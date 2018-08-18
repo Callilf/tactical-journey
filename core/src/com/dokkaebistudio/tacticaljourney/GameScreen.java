@@ -17,27 +17,13 @@
 package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
-import com.dokkaebistudio.tacticaljourney.systems.BackgroundSystem;
-import com.dokkaebistudio.tacticaljourney.systems.BobSystem;
-import com.dokkaebistudio.tacticaljourney.systems.BoundsSystem;
-import com.dokkaebistudio.tacticaljourney.systems.CameraSystem;
-import com.dokkaebistudio.tacticaljourney.systems.CollisionSystem;
-import com.dokkaebistudio.tacticaljourney.systems.GravitySystem;
-import com.dokkaebistudio.tacticaljourney.systems.MovementSystem;
-import com.dokkaebistudio.tacticaljourney.systems.PlatformSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
-import com.dokkaebistudio.tacticaljourney.systems.SquirrelSystem;
-import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
-import com.dokkaebistudio.tacticaljourney.systems.CollisionSystem.CollisionListener;
 
 public class GameScreen extends ScreenAdapter {
 	static final int GAME_READY = 0;
@@ -51,73 +37,33 @@ public class GameScreen extends ScreenAdapter {
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
 	World world;
-	CollisionListener collisionListener;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
-	int lastScore;
-	String scoreString;
 	
-	PooledEngine engine;
-	private GlyphLayout layout = new GlyphLayout();
-	
+	PooledEngine engine;	
 	private int state;
 
 	public GameScreen (TacticalJourney game) {
 		this.game = game;
 
 		state = GAME_READY;
-		guiCam = new OrthographicCamera(320, 480);
-		guiCam.position.set(320 / 2, 480 / 2, 0);
+		guiCam = new OrthographicCamera(1920, 1080);
+		guiCam.position.set(1920 / 2, 1080 / 2, 0);
 		touchPoint = new Vector3();
-		collisionListener = new CollisionListener() {
-			@Override
-			public void jump () {
-				Assets.playSound(Assets.jumpSound);
-			}
-
-			@Override
-			public void highJump () {
-				Assets.playSound(Assets.highJumpSound);
-			}
-
-			@Override
-			public void hit () {
-				Assets.playSound(Assets.hitSound);
-			}
-
-			@Override
-			public void coin () {
-				Assets.playSound(Assets.coinSound);
-			}
-		};
 		
 		engine = new PooledEngine();
 		
 		world = new World(engine);
 		
-		engine.addSystem(new BobSystem(world));
-		engine.addSystem(new SquirrelSystem());
-		engine.addSystem(new PlatformSystem());
-		engine.addSystem(new CameraSystem());
-		engine.addSystem(new BackgroundSystem());
-		engine.addSystem(new GravitySystem());
-		engine.addSystem(new MovementSystem());
-		engine.addSystem(new BoundsSystem());
-		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem());
-		engine.addSystem(new CollisionSystem(world, collisionListener));
 		engine.addSystem(new RenderingSystem(game.batcher));
-		
-		engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 		
 		world.create();
 		
-		pauseBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
+		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
-		lastScore = 0;
-		scoreString = "SCORE: 0";
 		
 		pauseSystems();
 	}
@@ -164,38 +110,6 @@ public class GameScreen extends ScreenAdapter {
 				return;
 			}
 		}
-		
-		ApplicationType appType = Gdx.app.getType();
-		
-		// should work also with Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)
-		float accelX = 0.0f;
-		
-		if (appType == ApplicationType.Android || appType == ApplicationType.iOS) {
-			accelX = Gdx.input.getAccelerometerX();
-		} else {
-			if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) accelX = 5f;
-			if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) accelX = -5f;
-		}
-		
-		engine.getSystem(BobSystem.class).setAccelX(accelX);
-		
-		if (world.score != lastScore) {
-			lastScore = world.score;
-			scoreString = "SCORE: " + lastScore;
-		}
-		if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
-			game.setScreen(new WinScreen(game));
-		}
-		if (world.state == World.WORLD_STATE_GAME_OVER) {
-			state = GAME_OVER;
-			if (lastScore >= Settings.highscores[4])
-				scoreString = "NEW HIGHSCORE: " + lastScore;
-			else
-				scoreString = "SCORE: " + lastScore;
-			pauseSystems();
-			Settings.addScore(lastScore);
-			Settings.save();
-		}
 	}
 
 	private void updatePaused () {
@@ -219,10 +133,7 @@ public class GameScreen extends ScreenAdapter {
 
 	private void updateLevelEnd () {
 		if (Gdx.input.justTouched()) {
-			engine.removeAllEntities();
-			world = new World(engine);
-			world.score = lastScore;
-			state = GAME_READY;
+
 		}
 	}
 
@@ -257,62 +168,30 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private void presentReady () {
-		game.batcher.draw(Assets.ready, 160 - 192 / 2, 240 - 32 / 2, 192, 32);
+		game.batcher.draw(Assets.ready, 1920/2 - 192 / 2, 1080/2 - 32 / 2, 192, 32);
 	}
 
 	private void presentRunning () {
-		game.batcher.draw(Assets.pause, 320 - 64, 480 - 64, 64, 64);
-		Assets.font.draw(game.batcher, scoreString, 16, 480 - 20);
+		game.batcher.draw(Assets.pause, 10, 10, 64, 64);
 	}
 
 	private void presentPaused () {
 		game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 240 - 96 / 2, 192, 96);
-		Assets.font.draw(game.batcher, scoreString, 16, 480 - 20);
 	}
 
 	private void presentLevelEnd () {
-		String topText = "the princess is ...";
-		String bottomText = "in another castle!";
-		
-		layout.setText(Assets.font, topText);
-		float topWidth = layout.width;
-		
-		layout.setText(Assets.font, bottomText);
-		float bottomWidth = layout.width;
-		Assets.font.draw(game.batcher, topText, 160 - topWidth / 2, 480 - 40);
-		Assets.font.draw(game.batcher, bottomText, 160 - bottomWidth / 2, 40);
 	}
 
 	private void presentGameOver () {
 		game.batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
-		
-		layout.setText(Assets.font, scoreString);
-		float scoreWidth = layout.width;
-		Assets.font.draw(game.batcher, scoreString, 160 - scoreWidth / 2, 480 - 20);
 	}
 	
 	private void pauseSystems() {
-		engine.getSystem(BobSystem.class).setProcessing(false);
-		engine.getSystem(SquirrelSystem.class).setProcessing(false);
-		engine.getSystem(PlatformSystem.class).setProcessing(false);
-		engine.getSystem(GravitySystem.class).setProcessing(false);
-		engine.getSystem(MovementSystem.class).setProcessing(false);
-		engine.getSystem(BoundsSystem.class).setProcessing(false);
-		engine.getSystem(StateSystem.class).setProcessing(false);
-		engine.getSystem(AnimationSystem.class).setProcessing(false);
-		engine.getSystem(CollisionSystem.class).setProcessing(false);
+		//TODO Add systems to pause here
 	}
 	
 	private void resumeSystems() {
-		engine.getSystem(BobSystem.class).setProcessing(true);
-		engine.getSystem(SquirrelSystem.class).setProcessing(true);
-		engine.getSystem(PlatformSystem.class).setProcessing(true);
-		engine.getSystem(GravitySystem.class).setProcessing(true);
-		engine.getSystem(MovementSystem.class).setProcessing(true);
-		engine.getSystem(BoundsSystem.class).setProcessing(true);
-		engine.getSystem(StateSystem.class).setProcessing(true);
-		engine.getSystem(AnimationSystem.class).setProcessing(true);
-		engine.getSystem(CollisionSystem.class).setProcessing(true);
+		//TODO //Add systems to restart here
 	}
 
 	@Override

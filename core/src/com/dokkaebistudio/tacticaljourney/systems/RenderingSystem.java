@@ -30,9 +30,8 @@ import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
 public class RenderingSystem extends IteratingSystem {
-	static final float FRUSTUM_WIDTH = 10;
-	static final float FRUSTUM_HEIGHT = 15;
-	static final float PIXELS_TO_METRES = 1.0f / 32.0f;
+	static final float SCREEN_WIDTH = 1920;
+	static final float SCREEN_HEIGHT = 1080;
 	
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
@@ -60,8 +59,8 @@ public class RenderingSystem extends IteratingSystem {
 		
 		this.batch = batch;
 		
-		cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		cam.position.set(FRUSTUM_WIDTH / 2, FRUSTUM_HEIGHT / 2, 0);
+		cam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+		cam.position.set(0, 0, 0);
 	}
 
 	@Override
@@ -92,7 +91,7 @@ public class RenderingSystem extends IteratingSystem {
 					   t.pos.x - originX, t.pos.y - originY,
 					   originX, originY,
 					   width, height,
-					   t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES,
+					   t.scale.x, t.scale.y,
 					   MathUtils.radiansToDegrees * t.rotation);
 		}
 		

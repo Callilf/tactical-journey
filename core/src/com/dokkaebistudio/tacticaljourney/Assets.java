@@ -28,6 +28,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Assets {
 	public static Texture background;
 	public static TextureRegion backgroundRegion;
+	public static Texture menuBackground;
+	public static TextureRegion menuBackgroundRegion;
 
 	public static Texture items;
 	public static TextureRegion mainMenu;
@@ -63,8 +65,11 @@ public class Assets {
 	}
 
 	public static void load () {
-		background = loadTexture("data/background.png");
-		backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
+		background = loadTexture("data/background-test.png");
+		backgroundRegion = new TextureRegion(background, 0, 0, 1920, 1080);
+		
+		menuBackground = loadTexture("data/background-test-menu.png");
+		menuBackgroundRegion = new TextureRegion(menuBackground, 0, 0, 1920, 1080);
 
 		items = loadTexture("data/items.png");
 		mainMenu = new TextureRegion(items, 0, 224, 300, 110);

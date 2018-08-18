@@ -1,7 +1,4 @@
-#Ashley Super Jumper
+#Tactical Journey
 
-Remake of the [Super Jumper](https://github.com/libgdx/libgdx-demo-superjumper) libgdx demo using the [Ashley](https://github.com/libgdx/ashley) entity framework. It is licensed under the [Apache license](https://github.com/siondream/ashley-superjumper/blob/master/LICENSE).
-
-This simple game might help you understand how entity systems in general and Ashley in particular work.
-
-![](http://i.imgur.com/uyxcews.png)
+Prototype of a Tactical/Rogue like/Dungeon crawler game.
+Link to the google doc : https://docs.google.com/document/d/1qaGLxaa8pRKRXUk0_5fTY8Xyn_tAPCGkkYIpm9ufRK4/edit?usp=sharing

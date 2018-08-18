@@ -63,7 +63,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.siondream.superjumper.android/com.siondream.superjumper.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.dokkaebistudio.tacticaljourney.android/com.dokkaebistudio.tacticaljourney.android.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

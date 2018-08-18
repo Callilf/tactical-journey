@@ -7,8 +7,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'com.siondream.superjumper.GdxDefinition'
-    devModules 'com.siondream.superjumper.GdxDefinitionSuperdev'
+    modules 'com.dokkaebistudio.tacticaljourney.GdxDefinition'
+    devModules 'com.dokkaebistudio.tacticaljourney.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {

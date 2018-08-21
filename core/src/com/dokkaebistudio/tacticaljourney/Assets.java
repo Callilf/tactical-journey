@@ -17,19 +17,19 @@
 package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
-	public static Texture background;
-	public static TextureRegion backgroundRegion;
-	public static Texture menuBackground;
-	public static TextureRegion menuBackgroundRegion;
+	public static final String background = "data/background-test.png";
+	public static final String menuBackground = "data/background-test-menu.png";
 
 	public static Texture items;
 	public static TextureRegion mainMenu;
@@ -60,17 +60,79 @@ public class Assets {
 	public static Sound coinSound;
 	public static Sound clickSound;
 
+	private static Assets instance;
+	private AssetManager manager;
+
+	public static Assets getInstance() {
+		if (instance == null) {
+			instance = new Assets();
+		}
+		return instance;
+	}
+
+	public Assets() {
+		manager = new AssetManager();
+		registerAssets();
+	}
+
+	/**
+	 * This doesn't load the textures yet, it simply adds files to the list of assets to load.
+	 * Loading will be done by calling load on the AssetManager a bunch of times until it's done.
+	 */
+	private void registerAssets() {
+		// register textures
+		registerTexture(background);
+		registerTexture(menuBackground);
+
+		// TODO register texture atlases
+
+		// TODO register fonts
+
+		// TODO register animations
+
+		// TODO register sounds
+
+	}
+
+	/**
+	 * Loads some assets, call this in the render loop of the loading screen.
+	 * @return True if all is loaded.
+	 */
+	public boolean loadAssets() {
+		return manager.update();
+	}
+
+	/**
+	 * Returns asset loading progress in percentage (0-100).
+	 */
+	public float getLoadingProgress() {
+		return manager.getProgress() * 100;
+	}
+
+	private void registerTextureAtlas(String atlasFile) {
+		this.manager.load(atlasFile, TextureAtlas.class);
+	}
+	public static TextureAtlas getTextureAtlas(String file){
+		return getInstance().manager.get(file, TextureAtlas.class);
+	}
+
+	private void registerTexture(String file) {
+		this.manager.load(file, Texture.class);
+	}
+
+	public static Texture getTexture(String file){
+		return getInstance().manager.get(file, Texture.class);
+	}
+
+
+
+	// OLD DUMB SYNCHRONOUS WAY
+
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
 	}
 
 	public static void load () {
-		background = loadTexture("data/background-test.png");
-		backgroundRegion = new TextureRegion(background, 0, 0, 1920, 1080);
-		
-		menuBackground = loadTexture("data/background-test-menu.png");
-		menuBackgroundRegion = new TextureRegion(menuBackground, 0, 0, 1920, 1080);
-
 		items = loadTexture("data/items.png");
 		mainMenu = new TextureRegion(items, 0, 224, 300, 110);
 		pauseMenu = new TextureRegion(items, 224, 128, 192, 96);

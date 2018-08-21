@@ -18,82 +18,56 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class LoadingScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
-	Rectangle soundBounds;
-	Rectangle playBounds;
-	Rectangle highscoresBounds;
-	Rectangle helpBounds;
-	Vector3 touchPoint;
 
 	Texture menuBackground;
 
-	public MainMenuScreen (TacticalJourney game) {
+	public LoadingScreen(TacticalJourney game) {
 		this.game = game;
 
 		guiCam = new OrthographicCamera(1920, 1080);
 		guiCam.position.set(1920 / 2, 1080 / 2, 0);
-		soundBounds = new Rectangle(0, 0, 64, 64);
-		
-		playBounds = new Rectangle(1920/2 - 300/2, 1080/2 + 70, 300, 36);
-		touchPoint = new Vector3();
-
-		// should be already loaded
-		menuBackground = Assets.getTexture(Assets.menuBackground);
 	}
 
-	public void update () {
-		if (Gdx.input.justTouched()) {
-			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-			if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				game.setScreen(new GameScreen(game));
-				return;
-			}
-			if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				Settings.soundEnabled = !Settings.soundEnabled;
-				if (Settings.soundEnabled)
-					Assets.music.play();
-				else
-					Assets.music.pause();
-			}
+	public int load(){
+		boolean loaded = Assets.getInstance().loadAssets();
+		if (loaded) { // loading is finished ! Change screen
+			this.game.setScreen(new MainMenuScreen(this.game));
 		}
+		return (int)Assets.getInstance().getLoadingProgress();
 	}
 
-	public void draw () {
+	public void draw(int progress) {
+
 		GL20 gl = Gdx.gl;
-		gl.glClearColor(1, 0, 0, 1);
+		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		guiCam.update();
 		game.batcher.setProjectionMatrix(guiCam.combined);
 
-		game.batcher.disableBlending();
 		game.batcher.begin();
-		game.batcher.draw(menuBackground, 0, 0, 1920, 1080);
-		game.batcher.end();
-
-		game.batcher.enableBlending();
-		game.batcher.begin();
-		game.batcher.draw(Assets.logo, 1920/2 - 274/2, 1080/2 + 142*2, 274, 142);
-		game.batcher.draw(Assets.mainMenu, 1920/2 - 300/2, 1080/2, 300, 110);
-		game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
+		// draw loading text in the center
+		String text = "LOADING - " + progress + "%";
+		GlyphLayout loadingLayout = new GlyphLayout();
+		// update layout. It is used to compute the real text height and width to aid positionning
+		loadingLayout.setText(Assets.font, text);
+		Assets.font.draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
 	}
 
 	@Override
 	public void render (float delta) {
-		update();
-		draw();
+		int progress = load();
+		draw(progress);
 	}
 
 	@Override

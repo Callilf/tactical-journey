@@ -30,7 +30,7 @@ public class TacticalJourney extends Game {
 		batcher = new SpriteBatch();
 		Settings.load();
 		Assets.load();
-		setScreen(new MainMenuScreen(this));
+		setScreen(new LoadingScreen(this));
 	}
 	
 	@Override

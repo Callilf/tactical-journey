@@ -20,6 +20,7 @@ import java.util.Random;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
@@ -56,7 +57,7 @@ public class World {
 		TransformComponent position = engine.createComponent(TransformComponent.class);
 		TextureComponent texture = engine.createComponent(TextureComponent.class);
 		
-		texture.region = Assets.backgroundRegion;
+		texture.region = new TextureRegion(Assets.getTexture(Assets.background));
 		
 		backgroundEntity.add(position);
 		backgroundEntity.add(texture);

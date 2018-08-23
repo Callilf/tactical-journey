@@ -19,11 +19,14 @@ package com.dokkaebistudio.tacticaljourney;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+
+import java.applet.Applet;
 
 public class MainMenuScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -35,6 +38,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	Vector3 touchPoint;
 
 	Texture menuBackground;
+	private Music music;
 
 	public MainMenuScreen (TacticalJourney game) {
 		this.game = game;
@@ -48,6 +52,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		// should be already loaded
 		menuBackground = Assets.getTexture(Assets.menuBackground);
+		music = Assets.getMusic(Assets.music);
 	}
 
 	public void update () {
@@ -63,9 +68,9 @@ public class MainMenuScreen extends ScreenAdapter {
 				Assets.playSound(Assets.clickSound);
 				Settings.soundEnabled = !Settings.soundEnabled;
 				if (Settings.soundEnabled)
-					Assets.music.play();
+					this.music.play();
 				else
-					Assets.music.pause();
+					this.music.pause();
 			}
 		}
 	}

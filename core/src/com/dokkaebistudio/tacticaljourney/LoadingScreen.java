@@ -22,8 +22,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 
 public class LoadingScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -39,10 +37,17 @@ public class LoadingScreen extends ScreenAdapter {
 	}
 
 	public int load(){
+	    // call asset manager loading each tick
 		boolean loaded = Assets.getInstance().loadAssets();
-		if (loaded) { // loading is finished ! Change screen
+
+		if (loaded) { // loading is finished !
+		    // create regions and shit
+            Assets.getInstance().finalizeLoading();
+            // change screen
 			this.game.setScreen(new MainMenuScreen(this.game));
 		}
+
+		// report progress
 		return (int)Assets.getInstance().getLoadingProgress();
 	}
 
@@ -58,7 +63,7 @@ public class LoadingScreen extends ScreenAdapter {
 		// draw loading text in the center
 		String text = "LOADING - " + progress + "%";
 		GlyphLayout loadingLayout = new GlyphLayout();
-		// update layout. It is used to compute the real text height and width to aid positionning
+		// update layout. It is used to compute the real text height and width to aid positioning
 		loadingLayout.setText(Assets.font, text);
 		Assets.font.draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	

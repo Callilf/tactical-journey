@@ -31,7 +31,16 @@ public class Assets {
 	public static final String background = "data/background-test.png";
 	public static final String menuBackground = "data/background-test-menu.png";
 
-	public static Texture items;
+	public static String items = "data/items.png";
+
+	public static String music = "data/music.mp3";
+	public static String jumpSound = "data/jump.wav";
+	public static String highJumpSound = "data/highjump.wav";
+	public static String hitSound = "data/hit.wav";
+	public static String coinSound = "data/coin.wav";
+	public static String clickSound = "data/click.wav";
+
+
 	public static TextureRegion mainMenu;
 	public static TextureRegion pauseMenu;
 	public static TextureRegion ready;
@@ -52,13 +61,6 @@ public class Assets {
 	public static Animation platform;
 	public static Animation breakingPlatform;
 	public static BitmapFont font;
-
-	public static Music music;
-	public static Sound jumpSound;
-	public static Sound highJumpSound;
-	public static Sound hitSound;
-	public static Sound coinSound;
-	public static Sound clickSound;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -83,15 +85,17 @@ public class Assets {
 		// register textures
 		registerTexture(background);
 		registerTexture(menuBackground);
+		registerTexture(items);
 
-		// TODO register texture atlases
+		// TODO register texture atlases (they need to be generated first)
 
-		// TODO register fonts
-
-		// TODO register animations
-
-		// TODO register sounds
-
+		// register music and sounds
+		registerMusic(music);
+		registerSound(jumpSound);
+		registerSound(highJumpSound);
+		registerSound(hitSound);
+		registerSound(coinSound);
+		registerSound(clickSound);
 	}
 
 	/**
@@ -113,15 +117,35 @@ public class Assets {
 		this.manager.load(atlasFile, TextureAtlas.class);
 	}
 	public static TextureAtlas getTextureAtlas(String file){
-		return getInstance().manager.get(file, TextureAtlas.class);
+		return getInstance().manager.get(file);
 	}
 
 	private void registerTexture(String file) {
 		this.manager.load(file, Texture.class);
 	}
-
 	public static Texture getTexture(String file){
-		return getInstance().manager.get(file, Texture.class);
+		return getInstance().manager.get(file);
+	}
+
+	private void registerMusic(String file) {
+		this.manager.load(file, Music.class);
+	}
+	public static Music getMusic(String file) {
+		return getInstance().manager.get(file);
+	}
+
+	private void registerSound(String file) {
+		this.manager.load(file, Sound.class);
+	}
+	public static Sound getSound(String file){
+		return getInstance().manager.get(file);
+	}
+
+	/**
+	 * Should be called as soon as possible to display loading info.
+	 */
+	public void loadFont() {
+		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 	}
 
 
@@ -132,52 +156,52 @@ public class Assets {
 		return new Texture(Gdx.files.internal(file));
 	}
 
-	public static void load () {
-		items = loadTexture("data/items.png");
-		mainMenu = new TextureRegion(items, 0, 224, 300, 110);
-		pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
-		ready = new TextureRegion(items, 320, 224, 192, 32);
-		gameOver = new TextureRegion(items, 352, 256, 160, 96);
-		highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
-		logo = new TextureRegion(items, 0, 352, 274, 142);
-		soundOff = new TextureRegion(items, 0, 0, 64, 64);
-		soundOn = new TextureRegion(items, 64, 0, 64, 64);
-		arrow = new TextureRegion(items, 0, 64, 64, 64);
-		pause = new TextureRegion(items, 64, 64, 64, 64);
+	public void finalizeLoading() {
+		// create regions
+		Texture itemsTex = getTexture(items);
+		mainMenu = new TextureRegion(itemsTex, 0, 224, 300, 110);
+		pauseMenu = new TextureRegion(itemsTex, 224, 128, 192, 96);
+		ready = new TextureRegion(itemsTex, 320, 224, 192, 32);
+		gameOver = new TextureRegion(itemsTex, 352, 256, 160, 96);
+		highScoresRegion = new TextureRegion(itemsTex, 0, 257, 300, 110 / 3);
+		logo = new TextureRegion(itemsTex, 0, 352, 274, 142);
+		soundOff = new TextureRegion(itemsTex, 0, 0, 64, 64);
+		soundOn = new TextureRegion(itemsTex, 64, 0, 64, 64);
+		arrow = new TextureRegion(itemsTex, 0, 64, 64, 64);
+		pause = new TextureRegion(itemsTex, 64, 64, 64, 64);
+		spring = new TextureRegion(itemsTex, 128, 0, 32, 32);
+		castle = new TextureRegion(itemsTex, 128, 64, 64, 64);
 
-		spring = new TextureRegion(items, 128, 0, 32, 32);
-		castle = new TextureRegion(items, 128, 64, 64, 64);
-		coinAnim = new Animation(0.2f, new TextureRegion(items, 128, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32),
-			new TextureRegion(items, 192, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32));
-		bobJump = new Animation(0.2f, new TextureRegion(items, 0, 128, 32, 32), new TextureRegion(items, 32, 128, 32, 32));
-		bobFall = new Animation(0.2f, new TextureRegion(items, 64, 128, 32, 32), new TextureRegion(items, 96, 128, 32, 32));
-		bobHit = new Animation(0.2f, new TextureRegion(items, 128, 128, 32, 32));
-		squirrelFly = new Animation(0.2f, new TextureRegion(items, 0, 160, 32, 32), new TextureRegion(items, 32, 160, 32, 32));
-		platform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16));
-		breakingPlatform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16), new TextureRegion(items, 64, 176, 64, 16),
-			new TextureRegion(items, 64, 192, 64, 16), new TextureRegion(items, 64, 208, 64, 16));
+		// animations
+		coinAnim = new Animation(0.2f, new TextureRegion(itemsTex, 128, 32, 32, 32), new TextureRegion(itemsTex, 160, 32, 32, 32),
+			new TextureRegion(itemsTex, 192, 32, 32, 32), new TextureRegion(itemsTex, 160, 32, 32, 32));
+		bobJump = new Animation(0.2f, new TextureRegion(itemsTex, 0, 128, 32, 32), new TextureRegion(itemsTex, 32, 128, 32, 32));
+		bobFall = new Animation(0.2f, new TextureRegion(itemsTex, 64, 128, 32, 32), new TextureRegion(itemsTex, 96, 128, 32, 32));
+		bobHit = new Animation(0.2f, new TextureRegion(itemsTex, 128, 128, 32, 32));
+		squirrelFly = new Animation(0.2f, new TextureRegion(itemsTex, 0, 160, 32, 32), new TextureRegion(itemsTex, 32, 160, 32, 32));
+		platform = new Animation(0.2f, new TextureRegion(itemsTex, 64, 160, 64, 16));
+		breakingPlatform = new Animation(0.2f, new TextureRegion(itemsTex, 64, 160, 64, 16), new TextureRegion(itemsTex, 64, 176, 64, 16),
+			new TextureRegion(itemsTex, 64, 192, 64, 16), new TextureRegion(itemsTex, 64, 208, 64, 16));
 
-		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-
-		music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
-		music.setLooping(true);
-		music.setVolume(0.5f);
-		if (Settings.soundEnabled) music.play();
-		jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
-		highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
-		hitSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
-		coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
-		clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
-		
+		// animations playing on loop
 		coinAnim.setPlayMode(PlayMode.LOOP);
 		bobJump.setPlayMode(PlayMode.LOOP);
 		bobFall.setPlayMode(PlayMode.LOOP);
 		bobHit.setPlayMode(PlayMode.LOOP);
 		squirrelFly.setPlayMode(PlayMode.LOOP);
 		platform.setPlayMode(PlayMode.LOOP);
+
+		// set music settings
+		Music musicAsset = getMusic(music);
+		musicAsset.setLooping(true);
+		musicAsset.setVolume(0.5f);
+		if (Settings.soundEnabled) musicAsset.play();
+
 	}
 
-	public static void playSound (Sound sound) {
-		if (Settings.soundEnabled) sound.play(1);
+	public static void playSound (String sound) {
+		if (Settings.soundEnabled) {
+			getSound(sound).play(1);
+		}
 	}
 }

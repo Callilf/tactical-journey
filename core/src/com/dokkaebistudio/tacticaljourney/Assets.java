@@ -30,6 +30,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Assets {
 	public static final String background = "data/background-test.png";
 	public static final String menuBackground = "data/background-test-menu.png";
+	public static final String player = "data/player-test.png";
+	public static final String tile = "data/tile-test.png";
 
 	public static String items = "data/items.png";
 
@@ -85,6 +87,8 @@ public class Assets {
 		// register textures
 		registerTexture(background);
 		registerTexture(menuBackground);
+		registerTexture(player);
+        registerTexture(tile);
 		registerTexture(items);
 
 		// TODO register texture atlases (they need to be generated first)

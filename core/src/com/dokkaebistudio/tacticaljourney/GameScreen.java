@@ -26,11 +26,22 @@ import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 
 public class GameScreen extends ScreenAdapter {
-	static final int GAME_READY = 0;
-	static final int GAME_RUNNING = 1;
-	static final int GAME_PAUSED = 2;
-	static final int GAME_LEVEL_END = 3;
-	static final int GAME_OVER = 4;
+	private static final int GAME_READY = 0;
+	private static final int GAME_RUNNING = 1;
+	private static final int GAME_PAUSED = 2;
+	private static final int GAME_LEVEL_END = 3;
+	private static final int GAME_OVER = 4;
+
+	// dimensions
+	public static final int SCREEN_H = 1080;
+	public static final int SCREEN_W = 1920;
+	public static final int GRID_H = 16;
+	public static final int GRID_W = 28;
+	public static final int GRID_SIZE = 64;
+
+	public static final int BOTTOM_MENU_HEIGHT = 56;
+	public static final int LEFT_RIGHT_PADDING = 64;
+
 
 	TacticalJourney game;
 
@@ -48,8 +59,8 @@ public class GameScreen extends ScreenAdapter {
 		this.game = game;
 
 		state = GAME_READY;
-		guiCam = new OrthographicCamera(1920, 1080);
-		guiCam.position.set(1920 / 2, 1080 / 2, 0);
+		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
+		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
 		touchPoint = new Vector3();
 		
 		engine = new PooledEngine();
@@ -168,7 +179,7 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private void presentReady () {
-		game.batcher.draw(Assets.ready, 1920/2 - 192 / 2, 1080/2 - 32 / 2, 192, 32);
+		game.batcher.draw(Assets.ready, SCREEN_W/2 - 192 / 2, SCREEN_H/2 - 32 / 2, 192, 32);
 	}
 
 	private void presentRunning () {

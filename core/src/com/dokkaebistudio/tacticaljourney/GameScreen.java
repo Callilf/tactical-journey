@@ -18,11 +18,13 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
+import com.dokkaebistudio.tacticaljourney.systems.InputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 
 public class GameScreen extends ScreenAdapter {
@@ -69,6 +71,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
+		engine.addSystem(new InputSystem());
 		
 		world.create();
 		

@@ -29,8 +29,8 @@ public class TacticalJourney extends Game {
 	public void create () {
 		batcher = new SpriteBatch();
 		Settings.load();
-		Assets.load();
-		setScreen(new MainMenuScreen(this));
+		Assets.getInstance().loadFont();
+		setScreen(new LoadingScreen(this));
 	}
 	
 	@Override

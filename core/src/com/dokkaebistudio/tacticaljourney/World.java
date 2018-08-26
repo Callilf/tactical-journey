@@ -21,6 +21,8 @@ import java.util.Random;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
@@ -41,9 +43,29 @@ public class World {
 	
 	public void create() {
 		createBackground();
+		createPlayer();
 		generateLevel();
 
 		this.state = WORLD_STATE_RUNNING;
+	}
+
+	private void createPlayer() {
+		Entity playerEntity = engine.createEntity();
+
+		TransformComponent position = engine.createComponent(TransformComponent.class);
+		TextureComponent texture = engine.createComponent(TextureComponent.class);
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(4, 5); // default position
+
+		texture.region = new TextureRegion(Assets.getTexture(Assets.player));
+
+		playerEntity.add(position);
+		playerEntity.add(texture);
+		playerEntity.add(gridPosition);
+		// he's the player !
+		playerEntity.add(engine.createComponent(PlayerComponent.class));
+
+		engine.addEntity(playerEntity);
 	}
 
 	private void generateLevel () {
@@ -52,16 +74,22 @@ public class World {
 	
 	
 	private void createBackground() {
-		Entity backgroundEntity = engine.createEntity();
-		
-		TransformComponent position = engine.createComponent(TransformComponent.class);
-		TextureComponent texture = engine.createComponent(TextureComponent.class);
-		
-		texture.region = new TextureRegion(Assets.getTexture(Assets.background));
-		
-		backgroundEntity.add(position);
-		backgroundEntity.add(texture);
-		
-		engine.addEntity(backgroundEntity);
+		for (int x = 0; x < GameScreen.GRID_W; x++) {
+			for (int y = 0; y < GameScreen.GRID_H; y++) {
+				Entity tileEntity = engine.createEntity();
+				TransformComponent position = engine.createComponent(TransformComponent.class);
+				TextureComponent texture = engine.createComponent(TextureComponent.class);
+				GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+				gridPosition.coord.set(x, y);
+
+				texture.region = new TextureRegion(Assets.getTexture(Assets.tile));
+
+				tileEntity.add(position);
+				tileEntity.add(texture);
+				tileEntity.add(gridPosition);
+
+				engine.addEntity(tileEntity);
+			}
+		}
 	}
 }

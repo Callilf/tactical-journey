@@ -18,7 +18,6 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
@@ -71,7 +70,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
-		engine.addSystem(new InputSystem());
+		engine.addSystem(new InputSystem(world));
 		
 		world.create();
 		

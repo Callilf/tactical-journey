@@ -36,6 +36,7 @@ public class World {
 	public final Random rand;
 
 	public int state;
+	public Entity[][] grid;
 	
 	private PooledEngine engine;
 
@@ -77,6 +78,7 @@ public class World {
 	
 	
 	private void createBackground() {
+		grid = new Entity[GameScreen.GRID_W][GameScreen.GRID_H];
 		for (int x = 0; x < GameScreen.GRID_W; x++) {
 			for (int y = 0; y < GameScreen.GRID_H; y++) {
 				Entity tileEntity = engine.createEntity();
@@ -105,6 +107,7 @@ public class World {
 				tileEntity.add(tile);
 
 				engine.addEntity(tileEntity);
+				grid[x][y] = tileEntity;
 			}
 		}
 	}

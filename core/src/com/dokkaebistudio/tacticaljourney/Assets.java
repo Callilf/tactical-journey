@@ -31,7 +31,9 @@ public class Assets {
 	public static final String background = "data/background-test.png";
 	public static final String menuBackground = "data/background-test-menu.png";
 	public static final String player = "data/player-test.png";
-	public static final String tile = "data/tile-test.png";
+	public static final String tile_ground = "data/tile-test.png";
+	public static final String tile_wall = "data/tile-wall-test.png";
+	public static final String tile_pit = "data/tile-pit-test.png";
 
 	public static String items = "data/items.png";
 
@@ -88,7 +90,9 @@ public class Assets {
 		registerTexture(background);
 		registerTexture(menuBackground);
 		registerTexture(player);
-        registerTexture(tile);
+		registerTexture(tile_ground);
+		registerTexture(tile_wall);
+        registerTexture(tile_pit);
 		registerTexture(items);
 
 		// TODO register texture atlases (they need to be generated first)

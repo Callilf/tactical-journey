@@ -21,9 +21,12 @@ import java.util.Random;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
 public class World {
@@ -80,13 +83,26 @@ public class World {
 				TransformComponent position = engine.createComponent(TransformComponent.class);
 				TextureComponent texture = engine.createComponent(TextureComponent.class);
 				GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+				TileComponent tile = engine.createComponent(TileComponent.class);
+				
+				int random = MathUtils.random(9);
+				if (random == 0) {
+					tile.type = TileEnum.WALL;
+					texture.region = new TextureRegion(Assets.getTexture(Assets.tile_wall));
+				} else {
+					tile.type = TileEnum.GROUND;
+					texture.region = new TextureRegion(Assets.getTexture(Assets.tile_ground));
+				}
+				
+				
 				gridPosition.coord.set(x, y);
 
-				texture.region = new TextureRegion(Assets.getTexture(Assets.tile));
+				
 
 				tileEntity.add(position);
 				tileEntity.add(texture);
 				tileEntity.add(gridPosition);
+				tileEntity.add(tile);
 
 				engine.addEntity(tileEntity);
 			}

@@ -11,7 +11,11 @@ import java.util.List;
  */
 public class WheelComponent implements Component {
 
-    List<Sector> sectors = new LinkedList<Sector>();
+    public List<Sector> sectors = new LinkedList<Sector>();
+
+    public void addSector(int range, Hit hit) {
+        sectors.add(new Sector(range, hit));
+    }
 
     public class Sector {
         /** Range must be > 1. */

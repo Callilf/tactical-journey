@@ -19,12 +19,19 @@ package com.dokkaebistudio.tacticaljourney;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.InputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameScreen extends ScreenAdapter {
 	private static final int GAME_RUNNING = 1;
@@ -40,7 +47,15 @@ public class GameScreen extends ScreenAdapter {
 
 	public static final int BOTTOM_MENU_HEIGHT = 56;
 	public static final int LEFT_RIGHT_PADDING = 64;
+	private static final Color HIT_COLOR = Color.GREEN;
+	private static final Color MISS_COLOR = Color.BLACK;
+	private static final Color CRITICAL_COLOR = Color.RED;
+	private static final Color GRAZE_COLOR = Color.GRAY;
+	private static final int WHEEL_X = SCREEN_W / 2;
+	private static final int WHEEL_Y = 128;
+	private static final int WHEEL_RADIUS = 64;
 
+	List<WheelComponent.Sector> attackWheel = new LinkedList<WheelComponent.Sector>();
 
 	TacticalJourney game;
 
@@ -70,6 +85,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
 		engine.addSystem(new InputSystem(world));
+		engine.addSystem(new WheelSystem(attackWheel));
 		
 		world.create();
 		
@@ -134,6 +150,50 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private void presentRunning () {
+		// draw the attack wheel
+		drawAttackWheel();
+	}
+
+	private void drawAttackWheel() {
+		// first normalize sector values
+		int total = 0;
+		List<Float> normalizeRanges = new LinkedList<Float>();
+		for(WheelComponent.Sector s: attackWheel){
+			total += s.range;
+
+		}
+		for(WheelComponent.Sector s: attackWheel){
+			normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
+		}
+		// begin render
+		game.shapeRenderer.setProjectionMatrix(guiCam.combined);
+		game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		int rangeCumul = 0;
+		for(int i = 0; i< attackWheel.size(); i++) {
+			// color
+			switch (attackWheel.get(i).hit){
+				case HIT:
+					game.shapeRenderer.setColor(HIT_COLOR);
+					break;
+				case CRITICAL:
+					game.shapeRenderer.setColor(CRITICAL_COLOR);
+					break;
+				case GRAZE:
+					game.shapeRenderer.setColor(GRAZE_COLOR);
+					break;
+				case MISS:
+					game.shapeRenderer.setColor(MISS_COLOR);
+					break;
+			}
+			// draw arc
+			game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS, rangeCumul, normalizeRanges.get(i));
+			// next arc starts at the end of previous arc
+			rangeCumul += normalizeRanges.get(i);
+		}
+		game.shapeRenderer.end();
+
+
+
 	}
 
 	private void presentLevelEnd () {

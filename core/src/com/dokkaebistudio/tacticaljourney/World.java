@@ -16,10 +16,12 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
@@ -29,20 +31,30 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
+import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
+import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
+
 public class World {
 	public static final int WORLD_STATE_RUNNING = 0;
 	public static final int WORLD_STATE_NEXT_LEVEL = 1;
 	public static final int WORLD_STATE_GAME_OVER = 2;
-	public final Random rand;
 
 	public int state;
 	public Entity[][] grid;
 	
 	private PooledEngine engine;
+	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
+	private TextureAtlas.AtlasRegion wallTexture;
+	private TextureAtlas.AtlasRegion playerTexture;
+	private TextureAtlas.AtlasRegion pitTexture;
+	private TextureAtlas.AtlasRegion groundTexture;
 
 	public World (PooledEngine engine) {
 		this.engine = engine;
-		this.rand = new Random();
+		wallTexture = Assets.getTexture(Assets.tile_wall);
+		groundTexture = Assets.getTexture(Assets.tile_ground);
+		pitTexture = Assets.getTexture(Assets.tile_pit);
+		playerTexture = Assets.getTexture(Assets.player);
 	}
 	
 	public void create() {
@@ -61,7 +73,7 @@ public class World {
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord.set(4, 5); // default position
 
-		texture.region = Assets.getTexture(Assets.player);
+		texture.region = this.playerTexture;
 
 		playerEntity.add(position);
 		playerEntity.add(texture);
@@ -78,28 +90,30 @@ public class World {
 	
 	
 	private void createBackground() {
-		grid = new Entity[GameScreen.GRID_W][GameScreen.GRID_H];
-		for (int x = 0; x < GameScreen.GRID_W; x++) {
+		TileEnum[][] generatedRoom = generateRoom();
+		grid = new Entity[GRID_W][GameScreen.GRID_H];
+		for (int x = 0; x < GRID_W; x++) {
 			for (int y = 0; y < GameScreen.GRID_H; y++) {
 				Entity tileEntity = engine.createEntity();
 				TransformComponent position = engine.createComponent(TransformComponent.class);
 				TextureComponent texture = engine.createComponent(TextureComponent.class);
 				GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 				TileComponent tile = engine.createComponent(TileComponent.class);
-				
-				int random = MathUtils.random(9);
-				if (random == 0) {
-					tile.type = TileEnum.WALL;
-					texture.region = Assets.getTexture(Assets.tile_wall);
-				} else {
-					tile.type = TileEnum.GROUND;
-					texture.region = Assets.getTexture(Assets.tile_ground);
-				}
-				
-				
-				gridPosition.coord.set(x, y);
 
-				
+				tile.type = generatedRoom[x][y];
+				switch (generatedRoom[x][y]) {
+					case WALL:
+						texture.region = wallTexture;
+						break;
+					case GROUND:
+						texture.region = groundTexture;
+						break;
+					case PIT:
+						texture.region = pitTexture;
+						break;
+				}
+
+				gridPosition.coord.set(x, y);
 
 				tileEntity.add(position);
 				tileEntity.add(texture);
@@ -110,5 +124,35 @@ public class World {
 				grid[x][y] = tileEntity;
 			}
 		}
+	}
+
+	/**
+	 * Generates a random room by creating an array of {@link TileEnum}. There are walls on each border of the room.
+	 */
+	private TileEnum[][] generateRoom() {
+		TileEnum[][] tiles = new TileEnum[GRID_W][GRID_H];
+		// fill with ground first
+		for(TileEnum[] tileCol: tiles){
+			Arrays.fill(tileCol, TileEnum.GROUND);
+		}
+		for (int x = 0; x < GRID_W; x++) {
+			for (int y = 0; y < GameScreen.GRID_H; y++) {
+				if (x == 0 || x == GRID_W-1 || y == 0 || y == GRID_H - 1) {
+					// walls
+					tiles[x][y] = TileEnum.WALL;
+				} else {
+					// generate some random walls and pits
+					int random = MathUtils.random(9);
+					if (random == 0) {
+						// PIT
+						tiles[x][y] = TileEnum.PIT;
+					} else if (random == 1) {
+						// WALL
+						tiles[x][y] = TileEnum.WALL;
+					}
+				}
+			}
+		}
+		return tiles;
 	}
 }

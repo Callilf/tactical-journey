@@ -23,6 +23,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
@@ -33,12 +36,9 @@ public class MainMenuScreen extends ScreenAdapter {
 	OrthographicCamera guiCam;
 	Rectangle soundBounds;
 	Rectangle playBounds;
-	Rectangle highscoresBounds;
-	Rectangle helpBounds;
 	Vector3 touchPoint;
 
-	Texture menuBackground;
-	private Music music;
+	TextureRegion menuBackground;
 
 	public MainMenuScreen (TacticalJourney game) {
 		this.game = game;
@@ -52,26 +52,12 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		// should be already loaded
 		menuBackground = Assets.getTexture(Assets.menuBackground);
-		music = Assets.getMusic(Assets.music);
 	}
 
 	public void update () {
 		if (Gdx.input.justTouched()) {
-			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-			if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				game.setScreen(new GameScreen(game));
-				return;
-			}
-			if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				Settings.soundEnabled = !Settings.soundEnabled;
-				if (Settings.soundEnabled)
-					this.music.play();
-				else
-					this.music.pause();
-			}
+			// touched screen, start the fucking game already
+			game.setScreen(new GameScreen(game));
 		}
 	}
 
@@ -89,9 +75,12 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		game.batcher.enableBlending();
 		game.batcher.begin();
-		game.batcher.draw(Assets.logo, 1920/2 - 274/2, 1080/2 + 142*2, 274, 142);
-		game.batcher.draw(Assets.mainMenu, 1920/2 - 300/2, 1080/2, 300, 110);
-		game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
+		// draw loading text in the center
+		String text = "TOUCH ANYWHERE TO START";
+		GlyphLayout loadingLayout = new GlyphLayout();
+		// update layout. It is used to compute the real text height and width to aid positioning
+		loadingLayout.setText(Assets.font, text);
+		Assets.font.draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
 	}
 

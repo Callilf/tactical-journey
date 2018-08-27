@@ -41,8 +41,6 @@ public class LoadingScreen extends ScreenAdapter {
 		boolean loaded = Assets.getInstance().loadAssets();
 
 		if (loaded) { // loading is finished !
-		    // create regions and shit
-            Assets.getInstance().finalizeLoading();
             // change screen
 			this.game.setScreen(new MainMenuScreen(this.game));
 		}

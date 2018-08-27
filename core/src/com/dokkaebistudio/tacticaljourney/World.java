@@ -61,7 +61,7 @@ public class World {
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord.set(4, 5); // default position
 
-		texture.region = new TextureRegion(Assets.getTexture(Assets.player));
+		texture.region = Assets.getTexture(Assets.player);
 
 		playerEntity.add(position);
 		playerEntity.add(texture);
@@ -90,10 +90,10 @@ public class World {
 				int random = MathUtils.random(9);
 				if (random == 0) {
 					tile.type = TileEnum.WALL;
-					texture.region = new TextureRegion(Assets.getTexture(Assets.tile_wall));
+					texture.region = Assets.getTexture(Assets.tile_wall);
 				} else {
 					tile.type = TileEnum.GROUND;
-					texture.region = new TextureRegion(Assets.getTexture(Assets.tile_ground));
+					texture.region = Assets.getTexture(Assets.tile_ground);
 				}
 				
 				

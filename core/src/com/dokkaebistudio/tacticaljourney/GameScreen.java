@@ -27,9 +27,7 @@ import com.dokkaebistudio.tacticaljourney.systems.InputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 
 public class GameScreen extends ScreenAdapter {
-	private static final int GAME_READY = 0;
 	private static final int GAME_RUNNING = 1;
-	private static final int GAME_PAUSED = 2;
 	private static final int GAME_LEVEL_END = 3;
 	private static final int GAME_OVER = 4;
 
@@ -59,7 +57,8 @@ public class GameScreen extends ScreenAdapter {
 	public GameScreen (TacticalJourney game) {
 		this.game = game;
 
-		state = GAME_READY;
+		// already running
+		state = GAME_RUNNING;
 		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
 		touchPoint = new Vector3();
@@ -77,8 +76,6 @@ public class GameScreen extends ScreenAdapter {
 		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
-		
-		pauseSystems();
 	}
 
 	public void update (float deltaTime) {
@@ -87,14 +84,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.update(deltaTime);
 		
 		switch (state) {
-		case GAME_READY:
-			updateReady();
-			break;
 		case GAME_RUNNING:
 			updateRunning(deltaTime);
-			break;
-		case GAME_PAUSED:
-			updatePaused();
 			break;
 		case GAME_LEVEL_END:
 			updateLevelEnd();
@@ -105,44 +96,12 @@ public class GameScreen extends ScreenAdapter {
 		}
 	}
 
-	private void updateReady () {
-		if (Gdx.input.justTouched()) {
-			state = GAME_RUNNING;
-			resumeSystems();
-		}
-	}
-
 	private void updateRunning (float deltaTime) {
 		if (Gdx.input.justTouched()) {
-			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-			if (pauseBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				state = GAME_PAUSED;
-				pauseSystems();
-				return;
-			}
+			// TODO do nothing yet
 		}
 	}
 
-	private void updatePaused () {
-		if (Gdx.input.justTouched()) {
-			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-			if (resumeBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				state = GAME_RUNNING;
-				resumeSystems();
-				return;
-			}
-
-			if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
-				Assets.playSound(Assets.clickSound);
-				game.setScreen(new MainMenuScreen(game));
-				return;
-			}
-		}
-	}
 
 	private void updateLevelEnd () {
 		if (Gdx.input.justTouched()) {
@@ -161,14 +120,8 @@ public class GameScreen extends ScreenAdapter {
 		game.batcher.setProjectionMatrix(guiCam.combined);
 		game.batcher.begin();
 		switch (state) {
-		case GAME_READY:
-			presentReady();
-			break;
 		case GAME_RUNNING:
 			presentRunning();
-			break;
-		case GAME_PAUSED:
-			presentPaused();
 			break;
 		case GAME_LEVEL_END:
 			presentLevelEnd();
@@ -180,31 +133,13 @@ public class GameScreen extends ScreenAdapter {
 		game.batcher.end();
 	}
 
-	private void presentReady () {
-		game.batcher.draw(Assets.ready, SCREEN_W/2 - 192 / 2, SCREEN_H/2 - 32 / 2, 192, 32);
-	}
-
 	private void presentRunning () {
-		game.batcher.draw(Assets.pause, 10, 10, 64, 64);
-	}
-
-	private void presentPaused () {
-		game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 240 - 96 / 2, 192, 96);
 	}
 
 	private void presentLevelEnd () {
 	}
 
 	private void presentGameOver () {
-		game.batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
-	}
-	
-	private void pauseSystems() {
-		//TODO Add systems to pause here
-	}
-	
-	private void resumeSystems() {
-		//TODO //Add systems to restart here
 	}
 
 	@Override
@@ -215,9 +150,6 @@ public class GameScreen extends ScreenAdapter {
 
 	@Override
 	public void pause () {
-		if (state == GAME_RUNNING) {
-			state = GAME_PAUSED;
-			pauseSystems();
-		}
+		// TODO nothing yet
 	}
 }

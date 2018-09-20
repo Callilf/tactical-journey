@@ -14,42 +14,45 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney;
-
-import java.util.Arrays;
-import java.util.Random;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.dokkaebistudio.tacticaljourney.components.*;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+package com.dokkaebistudio.tacticaljourney.room;
 
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 
-public class World {
-	public static final int WORLD_STATE_RUNNING = 0;
-	public static final int WORLD_STATE_NEXT_LEVEL = 1;
-	public static final int WORLD_STATE_GAME_OVER = 2;
+import java.util.Arrays;
 
-	public int state;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
+
+public class Room {
+	public RoomState state;
 	public Entity[][] grid;
 	
-	private PooledEngine engine;
+	public PooledEngine engine;
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion playerTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
+	private TextureAtlas.AtlasRegion mudTexture;
 	private TextureAtlas.AtlasRegion groundTexture;
 
-	public World (PooledEngine engine) {
+	public Room (PooledEngine engine) {
 		this.engine = engine;
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
+		mudTexture = Assets.getTexture(Assets.tile_mud);
 		playerTexture = Assets.getTexture(Assets.player);
 	}
 	
@@ -58,7 +61,7 @@ public class World {
 		createPlayer();
 		generateLevel();
 
-		this.state = WORLD_STATE_RUNNING;
+		this.state = RoomState.PLAYER_TURN;
 	}
 
 	private void createPlayer() {
@@ -85,7 +88,10 @@ public class World {
 		playerEntity.add(gridPosition);
 		playerEntity.add(baseWheelComponent);
 		// he's the player !
-		playerEntity.add(engine.createComponent(PlayerComponent.class));
+		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+		playerComponent.engine = this.engine;
+		playerComponent.moveSpeed = 4;
+		playerEntity.add(playerComponent);
 
 		engine.addEntity(playerEntity);
 	}
@@ -116,6 +122,9 @@ public class World {
 						break;
 					case PIT:
 						texture.region = pitTexture;
+						break;
+					case MUD:
+						texture.region = mudTexture;
 						break;
 				}
 
@@ -155,6 +164,9 @@ public class World {
 					} else if (random == 1) {
 						// WALL
 						tiles[x][y] = TileEnum.WALL;
+					} else if (random == 2) {
+						// WALL
+						tiles[x][y] = TileEnum.MUD;
 					}
 				}
 			}

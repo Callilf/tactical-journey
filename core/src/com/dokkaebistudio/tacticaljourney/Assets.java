@@ -20,12 +20,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
@@ -37,6 +33,10 @@ public class Assets {
 	public static final String tile_ground = "tile-test";
 	public static final String tile_wall = "tile-wall-test";
 	public static final String tile_pit = "tile-pit-test";
+	public static final String tile_mud = "tile-mud-test";
+	
+	
+	public static final String tile_movable = "tile-movable";
 
 	public static BitmapFont font;
 

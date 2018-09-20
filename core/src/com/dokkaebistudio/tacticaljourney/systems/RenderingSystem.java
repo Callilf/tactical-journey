@@ -46,7 +46,7 @@ public class RenderingSystem extends IteratingSystem {
 	private final ComponentMapper<GridPositionComponent> gridPositionM;
 	
 	public RenderingSystem(SpriteBatch batch) {
-		super(Family.all(TransformComponent.class, TextureComponent.class).get());
+		super(Family.all(TextureComponent.class).get());
 		
 		textureM = ComponentMapper.getFor(TextureComponent.class);
 		transformM = ComponentMapper.getFor(TransformComponent.class);
@@ -57,6 +57,14 @@ public class RenderingSystem extends IteratingSystem {
 		comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
+				if (!transformM.has(entityA) && transformM.has(entityB)) {
+					return 1;
+				} else if (!transformM.has(entityB) && transformM.has(entityA)) {
+					return -1;
+				} else if (!transformM.has(entityA) && !transformM.has(entityB)) {
+					return 0;
+				}
+				
 				return (int)Math.signum(transformM.get(entityB).pos.z -
 										transformM.get(entityA).pos.z);
 			}
@@ -101,7 +109,7 @@ public class RenderingSystem extends IteratingSystem {
 						1, 1,
 						0);
 
-			} else {
+			} else if (transformM.has(entity)) {
 				// use transform component for drawing position
 				TransformComponent t = transformM.get(entity);
 

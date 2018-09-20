@@ -12,16 +12,25 @@ public class TileComponent implements Component {
 	 */
 	public enum TileEnum {
 
-		GROUND(false, false),
+		GROUND(false, false, 1),
+		MUD(false, false, 2),
 		WALL(true, false),
 		PIT(false, true);
 		
 		private boolean isWall;
 		private boolean isPit;
+		private int moveConsumed;
 		
 		TileEnum(boolean isW, boolean isP) {
 			isWall = isW;
 			isPit = isP;
+			this.moveConsumed = 1;
+		}
+		
+		TileEnum(boolean isW, boolean isP, int moveConsumed) {
+			isWall = isW;
+			isPit = isP;
+			this.moveConsumed = moveConsumed; 
 		}
 
 		public boolean isWall() {
@@ -40,7 +49,22 @@ public class TileComponent implements Component {
 			this.isPit = isPit;
 		}
 		
-		
+		public int getMoveConsumed() {
+			return moveConsumed;
+		}
+
+		public void setMoveConsumed(int moveConsumed) {
+			this.moveConsumed = moveConsumed;
+		}
+
+		/**
+		 * Utility method. This will disappear later
+		 * when we will have to handle flight and movement modificators.
+		 * @return
+		 */
+		public boolean isWalkable() {
+			return !isWall && !isPit;
+		}
 	}
 	
 	/** The type of the tile. */

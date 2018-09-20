@@ -6,35 +6,49 @@ filter: Nearest,Nearest
 repeat: none
 background-test-menu
   rotate: false
-  xy: 2, 134
+  xy: 2, 200
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 68, 68
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-tile-pit-test
+tile-movable
   rotate: false
   xy: 2, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+tile-mud-test
+  rotate: false
+  xy: 2, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-pit-test
+  rotate: false
+  xy: 1924, 1216
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 tile-test
   rotate: false
-  xy: 1924, 1150
+  xy: 68, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 2, 2
+  xy: 1924, 1150
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

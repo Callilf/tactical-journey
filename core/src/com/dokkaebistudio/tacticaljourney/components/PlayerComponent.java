@@ -17,6 +17,8 @@ public class PlayerComponent implements Component {
 	
 	/** The tiles where the player can move. */
 	public Set<Entity> movableTiles = new HashSet<>();
+	/** The selected tile for movement. */
+	public Entity selectedTile;
 	
 	
 	/**
@@ -27,6 +29,16 @@ public class PlayerComponent implements Component {
 			engine.removeEntity(e);
 		}
 		movableTiles.clear();
+	}
+	
+	/**
+	 * Clear the selected tile and remove it from the engine.
+	 */
+	public void clearSelectedTile() {
+		if (selectedTile != null) {
+			engine.removeEntity(selectedTile);
+			selectedTile = null;
+		}
 	}
 	
 }

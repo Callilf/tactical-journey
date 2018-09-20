@@ -27,7 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
-import com.dokkaebistudio.tacticaljourney.systems.InputSystem;
+import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
@@ -87,7 +87,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
 		engine.addSystem(new PlayerMoveSystem(world));
-		engine.addSystem(new InputSystem(world));
+		engine.addSystem(new KeyInputMovementSystem(world));
 		engine.addSystem(new WheelSystem(attackWheel));
 		
 		

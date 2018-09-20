@@ -9,6 +9,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -23,6 +25,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
+    private final ComponentMapper<TextureComponent> textureCompoM;
     private Room world;
 
     public PlayerMoveSystem(Room w) {
@@ -30,6 +33,7 @@ public class PlayerMoveSystem extends IteratingSystem {
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
+        this.textureCompoM = ComponentMapper.getFor(TextureComponent.class);
         world = w;
     }
 
@@ -52,6 +56,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        for (Entity tileCoord : allWalkableTiles) {
 	        	GridPositionComponent tilePosCompo = gridPositionM.get(tileCoord);
 	        	
+	        	//TODO: move this into a factory
 	        	Entity movableTileEntity = world.engine.createEntity();
 	        	GridPositionComponent movableTilePos = world.engine.createComponent(GridPositionComponent.class);
 	        	movableTilePos.coord.set(tilePosCompo.coord);
@@ -64,6 +69,46 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        	playerCompo.movableTiles.add(movableTileEntity);
 	        	world.engine.addEntity(movableTileEntity);
 	        }
+	        
+    	} else {
+    		
+    		//Handle mouse click movable tiles
+            if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+            	int x = Gdx.input.getX();
+            	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+            	
+            	for (Entity tile : playerCompo.movableTiles) {
+            		TextureComponent textureComponent = textureCompoM.get(tile);
+            		GridPositionComponent gridPos = gridPositionM.get(tile);
+            		float tileStartX = gridPos.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+            		float tileStartY = gridPos.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+            		float tileEndX = tileStartX + textureComponent.region.getRegionWidth();
+            		float tileEndY = tileStartY + textureComponent.region.getRegionHeight();
+            		
+            		if (tileStartX < x && tileEndX > x && tileStartY < y && tileEndY > y) {
+            			//Clic on this tile !!
+            			Entity redCross = world.engine.createEntity();
+            			
+            			//TODO: move this into a factory
+            			GridPositionComponent movableTilePos = world.engine.createComponent(GridPositionComponent.class);
+        	        	movableTilePos.coord.set(gridPos.coord);
+        	        	redCross.add(movableTilePos);
+        	        	TextureComponent texture = world.engine.createComponent(TextureComponent.class);
+        	        	texture.region = Assets.getTexture(Assets.tile_movable_selected);
+        	        	redCross.add(texture);
+            			
+        	        	//TODO use a setter that clears beforehand
+        	        	playerCompo.clearSelectedTile();
+        	        	playerCompo.selectedTile = redCross;
+        	        	world.engine.addEntity(redCross);
+        	        	break;
+            		} 
+
+            	}
+            	
+            }
+    		
+    		
     	}
     }
 

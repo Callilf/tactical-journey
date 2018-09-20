@@ -13,13 +13,13 @@ import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
-public class InputSystem extends IteratingSystem {
+public class KeyInputMovementSystem extends IteratingSystem {
 
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private Room world;
 
-    public InputSystem(Room w) {
+    public KeyInputMovementSystem(Room w) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);

@@ -13,7 +13,7 @@ background-test-menu
   index: -1
 player-test
   rotate: false
-  xy: 2, 2
+  xy: 68, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -21,6 +21,13 @@ player-test
 tile-movable
   rotate: false
   xy: 2, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-movable-selected
+  rotate: false
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

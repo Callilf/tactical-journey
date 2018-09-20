@@ -25,8 +25,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
-import com.dokkaebistudio.tacticaljourney.systems.InputSystem;
+import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
+import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 
@@ -61,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
-	World world;
+	Room world;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
@@ -80,12 +82,14 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine = new PooledEngine();
 		
-		world = new World(engine);
+		world = new Room(engine);
 		
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
-		engine.addSystem(new InputSystem(world));
+		engine.addSystem(new PlayerMoveSystem(world));
+		engine.addSystem(new KeyInputMovementSystem(world));
 		engine.addSystem(new WheelSystem(attackWheel));
+		
 		
 		world.create();
 		

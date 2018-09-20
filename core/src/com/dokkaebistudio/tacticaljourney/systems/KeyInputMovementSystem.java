@@ -8,24 +8,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.World;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
-public class InputSystem extends IteratingSystem {
+public class KeyInputMovementSystem extends IteratingSystem {
 
+	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private World world;
+    private Room world;
 
-    public InputSystem(World w) {
+    public KeyInputMovementSystem(Room w) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
+        this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
         world = w;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+    	PlayerComponent playerCompo = playerCM.get(entity);
         GridPositionComponent g = gridPositionM.get(entity);
         
         Vector2 newLocation = null;
@@ -45,16 +48,18 @@ public class InputSystem extends IteratingSystem {
         }
         
         if (newLocation != null) {
-        	attemptToMove(g, newLocation);
+        	attemptToMove(g, playerCompo, newLocation);
         }
     }
 
-	private void attemptToMove(GridPositionComponent g, Vector2 newLocation) {
+	private void attemptToMove(GridPositionComponent g, PlayerComponent playerCompo, Vector2 newLocation) {
 		Entity destinationTile = world.grid[(int) newLocation.x][(int) newLocation.y];
 		TileComponent destiTileCompo = destinationTile.getComponent(TileComponent.class);
 		if (!destiTileCompo.type.isWall() && !destiTileCompo.type.isPit()) {
 			g.coord.x = newLocation.x;
 			g.coord.y = newLocation.y;
+			//clear the movable tile so that it will be re computed next frame
+			playerCompo.clearMovableTiles();
 		}
 	}
 }

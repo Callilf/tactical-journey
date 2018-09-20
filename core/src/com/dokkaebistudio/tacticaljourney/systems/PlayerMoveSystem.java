@@ -1,6 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -65,6 +67,12 @@ public class PlayerMoveSystem extends IteratingSystem {
     	}
     }
 
+    
+    
+    
+    //***********************************************
+    // Movable tiles search algorithm
+    
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
@@ -74,6 +82,20 @@ public class PlayerMoveSystem extends IteratingSystem {
      * @return the set of tiles where the entity can move
      */
 	private Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth) {
+    	Map<Integer, Set<Entity>> allTilesByDepth = new HashMap<>();
+    	return findAllWalkableTiles(currentTileEntity, currentDepth, maxDepth, allTilesByDepth);
+	}
+	
+    /**
+     * Find all tiles where the entity can move.
+     * Recursive method that stops when currentDepth becomes higher than maxDepth
+     * @param currentTileEntity the starting tile
+     * @param currentDepth the current depth of the search
+     * @param maxDepth the max depth of the search
+     * @param allTilesByDepth the map containing for each depth all the tiles the entity can move onto
+     * @return the set of tiles where the entity can move
+     */
+	private Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, Map<Integer, Set<Entity>> allTilesByDepth) {		
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		
 		//Check whether we reached the maxDepth or not
@@ -84,18 +106,27 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        int currentY = (int)currentPosition.y;
 			
 	        //Check the 4 contiguous tiles and retrieve the ones we can move onto
-			Set<Entity> previouslyReturnedTiles = check4(currentX, currentY);
+	        Set<Entity> tilesToIgnore = null;
+	        if (allTilesByDepth.containsKey(currentDepth)) {
+	        	tilesToIgnore = allTilesByDepth.get(currentDepth);
+	        }
+			Set<Entity> previouslyReturnedTiles = check4ContiguousTiles(currentX, currentY, tilesToIgnore);
 			walkableTiles.addAll(previouslyReturnedTiles);
+			
+			//Fill the map
+			Set<Entity> set = allTilesByDepth.get(currentDepth);
+			if (set == null) set = new LinkedHashSet<>();
+			set.addAll(previouslyReturnedTiles);
+			allTilesByDepth.put(currentDepth, set);
 			
 			//For each retrieved tile, redo a search until we reach max depth
 			for (Entity tile : previouslyReturnedTiles) {
 				TileComponent tileComponent = tileCM.get(tile);
 				int moveConsumed = tileComponent.type.getMoveConsumed();
-	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth);
+	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth);
 	        	walkableTiles.addAll(returnedTiles);
 	        }
 		}
-		
 		
 		return walkableTiles;
 	}
@@ -106,27 +137,27 @@ public class PlayerMoveSystem extends IteratingSystem {
 	 * @param currentY the current tile Y
 	 * @return the set of tile entities where it's possible to move
 	 */
-	private Set<Entity> check4(int currentX, int currentY) {
+	private Set<Entity> check4ContiguousTiles(int currentX, int currentY, Set<Entity> tilesToIgnore) {
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		//Left
 		if (currentX > 0) {
 			Entity tileEntity = world.grid[currentX - 1][currentY];
-			checkOneTile(tileEntity, walkableTiles);
+			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Up
 		if (currentY < GameScreen.GRID_H - 1) {
 			Entity tileEntity = world.grid[currentX][currentY + 1];
-			checkOneTile(tileEntity, walkableTiles);
+			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Right
 		if (currentX < GameScreen.GRID_W - 1) {
 			Entity tileEntity = world.grid[currentX + 1][currentY];
-			checkOneTile(tileEntity, walkableTiles);
+			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Down
 		if (currentY > 0) {
 			Entity tileEntity = world.grid[currentX][currentY - 1];
-			checkOneTile(tileEntity, walkableTiles);
+			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		return walkableTiles;
 	}
@@ -136,14 +167,20 @@ public class PlayerMoveSystem extends IteratingSystem {
 	 * @param tileEntity the tile to check
 	 * @param walkableTiles the set of movable entities
 	 */
-	private void checkOneTile(Entity tileEntity, Set<Entity> walkableTiles) {
-		TileComponent tileComponent = tileCM.get(tileEntity);
+	private void checkOneTile(Entity tileEntity, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore) {
+		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
+			return;
+		}
 		
+		TileComponent tileComponent = tileCM.get(tileEntity);
 		//TODO: this condition will have to change when we will have to handle items that allow
 		//moving past pits for example.
 		if (tileComponent.type.isWalkable()) {
 			walkableTiles.add(tileEntity);
 		}
 	}
+	
+    // End of movable tiles search algorithm
+    //***********************************************
 
 }

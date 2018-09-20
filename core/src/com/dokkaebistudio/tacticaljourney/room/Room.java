@@ -90,7 +90,7 @@ public class Room {
 		// he's the player !
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
-		playerComponent.moveSpeed = 4;
+		playerComponent.moveSpeed = 5;
 		playerEntity.add(playerComponent);
 
 		engine.addEntity(playerEntity);

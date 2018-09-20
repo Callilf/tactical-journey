@@ -24,12 +24,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.*;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
@@ -71,6 +67,15 @@ public class World {
 		TransformComponent position = engine.createComponent(TransformComponent.class);
 		TextureComponent texture = engine.createComponent(TextureComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
+
+		baseWheelComponent.addSector(15, WheelComponent.Hit.MISS);
+		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
+		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
+		baseWheelComponent.addSector(2, WheelComponent.Hit.CRITICAL);
+		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
+		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
+
 		gridPosition.coord.set(4, 5); // default position
 
 		texture.region = this.playerTexture;
@@ -78,6 +83,7 @@ public class World {
 		playerEntity.add(position);
 		playerEntity.add(texture);
 		playerEntity.add(gridPosition);
+		playerEntity.add(baseWheelComponent);
 		// he's the player !
 		playerEntity.add(engine.createComponent(PlayerComponent.class));
 

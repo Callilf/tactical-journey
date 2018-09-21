@@ -17,13 +17,13 @@ public class KeyInputMovementSystem extends IteratingSystem {
 
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private Room world;
+    private Room room;
 
-    public KeyInputMovementSystem(Room w) {
+    public KeyInputMovementSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
-        world = w;
+        room = r;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class KeyInputMovementSystem extends IteratingSystem {
     }
 
 	private void attemptToMove(GridPositionComponent g, PlayerComponent playerCompo, Vector2 newLocation) {
-		Entity destinationTile = world.grid[(int) newLocation.x][(int) newLocation.y];
+		Entity destinationTile = room.grid[(int) newLocation.x][(int) newLocation.y];
 		TileComponent destiTileCompo = destinationTile.getComponent(TileComponent.class);
 		if (!destiTileCompo.type.isWall() && !destiTileCompo.type.isPit()) {
 			g.coord.x = newLocation.x;

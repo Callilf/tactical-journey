@@ -63,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
-	Room world;
+	Room room;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
@@ -82,16 +82,16 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine = new PooledEngine();
 		
-		world = new Room(engine);
+		room = new Room(engine);
 		
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
-		engine.addSystem(new PlayerMoveSystem(world));
-		engine.addSystem(new KeyInputMovementSystem(world));
+		engine.addSystem(new PlayerMoveSystem(room));
+		engine.addSystem(new KeyInputMovementSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel));
 		
 		
-		world.create();
+		room.create();
 		
 		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);

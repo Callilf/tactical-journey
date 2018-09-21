@@ -12,7 +12,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
@@ -26,15 +25,15 @@ public class PlayerMoveSystem extends IteratingSystem {
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<TextureComponent> textureCompoM;
-    private Room world;
+    private Room room;
 
-    public PlayerMoveSystem(Room w) {
+    public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
         this.textureCompoM = ComponentMapper.getFor(TextureComponent.class);
-        world = w;
+        room = r;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     		
     		//Build the movable tiles list
         	GridPositionComponent gridPositionComponent = gridPositionM.get(moverEntity);
-        	Entity playerTileEntity = world.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
+        	Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
 	        
 	        //Find all walkable tiles
 	        Set<Entity> allWalkableTiles = findAllWalkableTiles(playerTileEntity, 1, playerCompo.moveSpeed);
@@ -54,20 +53,8 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        
 	        //Create entities for each movable tiles to display them
 	        for (Entity tileCoord : allWalkableTiles) {
-	        	GridPositionComponent tilePosCompo = gridPositionM.get(tileCoord);
-	        	
-	        	//TODO: move this into a factory
-	        	Entity movableTileEntity = world.engine.createEntity();
-	        	GridPositionComponent movableTilePos = world.engine.createComponent(GridPositionComponent.class);
-	        	movableTilePos.coord.set(tilePosCompo.coord);
-	        	movableTileEntity.add(movableTilePos);
-	        	
-	        	TextureComponent texture = world.engine.createComponent(TextureComponent.class);
-	        	texture.region = Assets.getTexture(Assets.tile_movable);
-	        	movableTileEntity.add(texture);
-	        	
+	        	Entity movableTileEntity = room.entityFactory.createMovableTile(gridPositionM.get(tileCoord).coord);
 	        	playerCompo.movableTiles.add(movableTileEntity);
-	        	world.engine.addEntity(movableTileEntity);
 	        }
 	        
     	} else {
@@ -80,27 +67,18 @@ public class PlayerMoveSystem extends IteratingSystem {
             	for (Entity tile : playerCompo.movableTiles) {
             		TextureComponent textureComponent = textureCompoM.get(tile);
             		GridPositionComponent gridPos = gridPositionM.get(tile);
+            		
+            		//TODO: find an overlap method in libGDX instead of this ugly test
             		float tileStartX = gridPos.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
             		float tileStartY = gridPos.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
             		float tileEndX = tileStartX + textureComponent.region.getRegionWidth();
             		float tileEndY = tileStartY + textureComponent.region.getRegionHeight();
             		
             		if (tileStartX < x && tileEndX > x && tileStartY < y && tileEndY > y) {
-            			//Clic on this tile !!
-            			Entity redCross = world.engine.createEntity();
-            			
-            			//TODO: move this into a factory
-            			GridPositionComponent movableTilePos = world.engine.createComponent(GridPositionComponent.class);
-        	        	movableTilePos.coord.set(gridPos.coord);
-        	        	redCross.add(movableTilePos);
-        	        	TextureComponent texture = world.engine.createComponent(TextureComponent.class);
-        	        	texture.region = Assets.getTexture(Assets.tile_movable_selected);
-        	        	redCross.add(texture);
-            			
-        	        	//TODO use a setter that clears beforehand
-        	        	playerCompo.clearSelectedTile();
-        	        	playerCompo.selectedTile = redCross;
-        	        	world.engine.addEntity(redCross);
+            			//Clicked on this tile !!
+            			//Create an entity to show that this tile is selected as the destination
+            			Entity destinationTileEntity = room.entityFactory.createDestinationTile(gridPos.coord);
+            			playerCompo.setSelectedTile(destinationTileEntity);
         	        	break;
             		} 
 
@@ -186,22 +164,22 @@ public class PlayerMoveSystem extends IteratingSystem {
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		//Left
 		if (currentX > 0) {
-			Entity tileEntity = world.grid[currentX - 1][currentY];
+			Entity tileEntity = room.grid[currentX - 1][currentY];
 			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Up
 		if (currentY < GameScreen.GRID_H - 1) {
-			Entity tileEntity = world.grid[currentX][currentY + 1];
+			Entity tileEntity = room.grid[currentX][currentY + 1];
 			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Right
 		if (currentX < GameScreen.GRID_W - 1) {
-			Entity tileEntity = world.grid[currentX + 1][currentY];
+			Entity tileEntity = room.grid[currentX + 1][currentY];
 			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		//Down
 		if (currentY > 0) {
-			Entity tileEntity = world.grid[currentX][currentY - 1];
+			Entity tileEntity = room.grid[currentX][currentY - 1];
 			checkOneTile(tileEntity, walkableTiles, tilesToIgnore);
 		}
 		return walkableTiles;

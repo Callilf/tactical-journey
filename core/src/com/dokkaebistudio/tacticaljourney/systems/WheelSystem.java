@@ -1,15 +1,14 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelModifierComponent;
-
-import java.util.List;
 
 /**
  * This system's role is to upadte the attack wheel, considering

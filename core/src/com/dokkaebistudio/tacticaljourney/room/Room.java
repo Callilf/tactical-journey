@@ -23,119 +23,40 @@ import java.util.Arrays;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 
 public class Room {
 	public RoomState state;
 	public Entity[][] grid;
 	
 	public PooledEngine engine;
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion wallTexture;
-	private TextureAtlas.AtlasRegion playerTexture;
-	private TextureAtlas.AtlasRegion pitTexture;
-	private TextureAtlas.AtlasRegion mudTexture;
-	private TextureAtlas.AtlasRegion groundTexture;
+	public EntityFactory entityFactory;
 
 	public Room (PooledEngine engine) {
 		this.engine = engine;
-		wallTexture = Assets.getTexture(Assets.tile_wall);
-		groundTexture = Assets.getTexture(Assets.tile_ground);
-		pitTexture = Assets.getTexture(Assets.tile_pit);
-		mudTexture = Assets.getTexture(Assets.tile_mud);
-		playerTexture = Assets.getTexture(Assets.player);
+		this.entityFactory = new EntityFactory(this.engine);
 	}
 	
 	public void create() {
-		createBackground();
-		createPlayer();
-		generateLevel();
+		createGrid();
+		entityFactory.createPlayer(new Vector2(4,5), 5);
 
 		this.state = RoomState.PLAYER_TURN;
 	}
 
-	private void createPlayer() {
-		Entity playerEntity = engine.createEntity();
-
-		TransformComponent position = engine.createComponent(TransformComponent.class);
-		TextureComponent texture = engine.createComponent(TextureComponent.class);
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
-
-		baseWheelComponent.addSector(15, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(2, WheelComponent.Hit.CRITICAL);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
-
-		gridPosition.coord.set(4, 5); // default position
-
-		texture.region = this.playerTexture;
-
-		playerEntity.add(position);
-		playerEntity.add(texture);
-		playerEntity.add(gridPosition);
-		playerEntity.add(baseWheelComponent);
-		// he's the player !
-		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
-		playerComponent.engine = this.engine;
-		playerComponent.moveSpeed = 5;
-		playerEntity.add(playerComponent);
-
-		engine.addEntity(playerEntity);
-	}
-
-	private void generateLevel () {
-		
-	}
-	
-	
-	private void createBackground() {
+	/**
+	 * Create the grid, ie. fille the 2 dimensional array of tile entities.
+	 */
+	private void createGrid() {
 		TileEnum[][] generatedRoom = generateRoom();
 		grid = new Entity[GRID_W][GameScreen.GRID_H];
 		for (int x = 0; x < GRID_W; x++) {
 			for (int y = 0; y < GameScreen.GRID_H; y++) {
-				Entity tileEntity = engine.createEntity();
-				TransformComponent position = engine.createComponent(TransformComponent.class);
-				TextureComponent texture = engine.createComponent(TextureComponent.class);
-				GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-				TileComponent tile = engine.createComponent(TileComponent.class);
-
-				tile.type = generatedRoom[x][y];
-				switch (generatedRoom[x][y]) {
-					case WALL:
-						texture.region = wallTexture;
-						break;
-					case GROUND:
-						texture.region = groundTexture;
-						break;
-					case PIT:
-						texture.region = pitTexture;
-						break;
-					case MUD:
-						texture.region = mudTexture;
-						break;
-				}
-
-				gridPosition.coord.set(x, y);
-
-				tileEntity.add(position);
-				tileEntity.add(texture);
-				tileEntity.add(gridPosition);
-				tileEntity.add(tile);
-
-				engine.addEntity(tileEntity);
+				Entity tileEntity = entityFactory.createTile(new Vector2(x, y), generatedRoom[x][y]);
 				grid[x][y] = tileEntity;
 			}
 		}

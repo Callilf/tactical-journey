@@ -11,51 +11,58 @@ background-test-menu
   orig: 1920, 1080
   offset: 0, 0
   index: -1
-player-test
-  rotate: false
-  xy: 68, 68
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-tile-movable
-  rotate: false
-  xy: 2, 68
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-tile-movable-selected
-  rotate: false
-  xy: 2, 2
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-tile-mud-test
+btn-move-confirmation
   rotate: false
   xy: 2, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-tile-pit-test
+player-test
   rotate: false
-  xy: 1924, 1216
+  xy: 134, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-tile-test
+tile-movable
   rotate: false
   xy: 68, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-tile-wall-test
+tile-movable-selected
+  rotate: false
+  xy: 68, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-mud-test
+  rotate: false
+  xy: 1924, 1216
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-pit-test
+  rotate: false
+  xy: 2, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-test
   rotate: false
   xy: 1924, 1150
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-wall-test
+  rotate: false
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

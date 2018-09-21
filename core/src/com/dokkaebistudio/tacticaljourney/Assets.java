@@ -38,6 +38,10 @@ public class Assets {
 	
 	public static final String tile_movable = "tile-movable";
 	public static final String tile_movable_selected = "tile-movable-selected";
+	
+	public static final String btn_move_confirmation = "btn-move-confirmation";
+
+	
 
 	public static BitmapFont font;
 

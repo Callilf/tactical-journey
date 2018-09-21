@@ -45,7 +45,7 @@ public class Room {
 		createGrid();
 		entityFactory.createPlayer(new Vector2(4,5), 5);
 
-		this.state = RoomState.PLAYER_TURN;
+		this.state = RoomState.PLAYER_MOVE_START;
 	}
 
 	/**

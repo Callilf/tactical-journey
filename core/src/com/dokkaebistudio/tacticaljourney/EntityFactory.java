@@ -5,11 +5,12 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
@@ -58,7 +59,7 @@ public final class EntityFactory {
 		Entity playerEntity = engine.createEntity();
 
 		TransformComponent position = engine.createComponent(TransformComponent.class);
-		TextureComponent texture = engine.createComponent(TextureComponent.class);
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
 
@@ -69,12 +70,13 @@ public final class EntityFactory {
 		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
 		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
 
-		gridPosition.coord.set(pos); // default position
+		gridPosition.coord.set(pos);
 
-		texture.region = this.playerTexture;
+		//texture.region = this.playerTexture;
+		spriteCompo.setSprite(new Sprite(this.playerTexture));
 
 		playerEntity.add(position);
-		playerEntity.add(texture);
+		playerEntity.add(spriteCompo);
 		playerEntity.add(gridPosition);
 		playerEntity.add(baseWheelComponent);
 		// he's the player !
@@ -97,30 +99,30 @@ public final class EntityFactory {
 	public Entity createTile(Vector2 pos, TileEnum type) {
 		Entity tileEntity = engine.createEntity();
 		TransformComponent position = engine.createComponent(TransformComponent.class);
-		TextureComponent texture = engine.createComponent(TextureComponent.class);
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		TileComponent tile = engine.createComponent(TileComponent.class);
 
 		tile.type = type;
 		switch (type) {
 			case WALL:
-				texture.region = wallTexture;
+				spriteCompo.setSprite(new Sprite(wallTexture));
 				break;
 			case GROUND:
-				texture.region = groundTexture;
+				spriteCompo.setSprite(new Sprite(groundTexture));
 				break;
 			case PIT:
-				texture.region = pitTexture;
+				spriteCompo.setSprite(new Sprite(pitTexture));
 				break;
 			case MUD:
-				texture.region = mudTexture;
+				spriteCompo.setSprite(new Sprite(mudTexture));
 				break;
 		}
 
 		gridPosition.coord.set(pos);
 
 		tileEntity.add(position);
-		tileEntity.add(texture);
+		tileEntity.add(spriteCompo);
 		tileEntity.add(gridPosition);
 		tileEntity.add(tile);
 
@@ -137,9 +139,9 @@ public final class EntityFactory {
     	movableTilePos.coord.set(pos);
     	movableTileEntity.add(movableTilePos);
     	
-    	TextureComponent texture = engine.createComponent(TextureComponent.class);
-    	texture.region = Assets.getTexture(Assets.tile_movable);
-    	movableTileEntity.add(texture);
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
+    	movableTileEntity.add(spriteCompo);
     	
     	engine.addEntity(movableTileEntity);
     	return movableTileEntity;
@@ -157,12 +159,32 @@ public final class EntityFactory {
 		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord.set(pos);
     	redCross.add(movableTilePos);
-    	TextureComponent texture = engine.createComponent(TextureComponent.class);
-    	texture.region = Assets.getTexture(Assets.tile_movable_selected);
-    	redCross.add(texture);
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
+    	redCross.add(spriteCompo);
     	
     	engine.addEntity(redCross);
     	return redCross;
+	}
+	
+	/**
+	 * Create the movement confirmation button.
+	 * @param pos the position
+	 * @return the confirmation button entity
+	 */
+	public Entity createMoveConfirmationButton(Vector2 pos) {
+		Entity confirmButton = engine.createEntity();
+		
+		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord.set(pos);
+    	confirmButton.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
+    	confirmButton.add(spriteCompo);
+    	
+    	engine.addEntity(confirmButton);
+    	return confirmButton;
 	}
 	
 }

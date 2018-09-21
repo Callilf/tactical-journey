@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
 public class KeyInputMovementSystem extends IteratingSystem {
 
@@ -58,8 +59,8 @@ public class KeyInputMovementSystem extends IteratingSystem {
 		if (!destiTileCompo.type.isWall() && !destiTileCompo.type.isPit()) {
 			g.coord.x = newLocation.x;
 			g.coord.y = newLocation.y;
-			//clear the movable tile so that it will be re computed next frame
-			playerCompo.clearMovableTiles();
+			
+			room.state = RoomState.PLAYER_MOVE_START;
 		}
 	}
 }

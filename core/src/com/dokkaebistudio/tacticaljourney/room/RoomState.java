@@ -9,6 +9,8 @@ package com.dokkaebistudio.tacticaljourney.room;
  *
  */
 public enum RoomState {
-	PLAYER_TURN,
+	PLAYER_MOVE_START,
+	PLAYER_MOVE_TILES_DISPLAYED,
+	PLAYER_MOVE_DESTINATION_SELECTED,
 	ENEMY_TURN;
 }

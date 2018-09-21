@@ -16,6 +16,9 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_H;
+import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_W;
+
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -24,15 +27,11 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
-
-import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_H;
-import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_W;
 
 public class RenderingSystem extends IteratingSystem {
 
@@ -41,14 +40,14 @@ public class RenderingSystem extends IteratingSystem {
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
 	
-	private ComponentMapper<TextureComponent> textureM;
+	private ComponentMapper<SpriteComponent> textureM;
 	private ComponentMapper<TransformComponent> transformM;
 	private final ComponentMapper<GridPositionComponent> gridPositionM;
 	
 	public RenderingSystem(SpriteBatch batch) {
-		super(Family.all(TextureComponent.class).get());
+		super(Family.all(SpriteComponent.class).get());
 		
-		textureM = ComponentMapper.getFor(TextureComponent.class);
+		textureM = ComponentMapper.getFor(SpriteComponent.class);
 		transformM = ComponentMapper.getFor(TransformComponent.class);
 		gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
 		
@@ -87,43 +86,36 @@ public class RenderingSystem extends IteratingSystem {
 		batch.begin();
 		
 		for (Entity entity : renderQueue) {
-			TextureComponent tex = textureM.get(entity);
+			SpriteComponent spriteCompo = textureM.get(entity);
 			
-			if (tex.region == null) {
+			if (spriteCompo.getSprite() == null) {
 				continue;
 			}
 
 			if (gridPositionM.has(entity)){
 				// use grid position to render instead of real screen coordinates
 				GridPositionComponent g = gridPositionM.get(entity);
-				float width = tex.region.getRegionWidth();
-				float height = tex.region.getRegionHeight();
-				float originX = width * 0.5f;
-				float originY = height * 0.5f;
-
-				batch.draw(tex.region,
-						g.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING,
-						g.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT,
-						originX, originY,
-						width, height,
-						1, 1,
-						0);
+				
+				float x = g.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+				float y = g.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+				spriteCompo.getSprite().setPosition(x, y);
+				spriteCompo.getSprite().draw(batch);
 
 			} else if (transformM.has(entity)) {
+				//TODO This is not used at the moment, but will probably used later
+				
 				// use transform component for drawing position
 				TransformComponent t = transformM.get(entity);
-
-				float width = tex.region.getRegionWidth();
-				float height = tex.region.getRegionHeight();
+				
+				float width = spriteCompo.getSprite().getRegionWidth();
+				float height = spriteCompo.getSprite().getRegionHeight();
 				float originX = width * 0.5f;
 				float originY = height * 0.5f;
+				float x = t.pos.x - originX;
+				float y = t.pos.y - originY;
 
-				batch.draw(tex.region,
-						t.pos.x - originX, t.pos.y - originY,
-						originX, originY,
-						width, height,
-						t.scale.x, t.scale.y,
-						MathUtils.radiansToDegrees * t.rotation);
+				spriteCompo.getSprite().setPosition(x, y);
+				spriteCompo.getSprite().draw(batch);
 			}
 		}
 		

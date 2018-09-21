@@ -10,85 +10,137 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextureComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
 public class PlayerMoveSystem extends IteratingSystem {
 
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private final ComponentMapper<TextureComponent> textureCompoM;
+    private final ComponentMapper<SpriteComponent> textureCompoM;
     private Room room;
+    private boolean leftClickJustPressed;
 
     public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
-        this.textureCompoM = ComponentMapper.getFor(TextureComponent.class);
+        this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         room = r;
+        
+        initInputProcessor();
     }
 
     @Override
     protected void processEntity(Entity moverEntity, float deltaTime) {
     	PlayerComponent playerCompo = playerCM.get(moverEntity);
+    	GridPositionComponent moverCurrentPos = gridPositionM.get(moverEntity);
     	
-    	//First, check whether the set of movetiles hasn't already been computed
-    	if (playerCompo.movableTiles.isEmpty()) {
+    	switch(room.state) {
+    	
+    	case PLAYER_MOVE_START:
+    		//clear the movable tile
+			playerCompo.clearMovableTiles();
     		
     		//Build the movable tiles list
-        	GridPositionComponent gridPositionComponent = gridPositionM.get(moverEntity);
-        	Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
+        	buildMoveTilesSet(moverEntity, playerCompo);
+	        room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+	        break;
 	        
-	        //Find all walkable tiles
-	        Set<Entity> allWalkableTiles = findAllWalkableTiles(playerTileEntity, 1, playerCompo.moveSpeed);
-	        allWalkableTiles.remove(playerTileEntity);
 	        
-	        //Create entities for each movable tiles to display them
-	        for (Entity tileCoord : allWalkableTiles) {
-	        	Entity movableTileEntity = room.entityFactory.createMovableTile(gridPositionM.get(tileCoord).coord);
-	        	playerCompo.movableTiles.add(movableTileEntity);
-	        }
-	        
-    	} else {
-    		
-    		//Handle mouse click movable tiles
-            if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+    	case PLAYER_MOVE_TILES_DISPLAYED:
+    		//When clicking on a moveTile, display it as the destination
+            if (leftClickJustPressed) {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
-            	for (Entity tile : playerCompo.movableTiles) {
-            		TextureComponent textureComponent = textureCompoM.get(tile);
-            		GridPositionComponent gridPos = gridPositionM.get(tile);
-            		
-            		//TODO: find an overlap method in libGDX instead of this ugly test
-            		float tileStartX = gridPos.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
-            		float tileStartY = gridPos.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-            		float tileEndX = tileStartX + textureComponent.region.getRegionWidth();
-            		float tileEndY = tileStartY + textureComponent.region.getRegionHeight();
-            		
-            		if (tileStartX < x && tileEndX > x && tileStartY < y && tileEndY > y) {
-            			//Clicked on this tile !!
-            			//Create an entity to show that this tile is selected as the destination
-            			Entity destinationTileEntity = room.entityFactory.createDestinationTile(gridPos.coord);
-            			playerCompo.setSelectedTile(destinationTileEntity);
-        	        	break;
-            		} 
-
-            	}
-            	
+            	selectDestinationTile(playerCompo, x, y, moverCurrentPos);
             }
+            break;
     		
+            
+    	case PLAYER_MOVE_DESTINATION_SELECTED:
+    		//Either click on confirm to move or click on another tile to change the destination
+    		if (leftClickJustPressed) {
+    			int x = Gdx.input.getX();
+            	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+    			
+    			//First test the confirmation button
+            	SpriteComponent confirmationButtonSprite = textureCompoM.get(playerCompo.getMovementConfirmationButton());
+            	if (confirmationButtonSprite.containsPoint(x, y)) {
+            		//Clicked on the confirmation button, move the entity
+            		
+            		//TODO move the player
+            		GridPositionComponent selectedTilePos = gridPositionM.get(playerCompo.getSelectedTile());
+            		moverCurrentPos.coord.set(selectedTilePos.coord);
+            		room.state = RoomState.PLAYER_MOVE_START;
+            		
+            		break;
+            	}
+    			
+    			
+    			//No confirmation, check if another tile has been selected
+    			selectDestinationTile(playerCompo, x, y, moverCurrentPos);
+    			
+    		}
     		
+    		break;
+    		
+    	default:
+    		break;
+    	
     	}
+    	
+    	leftClickJustPressed = false;
+
     }
+
+	private void selectDestinationTile(PlayerComponent playerCompo, int x, int y, GridPositionComponent moverCurrentPos) {
+		for (Entity tile : playerCompo.movableTiles) {
+			SpriteComponent spriteComponent = textureCompoM.get(tile);
+			GridPositionComponent gridPos = gridPositionM.get(tile);
+			
+			if (spriteComponent.containsPoint(x, y)) {
+				//Clicked on this tile !!
+				//Create an entity to show that this tile is selected as the destination
+				Entity destinationTileEntity = room.entityFactory.createDestinationTile(gridPos.coord);
+				playerCompo.setSelectedTile(destinationTileEntity);
+				
+				//Display the confirmation button
+				Entity moveConfirmationButton = room.entityFactory.createMoveConfirmationButton(moverCurrentPos.coord);
+				playerCompo.setMovementConfirmationButton(moveConfirmationButton);
+				
+				room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+		    	break;
+			} 
+
+		}
+	}
+
+	private void buildMoveTilesSet(Entity moverEntity, PlayerComponent playerCompo) {
+		GridPositionComponent gridPositionComponent = gridPositionM.get(moverEntity);
+		Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
+		
+		//Find all walkable tiles
+		Set<Entity> allWalkableTiles = findAllWalkableTiles(playerTileEntity, 1, playerCompo.moveSpeed);
+		allWalkableTiles.remove(playerTileEntity);
+		
+		//Create entities for each movable tiles to display them
+		for (Entity tileCoord : allWalkableTiles) {
+			Entity movableTileEntity = room.entityFactory.createMovableTile(gridPositionM.get(tileCoord).coord);
+			playerCompo.movableTiles.add(movableTileEntity);
+		}
+	}
 
     
     
@@ -206,4 +258,57 @@ public class PlayerMoveSystem extends IteratingSystem {
     // End of movable tiles search algorithm
     //***********************************************
 
+	
+	/**
+	 * Initialize the inputProcessor.
+	 */
+	private void initInputProcessor() {
+		Gdx.input.setInputProcessor(new InputProcessor() {
+
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				if (button == Input.Buttons.LEFT) {
+					leftClickJustPressed = true;
+					return true;
+				}				
+				return false;
+			}
+
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				return false;
+			}
+
+			@Override
+			public boolean scrolled(int amount) {
+				return false;
+			}
+
+        });
+	}
 }

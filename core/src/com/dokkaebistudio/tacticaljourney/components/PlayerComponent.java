@@ -1,6 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
@@ -24,6 +26,8 @@ public class PlayerComponent implements Component {
 	/** The button used to confirm movements. */
 	private Entity movementConfirmationButton;
 	
+	/** The arrows displaying the paths to the selected tile. */
+	private List<Entity> wayPoints = new ArrayList<>();
 	
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.
@@ -43,6 +47,11 @@ public class PlayerComponent implements Component {
 			engine.removeEntity(this.movementConfirmationButton);
 		}
 		this.movementConfirmationButton = null;
+		
+		for (Entity e : wayPoints) {
+			engine.removeEntity(e);
+		}
+		wayPoints.clear();
 	}
 	
 	
@@ -70,6 +79,23 @@ public class PlayerComponent implements Component {
 		}
 		this.movementConfirmationButton = movementConfirmationButton;
 	}
+
+
+
+	public List<Entity> getWayPoints() {
+		return wayPoints;
+	}
+
+
+
+	public void setWayPoints(List<Entity> wayPoints) {
+		for (Entity e : this.wayPoints) {
+			engine.removeEntity(e);
+		}
+		this.wayPoints = wayPoints;
+	}
+	
+	
 	
 	
 	

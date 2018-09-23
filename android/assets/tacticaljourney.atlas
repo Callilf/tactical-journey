@@ -39,6 +39,13 @@ tile-movable-selected
   orig: 64, 64
   offset: 0, 0
   index: -1
+tile-movable-waypoint
+  rotate: false
+  xy: 1924, 1084
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 tile-mud-test
   rotate: false
   xy: 1924, 1216

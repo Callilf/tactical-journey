@@ -1,7 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,8 +15,13 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
+import com.badlogic.gdx.ai.pfa.GraphPath;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.RoomGraph;
+import com.dokkaebistudio.tacticaljourney.ai.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
@@ -29,6 +37,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private Room room;
     private boolean leftClickJustPressed;
+    private Set<Entity> allWalkableTiles;
 
     public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
@@ -64,7 +73,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
-            	selectDestinationTile(playerCompo, x, y, moverCurrentPos);
+            	selectDestinationTile(playerCompo, x, y, moverCurrentPos, moverEntity);
             }
             break;
     		
@@ -90,7 +99,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     			
     			
     			//No confirmation, check if another tile has been selected
-    			selectDestinationTile(playerCompo, x, y, moverCurrentPos);
+    			selectDestinationTile(playerCompo, x, y, moverCurrentPos, moverEntity);
     			
     		}
     		
@@ -105,7 +114,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 
     }
 
-	private void selectDestinationTile(PlayerComponent playerCompo, int x, int y, GridPositionComponent moverCurrentPos) {
+	private void selectDestinationTile(PlayerComponent playerCompo, int x, int y, GridPositionComponent moverCurrentPos, Entity moverTileEntity) {
 		for (Entity tile : playerCompo.movableTiles) {
 			SpriteComponent spriteComponent = textureCompoM.get(tile);
 			GridPositionComponent gridPos = gridPositionM.get(tile);
@@ -120,6 +129,29 @@ public class PlayerMoveSystem extends IteratingSystem {
 				Entity moveConfirmationButton = room.entityFactory.createMoveConfirmationButton(moverCurrentPos.coord);
 				playerCompo.setMovementConfirmationButton(moveConfirmationButton);
 				
+				
+				
+				//Display the way to go to this point
+				RoomGraph roomGraph = new RoomGraph(allWalkableTiles);
+				IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
+				GraphPath<Entity> path = new DefaultGraphPath<Entity>();
+	            indexedAStarPathFinder.searchNodePath(moverTileEntity, room.grid[(int) gridPos.coord.x][(int) gridPos.coord.y], new RoomHeuristic(), path);
+				
+	            int pathNb = -1;
+	            List<Entity> waypoints = new ArrayList<>();
+	            Iterator<Entity> iterator = path.iterator();
+	            while(iterator.hasNext()) {
+	            	pathNb ++;
+	            	Entity next = iterator.next();
+	            	if (pathNb == 0 || !iterator.hasNext()) continue;
+	            	GridPositionComponent gridPositionComponent = gridPositionM.get(next);
+	            	Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord);
+	            	waypoints.add(waypoint);
+	            	
+	            }
+            	playerCompo.setWayPoints(waypoints);
+
+				
 				room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
 		    	break;
 			} 
@@ -132,8 +164,8 @@ public class PlayerMoveSystem extends IteratingSystem {
 		Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
 		
 		//Find all walkable tiles
-		Set<Entity> allWalkableTiles = findAllWalkableTiles(playerTileEntity, 1, playerCompo.moveSpeed);
-		allWalkableTiles.remove(playerTileEntity);
+		allWalkableTiles = findAllWalkableTiles(playerTileEntity, 1, playerCompo.moveSpeed);
+		allWalkableTiles.add(playerTileEntity);
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : allWalkableTiles) {

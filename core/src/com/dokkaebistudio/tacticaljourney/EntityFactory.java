@@ -167,6 +167,27 @@ public final class EntityFactory {
     	return redCross;
 	}
 	
+	
+	/**
+	 * Create a waypoint.
+	 * @param pos the position
+	 * @return the waypoint entity
+	 */
+	public Entity createWaypoint(Vector2 pos) {
+		Entity confirmButton = engine.createEntity();
+		
+		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord.set(pos);
+    	confirmButton.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_waypoint)));
+    	confirmButton.add(spriteCompo);
+    	
+    	engine.addEntity(confirmButton);
+    	return confirmButton;
+	}
+	
 	/**
 	 * Create the movement confirmation button.
 	 * @param pos the position

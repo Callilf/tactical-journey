@@ -47,7 +47,7 @@ public class AnimationSystem extends IteratingSystem {
 		AnimationComponent anim = am.get(entity);
 		StateComponent state = sm.get(entity);
 		
-		Animation animation = anim.animations.get(state.get());
+		Animation<Sprite> animation = anim.animations.get(state.get());
 		
 		if (animation != null) {
 			spriteCompo.setSprite(new Sprite(animation.getKeyFrame(state.time))); 

@@ -73,7 +73,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
-            	selectDestinationTile(playerCompo, x, y, moverCurrentPos, moverEntity);
+            	selectDestinationTile(playerCompo, x, y, moverCurrentPos);
             }
             break;
     		
@@ -99,7 +99,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     			
     			
     			//No confirmation, check if another tile has been selected
-    			selectDestinationTile(playerCompo, x, y, moverCurrentPos, moverEntity);
+    			selectDestinationTile(playerCompo, x, y, moverCurrentPos);
     			
     		}
     		
@@ -114,7 +114,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 
     }
 
-	private void selectDestinationTile(PlayerComponent playerCompo, int x, int y, GridPositionComponent moverCurrentPos, Entity moverTileEntity) {
+	private void selectDestinationTile(PlayerComponent playerCompo, int x, int y, GridPositionComponent moverCurrentPos) {
 		for (Entity tile : playerCompo.movableTiles) {
 			SpriteComponent spriteComponent = textureCompoM.get(tile);
 			GridPositionComponent gridPos = gridPositionM.get(tile);
@@ -132,10 +132,12 @@ public class PlayerMoveSystem extends IteratingSystem {
 				
 				
 				//Display the way to go to this point
-				RoomGraph roomGraph = new RoomGraph(allWalkableTiles);
+				Entity startTileEntity = room.grid[(int) moverCurrentPos.coord.x][(int) moverCurrentPos.coord.y];
+				List<Entity> movableTilesList = new ArrayList<>(allWalkableTiles);
+				RoomGraph roomGraph = new RoomGraph(movableTilesList);
 				IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
 				GraphPath<Entity> path = new DefaultGraphPath<Entity>();
-	            indexedAStarPathFinder.searchNodePath(moverTileEntity, room.grid[(int) gridPos.coord.x][(int) gridPos.coord.y], new RoomHeuristic(), path);
+	            indexedAStarPathFinder.searchNodePath(startTileEntity, room.grid[(int) gridPos.coord.x][(int) gridPos.coord.y], new RoomHeuristic(), path);
 				
 	            int pathNb = -1;
 	            List<Entity> waypoints = new ArrayList<>();

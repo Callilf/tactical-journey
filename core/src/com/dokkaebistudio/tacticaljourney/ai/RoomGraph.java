@@ -1,15 +1,12 @@
 package com.dokkaebistudio.tacticaljourney.ai;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 
@@ -17,9 +14,9 @@ public class RoomGraph implements IndexedGraph<Entity> {
 	
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<TileComponent> tileCompoM;
-	private Set<Entity> movableTiles;
+	private List<Entity> movableTiles;
 	
-	public RoomGraph(Set<Entity> movableTiles) {
+	public RoomGraph(List<Entity> movableTiles) {
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.tileCompoM = ComponentMapper.getFor(TileComponent.class);
         this.movableTiles = movableTiles;
@@ -28,10 +25,9 @@ public class RoomGraph implements IndexedGraph<Entity> {
 	@Override
 	public Array<Connection<Entity>> getConnections(Entity fromNode) {
 		Array<Connection<Entity>> connections = new Array<Connection<Entity>>();
-		List<Entity> movableTilesList = new ArrayList<>(movableTiles);
 		GridPositionComponent firstPos = gridPositionM.get(fromNode);
 
-		for (Entity nodeToTest :  movableTilesList) {
+		for (Entity nodeToTest :  movableTiles) {
 			GridPositionComponent secondPos = gridPositionM.get(nodeToTest);
 			if (firstPos.coord.x == secondPos.coord.x && firstPos.coord.y == secondPos.coord.y) continue;
 
@@ -51,8 +47,7 @@ public class RoomGraph implements IndexedGraph<Entity> {
 
 	@Override
 	public int getIndex(Entity node) {
-		GridPositionComponent pos = gridPositionM.get(node);
-		return (int) (pos.coord.x * GameScreen.GRID_H + pos.coord.y) % movableTiles.size();
+		return movableTiles.indexOf(node);
 	}
 
 	@Override
@@ -95,11 +90,11 @@ public class RoomGraph implements IndexedGraph<Entity> {
 
 
 
-	public Set<Entity> getMovableTiles() {
+	public List<Entity> getMovableTiles() {
 		return movableTiles;
 	}
 
-	public void setMovableTiles(Set<Entity> movableTiles) {
+	public void setMovableTiles(List<Entity> movableTiles) {
 		this.movableTiles = movableTiles;
 	}
     

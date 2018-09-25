@@ -21,15 +21,12 @@ import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 
 import java.util.Arrays;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 
 public class Room {
@@ -39,28 +36,19 @@ public class Room {
 	public PooledEngine engine;
 	public EntityFactory entityFactory;
 	
-	public Entity turnText;
-	public int turn;
+	public TurnManager turnManager;
 
 	public Room (PooledEngine engine) {
 		this.engine = engine;
 		this.entityFactory = new EntityFactory(this.engine);
-		this.turn = 1;
 	}
 	
 	public void create() {
 		createGrid();
 		entityFactory.createPlayer(new Vector2(4,5), 5);
-		turnText = entityFactory.createText(new Vector3(100.0f, 100.0f, 0.0f), "Turn " + turn);
+		turnManager = new TurnManager(this);
 
 		this.state = RoomState.PLAYER_MOVE_START;
-	}
-	
-	public void endTurn() {
-		this.turn ++;
-		ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
-		TextComponent textComponent = textCompoM.get(turnText);
-		textComponent.setText("Turn " + this.turn);
 	}
 
 	/**

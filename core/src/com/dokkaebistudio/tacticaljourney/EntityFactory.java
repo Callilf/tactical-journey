@@ -5,12 +5,15 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
@@ -206,6 +209,25 @@ public final class EntityFactory {
     	
     	engine.addEntity(confirmButton);
     	return confirmButton;
+	}
+	
+	
+	/**
+	 * Create a text that will be displayed on screen.
+	 * @param pos the position of the text
+	 * @return the text entity
+	 */
+	public Entity createText(Vector3 pos, String text) {
+		Entity textTest = engine.createEntity();
+		TransformComponent transfoCompo = new TransformComponent();
+		transfoCompo.pos.set(pos);
+		textTest.add(transfoCompo);
+		
+		TextComponent tc = new TextComponent(new BitmapFont());
+		tc.setText(text);
+		textTest.add(tc);
+		engine.addEntity(textTest);
+		return textTest;
 	}
 	
 }

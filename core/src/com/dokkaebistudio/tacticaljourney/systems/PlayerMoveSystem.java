@@ -92,6 +92,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             		//TODO move the player
             		GridPositionComponent selectedTilePos = gridPositionM.get(playerCompo.getSelectedTile());
             		moverCurrentPos.coord.set(selectedTilePos.coord);
+            		room.endTurn();
             		room.state = RoomState.PLAYER_MOVE_START;
             		
             		break;

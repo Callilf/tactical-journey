@@ -38,7 +38,7 @@ public class RoomGraph implements IndexedGraph<Entity> {
 			
 			if (beside || aboveOrUnder) {
 				TileComponent tileComponent = tileCompoM.get(nodeToTest);
-				connections.add(new RoomConnection(fromNode, nodeToTest, 1));
+				connections.add(new RoomConnection(fromNode, nodeToTest, tileComponent.type.getMoveConsumed()));
 			}
 		}
 		

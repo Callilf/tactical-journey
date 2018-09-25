@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 
 public class RenderingSystem extends IteratingSystem {
@@ -40,14 +41,16 @@ public class RenderingSystem extends IteratingSystem {
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
 	
-	private ComponentMapper<SpriteComponent> textureM;
+	private ComponentMapper<SpriteComponent> spriteM;
+	private ComponentMapper<TextComponent> textM;
 	private ComponentMapper<TransformComponent> transformM;
 	private final ComponentMapper<GridPositionComponent> gridPositionM;
 	
 	public RenderingSystem(SpriteBatch batch) {
-		super(Family.all(SpriteComponent.class).get());
+		super(Family.one(SpriteComponent.class, TextComponent.class).get());
 		
-		textureM = ComponentMapper.getFor(SpriteComponent.class);
+		spriteM = ComponentMapper.getFor(SpriteComponent.class);
+		textM = ComponentMapper.getFor(TextComponent.class);
 		transformM = ComponentMapper.getFor(TransformComponent.class);
 		gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
 		
@@ -86,9 +89,10 @@ public class RenderingSystem extends IteratingSystem {
 		batch.begin();
 		
 		for (Entity entity : renderQueue) {
-			SpriteComponent spriteCompo = textureM.get(entity);
+			SpriteComponent spriteCompo = spriteM.get(entity);
+			TextComponent textCompo = textM.get(entity);
 			
-			if (spriteCompo.getSprite() == null) {
+			if (spriteCompo == null && textCompo == null) {
 				continue;
 			}
 
@@ -98,8 +102,13 @@ public class RenderingSystem extends IteratingSystem {
 				
 				float x = g.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
 				float y = g.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-				spriteCompo.getSprite().setPosition(x, y);
-				spriteCompo.getSprite().draw(batch);
+				if (spriteCompo != null && spriteCompo.getSprite() != null) {
+					spriteCompo.getSprite().setPosition(x, y);
+					spriteCompo.getSprite().draw(batch);
+				}
+				if (textCompo != null && textCompo.getFont() != null) {
+					textCompo.getFont().draw(batch, textCompo.getText(), x, y);
+				}
 
 			} else if (transformM.has(entity)) {
 				//TODO This is not used at the moment, but will probably used later
@@ -107,15 +116,21 @@ public class RenderingSystem extends IteratingSystem {
 				// use transform component for drawing position
 				TransformComponent t = transformM.get(entity);
 				
-				float width = spriteCompo.getSprite().getRegionWidth();
-				float height = spriteCompo.getSprite().getRegionHeight();
-				float originX = width * 0.5f;
-				float originY = height * 0.5f;
-				float x = t.pos.x - originX;
-				float y = t.pos.y - originY;
-
-				spriteCompo.getSprite().setPosition(x, y);
-				spriteCompo.getSprite().draw(batch);
+				
+				if (spriteCompo != null && spriteCompo.getSprite() != null) {
+					float width = spriteCompo.getSprite().getRegionWidth();
+					float height = spriteCompo.getSprite().getRegionHeight();
+					float originX = width * 0.5f;
+					float originY = height * 0.5f;
+					float x = t.pos.x - originX;
+					float y = t.pos.y - originY;
+				
+					spriteCompo.getSprite().setPosition(x, y);
+					spriteCompo.getSprite().draw(batch);
+				}
+				if (textCompo != null && textCompo.getFont() != null) {					
+					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
+				}
 			}
 		}
 		

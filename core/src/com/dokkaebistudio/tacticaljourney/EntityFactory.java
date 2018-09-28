@@ -64,7 +64,6 @@ public final class EntityFactory {
 	public Entity createPlayer(Vector2 pos, int moveSpeed) {
 		Entity playerEntity = engine.createEntity();
 
-		TransformComponent position = engine.createComponent(TransformComponent.class);
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
@@ -80,7 +79,6 @@ public final class EntityFactory {
 
 		spriteCompo.setSprite(new Sprite(this.playerTexture));
 
-		playerEntity.add(position);
 		playerEntity.add(spriteCompo);
 		playerEntity.add(gridPosition);
 		playerEntity.add(baseWheelComponent);
@@ -108,7 +106,6 @@ public final class EntityFactory {
 	 */
 	public Entity createTile(Vector2 pos, TileEnum type) {
 		Entity tileEntity = engine.createEntity();
-		TransformComponent position = engine.createComponent(TransformComponent.class);
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		TileComponent tile = engine.createComponent(TileComponent.class);
@@ -131,7 +128,6 @@ public final class EntityFactory {
 
 		gridPosition.coord.set(pos);
 
-		tileEntity.add(position);
 		tileEntity.add(spriteCompo);
 		tileEntity.add(gridPosition);
 		tileEntity.add(tile);
@@ -229,7 +225,6 @@ public final class EntityFactory {
 	public Entity createEnemy(Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 
-		TransformComponent position = engine.createComponent(TransformComponent.class);
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 
@@ -237,7 +232,6 @@ public final class EntityFactory {
 
 		spriteCompo.setSprite(new Sprite(this.enemyTexture));
 
-		enemyEntity.add(position);
 		enemyEntity.add(spriteCompo);
 		enemyEntity.add(gridPosition);
 		

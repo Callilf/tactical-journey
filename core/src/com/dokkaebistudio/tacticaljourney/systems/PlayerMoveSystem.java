@@ -17,16 +17,21 @@ import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
 public class PlayerMoveSystem extends IteratingSystem {
+	
+	public static final int MOVE_SPEED = 10;
 
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
 	private final ComponentMapper<MoveComponent> moveCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
+    private final ComponentMapper<TransformComponent> transfoCompoM;
+
     private Room room;
     private boolean leftClickJustPressed;
 
@@ -37,6 +42,7 @@ public class PlayerMoveSystem extends IteratingSystem {
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
         this.moveCM = ComponentMapper.getFor(MoveComponent.class);
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
+        this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
         
         initInputProcessor();
@@ -69,8 +75,10 @@ public class PlayerMoveSystem extends IteratingSystem {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
-            	selectDestinationTile(moveCompo, x, y, moverCurrentPos);
-            	room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+            	boolean selected = selectDestinationTile(moveCompo, x, y, moverCurrentPos);
+            	if (selected) {
+            		room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+            	}
             }
             break;
     		
@@ -86,20 +94,16 @@ public class PlayerMoveSystem extends IteratingSystem {
             	if (confirmationButtonSprite.containsPoint(x, y)) {
             		//Clicked on the confirmation button, move the entity
             		
-            		//TODO animate the player to move
-            		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
-            		moverCurrentPos.coord.set(selectedTilePos.coord);
+            		//Initiate movement
+            		TransformComponent transfoCompo = room.engine.createComponent(TransformComponent.class);
+            		Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(moverCurrentPos.coord);
+            		transfoCompo.pos.x = startPos.x;
+            		transfoCompo.pos.y = startPos.y;
+            		transfoCompo.pos.z = 1;
+            		moverEntity.add(transfoCompo);
+            		moveCompo.currentMoveDestinationIndex = 0;
             		
-            		//Compute the cost of this move
-            		int cost = computeCostOfMovement(moveCompo);
-            		moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
-            		
-            		if (moveCompo.moveRemaining <= 0) {
-            			moveCompo.clearMovableTiles();
-            			room.turnManager.endPlayerTurn();
-            		} else {
-            			room.state = RoomState.PLAYER_MOVE_START;
-            		}
+            		room.state = RoomState.PLAYER_MOVING;
             		
             		break;
             	}
@@ -111,6 +115,79 @@ public class PlayerMoveSystem extends IteratingSystem {
     			
     		}
     		
+    		break;
+    		
+    	case PLAYER_MOVING:
+    		TransformComponent transfoCompo = transfoCompoM.get(moverEntity);
+    		if (moveCompo.getWayPoints().size() > moveCompo.currentMoveDestinationIndex) {
+    			Entity entity = moveCompo.getWayPoints().get(moveCompo.currentMoveDestinationIndex);
+    			GridPositionComponent gridPositionComponent = gridPositionM.get(entity);
+    			moveCompo.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
+    		} else {
+    			Entity entity = moveCompo.getSelectedTile();
+    			GridPositionComponent gridPositionComponent = gridPositionM.get(entity);
+    			moveCompo.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
+    		}
+    		
+    		
+    		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
+    			transfoCompo.pos.x = transfoCompo.pos.x + MOVE_SPEED;
+    			if (transfoCompo.pos.x >= moveCompo.currentMoveDestinationPos.x) {
+    				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
+    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
+    					room.state = RoomState.PLAYER_END_MOVEMENT;
+    				} else {
+    					moveCompo.currentMoveDestinationIndex ++;
+    				}
+    			}
+    		} else if (moveCompo.currentMoveDestinationPos.x < transfoCompo.pos.x) {
+    			transfoCompo.pos.x = transfoCompo.pos.x - MOVE_SPEED;
+    			if (transfoCompo.pos.x <= moveCompo.currentMoveDestinationPos.x) {
+    				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
+    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
+    					room.state = RoomState.PLAYER_END_MOVEMENT;
+    				} else {
+    					moveCompo.currentMoveDestinationIndex ++;
+    				}    			}
+    		} else if (moveCompo.currentMoveDestinationPos.y > transfoCompo.pos.y) { 
+    			transfoCompo.pos.y = transfoCompo.pos.y + MOVE_SPEED;
+    			if (transfoCompo.pos.y >= moveCompo.currentMoveDestinationPos.y) {
+    				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
+    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
+    					room.state = RoomState.PLAYER_END_MOVEMENT;
+    				} else {
+    					moveCompo.currentMoveDestinationIndex ++;
+    				}    			}
+    		} else if (moveCompo.currentMoveDestinationPos.y < transfoCompo.pos.y) {
+    			transfoCompo.pos.y = transfoCompo.pos.y - MOVE_SPEED;
+    			if (transfoCompo.pos.y <= moveCompo.currentMoveDestinationPos.y) {
+    				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
+    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
+    					room.state = RoomState.PLAYER_END_MOVEMENT;
+    				} else {
+    					moveCompo.currentMoveDestinationIndex ++;
+    				}    			
+    			}
+    		}
+    		
+    		break;
+    		
+    	case PLAYER_END_MOVEMENT:
+    		moverEntity.remove(TransformComponent.class);
+    		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
+    		moverCurrentPos.coord.set(selectedTilePos.coord);
+
+    		
+    		//Compute the cost of this move
+    		int cost = computeCostOfMovement(moveCompo);
+    		moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
+    		
+    		if (moveCompo.moveRemaining <= 0) {
+    			moveCompo.clearMovableTiles();
+    			room.turnManager.endPlayerTurn();
+    		} else {
+    			room.state = RoomState.PLAYER_MOVE_START;
+    		}
     		break;
     		
     	default:
@@ -156,7 +233,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 	 * @param y the ordinate of the destination
 	 * @param moverCurrentPos the current position of the mover
 	 */
-	private void selectDestinationTile(MoveComponent moveCompo, int x, int y, GridPositionComponent moverCurrentPos) {
+	private boolean selectDestinationTile(MoveComponent moveCompo, int x, int y, GridPositionComponent moverCurrentPos) {
 		for (Entity tile : moveCompo.movableTiles) {
 			SpriteComponent spriteComponent = textureCompoM.get(tile);
 			GridPositionComponent destinationPos = gridPositionM.get(tile);
@@ -175,10 +252,11 @@ public class PlayerMoveSystem extends IteratingSystem {
 				List<Entity> waypoints = MovableTileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
             	moveCompo.setWayPoints(waypoints);
 				
-		    	break;
+		    	return true;
 			} 
 
 		}
+		return false;
 	}
 
 	

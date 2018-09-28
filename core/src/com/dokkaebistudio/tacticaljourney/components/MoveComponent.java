@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class MoveComponent implements Component, Poolable {
@@ -38,6 +39,9 @@ public class MoveComponent implements Component, Poolable {
 	
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
+	
+	public Vector2 currentMoveDestinationPos;
+	public int currentMoveDestinationIndex;
 	
 	
 	@Override

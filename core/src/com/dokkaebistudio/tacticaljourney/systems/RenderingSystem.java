@@ -27,6 +27,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
@@ -60,9 +61,9 @@ public class RenderingSystem extends IteratingSystem {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
 				if (!transformM.has(entityA) && transformM.has(entityB)) {
-					return 1;
-				} else if (!transformM.has(entityB) && transformM.has(entityA)) {
 					return -1;
+				} else if (!transformM.has(entityB) && transformM.has(entityA)) {
+					return 1;
 				} else if (!transformM.has(entityA) && !transformM.has(entityB)) {
 					return 0;
 				}
@@ -96,34 +97,14 @@ public class RenderingSystem extends IteratingSystem {
 				continue;
 			}
 
-			if (gridPositionM.has(entity)){
-				// use grid position to render instead of real screen coordinates
-				GridPositionComponent g = gridPositionM.get(entity);
-				
-				float x = g.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
-				float y = g.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
-					spriteCompo.getSprite().setPosition(x, y);
-					spriteCompo.getSprite().draw(batch);
-				}
-				if (textCompo != null && textCompo.getFont() != null) {
-					textCompo.getFont().draw(batch, textCompo.getText(), x, y);
-				}
-
-			} else if (transformM.has(entity)) {
-				//TODO This is not used at the moment, but will probably used later
-				
+			if (transformM.has(entity)) {			
 				// use transform component for drawing position
 				TransformComponent t = transformM.get(entity);
 				
 				
 				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
-					float width = spriteCompo.getSprite().getRegionWidth();
-					float height = spriteCompo.getSprite().getRegionHeight();
-					float originX = width * 0.5f;
-					float originY = height * 0.5f;
-					float x = t.pos.x - originX;
-					float y = t.pos.y - originY;
+					float x = t.pos.x;
+					float y = t.pos.y;
 				
 					spriteCompo.getSprite().setPosition(x, y);
 					spriteCompo.getSprite().draw(batch);
@@ -131,7 +112,20 @@ public class RenderingSystem extends IteratingSystem {
 				if (textCompo != null && textCompo.getFont() != null) {					
 					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
 				}
-			}
+			} else if (gridPositionM.has(entity)){
+				// use grid position to render instead of real screen coordinates
+				GridPositionComponent g = gridPositionM.get(entity);
+				
+				Vector2 realPos = convertGridPosIntoPixelPos(g.coord);
+				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
+					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
+					spriteCompo.getSprite().draw(batch);
+				}
+				if (textCompo != null && textCompo.getFont() != null) {
+					textCompo.getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y);
+				}
+
+			} 
 		}
 		
 		batch.end();
@@ -141,6 +135,17 @@ public class RenderingSystem extends IteratingSystem {
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		renderQueue.add(entity);
+	}
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
+	 * @return the real position
+	 */
+	public static Vector2 convertGridPosIntoPixelPos(Vector2 gridPos) {
+		float x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+		float y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+		return new Vector2(x,y);
 	}
 	
 	public OrthographicCamera getCamera() {

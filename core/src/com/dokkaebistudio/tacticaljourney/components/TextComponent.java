@@ -19,12 +19,13 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
  * Component for entities that want to display text on screen.
  * @author Callil
  */
-public class TextComponent implements Component {
+public class TextComponent implements Component, Poolable {
 	
 	/** The font to use. */
 	private BitmapFont font;
@@ -39,6 +40,13 @@ public class TextComponent implements Component {
 		font = f;
 	}
 	
+
+	@Override
+	public void reset() {
+		font = null;
+		setText(null);
+	}
+	
 	
 
 	public String getText() {
@@ -49,12 +57,21 @@ public class TextComponent implements Component {
 		this.text = text;
 		
 		//Compute width and height
-		GlyphLayout layout = new GlyphLayout();
-		layout.setText(font, text);
-		this.width = layout.width;
-		this.height = layout.height;
+		if (text != null) {
+			GlyphLayout layout = new GlyphLayout();
+			layout.setText(font, text);
+			this.width = layout.width;
+			this.height = layout.height;
+		} else {
+			this.width = 0;
+			this.height = 0;
+		}
 	}
 	
+	
+	public void setFont(BitmapFont font) {
+		this.font = font;
+	}
 	
 	public BitmapFont getFont() {
 		return font;

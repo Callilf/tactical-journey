@@ -19,13 +19,18 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class SpriteComponent implements Component {
+public class SpriteComponent implements Component, Poolable {
 	public boolean hide;
 	private Sprite sprite;
 	
 	
-	
+	@Override
+	public void reset() {
+		hide = false;
+		sprite = null;
+	}
 	
 	
 	/**
@@ -57,6 +62,8 @@ public class SpriteComponent implements Component {
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
 	}
+
+
 	
 	
 	

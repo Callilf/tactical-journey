@@ -9,8 +9,9 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class MoveComponent implements Component {
+public class MoveComponent implements Component, Poolable {
 	
 	private final ComponentMapper<SpriteComponent> spriteCM = ComponentMapper.getFor(SpriteComponent.class);
 	
@@ -37,6 +38,14 @@ public class MoveComponent implements Component {
 	
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
+	
+	
+	@Override
+	public void reset() {
+		engine = null;
+		clearMovableTiles();
+	}
+	
 	
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.

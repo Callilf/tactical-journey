@@ -78,7 +78,6 @@ public final class EntityFactory {
 
 		gridPosition.coord.set(pos);
 
-		spriteCompo.hide = false;
 		spriteCompo.setSprite(new Sprite(this.playerTexture));
 
 		playerEntity.add(position);
@@ -129,7 +128,6 @@ public final class EntityFactory {
 				spriteCompo.setSprite(new Sprite(mudTexture));
 				break;
 		}
-		spriteCompo.hide = false;
 
 		gridPosition.coord.set(pos);
 
@@ -153,7 +151,6 @@ public final class EntityFactory {
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
-    	spriteCompo.hide = false;
     	movableTileEntity.add(spriteCompo);
     	
     	engine.addEntity(movableTileEntity);
@@ -174,7 +171,6 @@ public final class EntityFactory {
     	redCross.add(movableTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
-    	spriteCompo.hide = false;
     	redCross.add(spriteCompo);
     	
     	engine.addEntity(redCross);
@@ -196,7 +192,6 @@ public final class EntityFactory {
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_waypoint)));
-    	spriteCompo.hide = false;
     	confirmButton.add(spriteCompo);
     	
     	engine.addEntity(confirmButton);
@@ -216,7 +211,6 @@ public final class EntityFactory {
     	confirmButton.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.hide = false;
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
     	confirmButton.add(spriteCompo);
     	
@@ -242,7 +236,6 @@ public final class EntityFactory {
 		gridPosition.coord.set(pos);
 
 		spriteCompo.setSprite(new Sprite(this.enemyTexture));
-		spriteCompo.hide = false;
 
 		enemyEntity.add(position);
 		enemyEntity.add(spriteCompo);

@@ -1,11 +1,17 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
 
 
 
-public class TileComponent implements Component {
+public class TileComponent implements Component, Poolable {
+	
+	@Override
+	public void reset() {
+		type = null;
+	}
 	
 	/**
 	 * The enum referencing all types of tiles.

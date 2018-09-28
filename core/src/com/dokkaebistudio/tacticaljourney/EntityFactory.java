@@ -5,12 +5,13 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TextComponent;
@@ -31,6 +32,7 @@ public final class EntityFactory {
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion playerTexture;
+	private TextureAtlas.AtlasRegion enemyTexture;
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion mudTexture;
@@ -45,6 +47,7 @@ public final class EntityFactory {
 		this.engine = e;
 		
 		playerTexture = Assets.getTexture(Assets.player);
+		enemyTexture = Assets.getTexture(Assets.enemy);
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
@@ -75,18 +78,23 @@ public final class EntityFactory {
 
 		gridPosition.coord.set(pos);
 
-		//texture.region = this.playerTexture;
+		spriteCompo.hide = false;
 		spriteCompo.setSprite(new Sprite(this.playerTexture));
 
 		playerEntity.add(position);
 		playerEntity.add(spriteCompo);
 		playerEntity.add(gridPosition);
 		playerEntity.add(baseWheelComponent);
+		
 		// he's the player !
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
-		playerComponent.moveSpeed = moveSpeed;
 		playerEntity.add(playerComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.engine = this.engine;
+		moveComponent.moveSpeed = moveSpeed;
+		playerEntity.add(moveComponent);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
@@ -121,6 +129,7 @@ public final class EntityFactory {
 				spriteCompo.setSprite(new Sprite(mudTexture));
 				break;
 		}
+		spriteCompo.hide = false;
 
 		gridPosition.coord.set(pos);
 
@@ -144,6 +153,7 @@ public final class EntityFactory {
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
+    	spriteCompo.hide = false;
     	movableTileEntity.add(spriteCompo);
     	
     	engine.addEntity(movableTileEntity);
@@ -164,6 +174,7 @@ public final class EntityFactory {
     	redCross.add(movableTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
+    	spriteCompo.hide = false;
     	redCross.add(spriteCompo);
     	
     	engine.addEntity(redCross);
@@ -185,6 +196,7 @@ public final class EntityFactory {
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_waypoint)));
+    	spriteCompo.hide = false;
     	confirmButton.add(spriteCompo);
     	
     	engine.addEntity(confirmButton);
@@ -204,11 +216,49 @@ public final class EntityFactory {
     	confirmButton.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.hide = false;
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
     	confirmButton.add(spriteCompo);
     	
     	engine.addEntity(confirmButton);
     	return confirmButton;
+	}
+	
+	
+
+	/**
+	 * Create an enemy.
+	 * @param pos the position
+	 * @param moveSpeed the speed
+	 * @return the enemy entity
+	 */
+	public Entity createEnemy(Vector2 pos) {
+		Entity enemyEntity = engine.createEntity();
+
+		TransformComponent position = engine.createComponent(TransformComponent.class);
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+
+		gridPosition.coord.set(pos);
+
+		spriteCompo.setSprite(new Sprite(this.enemyTexture));
+		spriteCompo.hide = false;
+
+		enemyEntity.add(position);
+		enemyEntity.add(spriteCompo);
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.engine = this.engine;
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.engine = this.engine;
+		moveComponent.moveSpeed = 3;
+		enemyEntity.add(moveComponent);
+
+		engine.addEntity(enemyEntity);
+		return enemyEntity;
 	}
 	
 	
@@ -223,7 +273,7 @@ public final class EntityFactory {
 		transfoCompo.pos.set(pos);
 		textTest.add(transfoCompo);
 		
-		TextComponent tc = new TextComponent(new BitmapFont());
+		TextComponent tc = new TextComponent(Assets.font);
 		tc.setText(text);
 		textTest.add(tc);
 		engine.addEntity(textTest);

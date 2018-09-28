@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.ai;
+package com.dokkaebistudio.tacticaljourney.ai.pathfinding;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;

@@ -102,7 +102,7 @@ public class RenderingSystem extends IteratingSystem {
 				
 				float x = g.coord.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
 				float y = g.coord.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-				if (spriteCompo != null && spriteCompo.getSprite() != null) {
+				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
 					spriteCompo.getSprite().setPosition(x, y);
 					spriteCompo.getSprite().draw(batch);
 				}
@@ -117,7 +117,7 @@ public class RenderingSystem extends IteratingSystem {
 				TransformComponent t = transformM.get(entity);
 				
 				
-				if (spriteCompo != null && spriteCompo.getSprite() != null) {
+				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
 					float width = spriteCompo.getSprite().getRegionWidth();
 					float height = spriteCompo.getSprite().getRegionHeight();
 					float originX = width * 0.5f;

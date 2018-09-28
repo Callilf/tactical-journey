@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.ai;
+package com.dokkaebistudio.tacticaljourney.ai.pathfinding;
 
 import java.util.List;
 

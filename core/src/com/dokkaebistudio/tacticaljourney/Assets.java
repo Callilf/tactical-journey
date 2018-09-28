@@ -24,12 +24,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Assets {
-
+	
 	public static final String atlas = "tacticaljourney.atlas";
 
 	public static final String background = "background-test";
 	public static final String menuBackground = "background-test-menu";
 	public static final String player = "player-test";
+	public static final String enemy = "enemy-test";
 	public static final String tile_ground = "tile-test";
 	public static final String tile_wall = "tile-wall-test";
 	public static final String tile_pit = "tile-pit-test";
@@ -68,6 +69,7 @@ public class Assets {
 	private void registerAssets() {
 		// register the only texture atlas we have
 		registerTextureAtlas(atlas);
+		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);	
 	}
 
 	/**
@@ -105,6 +107,10 @@ public class Assets {
 	}
 	public static Sound getSound(String file){
 		return getInstance().manager.get(file);
+	}
+	
+	private void registerFont(String file) {
+		this.manager.load(file, BitmapFont.class);
 	}
 
 	/**

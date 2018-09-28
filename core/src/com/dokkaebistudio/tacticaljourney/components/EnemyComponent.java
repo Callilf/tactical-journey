@@ -3,12 +3,12 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 
-public class PlayerComponent implements Component {
+public class EnemyComponent implements Component {
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
-	/** The number of tiles the player can move. */
+	/** The health of the enemy. */
 	public int health;
 
 }

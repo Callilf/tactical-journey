@@ -21,7 +21,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpriteComponent implements Component {
+	public boolean hide;
 	private Sprite sprite;
+	
+	
 	
 	
 	

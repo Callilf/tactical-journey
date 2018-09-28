@@ -46,9 +46,11 @@ public class Room {
 	public void create() {
 		createGrid();
 		entityFactory.createPlayer(new Vector2(4,5), 5);
+		entityFactory.createEnemy(new Vector2(23,8));
+		entityFactory.createEnemy(new Vector2(25,3));
 		turnManager = new TurnManager(this);
 
-		this.state = RoomState.PLAYER_MOVE_START;
+		this.state = RoomState.PLAYER_TURN_INIT;
 	}
 
 	/**
@@ -63,6 +65,25 @@ public class Room {
 				grid[x][y] = tileEntity;
 			}
 		}
+	}
+	
+	/**
+	 * Return the entity for the tile at the given position.
+	 * @param x the abciss
+	 * @param y the ordinate
+	 * @return the tile at the given position
+	 */
+	public Entity getTileAtGridPosition(int x, int y) {
+		return grid[x][y];
+	}
+	
+	/**
+	 * Return the entity for the tile at the given position.
+	 * @param pos the position
+	 * @return the tile at the given position
+	 */
+	public Entity getTileAtGridPosition(Vector2 pos) {
+		return grid[(int) pos.x][(int) pos.y];
 	}
 
 	/**

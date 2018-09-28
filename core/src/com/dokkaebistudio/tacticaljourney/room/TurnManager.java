@@ -18,18 +18,25 @@ public class TurnManager {
 	private Entity textDisplay;
 	private TextComponent textComponent;
 	private int turn;
+	private Room room;
 	
 	public TurnManager(Room room) {
+		this.room = room;
 		turn = 1;
-		textDisplay = room.entityFactory.createText(new Vector3(100.0f, 100.0f, 0.0f), "Turn " + turn);
+		textDisplay = room.entityFactory.createText(new Vector3(900.0f, 1050.0f, 0.0f), "Turn " + turn);
 		
 		ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
 		textComponent = textCompoM.get(textDisplay);
 	}
 	
-	public void endTurn() {
+	public void endPlayerTurn() {
+		this.room.state = RoomState.ENEMY_TURN_INIT;
+	}
+	
+	public void endEnemyTurn() {
 		this.turn ++;
 		textComponent.setText("Turn " + this.turn);
+		this.room.state = RoomState.PLAYER_TURN_INIT;
 	}
 
 }

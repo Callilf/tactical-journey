@@ -22,12 +22,11 @@ import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
 public final class MovableTileSearchUtil {
 	
 	/** The speed at which entities move on screen. */
-	public static final int MOVE_SPEED = 10;
+	public static final int MOVE_SPEED = 7;
 
 
 	private MovableTileSearchUtil() {}
@@ -118,6 +117,9 @@ public final class MovableTileSearchUtil {
 				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
 				return performEndOfMovement(moveCompo, room);    			
 			}
+		} else {
+			//No move to perform, target already reached
+			return performEndOfMovement(moveCompo, room);
 		}
 		return false;
 	}
@@ -131,10 +133,10 @@ public final class MovableTileSearchUtil {
 	 * @return true if the movement has ended, false if still in progress.
 	 */
 	private static boolean performEndOfMovement(MoveComponent moveCompo, Room room) {
-		if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
+		if (moveCompo.currentMoveDestinationIndex >= moveCompo.getWayPoints().size()) {
+			moveCompo.currentMoveDestinationIndex ++;
 			return true;
 		}
-		
 		moveCompo.currentMoveDestinationIndex ++;
 		return false;
 	}

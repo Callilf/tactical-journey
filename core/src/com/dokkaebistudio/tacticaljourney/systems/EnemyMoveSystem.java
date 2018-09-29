@@ -62,7 +62,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         		
         		//Build the movable tiles list
     			MovableTileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
-    			moveCompo.hideMovableTiles();
+    			//moveCompo.hideMovableTiles();
         	}
     		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
     		
@@ -93,7 +93,7 @@ public class EnemyMoveSystem extends IteratingSystem {
 					//Display the way to go to this point
 					List<Entity> waypoints = MovableTileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
 		        	moveCompo.setWayPoints(waypoints);
-		        	moveCompo.hideMovementEntities();
+		        	//moveCompo.hideMovementEntities();
         		}
     		}
     		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
@@ -118,15 +118,18 @@ public class EnemyMoveSystem extends IteratingSystem {
     		
     	case ENEMY_MOVING:
     		
+    		boolean allEnemiesMovementsOver = true;
     		for (Entity enemyEntity : allEnemies) {
         		MoveComponent moveCompo = moveCM.get(enemyEntity);
 	    		TransformComponent transfoCompo = transfoCompoM.get(enemyEntity);
 	    		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
 	    		
 	    		//Do the movement on screen
-	    		boolean movementFinished = MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
-	    		if (movementFinished) room.state = RoomState.ENEMY_END_MOVEMENT;
-
+	    		allEnemiesMovementsOver &= MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
+    		}
+    		
+    		if (allEnemiesMovementsOver) {
+    			room.state = RoomState.ENEMY_END_MOVEMENT;
     		}
     		
     		break;
@@ -143,6 +146,8 @@ public class EnemyMoveSystem extends IteratingSystem {
         		//Set the new position in the GridPositionComponent
 	    		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
 	    		moverCurrentPos.coord.set(selectedTilePos.coord);
+	    		
+	    		moveCompo.clearMovableTiles();
     		}
     		room.turnManager.endEnemyTurn();
 

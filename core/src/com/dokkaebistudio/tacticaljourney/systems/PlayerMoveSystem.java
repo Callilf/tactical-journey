@@ -23,8 +23,6 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
 public class PlayerMoveSystem extends IteratingSystem {
 	
-	public static final int MOVE_SPEED = 10;
-
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
 	private final ComponentMapper<MoveComponent> moveCM;
@@ -95,13 +93,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             		//Clicked on the confirmation button, move the entity
             		
             		//Initiate movement
-            		TransformComponent transfoCompo = room.engine.createComponent(TransformComponent.class);
-            		Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(moverCurrentPos.coord);
-            		transfoCompo.pos.x = startPos.x;
-            		transfoCompo.pos.y = startPos.y;
-            		transfoCompo.pos.z = 1;
-            		moverEntity.add(transfoCompo);
-            		moveCompo.currentMoveDestinationIndex = 0;
+            		moveCompo.initiateMovement(moverEntity, moverCurrentPos);
             		
             		room.state = RoomState.PLAYER_MOVING;
             		
@@ -119,56 +111,11 @@ public class PlayerMoveSystem extends IteratingSystem {
     		
     	case PLAYER_MOVING:
     		TransformComponent transfoCompo = transfoCompoM.get(moverEntity);
-    		if (moveCompo.getWayPoints().size() > moveCompo.currentMoveDestinationIndex) {
-    			Entity entity = moveCompo.getWayPoints().get(moveCompo.currentMoveDestinationIndex);
-    			GridPositionComponent gridPositionComponent = gridPositionM.get(entity);
-    			moveCompo.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
-    		} else {
-    			Entity entity = moveCompo.getSelectedTile();
-    			GridPositionComponent gridPositionComponent = gridPositionM.get(entity);
-    			moveCompo.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
-    		}
+    		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
     		
-    		
-    		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
-    			transfoCompo.pos.x = transfoCompo.pos.x + MOVE_SPEED;
-    			if (transfoCompo.pos.x >= moveCompo.currentMoveDestinationPos.x) {
-    				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
-    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
-    					room.state = RoomState.PLAYER_END_MOVEMENT;
-    				} else {
-    					moveCompo.currentMoveDestinationIndex ++;
-    				}
-    			}
-    		} else if (moveCompo.currentMoveDestinationPos.x < transfoCompo.pos.x) {
-    			transfoCompo.pos.x = transfoCompo.pos.x - MOVE_SPEED;
-    			if (transfoCompo.pos.x <= moveCompo.currentMoveDestinationPos.x) {
-    				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
-    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
-    					room.state = RoomState.PLAYER_END_MOVEMENT;
-    				} else {
-    					moveCompo.currentMoveDestinationIndex ++;
-    				}    			}
-    		} else if (moveCompo.currentMoveDestinationPos.y > transfoCompo.pos.y) { 
-    			transfoCompo.pos.y = transfoCompo.pos.y + MOVE_SPEED;
-    			if (transfoCompo.pos.y >= moveCompo.currentMoveDestinationPos.y) {
-    				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
-    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
-    					room.state = RoomState.PLAYER_END_MOVEMENT;
-    				} else {
-    					moveCompo.currentMoveDestinationIndex ++;
-    				}    			}
-    		} else if (moveCompo.currentMoveDestinationPos.y < transfoCompo.pos.y) {
-    			transfoCompo.pos.y = transfoCompo.pos.y - MOVE_SPEED;
-    			if (transfoCompo.pos.y <= moveCompo.currentMoveDestinationPos.y) {
-    				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
-    				if (moveCompo.currentMoveDestinationIndex == moveCompo.getWayPoints().size()) {
-    					room.state = RoomState.PLAYER_END_MOVEMENT;
-    				} else {
-    					moveCompo.currentMoveDestinationIndex ++;
-    				}    			
-    			}
-    		}
+    		//Do the movement on screen
+    		boolean movementFinished = MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
+    		if (movementFinished) room.state = RoomState.PLAYER_END_MOVEMENT;
     		
     		break;
     		

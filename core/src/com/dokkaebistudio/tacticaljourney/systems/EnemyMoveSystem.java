@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
@@ -23,6 +24,8 @@ public class EnemyMoveSystem extends IteratingSystem {
 	private final ComponentMapper<MoveComponent> moveCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
+    private final ComponentMapper<TransformComponent> transfoCompoM;
+
     private Room room;
 
     public EnemyMoveSystem(Room r) {
@@ -32,6 +35,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         this.enemyCM = ComponentMapper.getFor(EnemyComponent.class);
         this.moveCM = ComponentMapper.getFor(MoveComponent.class);
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
+        this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
     }
 
@@ -101,14 +105,47 @@ public class EnemyMoveSystem extends IteratingSystem {
     		for (Entity enemyEntity : allEnemies) {
         		MoveComponent moveCompo = moveCM.get(enemyEntity);
         		GridPositionComponent moverCurrentPos = gridPositionM.get(enemyEntity);
+        		
+        		moveCompo.initiateMovement(enemyEntity, moverCurrentPos);
 	
+//	    		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
+//	    		moverCurrentPos.coord.set(selectedTilePos.coord);
+        		room.state = RoomState.ENEMY_MOVING;
+
+    		}    		
+    		
+    		break;
+    		
+    	case ENEMY_MOVING:
+    		
+    		for (Entity enemyEntity : allEnemies) {
+        		MoveComponent moveCompo = moveCM.get(enemyEntity);
+	    		TransformComponent transfoCompo = transfoCompoM.get(enemyEntity);
+	    		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
+	    		
+	    		//Do the movement on screen
+	    		boolean movementFinished = MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
+	    		if (movementFinished) room.state = RoomState.ENEMY_END_MOVEMENT;
+
+    		}
+    		
+    		break;
+    		
+    	case ENEMY_END_MOVEMENT:
+    		
+    		for (Entity enemyEntity : allEnemies) {
+        		MoveComponent moveCompo = moveCM.get(enemyEntity);
+        		GridPositionComponent moverCurrentPos = gridPositionM.get(enemyEntity);
+        		
+        		//Remove the transform component
+        		enemyEntity.remove(TransformComponent.class);
+        		
+        		//Set the new position in the GridPositionComponent
 	    		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
 	    		moverCurrentPos.coord.set(selectedTilePos.coord);
-	    		moveCompo.clearMovableTiles();
     		}
     		room.turnManager.endEnemyTurn();
-    		
-    		
+
     		break;
     		
     	default:

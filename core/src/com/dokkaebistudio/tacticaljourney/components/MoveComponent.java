@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 
 public class MoveComponent implements Component, Poolable {
 	
@@ -49,6 +50,39 @@ public class MoveComponent implements Component, Poolable {
 		engine = null;
 		clearMovableTiles();
 	}
+	
+	
+	
+	/**
+	 * Initiate a real movement on screen.
+	 * @param moverEntity the entity that will move
+	 * @param moverCurrentPos the current position of the mover.
+	 */
+	public void initiateMovement(Entity moverEntity, GridPositionComponent moverCurrentPos) {
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(moverCurrentPos.coord);
+		transfoCompo.pos.x = startPos.x;
+		transfoCompo.pos.y = startPos.y;
+		transfoCompo.pos.z = 1;
+		moverEntity.add(transfoCompo);
+		this.currentMoveDestinationIndex = 0;
+	}
+	
+	/**
+	 * Select the correct target given the currentMoveDestinationIndex
+	 * @param gridPositionM the gridPositionMapper
+	 */
+	public void selectCurrentMoveDestinationTile(ComponentMapper<GridPositionComponent> gridPositionM) {
+		Entity target = null;
+		if (this.getWayPoints().size() > this.currentMoveDestinationIndex) {
+			target = this.getWayPoints().get(this.currentMoveDestinationIndex);
+		} else {
+			target = this.getSelectedTile();
+		}
+		GridPositionComponent gridPositionComponent = gridPositionM.get(target);
+		this.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
+	}
+	
 	
 	
 	/**

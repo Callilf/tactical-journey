@@ -55,9 +55,9 @@ public class PlayerMoveSystem extends IteratingSystem {
     	
     	case PLAYER_TURN_INIT:
     		moveCompo.moveRemaining = moveCompo.moveSpeed;
-    		room.state = RoomState.PLAYER_MOVE_START;
+    		room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
     	
-    	case PLAYER_MOVE_START:
+    	case PLAYER_COMPUTE_MOVABLE_TILES:
     		//clear the movable tile
 			moveCompo.clearMovableTiles();
     		
@@ -133,7 +133,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     			moveCompo.clearMovableTiles();
     			room.turnManager.endPlayerTurn();
     		} else {
-    			room.state = RoomState.PLAYER_MOVE_START;
+    			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
     		}
     		break;
     		

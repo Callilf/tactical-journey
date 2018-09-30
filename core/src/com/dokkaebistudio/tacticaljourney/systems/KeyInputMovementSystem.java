@@ -60,7 +60,7 @@ public class KeyInputMovementSystem extends IteratingSystem {
 			g.coord.x = newLocation.x;
 			g.coord.y = newLocation.y;
 			
-			room.state = RoomState.PLAYER_MOVE_START;
+			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
 		}
 	}
 }

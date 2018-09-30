@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public final class MovableTileSearchUtil {
 	
@@ -217,23 +218,19 @@ public final class MovableTileSearchUtil {
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		//Left
 		if (currentX > 0) {
-			Entity tileEntity = room.grid[currentX - 1][currentY];
-			checkOneTile(tileEntity, walkableTiles, tilesToIgnore, tileCM);
+			checkOneTile(new Vector2(currentX - 1, currentY), room, walkableTiles, tilesToIgnore, tileCM);
 		}
 		//Up
 		if (currentY < GameScreen.GRID_H - 1) {
-			Entity tileEntity = room.grid[currentX][currentY + 1];
-			checkOneTile(tileEntity, walkableTiles, tilesToIgnore, tileCM);
+			checkOneTile(new Vector2(currentX, currentY + 1), room, walkableTiles, tilesToIgnore, tileCM);
 		}
 		//Right
 		if (currentX < GameScreen.GRID_W - 1) {
-			Entity tileEntity = room.grid[currentX + 1][currentY];
-			checkOneTile(tileEntity, walkableTiles, tilesToIgnore, tileCM);
+			checkOneTile(new Vector2(currentX + 1, currentY), room, walkableTiles, tilesToIgnore, tileCM);
 		}
 		//Down
 		if (currentY > 0) {
-			Entity tileEntity = room.grid[currentX][currentY - 1];
-			checkOneTile(tileEntity, walkableTiles, tilesToIgnore, tileCM);
+			checkOneTile(new Vector2(currentX, currentY - 1), room, walkableTiles, tilesToIgnore, tileCM);
 		}
 		return walkableTiles;
 	}
@@ -243,13 +240,22 @@ public final class MovableTileSearchUtil {
 	 * @param tileEntity the tile to check
 	 * @param walkableTiles the set of movable entities
 	 */
-	private static void checkOneTile(Entity tileEntity, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore,
+	private static void checkOneTile(Vector2 pos, Room room, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore,
 			ComponentMapper<TileComponent> tileCM) {
+		
+		Entity tileEntity = room.getTileAtGridPosition(pos);
 		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
 			return;
 		}
 		
 		TileComponent tileComponent = tileCM.get(tileEntity);
+		
+		Entity entityOnTile = TileUtil.getEntityOnTile(pos, room.engine);
+		if (entityOnTile != null) {
+			//There's already something on this tile.
+			return;
+		}
+		
 		//TODO: this condition will have to change when we will have to handle items that allow
 		//moving past pits for example.
 		if (tileComponent.type.isWalkable()) {

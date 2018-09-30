@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -92,6 +93,9 @@ public final class EntityFactory {
 		moveComponent.engine = this.engine;
 		moveComponent.moveSpeed = moveSpeed;
 		playerEntity.add(moveComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		playerEntity.add(solidComponent);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
@@ -243,6 +247,9 @@ public final class EntityFactory {
 		moveComponent.engine = this.engine;
 		moveComponent.moveSpeed = 3;
 		enemyEntity.add(moveComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
 
 		engine.addEntity(enemyEntity);
 		return enemyEntity;

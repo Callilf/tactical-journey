@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class EnemyComponent implements Component, Poolable {
+public class EnemyComponent extends SolidComponent implements Component, Poolable {
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;

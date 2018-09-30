@@ -97,7 +97,7 @@ public class Room {
 		}
 		for (int x = 0; x < GRID_W; x++) {
 			for (int y = 0; y < GameScreen.GRID_H; y++) {
-				if (x == 0 || x == GRID_W-1 || y == 0 || y == GRID_H - 1) {
+				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 1) {
 					// walls
 					tiles[x][y] = TileEnum.WALL;
 				} else {

@@ -6,77 +6,98 @@ filter: Nearest,Nearest
 repeat: none
 background-test-menu
   rotate: false
-  xy: 2, 266
+  xy: 2, 394
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
+btn-end-turn
+  rotate: false
+  xy: 2, 134
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+btn-end-turn-pushed
+  rotate: false
+  xy: 2, 264
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
 btn-move-confirmation
   rotate: false
-  xy: 2, 200
+  xy: 1924, 1410
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 134, 200
+  xy: 1924, 1278
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 1924, 1150
+  xy: 196, 196
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-movable
   rotate: false
-  xy: 68, 200
+  xy: 1924, 1344
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 68, 134
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 2, 2
+  xy: 262, 262
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-mud-test
   rotate: false
-  xy: 1924, 1282
+  xy: 196, 328
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-pit-test
   rotate: false
-  xy: 2, 134
+  xy: 2, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-test
   rotate: false
-  xy: 1924, 1216
+  xy: 196, 262
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 2, 68
+  xy: 262, 328
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tile-wall-test2
+  rotate: false
+  xy: 68, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

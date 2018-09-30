@@ -42,6 +42,8 @@ public class Assets {
 	public static final String tile_movable_selected = "tile-movable-selected";
 	
 	public static final String btn_move_confirmation = "btn-move-confirmation";
+	public static final String btn_end_turn = "btn-end-turn";
+	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
 
 	
 

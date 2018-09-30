@@ -87,6 +87,7 @@ public final class EntityFactory {
 		// he's the player !
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
+		playerComponent.setEndTurnButton(createEndTurnButton(new Vector2(0.0f, 0.0f)));
 		playerEntity.add(playerComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -99,6 +100,27 @@ public final class EntityFactory {
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
+	}
+	
+	
+	/**
+	 * Create the end turn button.
+	 * @param pos the position
+	 * @return the end turn button entity
+	 */
+	public Entity createEndTurnButton(Vector2 pos) {
+		Entity endTurnButton = engine.createEntity();
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(pos.x, pos.y, 10);
+		endTurnButton.add(transfoCompo);
+		    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+    	endTurnButton.add(spriteCompo);
+    	
+    	engine.addEntity(endTurnButton);
+    	return endTurnButton;
 	}
 	
 	

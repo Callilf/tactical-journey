@@ -44,18 +44,18 @@ public class GameScreen extends ScreenAdapter {
 	// dimensions
 	public static final int SCREEN_H = 1080;
 	public static final int SCREEN_W = 1920;
-	public static final int GRID_H = 16;
-	public static final int GRID_W = 28;
+	public static final int GRID_H = 17;
+	public static final int GRID_W = 30;
 	public static final int GRID_SIZE = 64;
 
-	public static final int BOTTOM_MENU_HEIGHT = 56;
-	public static final int LEFT_RIGHT_PADDING = 64;
+	public static final int BOTTOM_MENU_HEIGHT = 0;
+	public static final int LEFT_RIGHT_PADDING = 0;
 	private static final Color HIT_COLOR = Color.GREEN;
 	private static final Color MISS_COLOR = Color.BLACK;
 	private static final Color CRITICAL_COLOR = Color.RED;
 	private static final Color GRAZE_COLOR = Color.GRAY;
 	private static final int WHEEL_X = SCREEN_W / 2;
-	private static final int WHEEL_Y = 128;
+	private static final int WHEEL_Y = 64;
 	private static final int WHEEL_RADIUS = 64;
 
 	List<WheelComponent.Sector> attackWheel = new LinkedList<WheelComponent.Sector>();

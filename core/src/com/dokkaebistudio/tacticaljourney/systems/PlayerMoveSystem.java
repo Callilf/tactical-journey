@@ -9,7 +9,9 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.MovableTileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
@@ -32,6 +34,9 @@ public class PlayerMoveSystem extends IteratingSystem {
 
     private Room room;
     private boolean leftClickJustPressed;
+    private boolean leftClickJustReleased;
+    private boolean spaceJustPressed;
+    private boolean spaceJustReleased;
 
     public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
@@ -50,6 +55,45 @@ public class PlayerMoveSystem extends IteratingSystem {
     protected void processEntity(Entity moverEntity, float deltaTime) {
     	MoveComponent moveCompo = moveCM.get(moverEntity);
     	GridPositionComponent moverCurrentPos = gridPositionM.get(moverEntity);
+    	PlayerComponent playerCompo = playerCM.get(moverEntity);
+    	
+    	if (!room.state.isPlayerTurn()) {
+    		return;
+    	}
+    	
+    	//TODO refacto
+    	//Check if the end turn button has been pushed
+    	if (leftClickJustPressed) {
+    		int x = Gdx.input.getX();
+        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+        	
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+        	if (spriteComponent.containsPoint(x, y)) {
+        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+        	}
+    	}
+    	if (leftClickJustReleased) {
+    		int x = Gdx.input.getX();
+        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+        	
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+        	if (spriteComponent.containsPoint(x, y)) {
+        		moveCompo.clearMovableTiles();
+    			room.turnManager.endPlayerTurn();
+        	}
+    	}
+    	if (spaceJustPressed) {
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+    	}
+    	if (spaceJustReleased) {
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+    		moveCompo.clearMovableTiles();
+			room.turnManager.endPlayerTurn();
+    	}
+
     	
     	switch(room.state) {
     	
@@ -69,7 +113,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on a moveTile, display it as the destination
-            if (leftClickJustPressed) {
+            if (leftClickJustReleased) {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
@@ -83,7 +127,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             
     	case PLAYER_MOVE_DESTINATION_SELECTED:
     		//Either click on confirm to move or click on another tile to change the destination
-    		if (leftClickJustPressed) {
+    		if (leftClickJustReleased) {
     			int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
     			
@@ -143,7 +187,9 @@ public class PlayerMoveSystem extends IteratingSystem {
     	}
     	
     	leftClickJustPressed = false;
-
+    	leftClickJustReleased = false;
+    	spaceJustPressed = false;
+    	spaceJustReleased = false;
     }
 
     /**
@@ -222,11 +268,19 @@ public class PlayerMoveSystem extends IteratingSystem {
 
 			@Override
 			public boolean keyDown(int keycode) {
+				if (keycode == Input.Keys.SPACE) {
+					spaceJustPressed = true;
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public boolean keyUp(int keycode) {
+				if (keycode == Input.Keys.SPACE) {
+					spaceJustReleased = true;
+					return true;
+				}
 				return false;
 			}
 
@@ -240,12 +294,16 @@ public class PlayerMoveSystem extends IteratingSystem {
 				if (button == Input.Buttons.LEFT) {
 					leftClickJustPressed = true;
 					return true;
-				}				
+				}
 				return false;
 			}
 
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				if (button == Input.Buttons.LEFT) {
+					leftClickJustReleased = true;
+					return true;
+				}
 				return false;
 			}
 

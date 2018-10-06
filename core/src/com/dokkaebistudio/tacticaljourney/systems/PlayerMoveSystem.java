@@ -7,13 +7,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.MovableTileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
@@ -28,15 +28,12 @@ public class PlayerMoveSystem extends IteratingSystem {
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
 	private final ComponentMapper<MoveComponent> moveCM;
+	private final ComponentMapper<AttackComponent> attackCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private final ComponentMapper<TransformComponent> transfoCompoM;
 
     private Room room;
-    private boolean leftClickJustPressed;
-    private boolean leftClickJustReleased;
-    private boolean spaceJustPressed;
-    private boolean spaceJustReleased;
 
     public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
@@ -44,16 +41,16 @@ public class PlayerMoveSystem extends IteratingSystem {
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
         this.moveCM = ComponentMapper.getFor(MoveComponent.class);
+        this.attackCM = ComponentMapper.getFor(AttackComponent.class);
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
-        
-        initInputProcessor();
     }
 
     @Override
     protected void processEntity(Entity moverEntity, float deltaTime) {
     	MoveComponent moveCompo = moveCM.get(moverEntity);
+    	AttackComponent attackCompo = attackCM.get(moverEntity);
     	GridPositionComponent moverCurrentPos = gridPositionM.get(moverEntity);
     	PlayerComponent playerCompo = playerCM.get(moverEntity);
     	
@@ -61,39 +58,8 @@ public class PlayerMoveSystem extends IteratingSystem {
     		return;
     	}
     	
-    	//TODO refacto
     	//Check if the end turn button has been pushed
-    	if (leftClickJustPressed) {
-    		int x = Gdx.input.getX();
-        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
-        	
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-        	if (spriteComponent.containsPoint(x, y)) {
-        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-        	}
-    	}
-    	if (leftClickJustReleased) {
-    		int x = Gdx.input.getX();
-        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
-        	
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-        	if (spriteComponent.containsPoint(x, y)) {
-        		moveCompo.clearMovableTiles();
-    			room.turnManager.endPlayerTurn();
-        	}
-    	}
-    	if (spaceJustPressed) {
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-    	}
-    	if (spaceJustReleased) {
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-    		moveCompo.clearMovableTiles();
-			room.turnManager.endPlayerTurn();
-    	}
-
+    	handleEndTurnButton(moveCompo, playerCompo);
     	
     	switch(room.state) {
     	
@@ -104,6 +70,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     	case PLAYER_COMPUTE_MOVABLE_TILES:
     		//clear the movable tile
 			moveCompo.clearMovableTiles();
+			attackCompo.clearAttackableTiles();
     		
     		//Build the movable tiles list
         	MovableTileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room, gridPositionM, tileCM);
@@ -113,7 +80,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 	        
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on a moveTile, display it as the destination
-            if (leftClickJustReleased) {
+            if (InputSingleton.getInstance().leftClickJustReleased) {
             	int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
             	
@@ -127,7 +94,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             
     	case PLAYER_MOVE_DESTINATION_SELECTED:
     		//Either click on confirm to move or click on another tile to change the destination
-    		if (leftClickJustReleased) {
+    		if (InputSingleton.getInstance().leftClickJustReleased) {
     			int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
     			
@@ -175,6 +142,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     		
     		if (moveCompo.moveRemaining <= 0) {
     			moveCompo.clearMovableTiles();
+    			attackCompo.clearAttackableTiles();
     			room.turnManager.endPlayerTurn();
     		} else {
     			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
@@ -185,12 +153,50 @@ public class PlayerMoveSystem extends IteratingSystem {
     		break;
     	
     	}
-    	
-    	leftClickJustPressed = false;
-    	leftClickJustReleased = false;
-    	spaceJustPressed = false;
-    	spaceJustReleased = false;
     }
+
+    /**
+     * Handle the end turn button.
+     * @param moveCompo the move component
+     * @param playerCompo the player component
+     */
+	private void handleEndTurnButton(MoveComponent moveCompo, PlayerComponent playerCompo) {
+		if (InputSingleton.getInstance().leftClickJustPressed) {
+    		int x = Gdx.input.getX();
+        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+        	
+        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
+        	//The real action is on click release.
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+        	if (spriteComponent.containsPoint(x, y)) {
+        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+        	}
+    	}
+    	if (InputSingleton.getInstance().leftClickJustReleased) {
+    		int x = Gdx.input.getX();
+        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+        	
+        	//If release on the endTurnButton, restore the original texture and end the turn.
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+        	if (spriteComponent.containsPoint(x, y)) {
+        		moveCompo.clearMovableTiles();
+    			room.turnManager.endPlayerTurn();
+        	}
+    	}
+    	if (InputSingleton.getInstance().spaceJustPressed) {
+    		//If space pressed, make the endTurnButton look pushed.
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+    	}
+    	if (InputSingleton.getInstance().spaceJustReleased) {
+    		//If space released, restore the button texture and end the turn.
+        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+    		moveCompo.clearMovableTiles();
+			room.turnManager.endPlayerTurn();
+    	}
+	}
 
     /**
      * Return the cost of movement
@@ -252,76 +258,4 @@ public class PlayerMoveSystem extends IteratingSystem {
 		return false;
 	}
 
-	
-
-    
-    
-    
-    
-
-	
-	/**
-	 * Initialize the inputProcessor.
-	 */
-	private void initInputProcessor() {
-		Gdx.input.setInputProcessor(new InputProcessor() {
-
-			@Override
-			public boolean keyDown(int keycode) {
-				if (keycode == Input.Keys.SPACE) {
-					spaceJustPressed = true;
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public boolean keyUp(int keycode) {
-				if (keycode == Input.Keys.SPACE) {
-					spaceJustReleased = true;
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				if (button == Input.Buttons.LEFT) {
-					leftClickJustPressed = true;
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				if (button == Input.Buttons.LEFT) {
-					leftClickJustReleased = true;
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
-				return false;
-			}
-
-			@Override
-			public boolean mouseMoved(int screenX, int screenY) {
-				return false;
-			}
-
-			@Override
-			public boolean scrolled(int amount) {
-				return false;
-			}
-
-        });
-	}
 }

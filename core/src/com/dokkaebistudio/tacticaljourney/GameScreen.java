@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
+import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
@@ -89,6 +90,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new RenderingSystem(game.batcher));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
+		engine.addSystem(new PlayerAttackSystem(room));
 		engine.addSystem(new KeyInputMovementSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel));
 		
@@ -104,6 +106,7 @@ public class GameScreen extends ScreenAdapter {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 
 		engine.update(deltaTime);
+		InputSingleton.getInstance().resetEvents();
 		
 		switch (state) {
 		case GAME_RUNNING:

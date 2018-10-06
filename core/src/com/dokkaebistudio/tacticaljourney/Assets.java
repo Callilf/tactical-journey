@@ -38,6 +38,8 @@ public class Assets {
 	
 	
 	public static final String tile_movable = "tile-movable";
+	public static final String tile_attackable = "tile-attackable";
+	
 	public static final String tile_movable_waypoint = "tile-movable-waypoint";
 	public static final String tile_movable_selected = "tile-movable-selected";
 	

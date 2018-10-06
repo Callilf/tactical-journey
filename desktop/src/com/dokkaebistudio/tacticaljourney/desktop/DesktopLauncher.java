@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.title = "Tactical Journey";
 		config.width = 1920;
 		config.height = 1080;
-		config.fullscreen = true;
+		config.fullscreen = false;
 		new LwjglApplication(new TacticalJourney(), config);
 	}
 }

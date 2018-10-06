@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
@@ -95,6 +96,10 @@ public final class EntityFactory {
 		moveComponent.moveSpeed = moveSpeed;
 		playerEntity.add(moveComponent);
 		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.engine = this.engine;
+		playerEntity.add(attackComponent);
+		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		playerEntity.add(solidComponent);
 
@@ -164,7 +169,6 @@ public final class EntityFactory {
 	
 	
 	
-	//TODO: blue tiles
 	public Entity createMovableTile(Vector2 pos) {
 		Entity movableTileEntity = engine.createEntity();
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
@@ -177,6 +181,20 @@ public final class EntityFactory {
     	
     	engine.addEntity(movableTileEntity);
     	return movableTileEntity;
+	}
+	
+	public Entity createAttackableTile(Vector2 pos) {
+		Entity attackableTileEntity = engine.createEntity();
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord.set(pos);
+    	attackableTileEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_attackable)));
+    	attackableTileEntity.add(spriteCompo);
+    	
+    	engine.addEntity(attackableTileEntity);
+    	return attackableTileEntity;
 	}
 	
 	

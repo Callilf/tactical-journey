@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.dokkaebistudio.tacticaljourney.ai.movements.MovableTileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
@@ -24,6 +25,7 @@ public class EnemyMoveSystem extends IteratingSystem {
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<EnemyComponent> enemyCM;
 	private final ComponentMapper<MoveComponent> moveCM;
+	private final ComponentMapper<AttackComponent> attackCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private final ComponentMapper<TransformComponent> transfoCompoM;
@@ -40,6 +42,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.enemyCM = ComponentMapper.getFor(EnemyComponent.class);
         this.moveCM = ComponentMapper.getFor(MoveComponent.class);
+        this.attackCM = ComponentMapper.getFor(AttackComponent.class);
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
@@ -64,6 +67,7 @@ public class EnemyMoveSystem extends IteratingSystem {
     		}
     		
         	MoveComponent moveCompo = moveCM.get(enemyEntity);
+        	AttackComponent attackCompo = attackCM.get(enemyEntity);
         	GridPositionComponent moverCurrentPos = gridPositionM.get(enemyEntity);
     		
     		switch(room.state) {

@@ -1,0 +1,12 @@
+package com.dokkaebistudio.tacticaljourney.components;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.gdx.math.Vector2;
+
+public interface MovableInterface {
+
+	void initiateMovement(Vector2 currentPos);
+	void performMovement(float xOffset, float yOffset, ComponentMapper<TransformComponent> transfoCM);
+	void endMovement(Vector2 finalPos, ComponentMapper<GridPositionComponent> gridPositionM);
+	
+}

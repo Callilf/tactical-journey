@@ -65,7 +65,17 @@ public class RenderingSystem extends IteratingSystem {
 				} else if (!transformM.has(entityB) && transformM.has(entityA)) {
 					return 1;
 				} else if (!transformM.has(entityA) && !transformM.has(entityB)) {
-					return 0;
+					
+					
+					if (!gridPositionM.has(entityA) && gridPositionM.has(entityB)) {
+						return -1;
+					} else if (!gridPositionM.has(entityB) && gridPositionM.has(entityA)) {
+						return 1;
+					} else if (!gridPositionM.has(entityA) && !gridPositionM.has(entityB)) {
+						return 0;
+					}
+					
+					return (int)Math.signum(gridPositionM.get(entityA).zIndex - gridPositionM.get(entityB).zIndex);
 				}
 				
 				return (int)Math.signum(transformM.get(entityB).pos.z -
@@ -122,7 +132,7 @@ public class RenderingSystem extends IteratingSystem {
 					spriteCompo.getSprite().draw(batch);
 				}
 				if (textCompo != null && textCompo.getFont() != null) {
-					textCompo.getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y);
+					textCompo.getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y + textCompo.getHeight());
 				}
 
 			} 

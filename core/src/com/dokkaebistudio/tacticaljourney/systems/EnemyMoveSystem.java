@@ -9,7 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.dokkaebistudio.tacticaljourney.ai.movements.MovableTileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class EnemyMoveSystem extends IteratingSystem {
 
@@ -29,6 +30,8 @@ public class EnemyMoveSystem extends IteratingSystem {
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private final ComponentMapper<TransformComponent> transfoCompoM;
+    
+    private final MovementHandler movementHandler;
 
     /** The room. */
     private Room room;
@@ -46,6 +49,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
+        movementHandler = new MovementHandler(r.engine);
     }
 
     @Override
@@ -83,8 +87,8 @@ public class EnemyMoveSystem extends IteratingSystem {
         		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
-        		MovableTileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
-        		if (attackCompo != null) MovableTileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
+        		TileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
+        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
         		moveCompo.hideMovableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
         		
@@ -110,7 +114,7 @@ public class EnemyMoveSystem extends IteratingSystem {
     				moveCompo.setMovementConfirmationButton(moveConfirmationButton);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = MovableTileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
+    				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             	}
@@ -120,7 +124,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         		
         	case ENEMY_MOVE_DESTINATION_SELECTED :
 
-            	moveCompo.initiateMovement(enemyEntity, moverCurrentPos);
+        		movementHandler.initiateMovement(enemyEntity);
             	room.state = RoomState.ENEMY_MOVING;
 
         		break;
@@ -131,19 +135,14 @@ public class EnemyMoveSystem extends IteratingSystem {
     	    	moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
     	    		
     	    	//Do the movement on screen
-    	    	boolean movementFinished = MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
+    	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
         		if (movementFinished) room.state = RoomState.ENEMY_END_MOVEMENT;
         		
         		break;
         		
         	case ENEMY_END_MOVEMENT:
         		
-            	//Remove the transform component
-            	enemyEntity.remove(TransformComponent.class);
-            		
-            	//Set the new position in the GridPositionComponent
-    	    	GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
-    	    	moverCurrentPos.coord.set(selectedTilePos.coord);
+        		movementHandler.finishRealMovement(enemyEntity);
     	    		
     	    	moveCompo.clearMovableTiles();
     	    	

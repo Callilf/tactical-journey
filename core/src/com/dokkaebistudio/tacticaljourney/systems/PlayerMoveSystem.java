@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.ai.movements.MovableTileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class PlayerMoveSystem extends IteratingSystem {
 	
@@ -32,6 +33,8 @@ public class PlayerMoveSystem extends IteratingSystem {
     private final ComponentMapper<GridPositionComponent> gridPositionM;
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private final ComponentMapper<TransformComponent> transfoCompoM;
+    
+    private final MovementHandler movementHandler;
 
     private Room room;
 
@@ -45,6 +48,7 @@ public class PlayerMoveSystem extends IteratingSystem {
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
+        movementHandler = new MovementHandler(r.engine);
     }
 
     @Override
@@ -73,8 +77,8 @@ public class PlayerMoveSystem extends IteratingSystem {
 			if (attackCompo != null) attackCompo.clearAttackableTiles();
     		
     		//Build the movable tiles list
-        	MovableTileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room, gridPositionM, tileCM);
-        	if (attackCompo != null) MovableTileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
+        	TileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room, gridPositionM, tileCM);
+        	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
 	        room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
 	        break;
 	        
@@ -105,7 +109,7 @@ public class PlayerMoveSystem extends IteratingSystem {
             		//Clicked on the confirmation button, move the entity
             		
             		//Initiate movement
-            		moveCompo.initiateMovement(moverEntity, moverCurrentPos);
+            		movementHandler.initiateMovement(moverEntity);
             		
             		room.state = RoomState.PLAYER_MOVING;
             		
@@ -126,16 +130,13 @@ public class PlayerMoveSystem extends IteratingSystem {
     		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
     		
     		//Do the movement on screen
-    		boolean movementFinished = MovableTileSearchUtil.performRealMovement(moveCompo, transfoCompo, room);
+    		boolean movementFinished = movementHandler.performRealMovement(moverEntity, room);
     		if (movementFinished) room.state = RoomState.PLAYER_END_MOVEMENT;
     		
     		break;
     		
     	case PLAYER_END_MOVEMENT:
-    		moverEntity.remove(TransformComponent.class);
-    		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
-    		moverCurrentPos.coord.set(selectedTilePos.coord);
-
+    		movementHandler.finishRealMovement(moverEntity);
     		
     		//Compute the cost of this move
     		int cost = computeCostOfMovement(moveCompo);
@@ -246,7 +247,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 				moveCompo.setMovementConfirmationButton(moveConfirmationButton);
 				
 				//Display the way to go to this point
-				List<Entity> waypoints = MovableTileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
+				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
             	moveCompo.setWayPoints(waypoints);
 				
 		    	return true;

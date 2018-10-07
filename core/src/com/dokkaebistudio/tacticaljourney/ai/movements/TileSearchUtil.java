@@ -26,13 +26,13 @@ import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public final class MovableTileSearchUtil {
+public final class TileSearchUtil {
 	
 	/** The speed at which entities move on screen. */
 	public static final int MOVE_SPEED = 7;
 
 
-	private MovableTileSearchUtil() {}
+	private TileSearchUtil() {}
     
 	
 	
@@ -43,7 +43,7 @@ public final class MovableTileSearchUtil {
 		Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = MovableTileSearchUtil.findAllWalkableTiles(playerTileEntity, 1, moveCompo.moveRemaining,room, gridPositionM, tileCM);
+		moveCompo.allWalkableTiles = TileSearchUtil.findAllWalkableTiles(playerTileEntity, 1, moveCompo.moveRemaining,room, gridPositionM, tileCM);
 		moveCompo.allWalkableTiles.add(playerTileEntity);
 		
 		//Create entities for each movable tiles to display them
@@ -300,7 +300,7 @@ public final class MovableTileSearchUtil {
 		
 		TileComponent tileComponent = tileCM.get(tileEntity);
 		
-		Entity entityOnTile = TileUtil.getEntityOnTile(pos, room.engine);
+		Entity entityOnTile = TileUtil.getSolidEntityOnTile(pos, room.engine);
 		if (entityOnTile != null) {
 			//There's already something on this tile.
 			return;
@@ -323,6 +323,12 @@ public final class MovableTileSearchUtil {
 		
 		Entity tileEntity = room.getTileAtGridPosition(pos);
 		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
+			return;
+		}
+		
+		Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room.engine);
+		if (entityOnTile == null) {
+			//Nothing to attack on this tile
 			return;
 		}
 		

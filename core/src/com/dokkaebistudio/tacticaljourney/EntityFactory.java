@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -102,6 +103,12 @@ public final class EntityFactory {
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		playerEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.engine = engine;
+		healthComponent.setHp(100);
+		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
+		playerEntity.add(healthComponent);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
@@ -290,6 +297,12 @@ public final class EntityFactory {
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.engine = engine;
+		healthComponent.setHp(10);
+		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
+		enemyEntity.add(healthComponent);
 
 		engine.addEntity(enemyEntity);
 		return enemyEntity;
@@ -306,6 +319,25 @@ public final class EntityFactory {
 		TransformComponent transfoCompo = new TransformComponent();
 		transfoCompo.pos.set(pos);
 		textTest.add(transfoCompo);
+		
+		TextComponent tc = new TextComponent(Assets.font);
+		tc.setText(text);
+		textTest.add(tc);
+		engine.addEntity(textTest);
+		return textTest;
+	}
+	
+	/**
+	 * Create a text that will be displayed on a tile.
+	 * @param pos the position of the text in tile position
+	 * @return the text entity
+	 */
+	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex) {
+		Entity textTest = engine.createEntity();
+		GridPositionComponent gridPositionComponent = new GridPositionComponent();
+		gridPositionComponent.coord.set(tilePos);
+		gridPositionComponent.zIndex = zIndex;
+		textTest.add(gridPositionComponent);
 		
 		TextComponent tc = new TextComponent(Assets.font);
 		tc.setText(text);

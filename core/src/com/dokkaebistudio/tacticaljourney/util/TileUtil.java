@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 
 public final class TileUtil {
@@ -22,7 +23,7 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Entity getEntityOnTile(Vector2 position, PooledEngine engine) {
+	public static Entity getSolidEntityOnTile(Vector2 position, PooledEngine engine) {
 		Family family = Family.all(SolidComponent.class, GridPositionComponent.class).get();
 		
 		ImmutableArray<Entity> allSolids = engine.getEntitiesFor(family);
@@ -30,6 +31,26 @@ public final class TileUtil {
 			GridPositionComponent gridPositionComponent = gridPositionM.get(solid);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return solid;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Return the attackable entity standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The entity standing at this position, null if no entity there.
+	 */
+	public static Entity getAttackableEntityOnTile(Vector2 position, PooledEngine engine) {
+		Family family = Family.all(HealthComponent.class, GridPositionComponent.class).get();
+		
+		ImmutableArray<Entity> allAttackables = engine.getEntitiesFor(family);
+		for (Entity attackableEntity : allAttackables) {
+			GridPositionComponent gridPositionComponent = gridPositionM.get(attackableEntity);
+			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
+				return attackableEntity;
 			}
 		}
 		

@@ -45,10 +45,10 @@ public class Room {
 	
 	public void create() {
 		createGrid();
-		entityFactory.createPlayer(new Vector2(4,5), 1);
-		entityFactory.createEnemy(new Vector2(5,6));
-		entityFactory.createEnemy(new Vector2(2,9));
-		entityFactory.createEnemy(new Vector2(25,3));
+		entityFactory.createPlayer(new Vector2(4,5), 5);
+		entityFactory.createEnemy(new Vector2(5,6), 3);
+		entityFactory.createEnemy(new Vector2(2,9), 3);
+		entityFactory.createEnemy(new Vector2(25,3), 3);
 		turnManager = new TurnManager(this);
 
 		this.state = RoomState.PLAYER_TURN_INIT;

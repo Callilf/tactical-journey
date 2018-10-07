@@ -71,6 +71,14 @@ public class TileComponent implements Component, Poolable {
 		public boolean isWalkable() {
 			return !isWall && !isPit;
 		}
+		
+		/**
+		 * Utility method. This will disappear later.
+		 * @return
+		 */
+		public boolean isAttackable() {
+			return !isWall && !isPit;
+		}
 	}
 	
 	/** The type of the tile. */

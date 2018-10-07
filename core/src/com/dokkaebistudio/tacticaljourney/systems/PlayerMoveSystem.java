@@ -59,7 +59,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     	}
     	
     	//Check if the end turn button has been pushed
-    	handleEndTurnButton(moveCompo, playerCompo);
+    	handleEndTurnButton(moveCompo, attackCompo, playerCompo);
     	
     	switch(room.state) {
     	
@@ -70,10 +70,11 @@ public class PlayerMoveSystem extends IteratingSystem {
     	case PLAYER_COMPUTE_MOVABLE_TILES:
     		//clear the movable tile
 			moveCompo.clearMovableTiles();
-			attackCompo.clearAttackableTiles();
+			if (attackCompo != null) attackCompo.clearAttackableTiles();
     		
     		//Build the movable tiles list
         	MovableTileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room, gridPositionM, tileCM);
+        	if (attackCompo != null) MovableTileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
 	        room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
 	        break;
 	        
@@ -140,13 +141,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     		int cost = computeCostOfMovement(moveCompo);
     		moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
     		
-    		if (moveCompo.moveRemaining <= 0) {
-    			moveCompo.clearMovableTiles();
-    			attackCompo.clearAttackableTiles();
-    			room.turnManager.endPlayerTurn();
-    		} else {
-    			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
-    		}
+    		room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
     		break;
     		
     	default:
@@ -158,9 +153,10 @@ public class PlayerMoveSystem extends IteratingSystem {
     /**
      * Handle the end turn button.
      * @param moveCompo the move component
+     * @param attackCompo the attack component
      * @param playerCompo the player component
      */
-	private void handleEndTurnButton(MoveComponent moveCompo, PlayerComponent playerCompo) {
+	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo, PlayerComponent playerCompo) {
 		if (InputSingleton.getInstance().leftClickJustPressed) {
     		int x = Gdx.input.getX();
         	int y = GameScreen.SCREEN_H - Gdx.input.getY();
@@ -181,6 +177,7 @@ public class PlayerMoveSystem extends IteratingSystem {
     		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
         	if (spriteComponent.containsPoint(x, y)) {
         		moveCompo.clearMovableTiles();
+        		attackCompo.clearAttackableTiles();
     			room.turnManager.endPlayerTurn();
         	}
     	}
@@ -194,6 +191,7 @@ public class PlayerMoveSystem extends IteratingSystem {
         	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
     		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
     		moveCompo.clearMovableTiles();
+    		attackCompo.clearAttackableTiles();
 			room.turnManager.endPlayerTurn();
     	}
 	}

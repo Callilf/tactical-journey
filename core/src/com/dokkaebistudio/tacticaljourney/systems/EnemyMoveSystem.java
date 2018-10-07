@@ -80,9 +80,11 @@ public class EnemyMoveSystem extends IteratingSystem {
         		
         		//clear the movable tile
         		moveCompo.clearMovableTiles();
+        		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
         		MovableTileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
+        		if (attackCompo != null) MovableTileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
         		moveCompo.hideMovableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
         		

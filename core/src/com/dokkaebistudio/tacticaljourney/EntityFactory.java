@@ -266,7 +266,7 @@ public final class EntityFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createEnemy(Vector2 pos) {
+	public Entity createEnemy(Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -285,7 +285,7 @@ public final class EntityFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.engine = this.engine;
-		moveComponent.moveSpeed = 3;
+		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

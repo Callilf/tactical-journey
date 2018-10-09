@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 
 /**
@@ -14,6 +15,8 @@ import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
  *
  */
 public class HealthComponent implements Component, Poolable, MovableInterface {
+	
+	private static ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
@@ -40,6 +43,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 
 	public void setHp(int hp) {
 		this.hp = hp;
+		if (hpDisplayer != null) {
+			TextComponent textComponent = textCompoM.get(hpDisplayer);
+			textComponent.setText(String.valueOf(this.hp));
+		}
 	}
 
 	public Entity getHpDisplayer() {
@@ -59,7 +66,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	public void initiateMovement(Vector2 currentPos) {
 		
 		if (hpDisplayer != null) {
-			TextComponent textCompo = ComponentMapper.getFor(TextComponent.class).get(hpDisplayer);
+			TextComponent textCompo = textCompoM.get(hpDisplayer);
 			
 			//Add the tranfo component to the entity to perform real movement on screen
 			TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);

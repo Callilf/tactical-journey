@@ -22,7 +22,6 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -110,64 +109,6 @@ public final class TileSearchUtil {
 			
 		}
 		return waypoints;
-	}
-	
-	
-	
-	/**
-	 * Do the real movement from a tile to another.
-	 * @param moveCompo the moveComponent
-	 * @param transfoCompo the transformComponent
-	 * @param room the Room
-	 * @return true if the movement has ended, false if still in progress.
-	 */
-	public static boolean performRealMovement(MoveComponent moveCompo, TransformComponent transfoCompo, Room room) {
-		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
-			transfoCompo.pos.x = transfoCompo.pos.x + MOVE_SPEED;
-			if (transfoCompo.pos.x >= moveCompo.currentMoveDestinationPos.x) {
-				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
-				return performEndOfMovement(moveCompo, room);
-			}
-		} else if (moveCompo.currentMoveDestinationPos.x < transfoCompo.pos.x) {
-			transfoCompo.pos.x = transfoCompo.pos.x - MOVE_SPEED;
-			if (transfoCompo.pos.x <= moveCompo.currentMoveDestinationPos.x) {
-				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
-				return performEndOfMovement(moveCompo, room);    			
-			}
-		} else if (moveCompo.currentMoveDestinationPos.y > transfoCompo.pos.y) { 
-			transfoCompo.pos.y = transfoCompo.pos.y + MOVE_SPEED;
-			if (transfoCompo.pos.y >= moveCompo.currentMoveDestinationPos.y) {
-				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
-				return performEndOfMovement(moveCompo, room);    			
-			}
-		} else if (moveCompo.currentMoveDestinationPos.y < transfoCompo.pos.y) {
-			transfoCompo.pos.y = transfoCompo.pos.y - MOVE_SPEED;
-			if (transfoCompo.pos.y <= moveCompo.currentMoveDestinationPos.y) {
-				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
-				return performEndOfMovement(moveCompo, room);    			
-			}
-		} else {
-			//No move to perform, target already reached
-			return performEndOfMovement(moveCompo, room);
-		}
-		return false;
-	}
-
-
-	/**
-	 * Target has been reached. If it was the last one, stop the movement, otherwise
-	 * switch to the next target.
-	 * @param moveCompo the moveComponent
-	 * @param room the room.
-	 * @return true if the movement has ended, false if still in progress.
-	 */
-	private static boolean performEndOfMovement(MoveComponent moveCompo, Room room) {
-		if (moveCompo.currentMoveDestinationIndex >= moveCompo.getWayPoints().size()) {
-			moveCompo.currentMoveDestinationIndex ++;
-			return true;
-		}
-		moveCompo.currentMoveDestinationIndex ++;
-		return false;
 	}
 	
 	

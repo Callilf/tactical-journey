@@ -51,23 +51,6 @@ public class MoveComponent implements Component, Poolable {
 		clearMovableTiles();
 	}
 	
-	
-	
-	/**
-	 * Initiate a real movement on screen.
-	 * @param moverEntity the entity that will move
-	 * @param moverCurrentPos the current position of the mover.
-	 */
-	public void initiateMovement(Entity moverEntity, GridPositionComponent moverCurrentPos) {
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(moverCurrentPos.coord);
-		transfoCompo.pos.x = startPos.x;
-		transfoCompo.pos.y = startPos.y;
-		transfoCompo.pos.z = 1;
-		moverEntity.add(transfoCompo);
-		this.currentMoveDestinationIndex = 0;
-	}
-	
 	/**
 	 * Select the correct target given the currentMoveDestinationIndex
 	 * @param gridPositionM the gridPositionMapper

@@ -99,6 +99,7 @@ public final class EntityFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = this.engine;
+		attackComponent.setRangeMax(1);
 		playerEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

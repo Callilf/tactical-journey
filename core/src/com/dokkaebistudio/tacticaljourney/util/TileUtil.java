@@ -56,4 +56,16 @@ public final class TileUtil {
 		
 		return null;
 	}
+	
+	/**
+	 * Return the distance in tiles between two tiles. The distance is always positive.
+	 * @param startTilePos the start tile position
+	 * @param endTilePos the end tile position
+	 * @return the distance between startTile and endTile
+	 */
+	public static int getDistanceBetweenTiles(Vector2 startTilePos, Vector2 endTilePos) {
+		float xDistance = Math.abs(startTilePos.x - endTilePos.x);
+		float yDistance = Math.abs(startTilePos.y - endTilePos.y);
+		return (int) xDistance + (int) yDistance;
+	}
 }

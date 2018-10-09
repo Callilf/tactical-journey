@@ -16,6 +16,15 @@ public class AttackComponent implements Component, Poolable {
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
+	/** The min attack range. */
+	private int rangeMin;
+	/** The max attack range. */
+	private int rangeMax;
+	
+	
+	//**************************************
+	// Attack tiles selection and display
+	
 	/** The tiles where the player can attack. */
 	public Set<Entity> allAttackableTiles;
 	
@@ -27,6 +36,7 @@ public class AttackComponent implements Component, Poolable {
 	
 	/** The button used to confirm movements. */
 	private Entity attackConfirmationButton;
+	
 	
 	
 	@Override
@@ -104,6 +114,27 @@ public class AttackComponent implements Component, Poolable {
 			spriteComponent.hide = true;
 		}
 	}
-	
+
+
+	public int getRangeMin() {
+		return rangeMin;
+	}
+
+
+	public void setRangeMin(int rangeMin) {
+		this.rangeMin = rangeMin;
+	}
+
+
+	public int getRangeMax() {
+		return rangeMax;
+	}
+
+
+	public void setRangeMax(int rangeMax) {
+		this.rangeMax = rangeMax;
+	}
+
+
 	
 }

@@ -100,6 +100,7 @@ public final class EntityFactory {
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = this.engine;
 		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(4);
 		playerEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -246,25 +247,25 @@ public final class EntityFactory {
     	return confirmButton;
 	}
 	
-	/**
-	 * Create the movement confirmation button.
-	 * @param pos the position
-	 * @return the confirmation button entity
-	 */
-	public Entity createMoveConfirmationButton(Vector2 pos) {
-		Entity confirmButton = engine.createEntity();
-		
-		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
-    	confirmButton.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
-    	confirmButton.add(spriteCompo);
-    	
-    	engine.addEntity(confirmButton);
-    	return confirmButton;
-	}
+//	/**
+//	 * Create the movement confirmation button.
+//	 * @param pos the position
+//	 * @return the confirmation button entity
+//	 */
+//	public Entity createMoveConfirmationButton(Vector2 pos) {
+//		Entity confirmButton = engine.createEntity();
+//		
+//		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+//    	movableTilePos.coord.set(pos);
+//    	confirmButton.add(movableTilePos);
+//    	
+//    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+//    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
+//    	confirmButton.add(spriteCompo);
+//    	
+//    	engine.addEntity(confirmButton);
+//    	return confirmButton;
+//	}
 	
 	
 

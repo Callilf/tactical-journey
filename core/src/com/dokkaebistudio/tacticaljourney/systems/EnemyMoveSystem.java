@@ -109,10 +109,6 @@ public class EnemyMoveSystem extends IteratingSystem {
     				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord);
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
-    				//Display the confirmation button
-    				Entity moveConfirmationButton = room.entityFactory.createMoveConfirmationButton(moverCurrentPos.coord);
-    				moveCompo.setMovementConfirmationButton(moveConfirmationButton);
-    					
     				//Display the way to go to this point
     				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
     		       	moveCompo.setWayPoints(waypoints);

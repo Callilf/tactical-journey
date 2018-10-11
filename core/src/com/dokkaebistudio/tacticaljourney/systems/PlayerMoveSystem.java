@@ -103,23 +103,25 @@ public class PlayerMoveSystem extends IteratingSystem {
     			int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
     			
-    			//First test the confirmation button
-            	SpriteComponent confirmationButtonSprite = textureCompoM.get(moveCompo.getMovementConfirmationButton());
-            	if (confirmationButtonSprite.containsPoint(x, y)) {
-            		//Clicked on the confirmation button, move the entity
+            	SpriteComponent selectedTileSprite = textureCompoM.get(moveCompo.getSelectedTile());
+            	SpriteComponent playerSprite = textureCompoM.get(moverEntity);
+            	
+            	if (selectedTileSprite.containsPoint(x, y)) {
+            		//Confirm movement is we click on the selected tile again
             		
             		//Initiate movement
             		movementHandler.initiateMovement(moverEntity);
             		
             		room.state = RoomState.PLAYER_MOVING;
-            		
-            		break;
+            	} else if (playerSprite.containsPoint(x, y)) {
+            		//Cancel movement is we click on the character
+            		moveCompo.clearSelectedTile();
+            		room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+            	} else {
+	    			//No confirmation, check if another tile has been selected
+	    			selectDestinationTile(moveCompo, x, y, moverCurrentPos);
+	    			room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
             	}
-    			
-    			
-    			//No confirmation, check if another tile has been selected
-    			selectDestinationTile(moveCompo, x, y, moverCurrentPos);
-    			room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
     			
     		}
     		
@@ -241,11 +243,7 @@ public class PlayerMoveSystem extends IteratingSystem {
 				//Create an entity to show that this tile is selected as the destination
 				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord);
 				moveCompo.setSelectedTile(destinationTileEntity);
-				
-				//Display the confirmation button
-				Entity moveConfirmationButton = room.entityFactory.createMoveConfirmationButton(moverCurrentPos.coord);
-				moveCompo.setMovementConfirmationButton(moveConfirmationButton);
-				
+
 				//Display the way to go to this point
 				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
             	moveCompo.setWayPoints(waypoints);

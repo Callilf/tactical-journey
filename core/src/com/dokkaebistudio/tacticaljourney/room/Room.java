@@ -37,6 +37,7 @@ public class Room {
 	public EntityFactory entityFactory;
 	
 	public TurnManager turnManager;
+	public AttackManager attackManager;
 
 	public Room (PooledEngine engine) {
 		this.engine = engine;
@@ -50,6 +51,7 @@ public class Room {
 		entityFactory.createEnemy(new Vector2(2,9), 3);
 		entityFactory.createEnemy(new Vector2(25,3), 3);
 		turnManager = new TurnManager(this);
+		attackManager = new AttackManager(this);
 
 		this.state = RoomState.PLAYER_TURN_INIT;
 	}

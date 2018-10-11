@@ -35,9 +35,6 @@ public class MoveComponent implements Component, Poolable {
 	/** The selected tile for movement. */
 	private Entity selectedTile;
 	
-	/** The button used to confirm movements. */
-	private Entity movementConfirmationButton;
-	
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
 	
@@ -81,16 +78,18 @@ public class MoveComponent implements Component, Poolable {
 			allWalkableTiles.clear();
 		}
 		
+		clearSelectedTile();
+	}
+	
+	/**
+	 * Clear the list of movable tiles and remove all entities associated to it.
+	 */
+	public void clearSelectedTile() {
 		if (this.selectedTile != null) {
 			engine.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = null;
-		
-		if (this.movementConfirmationButton != null) {
-			engine.removeEntity(this.movementConfirmationButton);
-		}
-		this.movementConfirmationButton = null;
-		
+
 		for (Entity e : wayPoints) {
 			engine.removeEntity(e);
 		}
@@ -109,20 +108,6 @@ public class MoveComponent implements Component, Poolable {
 		}
 		this.selectedTile = selectedTile;
 	}
-
-
-
-	public Entity getMovementConfirmationButton() {
-		return movementConfirmationButton;
-	}
-
-	public void setMovementConfirmationButton(Entity movementConfirmationButton) {
-		if (this.movementConfirmationButton != null) {
-			engine.removeEntity(this.movementConfirmationButton);
-		}
-		this.movementConfirmationButton = movementConfirmationButton;
-	}
-
 
 
 	public List<Entity> getWayPoints() {
@@ -154,10 +139,6 @@ public class MoveComponent implements Component, Poolable {
 		}
 		if (this.selectedTile != null) {
 			SpriteComponent spriteComponent = spriteCM.get(this.selectedTile);
-			spriteComponent.hide = true;
-		}
-		if (this.movementConfirmationButton != null) {
-			SpriteComponent spriteComponent = spriteCM.get(this.movementConfirmationButton);
 			spriteComponent.hide = true;
 		}
 	}

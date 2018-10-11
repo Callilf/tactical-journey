@@ -74,9 +74,7 @@ public class PlayerAttackSystem extends IteratingSystem {
             				//Attack is possible !
 	            			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room.engine);
 	            			
-	            			//TODO : add attackManager to lower health and check if target is dead
-	            			HealthComponent healthComponent = healthCompoM.get(target);
-	            			healthComponent.setHp(healthComponent.getHp() - 10);
+	            			room.attackManager.performAttack(attackerEntity, target);
 	            			
 	            			moveCompo.clearMovableTiles();
 	                		attackCompo.clearAttackableTiles();

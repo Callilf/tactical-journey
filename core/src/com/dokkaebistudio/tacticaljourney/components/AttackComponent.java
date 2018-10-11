@@ -21,6 +21,8 @@ public class AttackComponent implements Component, Poolable {
 	/** The max attack range. */
 	private int rangeMax;
 	
+	/** The amount of damage dealt to an ennemy without any protection. */
+	private int strength;
 	
 	//**************************************
 	// Attack tiles selection and display
@@ -133,6 +135,16 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setRangeMax(int rangeMax) {
 		this.rangeMax = rangeMax;
+	}
+
+
+	public int getStrength() {
+		return strength;
+	}
+
+
+	public void setStrength(int strength) {
+		this.strength = strength;
 	}
 
 

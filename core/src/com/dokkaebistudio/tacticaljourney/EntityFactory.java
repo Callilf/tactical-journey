@@ -68,22 +68,21 @@ public final class EntityFactory {
 		Entity playerEntity = engine.createEntity();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(this.playerTexture));
+		playerEntity.add(spriteCompo);
+		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(pos);
+		gridPosition.zIndex = 10;
+		playerEntity.add(gridPosition);
+		
 		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
-
 		baseWheelComponent.addSector(15, WheelComponent.Hit.MISS);
 		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
 		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
 		baseWheelComponent.addSector(2, WheelComponent.Hit.CRITICAL);
 		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
 		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
-
-		gridPosition.coord.set(pos);
-
-		spriteCompo.setSprite(new Sprite(this.playerTexture));
-
-		playerEntity.add(spriteCompo);
-		playerEntity.add(gridPosition);
 		playerEntity.add(baseWheelComponent);
 		
 		// he's the player !
@@ -167,6 +166,7 @@ public final class EntityFactory {
 		}
 
 		gridPosition.coord.set(pos);
+		gridPosition.zIndex = 1;
 
 		tileEntity.add(spriteCompo);
 		tileEntity.add(gridPosition);
@@ -182,6 +182,7 @@ public final class EntityFactory {
 		Entity movableTileEntity = engine.createEntity();
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord.set(pos);
+    	movableTilePos.zIndex = 2;
     	movableTileEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -194,9 +195,10 @@ public final class EntityFactory {
 	
 	public Entity createAttackableTile(Vector2 pos) {
 		Entity attackableTileEntity = engine.createEntity();
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
-    	attackableTileEntity.add(movableTilePos);
+    	GridPositionComponent attackableTilePos = engine.createComponent(GridPositionComponent.class);
+    	attackableTilePos.coord.set(pos);
+    	attackableTilePos.zIndex = 2;
+    	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_attackable)));
@@ -215,9 +217,10 @@ public final class EntityFactory {
 	public Entity createDestinationTile(Vector2 pos) {
 		Entity redCross = engine.createEntity();
 		
-		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
-    	redCross.add(movableTilePos);
+		GridPositionComponent selectedTilePos = engine.createComponent(GridPositionComponent.class);
+    	selectedTilePos.coord.set(pos);
+    	selectedTilePos.zIndex = 2;
+    	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
     	redCross.add(spriteCompo);
@@ -235,9 +238,10 @@ public final class EntityFactory {
 	public Entity createWaypoint(Vector2 pos) {
 		Entity confirmButton = engine.createEntity();
 		
-		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
-    	confirmButton.add(movableTilePos);
+		GridPositionComponent waypointPos = engine.createComponent(GridPositionComponent.class);
+    	waypointPos.coord.set(pos);
+    	waypointPos.zIndex = 2;
+    	confirmButton.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_waypoint)));
@@ -279,13 +283,12 @@ public final class EntityFactory {
 		Entity enemyEntity = engine.createEntity();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-
-		gridPosition.coord.set(pos);
-
 		spriteCompo.setSprite(new Sprite(this.enemyTexture));
-
 		enemyEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(pos);
+		gridPosition.zIndex = 9;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);

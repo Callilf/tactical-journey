@@ -33,7 +33,13 @@ public class AttackWheel {
 	 * @return the sector targeted by the needle.
 	 */
 	public void setPointedSector() {
-		float rotation = 360 + (this.arrow.getRotation() % 360);
+		float rotation = 0;
+		if (this.arrow.getRotation() < 0) {
+			rotation = 360 + (this.arrow.getRotation() % 360);
+		} else {
+			rotation = this.arrow.getRotation() % 360;
+		}
+		
     	Sector pointedSector = this.sectors.get(0);
     	int totalRange = 0;
     	for (Sector s : this.sectors) {

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 
 /**
  * Manage the attacks between entities, checks whether the attack lands or fails,
@@ -39,11 +40,30 @@ public class AttackManager {
 	 * @param attacker the attacker entity
 	 * @param target the target entity
 	 */
-	public void performAttack(Entity attacker, Entity target) {
+	public void performAttack(Entity attacker, Entity target, Sector pointedSector) {
 		AttackComponent attackCompo = attackCM.get(attacker);
+		int damage = 0;
+		
+		//Compute damage
+		switch(pointedSector.hit) {
+		case HIT:
+			damage = attackCompo.getStrength();
+			break;
+		case GRAZE:
+			damage = attackCompo.getStrength() / 2;
+			break;
+		case MISS:
+			damage = 0;
+			break;
+		case CRITICAL:
+			damage = attackCompo.getStrength() * 2;
+			break;
+		default:
+		}
+		
 		
 		HealthComponent healthComponent = healthCM.get(target);
-		healthComponent.setHp(healthComponent.getHp() - attackCompo.getStrength());
+		healthComponent.setHp(healthComponent.getHp() - damage);
 		
 		if (healthComponent.getHp() <= 0) {
 			//target is dead

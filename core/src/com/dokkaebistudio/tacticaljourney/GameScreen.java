@@ -16,11 +16,15 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -33,9 +37,6 @@ import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class GameScreen extends ScreenAdapter {
 	private static final int GAME_RUNNING = 1;
@@ -55,11 +56,12 @@ public class GameScreen extends ScreenAdapter {
 	private static final Color MISS_COLOR = Color.BLACK;
 	private static final Color CRITICAL_COLOR = Color.RED;
 	private static final Color GRAZE_COLOR = Color.GRAY;
+	private static final int WHEEL_RADIUS = 256;
 	private static final int WHEEL_X = SCREEN_W / 2;
-	private static final int WHEEL_Y = 64;
-	private static final int WHEEL_RADIUS = 64;
+	private static final int WHEEL_Y = SCREEN_H/2;
+	
 
-	List<WheelComponent.Sector> attackWheel = new LinkedList<WheelComponent.Sector>();
+	AttackWheel attackWheel = new AttackWheel();
 
 	TacticalJourney game;
 
@@ -88,11 +90,12 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new RenderingSystem(game.batcher));
+		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
-		engine.addSystem(new PlayerAttackSystem(room));
+		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputMovementSystem(room));
-		engine.addSystem(new WheelSystem(attackWheel));
+		
 		
 		
 		room.create();
@@ -141,9 +144,6 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	public void drawUI () {
-		guiCam.update();
-		game.batcher.setProjectionMatrix(guiCam.combined);
-		game.batcher.begin();
 		switch (state) {
 		case GAME_RUNNING:
 			presentRunning();
@@ -155,7 +155,6 @@ public class GameScreen extends ScreenAdapter {
 			presentGameOver();
 			break;
 		}
-		game.batcher.end();
 	}
 
 	private void presentRunning () {
@@ -164,43 +163,55 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private void drawAttackWheel() {
-		// first normalize sector values
-		int total = 0;
-		List<Float> normalizeRanges = new LinkedList<Float>();
-		for(WheelComponent.Sector s: attackWheel){
-			total += s.range;
-
-		}
-		for(WheelComponent.Sector s: attackWheel){
-			normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
-		}
-		// begin render
-		game.shapeRenderer.setProjectionMatrix(guiCam.combined);
-		game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		int rangeCumul = 0;
-		for(int i = 0; i< attackWheel.size(); i++) {
-			// color
-			switch (attackWheel.get(i).hit){
-				case HIT:
-					game.shapeRenderer.setColor(HIT_COLOR);
-					break;
-				case CRITICAL:
-					game.shapeRenderer.setColor(CRITICAL_COLOR);
-					break;
-				case GRAZE:
-					game.shapeRenderer.setColor(GRAZE_COLOR);
-					break;
-				case MISS:
-					game.shapeRenderer.setColor(MISS_COLOR);
-					break;
+		
+		if (attackWheel.isDisplayed()) {
+			// first normalize sector values
+			int total = 0;
+			List<Float> normalizeRanges = new LinkedList<Float>();
+			for(WheelComponent.Sector s: attackWheel.getSectors()){
+				total += s.range;
+	
 			}
-			// draw arc
-			game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS, rangeCumul, normalizeRanges.get(i));
-			// next arc starts at the end of previous arc
-			rangeCumul += normalizeRanges.get(i);
-		}
-		game.shapeRenderer.end();
+			for(WheelComponent.Sector s: attackWheel.getSectors()){
+				normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
+			}
+			// begin render
+			game.shapeRenderer.setProjectionMatrix(guiCam.combined);
+			game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			int rangeCumul = 0;
+			for(int i = 0; i< attackWheel.getSectors().size(); i++) {
+				// color
+				switch (attackWheel.getSectors().get(i).hit){
+					case HIT:
+						game.shapeRenderer.setColor(HIT_COLOR);
+						break;
+					case CRITICAL:
+						game.shapeRenderer.setColor(CRITICAL_COLOR);
+						break;
+					case GRAZE:
+						game.shapeRenderer.setColor(GRAZE_COLOR);
+						break;
+					case MISS:
+						game.shapeRenderer.setColor(MISS_COLOR);
+						break;
+				}
+				// draw arc
+				game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS, rangeCumul, normalizeRanges.get(i));
+				// next arc starts at the end of previous arc
+				rangeCumul += normalizeRanges.get(i);
+			}
+			game.shapeRenderer.end();
+			
 
+			guiCam.update();
+			game.batcher.setProjectionMatrix(guiCam.combined);
+			game.batcher.begin();
+			Sprite arrow = attackWheel.getArrow();
+			arrow.setPosition(WHEEL_X - arrow.getWidth()/2, WHEEL_Y - arrow.getHeight()/2);
+			arrow.draw(game.batcher);
+			game.batcher.end();
+			
+		}
 
 
 	}

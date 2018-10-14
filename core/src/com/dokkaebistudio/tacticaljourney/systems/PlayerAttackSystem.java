@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -15,7 +16,9 @@ import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class PlayerAttackSystem extends IteratingSystem {
@@ -29,9 +32,10 @@ public class PlayerAttackSystem extends IteratingSystem {
     private final ComponentMapper<TransformComponent> transfoCompoM;
     private final ComponentMapper<HealthComponent> healthCompoM;
 
+    private final AttackWheel wheel;
     private Room room;
 
-    public PlayerAttackSystem(Room r) {
+    public PlayerAttackSystem(Room r, AttackWheel attackWheel) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
@@ -42,6 +46,7 @@ public class PlayerAttackSystem extends IteratingSystem {
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         this.healthCompoM = ComponentMapper.getFor(HealthComponent.class);
         room = r;
+        this.wheel = attackWheel;
     }
 
     @Override
@@ -71,29 +76,28 @@ public class PlayerAttackSystem extends IteratingSystem {
             			int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord, gridPositionComponent.coord);
             			
             			if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
+            				
             				//Attack is possible !
 	            			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room.engine);
-	            			
-	            			room.attackManager.performAttack(attackerEntity, target);
-	            			
-	            			moveCompo.clearMovableTiles();
-	                		attackCompo.clearAttackableTiles();
-	            			room.turnManager.endPlayerTurn();
+            				attackCompo.setTarget(target);
+            				room.state = RoomState.PLAYER_WHEEL_START;
+
 	            			break;
             			}
             		}
             	}
             	
-//            	boolean selected = selectDestinationTile(attackCompo, x, y, attackerCurrentPos);
-//            	if (selected) {
-//            		room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
-//            	}
             }
             break;
     		
             
-    	case PLAYER_MOVE_DESTINATION_SELECTED:
-
+    	case PLAYER_WHEEL_FINISHED:
+    		
+    		Sector pointedSector = wheel.getPointedSector();
+    		room.attackManager.performAttack(attackerEntity, attackCompo.getTarget(), pointedSector);
+			moveCompo.clearMovableTiles();
+    		attackCompo.clearAttackableTiles();
+			room.turnManager.endPlayerTurn();
     		
     		break;
     		

@@ -15,6 +15,10 @@ public enum RoomState {
 	PLAYER_MOVE_DESTINATION_SELECTED,
 	PLAYER_MOVING,
 	PLAYER_END_MOVEMENT,
+	PLAYER_WHEEL_START,
+	PLAYER_WHEEL_TURNING,
+	PLAYER_WHEEL_NEEDLE_STOP,
+	PLAYER_WHEEL_FINISHED,
 	ENEMY_TURN_INIT,
 	ENEMY_COMPUTE_MOVABLE_TILES,
 	ENEMY_MOVE_TILES_DISPLAYED,
@@ -34,7 +38,11 @@ public enum RoomState {
 				|| this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
     			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED 
     			|| this == RoomState.PLAYER_MOVING 
-    			|| this == RoomState.PLAYER_END_MOVEMENT;
+    			|| this == RoomState.PLAYER_END_MOVEMENT
+    	    	|| this == RoomState.PLAYER_WHEEL_START    			
+    			|| this == RoomState.PLAYER_WHEEL_TURNING    			
+    			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP
+    			|| this == RoomState.PLAYER_WHEEL_FINISHED;
 	}
 	
 	/**
@@ -48,5 +56,15 @@ public enum RoomState {
     			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 
     			|| this == RoomState.ENEMY_MOVING 
     			|| this == RoomState.ENEMY_END_MOVEMENT;
+	}
+	
+	/**
+	 * Return true if the wheel is displayed on screen, false otherwise.
+	 * @return true if wheel is displayed, false otherwise.
+	 */
+	public boolean isWheelDisplayed() {
+		return this == RoomState.PLAYER_WHEEL_START    			
+    			|| this == RoomState.PLAYER_WHEEL_TURNING    			
+    			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP;
 	}
 }

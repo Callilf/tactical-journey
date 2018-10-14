@@ -24,6 +24,9 @@ public class AttackComponent implements Component, Poolable {
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
 	
+	/** The target entity. */
+	private Entity target;
+	
 	//**************************************
 	// Attack tiles selection and display
 	
@@ -45,6 +48,7 @@ public class AttackComponent implements Component, Poolable {
 	public void reset() {
 		engine = null;
 		clearAttackableTiles();
+		this.target = null;
 	}
 	
 
@@ -145,6 +149,16 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setStrength(int strength) {
 		this.strength = strength;
+	}
+
+
+	public Entity getTarget() {
+		return target;
+	}
+
+
+	public void setTarget(Entity target) {
+		this.target = target;
 	}
 
 

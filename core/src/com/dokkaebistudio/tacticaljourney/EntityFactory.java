@@ -77,12 +77,14 @@ public final class EntityFactory {
 		playerEntity.add(gridPosition);
 		
 		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
-		baseWheelComponent.addSector(15, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(2, WheelComponent.Hit.CRITICAL);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(5, WheelComponent.Hit.GRAZE);
+		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
+		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
+		baseWheelComponent.addSector(10, WheelComponent.Hit.CRITICAL);
+		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
+		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
+		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+		baseWheelComponent.addSector(140, WheelComponent.Hit.MISS);
+		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
 		playerEntity.add(baseWheelComponent);
 		
 		// he's the player !

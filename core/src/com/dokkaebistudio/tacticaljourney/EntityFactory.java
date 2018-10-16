@@ -5,11 +5,13 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -20,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 
@@ -351,6 +354,35 @@ public final class EntityFactory {
 		textTest.add(tc);
 		engine.addEntity(textTest);
 		return textTest;
+	}
+	
+	/**
+	 * Create a damage displayer.
+	 * @param damage the damage to display
+	 * @param initialPos the initial position
+	 * @return the damage displayer entity
+	 */
+	public Entity createDamageDisplayer(String damage, Vector2 initialPos, boolean heal) {
+		Entity display = engine.createEntity();
+		
+		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
+		displayCompo.setInitialPosition(initialPos);
+		display.add(displayCompo);
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(initialPos, 100);
+		display.add(transfoCompo);
+		
+		TextComponent textCompo = engine.createComponent(TextComponent.class);
+		if (heal) {
+			textCompo.setFont(Assets.greenFont);
+		} else {
+			textCompo.setFont(Assets.redFont);
+		}
+		textCompo.setText(damage);
+		display.add(textCompo);
+		
+		return display;
 	}
 	
 }

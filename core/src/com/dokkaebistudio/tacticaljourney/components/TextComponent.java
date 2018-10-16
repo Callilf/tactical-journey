@@ -36,6 +36,7 @@ public class TextComponent implements Component, Poolable {
 	private float width;
 	private float height;
 	
+	public TextComponent() {}
 	public TextComponent(BitmapFont f) {
 		font = f;
 	}

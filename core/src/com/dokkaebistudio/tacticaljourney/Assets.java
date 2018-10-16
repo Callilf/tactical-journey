@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -52,6 +53,8 @@ public class Assets {
 	
 
 	public static BitmapFont font;
+	public static BitmapFont greenFont;
+	public static BitmapFont redFont;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -124,6 +127,10 @@ public class Assets {
 	 */
 	public void loadFont() {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		greenFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		greenFont.setColor(Color.GREEN);
+		redFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		redFont.setColor(Color.RED);
 	}
 
 	public static void playSound (String sound) {

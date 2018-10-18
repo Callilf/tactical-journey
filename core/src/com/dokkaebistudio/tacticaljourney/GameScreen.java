@@ -31,13 +31,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
-import com.dokkaebistudio.tacticaljourney.systems.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
-import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 public class GameScreen extends ScreenAdapter {
 	private static final int GAME_RUNNING = 1;
@@ -58,8 +58,8 @@ public class GameScreen extends ScreenAdapter {
 	private static final Color CRITICAL_COLOR = Color.RED;
 	private static final Color GRAZE_COLOR = Color.GRAY;
 	private static final int WHEEL_RADIUS = 256;
-	private static final int WHEEL_X = SCREEN_W / 2;
-	private static final int WHEEL_Y = SCREEN_H/2;
+	public static final int WHEEL_X = SCREEN_W / 2;
+	public static final int WHEEL_Y = SCREEN_H/2;
 	
 
 	AttackWheel attackWheel = new AttackWheel();
@@ -177,10 +177,16 @@ public class GameScreen extends ScreenAdapter {
 			for(WheelComponent.Sector s: attackWheel.getSectors()){
 				normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
 			}
+			
 			// begin render
 			game.shapeRenderer.setProjectionMatrix(guiCam.combined);
 			game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			// Draw a black circle behind (in case of missing sectors)
+			game.shapeRenderer.setColor(HIT_COLOR);
+			game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS-1, 0, 360);
+			
 			int rangeCumul = 0;
+			
 			for(int i = 0; i< attackWheel.getSectors().size(); i++) {
 				// color
 				switch (attackWheel.getSectors().get(i).hit){
@@ -208,12 +214,45 @@ public class GameScreen extends ScreenAdapter {
 			guiCam.update();
 			game.batcher.setProjectionMatrix(guiCam.combined);
 			game.batcher.begin();
+			
+//			int rangeCumul = 0;
+//			for (Sector s : attackWheel.getSectors()) {
+//				for (int i=rangeCumul ; i < rangeCumul + s.range ; i++) {
+//					Sprite sprite = attackWheel.getArcs().get(i);
+//					switch (s.hit) {
+//					case HIT:
+//						sprite.setColor(HIT_COLOR);
+//						break;
+//					case CRITICAL:
+//						sprite.setColor(CRITICAL_COLOR);
+//						break;
+//					case GRAZE:
+//						sprite.setColor(GRAZE_COLOR);
+//						break;
+//					case MISS:
+//						sprite.setColor(MISS_COLOR);
+//						break;
+//					}
+//				}
+//				rangeCumul += s.range;
+//			}
+//			
+//			List<Sprite> reversedArcs = new ArrayList<>();
+//			reversedArcs.addAll(attackWheel.getArcs());
+//			Collections.reverse(reversedArcs);
+//			for (Sprite arc : reversedArcs) {
+//				arc.draw(game.batcher);
+//			}
+			
+			
+			// Render the arrow
 			Sprite arrow = attackWheel.getArrow();
 			arrow.setPosition(WHEEL_X - arrow.getWidth()/2, WHEEL_Y - arrow.getHeight()/2);
 			arrow.draw(game.batcher);
+			
 			game.batcher.end();
 			
-		}
+		} 
 
 
 	}

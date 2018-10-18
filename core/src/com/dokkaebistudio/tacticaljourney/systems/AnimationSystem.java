@@ -22,9 +22,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.dokkaebistudio.tacticaljourney.components.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.StateComponent;
-import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 
 public class AnimationSystem extends IteratingSystem {
 	private ComponentMapper<SpriteComponent> tm;

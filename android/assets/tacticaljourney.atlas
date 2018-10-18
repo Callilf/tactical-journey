@@ -13,7 +13,7 @@ background-test-menu
   index: -1
 btn-end-turn
   rotate: false
-  xy: 516, 648
+  xy: 1544, 648
   size: 192, 128
   orig: 192, 128
   offset: 0, 0
@@ -34,14 +34,14 @@ btn-move-confirmation
   index: -1
 enemy-test
   rotate: false
-  xy: 516, 516
+  xy: 1544, 516
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 582, 582
+  xy: 1610, 582
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -55,7 +55,7 @@ tile-attackable
   index: -1
 tile-movable
   rotate: false
-  xy: 516, 582
+  xy: 1544, 582
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -69,7 +69,7 @@ tile-movable-selected
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 776, 712
+  xy: 1804, 712
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -90,7 +90,7 @@ tile-pit-test
   index: -1
 tile-test
   rotate: false
-  xy: 710, 712
+  xy: 1738, 712
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -109,9 +109,36 @@ tile-wall-test2
   orig: 64, 64
   offset: 0, 0
   index: -1
+wheel-arc
+  rotate: false
+  xy: 516, 264
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 wheel-arrow
   rotate: false
   xy: 2, 264
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+wheel_arc_green
+  rotate: false
+  xy: 1030, 264
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+tacticaljourney2.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+wheel_arc_red
+  rotate: false
+  xy: 2, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

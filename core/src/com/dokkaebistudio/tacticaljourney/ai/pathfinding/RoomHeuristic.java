@@ -3,7 +3,7 @@ package com.dokkaebistudio.tacticaljourney.ai.pathfinding;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.pfa.Heuristic;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 
 public class RoomHeuristic implements Heuristic<Entity> {
 	

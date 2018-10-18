@@ -1,5 +1,6 @@
 package com.dokkaebistudio.tacticaljourney;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class AttackWheel {
 	/** The list of sectors that compose the wheel. */
 	private List<WheelComponent.Sector> sectors;
 	
+//	/** The 360 arcs that compose the wheel. */
+//	private List<Sprite> arcs;
+	
 	/** The arrow that spins. */
 	private Sprite arrow;
 	
@@ -26,6 +30,14 @@ public class AttackWheel {
 		this.displayed = false;
 		this.sectors = new LinkedList<WheelComponent.Sector>();
 		this.arrow = new Sprite(Assets.getTexture(Assets.wheel_arrow));
+		
+//		this.arcs = new ArrayList<>();
+//		for (int i=0 ; i<360 ; i++) {
+//			Sprite arcSprite = new Sprite(Assets.getTexture(Assets.wheel_arc));
+//			arcSprite.setPosition(GameScreen.WHEEL_X - arcSprite.getWidth()/2, GameScreen.WHEEL_Y - arcSprite.getHeight()/2);
+//			arcSprite.setRotation(i);
+//			this.arcs.add(arcSprite);
+//		}
 	}
 	
 	/**
@@ -86,4 +98,14 @@ public class AttackWheel {
 	public Sector getPointedSector() {
 		return pointedSector;
 	}
+
+//	public List<Sprite> getArcs() {
+//		return arcs;
+//	}
+//
+//	public void setArcs(List<Sprite> arcs) {
+//		this.arcs = arcs;
+//	}
+	
+	
 }

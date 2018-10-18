@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.room;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 
 /**
  * Manages the turns of a room.

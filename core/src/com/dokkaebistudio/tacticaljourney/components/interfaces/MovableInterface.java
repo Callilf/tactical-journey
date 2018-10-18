@@ -2,8 +2,8 @@ package com.dokkaebistudio.tacticaljourney.components.interfaces;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 
 public interface MovableInterface {
 

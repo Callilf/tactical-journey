@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney.systems;
+package com.dokkaebistudio.tacticaljourney.systems.display;
 
 import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_H;
 import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_W;
@@ -30,10 +30,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 
 public class RenderingSystem extends IteratingSystem {
 

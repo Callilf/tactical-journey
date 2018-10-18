@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;

@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.display;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 public class MoveComponent implements Component, Poolable {
 	

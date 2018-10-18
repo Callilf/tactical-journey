@@ -1,12 +1,12 @@
-package com.dokkaebistudio.tacticaljourney.systems;
+package com.dokkaebistudio.tacticaljourney.systems.display;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.dokkaebistudio.tacticaljourney.components.DamageDisplayComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 public class DamageDisplaySystem extends IteratingSystem {

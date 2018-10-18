@@ -9,13 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.DamageDisplayComponent;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
-import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 /**
  * Manage the attacks between entities, checks whether the attack lands or fails,

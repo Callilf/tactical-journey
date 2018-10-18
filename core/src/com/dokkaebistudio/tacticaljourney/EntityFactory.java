@@ -11,19 +11,19 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
-import com.dokkaebistudio.tacticaljourney.components.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
-import com.dokkaebistudio.tacticaljourney.components.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 
 /**

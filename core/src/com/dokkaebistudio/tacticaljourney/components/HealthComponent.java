@@ -6,8 +6,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.systems.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.

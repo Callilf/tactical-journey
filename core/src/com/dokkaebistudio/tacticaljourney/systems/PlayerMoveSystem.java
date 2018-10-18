@@ -238,6 +238,11 @@ public class PlayerMoveSystem extends IteratingSystem {
 			SpriteComponent spriteComponent = textureCompoM.get(tile);
 			GridPositionComponent destinationPos = gridPositionM.get(tile);
 			
+			if (destinationPos.coord.equals(moverCurrentPos.coord)) {
+				//Cannot move to the tile we already are
+				continue;
+			}
+			
 			if (spriteComponent.containsPoint(x, y)) {
 				//Clicked on this tile !!
 				//Create an entity to show that this tile is selected as the destination

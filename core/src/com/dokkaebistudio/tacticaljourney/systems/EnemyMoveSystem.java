@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -20,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class EnemyMoveSystem extends IteratingSystem {
 
@@ -90,17 +92,14 @@ public class EnemyMoveSystem extends IteratingSystem {
         		TileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
         		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
         		moveCompo.hideMovableTiles();
+        		attackCompo.hideAttackableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
         		
         		break;
         		
         	case ENEMY_MOVE_TILES_DISPLAYED :
         		
-            	Entity selectedTile = null;
-            	for (Entity t : moveCompo.movableTiles) {
-            		selectedTile = t;
-            		break;
-            	}
+            	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, moveCompo);
             		
             	if (selectedTile != null) {
             		GridPositionComponent destinationPos = gridPositionM.get(selectedTile);
@@ -141,6 +140,21 @@ public class EnemyMoveSystem extends IteratingSystem {
         		movementHandler.finishRealMovement(enemyEntity);
     	    		
     	    	moveCompo.clearMovableTiles();
+    	    	
+    	    	//Check if attack possible
+    	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
+    	    		for (Entity attTile : attackCompo.attackableTiles) {
+    	    			GridPositionComponent attTilePos = gridPositionM.get(attTile);
+    	    			int range = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord, attTilePos.coord);
+						if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
+    	    				//Attack possible
+							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord, room.engine);
+            				attackCompo.setTarget(target);
+							room.attackManager.performAttack(enemyEntity, attackCompo.getTarget());
+    	    			}
+    	    		}
+    	    	}
+    	    	attackCompo.clearAttackableTiles();
     	    	
     	    	enemyFinishedCount ++;
     	    	turnFinished.put(enemyEntity, new Boolean(true));

@@ -305,6 +305,12 @@ public final class EntityFactory {
 		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.engine = this.engine;
+		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(5);
+		enemyEntity.add(attackComponent);
+		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		enemyEntity.add(solidComponent);
 		

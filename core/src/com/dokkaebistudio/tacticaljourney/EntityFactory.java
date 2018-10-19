@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -298,6 +299,7 @@ public final class EntityFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.engine = this.engine;
+		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

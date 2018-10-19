@@ -99,7 +99,7 @@ public class EnemyMoveSystem extends IteratingSystem {
         		
         	case ENEMY_MOVE_TILES_DISPLAYED :
         		
-            	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, moveCompo);
+            	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, room.engine);
             		
             	if (selectedTile != null) {
             		GridPositionComponent destinationPos = gridPositionM.get(selectedTile);
@@ -112,8 +112,10 @@ public class EnemyMoveSystem extends IteratingSystem {
     				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
+            		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
+            	} else {
+            		room.state = RoomState.ENEMY_ATTACK;
             	}
-        		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
         		
         		break;
         		
@@ -138,10 +140,14 @@ public class EnemyMoveSystem extends IteratingSystem {
         	case ENEMY_END_MOVEMENT:
         		
         		movementHandler.finishRealMovement(enemyEntity);
-    	    		
     	    	moveCompo.clearMovableTiles();
-    	    	
-    	    	//Check if attack possible
+    	    	room.state = RoomState.ENEMY_ATTACK;
+
+        		break;
+        		
+        	case ENEMY_ATTACK:
+        		
+        		//Check if attack possible
     	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
     	    			GridPositionComponent attTilePos = gridPositionM.get(attTile);
@@ -159,7 +165,7 @@ public class EnemyMoveSystem extends IteratingSystem {
     	    	enemyFinishedCount ++;
     	    	turnFinished.put(enemyEntity, new Boolean(true));
     	    	room.state = RoomState.ENEMY_TURN_INIT;
-
+    	    	
         		break;
         		
         	default:

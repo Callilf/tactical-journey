@@ -24,7 +24,8 @@ public enum RoomState {
 	ENEMY_MOVE_TILES_DISPLAYED,
 	ENEMY_MOVE_DESTINATION_SELECTED,
 	ENEMY_MOVING,
-	ENEMY_END_MOVEMENT;
+	ENEMY_END_MOVEMENT,
+	ENEMY_ATTACK;
 	
 	
 	
@@ -55,7 +56,8 @@ public enum RoomState {
 				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
     			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 
     			|| this == RoomState.ENEMY_MOVING 
-    			|| this == RoomState.ENEMY_END_MOVEMENT;
+    			|| this == RoomState.ENEMY_END_MOVEMENT
+    			|| this == RoomState.ENEMY_ATTACK;
 	}
 	
 	/**

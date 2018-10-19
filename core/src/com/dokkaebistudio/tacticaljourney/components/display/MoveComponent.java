@@ -44,8 +44,8 @@ public class MoveComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
-		engine = null;
 		clearMovableTiles();
+		engine = null;
 	}
 	
 	/**

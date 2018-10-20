@@ -160,7 +160,7 @@ public class PlayerMoveSystem extends IteratingSystem {
      * @param playerCompo the player component
      */
 	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo, PlayerComponent playerCompo) {
-		if (!room.state.isWheelDisplayed()) {
+		if (room.state.canEndTurn()) {
 			if (InputSingleton.getInstance().leftClickJustPressed) {
 	    		int x = Gdx.input.getX();
 	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();

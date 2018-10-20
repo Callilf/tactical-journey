@@ -69,4 +69,13 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_WHEEL_TURNING    			
     			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP;
 	}
+	
+	/**
+	 * Whether the player can end his turn or not.
+	 * @return true if the turn can be ended manually.
+	 */
+	public boolean canEndTurn() {
+		return this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
+    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+	}
 }

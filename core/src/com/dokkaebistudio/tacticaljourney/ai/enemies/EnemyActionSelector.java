@@ -9,6 +9,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -58,9 +60,9 @@ public class EnemyActionSelector {
 	private static Entity moveRandomly(MoveComponent moveComponent) {
 		Entity selectedTile;
 		List<Entity> movableTilesList = new ArrayList<>(moveComponent.movableTiles);
-		//TODO remove this random to use a global random system (to allow seeding)
-		Random r = new Random();
-		int randomIndex = r.nextInt(movableTilesList.size());
+
+		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		int randomIndex = random.nextInt(movableTilesList.size());
 		selectedTile = movableTilesList.get(randomIndex);
 		return selectedTile;
 	}

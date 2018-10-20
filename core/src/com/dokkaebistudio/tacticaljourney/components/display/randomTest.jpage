@@ -1,0 +1,16 @@
+java.util.Random r = new java.util.Random(13216548156);
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));
+System.out.println(r.nextInt(100));

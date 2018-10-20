@@ -28,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
@@ -78,6 +79,9 @@ public class GameScreen extends ScreenAdapter {
 
 	public GameScreen (TacticalJourney game) {
 		this.game = game;
+		
+		//Instanciate the RNG
+		RandomSingleton.createInstance();
 
 		// already running
 		state = GAME_RUNNING;

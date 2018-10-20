@@ -24,9 +24,11 @@ import java.util.Arrays;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 
 public class Room {
@@ -105,14 +107,15 @@ public class Room {
 					tiles[x][y] = TileEnum.WALL;
 				} else {
 					// generate some random walls and pits
-					int random = MathUtils.random(9);
-					if (random == 0) {
+					RandomXS128 random = RandomSingleton.getInstance().getRandom();
+					int r = random.nextInt(15);
+					if (r == 0) {
 						// PIT
 						tiles[x][y] = TileEnum.PIT;
-					} else if (random == 1) {
+					} else if (r == 1) {
 						// WALL
 						tiles[x][y] = TileEnum.WALL;
-					} else if (random == 2) {
+					} else if (r == 2) {
 						// WALL
 						tiles[x][y] = TileEnum.MUD;
 					}

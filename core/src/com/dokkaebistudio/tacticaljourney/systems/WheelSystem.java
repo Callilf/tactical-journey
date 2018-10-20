@@ -7,8 +7,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.components.WheelModifierComponent;
@@ -43,7 +45,7 @@ public class WheelSystem extends EntitySystem {
     		
     		case PLAYER_WHEEL_START:
     			wheel.setDisplayed(true);
-    			Random r = new Random();
+    			RandomXS128 r = RandomSingleton.getInstance().getRandom();
     			int nextInt = r.nextInt(360);
     			wheel.getArrow().setRotation(nextInt);
     			

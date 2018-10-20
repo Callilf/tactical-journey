@@ -160,43 +160,45 @@ public class PlayerMoveSystem extends IteratingSystem {
      * @param playerCompo the player component
      */
 	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo, PlayerComponent playerCompo) {
-		if (InputSingleton.getInstance().leftClickJustPressed) {
-    		int x = Gdx.input.getX();
-        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
-        	
-        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
-        	//The real action is on click release.
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-        	if (spriteComponent.containsPoint(x, y)) {
-        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-        	}
-    	}
-    	if (InputSingleton.getInstance().leftClickJustReleased) {
-    		int x = Gdx.input.getX();
-        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
-        	
-        	//If release on the endTurnButton, restore the original texture and end the turn.
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-        	if (spriteComponent.containsPoint(x, y)) {
-        		moveCompo.clearMovableTiles();
-        		attackCompo.clearAttackableTiles();
-    			room.turnManager.endPlayerTurn();
-        	}
-    	}
-    	if (InputSingleton.getInstance().spaceJustPressed) {
-    		//If space pressed, make the endTurnButton look pushed.
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-    	}
-    	if (InputSingleton.getInstance().spaceJustReleased) {
-    		//If space released, restore the button texture and end the turn.
-        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
-    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-    		moveCompo.clearMovableTiles();
-    		attackCompo.clearAttackableTiles();
-			room.turnManager.endPlayerTurn();
-    	}
+		if (!room.state.isWheelDisplayed()) {
+			if (InputSingleton.getInstance().leftClickJustPressed) {
+	    		int x = Gdx.input.getX();
+	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+	        	
+	        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
+	        	//The real action is on click release.
+	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	if (spriteComponent.containsPoint(x, y)) {
+	        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+	        	}
+	    	}
+	    	if (InputSingleton.getInstance().leftClickJustReleased) {
+	    		int x = Gdx.input.getX();
+	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+	        	
+	        	//If release on the endTurnButton, restore the original texture and end the turn.
+	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+	        	if (spriteComponent.containsPoint(x, y)) {
+	        		moveCompo.clearMovableTiles();
+	        		attackCompo.clearAttackableTiles();
+	    			room.turnManager.endPlayerTurn();
+	        	}
+	    	}
+	    	if (InputSingleton.getInstance().spaceJustPressed) {
+	    		//If space pressed, make the endTurnButton look pushed.
+	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+	    	}
+	    	if (InputSingleton.getInstance().spaceJustReleased) {
+	    		//If space released, restore the button texture and end the turn.
+	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+	    		moveCompo.clearMovableTiles();
+	    		attackCompo.clearAttackableTiles();
+				room.turnManager.endPlayerTurn();
+	    	}
+		}
 	}
 
     /**

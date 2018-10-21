@@ -40,7 +40,8 @@ public final class EntityFactory {
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion playerTexture;
-	private TextureAtlas.AtlasRegion enemyTexture;
+	private TextureAtlas.AtlasRegion spiderTexture;
+	private TextureAtlas.AtlasRegion scorpionTexture;
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion mudTexture;
@@ -57,7 +58,8 @@ public final class EntityFactory {
 		this.engine = e;
 		
 		playerTexture = Assets.getTexture(Assets.player);
-		enemyTexture = Assets.getTexture(Assets.enemy);
+		spiderTexture = Assets.getTexture(Assets.enemy_spider);
+		scorpionTexture = Assets.getTexture(Assets.enemy_scorpion);
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
@@ -290,11 +292,11 @@ public final class EntityFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createEnemy(Vector2 pos, int speed) {
+	public Entity createSpider(Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.enemyTexture));
+		spriteCompo.setSprite(new Sprite(this.spiderTexture));
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -304,7 +306,7 @@ public final class EntityFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.engine = this.engine;
-		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -332,6 +334,53 @@ public final class EntityFactory {
 		return enemyEntity;
 	}
 	
+	/**
+	 * Create a scorpion.
+	 * @param pos the position
+	 * @param moveSpeed the speed
+	 * @return the enemy entity
+	 */
+	public Entity createScorpion(Vector2 pos, int speed) {
+		Entity enemyEntity = engine.createEntity();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(this.scorpionTexture));
+		enemyEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(pos);
+		gridPosition.zIndex = 9;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.engine = this.engine;
+		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.engine = this.engine;
+		moveComponent.moveSpeed = speed;
+		enemyEntity.add(moveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.engine = this.engine;
+		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(10);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.engine = engine;
+		healthComponent.setMaxHp(15);
+		healthComponent.setHp(15);
+		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
+		enemyEntity.add(healthComponent);
+
+		engine.addEntity(enemyEntity);
+		return enemyEntity;
+	}
 	
 	/**
 	 * Create a text that will be displayed on screen.

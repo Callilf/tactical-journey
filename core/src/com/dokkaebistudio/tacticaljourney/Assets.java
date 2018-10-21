@@ -31,7 +31,8 @@ public class Assets {
 	public static final String background = "background-test";
 	public static final String menuBackground = "background-test-menu";
 	public static final String player = "player-test";
-	public static final String enemy = "enemy-test";
+	public static final String enemy_spider = "enemy-test";
+	public static final String enemy_scorpion = "enemy-scorpion-test";
 	public static final String tile_ground = "tile-test";
 	public static final String tile_wall = "tile-wall-test";
 	public static final String tile_pit = "tile-pit-test";

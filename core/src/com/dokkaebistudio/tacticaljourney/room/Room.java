@@ -61,15 +61,15 @@ public class Room {
 		
 		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createEnemy(new Vector2(x2,y2), 3);
+		entityFactory.createSpider(new Vector2(x2,y2), 3);
 		
 		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createEnemy(new Vector2(x3,y3), 3);
+		entityFactory.createSpider(new Vector2(x3,y3), 3);
 		
 		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createEnemy(new Vector2(x4,y4), 3);
+		entityFactory.createScorpion(new Vector2(x4,y4), 4);
 		
 		int x5 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 4);

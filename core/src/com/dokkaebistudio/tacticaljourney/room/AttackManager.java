@@ -98,10 +98,7 @@ public class AttackManager {
 		
 		//Add a damage displayer
 		GridPositionComponent targetGridPos = gridPosCompoCM.get(target);
-		Vector2 initialPos = RenderingSystem.convertGridPosIntoPixelPos(targetGridPos.coord);
-		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
-		Entity display = room.entityFactory.createDamageDisplayer(String.valueOf(damage), initialPos, false);
-		room.engine.addEntity(display);
+		room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord, false);
 	}
 	
 	

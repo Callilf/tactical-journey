@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 
 public final class TileUtil {
 	
@@ -56,6 +60,29 @@ public final class TileUtil {
 		
 		return null;
 	}
+	
+	
+	/**
+	 * Return all items standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The item entity(ies) standing at this position, empty list if no items there.
+	 */
+	public static List<Entity> getItemEntityOnTile(Vector2 position, PooledEngine engine) {
+		Family family = Family.all(ItemComponent.class, GridPositionComponent.class).get();
+		
+		List<Entity> result = new ArrayList<>();
+		ImmutableArray<Entity> allItems = engine.getEntitiesFor(family);
+		for (Entity item : allItems) {
+			GridPositionComponent gridPositionComponent = gridPositionM.get(item);
+			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
+				result.add(item);
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	/**
 	 * Return the distance in tiles between two tiles. The distance is always positive.

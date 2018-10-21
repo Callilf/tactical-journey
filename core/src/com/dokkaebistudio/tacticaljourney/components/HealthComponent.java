@@ -24,6 +24,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
+	/** The max number of h. */
+	private int maxHp;
+	
+	/** The current number of hp. */
 	private int hp;
 	
 	private Entity hpDisplayer;
@@ -37,29 +41,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 			engine.removeEntity(hpDisplayer);		
 		}
 	}
-	
-	
-
-	public int getHp() {
-		return hp;
-	}
-
-	public void setHp(int hp) {
-		this.hp = hp;
-		if (hpDisplayer != null) {
-			TextComponent textComponent = textCompoM.get(hpDisplayer);
-			textComponent.setText(String.valueOf(this.hp));
-		}
-	}
-
-	public Entity getHpDisplayer() {
-		return hpDisplayer;
-	}
-
-	public void setHpDisplayer(Entity hpDisplayer) {
-		this.hpDisplayer = hpDisplayer;
-	}
-
 
 	
 	//**************************************
@@ -102,6 +83,38 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 			GridPositionComponent gridPositionComponent = gridPositionM.get(hpDisplayer);
 			gridPositionComponent.coord.set(finalPos);
 		}
+	}
+
+	
+	
+	// Getters and Setters
+	
+	public int getHp() {
+		return hp;
+	}
+
+	public void setHp(int hp) {
+		this.hp = hp;
+		if (hpDisplayer != null) {
+			TextComponent textComponent = textCompoM.get(hpDisplayer);
+			textComponent.setText(String.valueOf(this.hp));
+		}
+	}
+
+	public Entity getHpDisplayer() {
+		return hpDisplayer;
+	}
+
+	public void setHpDisplayer(Entity hpDisplayer) {
+		this.hpDisplayer = hpDisplayer;
+	}
+
+	public int getMaxHp() {
+		return maxHp;
+	}
+
+	public void setMaxHp(int maxHp) {
+		this.maxHp = maxHp;
 	}
 
 

@@ -38,6 +38,7 @@ public class MoveComponent implements Component, Poolable {
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
 	
+	public Vector2 currentMoveDestinationTilePos;
 	public Vector2 currentMoveDestinationPos;
 	public int currentMoveDestinationIndex;
 	
@@ -60,6 +61,7 @@ public class MoveComponent implements Component, Poolable {
 			target = this.getSelectedTile();
 		}
 		GridPositionComponent gridPositionComponent = gridPositionM.get(target);
+		this.currentMoveDestinationTilePos = gridPositionComponent.coord;
 		this.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
 	}
 	

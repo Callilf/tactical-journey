@@ -50,6 +50,12 @@ public class Assets {
 	
 //	public static final String wheel_arc = "wheel-arc";
 	public static final String wheel_arrow = "wheel-arrow";
+	
+	
+	//******
+	// Items
+	
+	public static final String health_up_item = "item-consumable-health-up";
 
 	
 
@@ -129,7 +135,7 @@ public class Assets {
 	public void loadFont() {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		greenFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		greenFont.setColor(Color.GREEN);
+		greenFont.setColor(Color.OLIVE);
 		redFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		redFont.setColor(Color.RED);
 	}

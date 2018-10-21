@@ -5,7 +5,6 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -18,14 +17,16 @@ import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 
 /**
  * Factory used to create presets of entities.
@@ -44,6 +45,8 @@ public final class EntityFactory {
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion mudTexture;
 	private TextureAtlas.AtlasRegion groundTexture;
+	
+	private TextureAtlas.AtlasRegion healthUpTexture;
 
 
 	/**
@@ -59,6 +62,7 @@ public final class EntityFactory {
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
 		mudTexture = Assets.getTexture(Assets.tile_mud);
+		healthUpTexture = Assets.getTexture(Assets.health_up_item);
 	}
 
 
@@ -113,6 +117,7 @@ public final class EntityFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.engine = engine;
+		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
 		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
 		playerEntity.add(healthComponent);
@@ -318,6 +323,7 @@ public final class EntityFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.engine = engine;
+		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
 		enemyEntity.add(healthComponent);
@@ -370,8 +376,11 @@ public final class EntityFactory {
 	 * @param initialPos the initial position
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 initialPos, boolean heal) {
+	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal) {
 		Entity display = engine.createEntity();
+		
+		Vector2 initialPos = RenderingSystem.convertGridPosIntoPixelPos(gridPos);
+		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
 		displayCompo.setInitialPosition(initialPos);
@@ -390,7 +399,34 @@ public final class EntityFactory {
 		textCompo.setText(damage);
 		display.add(textCompo);
 		
+		engine.addEntity(display);
 		return display;
+	}
+	
+	
+	/**
+	 * Create a health up item that is consumed when picked up.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemHealthUp(Vector2 tilePos) {
+		Entity healthUp = engine.createEntity();
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(this.healthUpTexture));
+		healthUp.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(tilePos);
+		gridPosition.zIndex = 6;
+		healthUp.add(gridPosition);
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
+		healthUp.add(itemCompo);
+		
+		engine.addEntity(healthUp);
+		return healthUp;
 	}
 	
 }

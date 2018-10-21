@@ -52,6 +52,7 @@ public class Room {
 		entityFactory.createEnemy(new Vector2(5,6), 3);
 		entityFactory.createEnemy(new Vector2(2,9), 3);
 		entityFactory.createEnemy(new Vector2(25,3), 3);
+		entityFactory.createItemHealthUp(new Vector2(4,4));
 		turnManager = new TurnManager(this);
 		attackManager = new AttackManager(this);
 

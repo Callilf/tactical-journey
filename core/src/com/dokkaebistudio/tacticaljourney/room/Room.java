@@ -47,16 +47,33 @@ public class Room {
 	}
 	
 	public void create() {
-		createGrid();
-		entityFactory.createPlayer(new Vector2(4,5), 5);
-		entityFactory.createEnemy(new Vector2(5,6), 3);
-		entityFactory.createEnemy(new Vector2(2,9), 3);
-		entityFactory.createEnemy(new Vector2(25,3), 3);
-		entityFactory.createItemHealthUp(new Vector2(4,4));
 		turnManager = new TurnManager(this);
 		attackManager = new AttackManager(this);
-
+		createGrid();
+		
 		this.state = RoomState.PLAYER_TURN_INIT;
+		
+		
+		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		entityFactory.createPlayer(new Vector2(x,y), 5);
+		
+		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		entityFactory.createEnemy(new Vector2(x2,y2), 3);
+		
+		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		entityFactory.createEnemy(new Vector2(x3,y3), 3);
+		
+		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		entityFactory.createEnemy(new Vector2(x4,y4), 3);
+		
+		int x5 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		entityFactory.createItemHealthUp(new Vector2(x5,y5));
 	}
 
 	/**

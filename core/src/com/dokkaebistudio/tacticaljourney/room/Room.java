@@ -22,16 +22,20 @@ import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 import java.util.Arrays;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.EntityFactory;
+import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 
-public class Room {
+public class Room extends EntitySystem {
 	public RoomState state;
 	public Entity[][] grid;
 	
@@ -40,11 +44,24 @@ public class Room {
 	
 	public TurnManager turnManager;
 	public AttackManager attackManager;
+	
+	private Entity timeDisplayer;
 
 	public Room (PooledEngine engine) {
 		this.engine = engine;
 		this.entityFactory = new EntityFactory(this.engine);
 	}
+	
+	
+	@Override
+	public void update(float deltaTime) {
+		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
+		gtSingleton.updateElapsedTime(deltaTime);
+		
+		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
+		text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+	}
+	
 	
 	public void create() {
 		turnManager = new TurnManager(this);
@@ -53,6 +70,7 @@ public class Room {
 		
 		this.state = RoomState.PLAYER_TURN_INIT;
 		
+		createTimeDisplayer();
 		
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
@@ -61,19 +79,29 @@ public class Room {
 		
 		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createSpider(new Vector2(x2,y2), 3);
+		entityFactory.enemyFactory.createSpider(new Vector2(x2,y2), 3);
 		
 		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createSpider(new Vector2(x3,y3), 3);
+		entityFactory.enemyFactory.createSpider(new Vector2(x3,y3), 3);
 		
 		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		entityFactory.createScorpion(new Vector2(x4,y4), 4);
+		entityFactory.enemyFactory.createScorpion(new Vector2(x4,y4), 4);
 		
 		int x5 = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 4);
 		entityFactory.createItemHealthUp(new Vector2(x5,y5));
+	}
+
+	/** Create the entity that displays the current game time. */
+	private void createTimeDisplayer() {
+		//Display time
+		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ");
+		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
+		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
+		TransformComponent transfo = timeDisplayer.getComponent(TransformComponent.class);
+		transfo.pos.set(GameScreen.SCREEN_W/2 - text.getWidth()/2, 100, 100);
 	}
 
 	/**

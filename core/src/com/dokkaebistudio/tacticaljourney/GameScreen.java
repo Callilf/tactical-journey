@@ -102,6 +102,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new KeyInputMovementSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		
+		engine.addSystem(room);
 		
 		
 		room.create();

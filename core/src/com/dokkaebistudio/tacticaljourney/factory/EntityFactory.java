@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
@@ -38,10 +40,11 @@ public final class EntityFactory {
 	/** The gdx pooled engine. */
 	public PooledEngine engine;
 	
+	/** The enemy factory. */
+	public EnemyFactory enemyFactory;
+	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion playerTexture;
-	private TextureAtlas.AtlasRegion spiderTexture;
-	private TextureAtlas.AtlasRegion scorpionTexture;
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion mudTexture;
@@ -56,10 +59,9 @@ public final class EntityFactory {
 	 */
 	public EntityFactory(PooledEngine e) {
 		this.engine = e;
+		this.enemyFactory = new EnemyFactory(e, this);
 		
 		playerTexture = Assets.getTexture(Assets.player);
-		spiderTexture = Assets.getTexture(Assets.enemy_spider);
-		scorpionTexture = Assets.getTexture(Assets.enemy_scorpion);
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
@@ -284,103 +286,6 @@ public final class EntityFactory {
 //    	return confirmButton;
 //	}
 	
-	
-
-	/**
-	 * Create an enemy.
-	 * @param pos the position
-	 * @param moveSpeed the speed
-	 * @return the enemy entity
-	 */
-	public Entity createSpider(Vector2 pos, int speed) {
-		Entity enemyEntity = engine.createEntity();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.spiderTexture));
-		enemyEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
-		gridPosition.zIndex = 9;
-		enemyEntity.add(gridPosition);
-		
-		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
-		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
-		enemyEntity.add(enemyComponent);
-		
-		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
-		moveComponent.moveSpeed = speed;
-		enemyEntity.add(moveComponent);
-		
-		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(5);
-		enemyEntity.add(attackComponent);
-		
-		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		enemyEntity.add(solidComponent);
-		
-		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
-		healthComponent.setMaxHp(10);
-		healthComponent.setHp(10);
-		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
-		enemyEntity.add(healthComponent);
-
-		engine.addEntity(enemyEntity);
-		return enemyEntity;
-	}
-	
-	/**
-	 * Create a scorpion.
-	 * @param pos the position
-	 * @param moveSpeed the speed
-	 * @return the enemy entity
-	 */
-	public Entity createScorpion(Vector2 pos, int speed) {
-		Entity enemyEntity = engine.createEntity();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.scorpionTexture));
-		enemyEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
-		gridPosition.zIndex = 9;
-		enemyEntity.add(gridPosition);
-		
-		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
-		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		enemyEntity.add(enemyComponent);
-		
-		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
-		moveComponent.moveSpeed = speed;
-		enemyEntity.add(moveComponent);
-		
-		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(10);
-		enemyEntity.add(attackComponent);
-		
-		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		enemyEntity.add(solidComponent);
-		
-		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
-		healthComponent.setMaxHp(15);
-		healthComponent.setHp(15);
-		healthComponent.setHpDisplayer(this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
-		enemyEntity.add(healthComponent);
-
-		engine.addEntity(enemyEntity);
-		return enemyEntity;
-	}
 	
 	/**
 	 * Create a text that will be displayed on screen.

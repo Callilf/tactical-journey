@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 /**
  * Represents a floor that contains a set of rooms.
@@ -27,6 +29,11 @@ public class Floor {
 	/** The currently active room. */
 	private Room activeRoom;
 	
+	/**
+	 * Constructor.
+	 * @param gameScreen the game screen.
+	 * @param timeDisplayer the timedisplayer that the current room will update
+	 */
 	public Floor(GameScreen gameScreen, Entity timeDisplayer) {
 		this.gameScreen = gameScreen;
 		
@@ -47,22 +54,24 @@ public class Floor {
 	}
 	
 	
-	
+	/** 
+	 * Enter the given room.
+	 * @param newRoom the room we are entering
+	 */
 	public void enterRoom(Room newRoom) {
 		Room oldRoom = this.activeRoom;
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.activeRoom = newRoom;
 		
 		//Place the player
-		GridPositionComponent compo = Mappers.gridPositionComponent.get(this.gameScreen.player);
 		if (newRoom.getNorthNeighboor() == oldRoom) {
-			compo.coord.set(GameScreen.GRID_W/2, GameScreen.GRID_H-1);
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-1));
 		} else if (newRoom.getSouthNeighboor() == oldRoom) {
-			compo.coord.set(GameScreen.GRID_W/2, 1);
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1));
 		} else if (newRoom.getWestNeighboor() == oldRoom) {
-			compo.coord.set(0, GameScreen.GRID_H/2);
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(0, GameScreen.GRID_H/2));
 		} else if (newRoom.getEasthNeighboor() == oldRoom) {
-			compo.coord.set(GameScreen.GRID_W-1, GameScreen.GRID_H/2);
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-1, GameScreen.GRID_H/2));
 		}
 	}
 

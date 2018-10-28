@@ -90,6 +90,13 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 		}
 	}
 
+	@Override
+	public void place(Vector2 tilePos) {
+		if (hpDisplayer != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
+			gridPositionComponent.coord.set(tilePos);
+		}
+	}
 	
 	
 	// Getters and Setters

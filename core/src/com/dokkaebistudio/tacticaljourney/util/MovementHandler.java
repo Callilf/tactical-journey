@@ -42,6 +42,10 @@ public class MovementHandler {
     }
 	
 	
+    
+    //*********************************************************************
+    // Fluent movement BEGIN 
+    
 	public void initiateMovement(Entity e) {
 		GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(e);
 		MoveComponent moveComponent = Mappers.moveComponent.get(e);
@@ -205,4 +209,18 @@ public class MovementHandler {
 		}
 	}
 	
+    // Fluent movement END 
+    //*********************************************************************
+	
+	
+	public static void placeEntity(Entity e, Vector2 tilePos) {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+		gridPositionComponent.coord.set(tilePos.x, tilePos.y);
+		
+		for (Component c : e.getComponents()) {
+			if (c instanceof MovableInterface) {
+				((MovableInterface) c).place(tilePos);
+			}
+		}
+	}
 }

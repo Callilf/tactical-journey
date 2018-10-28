@@ -71,7 +71,7 @@ public final class EnemyFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.engine = this.engine;
-		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
+		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

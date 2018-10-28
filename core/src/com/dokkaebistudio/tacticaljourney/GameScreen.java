@@ -38,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
@@ -80,12 +81,12 @@ public class GameScreen extends ScreenAdapter {
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
 	Floor floor;
-	EntityFactory entityFactory;
+	public EntityFactory entityFactory;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
 	
-	PooledEngine engine;	
+	public PooledEngine engine;	
 	private int state;
 		
 	private Entity timeDisplayer;

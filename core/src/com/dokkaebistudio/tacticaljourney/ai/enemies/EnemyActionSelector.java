@@ -39,7 +39,10 @@ public class EnemyActionSelector {
 	    	
     	case MOVE_RANDOMLY :
     		selectedTile = moveRandomly(moveComponent);
+    		break;
     		
+    	case MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE:
+    		selectedTile = moveRandomlyButAttackIfPossible(engine, moveComponent, enemyPos);
     		break;
     		
     	case STANDING_STILL:
@@ -103,6 +106,57 @@ public class EnemyActionSelector {
 		    		if (shortestDistance == 1) {
 		    			break;
 		    		}
+		    	}
+			} else {
+				//No target, move randomly
+				selectedTile = moveRandomly(moveComponent);				
+			}
+		}
+		return selectedTile;
+	}
+	
+	/**
+	 * Move randomly if not in range of an enemy, but if in range, move at close range to attack.
+	 * @param engine the engine
+	 * @param moveComponent the move component of the enemy
+	 * @param enemyPos the enemy position
+	 * @return the selected tile. Null if no move needed
+	 */
+	private static Entity moveRandomlyButAttackIfPossible(PooledEngine engine,
+			MoveComponent moveComponent, GridPositionComponent enemyPos) {
+		Entity selectedTile = null;
+		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
+		ImmutableArray<Entity> allPlayers = engine.getEntitiesFor(family);
+		
+		//First find the closest target
+		int shortestDistance = -1;
+		Entity target = null;
+		for (Entity p : allPlayers) {
+			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord, playerPos.coord);
+			if (target == null || distance < shortestDistance) {
+				shortestDistance = distance;
+				target = p;
+			}
+		}
+		
+		if (shortestDistance == 1) {
+			//Already facing the player, don't need to move.
+		} else {
+			if (target != null) {
+				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+		    	for (Entity t : moveComponent.movableTiles) {
+		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord, tilePos.coord);
+		    		if (distance == 1) {
+		    			selectedTile = t;
+		    			break;
+		    		}
+		    	}
+		    	
+		    	if (selectedTile == null) {
+		    		//No target in range, move randomly
+					selectedTile = moveRandomly(moveComponent);		
 		    	}
 			} else {
 				//No target, move randomly

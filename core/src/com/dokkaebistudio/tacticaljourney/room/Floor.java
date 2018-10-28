@@ -1,16 +1,14 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.room;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 /**

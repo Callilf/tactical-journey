@@ -9,7 +9,8 @@ public class EnemyComponent implements Component, Poolable {
 	public enum EnemyMoveStrategy {
 		STANDING_STILL,
 		MOVE_TOWARD_PLAYER,
-		MOVE_RANDOMLY;
+		MOVE_RANDOMLY,
+		MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE;
 	}
 	
 	/** The engine that managed entities.*/

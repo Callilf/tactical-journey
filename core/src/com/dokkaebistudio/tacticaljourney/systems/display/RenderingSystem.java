@@ -30,26 +30,32 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 
-public class RenderingSystem extends IteratingSystem {
+public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
 	
+	private ComponentMapper<ParentRoomComponent> parentRoomCompoM;
 	private ComponentMapper<SpriteComponent> spriteM;
 	private ComponentMapper<TextComponent> textM;
 	private ComponentMapper<TransformComponent> transformM;
 	private final ComponentMapper<GridPositionComponent> gridPositionM;
+	private Room room;
 	
-	public RenderingSystem(SpriteBatch batch) {
+	public RenderingSystem(SpriteBatch batch, Room room) {
 		super(Family.one(SpriteComponent.class, TextComponent.class).get());
 		
+		parentRoomCompoM = ComponentMapper.getFor(ParentRoomComponent.class);
 		spriteM = ComponentMapper.getFor(SpriteComponent.class);
 		textM = ComponentMapper.getFor(TextComponent.class);
 		transformM = ComponentMapper.getFor(TransformComponent.class);
@@ -88,6 +94,11 @@ public class RenderingSystem extends IteratingSystem {
 		cam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		cam.position.set(SCREEN_W/2, SCREEN_H/2, 0);
 	}
+	
+	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
 
 	@Override
 	public void update(float deltaTime) {
@@ -100,6 +111,11 @@ public class RenderingSystem extends IteratingSystem {
 		batch.begin();
 		
 		for (Entity entity : renderQueue) {
+			ParentRoomComponent parentRoomComponent = parentRoomCompoM.get(entity);
+			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
+				continue;
+			}
+			
 			SpriteComponent spriteCompo = spriteM.get(entity);
 			TextComponent textCompo = textM.get(entity);
 			

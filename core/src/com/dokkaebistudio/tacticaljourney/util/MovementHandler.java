@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
@@ -71,8 +72,8 @@ public class MovementHandler {
 	 * @param room the Room
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	public boolean performRealMovement(Entity mover, Room room) {
-		boolean result = false;
+	public Boolean performRealMovement(Entity mover, Room room) {
+		Boolean result = false;
 		float xOffset = 0;
 		float yOffset = 0;
 		MoveComponent moveCompo = moveCM.get(mover);
@@ -123,10 +124,11 @@ public class MovementHandler {
 			result = performEndOfMovement(mover, moveCompo, room);
 		}
 		
-		
-		for (Component c : mover.getComponents()) {
-			if (c instanceof MovableInterface) {
-				((MovableInterface) c).performMovement(xOffset, yOffset, transfoCM);
+		if (result != null) {
+			for (Component c : mover.getComponents()) {
+				if (c instanceof MovableInterface) {
+					((MovableInterface) c).performMovement(xOffset, yOffset, transfoCM);
+				}
 			}
 		}
 		
@@ -140,14 +142,29 @@ public class MovementHandler {
 	 * @param room the room.
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	private boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
+	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
 		
 		
 		//Perform any action related to the current tile such as picking up consumables,
 		//receiving damages from spikes or fire...
 		//TODO move this
 		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
-		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room.engine);
+		
+		// Doors
+		Entity doorEntity = TileUtil.getDoorEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
+		if (doorEntity != null) {
+			DoorComponent doorCompo = doorEntity.getComponent(DoorComponent.class);
+			if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
+				//Change room !!!
+				finishRealMovement(mover);
+				moveCompo.clearMovableTiles();
+				room.leaveRoom(doorCompo.getTargetedRoom());
+				return null;
+			}
+		}
+		
+		// Items pickup
+		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
 		for (Entity item : items) {
 			ItemComponent itemComponent = ComponentMapper.getFor(ItemComponent.class).get(item);
 			if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {

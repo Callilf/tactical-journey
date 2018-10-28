@@ -1,7 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
-import java.util.Random;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -12,7 +10,6 @@ import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.components.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -21,12 +18,12 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
  * This system's role is to upadte the attack wheel, considering
  * all entities that can affect the wheel (items, stats, weapon type etc.).
  */
-public class WheelSystem extends EntitySystem {
+public class WheelSystem extends EntitySystem implements RoomSystem {
 
     private final ComponentMapper<WheelModifierComponent> wheelModifierComponentMapper;
     private final ComponentMapper<WheelComponent> wheelComponentMapper;
     private final AttackWheel wheel;
-    private final Room room;
+    private Room room;
 
     public WheelSystem(AttackWheel attackWheel, Room room) {
         // TODO get the real wheel from GameScreen
@@ -34,6 +31,11 @@ public class WheelSystem extends EntitySystem {
         this.wheelComponentMapper = ComponentMapper.getFor(WheelComponent.class);
         this.wheel = attackWheel;
         this.room = room;
+    }
+    
+    @Override
+    public void enterRoom(Room newRoom) {
+    	this.room = newRoom;	
     }
 
     @Override

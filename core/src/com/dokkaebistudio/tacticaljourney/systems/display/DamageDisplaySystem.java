@@ -8,8 +8,9 @@ import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayCompon
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 
-public class DamageDisplaySystem extends IteratingSystem {
+public class DamageDisplaySystem extends IteratingSystem implements RoomSystem {
 	
 	private final ComponentMapper<DamageDisplayComponent> damageDisplayCompoM;
     private final ComponentMapper<TextComponent> textCompoM;
@@ -23,6 +24,11 @@ public class DamageDisplaySystem extends IteratingSystem {
         this.textCompoM = ComponentMapper.getFor(TextComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
+    }
+    
+    @Override
+    public void enterRoom(Room newRoom) {
+    	this.room = newRoom;	
     }
 
     @Override

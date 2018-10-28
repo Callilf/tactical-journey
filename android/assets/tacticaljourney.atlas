@@ -32,6 +32,20 @@ btn-move-confirmation
   orig: 64, 64
   offset: 0, 0
   index: -1
+door-closed
+  rotate: false
+  xy: 776, 778
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+door-opened
+  rotate: false
+  xy: 582, 648
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 enemy-scorpion-test
   rotate: false
   xy: 516, 648
@@ -41,21 +55,21 @@ enemy-scorpion-test
   index: -1
 enemy-test
   rotate: false
-  xy: 582, 648
+  xy: 1924, 1728
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 776, 778
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 1924, 1728
+  xy: 68, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -83,7 +97,7 @@ tile-movable-selected
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 2, 2
+  xy: 328, 264
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

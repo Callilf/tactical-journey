@@ -22,16 +22,21 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
-public class AnimationSystem extends IteratingSystem {
+public class AnimationSystem extends IteratingSystem implements RoomSystem {
 	private ComponentMapper<SpriteComponent> tm;
 	private ComponentMapper<AnimationComponent> am;
 	private ComponentMapper<StateComponent> sm;
+    private ComponentMapper<ParentRoomComponent> parentRoomCompoM;
+
+	private Room room;
 	
-	public AnimationSystem() {
+	public AnimationSystem(Room room) {
 		super(Family.all(SpriteComponent.class,
 							AnimationComponent.class,
 							StateComponent.class).get());
@@ -39,10 +44,23 @@ public class AnimationSystem extends IteratingSystem {
 		tm = ComponentMapper.getFor(SpriteComponent.class);
 		am = ComponentMapper.getFor(AnimationComponent.class);
 		sm = ComponentMapper.getFor(StateComponent.class);
+		parentRoomCompoM = ComponentMapper.getFor(ParentRoomComponent.class);
+
+	}
+	
+	
+	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
 	}
 
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
+		ParentRoomComponent parentRoomComponent = parentRoomCompoM.get(entity);
+		if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
+			return;
+		}
+		
 		SpriteComponent spriteCompo = tm.get(entity);
 		AnimationComponent anim = am.get(entity);
 		StateComponent state = sm.get(entity);

@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
-public class KeyInputMovementSystem extends IteratingSystem {
+public class KeyInputMovementSystem extends IteratingSystem implements RoomSystem {
 
 	private final ComponentMapper<PlayerComponent> playerCM;
     private final ComponentMapper<GridPositionComponent> gridPositionM;
@@ -25,6 +25,11 @@ public class KeyInputMovementSystem extends IteratingSystem {
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
         this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
         room = r;
+    }
+    
+    @Override
+    public void enterRoom(Room newRoom) {
+    	this.room = newRoom;	
     }
 
     @Override

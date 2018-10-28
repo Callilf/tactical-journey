@@ -8,27 +8,17 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
  * Factory used to create presets of entities.
@@ -66,8 +56,9 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createSpider(Vector2 pos, int speed) {
+	public Entity createSpider(Room room, Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(this.spiderTexture));
@@ -101,10 +92,16 @@ public final class EnemyFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
+		Entity hpEntity = this.entityFactory.createTextOnTile(room, pos, String.valueOf(healthComponent.getHp()), 100);
+		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		enemyEntity.add(parentRoomComponent);
+		
 		engine.addEntity(enemyEntity);
+		
 		return enemyEntity;
 	}
 	
@@ -114,8 +111,9 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createScorpion(Vector2 pos, int speed) {
+	public Entity createScorpion(Room room, Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(this.scorpionTexture));
@@ -149,10 +147,15 @@ public final class EnemyFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100));
+		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(room, pos, String.valueOf(healthComponent.getHp()), 100));
 		enemyEntity.add(healthComponent);
-
+		
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		enemyEntity.add(parentRoomComponent);
+		
 		engine.addEntity(enemyEntity);
+		
 		return enemyEntity;
 	}
 	

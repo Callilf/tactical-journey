@@ -241,7 +241,7 @@ public final class TileSearchUtil {
 		
 		TileComponent tileComponent = tileCM.get(tileEntity);
 		
-		Entity entityOnTile = TileUtil.getSolidEntityOnTile(pos, room.engine);
+		Entity entityOnTile = TileUtil.getSolidEntityOnTile(pos, room);
 		if (entityOnTile != null) {
 			//There's already something on this tile.
 			return;
@@ -267,7 +267,7 @@ public final class TileSearchUtil {
 			return;
 		}
 		
-		Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room.engine);
+		Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
 		if (entityOnTile == null) {
 			//Nothing to attack on this tile
 			return;

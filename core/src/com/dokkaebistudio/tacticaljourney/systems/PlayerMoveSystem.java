@@ -24,7 +24,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
-public class PlayerMoveSystem extends IteratingSystem {
+public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
@@ -49,6 +49,11 @@ public class PlayerMoveSystem extends IteratingSystem {
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
         movementHandler = new MovementHandler(r.engine);
+    }
+    
+    @Override
+    public void enterRoom(Room newRoom) {
+    	this.room = newRoom;	
     }
 
     @Override
@@ -132,8 +137,9 @@ public class PlayerMoveSystem extends IteratingSystem {
     		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
     		
     		//Do the movement on screen
-    		boolean movementFinished = movementHandler.performRealMovement(moverEntity, room);
-    		if (movementFinished) room.state = RoomState.PLAYER_END_MOVEMENT;
+    		Boolean movementFinished = movementHandler.performRealMovement(moverEntity, room);
+    		if (movementFinished == null) return;
+    		else if (movementFinished) room.state = RoomState.PLAYER_END_MOVEMENT;
     		
     		break;
     		

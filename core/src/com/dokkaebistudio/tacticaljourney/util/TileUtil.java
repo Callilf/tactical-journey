@@ -6,18 +6,22 @@ import java.util.List;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
 public final class TileUtil {
 	
 	private final static ComponentMapper<GridPositionComponent> gridPositionM = ComponentMapper
-			.getFor(GridPositionComponent.class);;
+			.getFor(GridPositionComponent.class);
+	private final static ComponentMapper<ParentRoomComponent> parentRoomM = ComponentMapper
+			.getFor(ParentRoomComponent.class);
 
 	private TileUtil() {}
 	
@@ -27,11 +31,16 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Entity getSolidEntityOnTile(Vector2 position, PooledEngine engine) {
+	public static Entity getSolidEntityOnTile(Vector2 position, Room room) {
 		Family family = Family.all(SolidComponent.class, GridPositionComponent.class).get();
 		
-		ImmutableArray<Entity> allSolids = engine.getEntitiesFor(family);
+		ImmutableArray<Entity> allSolids = room.engine.getEntitiesFor(family);
 		for (Entity solid : allSolids) {
+			ParentRoomComponent parentRoomComponent = parentRoomM.get(solid);
+			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
+				continue;
+			}
+			
 			GridPositionComponent gridPositionComponent = gridPositionM.get(solid);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return solid;
@@ -47,11 +56,16 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Entity getAttackableEntityOnTile(Vector2 position, PooledEngine engine) {
+	public static Entity getAttackableEntityOnTile(Vector2 position, Room room) {
 		Family family = Family.all(HealthComponent.class, GridPositionComponent.class).get();
 		
-		ImmutableArray<Entity> allAttackables = engine.getEntitiesFor(family);
+		ImmutableArray<Entity> allAttackables = room.engine.getEntitiesFor(family);
 		for (Entity attackableEntity : allAttackables) {
+			ParentRoomComponent parentRoomComponent = parentRoomM.get(attackableEntity);
+			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
+				continue;
+			}
+			
 			GridPositionComponent gridPositionComponent = gridPositionM.get(attackableEntity);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return attackableEntity;
@@ -68,12 +82,17 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The item entity(ies) standing at this position, empty list if no items there.
 	 */
-	public static List<Entity> getItemEntityOnTile(Vector2 position, PooledEngine engine) {
+	public static List<Entity> getItemEntityOnTile(Vector2 position, Room room) {
 		Family family = Family.all(ItemComponent.class, GridPositionComponent.class).get();
 		
 		List<Entity> result = new ArrayList<>();
-		ImmutableArray<Entity> allItems = engine.getEntitiesFor(family);
+		ImmutableArray<Entity> allItems = room.engine.getEntitiesFor(family);
 		for (Entity item : allItems) {
+			ParentRoomComponent parentRoomComponent = parentRoomM.get(item);
+			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
+				continue;
+			}
+			
 			GridPositionComponent gridPositionComponent = gridPositionM.get(item);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				result.add(item);
@@ -81,6 +100,32 @@ public final class TileUtil {
 		}
 		
 		return result;
+	}
+	
+	
+	/**
+	 * Return the door on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The door entity at this position, empty list if no door there.
+	 */
+	public static Entity getDoorEntityOnTile(Vector2 position, Room room) {
+		Family family = Family.all(DoorComponent.class, GridPositionComponent.class).get();
+		
+		ImmutableArray<Entity> allDoors = room.engine.getEntitiesFor(family);
+		for (Entity door : allDoors) {
+			ParentRoomComponent parentRoomComponent = parentRoomM.get(door);
+			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
+				continue;
+			}
+			
+			GridPositionComponent gridPositionComponent = gridPositionM.get(door);
+			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
+				return door;
+			}
+		}
+		
+		return null;
 	}
 	
 	

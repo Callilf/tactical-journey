@@ -23,7 +23,7 @@ public class TurnManager {
 	public TurnManager(Room room) {
 		this.room = room;
 		turn = 1;
-		textDisplay = room.entityFactory.createText(new Vector3(900.0f, 1050.0f, 0.0f), "Turn " + turn);
+		textDisplay = room.entityFactory.createText(new Vector3(300.0f, 1050.0f, 0.0f), "Turn " + turn);
 		
 		ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
 		textComponent = textCompoM.get(textDisplay);

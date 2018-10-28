@@ -19,6 +19,8 @@ package com.dokkaebistudio.tacticaljourney;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -26,16 +28,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
@@ -69,13 +75,16 @@ public class GameScreen extends ScreenAdapter {
 
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
-	Room room;
+	Floor floor;
+	EntityFactory entityFactory;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
 	
 	PooledEngine engine;	
 	private int state;
+	
+	public Entity player;
 
 	public GameScreen (TacticalJourney game) {
 		this.game = game;
@@ -90,11 +99,18 @@ public class GameScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 		
 		engine = new PooledEngine();
+		this.entityFactory = new EntityFactory(this.engine);
 		
-		room = new Room(engine);
+		floor = new Floor(this);
+		Room room = floor.getActiveRoom();
 		
-		engine.addSystem(new AnimationSystem());
-		engine.addSystem(new RenderingSystem(game.batcher));
+		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
+		int y = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		player = entityFactory.createPlayer(new Vector2(15,15), 5);
+		
+		engine.addSystem(new AnimationSystem(room));
+		engine.addSystem(new RenderingSystem(game.batcher, room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
@@ -105,11 +121,29 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(room);
 		
 		
-		room.create();
 		
 		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
+		
+		
+		//Enter the first room
+		enterRoom(room, null);
+	}
+	
+	/**
+	 * Enter a room.
+	 * @param room the room we are entering in
+	 */
+	public void enterRoom(Room newRoom, Room oldRoom) {
+		for (EntitySystem s : engine.getSystems()) {
+			if (s instanceof RoomSystem) {
+				((RoomSystem)s).enterRoom(newRoom);
+			}
+		}
+		
+		engine.removeSystem(oldRoom);
+		engine.addSystem(newRoom);
 	}
 
 	public void update (float deltaTime) {

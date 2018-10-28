@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class PlayerAttackSystem extends IteratingSystem {
+public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	
 	private final ComponentMapper<TileComponent> tileCM;
 	private final ComponentMapper<PlayerComponent> playerCM;
@@ -47,6 +47,11 @@ public class PlayerAttackSystem extends IteratingSystem {
         this.healthCompoM = ComponentMapper.getFor(HealthComponent.class);
         room = r;
         this.wheel = attackWheel;
+    }
+    
+    @Override
+    public void enterRoom(Room newRoom) {
+    	this.room = newRoom;	
     }
 
     @Override
@@ -78,7 +83,7 @@ public class PlayerAttackSystem extends IteratingSystem {
             			if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
             				
             				//Attack is possible !
-	            			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room.engine);
+	            			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
             				attackCompo.setTarget(target);
             				room.state = RoomState.PLAYER_WHEEL_START;
 

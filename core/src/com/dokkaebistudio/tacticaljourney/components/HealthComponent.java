@@ -9,7 +9,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.ContainsEntityInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 /**
@@ -41,7 +43,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 			engine.removeEntity(hpDisplayer);		
 		}
 	}
-
 	
 	//**************************************
 	// Movement
@@ -69,8 +70,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	public void performMovement(float xOffset, float yOffset, ComponentMapper<TransformComponent> transfoCM) {
 		if (hpDisplayer != null) {
 			TransformComponent transformComponent = transfoCM.get(hpDisplayer);
-			transformComponent.pos.x = transformComponent.pos.x + xOffset;
-			transformComponent.pos.y = transformComponent.pos.y + yOffset;
+			if (transformComponent != null) {
+				transformComponent.pos.x = transformComponent.pos.x + xOffset;
+				transformComponent.pos.y = transformComponent.pos.y + yOffset;
+			}
 		}
 	}
 

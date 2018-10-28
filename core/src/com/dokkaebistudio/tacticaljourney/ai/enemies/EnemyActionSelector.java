@@ -2,9 +2,7 @@ package com.dokkaebistudio.tacticaljourney.ai.enemies;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
@@ -15,14 +13,10 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class EnemyActionSelector {
-
-    private static final ComponentMapper<GridPositionComponent> gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
-    private static final ComponentMapper<MoveComponent> moveCompoM = ComponentMapper.getFor(MoveComponent.class);
-    private static final ComponentMapper<EnemyComponent> enemyCompoM = ComponentMapper.getFor(EnemyComponent.class);
-
 	
 	/**
 	 * Select the tile to move on.
@@ -32,9 +26,9 @@ public class EnemyActionSelector {
 	 */
 	public static Entity selectTileToMove(Entity enemyEntity, PooledEngine engine) {
     	Entity selectedTile = null;
-    	MoveComponent moveComponent = moveCompoM.get(enemyEntity);
-    	GridPositionComponent enemyPos = gridPositionM.get(enemyEntity);
-    	EnemyComponent enemyComponent = enemyCompoM.get(enemyEntity);
+    	MoveComponent moveComponent = Mappers.moveComponent.get(enemyEntity);
+    	GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
+    	EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
     	
     	    	
     	switch (enemyComponent.getMoveStrategy()) {
@@ -84,7 +78,7 @@ public class EnemyActionSelector {
 		int shortestDistance = -1;
 		Entity target = null;
 		for (Entity p : allPlayers) {
-			GridPositionComponent playerPos = gridPositionM.get(p);
+			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
 			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord, playerPos.coord);
 			if (target == null || distance < shortestDistance) {
 				shortestDistance = distance;
@@ -96,10 +90,10 @@ public class EnemyActionSelector {
 			//Already facing the player, don't need to move.
 		} else {
 			if (target != null) {
-				GridPositionComponent targetPos = gridPositionM.get(target);
+				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 				shortestDistance = -1;
 		    	for (Entity t : moveComponent.movableTiles) {
-		    		GridPositionComponent tilePos = gridPositionM.get(t);
+		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord, tilePos.coord);
 		    		if (selectedTile == null || distance < shortestDistance) {
 		    			selectedTile = t;

@@ -39,7 +39,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.TurnManager;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
@@ -49,6 +48,7 @@ import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class GameScreen extends ScreenAdapter {
 	private static final int GAME_RUNNING = 1;
@@ -154,7 +154,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(newRoom);
 		
 		//Set the player in the new room
-		ParentRoomComponent prc = player.getComponent(ParentRoomComponent.class);
+		ParentRoomComponent prc = Mappers.parentRoomComponent.get(player);
 		prc.setParentRoom(newRoom);
 	}
 
@@ -219,9 +219,9 @@ public class GameScreen extends ScreenAdapter {
 	private void createTimeDisplayer() {
 		//Display time
 		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ", null);
-		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
+		TextComponent text = Mappers.textComponent.get(timeDisplayer);
 		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
-		TransformComponent transfo = timeDisplayer.getComponent(TransformComponent.class);
+		TransformComponent transfo =  Mappers.transfoComponent.get(timeDisplayer);
 		transfo.pos.set(300, 100, 100);
 	}
 

@@ -1,7 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
@@ -9,10 +8,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.components.interfaces.ContainsEntityInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.
@@ -20,9 +18,7 @@ import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
  *
  */
 public class HealthComponent implements Component, Poolable, MovableInterface {
-	
-	private static ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
-	
+		
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
@@ -57,7 +53,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	public void initiateMovement(Vector2 currentPos) {
 		
 		if (hpDisplayer != null) {
-			TextComponent textCompo = textCompoM.get(hpDisplayer);
+			TextComponent textCompo = Mappers.textComponent.get(hpDisplayer);
 			
 			//Add the tranfo component to the entity to perform real movement on screen
 			TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
@@ -73,9 +69,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 
 
 	@Override
-	public void performMovement(float xOffset, float yOffset, ComponentMapper<TransformComponent> transfoCM) {
+	public void performMovement(float xOffset, float yOffset) {
 		if (hpDisplayer != null) {
-			TransformComponent transformComponent = transfoCM.get(hpDisplayer);
+			TransformComponent transformComponent = Mappers.transfoComponent.get(hpDisplayer);
 			if (transformComponent != null) {
 				transformComponent.pos.x = transformComponent.pos.x + xOffset;
 				transformComponent.pos.y = transformComponent.pos.y + yOffset;
@@ -86,10 +82,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 
 
 	@Override
-	public void endMovement(Vector2 finalPos, ComponentMapper<GridPositionComponent> gridPositionM) {
+	public void endMovement(Vector2 finalPos) {
 		if (hpDisplayer != null) {
 			hpDisplayer.remove(TransformComponent.class);
-			GridPositionComponent gridPositionComponent = gridPositionM.get(hpDisplayer);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
 			gridPositionComponent.coord.set(finalPos);
 		}
 	}
@@ -105,7 +101,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	public void setHp(int hp) {
 		this.hp = hp;
 		if (hpDisplayer != null) {
-			TextComponent textComponent = textCompoM.get(hpDisplayer);
+			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
 			textComponent.setText(String.valueOf(this.hp));
 		}
 	}

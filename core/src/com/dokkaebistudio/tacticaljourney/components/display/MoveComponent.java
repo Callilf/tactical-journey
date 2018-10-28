@@ -6,17 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class MoveComponent implements Component, Poolable {
-	
-	private final ComponentMapper<SpriteComponent> spriteCM = ComponentMapper.getFor(SpriteComponent.class);
-	
+		
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
@@ -53,14 +51,14 @@ public class MoveComponent implements Component, Poolable {
 	 * Select the correct target given the currentMoveDestinationIndex
 	 * @param gridPositionM the gridPositionMapper
 	 */
-	public void selectCurrentMoveDestinationTile(ComponentMapper<GridPositionComponent> gridPositionM) {
+	public void selectCurrentMoveDestinationTile() {
 		Entity target = null;
 		if (this.getWayPoints().size() > this.currentMoveDestinationIndex) {
 			target = this.getWayPoints().get(this.currentMoveDestinationIndex);
 		} else {
 			target = this.getSelectedTile();
 		}
-		GridPositionComponent gridPositionComponent = gridPositionM.get(target);
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(target);
 		this.currentMoveDestinationTilePos = gridPositionComponent.coord;
 		this.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
 	}
@@ -129,18 +127,18 @@ public class MoveComponent implements Component, Poolable {
 	
 	public void hideMovableTiles() {
 		for (Entity e : movableTiles) {
-			SpriteComponent spriteComponent = spriteCM.get(e);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
 			spriteComponent.hide = true;
 		}
 	}
 	
 	public void hideMovementEntities() {
 		for (Entity e : wayPoints) {
-			SpriteComponent spriteComponent = spriteCM.get(e);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
 			spriteComponent.hide = true;
 		}
 		if (this.selectedTile != null) {
-			SpriteComponent spriteComponent = spriteCM.get(this.selectedTile);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(this.selectedTile);
 			spriteComponent.hide = true;
 		}
 	}

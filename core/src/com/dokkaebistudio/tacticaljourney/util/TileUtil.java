@@ -3,7 +3,6 @@ package com.dokkaebistudio.tacticaljourney.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -16,12 +15,12 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
+/**
+ * Helpers for everything related to tiles, like finding something on a give tile.
+ * @author Callil
+ *
+ */
 public final class TileUtil {
-	
-	private final static ComponentMapper<GridPositionComponent> gridPositionM = ComponentMapper
-			.getFor(GridPositionComponent.class);
-	private final static ComponentMapper<ParentRoomComponent> parentRoomM = ComponentMapper
-			.getFor(ParentRoomComponent.class);
 
 	private TileUtil() {}
 	
@@ -36,12 +35,12 @@ public final class TileUtil {
 		
 		ImmutableArray<Entity> allSolids = room.engine.getEntitiesFor(family);
 		for (Entity solid : allSolids) {
-			ParentRoomComponent parentRoomComponent = parentRoomM.get(solid);
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(solid);
 			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
 				continue;
 			}
 			
-			GridPositionComponent gridPositionComponent = gridPositionM.get(solid);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(solid);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return solid;
 			}
@@ -61,12 +60,12 @@ public final class TileUtil {
 		
 		ImmutableArray<Entity> allAttackables = room.engine.getEntitiesFor(family);
 		for (Entity attackableEntity : allAttackables) {
-			ParentRoomComponent parentRoomComponent = parentRoomM.get(attackableEntity);
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(attackableEntity);
 			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
 				continue;
 			}
 			
-			GridPositionComponent gridPositionComponent = gridPositionM.get(attackableEntity);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(attackableEntity);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return attackableEntity;
 			}
@@ -88,12 +87,12 @@ public final class TileUtil {
 		List<Entity> result = new ArrayList<>();
 		ImmutableArray<Entity> allItems = room.engine.getEntitiesFor(family);
 		for (Entity item : allItems) {
-			ParentRoomComponent parentRoomComponent = parentRoomM.get(item);
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(item);
 			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
 				continue;
 			}
 			
-			GridPositionComponent gridPositionComponent = gridPositionM.get(item);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				result.add(item);
 			}
@@ -114,12 +113,12 @@ public final class TileUtil {
 		
 		ImmutableArray<Entity> allDoors = room.engine.getEntitiesFor(family);
 		for (Entity door : allDoors) {
-			ParentRoomComponent parentRoomComponent = parentRoomM.get(door);
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(door);
 			if (parentRoomComponent == null || parentRoomComponent.getParentRoom() != room) {
 				continue;
 			}
 			
-			GridPositionComponent gridPositionComponent = gridPositionM.get(door);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(door);
 			if (gridPositionComponent.coord.x == position.x && gridPositionComponent.coord.y == position.y) {
 				return door;
 			}

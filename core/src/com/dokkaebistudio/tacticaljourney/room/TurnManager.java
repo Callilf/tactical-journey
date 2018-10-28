@@ -3,10 +3,10 @@
  */
 package com.dokkaebistudio.tacticaljourney.room;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Manages the turns of a room.
@@ -25,8 +25,7 @@ public class TurnManager {
 		turn = 1;
 		textDisplay = room.entityFactory.createText(new Vector3(300.0f, 1050.0f, 0.0f), "Turn " + turn, r);
 		
-		ComponentMapper<TextComponent> textCompoM = ComponentMapper.getFor(TextComponent.class);
-		textComponent = textCompoM.get(textDisplay);
+		textComponent = Mappers.textComponent.get(textDisplay);
 	}
 	
 	public void endPlayerTurn() {

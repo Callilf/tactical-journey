@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
@@ -23,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public final class TileSearchUtil {
@@ -35,33 +35,29 @@ public final class TileSearchUtil {
     
 	
 	
-	public static void buildMoveTilesSet(Entity moverEntity, MoveComponent moveCompo, Room room, 
-			ComponentMapper<GridPositionComponent> gridPositionM,
-			ComponentMapper<TileComponent> tileCM) {
-		GridPositionComponent gridPositionComponent = gridPositionM.get(moverEntity);
+	public static void buildMoveTilesSet(Entity moverEntity, MoveComponent moveCompo, Room room) {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
 		Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = TileSearchUtil.findAllWalkableTiles(playerTileEntity, 1, moveCompo.moveRemaining,room, gridPositionM, tileCM);
+		moveCompo.allWalkableTiles = TileSearchUtil.findAllWalkableTiles(playerTileEntity, 1, moveCompo.moveRemaining,room);
 		moveCompo.allWalkableTiles.add(playerTileEntity);
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : moveCompo.allWalkableTiles) {
-			Entity movableTileEntity = room.entityFactory.createMovableTile(gridPositionM.get(tileCoord).coord);
+			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
 	}
 	
 	
 	
-	public static void buildAttackTilesSet(Entity moverEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room, 
-			ComponentMapper<GridPositionComponent> gridPositionM,
-			ComponentMapper<TileComponent> tileCM) {
+	public static void buildAttackTilesSet(Entity moverEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
 		
 		Set<Entity> attackableTiles = new HashSet<>();
 		for (Entity t : moveCompo.allWalkableTiles) {
-			GridPositionComponent tilePos = gridPositionM.get(t);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(CheckTypeEnum.ATTACK, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, tileCM);
+			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+			Set<Entity> foundAttTiles = check4ContiguousTiles(CheckTypeEnum.ATTACK, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room);
 			attackableTiles.addAll(foundAttTiles);
 		}
 
@@ -69,7 +65,7 @@ public final class TileSearchUtil {
 		
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(gridPositionM.get(tileCoord).coord);
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
 	}
@@ -84,11 +80,10 @@ public final class TileSearchUtil {
 	 * @param moverCurrentPos the position of the start tile
 	 * @param destinationPos the position of the destination
 	 * @param room the room
-	 * @param gridPositionM the gridPosition component mapper
 	 * @return the list of waypoints entities
 	 */
 	public static List<Entity> buildWaypointList(MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
-			GridPositionComponent destinationPos, Room room, ComponentMapper<GridPositionComponent> gridPositionM) {
+			GridPositionComponent destinationPos, Room room) {
 		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord);
 		List<Entity> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
 		RoomGraph roomGraph = new RoomGraph(movableTilesList);
@@ -103,7 +98,7 @@ public final class TileSearchUtil {
 			pathNb ++;
 			Entity next = iterator.next();
 			if (pathNb == 0 || !iterator.hasNext()) continue;
-			GridPositionComponent gridPositionComponent = gridPositionM.get(next);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
 			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord);
 			waypoints.add(waypoint);
 			
@@ -123,10 +118,9 @@ public final class TileSearchUtil {
      * @param maxDepth the max depth of the search
      * @return the set of tiles where the entity can move
      */
-	public static Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, Room room,
-			ComponentMapper<GridPositionComponent> gridCompoM, ComponentMapper<TileComponent> tileCM) {
+	public static Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
     	Map<Integer, Set<Entity>> allTilesByDepth = new HashMap<>();
-    	return findAllWalkableTiles(currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room, gridCompoM, tileCM);
+    	return findAllWalkableTiles(currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
 	}
 	
     /**
@@ -139,13 +133,12 @@ public final class TileSearchUtil {
      * @return the set of tiles where the entity can move
      */
 	private static Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, 
-			Map<Integer, Set<Entity>> allTilesByDepth, Room room,
-			ComponentMapper<GridPositionComponent> gridCompoM, ComponentMapper<TileComponent> tileCM) {		
+			Map<Integer, Set<Entity>> allTilesByDepth, Room room) {		
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		
 		//Check whether we reached the maxDepth or not
 		if (currentDepth <= maxDepth) {
-			GridPositionComponent gridPosCompo = gridCompoM.get(currentTileEntity);
+			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(currentTileEntity);
 	        Vector2 currentPosition = gridPosCompo.coord;
 	        int currentX = (int)currentPosition.x;
 	        int currentY = (int)currentPosition.y;
@@ -155,7 +148,7 @@ public final class TileSearchUtil {
 	        if (allTilesByDepth.containsKey(currentDepth)) {
 	        	tilesToIgnore = allTilesByDepth.get(currentDepth);
 	        }
-			Set<Entity> previouslyReturnedTiles = check4ContiguousTiles(CheckTypeEnum.MOVEMENT, currentX, currentY, tilesToIgnore, room, tileCM);
+			Set<Entity> previouslyReturnedTiles = check4ContiguousTiles(CheckTypeEnum.MOVEMENT, currentX, currentY, tilesToIgnore, room);
 			walkableTiles.addAll(previouslyReturnedTiles);
 			
 			//Fill the map
@@ -166,9 +159,9 @@ public final class TileSearchUtil {
 			
 			//For each retrieved tile, redo a search until we reach max depth
 			for (Entity tile : previouslyReturnedTiles) {
-				TileComponent tileComponent = tileCM.get(tile);
+				TileComponent tileComponent = Mappers.tileComponent.get(tile);
 				int moveConsumed = tileComponent.type.getMoveConsumed();
-	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth, room, gridCompoM, tileCM);
+	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth, room);
 	        	walkableTiles.addAll(returnedTiles);
 	        }
 		}
@@ -188,39 +181,38 @@ public final class TileSearchUtil {
 	 * @param currentY the current tile Y
 	 * @return the set of tile entities where it's possible to move
 	 */
-	private static Set<Entity> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room,
-			ComponentMapper<TileComponent> tileCM) {
+	private static Set<Entity> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room) {
 		Set<Entity> foundTiles = new LinkedHashSet<>();
 		//Left
 		if (currentX > 0) {
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForMovement(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore);
 			}
 		}
 		//Up
 		if (currentY < GameScreen.GRID_H - 1) {
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForMovement(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore);
 			}
 		}
 		//Right
 		if (currentX < GameScreen.GRID_W - 1) {
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForMovement(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore);
 			}
 		}
 		//Down
 		if (currentY > 0) {
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForMovement(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, tileCM);
+				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore);
 			}
 		}
 		return foundTiles;
@@ -231,15 +223,14 @@ public final class TileSearchUtil {
 	 * @param tileEntity the tile to check
 	 * @param walkableTiles the set of movable entities
 	 */
-	private static void checkOneTileForMovement(Vector2 pos, Room room, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore,
-			ComponentMapper<TileComponent> tileCM) {
+	private static void checkOneTileForMovement(Vector2 pos, Room room, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore) {
 		
 		Entity tileEntity = room.getTileAtGridPosition(pos);
 		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
 			return;
 		}
 		
-		TileComponent tileComponent = tileCM.get(tileEntity);
+		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
 		
 		Entity entityOnTile = TileUtil.getSolidEntityOnTile(pos, room);
 		if (entityOnTile != null) {
@@ -259,8 +250,7 @@ public final class TileSearchUtil {
 	 * @param tileEntity the tile to check
 	 * @param attackableTiles the set of attackable tile entities
 	 */
-	private static void checkOneTileForAttack(Vector2 pos, Room room, Set<Entity> attackableTiles, Set<Entity> tilesToIgnore,
-			ComponentMapper<TileComponent> tileCM) {
+	private static void checkOneTileForAttack(Vector2 pos, Room room, Set<Entity> attackableTiles, Set<Entity> tilesToIgnore) {
 		
 		Entity tileEntity = room.getTileAtGridPosition(pos);
 		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
@@ -273,7 +263,7 @@ public final class TileSearchUtil {
 			return;
 		}
 		
-		TileComponent tileComponent = tileCM.get(tileEntity);
+		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
 		
 		//TODO: this condition will probably have to change, when fighting a flying enemy over a pit
 		//for example.

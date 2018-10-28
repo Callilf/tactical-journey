@@ -9,6 +9,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Represents a floor that contains a set of rooms.
@@ -53,7 +54,7 @@ public class Floor {
 		this.activeRoom = newRoom;
 		
 		//Place the player
-		GridPositionComponent compo = this.gameScreen.player.getComponent(GridPositionComponent.class);
+		GridPositionComponent compo = Mappers.gridPositionComponent.get(this.gameScreen.player);
 		if (newRoom.getNorthNeighboor() == oldRoom) {
 			compo.coord.set(GameScreen.GRID_W/2, GameScreen.GRID_H-1);
 		} else if (newRoom.getSouthNeighboor() == oldRoom) {

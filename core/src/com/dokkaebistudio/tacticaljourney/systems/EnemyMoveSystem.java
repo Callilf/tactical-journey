@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -16,34 +15,24 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
-
-	private final ComponentMapper<TileComponent> tileCM;
-	private final ComponentMapper<EnemyComponent> enemyCM;
-	private final ComponentMapper<MoveComponent> moveCM;
-	private final ComponentMapper<AttackComponent> attackCM;
-    private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private final ComponentMapper<SpriteComponent> textureCompoM;
-    private final ComponentMapper<TransformComponent> transfoCompoM;
-    private final ComponentMapper<ParentRoomComponent> parentRoomCompoM;
-    private final ComponentMapper<HealthComponent> healthCompoM;
-
-    
+	
+    /** The movement handler. */
     private final MovementHandler movementHandler;
 
     /** The room. */
     private Room room;
-    
+   
+    /** The enemies of the current room that need updating. */
     private List<Entity> allEnemiesOfCurrentRoom;
     
     /** For each enemy, store whether it's turn is over or not. */
@@ -51,16 +40,6 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 
     public EnemyMoveSystem(Room r) {
         super(Family.all(EnemyComponent.class, MoveComponent.class, GridPositionComponent.class).get());
-        this.tileCM = ComponentMapper.getFor(TileComponent.class);
-        this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
-        this.enemyCM = ComponentMapper.getFor(EnemyComponent.class);
-        this.moveCM = ComponentMapper.getFor(MoveComponent.class);
-        this.attackCM = ComponentMapper.getFor(AttackComponent.class);
-        this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
-        this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
-		this.parentRoomCompoM = ComponentMapper.getFor(ParentRoomComponent.class);
-		this.healthCompoM = ComponentMapper.getFor(HealthComponent.class);
-
         room = r;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
@@ -83,7 +62,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	allEnemiesOfCurrentRoom.clear();
     	ImmutableArray<Entity> allEnemies = getEntities();
     	for (Entity enemyEntity : allEnemies) {
-			ParentRoomComponent parentRoomComponent = parentRoomCompoM.get(enemyEntity);
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(enemyEntity);
 			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() == this.room) {
 				allEnemiesOfCurrentRoom.add(enemyEntity);
 			}
@@ -92,7 +71,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	
     	int enemyFinishedCount = 0;
     	for (Entity enemyEntity : allEnemiesOfCurrentRoom) {
-    		HealthComponent healthComponent = healthCompoM.get(enemyEntity);
+    		HealthComponent healthComponent = Mappers.healthComponent.get(enemyEntity);
     		if (healthComponent == null || healthComponent.isDead()) {
     			continue;
     		}
@@ -102,9 +81,9 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     			continue;
     		}
     		
-        	MoveComponent moveCompo = moveCM.get(enemyEntity);
-        	AttackComponent attackCompo = attackCM.get(enemyEntity);
-        	GridPositionComponent moverCurrentPos = gridPositionM.get(enemyEntity);
+        	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
+        	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
+        	GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(enemyEntity);
     		
     		switch(room.state) {
         	case ENEMY_TURN_INIT :
@@ -119,8 +98,8 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
-        		TileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room, gridPositionM, tileCM);
-        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
+        		TileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room);
+        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
@@ -132,14 +111,14 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
             	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, room.engine);
             		
             	if (selectedTile != null) {
-            		GridPositionComponent destinationPos = gridPositionM.get(selectedTile);
+            		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);
     		    	//Clicked on this tile !!
     				//Create an entity to show that this tile is selected as the destination
     				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord);
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
+    				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
@@ -158,8 +137,8 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		
         	case ENEMY_MOVING:
         		
-    	    	TransformComponent transfoCompo = transfoCompoM.get(enemyEntity);
-    	    	moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
+    	    	TransformComponent transfoCompo = Mappers.transfoComponent.get(enemyEntity);
+    	    	moveCompo.selectCurrentMoveDestinationTile();
     	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
@@ -180,7 +159,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		//Check if attack possible
     	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
-    	    			GridPositionComponent attTilePos = gridPositionM.get(attTile);
+    	    			GridPositionComponent attTilePos = Mappers.gridPositionComponent.get(attTile);
     	    			int range = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord, attTilePos.coord);
 						if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
     	    				//Attack possible

@@ -35,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
 	public Floor floor;
@@ -81,7 +82,7 @@ public class Room extends EntitySystem {
 		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
 		gtSingleton.updateElapsedTime(deltaTime);
 		
-		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
+		TextComponent text = Mappers.textComponent.get(timeDisplayer);
 		text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
 	}
 	

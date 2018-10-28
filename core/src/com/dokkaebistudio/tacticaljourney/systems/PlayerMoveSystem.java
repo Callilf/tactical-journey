@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.List;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -22,34 +21,21 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.room.TurnManager;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	
-	private final ComponentMapper<TileComponent> tileCM;
-	private final ComponentMapper<PlayerComponent> playerCM;
-	private final ComponentMapper<MoveComponent> moveCM;
-	private final ComponentMapper<AttackComponent> attackCM;
-    private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private final ComponentMapper<SpriteComponent> textureCompoM;
-    private final ComponentMapper<TransformComponent> transfoCompoM;
-    
+	/** The movement handler. */
     private final MovementHandler movementHandler;
-
+    
+    /** The current room. */
     private Room room;
 
-    public PlayerMoveSystem(Room r) {
+    public PlayerMoveSystem(Room room) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
-        this.tileCM = ComponentMapper.getFor(TileComponent.class);
-        this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
-        this.playerCM = ComponentMapper.getFor(PlayerComponent.class);
-        this.moveCM = ComponentMapper.getFor(MoveComponent.class);
-        this.attackCM = ComponentMapper.getFor(AttackComponent.class);
-        this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
-        this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
-        room = r;
-        movementHandler = new MovementHandler(r.engine);
+        this.room = room;
+        this.movementHandler = new MovementHandler(room.engine);
     }
     
     @Override
@@ -59,10 +45,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
     @Override
     protected void processEntity(Entity moverEntity, float deltaTime) {
-    	MoveComponent moveCompo = moveCM.get(moverEntity);
-    	AttackComponent attackCompo = attackCM.get(moverEntity);
-    	GridPositionComponent moverCurrentPos = gridPositionM.get(moverEntity);
-    	PlayerComponent playerCompo = playerCM.get(moverEntity);
+    	MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
+    	AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
+    	GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(moverEntity);
+    	PlayerComponent playerCompo = Mappers.playerComponent.get(moverEntity);
     	
     	if (!room.state.isPlayerTurn()) {
     		return;
@@ -83,8 +69,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (attackCompo != null) attackCompo.clearAttackableTiles();
     		
     		//Build the movable tiles list
-        	TileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room, gridPositionM, tileCM);
-        	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room, gridPositionM, tileCM);
+        	TileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room);
+        	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room);
 	        room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
 	        break;
 	        
@@ -109,8 +95,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     			int x = Gdx.input.getX();
             	int y = GameScreen.SCREEN_H - Gdx.input.getY();
     			
-            	SpriteComponent selectedTileSprite = textureCompoM.get(moveCompo.getSelectedTile());
-            	SpriteComponent playerSprite = textureCompoM.get(moverEntity);
+            	SpriteComponent selectedTileSprite = Mappers.spriteComponent.get(moveCompo.getSelectedTile());
+            	SpriteComponent playerSprite = Mappers.spriteComponent.get(moverEntity);
             	
             	if (selectedTileSprite.containsPoint(x, y)) {
             		//Confirm movement is we click on the selected tile again
@@ -134,8 +120,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     		break;
     		
     	case PLAYER_MOVING:
-    		TransformComponent transfoCompo = transfoCompoM.get(moverEntity);
-    		moveCompo.selectCurrentMoveDestinationTile(gridPositionM);
+    		TransformComponent transfoCompo = Mappers.transfoComponent.get(moverEntity);
+    		moveCompo.selectCurrentMoveDestinationTile();
     		
     		//Do the movement on screen
     		Boolean movementFinished = movementHandler.performRealMovement(moverEntity, room);
@@ -174,7 +160,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	        	
 	        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
 	        	//The real action is on click release.
-	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
 	        	if (spriteComponent.containsPoint(x, y)) {
 	        		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
 	        	}
@@ -184,7 +170,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
 	        	
 	        	//If release on the endTurnButton, restore the original texture and end the turn.
-	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
 	    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
 	        	if (spriteComponent.containsPoint(x, y)) {
 	        		moveCompo.clearMovableTiles();
@@ -194,12 +180,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	    	}
 	    	if (InputSingleton.getInstance().spaceJustPressed) {
 	    		//If space pressed, make the endTurnButton look pushed.
-	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
 	        	spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
 	    	}
 	    	if (InputSingleton.getInstance().spaceJustReleased) {
 	    		//If space released, restore the button texture and end the turn.
-	        	SpriteComponent spriteComponent = textureCompoM.get(playerCompo.getEndTurnButton());
+	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
 	    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
 	    		moveCompo.clearMovableTiles();
 	    		attackCompo.clearAttackableTiles();
@@ -216,10 +202,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	private int computeCostOfMovement(MoveComponent moveCompo) {
 		int cost = 0;
 		for (Entity wp : moveCompo.getWayPoints()) {
-			GridPositionComponent gridPositionComponent = gridPositionM.get(wp);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
 			cost = cost + getCostOfTileAtPos(gridPositionComponent.coord);
 		}
-		GridPositionComponent gridPositionComponent = gridPositionM.get(moveCompo.getSelectedTile());		
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());		
 		cost = cost + getCostOfTileAtPos(gridPositionComponent.coord);
 		return cost;
 	}
@@ -231,7 +217,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 */
 	private int getCostOfTileAtPos(Vector2 pos) {
 		Entity tileEntity = room.getTileAtGridPosition(pos);
-		TileComponent tileComponent = tileCM.get(tileEntity);
+		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
 		return tileComponent.type.getMoveConsumed();
 	}
 
@@ -244,8 +230,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 */
 	private boolean selectDestinationTile(MoveComponent moveCompo, int x, int y, GridPositionComponent moverCurrentPos) {
 		for (Entity tile : moveCompo.movableTiles) {
-			SpriteComponent spriteComponent = textureCompoM.get(tile);
-			GridPositionComponent destinationPos = gridPositionM.get(tile);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
+			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
 			
 			if (destinationPos.coord.equals(moverCurrentPos.coord)) {
 				//Cannot move to the tile we already are
@@ -259,7 +245,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.setSelectedTile(destinationTileEntity);
 
 				//Display the way to go to this point
-				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room, gridPositionM);
+				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
             	moveCompo.setWayPoints(waypoints);
 				
 		    	return true;

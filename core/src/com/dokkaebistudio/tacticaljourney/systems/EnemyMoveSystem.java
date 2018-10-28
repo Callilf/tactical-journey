@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.TurnManager;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -41,13 +42,14 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 
     /** The room. */
     private Room room;
+    private TurnManager turnManager;
     
     private List<Entity> allEnemiesOfCurrentRoom;
     
     /** For each enemy, store whether it's turn is over or not. */
     private Map<Entity, Boolean> turnFinished = new HashMap<>();
 
-    public EnemyMoveSystem(Room r) {
+    public EnemyMoveSystem(Room r, TurnManager tm) {
         super(Family.all(EnemyComponent.class, MoveComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
@@ -59,6 +61,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 		this.parentRoomCompoM = ComponentMapper.getFor(ParentRoomComponent.class);
 
         room = r;
+        turnManager = tm;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
     }
@@ -206,7 +209,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 		if (allEnemiesOfCurrentRoom.size() == 0 || enemyFinishedCount == allEnemiesOfCurrentRoom.size()) {
 			enemyFinishedCount = 0;
 			turnFinished.clear();
-			room.turnManager.endEnemyTurn();
+			this.turnManager.endEnemyTurn();
 		}
     	
     }

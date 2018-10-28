@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.TurnManager;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
@@ -34,8 +35,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
     private final AttackWheel wheel;
     private Room room;
+    private TurnManager turnManager;
 
-    public PlayerAttackSystem(Room r, AttackWheel attackWheel) {
+    public PlayerAttackSystem(Room r, TurnManager tm, AttackWheel attackWheel) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
@@ -46,6 +48,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         this.healthCompoM = ComponentMapper.getFor(HealthComponent.class);
         room = r;
+        turnManager = tm;
         this.wheel = attackWheel;
     }
     
@@ -102,7 +105,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		room.attackManager.performAttack(attackerEntity, attackCompo.getTarget(), pointedSector);
 			moveCompo.clearMovableTiles();
     		attackCompo.clearAttackableTiles();
-			room.turnManager.endPlayerTurn();
+			this.turnManager.endPlayerTurn();
     		
     		break;
     		

@@ -34,8 +34,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.TurnManager;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
@@ -84,6 +87,10 @@ public class GameScreen extends ScreenAdapter {
 	PooledEngine engine;	
 	private int state;
 	
+	public TurnManager turnManager;
+	
+	private Entity timeDisplayer;
+	
 	public Entity player;
 
 	public GameScreen (TacticalJourney game) {
@@ -101,8 +108,13 @@ public class GameScreen extends ScreenAdapter {
 		engine = new PooledEngine();
 		this.entityFactory = new EntityFactory(this.engine);
 		
-		floor = new Floor(this);
+		createTimeDisplayer();
+
+		floor = new Floor(this, timeDisplayer);
 		Room room = floor.getActiveRoom();
+		
+		turnManager = new TurnManager(floor);
+
 		
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
@@ -112,9 +124,9 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
-		engine.addSystem(new PlayerMoveSystem(room));
-		engine.addSystem(new EnemyMoveSystem(room));
-		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
+		engine.addSystem(new PlayerMoveSystem(room, turnManager));
+		engine.addSystem(new EnemyMoveSystem(room, turnManager));
+		engine.addSystem(new PlayerAttackSystem(room, turnManager, attackWheel));
 		engine.addSystem(new KeyInputMovementSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		
@@ -201,6 +213,16 @@ public class GameScreen extends ScreenAdapter {
 	private void presentRunning () {
 		// draw the attack wheel
 		drawAttackWheel();
+	}
+	
+	/** Create the entity that displays the current game time. */
+	private void createTimeDisplayer() {
+		//Display time
+		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ");
+		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
+		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
+		TransformComponent transfo = timeDisplayer.getComponent(TransformComponent.class);
+		transfo.pos.set(300, 100, 100);
 	}
 
 	private void drawAttackWheel() {

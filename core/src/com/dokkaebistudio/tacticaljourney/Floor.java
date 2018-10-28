@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -25,11 +26,11 @@ public class Floor {
 	/** The currently active room. */
 	private Room activeRoom;
 	
-	public Floor(GameScreen gameScreen) {
+	public Floor(GameScreen gameScreen, Entity timeDisplayer) {
 		this.gameScreen = gameScreen;
 		
-		Room room1 = new Room(this, gameScreen.engine, gameScreen.entityFactory);
-		Room room2 = new Room(this, gameScreen.engine, gameScreen.entityFactory);
+		Room room1 = new Room(this, gameScreen.engine, gameScreen.entityFactory, timeDisplayer);
+		Room room2 = new Room(this, gameScreen.engine, gameScreen.entityFactory, timeDisplayer);
 		
 		room1.setNeighboors(room2, null, null, null);
 		room2.setNeighboors(null, room1, null, null);

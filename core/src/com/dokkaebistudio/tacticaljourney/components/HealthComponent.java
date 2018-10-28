@@ -34,7 +34,13 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	
 	private Entity hpDisplayer;
 	
-	
+	/**
+	 * Whether this entity is dead.
+	 * @return true if the entity is dead.
+	 */
+	public boolean isDead() {
+		return hp <= 0;
+	}
 	
 	
 	@Override

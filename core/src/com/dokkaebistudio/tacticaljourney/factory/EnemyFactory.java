@@ -92,7 +92,7 @@ public final class EnemyFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
-		Entity hpEntity = this.entityFactory.createTextOnTile(room, pos, String.valueOf(healthComponent.getHp()), 100);
+		Entity hpEntity = this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room);
 		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 
@@ -147,7 +147,7 @@ public final class EnemyFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(room, pos, String.valueOf(healthComponent.getHp()), 100));
+		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room));
 		enemyEntity.add(healthComponent);
 		
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);

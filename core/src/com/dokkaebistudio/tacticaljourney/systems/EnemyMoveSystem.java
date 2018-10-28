@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -22,7 +23,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.room.TurnManager;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -36,20 +36,20 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     private final ComponentMapper<SpriteComponent> textureCompoM;
     private final ComponentMapper<TransformComponent> transfoCompoM;
     private final ComponentMapper<ParentRoomComponent> parentRoomCompoM;
+    private final ComponentMapper<HealthComponent> healthCompoM;
 
     
     private final MovementHandler movementHandler;
 
     /** The room. */
     private Room room;
-    private TurnManager turnManager;
     
     private List<Entity> allEnemiesOfCurrentRoom;
     
     /** For each enemy, store whether it's turn is over or not. */
     private Map<Entity, Boolean> turnFinished = new HashMap<>();
 
-    public EnemyMoveSystem(Room r, TurnManager tm) {
+    public EnemyMoveSystem(Room r) {
         super(Family.all(EnemyComponent.class, MoveComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
@@ -59,9 +59,9 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
 		this.parentRoomCompoM = ComponentMapper.getFor(ParentRoomComponent.class);
+		this.healthCompoM = ComponentMapper.getFor(HealthComponent.class);
 
         room = r;
-        turnManager = tm;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
     }
@@ -92,10 +92,10 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	
     	int enemyFinishedCount = 0;
     	for (Entity enemyEntity : allEnemiesOfCurrentRoom) {
-			ParentRoomComponent parentRoomComponent = parentRoomCompoM.get(enemyEntity);
-			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
-				continue;
-			}
+    		HealthComponent healthComponent = healthCompoM.get(enemyEntity);
+    		if (healthComponent == null || healthComponent.isDead()) {
+    			continue;
+    		}
     		
     		if (turnFinished.get(enemyEntity) != null && turnFinished.get(enemyEntity).booleanValue() == true) {
     			enemyFinishedCount ++;
@@ -209,7 +209,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 		if (allEnemiesOfCurrentRoom.size() == 0 || enemyFinishedCount == allEnemiesOfCurrentRoom.size()) {
 			enemyFinishedCount = 0;
 			turnFinished.clear();
-			this.turnManager.endEnemyTurn();
+			room.turnManager.endEnemyTurn();
 		}
     	
     }

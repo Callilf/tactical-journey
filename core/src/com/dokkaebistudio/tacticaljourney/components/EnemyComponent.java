@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class EnemyComponent extends SolidComponent implements Component, Poolable {
+public class EnemyComponent implements Component, Poolable {
 	
 	public enum EnemyMoveStrategy {
 		STANDING_STILL,
@@ -22,6 +22,11 @@ public class EnemyComponent extends SolidComponent implements Component, Poolabl
 	public void reset() {
 		engine = null;
 	}
+	
+	
+	
+	
+	// Getters and Setters
 
 	public EnemyMoveStrategy getMoveStrategy() {
 		return moveStrategy;
@@ -30,7 +35,6 @@ public class EnemyComponent extends SolidComponent implements Component, Poolabl
 	public void setMoveStrategy(EnemyMoveStrategy moveStrategy) {
 		this.moveStrategy = moveStrategy;
 	}
-	
 	
 
 }

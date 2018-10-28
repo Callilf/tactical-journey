@@ -38,9 +38,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     private final MovementHandler movementHandler;
 
     private Room room;
-    private TurnManager turnManager;
 
-    public PlayerMoveSystem(Room r, TurnManager tm) {
+    public PlayerMoveSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.tileCM = ComponentMapper.getFor(TileComponent.class);
         this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
@@ -50,7 +49,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
         this.textureCompoM = ComponentMapper.getFor(SpriteComponent.class);
         this.transfoCompoM = ComponentMapper.getFor(TransformComponent.class);
         room = r;
-        turnManager = tm;
         movementHandler = new MovementHandler(r.engine);
     }
     
@@ -191,7 +189,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	        	if (spriteComponent.containsPoint(x, y)) {
 	        		moveCompo.clearMovableTiles();
 	        		attackCompo.clearAttackableTiles();
-	    			this.turnManager.endPlayerTurn();
+	    			room.turnManager.endPlayerTurn();
 	        	}
 	    	}
 	    	if (InputSingleton.getInstance().spaceJustPressed) {
@@ -205,7 +203,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	    		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
 	    		moveCompo.clearMovableTiles();
 	    		attackCompo.clearAttackableTiles();
-				this.turnManager.endPlayerTurn();
+				room.turnManager.endPlayerTurn();
 	    	}
 		}
 	}

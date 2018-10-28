@@ -33,6 +33,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
@@ -86,9 +87,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	PooledEngine engine;	
 	private int state;
-	
-	public TurnManager turnManager;
-	
+		
 	private Entity timeDisplayer;
 	
 	public Entity player;
@@ -113,20 +112,17 @@ public class GameScreen extends ScreenAdapter {
 		floor = new Floor(this, timeDisplayer);
 		Room room = floor.getActiveRoom();
 		
-		turnManager = new TurnManager(floor);
-
-		
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
 		int y = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		player = entityFactory.createPlayer(new Vector2(15,15), 5);
+		player = entityFactory.createPlayer(new Vector2(15,15), 5, room);
 		
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
-		engine.addSystem(new PlayerMoveSystem(room, turnManager));
-		engine.addSystem(new EnemyMoveSystem(room, turnManager));
-		engine.addSystem(new PlayerAttackSystem(room, turnManager, attackWheel));
+		engine.addSystem(new PlayerMoveSystem(room));
+		engine.addSystem(new EnemyMoveSystem(room));
+		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputMovementSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		
@@ -156,6 +152,10 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.removeSystem(oldRoom);
 		engine.addSystem(newRoom);
+		
+		//Set the player in the new room
+		ParentRoomComponent prc = player.getComponent(ParentRoomComponent.class);
+		prc.setParentRoom(newRoom);
 	}
 
 	public void update (float deltaTime) {
@@ -218,7 +218,7 @@ public class GameScreen extends ScreenAdapter {
 	/** Create the entity that displays the current game time. */
 	private void createTimeDisplayer() {
 		//Display time
-		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ");
+		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ", null);
 		TextComponent text = timeDisplayer.getComponent(TextComponent.class);
 		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
 		TransformComponent transfo = timeDisplayer.getComponent(TransformComponent.class);

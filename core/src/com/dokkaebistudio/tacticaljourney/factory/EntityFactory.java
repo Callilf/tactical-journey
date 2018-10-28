@@ -16,7 +16,6 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.RoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -78,7 +77,7 @@ public final class EntityFactory {
 	 * @param moveSpeed the speed
 	 * @return the player entity
 	 */
-	public Entity createPlayer(Vector2 pos, int moveSpeed) {
+	public Entity createPlayer(Vector2 pos, int moveSpeed, Room room) {
 		Entity playerEntity = engine.createEntity();
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 
@@ -126,9 +125,13 @@ public final class EntityFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
-		Entity hpText = this.createTextOnTile(null, pos, String.valueOf(healthComponent.getHp()), 100);
+		Entity hpText = this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, null);
 		healthComponent.setHpDisplayer(hpText);
 		playerEntity.add(healthComponent);
+		
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		playerEntity.add(parentRoomComponent);
 
 		engine.addEntity(playerEntity);
 
@@ -339,7 +342,7 @@ public final class EntityFactory {
 	 * @param pos the position of the text
 	 * @return the text entity
 	 */
-	public Entity createText(Vector3 pos, String text) {
+	public Entity createText(Vector3 pos, String text, Room room) {
 		Entity textTest = engine.createEntity();
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
@@ -351,6 +354,12 @@ public final class EntityFactory {
 		tc.setText(text);
 		textTest.add(tc);
 		
+		if (room != null) {
+			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+			parentRoomComponent.setParentRoom(room);
+			textTest.add(parentRoomComponent);
+		}
+		
 		engine.addEntity(textTest);
 		return textTest;
 	}
@@ -360,7 +369,7 @@ public final class EntityFactory {
 	 * @param pos the position of the text in tile position
 	 * @return the text entity
 	 */
-	public Entity createTextOnTile(Room room, Vector2 tilePos, String text, int zIndex) {
+	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex, Room room) {
 		Entity textTest = engine.createEntity();
 		textTest.flags = EntityFlagEnum.TEXT_ON_TILE.getFlag();
 

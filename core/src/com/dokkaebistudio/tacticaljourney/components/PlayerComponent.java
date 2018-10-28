@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 
-public class PlayerComponent extends SolidComponent implements Component {
+public class PlayerComponent implements Component {
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;

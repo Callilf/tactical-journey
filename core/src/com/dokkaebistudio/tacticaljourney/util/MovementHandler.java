@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
@@ -150,19 +151,6 @@ public class MovementHandler {
 		//TODO move this
 		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
 		
-		// Doors
-		Entity doorEntity = TileUtil.getDoorEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
-		if (doorEntity != null) {
-			DoorComponent doorCompo = doorEntity.getComponent(DoorComponent.class);
-			if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
-				//Change room !!!
-				finishRealMovement(mover);
-				moveCompo.clearMovableTiles();
-				room.leaveRoom(doorCompo.getTargetedRoom());
-				return null;
-			}
-		}
-		
 		// Items pickup
 		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
 		for (Entity item : items) {
@@ -174,6 +162,23 @@ public class MovementHandler {
 		}
 		
 		
+		
+		// Things that only the player can do, such are go through a door
+		PlayerComponent playerCompo = mover.getComponent(PlayerComponent.class);
+		if (playerCompo != null) {
+			// Doors
+			Entity doorEntity = TileUtil.getDoorEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
+			if (doorEntity != null) {
+				DoorComponent doorCompo = doorEntity.getComponent(DoorComponent.class);
+				if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
+					//Change room !!!
+					finishRealMovement(mover);
+					moveCompo.clearMovableTiles();
+					room.leaveRoom(doorCompo.getTargetedRoom());
+					return null;
+				}
+			}
+		}
 		
 		
 		

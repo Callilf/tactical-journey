@@ -45,6 +45,8 @@ public class Room extends EntitySystem {
 	public PooledEngine engine;
 	public EntityFactory entityFactory;
 	
+	public TurnManager turnManager;
+
 	public AttackManager attackManager;
 	
 	/** The entities of this room. */
@@ -64,7 +66,7 @@ public class Room extends EntitySystem {
 		this.engine = engine;
 		this.entityFactory = ef;
 		this.timeDisplayer = timeDisplayer;
-
+		this.turnManager = new TurnManager(this);
 	}
 
 	

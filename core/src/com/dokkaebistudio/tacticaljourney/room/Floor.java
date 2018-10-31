@@ -63,7 +63,7 @@ public class Floor {
 		
 		//Place the player
 		if (newRoom.getNorthNeighboor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-1));
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2));
 		} else if (newRoom.getSouthNeighboor() == oldRoom) {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1));
 		} else if (newRoom.getWestNeighboor() == oldRoom) {

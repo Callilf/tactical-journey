@@ -59,9 +59,9 @@ public class GameScreen extends ScreenAdapter {
 	// dimensions
 	public static final int SCREEN_H = 1080;
 	public static final int SCREEN_W = 1920;
-	public static final int GRID_H = 17;
-	public static final int GRID_W = 30;
-	public static final int GRID_SIZE = 64;
+	public static final int GRID_H = 14;
+	public static final int GRID_W = 24;
+	public static final int GRID_SIZE = 80;
 
 	public static final int BOTTOM_MENU_HEIGHT = 0;
 	public static final int LEFT_RIGHT_PADDING = 0;
@@ -115,8 +115,8 @@ public class GameScreen extends ScreenAdapter {
 		
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y = 3 + random.nextInt(GameScreen.GRID_H - 4);
-		player = entityFactory.createPlayer(new Vector2(15,15), 5, room);
+		int y = 3 + random.nextInt(GameScreen.GRID_H - 5);
+		player = entityFactory.createPlayer(new Vector2(x,y), 5, room);
 		
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room));

@@ -96,19 +96,19 @@ public class Room extends EntitySystem {
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		
 		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		Entity spider1 = entityFactory.enemyFactory.createSpider(this, new Vector2(x2,y2), 3);
 		
 		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		Entity spider2 = entityFactory.enemyFactory.createSpider(this, new Vector2(x3,y3), 3);
 		
 		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		Entity scorpion = entityFactory.enemyFactory.createScorpion(this, new Vector2(x4,y4), 4);
 		
 		int x5 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 4);
+		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		Entity healthUp = entityFactory.createItemHealthUp(this, new Vector2(x5,y5));
 	}
 
@@ -156,7 +156,7 @@ public class Room extends EntitySystem {
 		}
 		for (int x = 0; x < GRID_W; x++) {
 			for (int y = 0; y < GameScreen.GRID_H; y++) {
-				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 1) {
+				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 2 || y == GRID_H - 1) {
 					
 					//Spaces for doors
 					if ( (x == 0 && y== GRID_H/2) ) {
@@ -168,7 +168,7 @@ public class Room extends EntitySystem {
 					} else if ( x == GRID_W/2 && y == 1) {
 						tiles[x][y] = TileEnum.GROUND;
 						Entity door = entityFactory.createDoor(this, new Vector2(x,y), southNeighboor);
-					} else if ( x == GRID_W/2 && y == GRID_H-1) {
+					} else if ( x == GRID_W/2 && y == GRID_H-2) {
 						tiles[x][y] = TileEnum.GROUND;
 						Entity door = entityFactory.createDoor(this, new Vector2(x,y), northNeighboor);
 					} else {

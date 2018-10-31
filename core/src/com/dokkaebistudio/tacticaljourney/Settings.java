@@ -22,7 +22,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class Settings {
 	public static boolean soundEnabled = true;
 	public final static int[] highscores = new int[] {100, 80, 50, 30, 10};
-	public final static String file = ".superjumper";
+	public final static String file = ".tacticaljourney";
 
 	public static void load () {
 		try {

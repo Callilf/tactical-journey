@@ -4,16 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class AttackComponent implements Component, Poolable {
-	
-	private final ComponentMapper<SpriteComponent> spriteCM = ComponentMapper.getFor(SpriteComponent.class);
-	
+		
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
@@ -106,18 +104,18 @@ public class AttackComponent implements Component, Poolable {
 	
 	public void hideAttackableTiles() {
 		for (Entity e : attackableTiles) {
-			SpriteComponent spriteComponent = spriteCM.get(e);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
 			spriteComponent.hide = true;
 		}
 	}
 	
 	public void hideAttackEntities() {
 		if (this.selectedTile != null) {
-			SpriteComponent spriteComponent = spriteCM.get(this.selectedTile);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(this.selectedTile);
 			spriteComponent.hide = true;
 		}
 		if (this.attackConfirmationButton != null) {
-			SpriteComponent spriteComponent = spriteCM.get(this.attackConfirmationButton);
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(this.attackConfirmationButton);
 			spriteComponent.hide = true;
 		}
 	}

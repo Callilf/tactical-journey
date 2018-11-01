@@ -10,6 +10,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
@@ -19,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 /**
+ * Handles movements of entities.
  * @author Callil
  *
  */
@@ -30,21 +33,22 @@ public class MovementHandler {
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
-	private final ComponentMapper<MoveComponent> moveCM;
-    private final ComponentMapper<GridPositionComponent> gridPositionM;
-    private final ComponentMapper<TransformComponent> transfoCM;
-    
+	/**
+	 * Constructor.
+	 * @param engine the game engine
+	 */
     public MovementHandler(PooledEngine engine) {
-        this.gridPositionM = ComponentMapper.getFor(GridPositionComponent.class);
-        this.moveCM = ComponentMapper.getFor(MoveComponent.class);
-        this.transfoCM = ComponentMapper.getFor(TransformComponent.class);
         this.engine = engine;
     }
 	
 	
+    
+    //*********************************************************************
+    // Fluent movement BEGIN 
+    
 	public void initiateMovement(Entity e) {
-		GridPositionComponent moverCurrentPos = gridPositionM.get(e);
-		MoveComponent moveComponent = moveCM.get(e);
+		GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(e);
+		MoveComponent moveComponent = Mappers.moveComponent.get(e);
 		
 		//Add the tranfo component to the entity to perform real movement on screen
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
@@ -71,12 +75,12 @@ public class MovementHandler {
 	 * @param room the Room
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	public boolean performRealMovement(Entity mover, Room room) {
-		boolean result = false;
+	public Boolean performRealMovement(Entity mover, Room room) {
+		Boolean result = false;
 		float xOffset = 0;
 		float yOffset = 0;
-		MoveComponent moveCompo = moveCM.get(mover);
-		TransformComponent transfoCompo = transfoCM.get(mover);
+		MoveComponent moveCompo = Mappers.moveComponent.get(mover);
+		TransformComponent transfoCompo = Mappers.transfoComponent.get(mover);
 		
 		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
 			transfoCompo.pos.x = transfoCompo.pos.x + MOVE_SPEED;
@@ -123,10 +127,11 @@ public class MovementHandler {
 			result = performEndOfMovement(mover, moveCompo, room);
 		}
 		
-		
-		for (Component c : mover.getComponents()) {
-			if (c instanceof MovableInterface) {
-				((MovableInterface) c).performMovement(xOffset, yOffset, transfoCM);
+		if (result != null) {
+			for (Component c : mover.getComponents()) {
+				if (c instanceof MovableInterface) {
+					((MovableInterface) c).performMovement(xOffset, yOffset);
+				}
 			}
 		}
 		
@@ -140,14 +145,16 @@ public class MovementHandler {
 	 * @param room the room.
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	private boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
+	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
 		
 		
 		//Perform any action related to the current tile such as picking up consumables,
 		//receiving damages from spikes or fire...
 		//TODO move this
 		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
-		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room.engine);
+		
+		// Items pickup
+		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
 		for (Entity item : items) {
 			ItemComponent itemComponent = ComponentMapper.getFor(ItemComponent.class).get(item);
 			if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
@@ -157,6 +164,23 @@ public class MovementHandler {
 		}
 		
 		
+		
+		// Things that only the player can do, such are go through a door
+		PlayerComponent playerCompo = Mappers.playerComponent.get(mover);
+		if (playerCompo != null) {
+			// Doors
+			Entity doorEntity = TileUtil.getDoorEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
+			if (doorEntity != null) {
+				DoorComponent doorCompo = Mappers.doorComponent.get(doorEntity);
+				if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
+					//Change room !!!
+					finishRealMovement(mover);
+					moveCompo.clearMovableTiles();
+					room.leaveRoom(doorCompo.getTargetedRoom());
+					return null;
+				}
+			}
+		}
 		
 		
 		
@@ -171,18 +195,32 @@ public class MovementHandler {
 	
 	
 	public void finishRealMovement(Entity e) {
-		MoveComponent moveCompo = moveCM.get(e);
-		GridPositionComponent gridPositionComponent = gridPositionM.get(e);
+		MoveComponent moveCompo = Mappers.moveComponent.get(e);
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		
 		e.remove(TransformComponent.class);
-		GridPositionComponent selectedTilePos = gridPositionM.get(moveCompo.getSelectedTile());
+		GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
 		gridPositionComponent.coord.set(selectedTilePos.coord);
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {
-				((MovableInterface) c).endMovement(selectedTilePos.coord, gridPositionM);
+				((MovableInterface) c).endMovement(selectedTilePos.coord);
 			}
 		}
 	}
 	
+    // Fluent movement END 
+    //*********************************************************************
+	
+	
+	public static void placeEntity(Entity e, Vector2 tilePos) {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+		gridPositionComponent.coord.set(tilePos.x, tilePos.y);
+		
+		for (Component c : e.getComponents()) {
+			if (c instanceof MovableInterface) {
+				((MovableInterface) c).place(tilePos);
+			}
+		}
+	}
 }

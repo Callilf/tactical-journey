@@ -6,126 +6,140 @@ filter: Nearest,Nearest
 repeat: none
 background-test-menu
   rotate: false
-  xy: 2, 844
+  xy: 2, 892
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 btn-end-turn
   rotate: false
-  xy: 516, 714
+  xy: 516, 762
   size: 192, 128
   orig: 192, 128
   offset: 0, 0
   index: -1
 btn-end-turn-pushed
   rotate: false
-  xy: 2, 200
+  xy: 2, 248
   size: 192, 128
   orig: 192, 128
   offset: 0, 0
   index: -1
 btn-move-confirmation
   rotate: false
-  xy: 1924, 1860
+  xy: 84, 100
   size: 64, 64
   orig: 64, 64
+  offset: 0, 0
+  index: -1
+door-closed
+  rotate: false
+  xy: 516, 598
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+door-opened
+  rotate: false
+  xy: 278, 296
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 516, 648
-  size: 64, 64
-  orig: 64, 64
+  xy: 196, 296
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 582, 648
-  size: 64, 64
-  orig: 64, 64
+  xy: 598, 680
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 776, 778
-  size: 64, 64
-  orig: 64, 64
+  xy: 792, 810
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
   xy: 1924, 1728
-  size: 64, 64
-  orig: 64, 64
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 516, 582
-  size: 64, 64
-  orig: 64, 64
+  xy: 84, 166
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable
   rotate: false
-  xy: 710, 778
-  size: 64, 64
-  orig: 64, 64
+  xy: 516, 680
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 68, 134
-  size: 64, 64
-  orig: 64, 64
+  xy: 2, 84
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
   xy: 2, 2
-  size: 64, 64
-  orig: 64, 64
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-mud-test
   rotate: false
-  xy: 2, 134
-  size: 64, 64
-  orig: 64, 64
+  xy: 1924, 1892
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-pit-test
   rotate: false
-  xy: 196, 264
-  size: 64, 64
-  orig: 64, 64
+  xy: 2, 166
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-test
   rotate: false
-  xy: 1924, 1794
-  size: 64, 64
-  orig: 64, 64
+  xy: 710, 810
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 2, 68
-  size: 64, 64
-  orig: 64, 64
+  xy: 1924, 1810
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test2
   rotate: false
-  xy: 262, 264
+  xy: 360, 312
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel-arrow
   rotate: false
-  xy: 2, 330
+  xy: 2, 378
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

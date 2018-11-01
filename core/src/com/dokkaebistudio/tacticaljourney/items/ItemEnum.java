@@ -1,10 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.items;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 
 /**
@@ -20,16 +20,14 @@ public enum ItemEnum {
 		@Override
 		public void pickUp(Entity picker, Entity item, Room room) {
 			//Heal the picker for 25 HP !
-			ComponentMapper<HealthComponent> healthCompoM = ComponentMapper.getFor(HealthComponent.class);
-			HealthComponent healthComponent = healthCompoM.get(picker);
+			HealthComponent healthComponent = Mappers.healthComponent.get(picker);
 			healthComponent.setHp(healthComponent.getHp() + 25);
 			if (healthComponent.getHp() > healthComponent.getMaxHp()) {
 				healthComponent.setHp(healthComponent.getMaxHp());
 			}
 			
 			//Display a DamageDisplayer
-			ComponentMapper<GridPositionComponent> gridPositionCompoM = ComponentMapper.getFor(GridPositionComponent.class);
-			GridPositionComponent gridPosCompo = gridPositionCompoM.get(item);
+			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(item);
 			room.entityFactory.createDamageDisplayer("25", gridPosCompo.coord, true);
 		}
 

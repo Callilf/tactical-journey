@@ -33,10 +33,15 @@ public class Assets {
 	public static final String player = "player-test";
 	public static final String enemy_spider = "enemy-test";
 	public static final String enemy_scorpion = "enemy-scorpion-test";
+	
 	public static final String tile_ground = "tile-test";
 	public static final String tile_wall = "tile-wall-test";
 	public static final String tile_pit = "tile-pit-test";
 	public static final String tile_mud = "tile-mud-test";
+	
+	public static final String door_closed = "door-closed";
+	public static final String door_opened = "door-opened";
+
 	
 	
 	public static final String tile_movable = "tile-movable";

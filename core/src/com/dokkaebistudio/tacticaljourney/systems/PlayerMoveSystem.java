@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	
@@ -31,6 +32,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     
     /** The current room. */
     private Room room;
+    
+    /** The highlighted enemy. */
+    private Entity enemyHighlighted;
 
     public PlayerMoveSystem(Room room) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
@@ -69,9 +73,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (attackCompo != null) attackCompo.clearAttackableTiles();
     		
     		//Build the movable tiles list
-        	TileSearchUtil.buildMoveTilesSet(moverEntity, moveCompo, room);
-        	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, moveCompo, attackCompo, room);
-	        room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+        	TileSearchUtil.buildMoveTilesSet(moverEntity, room);
+        	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, room, true);
+	        room.state = RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER;
 	        break;
 	        
 	        
@@ -86,6 +90,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
             		room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
             	}
             }
+            
+            //When right clicking on an ennemy, display it's possible movement
+            handleRightClickOnEnemies(moverEntity);
             break;
     		
             
@@ -145,6 +152,65 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	
     	}
     }
+
+    /**
+     * Holding right click on an enemy displays it's possible movements and attacks.
+     */
+	private void handleRightClickOnEnemies(Entity player) {
+		if (InputSingleton.getInstance().rightClickJustPressed) {
+			int x = Gdx.input.getX();
+			int y = GameScreen.SCREEN_H - Gdx.input.getY();
+			
+			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x,y));
+			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
+			if (attackableEntity != null) {
+				//There is an enemy at this location, display it's tiles
+		    	MoveComponent enemyMoveCompo = Mappers.moveComponent.get(attackableEntity);
+		    	if (enemyMoveCompo != null) {
+		    		enemyHighlighted = attackableEntity;
+		    		enemyMoveCompo.showMovableTiles();
+		    	}
+		    	AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
+		    	if (enemyAttackCompo != null) {
+		    		enemyHighlighted = attackableEntity;
+		    		enemyAttackCompo.showAttackableTiles();
+		    	}
+		    	//Hide the player's tiles
+		    	MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
+		    	if (playerMoveComponent != null) {
+		    		playerMoveComponent.hideMovableTiles();
+		    	}
+		    	AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
+		    	if (playerAttackComponent != null) {
+		    		playerAttackComponent.hideAttackableTiles();
+		    	}
+			}
+		} else if (InputSingleton.getInstance().rightClickJustReleased && enemyHighlighted != null) {
+			//Released right click
+			
+			//hide the enemy tiles
+			MoveComponent enemyMoveCompo = Mappers.moveComponent.get(enemyHighlighted);
+			if (enemyMoveCompo != null) {
+				enemyMoveCompo.hideMovableTiles();
+			}
+			AttackComponent enemyAttackCompo = Mappers.attackComponent.get(enemyHighlighted);
+			if (enemyAttackCompo != null) {
+				enemyAttackCompo.hideAttackableTiles();
+			}
+			enemyHighlighted = null;
+			
+			//Display the player's ones
+	    	//Hide the player's tiles
+	    	MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
+	    	if (playerMoveComponent != null) {
+	    		playerMoveComponent.showMovableTiles();
+	    	}
+	    	AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
+	    	if (playerAttackComponent != null) {
+	    		playerAttackComponent.showAttackableTiles();
+	    	}
+		}
+	}
 
     /**
      * Handle the end turn button.

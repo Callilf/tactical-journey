@@ -19,6 +19,7 @@ public enum RoomState {
 	PLAYER_WHEEL_TURNING,
 	PLAYER_WHEEL_NEEDLE_STOP,
 	PLAYER_WHEEL_FINISHED,
+	ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
 	ENEMY_TURN_INIT,
 	ENEMY_COMPUTE_MOVABLE_TILES,
 	ENEMY_MOVE_TILES_DISPLAYED,
@@ -51,7 +52,8 @@ public enum RoomState {
 	 * @return true if it's the enemies' turn, false otherwise.
 	 */
 	public boolean isEnemyTurn() {
-		return this == RoomState.ENEMY_TURN_INIT 
+		return this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
+				|| this == RoomState.ENEMY_TURN_INIT 
 				|| this == RoomState.ENEMY_COMPUTE_MOVABLE_TILES 
 				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
     			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 

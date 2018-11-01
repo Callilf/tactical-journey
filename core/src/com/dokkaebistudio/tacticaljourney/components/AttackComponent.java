@@ -45,7 +45,6 @@ public class AttackComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
-		engine = null;
 		clearAttackableTiles();
 		this.target = null;
 	}
@@ -102,6 +101,12 @@ public class AttackComponent implements Component, Poolable {
 	}
 	
 	
+	public void showAttackableTiles() {
+		for (Entity e : attackableTiles) {
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
+			spriteComponent.hide = false;
+		}
+	}
 	public void hideAttackableTiles() {
 		for (Entity e : attackableTiles) {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);

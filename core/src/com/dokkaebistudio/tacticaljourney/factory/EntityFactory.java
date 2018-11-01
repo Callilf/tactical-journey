@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * Factory used to create presets of entities.
@@ -115,7 +116,7 @@ public final class EntityFactory {
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = this.engine;
 		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(4);
+		attackComponent.setStrength(5);
 		playerEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -284,7 +285,7 @@ public final class EntityFactory {
 
 		GridPositionComponent selectedTilePos = engine.createComponent(GridPositionComponent.class);
     	selectedTilePos.coord.set(pos);
-    	selectedTilePos.zIndex = 2;
+    	selectedTilePos.zIndex = 100;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
@@ -306,7 +307,7 @@ public final class EntityFactory {
 
 		GridPositionComponent waypointPos = engine.createComponent(GridPositionComponent.class);
     	waypointPos.coord.set(pos);
-    	waypointPos.zIndex = 2;
+    	waypointPos.zIndex = 100;
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -403,7 +404,7 @@ public final class EntityFactory {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
-		Vector2 initialPos = RenderingSystem.convertGridPosIntoPixelPos(gridPos);
+		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
 		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);

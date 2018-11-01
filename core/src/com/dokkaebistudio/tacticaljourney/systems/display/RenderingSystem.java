@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -37,6 +36,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
@@ -131,7 +131,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				// use grid position to render instead of real screen coordinates
 				GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
 				
-				Vector2 realPos = convertGridPosIntoPixelPos(g.coord);
+				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord);
 				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					spriteCompo.getSprite().draw(batch);
@@ -152,16 +152,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 		renderQueue.add(entity);
 	}
 	
-	/**
-	 * Convert a grid position for ex (5,4) into pixel position (450,664).
-	 * @param gridPos the grid position
-	 * @return the real position
-	 */
-	public static Vector2 convertGridPosIntoPixelPos(Vector2 gridPos) {
-		float x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
-		float y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-		return new Vector2(x,y);
-	}
 	
 	public OrthographicCamera getCamera() {
 		return cam;

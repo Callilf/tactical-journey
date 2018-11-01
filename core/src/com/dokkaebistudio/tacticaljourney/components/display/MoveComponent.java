@@ -10,8 +10,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class MoveComponent implements Component, Poolable {
 		
@@ -60,7 +60,7 @@ public class MoveComponent implements Component, Poolable {
 		}
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(target);
 		this.currentMoveDestinationTilePos = gridPositionComponent.coord;
-		this.currentMoveDestinationPos = RenderingSystem.convertGridPosIntoPixelPos(gridPositionComponent.coord);
+		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord);
 	}
 	
 	
@@ -124,7 +124,12 @@ public class MoveComponent implements Component, Poolable {
 	}
 	
 	
-	
+	public void showMovableTiles() {
+		for (Entity e : movableTiles) {
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
+			spriteComponent.hide = false;
+		}
+	}
 	public void hideMovableTiles() {
 		for (Entity e : movableTiles) {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);

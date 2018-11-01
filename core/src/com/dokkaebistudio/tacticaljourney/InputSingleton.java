@@ -23,6 +23,12 @@ public class InputSingleton {
     /** Whether the left click has been released this frame. */
     public boolean leftClickJustReleased;
     
+	/** Whether the right click has been pressed during this frame. */
+    public boolean rightClickJustPressed;
+    
+    /** Whether the right click has been released this frame. */
+    public boolean rightClickJustReleased;
+    
     /** Whether the space bar has been pressed this frame. */
     public boolean spaceJustPressed;
     
@@ -55,6 +61,8 @@ public class InputSingleton {
 	public void resetEvents() {
 		this.leftClickJustPressed = false;
 		this.leftClickJustReleased = false;
+		this.rightClickJustPressed = false;
+		this.rightClickJustReleased = false;
 		this.spaceJustPressed = false;
 		this.spaceJustReleased = false;
 	}
@@ -95,6 +103,10 @@ public class InputSingleton {
 					leftClickJustPressed = true;
 					return true;
 				}
+				if (button == Input.Buttons.RIGHT) {
+					rightClickJustPressed = true;
+					return true;
+				}
 				return false;
 			}
 
@@ -102,6 +114,10 @@ public class InputSingleton {
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 				if (button == Input.Buttons.LEFT) {
 					leftClickJustReleased = true;
+					return true;
+				}
+				if (button == Input.Buttons.RIGHT) {
+					rightClickJustReleased = true;
 					return true;
 				}
 				return false;

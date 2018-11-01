@@ -59,13 +59,12 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	}
     	
     	//Get all enemies of the current room
-    	allEnemiesOfCurrentRoom.clear();
-    	ImmutableArray<Entity> allEnemies = getEntities();
-    	for (Entity enemyEntity : allEnemies) {
-			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(enemyEntity);
-			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() == this.room) {
-				allEnemiesOfCurrentRoom.add(enemyEntity);
-			}
+    	fillEntitiesOfCurrentRoom();
+    	
+    	if (room.state == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER) {
+    		//Computing movable tiles of all enemies to display them to the player
+    		computeMovableTilesToDisplayToPlayer();
+    		return;
     	}
     	
     	
@@ -98,8 +97,8 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
-        		TileSearchUtil.buildMoveTilesSet(enemyEntity, moveCompo, room);
-        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, moveCompo, attackCompo, room);
+        		TileSearchUtil.buildMoveTilesSet(enemyEntity, room);
+        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, room, true);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
@@ -192,7 +191,43 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 		}
     	
     }
+
+	private void fillEntitiesOfCurrentRoom() {
+		allEnemiesOfCurrentRoom.clear();
+    	ImmutableArray<Entity> allEnemies = getEntities();
+    	for (Entity enemyEntity : allEnemies) {
+			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(enemyEntity);
+			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() == this.room) {
+				allEnemiesOfCurrentRoom.add(enemyEntity);
+			}
+    	}
+	}
     
     @Override
     protected void processEntity(Entity moverEntity, float deltaTime) {}
+    
+    
+    /**
+     * For each enemy, compute the list of tiles where they can move and attack.
+     */
+    private void computeMovableTilesToDisplayToPlayer() {
+    	for (Entity enemyEntity : allEnemiesOfCurrentRoom) {
+        	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
+        	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
+        	
+    		//clear the movable tile
+    		moveCompo.clearMovableTiles();
+    		if (attackCompo != null) attackCompo.clearAttackableTiles();
+    		
+    		moveCompo.moveRemaining = moveCompo.moveSpeed;
+        		
+        	//Build the movable tiles list
+    		TileSearchUtil.buildMoveTilesSet(enemyEntity, room);
+    		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, room, false);
+    		moveCompo.hideMovableTiles();
+    		attackCompo.hideAttackableTiles();
+    	}
+    	
+    	room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+    }
 }

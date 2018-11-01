@@ -18,7 +18,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 
 /**
  * Handles movements of entities.
@@ -52,7 +51,7 @@ public class MovementHandler {
 		
 		//Add the tranfo component to the entity to perform real movement on screen
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(moverCurrentPos.coord);
+		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(moverCurrentPos.coord);
 		transfoCompo.pos.x = startPos.x;
 		transfoCompo.pos.y = startPos.y;
 		transfoCompo.pos.z = 1;

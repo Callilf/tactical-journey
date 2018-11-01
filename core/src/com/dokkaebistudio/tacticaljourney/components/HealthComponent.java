@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.
@@ -57,7 +58,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 			
 			//Add the tranfo component to the entity to perform real movement on screen
 			TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-			Vector2 startPos = RenderingSystem.convertGridPosIntoPixelPos(currentPos);
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
 			startPos.y = startPos.y + textCompo.getHeight();
 			transfoCompo.pos.x = startPos.x;
 			transfoCompo.pos.y = startPos.y;

@@ -35,13 +35,15 @@ public final class TileSearchUtil {
     
 	
 	
-	public static void buildMoveTilesSet(Entity moverEntity, MoveComponent moveCompo, Room room) {
+	public static void buildMoveTilesSet(Entity moverEntity, Room room) {
+		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
+
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
-		Entity playerTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
+		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = TileSearchUtil.findAllWalkableTiles(playerTileEntity, 1, moveCompo.moveRemaining,room);
-		moveCompo.allWalkableTiles.add(playerTileEntity);
+		moveCompo.allWalkableTiles = TileSearchUtil.findAllWalkableTiles(moverTileEntity, 1, moveCompo.moveRemaining,room);
+		moveCompo.allWalkableTiles.add(moverTileEntity);
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : moveCompo.allWalkableTiles) {
@@ -52,12 +54,23 @@ public final class TileSearchUtil {
 	
 	
 	
-	public static void buildAttackTilesSet(Entity moverEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+	/**
+	 * Compute the tiles where attack is possible.
+	 * @param moverEntity the attacker
+	 * @param room the current room
+	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
+	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
+	 */
+	public static void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities) {
+		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
+		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 		
 		Set<Entity> attackableTiles = new HashSet<>();
 		for (Entity t : moveCompo.allWalkableTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(CheckTypeEnum.ATTACK, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room);
+			
+			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
+			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room);
 			attackableTiles.addAll(foundAttTiles);
 		}
 
@@ -171,7 +184,8 @@ public final class TileSearchUtil {
 	
 	private enum CheckTypeEnum {
 		MOVEMENT,
-		ATTACK;
+		ATTACK,
+		ATTACK_FOR_DISPLAY;
 	}
 
 	/**
@@ -188,7 +202,9 @@ public final class TileSearchUtil {
 			if (type == CheckTypeEnum.MOVEMENT) {
 				checkOneTileForMovement(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore);
+				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, true);
+			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
+				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, false);
 			}
 		}
 		//Up
@@ -196,7 +212,9 @@ public final class TileSearchUtil {
 			if (type == CheckTypeEnum.MOVEMENT) {
 				checkOneTileForMovement(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore);
+				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, true);
+			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
+				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, false);
 			}
 		}
 		//Right
@@ -204,7 +222,9 @@ public final class TileSearchUtil {
 			if (type == CheckTypeEnum.MOVEMENT) {
 				checkOneTileForMovement(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore);
+				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, true);
+			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
+				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, false);
 			}
 		}
 		//Down
@@ -212,7 +232,9 @@ public final class TileSearchUtil {
 			if (type == CheckTypeEnum.MOVEMENT) {
 				checkOneTileForMovement(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore);
+				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, true);
+			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
+				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, false);
 			}
 		}
 		return foundTiles;
@@ -250,17 +272,19 @@ public final class TileSearchUtil {
 	 * @param tileEntity the tile to check
 	 * @param attackableTiles the set of attackable tile entities
 	 */
-	private static void checkOneTileForAttack(Vector2 pos, Room room, Set<Entity> attackableTiles, Set<Entity> tilesToIgnore) {
+	private static void checkOneTileForAttack(Vector2 pos, Room room, Set<Entity> attackableTiles, Set<Entity> tilesToIgnore, boolean checkEntityToAttack) {
 		
 		Entity tileEntity = room.getTileAtGridPosition(pos);
 		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
 			return;
 		}
 		
-		Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
-		if (entityOnTile == null) {
-			//Nothing to attack on this tile
-			return;
+		if (checkEntityToAttack) {
+			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
+			if (entityOnTile == null) {
+				//Nothing to attack on this tile
+				return;
+			}
 		}
 		
 		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);

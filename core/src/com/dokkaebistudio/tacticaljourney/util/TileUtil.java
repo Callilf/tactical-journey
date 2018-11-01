@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
@@ -23,6 +24,50 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public final class TileUtil {
 
 	private TileUtil() {}
+	
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
+	 * @return the real position
+	 */
+	public static Vector2 convertGridPosIntoPixelPos(Vector2 gridPos) {
+		float x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+		float y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+		return new Vector2(x,y);
+	}
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
+	 * @return the real position
+	 */
+	public static Vector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {
+		float x = (float)Math.floor(pixelPos.x / GameScreen.GRID_SIZE);
+		float y = (float)Math.floor(pixelPos.y / GameScreen.GRID_SIZE);
+		return new Vector2(x,y);
+	}
+	
+	/**
+	 * Return the tile at the given grid position.
+	 * @param gridPos the position
+	 * @param room the room
+	 * @return the tile at the given position
+	 */
+	public static Entity getTileAtGridPos(Vector2 gridPos, Room room) {
+		return room.grid[(int) gridPos.x][(int) gridPos.y];
+	}
+	
+	/**
+	 * Return the tile at the given pixel position.
+	 * @param gridPos the position
+	 * @param room the room
+	 * @return the tile at the given position
+	 */
+	public static Entity getTileAtPixelPos(Vector2 pixelPos, Room room) {
+		Vector2 gridPos = convertPixelPosIntoGridPos(pixelPos);
+		return getTileAtGridPos(gridPos, room);
+	}
 	
 	/**
 	 * Return the solid entity standing on the tile at the given position.

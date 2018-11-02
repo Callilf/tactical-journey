@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 background-test-menu
   rotate: false
-  xy: 2, 892
+  xy: 2, 874
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
@@ -14,15 +14,15 @@ background-test-menu
 btn-end-turn
   rotate: false
   xy: 516, 762
-  size: 192, 128
-  orig: 192, 128
+  size: 165, 110
+  orig: 165, 110
   offset: 0, 0
   index: -1
 btn-end-turn-pushed
   rotate: false
   xy: 2, 248
-  size: 192, 128
-  orig: 192, 128
+  size: 165, 110
+  orig: 165, 110
   offset: 0, 0
   index: -1
 btn-move-confirmation
@@ -41,14 +41,14 @@ door-closed
   index: -1
 door-opened
   rotate: false
-  xy: 278, 296
+  xy: 251, 278
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 196, 296
+  xy: 169, 278
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -62,14 +62,14 @@ enemy-test
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 792, 810
+  xy: 765, 792
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 1924, 1728
+  xy: 1924, 1710
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -104,7 +104,7 @@ tile-movable-waypoint
   index: -1
 tile-mud-test
   rotate: false
-  xy: 1924, 1892
+  xy: 1924, 1874
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -118,28 +118,28 @@ tile-pit-test
   index: -1
 tile-test
   rotate: false
-  xy: 710, 810
+  xy: 683, 792
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 1924, 1810
+  xy: 1924, 1792
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test2
   rotate: false
-  xy: 360, 312
+  xy: 333, 294
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel-arrow
   rotate: false
-  xy: 2, 378
+  xy: 2, 360
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

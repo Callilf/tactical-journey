@@ -19,13 +19,18 @@ package com.dokkaebistudio.tacticaljourney.room;
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
 import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -34,6 +39,9 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
+import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
+import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
@@ -116,14 +124,8 @@ public class Room extends EntitySystem {
 	 * Create the grid, ie. fille the 2 dimensional array of tile entities.
 	 */
 	private void createGrid() {
-		TileEnum[][] generatedRoom = generateRoom();
-		grid = new Entity[GRID_W][GameScreen.GRID_H];
-		for (int x = 0; x < GRID_W; x++) {
-			for (int y = 0; y < GameScreen.GRID_H; y++) {
-				Entity tileEntity = entityFactory.createTile(this, new Vector2(x, y), generatedRoom[x][y]);
-				grid[x][y] = tileEntity;
-			}
-		}
+		RoomGenerator generator = new RoomGenerator(this.entityFactory);
+		grid = generator.generateRoom(this, this.northNeighboor, this.easthNeighboor, this.southNeighboor, this.westNeighboor);
 	}
 	
 	/**
@@ -145,55 +147,55 @@ public class Room extends EntitySystem {
 		return grid[(int) pos.x][(int) pos.y];
 	}
 
-	/**
-	 * Generates a random room by creating an array of {@link TileEnum}. There are walls on each border of the room.
-	 */
-	private TileEnum[][] generateRoom() {
-		TileEnum[][] tiles = new TileEnum[GRID_W][GRID_H];
-		// fill with ground first
-		for(TileEnum[] tileCol: tiles){
-			Arrays.fill(tileCol, TileEnum.GROUND);
-		}
-		for (int x = 0; x < GRID_W; x++) {
-			for (int y = 0; y < GameScreen.GRID_H; y++) {
-				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 2 || y == GRID_H - 1) {
-					
-					//Spaces for doors
-					if ( (x == 0 && y== GRID_H/2) ) {
-						tiles[x][y] = TileEnum.GROUND;
-						Entity door = entityFactory.createDoor(this, new Vector2(x,y), westNeighboor);
-					} else if ( x== GRID_W-1 && y== GRID_H/2) {
-						tiles[x][y] = TileEnum.GROUND;
-						Entity door = entityFactory.createDoor(this, new Vector2(x,y), easthNeighboor);
-					} else if ( x == GRID_W/2 && y == 1) {
-						tiles[x][y] = TileEnum.GROUND;
-						Entity door = entityFactory.createDoor(this, new Vector2(x,y), southNeighboor);
-					} else if ( x == GRID_W/2 && y == GRID_H-2) {
-						tiles[x][y] = TileEnum.GROUND;
-						Entity door = entityFactory.createDoor(this, new Vector2(x,y), northNeighboor);
-					} else {
-						// walls
-						tiles[x][y] = TileEnum.WALL;
-					}
-				} else {
-					// generate some random walls and pits
-					RandomXS128 random = RandomSingleton.getInstance().getRandom();
-					int r = random.nextInt(15);
-					if (r == 0) {
-						// PIT
-						tiles[x][y] = TileEnum.PIT;
-					} else if (r == 1) {
-						// WALL
-						tiles[x][y] = TileEnum.WALL;
-					} else if (r == 2) {
-						// WALL
-						tiles[x][y] = TileEnum.MUD;
-					}
-				}
-			}
-		}
-		return tiles;
-	}
+//	/**
+//	 * Generates a random room by creating an array of {@link TileEnum}. There are walls on each border of the room.
+//	 */
+//	private TileEnum[][] generateRoom() {
+//		TileEnum[][] tiles = new TileEnum[GRID_W][GRID_H];
+//		// fill with ground first
+//		for(TileEnum[] tileCol: tiles){
+//			Arrays.fill(tileCol, TileEnum.GROUND);
+//		}
+//		for (int x = 0; x < GRID_W; x++) {
+//			for (int y = 0; y < GameScreen.GRID_H; y++) {
+//				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 2 || y == GRID_H - 1) {
+//					
+//					//Spaces for doors
+//					if ( (x == 0 && y== GRID_H/2) ) {
+//						tiles[x][y] = TileEnum.GROUND;
+//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), westNeighboor);
+//					} else if ( x== GRID_W-1 && y== GRID_H/2) {
+//						tiles[x][y] = TileEnum.GROUND;
+//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), easthNeighboor);
+//					} else if ( x == GRID_W/2 && y == 1) {
+//						tiles[x][y] = TileEnum.GROUND;
+//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), southNeighboor);
+//					} else if ( x == GRID_W/2 && y == GRID_H-2) {
+//						tiles[x][y] = TileEnum.GROUND;
+//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), northNeighboor);
+//					} else {
+//						// walls
+//						tiles[x][y] = TileEnum.WALL;
+//					}
+//				} else {
+//					// generate some random walls and pits
+//					RandomXS128 random = RandomSingleton.getInstance().getRandom();
+//					int r = random.nextInt(15);
+//					if (r == 0) {
+//						// PIT
+//						tiles[x][y] = TileEnum.PIT;
+//					} else if (r == 1) {
+//						// WALL
+//						tiles[x][y] = TileEnum.WALL;
+//					} else if (r == 2) {
+//						// WALL
+//						tiles[x][y] = TileEnum.MUD;
+//					}
+//				}
+//			}
+//		}
+//		return tiles;
+//	}
 
 
 	

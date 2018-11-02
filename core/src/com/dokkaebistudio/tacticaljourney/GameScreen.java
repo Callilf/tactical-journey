@@ -59,12 +59,12 @@ public class GameScreen extends ScreenAdapter {
 	// dimensions
 	public static final int SCREEN_H = 1080;
 	public static final int SCREEN_W = 1920;
-	public static final int GRID_H = 14;
-	public static final int GRID_W = 24;
+	public static final int GRID_H = 13;
+	public static final int GRID_W = 23;
 	public static final int GRID_SIZE = 80;
 
-	public static final int BOTTOM_MENU_HEIGHT = 0;
-	public static final int LEFT_RIGHT_PADDING = 0;
+	public static final int BOTTOM_MENU_HEIGHT = 40;
+	public static final int LEFT_RIGHT_PADDING = 40;
 	private static final Color HIT_COLOR = Color.GREEN;
 	private static final Color MISS_COLOR = Color.BLACK;
 	private static final Color CRITICAL_COLOR = Color.RED;

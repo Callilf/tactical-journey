@@ -21,10 +21,15 @@ import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -39,6 +44,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
@@ -49,6 +55,7 @@ public class Room extends EntitySystem {
 	
 	public RoomState state;
 	public Entity[][] grid;
+	public List<Vector2> possibleSpawns;
 	
 	public PooledEngine engine;
 	public EntityFactory entityFactory;
@@ -102,22 +109,33 @@ public class Room extends EntitySystem {
 		this.state = RoomState.PLAYER_TURN_INIT;
 				
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 		
-		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-		Entity spider1 = entityFactory.enemyFactory.createSpider(this, new Vector2(x2,y2), 3);
+		List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
+		Collections.shuffle(enemyPositions, random);
 		
-		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-		Entity spider2 = entityFactory.enemyFactory.createSpider(this, new Vector2(x3,y3), 3);
+		Iterator<Vector2> iterator = enemyPositions.iterator();
+		for (int i=0 ; i<enemyNb ; i++) {
+			entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+			iterator.remove();
+		}
 		
-		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-		Entity scorpion = entityFactory.enemyFactory.createScorpion(this, new Vector2(x4,y4), 4);
 		
-		int x5 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-		int y5 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-		Entity healthUp = entityFactory.createItemHealthUp(this, new Vector2(x5,y5));
+//		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+//		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 5);
+//		Entity spider1 = entityFactory.enemyFactory.createSpider(this, new Vector2(x2,y2), 3);
+//		
+//		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+//		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 5);
+//		Entity spider2 = entityFactory.enemyFactory.createSpider(this, new Vector2(x3,y3), 3);
+//		
+//		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
+//		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 5);
+//		Entity scorpion = entityFactory.enemyFactory.createScorpion(this, new Vector2(x4,y4), 4);
+		
+		if (iterator.hasNext()) {
+			entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
+		}
 	}
 
 	/**
@@ -125,7 +143,9 @@ public class Room extends EntitySystem {
 	 */
 	private void createGrid() {
 		RoomGenerator generator = new RoomGenerator(this.entityFactory);
-		grid = generator.generateRoom(this, this.northNeighboor, this.easthNeighboor, this.southNeighboor, this.westNeighboor);
+		GeneratedRoom generateRoom = generator.generateRoom(this, this.northNeighboor, this.easthNeighboor, this.southNeighboor, this.westNeighboor);
+		grid = generateRoom.getTileEntities();
+		possibleSpawns = generateRoom.getPossibleSpawns();
 	}
 	
 	/**

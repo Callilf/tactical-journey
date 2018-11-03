@@ -17,7 +17,9 @@ public enum RoomGenerationTileEnum {
 	N_DOOR,
 	E_DOOR,
 	S_DOOR,
-	W_DOOR;
+	W_DOOR,
+	
+	SPAWN;
 	
 	
 	

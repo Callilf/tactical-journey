@@ -2,11 +2,11 @@ WALL;WALL;WALL;WALL;WALL;WALL;WALL;WALL;WALL;WALL;WALL;N_DOOR;WALL;WALL;WALL;WAL
 WALL;;;;;;;;;;;;;;;;;;;;;;WALL
 WALL;;;;;;;;;;;;;;;;;;;;;;WALL
 WALL;;;;;WALL;WALL;WALL;WALL;WALL;WALL;;WALL;WALL;WALL;WALL;WALL;WALL;;;;;WALL
-WALL;;;;;WALL;;;;;;;;;;;;WALL;;;;;WALL
-WALL;;;;;WALL;;;;;;;;;;;;WALL;;;;;WALL
-W_DOOR;;;;;;;;;;;;;;;;;;;;;;E_DOOR
-WALL;;;;;WALL;;;;;;;;;;;;WALL;;;;;WALL
-WALL;;;;;WALL;;;;;;;;;;;;WALL;;;;;WALL
+WALL;;;;;WALL;SPAWN;;;;;;;;;;SPAWN;WALL;;;;;WALL
+WALL;;;;;WALL;;;;SPAWN;;;;SPAWN;;;;WALL;;;;;WALL
+W_DOOR;;;;;;;;;;;SPAWN;;;;;;;;;;;E_DOOR
+WALL;;;;;WALL;;;;SPAWN;;;;SPAWN;;;;WALL;;;;;WALL
+WALL;;;;;WALL;SPAWN;;;;;;;;;;SPAWN;WALL;;;;;WALL
 WALL;;;;;WALL;WALL;WALL;WALL;WALL;WALL;;WALL;WALL;WALL;WALL;WALL;WALL;;;;;WALL
 WALL;;;;;;;;;;;;;;;;;;;;;;WALL
 WALL;;;;;;;;;;;;;;;;;;;;;;WALL

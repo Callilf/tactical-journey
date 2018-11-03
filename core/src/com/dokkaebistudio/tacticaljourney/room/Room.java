@@ -16,32 +16,18 @@
 
 package com.dokkaebistudio.tacticaljourney.room;
 
-import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
-import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -65,7 +51,7 @@ public class Room extends EntitySystem {
 	public AttackManager attackManager;
 	
 	/** The entities of this room. */
-	private List<Entity> entities;
+	private List<Entity> enemies;
 	
 	private Entity timeDisplayer;
 	
@@ -102,7 +88,7 @@ public class Room extends EntitySystem {
 	
 	
 	public void create() {
-		entities = new ArrayList<>();
+		enemies = new ArrayList<>();
 		attackManager = new AttackManager(this);
 		createGrid();
 		
@@ -116,7 +102,8 @@ public class Room extends EntitySystem {
 		
 		Iterator<Vector2> iterator = enemyPositions.iterator();
 		for (int i=0 ; i<enemyNb ; i++) {
-			entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+			enemies.add(enemy);
 			iterator.remove();
 		}
 		
@@ -221,12 +208,20 @@ public class Room extends EntitySystem {
 	
 	// Getters and Setters
 	
-	public List<Entity> getEntities() {
-		return entities;
+	/**
+	 * Remove an enemy from the room.
+	 * @param enemy the enemy to remove
+	 */
+	public void removeEnemy(Entity enemy) {
+		this.engine.removeEntity(enemy);
+		this.enemies.remove(enemy);
 	}
-
-	public void setEntities(List<Entity> entities) {
-		this.entities = entities;
+	
+	/**
+	 * @return true if there are remaining enemies in this room.
+	 */
+	public boolean hasEnemies() {
+		return this.enemies.size() > 0;
 	}
 	
 	/** Set the neighboors.

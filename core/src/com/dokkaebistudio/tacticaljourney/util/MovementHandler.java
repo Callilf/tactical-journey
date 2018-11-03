@@ -28,6 +28,8 @@ public class MovementHandler {
 	
 	/** The speed at which entities move on screen. */
 	public static final int MOVE_SPEED = 7;
+	/** The speed at which entities move on screen. */
+	public static final int MOVE_SPEED_IN_CLEARED_ROOMS = 14;
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
@@ -81,45 +83,47 @@ public class MovementHandler {
 		MoveComponent moveCompo = Mappers.moveComponent.get(mover);
 		TransformComponent transfoCompo = Mappers.transfoComponent.get(mover);
 		
+		int moveSpeed = room.hasEnemies() ? MOVE_SPEED : MOVE_SPEED_IN_CLEARED_ROOMS;
+		
 		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
-			transfoCompo.pos.x = transfoCompo.pos.x + MOVE_SPEED;
+			transfoCompo.pos.x = transfoCompo.pos.x + moveSpeed;
 			
 			if (transfoCompo.pos.x >= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = MOVE_SPEED - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
+				xOffset = moveSpeed - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
 				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);
 			} else {
-				xOffset = MOVE_SPEED;
+				xOffset = moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.x < transfoCompo.pos.x) {
-			transfoCompo.pos.x = transfoCompo.pos.x - MOVE_SPEED;
+			transfoCompo.pos.x = transfoCompo.pos.x - moveSpeed;
 
 			if (transfoCompo.pos.x <= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = -MOVE_SPEED - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
+				xOffset = -moveSpeed - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
 				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
-				xOffset = -MOVE_SPEED;
+				xOffset = -moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y > transfoCompo.pos.y) { 
-			transfoCompo.pos.y = transfoCompo.pos.y + MOVE_SPEED;
+			transfoCompo.pos.y = transfoCompo.pos.y + moveSpeed;
 			
 			if (transfoCompo.pos.y >= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = MOVE_SPEED - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
+				yOffset = moveSpeed - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
 				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
-				yOffset = MOVE_SPEED;
+				yOffset = moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y < transfoCompo.pos.y) {
-			transfoCompo.pos.y = transfoCompo.pos.y - MOVE_SPEED;
+			transfoCompo.pos.y = transfoCompo.pos.y - moveSpeed;
 			
 			if (transfoCompo.pos.y <= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = -MOVE_SPEED - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
+				yOffset = -moveSpeed - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
 				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
-				yOffset = -MOVE_SPEED;
+				yOffset = -moveSpeed;
 			}
 		} else {
 			//No move to perform, target already reached

@@ -64,7 +64,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	switch(room.state) {
     	
     	case PLAYER_TURN_INIT:
-    		moveCompo.moveRemaining = moveCompo.moveSpeed;
+    		moveCompo.moveRemaining = room.hasEnemies() ? moveCompo.moveSpeed : 30;
     		room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
     	
     	case PLAYER_COMPUTE_MOVABLE_TILES:
@@ -75,6 +75,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     		//Build the movable tiles list
         	TileSearchUtil.buildMoveTilesSet(moverEntity, room);
         	if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(moverEntity, room, true);
+        	
+//        	if (!room.hasEnemies()) {
+//        		moveCompo.hideMovableTiles();
+//        	}
+        	
+        	
 	        room.state = RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER;
 	        break;
 	        
@@ -141,8 +147,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     		movementHandler.finishRealMovement(moverEntity);
     		
     		//Compute the cost of this move
-    		int cost = computeCostOfMovement(moveCompo);
-    		moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
+    		if (room.hasEnemies()) {
+	    		int cost = computeCostOfMovement(moveCompo);
+	    		moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
+    		}
     		
     		room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
     		break;

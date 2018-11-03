@@ -79,7 +79,7 @@ public class AttackManager {
 		if (healthComponent.getHp() <= 0) {
 			//target is dead
 			
-			room.engine.removeEntity(target);
+			room.removeEnemy(target);
 			//TODO: play death animation
 		}
 		

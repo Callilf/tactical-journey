@@ -6,8 +6,11 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -29,6 +32,8 @@ public class MapRenderer {
 	float offsetY = GameScreen.SCREEN_H/2 - GameScreen.SCREEN_H/5;
 	
 	
+	/** Whether the map is displayed on screen or not. */
+	private boolean mapDisplayed;
 	
 	/** The game screen. */
 	private GameScreen gameScreen;
@@ -36,8 +41,14 @@ public class MapRenderer {
 	/** The libGDX shape renderer. */
 	private ShapeRenderer shapeRenderer;
 	
+	/** The sprite renderer. */
+	private SpriteBatch batcher;
+	
 	/** The floor to render. */
 	private Floor floor;
+	
+	/** The background of the map. */
+	private Sprite background;
 	
 	/**
 	 * Instanciate a Map Renderer.
@@ -45,16 +56,33 @@ public class MapRenderer {
 	 * @param sr the shaperenderer
 	 * @param f the floor which map we want to render
 	 */
-	public MapRenderer(GameScreen gs, ShapeRenderer sr, Floor f) {
+	public MapRenderer(GameScreen gs, SpriteBatch sb, ShapeRenderer sr, Floor f) {
 		this.gameScreen = gs;
+		this.batcher = sb;
 		this.shapeRenderer = sr;
 		this.floor = f;
+		
+		background = new Sprite(Assets.getTexture(Assets.map_background));
 	}
 	
 	/**
 	 * Render the map of the floor.
 	 */
 	public void renderMap() {
+		if (!mapDisplayed) return;
+		
+		//gameScreen.guiCam.update();
+		batcher.setProjectionMatrix(gameScreen.guiCam.combined);
+		batcher.begin();
+		
+		// Render the background
+		background.setPosition(offsetX - background.getWidth()/2, offsetY - background.getHeight()/2);
+		background.draw(batcher);
+		
+		batcher.end();
+		
+		
+		
 		shapeRenderer.setProjectionMatrix(gameScreen.guiCam.combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -141,6 +169,19 @@ public class MapRenderer {
 				shapeRenderer.rect(grx, gry, MAP_ROOM_WIDTH, MAP_ROOM_HEIGHT);
 			}
 		}
+	}
+
+
+	
+	
+	// getters and setters
+	
+	public boolean isMapDisplayed() {
+		return mapDisplayed;
+	}
+
+	public void setMapDisplayed(boolean mapDisplayed) {
+		this.mapDisplayed = mapDisplayed;
 	}
 
 }

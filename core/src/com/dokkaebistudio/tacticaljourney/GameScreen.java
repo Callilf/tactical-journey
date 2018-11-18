@@ -44,7 +44,7 @@ import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
-import com.dokkaebistudio.tacticaljourney.systems.KeyInputMovementSystem;
+import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -116,6 +116,9 @@ public class GameScreen extends ScreenAdapter {
 		floor = new Floor(this, timeDisplayer);
 		Room room = floor.getActiveRoom();
 		
+		mapRenderer = new MapRenderer(this, game.batcher, game.shapeRenderer, floor);
+		mapRenderer.setMapDisplayed(true);
+		
 //		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 //		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
 //		int y = 3 + random.nextInt(GameScreen.GRID_H - 5);
@@ -127,7 +130,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
-		engine.addSystem(new KeyInputMovementSystem(room));
+		engine.addSystem(new KeyInputSystem(room, mapRenderer));
 		engine.addSystem(new DamageDisplaySystem(room));
 		
 		engine.addSystem(room);
@@ -137,9 +140,7 @@ public class GameScreen extends ScreenAdapter {
 		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
-		
-		mapRenderer = new MapRenderer(this, game.shapeRenderer, floor);
-		
+				
 		//Enter the first room
 		enterRoom(room, null);
 	}

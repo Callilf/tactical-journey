@@ -58,7 +58,11 @@ public class Assets {
 	public static final String wheel_arrow = "wheel-arrow";
 	
 	
-	public static final String map_background = "map-background";
+	//public static final String map_background = "map-background";
+	public static final String map_plus = "hud_map_plus";
+	public static final String map_minus = "hud_map_less";
+	public static final String map_background = "hud_map_background";
+	
 
 	
 	//******

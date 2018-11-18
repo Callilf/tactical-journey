@@ -130,10 +130,11 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
-		engine.addSystem(new KeyInputSystem(room, mapRenderer));
+		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		
 		engine.addSystem(room);
+		engine.addSystem(mapRenderer);
 		
 		
 		
@@ -168,6 +169,7 @@ public class GameScreen extends ScreenAdapter {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 
 		engine.update(deltaTime);
+		
 		InputSingleton.getInstance().resetEvents();
 		
 		switch (state) {

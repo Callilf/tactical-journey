@@ -6,147 +6,161 @@ filter: Nearest,Nearest
 repeat: none
 background-test-menu
   rotate: false
-  xy: 2, 918
+  xy: 2, 953
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 btn-end-turn
   rotate: false
-  xy: 516, 694
+  xy: 516, 729
   size: 165, 110
   orig: 165, 110
   offset: 0, 0
   index: -1
 btn-end-turn-pushed
   rotate: false
-  xy: 516, 806
+  xy: 516, 841
   size: 165, 110
   orig: 165, 110
   offset: 0, 0
   index: -1
 btn-move-confirmation
   rotate: false
-  xy: 847, 770
+  xy: 847, 805
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 door-closed
   rotate: false
-  xy: 765, 754
+  xy: 765, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 1924, 1754
+  xy: 1924, 1789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 516, 612
+  xy: 516, 647
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 847, 836
+  xy: 847, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-item-consumable-health-up
+hud_map_background
   rotate: false
-  xy: 516, 448
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-map-background
-  rotate: false
-  xy: 2, 2
+  xy: 2, 37
   size: 450, 400
   orig: 450, 400
   offset: 0, 0
   index: -1
+hud_map_less
+  rotate: false
+  xy: 2, 2
+  size: 90, 33
+  orig: 90, 33
+  offset: 0, 0
+  index: -1
+hud_map_plus
+  rotate: false
+  xy: 683, 754
+  size: 90, 33
+  orig: 90, 33
+  offset: 0, 0
+  index: -1
+item-consumable-health-up
+  rotate: false
+  xy: 516, 483
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
 player-test
   rotate: false
-  xy: 598, 530
+  xy: 598, 565
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 598, 612
+  xy: 598, 647
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable
   rotate: false
-  xy: 1924, 1836
+  xy: 1924, 1871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 516, 530
+  xy: 516, 565
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 1924, 1672
+  xy: 1924, 1707
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-mud-test
   rotate: false
-  xy: 1924, 1918
+  xy: 1924, 1953
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-pit-test
   rotate: false
-  xy: 683, 836
+  xy: 683, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-test
   rotate: false
-  xy: 683, 754
+  xy: 683, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 765, 836
+  xy: 765, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test2
   rotate: false
-  xy: 929, 852
+  xy: 929, 887
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel-arrow
   rotate: false
-  xy: 2, 404
+  xy: 2, 439
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

@@ -53,8 +53,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on a moveTile, display it as the destination
             if (InputSingleton.getInstance().leftClickJustReleased) {
-            	int x = Gdx.input.getX();
-            	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+            	int x = InputSingleton.getInstance().getClickX();
+            	int y = InputSingleton.getInstance().getClickY();
             	
             	for (Entity tile : attackCompo.attackableTiles) {
             		SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);

@@ -5,6 +5,9 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.Map.Entry;
 
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.GenerationMoveEnum;
@@ -21,15 +25,15 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.Generat
  * @author Callil
  *
  */
-public class MapRenderer {
+public class MapRenderer extends EntitySystem {
 	
 	// Constants
 	private static final float MAP_ROOM_WIDTH = 20;
 	private static final float MAP_ROOM_HEIGHT = 20;
 	private static final float MAP_CORRIDOR_LENGTH = 10;
 	
-	float offsetX = GameScreen.SCREEN_W/2 - GameScreen.SCREEN_W/8;
-	float offsetY = GameScreen.SCREEN_H/2 - GameScreen.SCREEN_H/5;
+	float offsetX = GameScreen.SCREEN_W - GameScreen.SCREEN_W/8;
+	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
 	
 	
 	/** Whether the map is displayed on screen or not. */
@@ -47,6 +51,10 @@ public class MapRenderer {
 	/** The floor to render. */
 	private Floor floor;
 	
+	/** The button to open the map. */
+	private Sprite openMapBtn;
+	/** The button to close the map. */
+	private Sprite closeMapBtn;
 	/** The background of the map. */
 	private Sprite background;
 	
@@ -62,27 +70,68 @@ public class MapRenderer {
 		this.shapeRenderer = sr;
 		this.floor = f;
 		
+		gameScreen.guiCam.update();
+		openMapBtn = new Sprite(Assets.getTexture(Assets.map_plus));
+		openMapBtn.setPosition(GameScreen.SCREEN_W - openMapBtn.getWidth(), GameScreen.SCREEN_H - openMapBtn.getHeight());
+
+		closeMapBtn = new Sprite(Assets.getTexture(Assets.map_minus));
+		closeMapBtn.setPosition(GameScreen.SCREEN_W - closeMapBtn.getWidth(), GameScreen.SCREEN_H - closeMapBtn.getHeight());
+		
 		background = new Sprite(Assets.getTexture(Assets.map_background));
+		background.setAlpha(0.5f);
+		background.setPosition(GameScreen.SCREEN_W - background.getWidth(), GameScreen.SCREEN_H - background.getHeight());
 	}
+	
+	
+	@Override
+	public void update(float deltaTime) {
+    	
+		if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+    		mapDisplayed = !mapDisplayed;
+    	}
+		
+		InputSingleton inputSingleton = InputSingleton.getInstance();
+		if (inputSingleton.leftClickJustReleased) {
+			int x = InputSingleton.getInstance().getClickX();
+        	int y = InputSingleton.getInstance().getClickY();
+        	
+        	Sprite btn = mapDisplayed ? closeMapBtn : openMapBtn;
+        	
+        	if (btn.getBoundingRectangle().contains(x, y)) {
+        		mapDisplayed = !mapDisplayed;
+        	}
+		}
+	}
+	
 	
 	/**
 	 * Render the map of the floor.
 	 */
 	public void renderMap() {
-		if (!mapDisplayed) return;
-		
-		//gameScreen.guiCam.update();
+		gameScreen.guiCam.update();
 		batcher.setProjectionMatrix(gameScreen.guiCam.combined);
 		batcher.begin();
 		
-		// Render the background
-		background.setPosition(offsetX - background.getWidth()/2, offsetY - background.getHeight()/2);
+
+		if (!mapDisplayed) {
+			//Draw the Map + button 
+			openMapBtn.draw(batcher);
+			
+			batcher.end();
+			return;
+		}
+		
+
+		// Render the background if the map is opened
 		background.draw(batcher);
+		
+		//Draw the Map - button 
+		closeMapBtn.draw(batcher);
 		
 		batcher.end();
 		
 		
-		
+		gameScreen.guiCam.update();
 		shapeRenderer.setProjectionMatrix(gameScreen.guiCam.combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 

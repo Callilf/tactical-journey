@@ -88,8 +88,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on a moveTile, display it as the destination
             if (InputSingleton.getInstance().leftClickJustReleased) {
-            	int x = Gdx.input.getX();
-            	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+            	int x = InputSingleton.getInstance().getClickX();
+            	int y = InputSingleton.getInstance().getClickY();
             	
             	boolean selected = selectDestinationTile(moveCompo, x, y, moverCurrentPos);
             	if (selected) {
@@ -105,8 +105,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_MOVE_DESTINATION_SELECTED:
     		//Either click on confirm to move or click on another tile to change the destination
     		if (InputSingleton.getInstance().leftClickJustReleased) {
-    			int x = Gdx.input.getX();
-            	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+            	int x = InputSingleton.getInstance().getClickX();
+            	int y = InputSingleton.getInstance().getClickY();
     			
             	SpriteComponent selectedTileSprite = Mappers.spriteComponent.get(moveCompo.getSelectedTile());
             	SpriteComponent playerSprite = Mappers.spriteComponent.get(moverEntity);

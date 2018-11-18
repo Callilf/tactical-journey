@@ -3,24 +3,18 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 public class KeyInputSystem extends IteratingSystem implements RoomSystem {
 
 	/** the current room. */
     private Room room;
-    
-    private MapRenderer mapRenderer;
 
-    public KeyInputSystem(Room r, MapRenderer mapRenderer) {
+    public KeyInputSystem(Room r) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         room = r;
-        this.mapRenderer = mapRenderer;
     }
     
     @Override
@@ -30,12 +24,7 @@ public class KeyInputSystem extends IteratingSystem implements RoomSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-    	
-    	if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-    		this.mapRenderer.setMapDisplayed(!this.mapRenderer.isMapDisplayed());
-    	}
-    	
-    	
+	
 //    	PlayerComponent playerCompo = Mappers.playerComponent.get(entity);
 //        GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(entity);
 //        

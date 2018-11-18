@@ -67,6 +67,13 @@ public class InputSingleton {
 		this.spaceJustReleased = false;
 	}
 	
+	public int getClickX() {
+		return Gdx.input.getX();
+	}
+	public int getClickY() {
+		return Gdx.graphics.getHeight() - Gdx.input.getY();
+	}
+	
 	
 	/**
 	 * Initialize the inputProcessor.

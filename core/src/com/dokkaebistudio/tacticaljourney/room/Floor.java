@@ -3,12 +3,13 @@
  */
 package com.dokkaebistudio.tacticaljourney.room;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 /**
@@ -24,6 +25,9 @@ public class Floor {
 	/** The rooms of this floor. */
 	private List<Room> rooms;
 	
+	/** The positions of each rooms. */
+	private Map<Room, Vector2> roomPositions;
+	
 	/** The currently active room. */
 	private Room activeRoom;
 	
@@ -35,20 +39,7 @@ public class Floor {
 	public Floor(GameScreen gameScreen, Entity timeDisplayer) {
 		this.gameScreen = gameScreen;
 		
-		Room room1 = new Room(this, gameScreen.engine, gameScreen.entityFactory, timeDisplayer);
-		Room room2 = new Room(this, gameScreen.engine, gameScreen.entityFactory, timeDisplayer);
-		
-		room1.setNeighboors(room2, null, null, null);
-		room2.setNeighboors(null, room1, null, null);
-		
-		room1.create();
-		room2.create();
-		
-		rooms = new ArrayList<>();
-		rooms.add(room1);
-		rooms.add(room2);
-		
-		activeRoom = room1;
+		FloorGenerator.generateFloor(this, gameScreen, timeDisplayer);
 	}
 	
 	
@@ -57,19 +48,19 @@ public class Floor {
 	 * @param newRoom the room we are entering
 	 */
 	public void enterRoom(Room newRoom) {
-		Room oldRoom = this.activeRoom;
+		Room oldRoom = this.getActiveRoom();
 		this.gameScreen.enterRoom(newRoom, oldRoom);
-		this.activeRoom = newRoom;
+		this.setActiveRoom(newRoom);
 		
 		//Place the player
-		if (newRoom.getNorthNeighboor() == oldRoom) {
+		if (newRoom.getNorthNeighbor() == oldRoom) {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2));
-		} else if (newRoom.getSouthNeighboor() == oldRoom) {
+		} else if (newRoom.getSouthNeighbor() == oldRoom) {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1));
-		} else if (newRoom.getWestNeighboor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(0, GameScreen.GRID_H/2));
-		} else if (newRoom.getEasthNeighboor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-1, GameScreen.GRID_H/2));
+		} else if (newRoom.getWestNeighbor() == oldRoom) {
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2));
+		} else if (newRoom.getEastNeighbor() == oldRoom) {
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2));
 		}
 	}
 
@@ -99,6 +90,17 @@ public class Floor {
 
 	public void setActiveRoom(Room activeRoom) {
 		this.activeRoom = activeRoom;
+		this.activeRoom.setVisited(true);
+	}
+
+
+	public Map<Room, Vector2> getRoomPositions() {
+		return roomPositions;
+	}
+
+
+	public void setRoomPositions(Map<Room, Vector2> roomPositions) {
+		this.roomPositions = roomPositions;
 	}
 
 	

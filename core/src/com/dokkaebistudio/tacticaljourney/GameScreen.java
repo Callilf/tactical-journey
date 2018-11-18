@@ -18,6 +18,7 @@ package com.dokkaebistudio.tacticaljourney;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -38,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
@@ -78,7 +80,7 @@ public class GameScreen extends ScreenAdapter {
 
 	TacticalJourney game;
 
-	OrthographicCamera guiCam;
+	public OrthographicCamera guiCam;
 	Vector3 touchPoint;
 	Floor floor;
 	public EntityFactory entityFactory;
@@ -90,6 +92,7 @@ public class GameScreen extends ScreenAdapter {
 	private int state;
 		
 	private Entity timeDisplayer;
+	private MapRenderer mapRenderer;
 	
 	public Entity player;
 
@@ -135,6 +138,7 @@ public class GameScreen extends ScreenAdapter {
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
 		
+		mapRenderer = new MapRenderer(this, game.shapeRenderer, floor);
 		
 		//Enter the first room
 		enterRoom(room, null);
@@ -214,6 +218,9 @@ public class GameScreen extends ScreenAdapter {
 	private void presentRunning () {
 		// draw the attack wheel
 		drawAttackWheel();
+		
+		//Display map
+		mapRenderer.renderMap();
 	}
 	
 	/** Create the entity that displays the current game time. */
@@ -318,6 +325,10 @@ public class GameScreen extends ScreenAdapter {
 
 
 	}
+	
+	
+	
+	
 
 	private void presentLevelEnd () {
 	}

@@ -39,6 +39,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class Room extends EntitySystem {
 	public Floor floor;
 	
+	public RoomType type;
+	
 	public RoomState state;
 	public Entity[][] grid;
 	public List<Vector2> possibleSpawns;
@@ -55,19 +57,24 @@ public class Room extends EntitySystem {
 	
 	private Entity timeDisplayer;
 	
+	/** Whether the player has already entered this room or not. */
+	private boolean visited;
 	
-	private Room northNeighboor;
-	private Room southNeighboor;
-	private Room westNeighboor;
-	private Room easthNeighboor;
+	
+	private Room northNeighbor;
+	private Room southNeighbor;
+	private Room westNeighbor;
+	private Room eastNeighbor;
 	
 
-	public Room (Floor f, PooledEngine engine, EntityFactory ef, Entity timeDisplayer) {
+	public Room (Floor f, PooledEngine engine, EntityFactory ef, Entity timeDisplayer, RoomType type) {
 		this.floor = f;
 		this.engine = engine;
 		this.entityFactory = ef;
 		this.timeDisplayer = timeDisplayer;
 		this.turnManager = new TurnManager(this);
+		this.type = type;
+		this.visited = false;
 	}
 
 	
@@ -88,56 +95,63 @@ public class Room extends EntitySystem {
 	
 	
 	public void create() {
+		this.state = RoomState.PLAYER_TURN_INIT;
+
 		enemies = new ArrayList<>();
 		attackManager = new AttackManager(this);
-		createGrid();
-		
-		this.state = RoomState.PLAYER_TURN_INIT;
-				
-		RandomXS128 random = RandomSingleton.getInstance().getRandom();
-		int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
-		
-		List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
-		Collections.shuffle(enemyPositions, random);
-		
-		Iterator<Vector2> iterator = enemyPositions.iterator();
-		for (int i=0 ; i<enemyNb ; i++) {
-			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
-			enemies.add(enemy);
-			iterator.remove();
-		}
-		
-		
-//		int x2 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-//		int y2 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-//		Entity spider1 = entityFactory.enemyFactory.createSpider(this, new Vector2(x2,y2), 3);
-//		
-//		int x3 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-//		int y3 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-//		Entity spider2 = entityFactory.enemyFactory.createSpider(this, new Vector2(x3,y3), 3);
-//		
-//		int x4 = 1 + random.nextInt(GameScreen.GRID_W - 2);
-//		int y4 = 3 + random.nextInt(GameScreen.GRID_H - 5);
-//		Entity scorpion = entityFactory.enemyFactory.createScorpion(this, new Vector2(x4,y4), 4);
-		
-		if (iterator.hasNext()) {
-			entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
-		}
+		createLayout();
+		createContent();
 	}
+
+
+
 
 	/**
 	 * Create the grid, ie. fille the 2 dimensional array of tile entities.
 	 */
-	private void createGrid() {
+	private void createLayout() {
 		RoomGenerator generator = new RoomGenerator(this.entityFactory);
-		GeneratedRoom generateRoom = generator.generateRoom(this, this.northNeighboor, this.easthNeighboor, this.southNeighboor, this.westNeighboor);
+		GeneratedRoom generateRoom = generator.generateRoom(this, this.northNeighbor, this.eastNeighbor, this.southNeighbor, this.westNeighbor);
 		grid = generateRoom.getTileEntities();
 		possibleSpawns = generateRoom.getPossibleSpawns();
 	}
 	
+	
+	private void createContent() {
+		switch(type) {
+		case COMMON_ENEMY_ROOM :
+			RandomXS128 random = RandomSingleton.getInstance().getRandom();
+			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
+			
+			// Retrieve the spawn points and shuffle them
+			List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(enemyPositions, random);
+			
+			// Place enemies
+			Iterator<Vector2> iterator = enemyPositions.iterator();
+			for (int i=0 ; i<enemyNb ; i++) {
+				Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+				enemies.add(enemy);
+				iterator.remove();
+			}
+			
+			// Place health
+			if (iterator.hasNext()) {
+				entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
+			}
+			break;
+			
+		case START_FLOOR_ROOM:
+		case END_FLOOR_ROOM:
+			default:
+			break;
+		}
+	}
+	
+	
 	/**
 	 * Return the entity for the tile at the given position.
-	 * @param x the abciss
+	 * @param x the abscissa
 	 * @param y the ordinate
 	 * @return the tile at the given position
 	 */
@@ -224,58 +238,84 @@ public class Room extends EntitySystem {
 		return this.enemies.size() > 0;
 	}
 	
-	/** Set the neighboors.
+	
+	
+	// Neighbors
+	
+	/** Set the neighbors.
 	 * 
 	 * @param nn
 	 * @param sn
 	 * @param wn
 	 * @param en
 	 */
-	public void setNeighboors(Room nn, Room sn, Room wn, Room en) {
-		this.northNeighboor = nn;
-		this.southNeighboor = sn;
-		this.westNeighboor = wn;
-		this.easthNeighboor = en;
+	public void setNeighbors(Room nn, Room sn, Room wn, Room en) {
+		this.northNeighbor = nn;
+		this.southNeighbor = sn;
+		this.westNeighbor = wn;
+		this.eastNeighbor = en;
+	}
+	
+	/**
+	 * @return the number of neighbors for the current room.
+	 */
+	public int getNumberOfNeighbors() {
+		int nb = 0;
+		if (northNeighbor != null) nb ++;
+		if (southNeighbor != null) nb ++;
+		if (westNeighbor != null) nb ++;
+		if (eastNeighbor != null) nb ++;
+		return nb;
 	}
 
 
-	public Room getNorthNeighboor() {
-		return northNeighboor;
+	public Room getNorthNeighbor() {
+		return northNeighbor;
 	}
 
 
-	public void setNorthNeighboor(Room northNeighboor) {
-		this.northNeighboor = northNeighboor;
+	public void setNorthNeighbor(Room northNeighbor) {
+		this.northNeighbor = northNeighbor;
 	}
 
 
-	public Room getSouthNeighboor() {
-		return southNeighboor;
+	public Room getSouthNeighbor() {
+		return southNeighbor;
 	}
 
 
-	public void setSouthNeighboor(Room southNeighboor) {
-		this.southNeighboor = southNeighboor;
+	public void setSouthNeighbor(Room southNeighbor) {
+		this.southNeighbor = southNeighbor;
 	}
 
 
-	public Room getWestNeighboor() {
-		return westNeighboor;
+	public Room getWestNeighbor() {
+		return westNeighbor;
 	}
 
 
-	public void setWestNeighboor(Room westNeighboor) {
-		this.westNeighboor = westNeighboor;
+	public void setWestNeighbor(Room westNeighbor) {
+		this.westNeighbor = westNeighbor;
 	}
 
 
-	public Room getEasthNeighboor() {
-		return easthNeighboor;
+	public Room getEastNeighbor() {
+		return eastNeighbor;
 	}
 
 
-	public void setEasthNeighboor(Room easthNeighboor) {
-		this.easthNeighboor = easthNeighboor;
+	public void setEastNeighbor(Room easthNeighbor) {
+		this.eastNeighbor = easthNeighbor;
+	}
+
+
+	public boolean isVisited() {
+		return visited;
+	}
+
+
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 	
 }

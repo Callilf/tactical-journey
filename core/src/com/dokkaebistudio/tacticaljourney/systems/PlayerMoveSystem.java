@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -99,6 +100,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
             
             //When right clicking on an ennemy, display it's possible movement
             handleRightClickOnEnemies(moverEntity);
+            
+            handleSkillSelection(room.state, moverEntity);
             break;
     		
             
@@ -153,6 +156,17 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     		}
     		
     		room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
+    		break;
+    		
+    		
+    		
+    		
+    	case PLAYER_TARGETING:
+    		
+    		// Display all attackable tiles
+    		
+    		handleSkillSelection(room.state, moverEntity);
+    		
     		break;
     		
     	default:
@@ -217,6 +231,43 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	    	if (playerAttackComponent != null) {
 	    		playerAttackComponent.showAttackableTiles();
 	    	}
+		}
+	}
+	
+	
+	/**
+	 * Handle the selection of a skill.
+	 * @param rs the current room state
+	 * @param moveCompo the move component
+	 */
+	private void handleSkillSelection(RoomState rs, Entity player) {
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(player);
+		MoveComponent moveCompo = Mappers.moveComponent.get(player);
+		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
+		
+		if (InputSingleton.getInstance().skill1JustPressed) {
+			if (rs == RoomState.PLAYER_MOVE_TILES_DISPLAYED) {
+				moveCompo.hideMovableTiles();
+				
+	    		Entity skillEntity = playerCompo.getSkill1();
+	    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
+	    		skillPos.coord.set(playerPos.coord);
+	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
+	    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+
+				this.room.state = RoomState.PLAYER_TARGETING;
+			} else {
+				moveCompo.showMovableTiles();
+				
+				//Clear the skill
+				Entity skill1 = playerCompo.getSkill1();
+				MoveComponent skillMoveCompo = Mappers.moveComponent.get(skill1);
+				skillMoveCompo.clearMovableTiles();
+				AttackComponent skillAttackCompo = Mappers.attackComponent.get(skill1);
+				skillAttackCompo.clearAttackableTiles();
+				
+				this.room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+			}
 		}
 	}
 

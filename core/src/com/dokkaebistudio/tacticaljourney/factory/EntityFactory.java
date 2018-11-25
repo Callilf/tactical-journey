@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -30,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -133,6 +135,8 @@ public final class EntityFactory {
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 		parentRoomComponent.setParentRoom(room);
 		playerEntity.add(parentRoomComponent);
+		
+		this.createSkill(playerEntity, "Slash", 1);
 
 		engine.addEntity(playerEntity);
 
@@ -460,4 +464,41 @@ public final class EntityFactory {
 		return healthUp;
 	}
 	
+	
+	public Entity createSkill(Entity parent, String name, int skillNumber) {
+		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
+		PlayerComponent playerComponent = Mappers.playerComponent.get(parent);
+		
+		Entity skillEntity = engine.createEntity();
+		
+		SkillComponent skillCompo = engine.createComponent(SkillComponent.class);
+		skillCompo.setParentEntity(parent);
+		skillCompo.setSkillNumber(skillNumber);
+		skillCompo.setName(name);
+		skillEntity.add(skillCompo);
+		
+		GridPositionComponent skillPosCompo = engine.createComponent(GridPositionComponent.class);
+		skillPosCompo.coord.set(parentPos.coord);
+		skillEntity.add(skillPosCompo);
+		
+		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);
+		skillMoveComponent.engine = engine;
+		skillMoveComponent.moveSpeed = 0;
+		skillMoveComponent.moveRemaining = 0;
+		skillEntity.add(skillMoveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.engine = engine;
+		attackComponent.setRangeMin(2);
+		attackComponent.setRangeMax(3);
+		attackComponent.setStrength(5);
+		attackComponent.setSkillNumber(1);
+		skillEntity.add(attackComponent);
+		
+		//TODO add in engine ??
+		
+		playerComponent.setSkill1(skillEntity);
+		
+		return skillEntity;
+	}
 }

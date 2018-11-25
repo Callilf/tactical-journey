@@ -14,6 +14,9 @@ public class PlayerComponent implements Component {
 	
 	/** The button to end the current turn. */
 	private Entity endTurnButton;
+	
+	/** The first skill. */
+	private Entity skill1;
 
 	
 	
@@ -27,6 +30,14 @@ public class PlayerComponent implements Component {
 
 	public void setEndTurnButton(Entity endTurnButton) {
 		this.endTurnButton = endTurnButton;
+	}
+
+	public Entity getSkill1() {
+		return skill1;
+	}
+
+	public void setSkill1(Entity skill1) {
+		this.skill1 = skill1;
 	}
 
 }

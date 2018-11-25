@@ -17,6 +17,9 @@ public class InputSingleton {
 	/** The instance. */
 	private static InputSingleton instance;
 	
+	//*************
+	// Mouse
+	
 	/** Whether the left click has been pressed during this frame. */
     public boolean leftClickJustPressed;
     
@@ -29,12 +32,23 @@ public class InputSingleton {
     /** Whether the right click has been released this frame. */
     public boolean rightClickJustReleased;
     
+    
+    
+    //****************
+    // Keyboard
+    
     /** Whether the space bar has been pressed this frame. */
     public boolean spaceJustPressed;
     
     /** Whether the space bar has been released this frame. */
     public boolean spaceJustReleased; 
 	
+    /** Whether the 1 key has been pressed this frame. */
+    public boolean skill1JustPressed;
+    
+    /** Whether the 1 key has been released this frame. */
+    public boolean skill1JustReleased; 
+    
 	
 	/**
 	 *  Forbidden constructor since it's a singleton.
@@ -63,8 +77,11 @@ public class InputSingleton {
 		this.leftClickJustReleased = false;
 		this.rightClickJustPressed = false;
 		this.rightClickJustReleased = false;
+		
 		this.spaceJustPressed = false;
 		this.spaceJustReleased = false;
+		this.skill1JustPressed = false;
+		this.skill1JustReleased = false;
 	}
 	
 	public int getClickX() {
@@ -87,6 +104,10 @@ public class InputSingleton {
 					spaceJustPressed = true;
 					return true;
 				}
+				if (keycode == Input.Keys.NUM_1) {
+					skill1JustPressed = true;
+					return true;
+				}
 				return false;
 			}
 
@@ -94,6 +115,10 @@ public class InputSingleton {
 			public boolean keyUp(int keycode) {
 				if (keycode == Input.Keys.SPACE) {
 					spaceJustReleased = true;
+					return true;
+				}
+				if (keycode == Input.Keys.NUM_1) {
+					skill1JustReleased = true;
 					return true;
 				}
 				return false;

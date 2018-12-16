@@ -17,7 +17,9 @@ public enum RoomState {
 	PLAYER_MOVING,
 	PLAYER_END_MOVEMENT,
 	
+	PLAYER_TARGETING_START,
 	PLAYER_TARGETING,
+	PLAYER_TARGETING_STOP,
 	
 	PLAYER_WHEEL_START,
 	PLAYER_WHEEL_TURNING,
@@ -47,7 +49,9 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED 
     			|| this == RoomState.PLAYER_MOVING 
     			|| this == RoomState.PLAYER_END_MOVEMENT
+    			|| this == RoomState.PLAYER_TARGETING_START
     			|| this == RoomState.PLAYER_TARGETING
+    			|| this == RoomState.PLAYER_TARGETING_STOP
     	    	|| this == RoomState.PLAYER_WHEEL_START    			
     			|| this == RoomState.PLAYER_WHEEL_TURNING    			
     			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP

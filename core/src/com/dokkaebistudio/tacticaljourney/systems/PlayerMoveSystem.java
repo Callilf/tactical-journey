@@ -101,7 +101,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
             //When right clicking on an ennemy, display it's possible movement
             handleRightClickOnEnemies(moverEntity);
             
-            handleSkillSelection(room.state, moverEntity);
+            handleSkillSelection(moverEntity, room);
             break;
     		
             
@@ -159,16 +159,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     		break;
     		
     		
-    		
-    		
-    	case PLAYER_TARGETING:
-    		
-    		// Display all attackable tiles
-    		
-    		handleSkillSelection(room.state, moverEntity);
-    		
-    		break;
-    		
     	default:
     		break;
     	
@@ -180,8 +170,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
      */
 	private void handleRightClickOnEnemies(Entity player) {
 		if (InputSingleton.getInstance().rightClickJustPressed) {
-			int x = Gdx.input.getX();
-			int y = GameScreen.SCREEN_H - Gdx.input.getY();
+			int x = InputSingleton.getInstance().getClickX();
+			int y = InputSingleton.getInstance().getClickY();
 			
 			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x,y));
 			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
@@ -240,33 +230,21 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * @param rs the current room state
 	 * @param moveCompo the move component
 	 */
-	private void handleSkillSelection(RoomState rs, Entity player) {
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(player);
+	public static void handleSkillSelection(Entity player, Room room) {
 		MoveComponent moveCompo = Mappers.moveComponent.get(player);
-		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
 		
 		if (InputSingleton.getInstance().skill1JustPressed) {
-			if (rs == RoomState.PLAYER_MOVE_TILES_DISPLAYED) {
+			if (room.state  == RoomState.PLAYER_MOVE_TILES_DISPLAYED) {
+				//Use the skill
+				
 				moveCompo.hideMovableTiles();
-				
-	    		Entity skillEntity = playerCompo.getSkill1();
-	    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
-	    		skillPos.coord.set(playerPos.coord);
-	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
-	    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+				room.state = RoomState.PLAYER_TARGETING_START;
 
-				this.room.state = RoomState.PLAYER_TARGETING;
 			} else {
+				//Stop using the skill
+				
 				moveCompo.showMovableTiles();
-				
-				//Clear the skill
-				Entity skill1 = playerCompo.getSkill1();
-				MoveComponent skillMoveCompo = Mappers.moveComponent.get(skill1);
-				skillMoveCompo.clearMovableTiles();
-				AttackComponent skillAttackCompo = Mappers.attackComponent.get(skill1);
-				skillAttackCompo.clearAttackableTiles();
-				
-				this.room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+				room.state = RoomState.PLAYER_TARGETING_STOP;
 			}
 		}
 	}

@@ -37,8 +37,8 @@ public class AttackManager {
 	 * @param attacker the attacker entity
 	 * @param target the target entity
 	 */
-	public void performAttack(Entity attacker, Entity target) {
-		this.performAttack(attacker, target, null);
+	public void performAttack(Entity attacker, AttackComponent attackCompo) {
+		this.performAttack(attacker, attackCompo, null);
 	}
 	
 	/**
@@ -47,8 +47,13 @@ public class AttackManager {
 	 * @param target the target entity
 	 * @param pointedSector the sector pointed by the arrow (if the player attacks)
 	 */
-	public void performAttack(Entity attacker, Entity target, Sector pointedSector) {
-		AttackComponent attackCompo = Mappers.attackComponent.get(attacker);
+	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
+		Entity target = attackCompo.getTarget();
+		if (target == null) {
+			//Attacked an empty tiled... XD
+			return;
+		}
+		
 		int damage = 0;
 		
 		//Compute damage

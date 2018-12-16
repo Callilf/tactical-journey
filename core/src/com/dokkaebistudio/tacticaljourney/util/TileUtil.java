@@ -43,8 +43,8 @@ public final class TileUtil {
 	 * @return the real position
 	 */
 	public static Vector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {
-		float x = (float)Math.floor(pixelPos.x / GameScreen.GRID_SIZE);
-		float y = (float)Math.floor(pixelPos.y / GameScreen.GRID_SIZE);
+		float x = (float)Math.floor((pixelPos.x - GameScreen.LEFT_RIGHT_PADDING) / GameScreen.GRID_SIZE);
+		float y = (float)Math.floor((pixelPos.y - GameScreen.BOTTOM_MENU_HEIGHT) / GameScreen.GRID_SIZE);
 		return new Vector2(x,y);
 	}
 	

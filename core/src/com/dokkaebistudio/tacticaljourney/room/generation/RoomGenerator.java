@@ -51,7 +51,7 @@ public class RoomGenerator {
 		GeneratedRoom groom = new GeneratedRoom();
         groom.setTileEntities(new Entity[GRID_W][GameScreen.GRID_H]);
         groom.setTileTypes(new TileEnum[GRID_W][GRID_H]);
-        groom.setPossibleSpawns(new ArrayList<>());
+        groom.setPossibleSpawns(new ArrayList<Vector2>());
 		
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();

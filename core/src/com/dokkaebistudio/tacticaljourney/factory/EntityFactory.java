@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -108,6 +109,8 @@ public final class EntityFactory {
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
 		playerComponent.setEndTurnButton(createEndTurnButton(new Vector2(0.0f, 0.0f)));
+		playerComponent.setSkill1Button(createSkillButton(SkillEnum.SLASH, SkillEnum.SKILL_1_POSITION));
+		playerComponent.setSkill2Button(createSkillButton(SkillEnum.BOW, SkillEnum.SKILL_2_POSITION));
 		playerEntity.add(playerComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -136,7 +139,8 @@ public final class EntityFactory {
 		parentRoomComponent.setParentRoom(room);
 		playerEntity.add(parentRoomComponent);
 		
-		this.createSkill(playerEntity, "Slash", 1);
+		this.createSkill(playerEntity, SkillEnum.SLASH, 1);
+		this.createSkill(playerEntity, SkillEnum.BOW, 2);
 
 		engine.addEntity(playerEntity);
 
@@ -164,6 +168,28 @@ public final class EntityFactory {
     	
     	engine.addEntity(endTurnButton);
     	return endTurnButton;
+	}
+	
+	/**
+	 * Create the end turn button.
+	 * @param pos the position
+	 * @return the end turn button entity
+	 */
+	public Entity createSkillButton(SkillEnum skill, Vector2 pos) {
+		Entity skillButton = engine.createEntity();
+		skillButton.flags = EntityFlagEnum.SKILL1_BUTTON.getFlag();
+
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(pos.x, pos.y, 10);
+		skillButton.add(transfoCompo);
+		    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(skill.getBtnTexture())));
+    	skillButton.add(spriteCompo);
+    	
+    	engine.addEntity(skillButton);
+    	return skillButton;
 	}
 	
 	
@@ -465,7 +491,7 @@ public final class EntityFactory {
 	}
 	
 	
-	public Entity createSkill(Entity parent, String name, int skillNumber) {
+	public Entity createSkill(Entity parent, SkillEnum type, int skillNumber) {
 		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
 		PlayerComponent playerComponent = Mappers.playerComponent.get(parent);
 		
@@ -474,7 +500,7 @@ public final class EntityFactory {
 		SkillComponent skillCompo = engine.createComponent(SkillComponent.class);
 		skillCompo.setParentEntity(parent);
 		skillCompo.setSkillNumber(skillNumber);
-		skillCompo.setName(name);
+		skillCompo.setType(type);
 		skillEntity.add(skillCompo);
 		
 		GridPositionComponent skillPosCompo = engine.createComponent(GridPositionComponent.class);
@@ -489,15 +515,23 @@ public final class EntityFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = engine;
-		attackComponent.setRangeMin(2);
-		attackComponent.setRangeMax(3);
-		attackComponent.setStrength(5);
-		attackComponent.setSkillNumber(1);
+		attackComponent.setRangeMin(type.getRangeMin());
+		attackComponent.setRangeMax(type.getRangeMax());
+		attackComponent.setStrength(type.getStrength());
+		attackComponent.setSkillNumber(skillNumber);
 		skillEntity.add(attackComponent);
 		
-		//TODO add in engine ??
-		
-		playerComponent.setSkill1(skillEntity);
+
+		switch(skillNumber) {
+		case 1:
+			playerComponent.setSkill1(skillEntity);
+			break;
+		case 2:
+			playerComponent.setSkill2(skillEntity);
+			break;
+			default:
+				break;
+		}
 		
 		return skillEntity;
 	}

@@ -231,9 +231,70 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * @param moveCompo the move component
 	 */
 	public static void handleSkillSelection(Entity player, Room room) {
+		boolean skillSelected = false;
+		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
 		MoveComponent moveCompo = Mappers.moveComponent.get(player);
 		
+		//Check the click on a skill button
+		if (InputSingleton.getInstance().leftClickJustPressed) {
+			int x = InputSingleton.getInstance().getClickX();
+			int y = InputSingleton.getInstance().getClickY();
+			
+        	//If click on a skill button, make it look pushed but don't to any thing else.
+        	//The real action is on click release.
+        	SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
+        	SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill2Button());
+        	if (skill1SpriteComponent.containsPoint(x, y)) {
+        		SkillComponent skillComponent = Mappers.skillComponent.get(playerCompo.getSkill1());
+        		skill1SpriteComponent.setSprite(new Sprite(Assets.getTexture(skillComponent.getType().getBtnPushedTexture())));
+        	}
+        	if (skill2SpriteComponent.containsPoint(x, y)) {
+        		SkillComponent skillComponent = Mappers.skillComponent.get(playerCompo.getSkill2());
+        		skill2SpriteComponent.setSprite(new Sprite(Assets.getTexture(skillComponent.getType().getBtnPushedTexture())));
+        	}
+		}
+		if (InputSingleton.getInstance().leftClickJustReleased) {
+			int x = InputSingleton.getInstance().getClickX();
+			int y = InputSingleton.getInstance().getClickY();
+        	
+        	//If release on the endTurnButton, restore the original texture and end the turn.
+        	SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
+        	if (skill1SpriteComponent.containsPoint(x, y)) {
+        		playerCompo.setActiveSkill(playerCompo.getSkill1());
+        		skillSelected = true;
+        	}
+    		SkillComponent skill1Component = Mappers.skillComponent.get(playerCompo.getSkill1());
+    		skill1SpriteComponent.setSprite(new Sprite(Assets.getTexture(skill1Component.getType().getBtnTexture())));
+    		
+        	SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill2Button());
+        	if (skill2SpriteComponent.containsPoint(x, y)) {
+        		playerCompo.setActiveSkill(playerCompo.getSkill2());
+        		skillSelected = true;
+        	}
+    		SkillComponent skill2Component = Mappers.skillComponent.get(playerCompo.getSkill2());
+    		skill2SpriteComponent.setSprite(new Sprite(Assets.getTexture(skill2Component.getType().getBtnTexture())));
+
+        	
+    	}
+		
 		if (InputSingleton.getInstance().skill1JustPressed) {
+    		//If skill hotkey pressed, make the skill button look pushed.
+        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
+    		SkillComponent skillComponent = Mappers.skillComponent.get(playerCompo.getSkill1());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(skillComponent.getType().getBtnPushedTexture())));
+		}
+		if (InputSingleton.getInstance().skill1JustReleased) {
+    		//If skill hotkey released, restore the button texture and acticate/deactivate the skill.
+        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
+    		SkillComponent skillComponent = Mappers.skillComponent.get(playerCompo.getSkill1());
+    		spriteComponent.setSprite(new Sprite(Assets.getTexture(skillComponent.getType().getBtnTexture())));
+			skillSelected = true;
+    		playerCompo.setActiveSkill(playerCompo.getSkill1());
+    	}
+		
+		
+		
+		if (skillSelected) {
 			if (room.state  == RoomState.PLAYER_MOVE_TILES_DISPLAYED) {
 				//Use the skill
 				
@@ -242,7 +303,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			} else {
 				//Stop using the skill
-				
 				moveCompo.showMovableTiles();
 				room.state = RoomState.PLAYER_TARGETING_STOP;
 			}
@@ -258,8 +318,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo, PlayerComponent playerCompo) {
 		if (room.state.canEndTurn()) {
 			if (InputSingleton.getInstance().leftClickJustPressed) {
-	    		int x = Gdx.input.getX();
-	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+				int x = InputSingleton.getInstance().getClickX();
+				int y = InputSingleton.getInstance().getClickY();
 	        	
 	        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
 	        	//The real action is on click release.
@@ -269,8 +329,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	        	}
 	    	}
 	    	if (InputSingleton.getInstance().leftClickJustReleased) {
-	    		int x = Gdx.input.getX();
-	        	int y = GameScreen.SCREEN_H - Gdx.input.getY();
+				int x = InputSingleton.getInstance().getClickX();
+				int y = InputSingleton.getInstance().getClickY();
 	        	
 	        	//If release on the endTurnButton, restore the original texture and end the turn.
 	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());

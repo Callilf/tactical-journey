@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
 /**
  * Represent a skill of the player.
@@ -14,8 +15,9 @@ public class SkillComponent implements Component, Poolable {
 	/** The number of this skill. */
 	private int skillNumber;
 	
-	/** The skill name. */
-	private String name;
+	/** The type of skill. */
+	private SkillEnum type;
+	
 	
 	/** The entity possessing this skill. */
 	private Entity parentEntity;
@@ -29,9 +31,6 @@ public class SkillComponent implements Component, Poolable {
 		if (parentEntity != null) {
 			parentEntity = null;		
 		}
-		if (name != null) {
-			name = null;
-		}
 	}
 
 	
@@ -44,28 +43,20 @@ public class SkillComponent implements Component, Poolable {
 		this.parentEntity = parentEntity;
 	}
 
-
-
 	public int getSkillNumber() {
 		return skillNumber;
 	}
-
-
 
 	public void setSkillNumber(int skillNumber) {
 		this.skillNumber = skillNumber;
 	}
 
-
-
-	public String getName() {
-		return name;
+	public SkillEnum getType() {
+		return type;
 	}
 
-
-
-	public void setName(String name) {
-		this.name = name;
+	public void setType(SkillEnum type) {
+		this.type = type;
 	}
 	
 }

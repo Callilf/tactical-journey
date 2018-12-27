@@ -27,9 +27,37 @@ btn-end-turn-pushed
   index: -1
 btn-move-confirmation
   rotate: false
-  xy: 847, 805
+  xy: 999, 887
   size: 64, 64
   orig: 64, 64
+  offset: 0, 0
+  index: -1
+btn-skill-bow
+  rotate: false
+  xy: 929, 883
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-bow-pushed
+  rotate: false
+  xy: 598, 495
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-slash
+  rotate: false
+  xy: 847, 801
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-slash-pushed
+  rotate: false
+  xy: 1924, 1637
+  size: 68, 68
+  orig: 68, 68
   offset: 0, 0
   index: -1
 door-closed
@@ -153,7 +181,7 @@ tile-wall-test
   index: -1
 tile-wall-test2
   rotate: false
-  xy: 929, 887
+  xy: 1924, 1571
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

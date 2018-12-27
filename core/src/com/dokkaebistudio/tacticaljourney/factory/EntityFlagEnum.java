@@ -17,6 +17,8 @@ public enum EntityFlagEnum {
 	TEXT(504),
 	TEXT_ON_TILE(505),
 	DAMAGE_DISPLAYER(506),
+	SKILL1_BUTTON(507),
+	SKILL2_BUTTON(508),
 	
 	
 	

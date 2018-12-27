@@ -65,6 +65,7 @@ public final class TileSearchUtil {
 		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 		
+		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
 		for (Entity t : moveCompo.allWalkableTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
@@ -72,6 +73,21 @@ public final class TileSearchUtil {
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
+		}
+		
+		//Postprocess : remove tiles that cannot be attacked
+		if (attackCompo.getRangeMin() > 1) {
+			 GridPositionComponent posCompo = Mappers.gridPositionComponent.get(moverEntity);
+
+			Iterator<Entity> it = attackableTiles.iterator();
+			while (it.hasNext()) {
+				Entity currentAttackableTile = it.next();
+				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
+				//Remove tiles that are too close
+				if (TileUtil.getDistanceBetweenTiles(posCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
+					it.remove();
+				}
+			}
 		}
 
 		attackCompo.allAttackableTiles = attackableTiles;

@@ -42,7 +42,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
     	GridPositionComponent attackerCurrentPos = Mappers.gridPositionComponent.get(attackerEntity);
     	PlayerComponent playerCompo = Mappers.playerComponent.get(attackerEntity);
-		Entity skillEntity = playerCompo.getSkill1();
+		Entity skillEntity = playerCompo.getActiveSkill();
 
     	
     	if (!room.state.isPlayerTurn()) {
@@ -74,37 +74,45 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     	case PLAYER_TARGETING_START:
     		
-    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
-    		skillPos.coord.set(attackerCurrentPos.coord);
-    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
-    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
-
-    		room.state = RoomState.PLAYER_TARGETING;
+    		if (skillEntity != null) {
+	    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
+	    		skillPos.coord.set(attackerCurrentPos.coord);
+	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
+	    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+	
+	    		room.state = RoomState.PLAYER_TARGETING;
+    		}
     		
     		break;
     		
     	case PLAYER_TARGETING:
     		
-    		// Display all attackable tiles
-    		
-    		//Display the wheel is a tile is clicked
-    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-            selectAttackTile(skillAttackCompo, attackerCurrentPos);
-            
-            //Handle the change of skill
-    		PlayerMoveSystem.handleSkillSelection(attackerEntity, room);
+    		if (skillEntity != null) {
+	    		// Display all attackable tiles
+	    		
+	    		//Display the wheel is a tile is clicked
+	    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
+	            selectAttackTile(skillAttackCompo, attackerCurrentPos);
+	            
+	            //Handle the change of skill
+	    		PlayerMoveSystem.handleSkillSelection(attackerEntity, room);
+    		}
     		
     		break;
     		
     	case PLAYER_TARGETING_STOP:
     		
-			//Clear the skill
-			MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
-			skillMoveCompo.clearMovableTiles();
-			AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
-			skillAttackComponent.clearAttackableTiles();
-			
-			room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+    		if (skillEntity != null) {
+				//Clear the skill
+				MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
+				skillMoveCompo.clearMovableTiles();
+				AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
+				skillAttackComponent.clearAttackableTiles();
+				//unselect skill
+        		playerCompo.setActiveSkill(null);
+				
+				room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+    		}
 
     		
     		break;

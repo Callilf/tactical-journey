@@ -53,6 +53,11 @@ public class Assets {
 	public static final String btn_move_confirmation = "btn-move-confirmation";
 	public static final String btn_end_turn = "btn-end-turn";
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
+	public static final String btn_skill_attack = "btn-skill-slash";
+	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
+	public static final String btn_skill_bow = "btn-skill-bow";
+	public static final String btn_skill_bow_pushed = "btn-skill-bow-pushed";
+
 	
 //	public static final String wheel_arc = "wheel-arc";
 	public static final String wheel_arrow = "wheel-arrow";

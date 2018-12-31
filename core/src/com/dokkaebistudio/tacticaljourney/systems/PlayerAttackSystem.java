@@ -96,6 +96,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		break;
 		    		default:
 	    		}
+	    		indicatorTransfo.pos.x = indicatorTransfo.pos.x - 5;
+	    		indicatorTransfo.pos.y = indicatorTransfo.pos.y - 5;
+
 	
 	    		room.state = RoomState.PLAYER_TARGETING;
     		}

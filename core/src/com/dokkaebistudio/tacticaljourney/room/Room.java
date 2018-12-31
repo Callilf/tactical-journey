@@ -118,9 +118,10 @@ public class Room extends EntitySystem {
 	
 	
 	private void createContent() {
+		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+
 		switch(type) {
 		case COMMON_ENEMY_ROOM :
-			RandomXS128 random = RandomSingleton.getInstance().getRandom();
 			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 			
 			// Retrieve the spawn points and shuffle them
@@ -142,7 +143,11 @@ public class Room extends EntitySystem {
 			break;
 			
 		case START_FLOOR_ROOM:
+			break;
 		case END_FLOOR_ROOM:
+			int nextInt = random.nextInt(possibleSpawns.size());
+			Vector2 pos = possibleSpawns.get(nextInt);
+			entityFactory.createExit(this, pos);
 			default:
 			break;
 		}

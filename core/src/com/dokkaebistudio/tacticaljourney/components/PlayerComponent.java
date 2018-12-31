@@ -17,6 +17,8 @@ public class PlayerComponent implements Component {
 	
 	/** The skill currently active. Null if no skill is active. */
 	private Entity activeSkill;
+	/** The sprite that shows which skill is active. */
+	private Entity activeSkillIndicator;
 	
 	/** The first skill. */
 	private Entity skill1;
@@ -79,6 +81,14 @@ public class PlayerComponent implements Component {
 
 	public void setActiveSkill(Entity activeSkill) {
 		this.activeSkill = activeSkill;
+	}
+
+	public Entity getActiveSkillIndicator() {
+		return activeSkillIndicator;
+	}
+
+	public void setActiveSkillIndicator(Entity activeSkillIndicator) {
+		this.activeSkillIndicator = activeSkillIndicator;
 	}
 
 	

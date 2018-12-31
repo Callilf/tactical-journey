@@ -8,6 +8,7 @@ public enum EntityFlagEnum {
 	
 	TILE(100),
 	DOOR(101),
+	EXIT(102),
 	
 	END_TURN_BUTTON(500),
 	MOVABLE_TILE(501),

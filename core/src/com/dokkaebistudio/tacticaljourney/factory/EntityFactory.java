@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -111,6 +112,18 @@ public final class EntityFactory {
 		playerComponent.setEndTurnButton(createEndTurnButton(new Vector2(0.0f, 0.0f)));
 		playerComponent.setSkill1Button(createSkillButton(SkillEnum.SLASH, SkillEnum.SKILL_1_POSITION));
 		playerComponent.setSkill2Button(createSkillButton(SkillEnum.BOW, SkillEnum.SKILL_2_POSITION));
+		
+		
+		//TODO : refactor
+		Entity indicator = engine.createEntity();
+		SpriteComponent indicatorSpriteCompo = engine.createComponent(SpriteComponent.class);
+		indicatorSpriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_skill_active)));
+		indicator.add(indicatorSpriteCompo);
+		TransformComponent indicatorTransfoCompo = engine.createComponent(TransformComponent.class);
+		indicatorTransfoCompo.pos.set(0, 0, 11);
+		indicator.add(indicatorTransfoCompo);
+		playerComponent.setActiveSkillIndicator(indicator);
+		engine.addEntity(indicator);
 		playerEntity.add(playerComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -268,6 +281,32 @@ public final class EntityFactory {
     	return doorEntity;
 	}
 	
+	public Entity createExit(Room r, Vector2 pos) {
+		Entity exitEntity = engine.createEntity();
+		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord.set(pos);
+    	movableTilePos.zIndex = 2;
+    	exitEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.exit));
+    	spriteCompo.setSprite(s);
+    	exitEntity.add(spriteCompo);
+    	
+    	ExitComponent exitCompo = engine.createComponent(ExitComponent.class);
+    	exitCompo.setOpened(true);
+    	exitEntity.add(exitCompo);
+    	
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(r);
+		exitEntity.add(parentRoomComponent);
+    	    	
+		engine.addEntity(exitEntity);
+
+    	return exitEntity;
+	}
 	
 	public Entity createMovableTile(Vector2 pos) {
 		Entity movableTileEntity = engine.createEntity();

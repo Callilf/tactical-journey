@@ -8,10 +8,12 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -79,6 +81,21 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		skillPos.coord.set(attackerCurrentPos.coord);
 	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
 	    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+	    		
+	    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
+	    		SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);
+	    		
+	    		switch(skillComponent.getSkillNumber()) {
+	    		case 1:
+		    		TransformComponent activeSkill1BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill1Button());
+		    		indicatorTransfo.pos.set(activeSkill1BtnTransfo.pos);
+		    		break;
+	    		case 2:
+		    		TransformComponent activeSkill2BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill2Button());
+		    		indicatorTransfo.pos.set(activeSkill2BtnTransfo.pos);
+		    		break;
+		    		default:
+	    		}
 	
 	    		room.state = RoomState.PLAYER_TARGETING;
     		}
@@ -110,6 +127,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 				skillAttackComponent.clearAttackableTiles();
 				//unselect skill
         		playerCompo.setActiveSkill(null);
+	    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
+	    		indicatorTransfo.pos.set(-100,-100,0);
 				
 				room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
     		}

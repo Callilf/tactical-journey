@@ -8,6 +8,7 @@ import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -57,15 +58,10 @@ public class RoomGenerator {
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 		int roomNb = 1 + random.nextInt(7);
 		FileHandle roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
-		File file = roomPattern.file();
+		Reader reader = roomPattern.reader();
 		
 		//Load the pattern
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(new File(file.getPath()));
-		} catch (FileNotFoundException e) {
-			System.out.println("Failed to read the room pattern at " + file.getPath());
-		}
+		Scanner scanner = new Scanner(reader);
 		
 		//Fill the TileEnum array
 		

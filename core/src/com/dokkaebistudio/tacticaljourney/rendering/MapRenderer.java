@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
@@ -92,8 +93,9 @@ public class MapRenderer extends EntitySystem {
 		
 		InputSingleton inputSingleton = InputSingleton.getInstance();
 		if (inputSingleton.leftClickJustReleased) {
-			int x = InputSingleton.getInstance().getClickX();
-        	int y = InputSingleton.getInstance().getClickY();
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+        	int y = (int) touchPoint.y;
         	
         	Sprite btn = mapDisplayed ? closeMapBtn : openMapBtn;
         	

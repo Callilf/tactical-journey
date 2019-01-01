@@ -6,6 +6,8 @@ package com.dokkaebistudio.tacticaljourney;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Singleton used to manager player's inputs.
@@ -16,6 +18,12 @@ public class InputSingleton {
 	
 	/** The instance. */
 	private static InputSingleton instance;
+	
+	/** The camera. */
+	private OrthographicCamera guicam;
+	
+	/** The last touched point. */
+	private Vector3 touchPoint = new Vector3();
 	
 	//*************
 	// Mouse
@@ -56,15 +64,20 @@ public class InputSingleton {
 	private InputSingleton() {}
 	
 	/**
+	 * Instanciate the InputSingleton with the camera.
+	 * @param guicam the game camera
+	 */
+	public static void createInstance(OrthographicCamera guicam) {
+		instance = new InputSingleton();
+		instance.guicam = guicam;
+		instance.initInputProcessor();
+	}
+	
+	/**
 	 * Get the instance.
 	 * @return the {@link InputSingleton} instance.
 	 */
 	public static InputSingleton getInstance() {
-		if (instance == null) {
-			instance = new InputSingleton();
-			instance.initInputProcessor();
-		}
-		
 		return instance;
 	}
 	
@@ -84,11 +97,34 @@ public class InputSingleton {
 		this.skill1JustReleased = false;
 	}
 	
+	/**
+	 * Get the x location of the touch.
+	 * @return the x location of the touch
+	 */
 	public int getClickX() {
-		return Gdx.input.getX();
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return (int) touchPoint.x;
 	}
+	
+	/**
+	 * Get the y location of the touch.
+	 * @return the y location of the touch
+	 */
 	public int getClickY() {
-		return Gdx.graphics.getHeight() - Gdx.input.getY();
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return (int) touchPoint.y;
+	}
+	
+	/**
+	 * Get the location of the touch.
+	 * @return the location of the touch
+	 */
+	public Vector3 getTouchPoint() {
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return touchPoint;
 	}
 	
 	
@@ -171,6 +207,5 @@ public class InputSingleton {
 			}
 
         });
-	}
-	
+	}	
 }

@@ -106,6 +106,10 @@ public class GameScreen extends ScreenAdapter {
 		state = GAME_RUNNING;
 		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
+		
+		//Instanciate the input processor
+		InputSingleton.createInstance(guiCam);
+
 		touchPoint = new Vector3();
 		
 		engine = new PooledEngine();

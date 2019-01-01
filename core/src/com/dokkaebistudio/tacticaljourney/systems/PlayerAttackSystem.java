@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
@@ -149,8 +150,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos) {
 		if (InputSingleton.getInstance().leftClickJustReleased) {
-			int x = InputSingleton.getInstance().getClickX();
-			int y = InputSingleton.getInstance().getClickY();
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+        	int y = (int) touchPoint.y;
 			
 			for (Entity tile : attackCompo.attackableTiles) {
 				SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);

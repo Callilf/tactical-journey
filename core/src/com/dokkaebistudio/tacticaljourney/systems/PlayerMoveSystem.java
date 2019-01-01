@@ -8,6 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
@@ -89,8 +90,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on a moveTile, display it as the destination
             if (InputSingleton.getInstance().leftClickJustReleased) {
-            	int x = InputSingleton.getInstance().getClickX();
-            	int y = InputSingleton.getInstance().getClickY();
+            	Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+    			int x = (int) touchPoint.x;
+            	int y = (int) touchPoint.y;
             	
             	boolean selected = selectDestinationTile(moveCompo, x, y, moverCurrentPos);
             	if (selected) {
@@ -108,8 +110,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_MOVE_DESTINATION_SELECTED:
     		//Either click on confirm to move or click on another tile to change the destination
     		if (InputSingleton.getInstance().leftClickJustReleased) {
-            	int x = InputSingleton.getInstance().getClickX();
-            	int y = InputSingleton.getInstance().getClickY();
+    			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+    			int x = (int) touchPoint.x;
+            	int y = (int) touchPoint.y;
     			
             	SpriteComponent selectedTileSprite = Mappers.spriteComponent.get(moveCompo.getSelectedTile());
             	SpriteComponent playerSprite = Mappers.spriteComponent.get(moverEntity);
@@ -170,8 +173,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
      */
 	private void handleRightClickOnEnemies(Entity player) {
 		if (InputSingleton.getInstance().rightClickJustPressed) {
-			int x = InputSingleton.getInstance().getClickX();
-			int y = InputSingleton.getInstance().getClickY();
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+        	int y = (int) touchPoint.y;
 			
 			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x,y));
 			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
@@ -237,8 +241,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		
 		//Check the click on a skill button
 		if (InputSingleton.getInstance().leftClickJustPressed) {
-			int x = InputSingleton.getInstance().getClickX();
-			int y = InputSingleton.getInstance().getClickY();
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+        	int y = (int) touchPoint.y;
 			
         	//If click on a skill button, make it look pushed but don't to any thing else.
         	//The real action is on click release.
@@ -254,8 +259,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
         	}
 		}
 		if (InputSingleton.getInstance().leftClickJustReleased) {
-			int x = InputSingleton.getInstance().getClickX();
-			int y = InputSingleton.getInstance().getClickY();
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+        	int y = (int) touchPoint.y;
         	
         	//If release on the endTurnButton, restore the original texture and end the turn.
         	SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
@@ -318,8 +324,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo, PlayerComponent playerCompo) {
 		if (room.state.canEndTurn()) {
 			if (InputSingleton.getInstance().leftClickJustPressed) {
-				int x = InputSingleton.getInstance().getClickX();
-				int y = InputSingleton.getInstance().getClickY();
+				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+				int x = (int) touchPoint.x;
+	        	int y = (int) touchPoint.y;
 	        	
 	        	//If click on the endTurnButton, make it look pushed but don't to any thing else.
 	        	//The real action is on click release.
@@ -329,8 +336,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	        	}
 	    	}
 	    	if (InputSingleton.getInstance().leftClickJustReleased) {
-				int x = InputSingleton.getInstance().getClickX();
-				int y = InputSingleton.getInstance().getClickY();
+	    		Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+				int x = (int) touchPoint.x;
+	        	int y = (int) touchPoint.y;
 	        	
 	        	//If release on the endTurnButton, restore the original texture and end the turn.
 	        	SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());

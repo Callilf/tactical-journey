@@ -129,7 +129,7 @@ public class GameScreen extends ScreenAdapter {
 		player = entityFactory.createPlayer(new Vector2(11, 11), 5, room);
 		
 		engine.addSystem(new AnimationSystem(room));
-		engine.addSystem(new RenderingSystem(game.batcher, room));
+		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));

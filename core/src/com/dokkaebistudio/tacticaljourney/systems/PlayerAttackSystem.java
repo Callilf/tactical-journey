@@ -58,23 +58,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		//When clicking on an attack tile, display the wheel
             selectAttackTile(attackCompo, attackerCurrentPos);
             break;
-    		
-            
-    	case PLAYER_WHEEL_FINISHED:
-    		
-    		Sector pointedSector = wheel.getPointedSector();
-    		room.attackManager.performAttack(attackerEntity, wheel.getAttackComponent(), pointedSector);
-    		clearAllEntityTiles(attackerEntity);
-    		
-    		//TODO : remove this or move it elsewhere
-			wheel.getAttackComponent().clearAttackableTiles();
-			wheel.setAttackComponent(null);
-			
-			room.turnManager.endPlayerTurn();
-    		
-    		break;
-    		
-    		
+
     	case PLAYER_TARGETING_START:
     		
     		if (skillEntity != null) {
@@ -124,19 +108,32 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_TARGETING_STOP:
     		
     		if (skillEntity != null) {
-				//Clear the skill
-				MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
-				skillMoveCompo.clearMovableTiles();
-				AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
-				skillAttackComponent.clearAttackableTiles();
-				//unselect skill
-        		playerCompo.setActiveSkill(null);
-	    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
-	    		indicatorTransfo.pos.set(-100,-100,0);
+    			// unselect the skill
+				stopSkillUse(playerCompo, skillEntity);
 				
 				room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
     		}
 
+    		
+    		break;
+    		
+    		
+    	case PLAYER_WHEEL_FINISHED:
+    		
+    		Sector pointedSector = wheel.getPointedSector();
+    		room.attackManager.performAttack(attackerEntity, wheel.getAttackComponent(), pointedSector);
+    		clearAllEntityTiles(attackerEntity);
+    		
+    		//TODO : remove this or move it elsewhere
+			wheel.getAttackComponent().clearAttackableTiles();
+			wheel.setAttackComponent(null);
+			
+			if (skillEntity != null) {
+    			// unselect the skill
+				stopSkillUse(playerCompo, skillEntity);
+			}
+			
+			room.turnManager.endPlayerTurn();
     		
     		break;
 
@@ -147,6 +144,18 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	}
     	
     }
+
+	private void stopSkillUse(PlayerComponent playerCompo, Entity skillEntity) {
+		//Clear the skill
+		MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
+		skillMoveCompo.clearMovableTiles();
+		AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
+		skillAttackComponent.clearAttackableTiles();
+		//unselect skill
+		playerCompo.setActiveSkill(null);
+		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
+		indicatorTransfo.pos.set(-100,-100,0);
+	}
 
 	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos) {
 		if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -162,7 +171,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord, gridPositionComponent.coord);
 					
 					if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
-						
+
 						//Attack is possible !
 		    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
 						attackCompo.setTarget(target);

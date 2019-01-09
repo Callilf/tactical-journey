@@ -61,7 +61,17 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
     	case PLAYER_TARGETING_START:
     		
+			moveCompo.clearSelectedTile();
+    		
     		if (skillEntity != null) {
+    			//unselect any other skill
+    			if (playerCompo.getSkill1() != skillEntity) {
+    				stopSkillUse(playerCompo, playerCompo.getSkill1());
+    			} else if (playerCompo.getSkill2() != skillEntity) {
+    				stopSkillUse(playerCompo, playerCompo.getSkill2());
+    			}
+    			
+    			// Find attackable tiles with the activated skill
 	    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 	    		skillPos.coord.set(attackerCurrentPos.coord);
 	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
@@ -151,10 +161,13 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		skillMoveCompo.clearMovableTiles();
 		AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
 		skillAttackComponent.clearAttackableTiles();
-		//unselect skill
-		playerCompo.setActiveSkill(null);
-		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
-		indicatorTransfo.pos.set(-100,-100,0);
+		
+		//unselect skill if the skill being cleared is the one currently is use
+		if (playerCompo.getActiveSkill() == skillEntity) {
+			playerCompo.setActiveSkill(null);
+			TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
+			indicatorTransfo.pos.set(-100,-100,0);
+		}
 	}
 
 	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos) {

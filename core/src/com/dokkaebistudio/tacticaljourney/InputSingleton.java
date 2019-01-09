@@ -57,6 +57,12 @@ public class InputSingleton {
     /** Whether the 1 key has been released this frame. */
     public boolean skill1JustReleased; 
     
+    /** Whether the 2 key has been pressed this frame. */
+    public boolean skill2JustPressed;
+    
+    /** Whether the 2 key has been released this frame. */
+    public boolean skill2JustReleased; 
+    
 	
 	/**
 	 *  Forbidden constructor since it's a singleton.
@@ -95,6 +101,8 @@ public class InputSingleton {
 		this.spaceJustReleased = false;
 		this.skill1JustPressed = false;
 		this.skill1JustReleased = false;
+		this.skill2JustPressed = false;
+		this.skill2JustReleased = false;
 	}
 	
 	/**
@@ -144,6 +152,10 @@ public class InputSingleton {
 					skill1JustPressed = true;
 					return true;
 				}
+				if (keycode == Input.Keys.NUM_2) {
+					skill2JustPressed = true;
+					return true;
+				}
 				return false;
 			}
 
@@ -155,6 +167,10 @@ public class InputSingleton {
 				}
 				if (keycode == Input.Keys.NUM_1) {
 					skill1JustReleased = true;
+					return true;
+				}
+				if (keycode == Input.Keys.NUM_2) {
+					skill2JustReleased = true;
 					return true;
 				}
 				return false;

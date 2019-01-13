@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
@@ -48,7 +49,8 @@ public class AttackManager {
 	 * @param pointedSector the sector pointed by the arrow (if the player attacks)
 	 */
 	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
-		attackCompo.setAmmunitions(attackCompo.getAmmunitions() - 1);
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
+		ammoCarrierComponent.useAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
 		
 		Entity target = attackCompo.getTarget();
 		if (target == null) {
@@ -102,8 +104,9 @@ public class AttackManager {
 	 * @param attackCompo the attack component
 	 * @return true if it is possible to attack with this attack component
 	 */
-	public boolean isAttackAllowed(AttackComponent attackCompo) {
-		return attackCompo.getAmmunitions() != 0;
+	public boolean isAttackAllowed(Entity attacker, AttackComponent attackCompo) {
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
+		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
 	}
 	
 }

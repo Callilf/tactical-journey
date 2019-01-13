@@ -72,7 +72,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     			}
     			
     			AttackComponent attackComponent = Mappers.attackComponent.get(skillEntity);
-	    		if (room.attackManager.isAttackAllowed(attackComponent)) {
+	    		if (room.attackManager.isAttackAllowed(attackerEntity, attackComponent)) {
 	    			// Find attackable tiles with the activated skill
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 		    		skillPos.coord.set(attackerCurrentPos.coord);

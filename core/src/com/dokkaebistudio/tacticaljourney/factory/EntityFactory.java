@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -32,7 +33,6 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -136,6 +136,21 @@ public final class EntityFactory {
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		playerEntity.add(attackComponent);
+		
+		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
+		ammoCarrierCompo.setArrows(10);
+		ammoCarrierCompo.setMaxArrows(10);
+		Vector3 arrowDisplayerPos = new Vector3();
+		arrowDisplayerPos.set(1200,1070, 100);
+		Entity arrowsNbText = this.createText(arrowDisplayerPos, "Arrows: 10/10", null);
+		ammoCarrierCompo.setArrowsDisplayer(arrowsNbText);
+		ammoCarrierCompo.setBombs(0);
+		ammoCarrierCompo.setMaxBombs(5);
+		Vector3 bombDisplayerPos = new Vector3();
+		bombDisplayerPos.set(1200,1040, 100);
+		Entity bombsNbText = this.createText(bombDisplayerPos, "Bombs: 0/5", null);
+		ammoCarrierCompo.setBombsDisplayer(bombsNbText);
+		playerEntity.add(ammoCarrierCompo);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		playerEntity.add(solidComponent);
@@ -557,15 +572,16 @@ public final class EntityFactory {
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());
 		attackComponent.setStrength(type.getStrength());
-		attackComponent.setAmmunitions(type.getAmmos());
+		attackComponent.setAmmoType(type.getAmmosType());
+		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
 		
-		if (type.getAmmos() >= 0) {
-			Vector3 pos = new Vector3();
-			pos.set(1650,100, 100);
-			Entity ammoText = this.createText(pos, String.valueOf(type.getAmmos()), null);
-			attackComponent.setAmmoDisplayer(ammoText);
-		}
+//		if (type.getAmmos() >= 0) {
+//			Vector3 pos = new Vector3();
+//			pos.set(1650,100, 100);
+//			Entity ammoText = this.createText(pos, String.valueOf(type.getAmmos()), null);
+//			attackComponent.setAmmoDisplayer(ammoText);
+//		}
 		
 		skillEntity.add(attackComponent);
 		

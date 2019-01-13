@@ -315,12 +315,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			switch (skillSelected) {
 			case SKILL_SELECTED:
 			case NEW_SKILL_SELECTED:
-				moveCompo.hideMovableTiles();
 				room.state = RoomState.PLAYER_TARGETING_START;
 				break;
 
 			case NO_SKILL_SELECTED:
-				moveCompo.showMovableTiles();
 				room.state = RoomState.PLAYER_TARGETING_STOP;
 				break;
 			}

@@ -152,7 +152,7 @@ public final class EntityFactory {
 		parentRoomComponent.setParentRoom(room);
 		playerEntity.add(parentRoomComponent);
 		
-		this.createSkill(playerEntity, SkillEnum.SLASH, 1);
+		this.createSkill(playerEntity, SkillEnum.SLASH, 1 );
 		this.createSkill(playerEntity, SkillEnum.BOW, 2);
 
 		engine.addEntity(playerEntity);
@@ -557,7 +557,16 @@ public final class EntityFactory {
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());
 		attackComponent.setStrength(type.getStrength());
+		attackComponent.setAmmunitions(type.getAmmos());
 		attackComponent.setSkillNumber(skillNumber);
+		
+		if (type.getAmmos() >= 0) {
+			Vector3 pos = new Vector3();
+			pos.set(1650,100, 100);
+			Entity ammoText = this.createText(pos, String.valueOf(type.getAmmos()), null);
+			attackComponent.setAmmoDisplayer(ammoText);
+		}
+		
 		skillEntity.add(attackComponent);
 		
 

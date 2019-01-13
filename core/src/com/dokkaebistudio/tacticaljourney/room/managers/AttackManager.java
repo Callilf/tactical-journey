@@ -48,6 +48,8 @@ public class AttackManager {
 	 * @param pointedSector the sector pointed by the arrow (if the player attacks)
 	 */
 	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
+		attackCompo.setAmmunitions(attackCompo.getAmmunitions() - 1);
+		
 		Entity target = attackCompo.getTarget();
 		if (target == null) {
 			//Attacked an empty tiled... XD
@@ -94,5 +96,14 @@ public class AttackManager {
 		room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord, false);
 	}
 	
+	
+	/**
+	 * Return true if this attack component can attack. i.e if it still has ammos.
+	 * @param attackCompo the attack component
+	 * @return true if it is possible to attack with this attack component
+	 */
+	public boolean isAttackAllowed(AttackComponent attackCompo) {
+		return attackCompo.getAmmunitions() != 0;
+	}
 	
 }

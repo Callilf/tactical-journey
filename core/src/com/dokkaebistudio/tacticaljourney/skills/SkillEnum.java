@@ -6,8 +6,8 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 
 public enum SkillEnum {
 
-	SLASH(Assets.btn_skill_attack, Assets.btn_skill_attack_pushed, 1, 1, 5),
-	BOW(Assets.btn_skill_bow, Assets.btn_skill_bow_pushed, 2, 5, 3);
+	SLASH(Assets.btn_skill_attack, Assets.btn_skill_attack_pushed, 1, 1, 5, -1),
+	BOW(Assets.btn_skill_bow, Assets.btn_skill_bow_pushed, 2, 5, 3, 10);
 	
 	
 	public final static Vector2 SKILL_1_POSITION = new Vector2(1500.0f, 20.0f);
@@ -22,13 +22,15 @@ public enum SkillEnum {
 	private int rangeMin;
 	private int rangeMax;
 	private int strength;
+	private int ammos;
 	
-	SkillEnum(String texture, String pushedTexture, int rangeMin, int rangeMax, int strength) {
+	SkillEnum(String texture, String pushedTexture, int rangeMin, int rangeMax, int strength, int ammos) {
 		setBtnTexture(texture);
 		setBtnPushedTexture(pushedTexture);
 		this.setRangeMin(rangeMin);
 		this.setRangeMax(rangeMax);
 		this.setStrength(strength);
+		this.setAmmos(ammos);
 	}
 
 	
@@ -88,6 +90,20 @@ public enum SkillEnum {
 	public void setStrength(int strength) {
 		this.strength = strength;
 	}
+
+
+
+	public int getAmmos() {
+		return ammos;
+	}
+
+
+
+	public void setAmmos(int ammos) {
+		this.ammos = ammos;
+	}
+	
+	
 
 	
 	

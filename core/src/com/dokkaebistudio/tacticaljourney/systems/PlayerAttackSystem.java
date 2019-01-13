@@ -60,42 +60,51 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
             break;
 
     	case PLAYER_TARGETING_START:
-    		
+    		moveCompo.hideMovableTiles();
 			moveCompo.clearSelectedTile();
     		
     		if (skillEntity != null) {
     			//unselect any other skill
     			if (playerCompo.getSkill1() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkill1());
+    				stopSkillUse(playerCompo, playerCompo.getSkill1(), moveCompo);
     			} else if (playerCompo.getSkill2() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkill2());
+    				stopSkillUse(playerCompo, playerCompo.getSkill2(), moveCompo);
     			}
     			
-    			// Find attackable tiles with the activated skill
-	    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
-	    		skillPos.coord.set(attackerCurrentPos.coord);
-	    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
-	    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
-	    		
-	    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
-	    		SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);
-	    		
-	    		switch(skillComponent.getSkillNumber()) {
-	    		case 1:
-		    		TransformComponent activeSkill1BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill1Button());
-		    		indicatorTransfo.pos.set(activeSkill1BtnTransfo.pos);
-		    		break;
-	    		case 2:
-		    		TransformComponent activeSkill2BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill2Button());
-		    		indicatorTransfo.pos.set(activeSkill2BtnTransfo.pos);
-		    		break;
-		    		default:
-	    		}
-	    		indicatorTransfo.pos.x = indicatorTransfo.pos.x - 5;
-	    		indicatorTransfo.pos.y = indicatorTransfo.pos.y - 5;
-
+    			AttackComponent attackComponent = Mappers.attackComponent.get(skillEntity);
+	    		if (room.attackManager.isAttackAllowed(attackComponent)) {
+	    			// Find attackable tiles with the activated skill
+		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
+		    		skillPos.coord.set(attackerCurrentPos.coord);
+		    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
+		    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+		    		
+		    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
+		    		SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);
+		    		
+		    		switch(skillComponent.getSkillNumber()) {
+		    		case 1:
+			    		TransformComponent activeSkill1BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill1Button());
+			    		indicatorTransfo.pos.set(activeSkill1BtnTransfo.pos);
+			    		break;
+		    		case 2:
+			    		TransformComponent activeSkill2BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill2Button());
+			    		indicatorTransfo.pos.set(activeSkill2BtnTransfo.pos);
+			    		break;
+			    		default:
+		    		}
+		    		indicatorTransfo.pos.x = indicatorTransfo.pos.x - 5;
+		    		indicatorTransfo.pos.y = indicatorTransfo.pos.y - 5;
 	
-	    		room.state = RoomState.PLAYER_TARGETING;
+		
+		    		room.state = RoomState.PLAYER_TARGETING;
+	    		} else {
+	    			//Cannot attack because the skill has run out of ammos
+	    			// unselect the skill
+					stopSkillUse(playerCompo, skillEntity, moveCompo);
+					
+					room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+	    		}
     		}
     		
     		break;
@@ -107,8 +116,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		
 	    		//Display the wheel is a tile is clicked
 	    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-	            selectAttackTile(skillAttackCompo, attackerCurrentPos);
-	            
+	    		selectAttackTile(skillAttackCompo, attackerCurrentPos);
+	    		
 	            //Handle the change of skill
 	    		PlayerMoveSystem.handleSkillSelection(attackerEntity, room);
     		}
@@ -119,7 +128,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     		if (skillEntity != null) {
     			// unselect the skill
-				stopSkillUse(playerCompo, skillEntity);
+				stopSkillUse(playerCompo, skillEntity, moveCompo);
 				
 				room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
     		}
@@ -140,7 +149,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			
 			if (skillEntity != null) {
     			// unselect the skill
-				stopSkillUse(playerCompo, skillEntity);
+				stopSkillUse(playerCompo, skillEntity, moveCompo);
 			}
 			
 			room.turnManager.endPlayerTurn();
@@ -155,7 +164,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	
     }
 
-	private void stopSkillUse(PlayerComponent playerCompo, Entity skillEntity) {
+	private void stopSkillUse(PlayerComponent playerCompo, Entity skillEntity, MoveComponent playerMoveCompo) {
 		//Clear the skill
 		MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
 		skillMoveCompo.clearMovableTiles();
@@ -167,7 +176,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			playerCompo.setActiveSkill(null);
 			TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
 			indicatorTransfo.pos.set(-100,-100,0);
+			
+			playerMoveCompo.showMovableTiles();
 		}
+		
 	}
 
 	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos) {

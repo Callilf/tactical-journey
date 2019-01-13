@@ -34,14 +34,14 @@ btn-move-confirmation
   index: -1
 btn-skill-bow
   rotate: false
-  xy: 1924, 1485
+  xy: 1011, 883
   size: 68, 68
   orig: 68, 68
   offset: 0, 0
   index: -1
 btn-skill-bow-pushed
   rotate: false
-  xy: 1924, 1555
+  xy: 1924, 1485
   size: 68, 68
   orig: 68, 68
   offset: 0, 0
@@ -55,7 +55,7 @@ btn-skill-selected
   index: -1
 btn-skill-slash
   rotate: false
-  xy: 1011, 883
+  xy: 1924, 1555
   size: 68, 68
   orig: 68, 68
   offset: 0, 0
@@ -69,42 +69,42 @@ btn-skill-slash-pushed
   index: -1
 door-closed
   rotate: false
-  xy: 1924, 1707
+  xy: 598, 565
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 516, 483
+  xy: 847, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 516, 647
+  xy: 683, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 929, 871
+  xy: 847, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 entrance
   rotate: false
-  xy: 847, 789
+  xy: 1924, 1707
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 765, 789
+  xy: 1924, 1789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -146,21 +146,21 @@ item-consumable-bomb
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 598, 483
+  xy: 929, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 598, 565
+  xy: 598, 483
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 847, 871
+  xy: 765, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -195,7 +195,7 @@ tile-mud-test
   index: -1
 tile-pit-test
   rotate: false
-  xy: 683, 871
+  xy: 516, 647
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -209,7 +209,7 @@ tile-test
   index: -1
 tile-wall-test
   rotate: false
-  xy: 1924, 1789
+  xy: 516, 483
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

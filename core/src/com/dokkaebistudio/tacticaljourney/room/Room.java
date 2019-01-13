@@ -131,13 +131,18 @@ public class Room extends EntitySystem {
 			// Place enemies
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
-				Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+				Entity enemy = null;
+				if (random.nextInt(5) == 0) {
+					enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(iterator.next()), 4);
+				} else {
+					enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+				}
 				enemies.add(enemy);
 				iterator.remove();
 			}
 			
 			// Place health
-			if (iterator.hasNext()) {
+			if (iterator.hasNext() && random.nextInt(3) == 0) {
 				entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
 			}
 			break;

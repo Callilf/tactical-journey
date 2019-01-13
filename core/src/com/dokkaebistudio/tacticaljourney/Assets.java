@@ -30,6 +30,8 @@ public class Assets {
 
 	public static final String background = "background-test";
 	public static final String menuBackground = "background-test-menu";
+	
+	
 	public static final String player = "player-test";
 	public static final String enemy_spider = "enemy-test";
 	public static final String enemy_scorpion = "enemy-scorpion-test";
@@ -38,6 +40,10 @@ public class Assets {
 	public static final String tile_wall = "tile-wall-test";
 	public static final String tile_pit = "tile-pit-test";
 	public static final String tile_mud = "tile-mud-test";
+	
+	public static final String exit = "exit";
+	public static final String entrance = "entrance";
+
 	
 	public static final String door_closed = "door-closed";
 	public static final String door_opened = "door-opened";
@@ -53,6 +59,13 @@ public class Assets {
 	public static final String btn_move_confirmation = "btn-move-confirmation";
 	public static final String btn_end_turn = "btn-end-turn";
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
+	
+	public static final String btn_skill_active = "btn-skill-selected";
+	public static final String btn_skill_attack = "btn-skill-slash";
+	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
+	public static final String btn_skill_bow = "btn-skill-bow";
+	public static final String btn_skill_bow_pushed = "btn-skill-bow-pushed";
+
 	
 //	public static final String wheel_arc = "wheel-arc";
 	public static final String wheel_arrow = "wheel-arrow";

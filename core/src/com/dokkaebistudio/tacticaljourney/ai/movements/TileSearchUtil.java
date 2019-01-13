@@ -65,13 +65,29 @@ public final class TileSearchUtil {
 		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 		
+		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
 		for (Entity t : moveCompo.allWalkableTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
-			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room);
+			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
+		}
+		
+		//Postprocess : remove tiles that cannot be attacked
+		if (attackCompo.getRangeMin() > 1) {
+			 GridPositionComponent posCompo = Mappers.gridPositionComponent.get(moverEntity);
+
+			Iterator<Entity> it = attackableTiles.iterator();
+			while (it.hasNext()) {
+				Entity currentAttackableTile = it.next();
+				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
+				//Remove tiles that are too close
+				if (TileUtil.getDistanceBetweenTiles(posCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
+					it.remove();
+				}
+			}
 		}
 
 		attackCompo.allAttackableTiles = attackableTiles;
@@ -188,6 +204,9 @@ public final class TileSearchUtil {
 		ATTACK_FOR_DISPLAY;
 	}
 
+	
+	
+	
 	/**
 	 * Check the 4 contiguous tiles.
 	 * @param type the type of search
@@ -196,47 +215,91 @@ public final class TileSearchUtil {
 	 * @return the set of tile entities where it's possible to move
 	 */
 	private static Set<Entity> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room) {
+		return check4ContiguousTiles(type, currentX, currentY, tilesToIgnore, room, 1, 1);
+	}
+		
+		
+	/**
+	 * Check the 4 contiguous tiles.
+	 * @param type the type of search
+	 * @param currentX the current tile X
+	 * @param currentY the current tile Y
+	 * @return the set of tile entities where it's possible to move
+	 */
+	private static Set<Entity> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room, int maxDepth, int currentDepth) {
 		Set<Entity> foundTiles = new LinkedHashSet<>();
 		//Left
 		if (currentX > 0) {
+			int newX = currentX - 1;
+			int newY = currentY;
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore);
+				checkOneTileForMovement(new Vector2(newX, newY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, true);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				checkOneTileForAttack(new Vector2(currentX - 1, currentY), room, foundTiles, tilesToIgnore, false);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, false);
 			}
+			
+			
+			if (maxDepth > currentDepth) {
+				Set<Entity> subDepthTiles = check4ContiguousTiles(type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				foundTiles.addAll(subDepthTiles);
+			}
+			
 		}
 		//Up
 		if (currentY < GameScreen.GRID_H - 1) {
+			int newX = currentX;
+			int newY = currentY + 1;
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore);
+				checkOneTileForMovement(new Vector2(newX, newY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, true);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				checkOneTileForAttack(new Vector2(currentX, currentY + 1), room, foundTiles, tilesToIgnore, false);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, false);
+			}
+			
+			if (maxDepth > currentDepth) {
+				Set<Entity> subDepthTiles = check4ContiguousTiles(type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				foundTiles.addAll(subDepthTiles);
 			}
 		}
 		//Right
 		if (currentX < GameScreen.GRID_W - 1) {
+			int newX = currentX + 1;
+			int newY = currentY;
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore);
+				checkOneTileForMovement(new Vector2(newX, newY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, true);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				checkOneTileForAttack(new Vector2(currentX + 1, currentY), room, foundTiles, tilesToIgnore, false);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, false);
+			}
+			
+			if (maxDepth > currentDepth) {
+				Set<Entity> subDepthTiles = check4ContiguousTiles(type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				foundTiles.addAll(subDepthTiles);
 			}
 		}
 		//Down
 		if (currentY > 0) {
+			int newX = currentX;
+			int newY = currentY - 1;
 			if (type == CheckTypeEnum.MOVEMENT) {
-				checkOneTileForMovement(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore);
+				checkOneTileForMovement(new Vector2(newX, newY), room, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, true);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				checkOneTileForAttack(new Vector2(currentX, currentY - 1), room, foundTiles, tilesToIgnore, false);
+				checkOneTileForAttack(new Vector2(newX, newY), room, foundTiles, tilesToIgnore, false);
+			}
+			
+			if (maxDepth > currentDepth) {
+				Set<Entity> subDepthTiles = check4ContiguousTiles(type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				foundTiles.addAll(subDepthTiles);
 			}
 		}
+		
+		
 		return foundTiles;
 	}
 

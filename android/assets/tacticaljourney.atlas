@@ -27,21 +27,56 @@ btn-end-turn-pushed
   index: -1
 btn-move-confirmation
   rotate: false
-  xy: 847, 805
+  xy: 1081, 887
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+btn-skill-bow
+  rotate: false
+  xy: 929, 801
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-bow-pushed
+  rotate: false
+  xy: 1011, 883
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-selected
+  rotate: false
+  xy: 598, 487
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-skill-slash
+  rotate: false
+  xy: 1924, 1637
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+btn-skill-slash-pushed
+  rotate: false
+  xy: 1924, 1567
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
 door-closed
   rotate: false
-  xy: 765, 789
+  xy: 847, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 1924, 1789
+  xy: 1924, 1871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -55,7 +90,21 @@ enemy-scorpion-test
   index: -1
 enemy-test
   rotate: false
-  xy: 847, 871
+  xy: 598, 565
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+entrance
+  rotate: false
+  xy: 516, 483
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+exit
+  rotate: false
+  xy: 1924, 1789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -83,42 +132,42 @@ hud_map_plus
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 516, 483
+  xy: 1924, 1707
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 598, 565
+  xy: 847, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 598, 647
+  xy: 765, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable
   rotate: false
-  xy: 1924, 1871
+  xy: 683, 789
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 516, 565
+  xy: 598, 647
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 1924, 1707
+  xy: 929, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -139,21 +188,21 @@ tile-pit-test
   index: -1
 tile-test
   rotate: false
-  xy: 683, 789
+  xy: 765, 871
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 765, 871
+  xy: 516, 565
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test2
   rotate: false
-  xy: 929, 887
+  xy: 1924, 1501
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

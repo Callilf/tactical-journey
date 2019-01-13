@@ -24,6 +24,9 @@ public class MoveComponent implements Component, Poolable {
 	/** The number of tiles the player can move during this turn. */
 	public int moveRemaining;
 	
+	/** Whether we are in free move mode, which mean there are no enemies in the room. */
+	public boolean freeMove;
+	
 	/** The tiles where the player can move. */
 	public Set<Entity> allWalkableTiles;
 	
@@ -125,9 +128,11 @@ public class MoveComponent implements Component, Poolable {
 	
 	
 	public void showMovableTiles() {
-		for (Entity e : movableTiles) {
-			SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
-			spriteComponent.hide = false;
+		if (!freeMove) {
+			for (Entity e : movableTiles) {
+				SpriteComponent spriteComponent = Mappers.spriteComponent.get(e);
+				spriteComponent.hide = false;
+			}
 		}
 	}
 	public void hideMovableTiles() {

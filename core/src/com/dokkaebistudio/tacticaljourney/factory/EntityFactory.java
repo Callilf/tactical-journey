@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -27,9 +28,12 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -106,6 +110,20 @@ public final class EntityFactory {
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
 		playerComponent.setEndTurnButton(createEndTurnButton(new Vector2(0.0f, 0.0f)));
+		playerComponent.setSkill1Button(createSkillButton(SkillEnum.SLASH, SkillEnum.SKILL_1_POSITION));
+		playerComponent.setSkill2Button(createSkillButton(SkillEnum.BOW, SkillEnum.SKILL_2_POSITION));
+		
+		
+		//TODO : refactor
+		Entity indicator = engine.createEntity();
+		SpriteComponent indicatorSpriteCompo = engine.createComponent(SpriteComponent.class);
+		indicatorSpriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_skill_active)));
+		indicator.add(indicatorSpriteCompo);
+		TransformComponent indicatorTransfoCompo = engine.createComponent(TransformComponent.class);
+		indicatorTransfoCompo.pos.set(0, 0, 11);
+		indicator.add(indicatorTransfoCompo);
+		playerComponent.setActiveSkillIndicator(indicator);
+		engine.addEntity(indicator);
 		playerEntity.add(playerComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -133,6 +151,9 @@ public final class EntityFactory {
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 		parentRoomComponent.setParentRoom(room);
 		playerEntity.add(parentRoomComponent);
+		
+		this.createSkill(playerEntity, SkillEnum.SLASH, 1);
+		this.createSkill(playerEntity, SkillEnum.BOW, 2);
 
 		engine.addEntity(playerEntity);
 
@@ -160,6 +181,28 @@ public final class EntityFactory {
     	
     	engine.addEntity(endTurnButton);
     	return endTurnButton;
+	}
+	
+	/**
+	 * Create the end turn button.
+	 * @param pos the position
+	 * @return the end turn button entity
+	 */
+	public Entity createSkillButton(SkillEnum skill, Vector2 pos) {
+		Entity skillButton = engine.createEntity();
+		skillButton.flags = EntityFlagEnum.SKILL1_BUTTON.getFlag();
+
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(pos.x, pos.y, 10);
+		skillButton.add(transfoCompo);
+		    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(skill.getBtnTexture())));
+    	skillButton.add(spriteCompo);
+    	
+    	engine.addEntity(skillButton);
+    	return skillButton;
 	}
 	
 	
@@ -238,6 +281,32 @@ public final class EntityFactory {
     	return doorEntity;
 	}
 	
+	public Entity createExit(Room r, Vector2 pos) {
+		Entity exitEntity = engine.createEntity();
+		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord.set(pos);
+    	movableTilePos.zIndex = 2;
+    	exitEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.exit));
+    	spriteCompo.setSprite(s);
+    	exitEntity.add(spriteCompo);
+    	
+    	ExitComponent exitCompo = engine.createComponent(ExitComponent.class);
+    	exitCompo.setOpened(true);
+    	exitEntity.add(exitCompo);
+    	
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(r);
+		exitEntity.add(parentRoomComponent);
+    	    	
+		engine.addEntity(exitEntity);
+
+    	return exitEntity;
+	}
 	
 	public Entity createMovableTile(Vector2 pos) {
 		Entity movableTileEntity = engine.createEntity();
@@ -460,4 +529,49 @@ public final class EntityFactory {
 		return healthUp;
 	}
 	
+	
+	public Entity createSkill(Entity parent, SkillEnum type, int skillNumber) {
+		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
+		PlayerComponent playerComponent = Mappers.playerComponent.get(parent);
+		
+		Entity skillEntity = engine.createEntity();
+		
+		SkillComponent skillCompo = engine.createComponent(SkillComponent.class);
+		skillCompo.setParentEntity(parent);
+		skillCompo.setSkillNumber(skillNumber);
+		skillCompo.setType(type);
+		skillEntity.add(skillCompo);
+		
+		GridPositionComponent skillPosCompo = engine.createComponent(GridPositionComponent.class);
+		skillPosCompo.coord.set(parentPos.coord);
+		skillEntity.add(skillPosCompo);
+		
+		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);
+		skillMoveComponent.engine = engine;
+		skillMoveComponent.moveSpeed = 0;
+		skillMoveComponent.moveRemaining = 0;
+		skillEntity.add(skillMoveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.engine = engine;
+		attackComponent.setRangeMin(type.getRangeMin());
+		attackComponent.setRangeMax(type.getRangeMax());
+		attackComponent.setStrength(type.getStrength());
+		attackComponent.setSkillNumber(skillNumber);
+		skillEntity.add(attackComponent);
+		
+
+		switch(skillNumber) {
+		case 1:
+			playerComponent.setSkill1(skillEntity);
+			break;
+		case 2:
+			playerComponent.setSkill2(skillEntity);
+			break;
+			default:
+				break;
+		}
+		
+		return skillEntity;
+	}
 }

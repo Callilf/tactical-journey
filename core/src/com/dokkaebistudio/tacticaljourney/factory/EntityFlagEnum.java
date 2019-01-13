@@ -8,6 +8,7 @@ public enum EntityFlagEnum {
 	
 	TILE(100),
 	DOOR(101),
+	EXIT(102),
 	
 	END_TURN_BUTTON(500),
 	MOVABLE_TILE(501),
@@ -17,6 +18,8 @@ public enum EntityFlagEnum {
 	TEXT(504),
 	TEXT_ON_TILE(505),
 	DAMAGE_DISPLAYER(506),
+	SKILL1_BUTTON(507),
+	SKILL2_BUTTON(508),
 	
 	
 	

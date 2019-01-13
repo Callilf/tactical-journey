@@ -118,9 +118,10 @@ public class Room extends EntitySystem {
 	
 	
 	private void createContent() {
+		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+
 		switch(type) {
 		case COMMON_ENEMY_ROOM :
-			RandomXS128 random = RandomSingleton.getInstance().getRandom();
 			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 			
 			// Retrieve the spawn points and shuffle them
@@ -130,19 +131,28 @@ public class Room extends EntitySystem {
 			// Place enemies
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
-				Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+				Entity enemy = null;
+				if (random.nextInt(5) == 0) {
+					enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(iterator.next()), 4);
+				} else {
+					enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+				}
 				enemies.add(enemy);
 				iterator.remove();
 			}
 			
 			// Place health
-			if (iterator.hasNext()) {
+			if (iterator.hasNext() && random.nextInt(3) == 0) {
 				entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
 			}
 			break;
 			
 		case START_FLOOR_ROOM:
+			break;
 		case END_FLOOR_ROOM:
+			int nextInt = random.nextInt(possibleSpawns.size());
+			Vector2 pos = possibleSpawns.get(nextInt);
+			entityFactory.createExit(this, pos);
 			default:
 			break;
 		}

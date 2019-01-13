@@ -48,7 +48,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	/** The current room. */
 	private Room room;
 	
-	public RenderingSystem(SpriteBatch batch, Room room) {
+	public RenderingSystem(SpriteBatch batch, Room room, OrthographicCamera camera) {
 		super(Family.one(SpriteComponent.class, TextComponent.class).get());
 				
 		renderQueue = new Array<Entity>();
@@ -80,8 +80,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 		
 		this.batch = batch;
 		
-		cam = new OrthographicCamera(SCREEN_W, SCREEN_H);
-		cam.position.set(SCREEN_W/2, SCREEN_H/2, 0);
+		cam = camera;
 	}
 	
 	@Override
@@ -117,12 +116,14 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				TransformComponent t = Mappers.transfoComponent.get(entity);
 				
 				
-				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
+				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					float x = t.pos.x;
 					float y = t.pos.y;
 				
 					spriteCompo.getSprite().setPosition(x, y);
-					spriteCompo.getSprite().draw(batch);
+					if (!spriteCompo.hide) {
+						spriteCompo.getSprite().draw(batch);
+					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {					
 					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
@@ -132,9 +133,11 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
 				
 				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord);
-				if (spriteCompo != null && spriteCompo.getSprite() != null && !spriteCompo.hide) {
+				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
-					spriteCompo.getSprite().draw(batch);
+					if (!spriteCompo.hide) {
+						spriteCompo.getSprite().draw(batch);
+					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {
 					textCompo.getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y + textCompo.getHeight());

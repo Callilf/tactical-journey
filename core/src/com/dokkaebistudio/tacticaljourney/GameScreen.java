@@ -106,6 +106,10 @@ public class GameScreen extends ScreenAdapter {
 		state = GAME_RUNNING;
 		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
+		
+		//Instanciate the input processor
+		InputSingleton.createInstance(guiCam);
+
 		touchPoint = new Vector3();
 		
 		engine = new PooledEngine();
@@ -125,7 +129,7 @@ public class GameScreen extends ScreenAdapter {
 		player = entityFactory.createPlayer(new Vector2(11, 11), 5, room);
 		
 		engine.addSystem(new AnimationSystem(room));
-		engine.addSystem(new RenderingSystem(game.batcher, room));
+		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));

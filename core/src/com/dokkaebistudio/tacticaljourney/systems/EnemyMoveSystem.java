@@ -164,7 +164,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	    				//Attack possible
 							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord, room);
             				attackCompo.setTarget(target);
-							room.attackManager.performAttack(enemyEntity, attackCompo.getTarget());
+							room.attackManager.performAttack(enemyEntity, attackCompo);
     	    			}
     	    		}
     	    	}

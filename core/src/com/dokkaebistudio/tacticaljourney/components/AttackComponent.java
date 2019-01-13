@@ -26,6 +26,9 @@ public class AttackComponent implements Component, Poolable {
 	/** The target entity. */
 	private Entity target;
 	
+	/** The skill that corresponds to this attack component. */
+	private int skillNumber;
+	
 	//**************************************
 	// Attack tiles selection and display
 	
@@ -163,6 +166,16 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setTarget(Entity target) {
 		this.target = target;
+	}
+
+
+	public int getSkillNumber() {
+		return skillNumber;
+	}
+
+
+	public void setSkillNumber(int skillNumber) {
+		this.skillNumber = skillNumber;
 	}
 
 

@@ -6,6 +6,8 @@ package com.dokkaebistudio.tacticaljourney;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Singleton used to manager player's inputs.
@@ -16,6 +18,15 @@ public class InputSingleton {
 	
 	/** The instance. */
 	private static InputSingleton instance;
+	
+	/** The camera. */
+	private OrthographicCamera guicam;
+	
+	/** The last touched point. */
+	private Vector3 touchPoint = new Vector3();
+	
+	//*************
+	// Mouse
 	
 	/** Whether the left click has been pressed during this frame. */
     public boolean leftClickJustPressed;
@@ -29,12 +40,29 @@ public class InputSingleton {
     /** Whether the right click has been released this frame. */
     public boolean rightClickJustReleased;
     
+    
+    
+    //****************
+    // Keyboard
+    
     /** Whether the space bar has been pressed this frame. */
     public boolean spaceJustPressed;
     
     /** Whether the space bar has been released this frame. */
     public boolean spaceJustReleased; 
 	
+    /** Whether the 1 key has been pressed this frame. */
+    public boolean skill1JustPressed;
+    
+    /** Whether the 1 key has been released this frame. */
+    public boolean skill1JustReleased; 
+    
+    /** Whether the 2 key has been pressed this frame. */
+    public boolean skill2JustPressed;
+    
+    /** Whether the 2 key has been released this frame. */
+    public boolean skill2JustReleased; 
+    
 	
 	/**
 	 *  Forbidden constructor since it's a singleton.
@@ -42,15 +70,20 @@ public class InputSingleton {
 	private InputSingleton() {}
 	
 	/**
+	 * Instanciate the InputSingleton with the camera.
+	 * @param guicam the game camera
+	 */
+	public static void createInstance(OrthographicCamera guicam) {
+		instance = new InputSingleton();
+		instance.guicam = guicam;
+		instance.initInputProcessor();
+	}
+	
+	/**
 	 * Get the instance.
 	 * @return the {@link InputSingleton} instance.
 	 */
 	public static InputSingleton getInstance() {
-		if (instance == null) {
-			instance = new InputSingleton();
-			instance.initInputProcessor();
-		}
-		
 		return instance;
 	}
 	
@@ -63,15 +96,43 @@ public class InputSingleton {
 		this.leftClickJustReleased = false;
 		this.rightClickJustPressed = false;
 		this.rightClickJustReleased = false;
+		
 		this.spaceJustPressed = false;
 		this.spaceJustReleased = false;
+		this.skill1JustPressed = false;
+		this.skill1JustReleased = false;
+		this.skill2JustPressed = false;
+		this.skill2JustReleased = false;
 	}
 	
+	/**
+	 * Get the x location of the touch.
+	 * @return the x location of the touch
+	 */
 	public int getClickX() {
-		return Gdx.input.getX();
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return (int) touchPoint.x;
 	}
+	
+	/**
+	 * Get the y location of the touch.
+	 * @return the y location of the touch
+	 */
 	public int getClickY() {
-		return Gdx.graphics.getHeight() - Gdx.input.getY();
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return (int) touchPoint.y;
+	}
+	
+	/**
+	 * Get the location of the touch.
+	 * @return the location of the touch
+	 */
+	public Vector3 getTouchPoint() {
+		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		guicam.unproject(touchPoint);				
+		return touchPoint;
 	}
 	
 	
@@ -87,6 +148,14 @@ public class InputSingleton {
 					spaceJustPressed = true;
 					return true;
 				}
+				if (keycode == Input.Keys.NUM_1) {
+					skill1JustPressed = true;
+					return true;
+				}
+				if (keycode == Input.Keys.NUM_2) {
+					skill2JustPressed = true;
+					return true;
+				}
 				return false;
 			}
 
@@ -94,6 +163,14 @@ public class InputSingleton {
 			public boolean keyUp(int keycode) {
 				if (keycode == Input.Keys.SPACE) {
 					spaceJustReleased = true;
+					return true;
+				}
+				if (keycode == Input.Keys.NUM_1) {
+					skill1JustReleased = true;
+					return true;
+				}
+				if (keycode == Input.Keys.NUM_2) {
+					skill2JustReleased = true;
 					return true;
 				}
 				return false;
@@ -146,6 +223,5 @@ public class InputSingleton {
 			}
 
         });
-	}
-	
+	}	
 }

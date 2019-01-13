@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 
@@ -25,6 +26,9 @@ public class AttackWheel {
 	/** The sector pointed by the arrow. */
 	private Sector pointedSector;
 	
+	
+	/** The attack component used to call the wheel. */
+	private AttackComponent attackComponent;
 	
 	public AttackWheel() {
 		this.displayed = false;
@@ -97,6 +101,14 @@ public class AttackWheel {
 
 	public Sector getPointedSector() {
 		return pointedSector;
+	}
+
+	public AttackComponent getAttackComponent() {
+		return attackComponent;
+	}
+
+	public void setAttackComponent(AttackComponent attackComponent) {
+		this.attackComponent = attackComponent;
 	}
 
 //	public List<Sprite> getArcs() {

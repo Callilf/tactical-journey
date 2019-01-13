@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class AttackComponent implements Component, Poolable {
@@ -23,11 +24,22 @@ public class AttackComponent implements Component, Poolable {
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
 	
+	/** The type of ammunition used by this attack component. */
+	private AmmoTypeEnum ammoType = AmmoTypeEnum.NONE;
+	/** The number of ammos used per attack. */
+	private int ammosUsedPerAttack = 1;
+	
 	/** The target entity. */
 	private Entity target;
 	
 	/** The skill that corresponds to this attack component. */
 	private int skillNumber;
+	
+	//**************
+	// Ammo display
+	private Entity ammoDisplayer;
+	
+	
 	
 	//**************************************
 	// Attack tiles selection and display
@@ -50,6 +62,10 @@ public class AttackComponent implements Component, Poolable {
 	public void reset() {
 		clearAttackableTiles();
 		this.target = null;
+		if (ammoDisplayer != null) {
+			engine.removeEntity(ammoDisplayer);
+			ammoDisplayer = null;
+		}
 	}
 	
 
@@ -128,6 +144,9 @@ public class AttackComponent implements Component, Poolable {
 		}
 	}
 
+	
+	//***************************
+	// Getters and setters
 
 	public int getRangeMin() {
 		return rangeMin;
@@ -176,6 +195,50 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setSkillNumber(int skillNumber) {
 		this.skillNumber = skillNumber;
+	}
+
+
+//	public int getAmmunitions() {
+//		return ammunitions;
+//	}
+//
+//
+//	public void setAmmunitions(int ammunitions) {
+//		this.ammunitions = ammunitions;
+//		if (ammoDisplayer != null) {
+//			TextComponent textComponent = Mappers.textComponent.get(ammoDisplayer);
+//			textComponent.setText(String.valueOf(this.ammunitions));
+//		}
+//	}
+
+
+	public Entity getAmmoDisplayer() {
+		return ammoDisplayer;
+	}
+
+
+	public void setAmmoDisplayer(Entity ammoDisplayer) {
+		this.ammoDisplayer = ammoDisplayer;
+	}
+
+
+	public AmmoTypeEnum getAmmoType() {
+		return ammoType;
+	}
+
+
+	public void setAmmoType(AmmoTypeEnum ammoType) {
+		this.ammoType = ammoType;
+	}
+
+
+	public int getAmmosUsedPerAttack() {
+		return ammosUsedPerAttack;
+	}
+
+
+	public void setAmmosUsedPerAttack(int ammosUsedPerAttack) {
+		this.ammosUsedPerAttack = ammosUsedPerAttack;
 	}
 
 

@@ -126,7 +126,7 @@ public class GameScreen extends ScreenAdapter {
 //		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 //		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
 //		int y = 3 + random.nextInt(GameScreen.GRID_H - 5);
-		player = entityFactory.createPlayer(new Vector2(11, 11), 5, room);
+		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
 		
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));

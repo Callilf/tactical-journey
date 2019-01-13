@@ -7,20 +7,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
-import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -32,7 +30,6 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -46,11 +43,13 @@ public final class EntityFactory {
 	/** The gdx pooled engine. */
 	public PooledEngine engine;
 	
+	/** The player factory. */
+	public PlayerFactory playerFactory;
+
 	/** The enemy factory. */
 	public EnemyFactory enemyFactory;
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion playerTexture;
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion mudTexture;
@@ -65,9 +64,9 @@ public final class EntityFactory {
 	 */
 	public EntityFactory(PooledEngine e) {
 		this.engine = e;
+		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
 		
-		playerTexture = Assets.getTexture(Assets.player);
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
@@ -76,90 +75,6 @@ public final class EntityFactory {
 	}
 
 
-	/**
-	 * Create the player.
-	 * @param pos the position
-	 * @param moveSpeed the speed
-	 * @return the player entity
-	 */
-	public Entity createPlayer(Vector2 pos, int moveSpeed, Room room) {
-		Entity playerEntity = engine.createEntity();
-		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.playerTexture));
-		playerEntity.add(spriteCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
-		gridPosition.zIndex = 10;
-		playerEntity.add(gridPosition);
-		
-		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
-		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.CRITICAL);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
-		baseWheelComponent.addSector(140, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
-		playerEntity.add(baseWheelComponent);
-		
-		// he's the player !
-		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
-		playerComponent.engine = this.engine;
-		playerComponent.setEndTurnButton(createEndTurnButton(new Vector2(0.0f, 0.0f)));
-		playerComponent.setSkill1Button(createSkillButton(SkillEnum.SLASH, SkillEnum.SKILL_1_POSITION));
-		playerComponent.setSkill2Button(createSkillButton(SkillEnum.BOW, SkillEnum.SKILL_2_POSITION));
-		
-		
-		//TODO : refactor
-		Entity indicator = engine.createEntity();
-		SpriteComponent indicatorSpriteCompo = engine.createComponent(SpriteComponent.class);
-		indicatorSpriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_skill_active)));
-		indicator.add(indicatorSpriteCompo);
-		TransformComponent indicatorTransfoCompo = engine.createComponent(TransformComponent.class);
-		indicatorTransfoCompo.pos.set(0, 0, 11);
-		indicator.add(indicatorTransfoCompo);
-		playerComponent.setActiveSkillIndicator(indicator);
-		engine.addEntity(indicator);
-		playerEntity.add(playerComponent);
-		
-		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
-		moveComponent.moveSpeed = moveSpeed;
-		playerEntity.add(moveComponent);
-		
-		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(5);
-		playerEntity.add(attackComponent);
-		
-		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		playerEntity.add(solidComponent);
-		
-		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
-		healthComponent.setMaxHp(100);
-		healthComponent.setHp(100);
-		Entity hpText = this.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, null);
-		healthComponent.setHpDisplayer(hpText);
-		playerEntity.add(healthComponent);
-		
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		playerEntity.add(parentRoomComponent);
-		
-		this.createSkill(playerEntity, SkillEnum.SLASH, 1);
-		this.createSkill(playerEntity, SkillEnum.BOW, 2);
-
-		engine.addEntity(playerEntity);
-
-		return playerEntity;
-	}
-	
 	
 	/**
 	 * Create the end turn button.
@@ -406,6 +321,33 @@ public final class EntityFactory {
 //    	return confirmButton;
 //	}
 	
+	/**
+	 * Create a simple sprite entity.
+	 * @param pos the position
+	 * @param texture the texture
+	 * @return the sprite entity
+	 */
+	public Entity createSprite(Vector3 pos, AtlasRegion texture, EntityFlagEnum flag, Room room) {
+		Entity sprite = engine.createEntity();
+		sprite.flags = flag.getFlag();
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(texture));
+		sprite.add(spriteCompo);
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(pos);
+		sprite.add(transfoCompo);
+		
+		if (room != null) {
+			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+			parentRoomComponent.setParentRoom(room);
+			sprite.add(parentRoomComponent);
+		}
+		
+		engine.addEntity(sprite);
+		return sprite;
+	}
 	
 	/**
 	 * Create a text that will be displayed on screen.
@@ -557,7 +499,17 @@ public final class EntityFactory {
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());
 		attackComponent.setStrength(type.getStrength());
+		attackComponent.setAmmoType(type.getAmmosType());
+		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
+		
+//		if (type.getAmmos() >= 0) {
+//			Vector3 pos = new Vector3();
+//			pos.set(1650,100, 100);
+//			Entity ammoText = this.createText(pos, String.valueOf(type.getAmmos()), null);
+//			attackComponent.setAmmoDisplayer(ammoText);
+//		}
+		
 		skillEntity.add(attackComponent);
 		
 

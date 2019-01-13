@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
@@ -48,6 +49,11 @@ public class AttackManager {
 	 * @param pointedSector the sector pointed by the arrow (if the player attacks)
 	 */
 	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
+		if (ammoCarrierComponent != null) {
+			ammoCarrierComponent.useAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
+		}
+		
 		Entity target = attackCompo.getTarget();
 		if (target == null) {
 			//Attacked an empty tiled... XD
@@ -94,5 +100,15 @@ public class AttackManager {
 		room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord, false);
 	}
 	
+	
+	/**
+	 * Return true if this attack component can attack. i.e if it still has ammos.
+	 * @param attackCompo the attack component
+	 * @return true if it is possible to attack with this attack component
+	 */
+	public boolean isAttackAllowed(Entity attacker, AttackComponent attackCompo) {
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
+		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
+	}
 	
 }

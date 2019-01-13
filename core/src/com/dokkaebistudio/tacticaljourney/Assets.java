@@ -82,6 +82,9 @@ public class Assets {
 	// Items
 	
 	public static final String health_up_item = "item-consumable-health-up";
+	public static final String arrow_item = "item-consumable-arrow";
+	public static final String bomb_item = "item-consumable-bomb";
+
 
 	
 

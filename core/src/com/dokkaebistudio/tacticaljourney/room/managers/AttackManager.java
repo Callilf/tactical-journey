@@ -50,7 +50,9 @@ public class AttackManager {
 	 */
 	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
-		ammoCarrierComponent.useAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
+		if (ammoCarrierComponent != null) {
+			ammoCarrierComponent.useAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
+		}
 		
 		Entity target = attackCompo.getTarget();
 		if (target == null) {

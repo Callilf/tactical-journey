@@ -16,13 +16,16 @@ public class AmmoCarrierComponent implements Component {
 	// Arrows
 	private int arrows;
 	private int maxArrows;
-	private Entity arrowsDisplayer;
+	private Entity arrowsTextDisplayer;
+	private Entity arrowsSpriteDisplayer;
+
 	
 	// Bombs
 	private int bombs;
 	private int maxBombs;
-	private Entity bombsDisplayer;
-	
+	private Entity bombsTextDisplayer;
+	private Entity bombsSpriteDisplayer;
+
 	
 	
 	/**
@@ -111,13 +114,13 @@ public class AmmoCarrierComponent implements Component {
 
 
 	private void updateBombDisplayer() {
-		TextComponent bombTextComponent = Mappers.textComponent.get(bombsDisplayer);
-		bombTextComponent.setText("Bombs: " + bombs + "/" + maxBombs);
+		TextComponent bombTextComponent = Mappers.textComponent.get(bombsTextDisplayer);
+		bombTextComponent.setText(bombs + "/" + maxBombs);
 	}
 
 	private void updateArrowDisplayer() {
-		TextComponent arrowTextComponent = Mappers.textComponent.get(arrowsDisplayer);
-		arrowTextComponent.setText("Arrows: " + arrows + "/" + maxArrows);
+		TextComponent arrowTextComponent = Mappers.textComponent.get(arrowsTextDisplayer);
+		arrowTextComponent.setText(arrows + "/" + maxArrows);
 	}
 	
 	
@@ -167,26 +170,50 @@ public class AmmoCarrierComponent implements Component {
 
 
 
-	public Entity getArrowsDisplayer() {
-		return arrowsDisplayer;
+	public Entity getArrowsTextDisplayer() {
+		return arrowsTextDisplayer;
 	}
 
 
 
-	public void setArrowsDisplayer(Entity arrowsDisplayer) {
-		this.arrowsDisplayer = arrowsDisplayer;
+	public void setArrowsTextDisplayer(Entity arrowsDisplayer) {
+		this.arrowsTextDisplayer = arrowsDisplayer;
 	}
 
 
 
-	public Entity getBombsDisplayer() {
-		return bombsDisplayer;
+	public Entity getBombsTextDisplayer() {
+		return bombsTextDisplayer;
 	}
 
 
 
-	public void setBombsDisplayer(Entity bombsDisplayer) {
-		this.bombsDisplayer = bombsDisplayer;
+	public void setBombsTextDisplayer(Entity bombsDisplayer) {
+		this.bombsTextDisplayer = bombsDisplayer;
+	}
+
+
+
+	public Entity getArrowsSpriteDisplayer() {
+		return arrowsSpriteDisplayer;
+	}
+
+
+
+	public void setArrowsSpriteDisplayer(Entity arrowsSpriteDisplayer) {
+		this.arrowsSpriteDisplayer = arrowsSpriteDisplayer;
+	}
+
+
+
+	public Entity getBombsSpriteDisplayer() {
+		return bombsSpriteDisplayer;
+	}
+
+
+
+	public void setBombsSpriteDisplayer(Entity bombsSpriteDisplayer) {
+		this.bombsSpriteDisplayer = bombsSpriteDisplayer;
 	}
 
 }

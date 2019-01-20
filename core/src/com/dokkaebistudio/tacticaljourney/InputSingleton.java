@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
  * Singleton used to manager player's inputs.
@@ -21,6 +22,9 @@ public class InputSingleton {
 	
 	/** The camera. */
 	private OrthographicCamera guicam;
+	
+	/** The viewpoint. */
+	private FitViewport viewport;
 	
 	/** The last touched point. */
 	private Vector3 touchPoint = new Vector3();
@@ -73,9 +77,10 @@ public class InputSingleton {
 	 * Instanciate the InputSingleton with the camera.
 	 * @param guicam the game camera
 	 */
-	public static void createInstance(OrthographicCamera guicam) {
+	public static void createInstance(OrthographicCamera guicam, FitViewport viewport) {
 		instance = new InputSingleton();
 		instance.guicam = guicam;
+		instance.viewport = viewport;
 		instance.initInputProcessor();
 	}
 	
@@ -111,7 +116,8 @@ public class InputSingleton {
 	 */
 	public int getClickX() {
 		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		guicam.unproject(touchPoint);				
+		//guicam.unproject(touchPoint);
+		viewport.unproject(touchPoint);
 		return (int) touchPoint.x;
 	}
 	
@@ -121,7 +127,8 @@ public class InputSingleton {
 	 */
 	public int getClickY() {
 		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		guicam.unproject(touchPoint);				
+		//guicam.unproject(touchPoint);				
+		viewport.unproject(touchPoint);
 		return (int) touchPoint.y;
 	}
 	
@@ -131,7 +138,8 @@ public class InputSingleton {
 	 */
 	public Vector3 getTouchPoint() {
 		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		guicam.unproject(touchPoint);				
+		//guicam.unproject(touchPoint);
+		viewport.unproject(touchPoint);
 		return touchPoint;
 	}
 	

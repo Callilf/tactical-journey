@@ -21,8 +21,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 public class Assets {
 	
@@ -137,7 +139,9 @@ public class Assets {
 	}
 
 	public static TextureAtlas.AtlasRegion getTexture(String file){
-		return getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
+		AtlasRegion region = getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
+		region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		return region;
 	}
 
 	private void registerMusic(String file) {

@@ -18,7 +18,6 @@ package com.dokkaebistudio.tacticaljourney;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -26,13 +25,14 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
@@ -80,6 +80,7 @@ public class GameScreen extends ScreenAdapter {
 
 	TacticalJourney game;
 
+	public FitViewport viewport;
 	public OrthographicCamera guiCam;
 	Vector3 touchPoint;
 	Floor floor;
@@ -106,9 +107,10 @@ public class GameScreen extends ScreenAdapter {
 		state = GAME_RUNNING;
 		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
+		viewport = new FitViewport(SCREEN_W, SCREEN_H, guiCam);
 		
 		//Instanciate the input processor
-		InputSingleton.createInstance(guiCam);
+		InputSingleton.createInstance(guiCam, viewport);
 
 		touchPoint = new Vector3();
 		
@@ -335,6 +337,17 @@ public class GameScreen extends ScreenAdapter {
 	
 	
 	
+	private void drawBackground() {
+		// begin render
+		game.shapeRenderer.setProjectionMatrix(guiCam.combined);
+		game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		// Draw a black circle behind (in case of missing sectors)
+		game.shapeRenderer.setColor(Color.BLACK);
+		game.shapeRenderer.rect(0, 0, SCREEN_W, SCREEN_H);
+		game.shapeRenderer.end();
+	}
+	
+	
 	
 
 	private void presentLevelEnd () {
@@ -342,9 +355,17 @@ public class GameScreen extends ScreenAdapter {
 
 	private void presentGameOver () {
 	}
+	
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height);
+	}
 
 	@Override
 	public void render (float delta) {
+		//drawBackground();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		update(delta);
 		drawUI();
 	}

@@ -10,7 +10,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
-import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -37,12 +38,21 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     
     /** For each enemy, store whether it's turn is over or not. */
     private Map<Entity, Boolean> turnFinished = new HashMap<>();
+    
+	/** The tile search service. */
+	private TileSearchService tileSearchService;
+	/** The attack tile search service. */
+	private AttackTileSearchService attackTileSearchService;
+
 
     public EnemyMoveSystem(Room r) {
         super(Family.all(EnemyComponent.class, MoveComponent.class, GridPositionComponent.class).get());
         room = r;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
+		this.tileSearchService = new TileSearchService();
+		this.attackTileSearchService = new AttackTileSearchService();
+
     }
 
     @Override
@@ -97,8 +107,8 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
-        		TileSearchUtil.buildMoveTilesSet(enemyEntity, room);
-        		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, room, true);
+        		tileSearchService.buildMoveTilesSet(enemyEntity, room);
+        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
         		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
@@ -117,7 +127,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
+    				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
@@ -222,8 +232,8 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     		moveCompo.moveRemaining = moveCompo.moveSpeed;
         		
         	//Build the movable tiles list
-    		TileSearchUtil.buildMoveTilesSet(enemyEntity, room);
-    		if (attackCompo != null) TileSearchUtil.buildAttackTilesSet(enemyEntity, room, false);
+    		tileSearchService.buildMoveTilesSet(enemyEntity, room);
+    		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, false);
     		moveCompo.hideMovableTiles();
     		attackCompo.hideAttackableTiles();
     	}

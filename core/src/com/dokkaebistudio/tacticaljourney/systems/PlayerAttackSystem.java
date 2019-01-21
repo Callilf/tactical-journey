@@ -6,7 +6,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
@@ -27,11 +28,19 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     
     /** The current room. */
     private Room room;
+    
+	/** The tile search service. */
+	private TileSearchService tileSearchService;
+	/** The attack tile search service. */
+	private AttackTileSearchService attackTileSearchService;
 
     public PlayerAttackSystem(Room room, AttackWheel attackWheel) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
         this.room = room;
         this.wheel = attackWheel;
+		this.tileSearchService = new TileSearchService();
+		this.attackTileSearchService = new AttackTileSearchService();
+
     }
     
     @Override
@@ -76,8 +85,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    			// Find attackable tiles with the activated skill
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 		    		skillPos.coord.set(attackerCurrentPos.coord);
-		    		TileSearchUtil.buildMoveTilesSet(skillEntity, room);
-		    		TileSearchUtil.buildAttackTilesSet(skillEntity, room, false);
+		    		tileSearchService.buildMoveTilesSet(skillEntity, room);
+		    		attackTileSearchService.buildAttackTilesSet(skillEntity, room, false);
 		    		
 		    		TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
 		    		SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);

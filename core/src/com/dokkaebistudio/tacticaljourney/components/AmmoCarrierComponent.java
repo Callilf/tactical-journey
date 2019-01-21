@@ -43,6 +43,9 @@ public class AmmoCarrierComponent implements Component {
 		case BOMBS:
 			result = bombs >= number;
 			break;
+		case NONE:
+			result = true;
+			break;
 			default:
 		}
 		return result;

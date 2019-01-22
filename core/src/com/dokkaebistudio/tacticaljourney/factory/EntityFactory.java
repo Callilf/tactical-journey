@@ -554,6 +554,7 @@ public final class EntityFactory {
 		skillMoveComponent.moveRemaining = 0;
 		skillEntity.add(skillMoveComponent);
 		
+		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = engine;
 		attackComponent.setRangeMin(type.getRangeMin());
@@ -562,6 +563,7 @@ public final class EntityFactory {
 		attackComponent.setAmmoType(type.getAmmosType());
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
+		attackComponent.setParentAttackCompo(parentAttackCompo);
 		
 //		if (type.getAmmos() >= 0) {
 //			Vector3 pos = new Vector3();

@@ -7,8 +7,8 @@ import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 
 public enum SkillEnum {
 
-	SLASH(Assets.btn_skill_attack, Assets.btn_skill_attack_pushed, 1, 1, 5, AmmoTypeEnum.NONE, 0),
-	BOW(Assets.btn_skill_bow, Assets.btn_skill_bow_pushed, 2, 5, 3, AmmoTypeEnum.ARROWS, 1);
+	SLASH(Assets.btn_skill_attack, Assets.btn_skill_attack_pushed, 1, 1, 0, AmmoTypeEnum.NONE, 0),
+	BOW(Assets.btn_skill_bow, Assets.btn_skill_bow_pushed, 2, 5, -2, AmmoTypeEnum.ARROWS, 1);
 	
 	
 	public final static Vector2 SKILL_1_POSITION = new Vector2(1500.0f, 20.0f);

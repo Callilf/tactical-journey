@@ -58,16 +58,10 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     		// Improve stats
     		HealthComponent healthCompo = Mappers.healthComponent.get(entity);
     		healthCompo.increaseMaxHealth(10);
-    		
-    		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 
     		AttackComponent attackComponent = Mappers.attackComponent.get(entity);
     		attackComponent.setStrength(attackComponent.getStrength() + 1);
-    		
-    		AttackComponent skill1Attack = Mappers.attackComponent.get(playerComponent.getSkill1());
-    		skill1Attack.setStrength(skill1Attack.getStrength() + 1);
-    		AttackComponent skill2Attack = Mappers.attackComponent.get(playerComponent.getSkill2());
-    		skill2Attack.setStrength(skill2Attack.getStrength() + 1);
+
 
     		
     		

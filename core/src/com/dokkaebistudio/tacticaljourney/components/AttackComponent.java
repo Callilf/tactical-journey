@@ -32,8 +32,17 @@ public class AttackComponent implements Component, Poolable {
 	/** The target entity. */
 	private Entity target;
 	
+	//*************
+	// Skill
+	
 	/** The skill that corresponds to this attack component. */
 	private int skillNumber;
+	
+	/** The parent attack compo. Used only if the current attack compo belongs to a skill.
+	 * If so, the parent attack compo gives the basic strength, and this attack compo's strength
+	 * is a differential which is added to the base strength (positive or negative).
+	 */
+	private AttackComponent parentAttackCompo;
 	
 	//**************
 	// Ammo display
@@ -169,7 +178,11 @@ public class AttackComponent implements Component, Poolable {
 
 
 	public int getStrength() {
-		return strength;
+		int result = strength;
+		if (parentAttackCompo != null) {
+			result += parentAttackCompo.getStrength();
+		}
+		return result;
 	}
 
 
@@ -196,20 +209,6 @@ public class AttackComponent implements Component, Poolable {
 	public void setSkillNumber(int skillNumber) {
 		this.skillNumber = skillNumber;
 	}
-
-
-//	public int getAmmunitions() {
-//		return ammunitions;
-//	}
-//
-//
-//	public void setAmmunitions(int ammunitions) {
-//		this.ammunitions = ammunitions;
-//		if (ammoDisplayer != null) {
-//			TextComponent textComponent = Mappers.textComponent.get(ammoDisplayer);
-//			textComponent.setText(String.valueOf(this.ammunitions));
-//		}
-//	}
 
 
 	public Entity getAmmoDisplayer() {
@@ -239,6 +238,16 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setAmmosUsedPerAttack(int ammosUsedPerAttack) {
 		this.ammosUsedPerAttack = ammosUsedPerAttack;
+	}
+
+
+	public AttackComponent getParentAttackCompo() {
+		return parentAttackCompo;
+	}
+
+
+	public void setParentAttackCompo(AttackComponent parentAttackCompo) {
+		this.parentAttackCompo = parentAttackCompo;
 	}
 
 

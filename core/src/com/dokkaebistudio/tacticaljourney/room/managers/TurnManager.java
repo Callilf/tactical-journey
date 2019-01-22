@@ -25,7 +25,7 @@ public class TurnManager {
 	public TurnManager(Room r) {
 		this.room = r;
 		turn = 1;
-		textDisplay = room.entityFactory.createText(new Vector3(300.0f, 1050.0f, 0.0f), "Turn " + turn, r);
+		textDisplay = room.entityFactory.createText(new Vector3(200.0f, 1050.0f, 0.0f), "Turn: " + turn, r);
 		
 		textComponent = Mappers.textComponent.get(textDisplay);
 	}
@@ -36,7 +36,7 @@ public class TurnManager {
 	
 	public void endEnemyTurn() {
 		this.turn ++;
-		textComponent.setText("Turn " + this.turn);
+		textComponent.setText("Turn: " + this.turn);
 		this.room.state = RoomState.PLAYER_TURN_INIT;
 	}
 

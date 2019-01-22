@@ -10,17 +10,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
@@ -154,6 +155,16 @@ public final class PlayerFactory {
 		Entity hpText = entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, null);
 		healthComponent.setHpDisplayer(hpText);
 		playerEntity.add(healthComponent);
+		
+		// Experience compo
+		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
+		expCompo.init(engine);
+		Entity levelDisp = entityFactory.createText(new Vector3(200, 100, 100), "Lvl: 1", null);
+		expCompo.setLevelDisplayer(levelDisp);
+		Entity expDisp = entityFactory.createText(new Vector3(200, 80, 100), "Exp: 0/10", null);
+		expCompo.setExperienceDisplayer(expDisp);
+		playerEntity.add(expCompo);
+
 		
 		//Parent room
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);

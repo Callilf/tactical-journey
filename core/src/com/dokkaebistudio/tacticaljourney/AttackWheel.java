@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 
 public class AttackWheel {
 

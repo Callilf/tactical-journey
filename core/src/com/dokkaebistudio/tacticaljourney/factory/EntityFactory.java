@@ -15,8 +15,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -26,6 +24,8 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -408,7 +408,8 @@ public final class EntityFactory {
 	/**
 	 * Create a damage displayer.
 	 * @param damage the damage to display
-	 * @param initialPos the initial position
+	 * @param gridPos the grid position
+	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
 	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal) {
@@ -433,6 +434,36 @@ public final class EntityFactory {
 			textCompo.setFont(Assets.redFont);
 		}
 		textCompo.setText(damage);
+		display.add(textCompo);
+		
+		engine.addEntity(display);
+		return display;
+	}
+	
+	/**
+	 * Create an experience displayer.
+	 * @param exp the amount of xp earned
+	 * @param initialPos the initial position
+	 * @return the exp displayer entity
+	 */
+	public Entity createExpDisplayer(int exp, Vector2 gridPos) {
+		Entity display = engine.createEntity();
+		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
+
+		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
+		
+		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
+		displayCompo.setInitialPosition(initialPos);
+		display.add(displayCompo);
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(initialPos, 100);
+		display.add(transfoCompo);
+		
+		TextComponent textCompo = engine.createComponent(TextComponent.class);
+		textCompo.setFont(Assets.font);
+		textCompo.setText("Exp+" + exp);
 		display.add(textCompo);
 		
 		engine.addEntity(display);

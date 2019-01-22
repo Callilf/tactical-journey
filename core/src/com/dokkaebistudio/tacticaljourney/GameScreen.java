@@ -35,15 +35,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
@@ -138,6 +139,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
+		engine.addSystem(new ExperienceSystem(room));
 		
 		engine.addSystem(room);
 		engine.addSystem(mapRenderer);
@@ -239,7 +241,7 @@ public class GameScreen extends ScreenAdapter {
 		TextComponent text = Mappers.textComponent.get(timeDisplayer);
 		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
 		TransformComponent transfo =  Mappers.transfoComponent.get(timeDisplayer);
-		transfo.pos.set(300, 100, 100);
+		transfo.pos.set(200, 1030.0f, 100);
 	}
 
 	private void drawAttackWheel() {

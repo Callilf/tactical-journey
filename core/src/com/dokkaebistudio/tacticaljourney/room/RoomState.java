@@ -34,7 +34,10 @@ public enum RoomState {
 	ENEMY_MOVE_DESTINATION_SELECTED,
 	ENEMY_MOVING,
 	ENEMY_END_MOVEMENT,
-	ENEMY_ATTACK;
+	ENEMY_ATTACK,
+	
+	
+	LEVEL_UP;
 	
 	
 	
@@ -90,5 +93,14 @@ public enum RoomState {
 	public boolean canEndTurn() {
 		return this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
     			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+	}
+	
+	
+	/**
+	 * Whether the game is paused or not.
+	 * @return true if in a state where the game is paused.
+	 */
+	public boolean isPaused() {
+		return this == RoomState.LEVEL_UP;
 	}
 }

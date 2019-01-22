@@ -86,11 +86,13 @@ public class Room extends EntitySystem {
 	
 	@Override
 	public void update(float deltaTime) {
-		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
-		gtSingleton.updateElapsedTime(deltaTime);
-		
-		TextComponent text = Mappers.textComponent.get(timeDisplayer);
-		text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		if (!state.isPaused()) {
+			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
+			gtSingleton.updateElapsedTime(deltaTime);
+			
+			TextComponent text = Mappers.textComponent.get(timeDisplayer);
+			text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		}
 	}
 	
 	

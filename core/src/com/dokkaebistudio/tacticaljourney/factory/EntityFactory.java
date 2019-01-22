@@ -98,6 +98,31 @@ public final class EntityFactory {
     	return endTurnButton;
 	}
 	
+	
+	/**
+	 * Create the ok button.
+	 * @param pos the position
+	 * @return the ok button entity
+	 */
+	public Entity createOkButton(Vector2 pos) {
+		Entity okTurnButton = engine.createEntity();
+		okTurnButton.flags = EntityFlagEnum.OK_BUTTON.getFlag();
+
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		if (pos != null) {
+			transfoCompo.pos.set(pos.x, pos.y, 10);
+		}
+		okTurnButton.add(transfoCompo);
+		    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_ok)));
+    	okTurnButton.add(spriteCompo);
+    	
+    	engine.addEntity(okTurnButton);
+    	return okTurnButton;
+	}
+	
 	/**
 	 * Create the end turn button.
 	 * @param pos the position
@@ -336,7 +361,9 @@ public final class EntityFactory {
 		sprite.add(spriteCompo);
 		
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos);
+		if (pos != null) {
+			transfoCompo.pos.set(pos);
+		}
 		sprite.add(transfoCompo);
 		
 		if (room != null) {
@@ -359,7 +386,9 @@ public final class EntityFactory {
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
 		TransformComponent transfoCompo = new TransformComponent();
-		transfoCompo.pos.set(pos);
+		if (pos != null) {
+			transfoCompo.pos.set(pos);
+		}
 		textTest.add(transfoCompo);
 		
 		TextComponent tc = new TextComponent(Assets.font);

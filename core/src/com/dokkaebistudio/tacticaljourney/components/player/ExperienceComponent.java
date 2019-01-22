@@ -62,10 +62,7 @@ public class ExperienceComponent implements Component,Poolable {
 		if (nextLevelXp > currentXp + amountToEarn) {
 			currentXp += amountToEarn;
 		} else {
-			level += 1;
-			currentXp = currentXp + amountToEarn - nextLevelXp;
-			nextLevelXp = 10 * level;
-			leveledUp = true;
+			this.levelUp(currentXp + amountToEarn - nextLevelXp);
 		}
 		
 		TextComponent levelText = Mappers.textComponent.get(levelDisplayer);
@@ -73,6 +70,18 @@ public class ExperienceComponent implements Component,Poolable {
 		
 		TextComponent expText = Mappers.textComponent.get(experienceDisplayer);
 		expText.setText("Exp " + currentXp + "/" + nextLevelXp);
+	}
+	
+	
+	/**
+	 * Level up.
+	 * @param startingXp the new amount of current XP.
+	 */
+	private void levelUp(int startingXp) {
+		level += 1;
+		currentXp = startingXp;
+		nextLevelXp = 10 * level;
+		leveledUp = true;
 	}
 	
 	

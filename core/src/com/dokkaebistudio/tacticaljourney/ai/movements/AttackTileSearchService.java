@@ -28,28 +28,37 @@ public class AttackTileSearchService extends TileSearchService {
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
 	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities) {
+		long totalTime = System.currentTimeMillis();
+
+		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		
 		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(moverEntity);
 
-		
+		 long time = System.currentTimeMillis();
 		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
 		for (Entity t : moveCompo.allWalkableTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
+			
+			visitedTilesWithRemainingMove.put(t, 0);
 			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
-		
+		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));
+
 		
 		//Obstacles post process
+		time = System.currentTimeMillis();
 		obstaclesPostProcess(attackerPosCompo, attackableTiles);
+		System.out.println("obstacles : " + String.valueOf(System.currentTimeMillis() - time));
 		
 		
+		time = System.currentTimeMillis();
 		//Range Postprocess : remove tiles that cannot be attacked
 		if (attackCompo.getRangeMin() > 1) {
 			Iterator<Entity> it = attackableTiles.iterator();
@@ -64,12 +73,19 @@ public class AttackTileSearchService extends TileSearchService {
 		}
 
 		attackCompo.allAttackableTiles = attackableTiles;
+		System.out.println("range : " + String.valueOf(System.currentTimeMillis() - time));
+
 		
+		time = System.currentTimeMillis();
+
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : attackCompo.allAttackableTiles) {
 			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
+		System.out.println("create entities : " + String.valueOf(System.currentTimeMillis() - time));
+
+		System.out.println("total : " + String.valueOf(System.currentTimeMillis() - totalTime));
 	}
 
 	

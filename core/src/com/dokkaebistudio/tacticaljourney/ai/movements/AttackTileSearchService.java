@@ -32,6 +32,7 @@ public class AttackTileSearchService extends TileSearchService {
 
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
+		obstacles.clear();
 		
 		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);

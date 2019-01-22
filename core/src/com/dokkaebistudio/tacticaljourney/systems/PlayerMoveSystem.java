@@ -5,14 +5,13 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchUtil;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
@@ -38,11 +37,18 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	/** The highlighted enemy. */
 	private Entity enemyHighlighted;
+	
+	/** The tile search service. */
+	private TileSearchService tileSearchService;
+	/** The attack tile search service. */
+	private AttackTileSearchService attackTileSearchService;
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
 		this.room = room;
 		this.movementHandler = new MovementHandler(room.engine);
+		this.tileSearchService = new TileSearchService();
+		this.attackTileSearchService = new AttackTileSearchService();
 	}
 
 	@Override
@@ -83,9 +89,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				attackCompo.clearAttackableTiles();
 
 			// Build the movable tiles list
-			TileSearchUtil.buildMoveTilesSet(moverEntity, room);
+			tileSearchService.buildMoveTilesSet(moverEntity, room);
 			if (attackCompo != null)
-				TileSearchUtil.buildAttackTilesSet(moverEntity, room, true);
+				attackTileSearchService.buildAttackTilesSet(moverEntity, room, true);
 
 			if (!room.hasEnemies()) {
 				moveCompo.hideMovableTiles();
@@ -476,7 +482,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.setSelectedTile(destinationTileEntity);
 
 				// Display the way to go to this point
-				List<Entity> waypoints = TileSearchUtil.buildWaypointList(moveCompo, moverCurrentPos, destinationPos,
+				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, moverCurrentPos, destinationPos,
 						room);
 				moveCompo.setWayPoints(waypoints);
 

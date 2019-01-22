@@ -56,7 +56,7 @@ public class RoomGenerator {
 		
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getRandom();
-		int roomNb = 1 + random.nextInt(7);
+		int roomNb = 1 + random.nextInt(10);
 		FileHandle roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
 		Reader reader = roomPattern.reader();
 		

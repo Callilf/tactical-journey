@@ -16,19 +16,13 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -37,10 +31,10 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
@@ -69,22 +63,15 @@ public class GameScreen extends ScreenAdapter {
 
 	public static final int BOTTOM_MENU_HEIGHT = 40;
 	public static final int LEFT_RIGHT_PADDING = 40;
-	private static final Color HIT_COLOR = Color.GREEN;
-	private static final Color MISS_COLOR = Color.BLACK;
-	private static final Color CRITICAL_COLOR = Color.RED;
-	private static final Color GRAZE_COLOR = Color.GRAY;
-	private static final int WHEEL_RADIUS = 256;
-	public static final int WHEEL_X = SCREEN_W / 2;
-	public static final int WHEEL_Y = SCREEN_H/2;
 	
-
-	AttackWheel attackWheel = new AttackWheel();
 
 	TacticalJourney game;
 
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
+
 	Vector3 touchPoint;
+	
 	Floor floor;
 	public EntityFactory entityFactory;
 	Rectangle pauseBounds;
@@ -93,9 +80,13 @@ public class GameScreen extends ScreenAdapter {
 	
 	public PooledEngine engine;	
 	private int state;
+	
+	AttackWheel attackWheel = new AttackWheel();
 		
 	private Entity timeDisplayer;
+	
 	private MapRenderer mapRenderer;
+	private WheelRenderer wheelRenderer;
 	
 	public Entity player;
 
@@ -126,6 +117,8 @@ public class GameScreen extends ScreenAdapter {
 		
 		mapRenderer = new MapRenderer(this, game.batcher, game.shapeRenderer, floor);
 		mapRenderer.setMapDisplayed(true);
+		
+		wheelRenderer = new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer);
 		
 //		RandomXS128 random = RandomSingleton.getInstance().getRandom();
 //		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
@@ -229,7 +222,7 @@ public class GameScreen extends ScreenAdapter {
 
 	private void presentRunning () {
 		// draw the attack wheel
-		drawAttackWheel();
+		wheelRenderer.renderWheel();
 		
 		//Display map
 		mapRenderer.renderMap();
@@ -245,83 +238,6 @@ public class GameScreen extends ScreenAdapter {
 		transfo.pos.set(PositionConstants.POS_TIMER, PositionConstants.Z_TIMER);
 	}
 
-	private void drawAttackWheel() {
-		
-		if (attackWheel.isDisplayed()) {
-			// first normalize sector values
-			int total = 0;
-			List<Float> normalizeRanges = new LinkedList<Float>();
-			for(WheelComponent.Sector s: attackWheel.getSectors()){
-				total += s.range;
-	
-			}
-			for(WheelComponent.Sector s: attackWheel.getSectors()){
-				normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
-			}
-			
-			// begin render
-			game.shapeRenderer.setProjectionMatrix(guiCam.combined);
-			game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-			// Draw a black circle behind (in case of missing sectors)
-			game.shapeRenderer.setColor(HIT_COLOR);
-			game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS-1, 0, 360);
-			
-			int rangeCumul = 0;
-			
-			for(int i = 0; i< attackWheel.getSectors().size(); i++) {
-				// color
-				switch (attackWheel.getSectors().get(i).hit){
-					case HIT:
-						game.shapeRenderer.setColor(HIT_COLOR);
-						break;
-					case CRITICAL:
-						game.shapeRenderer.setColor(CRITICAL_COLOR);
-						break;
-					case GRAZE:
-						game.shapeRenderer.setColor(GRAZE_COLOR);
-						break;
-					case MISS:
-						game.shapeRenderer.setColor(MISS_COLOR);
-						break;
-				}
-				// draw arc
-				game.shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS, rangeCumul, normalizeRanges.get(i));
-				// next arc starts at the end of previous arc
-				rangeCumul += normalizeRanges.get(i);
-			}
-			game.shapeRenderer.end();
-			
-
-			guiCam.update();
-			game.batcher.setProjectionMatrix(guiCam.combined);
-			game.batcher.begin();		
-			
-			// Render the arrow
-			Sprite arrow = attackWheel.getArrow();
-			arrow.setPosition(WHEEL_X - arrow.getWidth()/2, WHEEL_Y - arrow.getHeight()/2);
-			arrow.draw(game.batcher);
-			
-			game.batcher.end();
-			
-		} 
-
-
-	}
-	
-	
-	
-	private void drawBackground() {
-		// begin render
-		game.shapeRenderer.setProjectionMatrix(guiCam.combined);
-		game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		// Draw a black circle behind (in case of missing sectors)
-		game.shapeRenderer.setColor(Color.BLACK);
-		game.shapeRenderer.rect(0, 0, SCREEN_W, SCREEN_H);
-		game.shapeRenderer.end();
-	}
-	
-	
-	
 
 	private void presentLevelEnd () {
 	}

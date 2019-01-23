@@ -63,6 +63,7 @@ public class Assets {
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
 	
 	public static final String lvl_up_background = "hud_lvl_up_background";
+	public static final String lvl_up_reward_button = "hud_lvl_up_btn";
 	public static final String btn_ok = "btn-ok";
 	
 	public static final String btn_skill_active = "btn-skill-selected";

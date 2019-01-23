@@ -50,6 +50,16 @@ public class MoveComponent implements Component, Poolable {
 		engine = null;
 	}
 	
+	
+	/**
+	 * Increase the move speed by the given amount.
+	 * @param amount the amount to add
+	 */
+	public void increaseMoveSpeed(int amount) {
+		this.moveSpeed += amount;
+	}
+	
+	
 	/**
 	 * Select the correct target given the currentMoveDestinationIndex
 	 * @param gridPositionM the gridPositionMapper

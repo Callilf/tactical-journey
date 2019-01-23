@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -80,8 +81,10 @@ public class ExperienceComponent implements Component,Poolable {
 	private void levelUp(int startingXp) {
 		level += 1;
 		currentXp = startingXp;
-		nextLevelXp = 10 * level;
 		leveledUp = true;
+
+		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
+		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
 	}
 	
 	

@@ -77,6 +77,15 @@ public class AttackComponent implements Component, Poolable {
 		}
 	}
 	
+	/**
+	 * Increase the strength by the given amount.
+	 * @param amount the amount to add
+	 */
+	public void increaseStrength(int amount) {
+		this.strength += amount;
+	}
+
+	
 
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.

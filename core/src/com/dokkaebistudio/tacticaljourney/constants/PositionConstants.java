@@ -62,11 +62,12 @@ public final class PositionConstants {
 	public static Vector2 POS_LVL_UP_SUBTITLE = new Vector2(GameScreen.SCREEN_W/2, 650f);
 	public static float Z_LVL_UP_SUBTITLE = 500f;
 
-	public static Vector2 POS_LVL_UP_STATS = new Vector2(GameScreen.SCREEN_W/2, 550f);
-	public static float Z_LVL_UP_STATS = 500f;
 	
-	public static Vector2 POS_LVL_UP_BTN = new Vector2(GameScreen.SCREEN_W/2, 350f);
 	public static float Z_LVL_UP_BTN = 500f;
+	public static float Z_LVL_UP_BTN_TEXT = 501f;
+	public static Vector2 POS_LVL_UP_BTN_1 = new Vector2(GameScreen.SCREEN_W/2, 500f);
+	public static Vector2 POS_LVL_UP_BTN_2 = new Vector2(GameScreen.SCREEN_W/2, 430f);
+	public static Vector2 POS_LVL_UP_BTN_3 = new Vector2(GameScreen.SCREEN_W/2, 360f);
 
 
 }

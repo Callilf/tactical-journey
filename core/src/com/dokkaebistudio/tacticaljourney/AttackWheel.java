@@ -60,7 +60,7 @@ public class AttackWheel {
 		}
 		
 		rotation -= this.rotationOffset;
-		if (rotation < 0) rotation = 360 - rotation;
+		if (rotation < 0) rotation = 360 - Math.abs(rotation);
 		
     	Sector pointedSector = null;
     	int totalRange = 0;

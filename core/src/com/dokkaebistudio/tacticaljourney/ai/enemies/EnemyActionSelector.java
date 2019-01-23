@@ -58,7 +58,7 @@ public class EnemyActionSelector {
 		Entity selectedTile;
 		List<Entity> movableTilesList = new ArrayList<>(moveComponent.movableTiles);
 
-		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		int randomIndex = random.nextInt(movableTilesList.size());
 		selectedTile = movableTilesList.get(randomIndex);
 		return selectedTile;

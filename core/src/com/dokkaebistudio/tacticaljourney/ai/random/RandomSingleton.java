@@ -16,8 +16,10 @@ public class RandomSingleton {
 	/** The singleton instance. */
 	private static RandomSingleton instance;
 	
-	/** The random. */
-	private RandomXS128 random;
+	/** The random that follows the given seed, for floor layouts, enemies, items... */
+	private RandomXS128 seededRandom;
+	/** The random used for combat or any RNG event that doesn't need to use the seed. */
+	private RandomXS128 unseededRandom;
 	
 	/** The current seed. */
 	private String seed;
@@ -61,7 +63,8 @@ public class RandomSingleton {
 		long seedPart1 = Math.abs(tempR.nextLong());
 		long seedPart2 = Math.abs(tempR.nextLong());
 		this.setSeed(String.valueOf(seedPart1) + "-" + String.valueOf(seedPart2));
-		this.random = new RandomXS128(seedPart1, seedPart2);
+		this.seededRandom = new RandomXS128(seedPart1, seedPart2);
+		this.unseededRandom = new RandomXS128();
 	}
 	
 	/**
@@ -72,7 +75,8 @@ public class RandomSingleton {
 		Long l = new Long(split[0]);
 		Long l2 = new Long(split[1]);
 		this.setSeed(seed);
-		this.random = new RandomXS128(l, l2);
+		this.seededRandom = new RandomXS128(l, l2);
+		this.unseededRandom = new RandomXS128();
 	}
 	
 	
@@ -80,13 +84,22 @@ public class RandomSingleton {
 	
 	// Get and Set
 
-	public RandomXS128 getRandom() {
-		return random;
+	public RandomXS128 getSeededRandom() {
+		return seededRandom;
 	}
 
-	public void setRandom(RandomXS128 random) {
-		this.random = random;
+	public void setSeededRandom(RandomXS128 random) {
+		this.seededRandom = random;
 	}
+	
+	public RandomXS128 getUnseededRandom() {
+		return unseededRandom;
+	}
+
+	public void setUnseededRandom(RandomXS128 unseededRandom) {
+		this.unseededRandom = unseededRandom;
+	}
+
 
 	public String getSeed() {
 		return seed;
@@ -95,5 +108,4 @@ public class RandomSingleton {
 	public void setSeed(String seed) {
 		this.seed = seed;
 	}
-
 }

@@ -37,7 +37,7 @@ public class FloorGenerator {
 	 * @param floor the floor to generate.
 	 */
 	public static void generateFloor(Floor floor, GameScreen gameScreen, Entity timeDisplayer) {
-		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		List<Room> rooms = new ArrayList<>();
 		Map<Room, Vector2> roomsPerPosition = new HashMap<>();
 		

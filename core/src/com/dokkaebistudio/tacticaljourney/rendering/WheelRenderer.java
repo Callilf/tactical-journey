@@ -58,10 +58,10 @@ public class WheelRenderer {
 			shapeRenderer.setProjectionMatrix(gameScreen.guiCam.combined);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 			// Draw a black circle behind (in case of missing sectors)
-			shapeRenderer.setColor(HIT_COLOR);
+			shapeRenderer.setColor(MISS_COLOR);
 			shapeRenderer.arc(WHEEL_X, WHEEL_Y, WHEEL_RADIUS-1, 0, 360);
 			
-			int rangeCumul = 0;
+			int rangeCumul = wheel.getRotationOffset();
 			
 			for(int i = 0; i< wheel.getSectors().size(); i++) {
 				// color

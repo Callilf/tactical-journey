@@ -1,10 +1,10 @@
 package com.dokkaebistudio.tacticaljourney;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
@@ -13,6 +13,9 @@ public class AttackWheel {
 
 	/** Whether the wheel is visible or not. */
 	private boolean displayed;
+	
+	/** The offset of the wheel. Changes anytime the wheel is displayed. */
+	private int rotationOffset;
 	
 	/** The list of sectors that compose the wheel. */
 	private List<WheelComponent.Sector> sectors;
@@ -56,10 +59,13 @@ public class AttackWheel {
 			rotation = this.arrow.getRotation() % 360;
 		}
 		
-    	Sector pointedSector = this.sectors.get(0);
+		rotation -= this.rotationOffset;
+		if (rotation < 0) rotation = 360 - rotation;
+		
+    	Sector pointedSector = null;
     	int totalRange = 0;
     	for (Sector s : this.sectors) {
-    		if (totalRange + s.range > rotation) {
+    		if (totalRange <= rotation && totalRange + s.range > rotation) {
     			pointedSector = s;
     			break;
     		}
@@ -79,6 +85,9 @@ public class AttackWheel {
 
 	public void setDisplayed(boolean displayed) {
 		this.displayed = displayed;
+		if (displayed) {
+			this.rotationOffset = RandomSingleton.getInstance().getUnseededRandom().nextInt(360);
+		}
 	}
 
 
@@ -109,6 +118,14 @@ public class AttackWheel {
 
 	public void setAttackComponent(AttackComponent attackComponent) {
 		this.attackComponent = attackComponent;
+	}
+
+	public int getRotationOffset() {
+		return rotationOffset;
+	}
+
+	public void setRotationOffset(int rotationOffset) {
+		this.rotationOffset = rotationOffset;
 	}
 
 //	public List<Sprite> getArcs() {

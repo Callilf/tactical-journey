@@ -45,7 +45,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     		
     		case PLAYER_WHEEL_START:
     			wheel.setDisplayed(true);
-    			RandomXS128 r = RandomSingleton.getInstance().getRandom();
+    			RandomXS128 r = RandomSingleton.getInstance().getSeededRandom();
     			int nextInt = r.nextInt(360);
     			wheel.getArrow().setRotation(nextInt);
     			

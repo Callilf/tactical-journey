@@ -120,7 +120,7 @@ public class Room extends EntitySystem {
 	
 	
 	private void createContent() {
-		RandomXS128 random = RandomSingleton.getInstance().getRandom();
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 
 		switch(type) {
 		case COMMON_ENEMY_ROOM :

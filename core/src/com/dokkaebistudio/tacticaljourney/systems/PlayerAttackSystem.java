@@ -104,6 +104,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		}
 		    		indicatorTransfo.pos.x = indicatorTransfo.pos.x - 5;
 		    		indicatorTransfo.pos.y = indicatorTransfo.pos.y - 5;
+		    		
+		    		SpriteComponent indicatorSprite = Mappers.spriteComponent.get(playerCompo.getActiveSkillIndicator());
+		    		indicatorSprite.hide = false;
 	
 		
 		    		room.state = RoomState.PLAYER_TARGETING;
@@ -183,8 +186,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		//unselect skill if the skill being cleared is the one currently is use
 		if (playerCompo.getActiveSkill() == skillEntity) {
 			playerCompo.setActiveSkill(null);
-			TransformComponent indicatorTransfo = Mappers.transfoComponent.get(playerCompo.getActiveSkillIndicator());
-			indicatorTransfo.pos.set(-100,-100,0);
+			SpriteComponent indicatorSprite = Mappers.spriteComponent.get(playerCompo.getActiveSkillIndicator());
+			indicatorSprite.hide = true;
+
 			
 			playerMoveCompo.showMovableTiles();
 		}

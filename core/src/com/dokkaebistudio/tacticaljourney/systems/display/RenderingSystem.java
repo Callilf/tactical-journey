@@ -74,7 +74,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 					return (int)Math.signum(Mappers.gridPositionComponent.get(entityA).zIndex - Mappers.gridPositionComponent.get(entityB).zIndex);
 				}
 				
-				return (int) Math.signum(Mappers.transfoComponent.get(entityB).pos.z - Mappers.transfoComponent.get(entityA).pos.z);
+				return (int) Math.signum(Mappers.transfoComponent.get(entityA).pos.z - Mappers.transfoComponent.get(entityB).pos.z);
 			}
 		};
 		

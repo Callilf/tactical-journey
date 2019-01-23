@@ -35,15 +35,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
@@ -138,6 +140,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
+		engine.addSystem(new ExperienceSystem(room));
 		
 		engine.addSystem(room);
 		engine.addSystem(mapRenderer);
@@ -235,11 +238,11 @@ public class GameScreen extends ScreenAdapter {
 	/** Create the entity that displays the current game time. */
 	private void createTimeDisplayer() {
 		//Display time
-		timeDisplayer = entityFactory.createText(new Vector3(0,0,100), "Time: ", null);
+		timeDisplayer = entityFactory.createText();
 		TextComponent text = Mappers.textComponent.get(timeDisplayer);
 		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
 		TransformComponent transfo =  Mappers.transfoComponent.get(timeDisplayer);
-		transfo.pos.set(300, 100, 100);
+		transfo.pos.set(PositionConstants.POS_TIMER, PositionConstants.Z_TIMER);
 	}
 
 	private void drawAttackWheel() {
@@ -291,37 +294,7 @@ public class GameScreen extends ScreenAdapter {
 
 			guiCam.update();
 			game.batcher.setProjectionMatrix(guiCam.combined);
-			game.batcher.begin();
-			
-//			int rangeCumul = 0;
-//			for (Sector s : attackWheel.getSectors()) {
-//				for (int i=rangeCumul ; i < rangeCumul + s.range ; i++) {
-//					Sprite sprite = attackWheel.getArcs().get(i);
-//					switch (s.hit) {
-//					case HIT:
-//						sprite.setColor(HIT_COLOR);
-//						break;
-//					case CRITICAL:
-//						sprite.setColor(CRITICAL_COLOR);
-//						break;
-//					case GRAZE:
-//						sprite.setColor(GRAZE_COLOR);
-//						break;
-//					case MISS:
-//						sprite.setColor(MISS_COLOR);
-//						break;
-//					}
-//				}
-//				rangeCumul += s.range;
-//			}
-//			
-//			List<Sprite> reversedArcs = new ArrayList<>();
-//			reversedArcs.addAll(attackWheel.getArcs());
-//			Collections.reverse(reversedArcs);
-//			for (Sprite arc : reversedArcs) {
-//				arc.draw(game.batcher);
-//			}
-			
+			game.batcher.begin();		
 			
 			// Render the arrow
 			Sprite arrow = attackWheel.getArrow();

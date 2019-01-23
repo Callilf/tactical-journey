@@ -9,7 +9,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -30,6 +29,16 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	private int hp;
 	
 	private Entity hpDisplayer;
+	
+	
+	/**
+	 * Increase the max hp by the given amount.
+	 * @param amount the amount to add.
+	 */
+	public void increaseMaxHealth(int amount) {
+		this.setMaxHp(this.maxHp + amount);
+		this.setHp(this.hp + amount);
+	}
 	
 	/**
 	 * Whether this entity is dead.

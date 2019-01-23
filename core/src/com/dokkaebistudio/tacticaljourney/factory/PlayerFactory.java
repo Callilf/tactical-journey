@@ -10,17 +10,19 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
@@ -95,9 +97,9 @@ public final class PlayerFactory {
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
-		playerComponent.setEndTurnButton(entityFactory.createEndTurnButton(new Vector2(0.0f, 0.0f)));
-		playerComponent.setSkill1Button(entityFactory.createSkillButton(SkillEnum.SLASH, SkillEnum.SKILL_1_POSITION));
-		playerComponent.setSkill2Button(entityFactory.createSkillButton(SkillEnum.BOW, SkillEnum.SKILL_2_POSITION));
+		playerComponent.setEndTurnButton(entityFactory.createEndTurnButton());
+		playerComponent.setSkill1Button(entityFactory.createSkillButton(SkillEnum.SLASH, PositionConstants.POS_SKILL_1_BTN));
+		playerComponent.setSkill2Button(entityFactory.createSkillButton(SkillEnum.BOW, PositionConstants.POS_SKILL_2_BTN));
 		playerComponent.setActiveSkillIndicator( createSkillIndicator());
 		playerEntity.add(playerComponent);
 		
@@ -122,21 +124,21 @@ public final class PlayerFactory {
 		ammoCarrierCompo.setMaxBombs(5);
 		
 		Vector3 arrowTextDisplayerPos = new Vector3();
-		arrowTextDisplayerPos.set(1120,1040, 100);
-		Entity arrowsNbText = entityFactory.createText(arrowTextDisplayerPos, "10/10", null);
+		arrowTextDisplayerPos.set(PositionConstants.POS_ARROW_TEXT, PositionConstants.Z_ARROW_TEXT);
+		Entity arrowsNbText = entityFactory.createText(arrowTextDisplayerPos, "10/10");
 		ammoCarrierCompo.setArrowsTextDisplayer(arrowsNbText);
 		Vector3 arrowSpriteDisplayerPos = new Vector3();
-		arrowSpriteDisplayerPos.set(1050,1000, 100);
-		Entity arrowsSpriteDisplayer = entityFactory.createSprite(arrowSpriteDisplayerPos, arrowsTexture, EntityFlagEnum.ARROW_NB, null);
+		arrowSpriteDisplayerPos.set(PositionConstants.POS_ARROW_SPRITE, PositionConstants.Z_ARROW_SPRITE);
+		Entity arrowsSpriteDisplayer = entityFactory.createSprite(arrowSpriteDisplayerPos, arrowsTexture, EntityFlagEnum.ARROW_NB);
 		ammoCarrierCompo.setArrowsSpriteDisplayer(arrowsSpriteDisplayer);
 		
 		Vector3 bombDisplayerPos = new Vector3();
-		bombDisplayerPos.set(1320,1040, 100);
+		bombDisplayerPos.set(PositionConstants.POS_BOMB_TEXT, PositionConstants.Z_BOMB_TEXT);
 		Entity bombsNbText = entityFactory.createText(bombDisplayerPos, "0/5", null);
 		ammoCarrierCompo.setBombsTextDisplayer(bombsNbText);
 		Vector3 bombSpriteDisplayerPos = new Vector3();
-		bombSpriteDisplayerPos.set(1250,1000, 100);
-		Entity bombsSpriteDisplayer = entityFactory.createSprite(bombSpriteDisplayerPos, bombsTexture, EntityFlagEnum.BOMB_NB, null);
+		bombSpriteDisplayerPos.set(PositionConstants.POS_BOMB_SPRITE, PositionConstants.Z_BOMB_SPRITE);
+		Entity bombsSpriteDisplayer = entityFactory.createSprite(bombSpriteDisplayerPos, bombsTexture, EntityFlagEnum.BOMB_NB);
 		ammoCarrierCompo.setBombsSpriteDisplayer(bombsSpriteDisplayer);
 
 		
@@ -151,9 +153,23 @@ public final class PlayerFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
-		Entity hpText = entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, null);
+		Entity hpText = entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100);
 		healthComponent.setHpDisplayer(hpText);
 		playerEntity.add(healthComponent);
+		
+		// Experience compo
+		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
+		expCompo.init(engine);
+		Entity levelDisp = entityFactory.createText(
+				new Vector3(PositionConstants.POS_LEVEL, PositionConstants.Z_LEVEL),
+				"Lvl: 1");
+		expCompo.setLevelDisplayer(levelDisp);
+		Entity expDisp = entityFactory.createText(
+				new Vector3(PositionConstants.POS_EXPERIENCE, PositionConstants.Z_EXPERIENCE), 
+				"Exp: 0/10");
+		expCompo.setExperienceDisplayer(expDisp);
+		playerEntity.add(expCompo);
+
 		
 		//Parent room
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
@@ -179,10 +195,10 @@ public final class PlayerFactory {
 		
 		SpriteComponent indicatorSpriteCompo = engine.createComponent(SpriteComponent.class);
 		indicatorSpriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_skill_active)));
+		indicatorSpriteCompo.hide = true;
 		indicator.add(indicatorSpriteCompo);
 		
 		TransformComponent indicatorTransfoCompo = engine.createComponent(TransformComponent.class);
-		indicatorTransfoCompo.pos.set(-100, -100, 11);
 		indicator.add(indicatorTransfoCompo);
 		
 		engine.addEntity(indicator);

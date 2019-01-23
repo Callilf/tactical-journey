@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -95,7 +96,11 @@ public final class EnemyFactory {
 		Entity hpEntity = this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room);
 		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
-
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(11);
+		enemyEntity.add(expRewardCompo);
+		
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 		parentRoomComponent.setParentRoom(room);
 		enemyEntity.add(parentRoomComponent);
@@ -149,6 +154,10 @@ public final class EnemyFactory {
 		healthComponent.setHp(15);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room));
 		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(15);
+		enemyEntity.add(expRewardCompo);
 		
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 		parentRoomComponent.setParentRoom(room);

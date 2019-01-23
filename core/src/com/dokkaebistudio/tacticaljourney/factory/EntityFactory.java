@@ -15,8 +15,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -26,7 +24,10 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -81,13 +82,13 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the end turn button entity
 	 */
-	public Entity createEndTurnButton(Vector2 pos) {
+	public Entity createEndTurnButton() {
 		Entity endTurnButton = engine.createEntity();
 		endTurnButton.flags = EntityFlagEnum.END_TURN_BUTTON.getFlag();
 
 		
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos.x, pos.y, 10);
+		transfoCompo.pos.set(PositionConstants.POS_END_TURN_BTN, PositionConstants.Z_END_TURN_BTN);
 		endTurnButton.add(transfoCompo);
 		    	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -96,6 +97,27 @@ public final class EntityFactory {
     	
     	engine.addEntity(endTurnButton);
     	return endTurnButton;
+	}
+	
+	
+	/**
+	 * Create the ok button.
+	 * @param pos the position
+	 * @return the ok button entity
+	 */
+	public Entity createOkButton() {
+		Entity okTurnButton = engine.createEntity();
+		okTurnButton.flags = EntityFlagEnum.OK_BUTTON.getFlag();
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		okTurnButton.add(transfoCompo);
+		    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_ok)));
+    	okTurnButton.add(spriteCompo);
+    	
+    	engine.addEntity(okTurnButton);
+    	return okTurnButton;
 	}
 	
 	/**
@@ -109,7 +131,7 @@ public final class EntityFactory {
 
 		
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos.x, pos.y, 10);
+		transfoCompo.pos.set(pos.x, pos.y, PositionConstants.Z_SKILL_BTN);
 		skillButton.add(transfoCompo);
 		    	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -321,10 +343,34 @@ public final class EntityFactory {
 //    	return confirmButton;
 //	}
 	
+	
+	/**
+	 * Create a simple sprite entity.
+	 * @param texture the texture
+	 * @param flag the flag of the entity (for debugging purpose)
+	 * @return the sprite entity
+	 */
+	public Entity createSprite(AtlasRegion texture, EntityFlagEnum flag) {
+		return createSprite(null, texture, flag, null);
+	}
+	
 	/**
 	 * Create a simple sprite entity.
 	 * @param pos the position
 	 * @param texture the texture
+	 * @param flag the flag of the entity (for debugging purpose)
+	 * @return the sprite entity
+	 */
+	public Entity createSprite(Vector3 pos, AtlasRegion texture, EntityFlagEnum flag) {
+		return createSprite(pos, texture, flag, null);
+	}
+	
+	/**
+	 * Create a simple sprite entity.
+	 * @param pos the position
+	 * @param texture the texture
+	 * @param flag the flag of the entity (for debugging purpose)
+	 * @param room the parent room
 	 * @return the sprite entity
 	 */
 	public Entity createSprite(Vector3 pos, AtlasRegion texture, EntityFlagEnum flag, Room room) {
@@ -336,7 +382,9 @@ public final class EntityFactory {
 		sprite.add(spriteCompo);
 		
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos);
+		if (pos != null) {
+			transfoCompo.pos.set(pos);
+		}
 		sprite.add(transfoCompo);
 		
 		if (room != null) {
@@ -349,9 +397,40 @@ public final class EntityFactory {
 		return sprite;
 	}
 	
+	
+	
+	/**
+	 * Create a text that will be displayed on screen.
+	 * @return the text entity
+	 */
+	public Entity createText() {
+		return createText(null, null, null);
+	}
+	
+	/**
+	 * Create a text that will be displayed on screen.
+	 * @param text the text to display
+	 * @return the text entity
+	 */
+	public Entity createText( String text) {
+		return createText(null, text, null);
+	}
+	
+	/**
+	 * Create a text that will be displayed on screen.
+	 * @param pos the positon of the text
+	 * @param text the text to display
+	 * @return the text entity
+	 */
+	public Entity createText(Vector3 pos, String text) {
+		return createText(pos, text, null);
+	}
+	
 	/**
 	 * Create a text that will be displayed on screen.
 	 * @param pos the position of the text
+	 * @param text the text to display
+	 * @param room the parent room of this text
 	 * @return the text entity
 	 */
 	public Entity createText(Vector3 pos, String text, Room room) {
@@ -359,11 +438,15 @@ public final class EntityFactory {
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
 		TransformComponent transfoCompo = new TransformComponent();
-		transfoCompo.pos.set(pos);
+		if (pos != null) {
+			transfoCompo.pos.set(pos);
+		}
 		textTest.add(transfoCompo);
 		
 		TextComponent tc = new TextComponent(Assets.font);
-		tc.setText(text);
+		if (text != null) {
+			tc.setText(text);
+		}
 		textTest.add(tc);
 		
 		if (room != null) {
@@ -374,6 +457,16 @@ public final class EntityFactory {
 		
 		engine.addEntity(textTest);
 		return textTest;
+	}
+	
+	
+	/**
+	 * Create a text that will be displayed on a tile.
+	 * @param pos the position of the text in tile position
+	 * @return the text entity
+	 */
+	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex) {
+		return createTextOnTile(tilePos, text, zIndex, null);
 	}
 	
 	/**
@@ -408,7 +501,8 @@ public final class EntityFactory {
 	/**
 	 * Create a damage displayer.
 	 * @param damage the damage to display
-	 * @param initialPos the initial position
+	 * @param gridPos the grid position
+	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
 	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal) {
@@ -423,7 +517,7 @@ public final class EntityFactory {
 		display.add(displayCompo);
 		
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(initialPos, 100);
+		transfoCompo.pos.set(initialPos, PositionConstants.Z_DAMAGE_DISPLAYER);
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
@@ -433,6 +527,36 @@ public final class EntityFactory {
 			textCompo.setFont(Assets.redFont);
 		}
 		textCompo.setText(damage);
+		display.add(textCompo);
+		
+		engine.addEntity(display);
+		return display;
+	}
+	
+	/**
+	 * Create an experience displayer.
+	 * @param exp the amount of xp earned
+	 * @param initialPos the initial position
+	 * @return the exp displayer entity
+	 */
+	public Entity createExpDisplayer(int exp, Vector2 gridPos) {
+		Entity display = engine.createEntity();
+		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
+
+		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
+		
+		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
+		displayCompo.setInitialPosition(initialPos);
+		display.add(displayCompo);
+		
+		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		transfoCompo.pos.set(initialPos, PositionConstants.Z_EXP_DISPLAYER);
+		display.add(transfoCompo);
+		
+		TextComponent textCompo = engine.createComponent(TextComponent.class);
+		textCompo.setFont(Assets.font);
+		textCompo.setText("Exp+" + exp);
 		display.add(textCompo);
 		
 		engine.addEntity(display);
@@ -494,6 +618,7 @@ public final class EntityFactory {
 		skillMoveComponent.moveRemaining = 0;
 		skillEntity.add(skillMoveComponent);
 		
+		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = engine;
 		attackComponent.setRangeMin(type.getRangeMin());
@@ -502,14 +627,7 @@ public final class EntityFactory {
 		attackComponent.setAmmoType(type.getAmmosType());
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
-		
-//		if (type.getAmmos() >= 0) {
-//			Vector3 pos = new Vector3();
-//			pos.set(1650,100, 100);
-//			Entity ammoText = this.createText(pos, String.valueOf(type.getAmmos()), null);
-//			attackComponent.setAmmoDisplayer(ammoText);
-//		}
-		
+		attackComponent.setParentAttackCompo(parentAttackCompo);
 		skillEntity.add(attackComponent);
 		
 

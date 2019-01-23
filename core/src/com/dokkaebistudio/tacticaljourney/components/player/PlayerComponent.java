@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -8,9 +8,6 @@ public class PlayerComponent implements Component {
 	
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
-	
-	/** The number of tiles the player can move. */
-	public int health;
 	
 	/** The button to end the current turn. */
 	private Entity endTurnButton;

@@ -4,23 +4,25 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 
 /**
  * The util class containing all ComponentMappers.
@@ -43,9 +45,13 @@ public final class Mappers {
 	public final static ComponentMapper<AttackComponent> attackComponent = ComponentMapper.getFor(AttackComponent.class);
 	public final static ComponentMapper<SkillComponent> skillComponent = ComponentMapper.getFor(SkillComponent.class);
 	public final static ComponentMapper<AmmoCarrierComponent> ammoCarrierComponent = ComponentMapper.getFor(AmmoCarrierComponent.class);
+	public final static ComponentMapper<ExperienceComponent> experienceComponent = ComponentMapper.getFor(ExperienceComponent.class);
+
 
 
 	public final static ComponentMapper<HealthComponent> healthComponent = ComponentMapper.getFor(HealthComponent.class);
+	public final static ComponentMapper<ExpRewardComponent> expRewardComponent = ComponentMapper.getFor(ExpRewardComponent.class);
+
 
 	public final static ComponentMapper<TransformComponent> transfoComponent = ComponentMapper.getFor(TransformComponent.class);
 	public final static ComponentMapper<TextComponent> textComponent = ComponentMapper.getFor(TextComponent.class);

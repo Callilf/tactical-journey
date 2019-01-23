@@ -4,11 +4,13 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -89,6 +91,15 @@ public class AttackManager {
 		
 		if (healthComponent.getHp() <= 0) {
 			//target is dead
+			
+			//earn xp
+			ExperienceComponent expCompo = Mappers.experienceComponent.get(attacker);
+			ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
+			if (expCompo != null && expRewardCompo != null) {
+				expCompo.earnXp(expRewardCompo.getExpGain());
+				GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attacker);
+				room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord);
+			}
 			
 			room.removeEnemy(target);
 			//TODO: play death animation

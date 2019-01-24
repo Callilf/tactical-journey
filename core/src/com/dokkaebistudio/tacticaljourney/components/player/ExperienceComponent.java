@@ -28,7 +28,7 @@ public class ExperienceComponent implements Component,Poolable {
 	private boolean leveledUp;
 	
 	/** The number of level up reward choices. */
-	private int choicesNumber = 6;
+	private int choicesNumber = 3;
 	
 	
 	//Displayers
@@ -38,6 +38,7 @@ public class ExperienceComponent implements Component,Poolable {
 	public void init(PooledEngine engine) {
 		this.engine = engine;
 		reset();
+		updateDisplayers();
 	}
 	
 
@@ -46,7 +47,10 @@ public class ExperienceComponent implements Component,Poolable {
 		leveledUp = false;
 		level = 1;
 		currentXp = 0;
-		nextLevelXp = 10;
+		
+		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
+		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
+
 		if (levelDisplayer != null) {
 			engine.removeEntity(levelDisplayer);
 			levelDisplayer = null;
@@ -68,12 +72,7 @@ public class ExperienceComponent implements Component,Poolable {
 		} else {
 			this.levelUp(currentXp + amountToEarn - nextLevelXp);
 		}
-		
-		TextComponent levelText = Mappers.textComponent.get(levelDisplayer);
-		levelText.setText("Level " + level);
-		
-		TextComponent expText = Mappers.textComponent.get(experienceDisplayer);
-		expText.setText("Exp " + currentXp + "/" + nextLevelXp);
+		updateDisplayers();
 	}
 	
 	
@@ -90,6 +89,17 @@ public class ExperienceComponent implements Component,Poolable {
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
 	}
 	
+	private void updateDisplayers() {
+		if (levelDisplayer != null) {
+			TextComponent levelText = Mappers.textComponent.get(levelDisplayer);
+			levelText.setText("Level " + level);
+		}
+		
+		if (experienceDisplayer != null) {
+			TextComponent expText = Mappers.textComponent.get(experienceDisplayer);
+			expText.setText("Exp " + currentXp + "/" + nextLevelXp);
+		}
+	}
 	
 	//*********************************
 	// Getters and Setters
@@ -129,6 +139,7 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setLevelDisplayer(Entity levelDisplayer) {
 		this.levelDisplayer = levelDisplayer;
+		updateDisplayers();
 	}
 
 
@@ -139,6 +150,7 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setExperienceDisplayer(Entity experienceDisplayer) {
 		this.experienceDisplayer = experienceDisplayer;
+		updateDisplayers();
 	}
 
 

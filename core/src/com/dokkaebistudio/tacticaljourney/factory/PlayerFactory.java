@@ -162,11 +162,11 @@ public final class PlayerFactory {
 		expCompo.init(engine);
 		Entity levelDisp = entityFactory.createText(
 				new Vector3(PositionConstants.POS_LEVEL, PositionConstants.Z_LEVEL),
-				"Lvl: 1");
+				"placeholder");
 		expCompo.setLevelDisplayer(levelDisp);
 		Entity expDisp = entityFactory.createText(
 				new Vector3(PositionConstants.POS_EXPERIENCE, PositionConstants.Z_EXPERIENCE), 
-				"Exp: 0/10");
+				"placeholder");
 		expCompo.setExperienceDisplayer(expDisp);
 		playerEntity.add(expCompo);
 

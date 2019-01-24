@@ -15,7 +15,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
-import com.dokkaebistudio.tacticaljourney.components.LevelUpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -31,7 +30,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -102,61 +100,6 @@ public final class EntityFactory {
     	return endTurnButton;
 	}
 	
-	
-	/**
-	 * Create the ok button.
-	 * @param pos the position
-	 * @return the ok button entity
-	 */
-	public Entity createOkButton() {
-		Entity okTurnButton = engine.createEntity();
-		okTurnButton.flags = EntityFlagEnum.OK_BUTTON.getFlag();
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		okTurnButton.add(transfoCompo);
-		    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_ok)));
-    	okTurnButton.add(spriteCompo);
-    	
-    	engine.addEntity(okTurnButton);
-    	return okTurnButton;
-	}
-	
-//	/**
-//	 * Create the level up reward choice button.
-//	 * @return the button entity
-//	 */
-//	public Entity createLevelUpRewardButton(String text, Vector2 pos) {
-//		Entity rewardButton = engine.createEntity();
-//		rewardButton.flags = EntityFlagEnum.LEVEL_UP_REWARD_BUTTON.getFlag();
-//		
-//		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-//		rewardButton.add(transfoCompo);
-//		    	
-//    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-//    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.lvl_up_reward_button)));
-//    	rewardButton.add(spriteCompo);
-//    	
-//    	LevelUpRewardComponent lvlUpRewardCompo = engine.createComponent(LevelUpRewardComponent.class);
-//    	lvlUpRewardCompo.engine = engine;
-//    	Entity textEntity = this.createText(text);
-//    	lvlUpRewardCompo.setText(textEntity);
-//		rewardButton.add(lvlUpRewardCompo);
-//
-//		//Place button
-//		transfoCompo.pos.set(pos.x - spriteCompo.getSprite().getWidth()/2,pos.y, PositionConstants.Z_LVL_UP_BTN);
-//		
-//		//Place text in button
-//		TextComponent textComponent = Mappers.textComponent.get(textEntity);
-//		TransformComponent textTransfoComponent = Mappers.transfoComponent.get(textEntity);
-//		textTransfoComponent.pos.set(transfoCompo.pos.x + 20, 
-//				transfoCompo.pos.y + 30 + textComponent.getHeight()/2, 
-//				PositionConstants.Z_LVL_UP_BTN_TEXT);
-//    	
-//    	engine.addEntity(rewardButton);
-//    	return rewardButton;
-//	}
 	
 	/**
 	 * Create the end turn button.

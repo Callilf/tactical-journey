@@ -67,7 +67,10 @@ public class Assets {
 	public static final String lvl_up_choice_frame = "hud_lvl_up_choice_frame";
 	public static final String lvl_up_choice_desc_panel = "hud_lvl_up_choice_desc_panel";
 	public static final String lvl_up_choice_reward_panel = "hud_lvl_up_choice_reward_panel";
-	public static final String btn_ok = "btn-ok";
+	public static final String lvl_up_choice_claim_btn = "hud_lvl_up_choice_claim_btn";
+	public static final String lvl_up_choice_claim_btn_pushed = "hud_lvl_up_choice_claim_btn_pushed";
+	public static final String lvl_up_continue_btn = "hud_lvl_up_continue_btn";
+	public static final String lvl_up_continue_btn_pushed = "hud_lvl_up_continue_btn_pushed";
 	
 	public static final String btn_skill_active = "btn-skill-selected";
 	public static final String btn_skill_attack = "btn-skill-slash";

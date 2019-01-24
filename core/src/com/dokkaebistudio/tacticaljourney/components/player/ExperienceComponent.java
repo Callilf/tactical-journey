@@ -27,6 +27,9 @@ public class ExperienceComponent implements Component,Poolable {
 	/** Whether the entity just leveled up. */
 	private boolean leveledUp;
 	
+	/** The number of level up reward choices. */
+	private int choicesNumber = 6;
+	
 	
 	//Displayers
 	private Entity levelDisplayer;
@@ -136,6 +139,16 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setExperienceDisplayer(Entity experienceDisplayer) {
 		this.experienceDisplayer = experienceDisplayer;
+	}
+
+
+	public int getChoicesNumber() {
+		return choicesNumber;
+	}
+
+
+	public void setChoicesNumber(int choicesNumber) {
+		this.choicesNumber = choicesNumber;
 	}
 
 

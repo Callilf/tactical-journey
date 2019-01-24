@@ -2,6 +2,7 @@ package com.dokkaebistudio.tacticaljourney.leveling;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -13,13 +14,25 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class LevelUpRewardChoice {
 	
+	/** The levelup reward contained in this choice. */
 	private LevelUpRewardEnum levelUpRewardEnum;
-
+	
+	/** The hidden panel containing the real reward. */
 	private Entity rewardPanel;
+	
+	/** The text displayed on the hidden panel containing the real reward. */
 	private Entity rewardText;
+	
+	/** The front panel containing the description of the reward. */
 	private Entity descriptionPanel;
+	
+	/** The text on the front panel containing the description of the reward. */
 	private Entity descriptionText;
+	
+	/** The frame of the choice. */
 	private Entity frame;
+	
+	/** The button to claim the reward. */
 	private Entity claimBtn;
 	
 	private PooledEngine engine;
@@ -74,12 +87,40 @@ public class LevelUpRewardChoice {
 		
 		rewardText = factory.createText(new Vector3(pos.x + 30, pos.y + 65, 497 - choiceNumber), levelUpRewardEnum.getFinalDescription(), Assets.smallFont, null);
 		
+		
+		// Claim Button
+		
+		claimBtn = engine.createEntity();
+		
+		SpriteComponent claimBtnSprite = engine.createComponent(SpriteComponent.class);
+		claimBtnSprite.setSprite(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn)));
+		claimBtn.add(claimBtnSprite);
+		
+		TransformComponent claimBtnPos = engine.createComponent(TransformComponent.class);
+		claimBtnPos.pos.set(new Vector3(pos.x + 380, pos.y + 30, 501));
+		claimBtn.add(claimBtnPos);
+		
+		engine.addEntity(claimBtn);
 	}
 	
 	
 	public boolean containsPoint(int x, int y) {
-		SpriteComponent spriteComponent = Mappers.spriteComponent.get(frame);
+		SpriteComponent spriteComponent = Mappers.spriteComponent.get(claimBtn);
 		return spriteComponent.containsPoint(x, y);
+	}
+	
+	public void pushClaimBtn() {
+		SpriteComponent spriteComponent = Mappers.spriteComponent.get(claimBtn);
+		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));
+	}
+	public void releaseClaimBtn() {
+		SpriteComponent spriteComponent = Mappers.spriteComponent.get(claimBtn);
+		spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn)));
+	}
+	
+	public void deactivateClaimBtn() {
+		SpriteComponent spriteComponent = Mappers.spriteComponent.get(claimBtn);
+		spriteComponent.hide = true;
 	}
 	
 	public void clear() {

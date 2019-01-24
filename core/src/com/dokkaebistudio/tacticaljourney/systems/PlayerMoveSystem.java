@@ -263,14 +263,14 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			// If click on a skill button, make it look pushed but don't to any thing else.
 			// The real action is on click release.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
+			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
 			if (skill1SpriteComponent.containsPoint(x, y)) {
-				pushSkillButton(playerCompo.getSkill1(), skill1SpriteComponent);
+				pushSkillButton(playerCompo.getSkillMelee(), skill1SpriteComponent);
 			}
 
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill2Button());
+			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
 			if (skill2SpriteComponent.containsPoint(x, y)) {
-				pushSkillButton(playerCompo.getSkill2(), skill2SpriteComponent);
+				pushSkillButton(playerCompo.getSkillRange(), skill2SpriteComponent);
 			}
 		}
 		if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -279,14 +279,14 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int y = (int) touchPoint.y;
 
 			// If release on the button, restore the original texture and end the turn.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
-			SkillSelectionEnum sse = releaseSkillButton(playerCompo.getSkill1(), playerCompo.getSkill1Button(),
+			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
+			SkillSelectionEnum sse = releaseSkillButton(playerCompo.getSkillMelee(), playerCompo.getSkillMeleeButton(),
 					playerCompo, skill1SpriteComponent.containsPoint(x, y));
 			if (sse != null)
 				skillSelected = sse;
 
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill2Button());
-			sse = releaseSkillButton(playerCompo.getSkill2(), playerCompo.getSkill2Button(), playerCompo,
+			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
+			sse = releaseSkillButton(playerCompo.getSkillRange(), playerCompo.getSkillRangeButton(), playerCompo,
 					skill2SpriteComponent.containsPoint(x, y));
 			if (sse != null)
 				skillSelected = sse;
@@ -295,25 +295,25 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		if (InputSingleton.getInstance().skill1JustPressed) {
 			// If skill hotkey pressed, make the skill button look pushed.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill1Button());
-			pushSkillButton(playerCompo.getSkill1(), skill1SpriteComponent);
+			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
+			pushSkillButton(playerCompo.getSkillMelee(), skill1SpriteComponent);
 		}
 		if (InputSingleton.getInstance().skill1JustReleased) {
 			// If skill hotkey released, restore the button texture and activate/deactivate
 			// the skill.
-			skillSelected = releaseSkillButton(playerCompo.getSkill1(), playerCompo.getSkill1Button(), playerCompo,
+			skillSelected = releaseSkillButton(playerCompo.getSkillMelee(), playerCompo.getSkillMeleeButton(), playerCompo,
 					true);
 		}
 
 		if (InputSingleton.getInstance().skill2JustPressed) {
 			// If skill 2 hotkey pressed, make the skill button look pushed.
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkill2Button());
-			pushSkillButton(playerCompo.getSkill2(), skill2SpriteComponent);
+			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
+			pushSkillButton(playerCompo.getSkillRange(), skill2SpriteComponent);
 		}
 		if (InputSingleton.getInstance().skill2JustReleased) {
 			// If skill 2 hotkey released, restore the button texture and
 			// acticate/deactivate the skill.
-			skillSelected = releaseSkillButton(playerCompo.getSkill2(), playerCompo.getSkill2Button(), playerCompo,
+			skillSelected = releaseSkillButton(playerCompo.getSkillRange(), playerCompo.getSkillRangeButton(), playerCompo,
 					true);
 		}
 

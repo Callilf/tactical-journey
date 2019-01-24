@@ -62,8 +62,11 @@ public class Assets {
 	public static final String btn_end_turn = "btn-end-turn";
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
 	
-	public static final String lvl_up_background = "hud_lvl_up_background";
-	public static final String lvl_up_reward_button = "hud_lvl_up_btn";
+	public static final String lvl_up_background_top = "hud_lvl_up_background_top";
+	public static final String lvl_up_background_bottom = "hud_lvl_up_background_bottom";
+	public static final String lvl_up_choice_frame = "hud_lvl_up_choice_frame";
+	public static final String lvl_up_choice_desc_panel = "hud_lvl_up_choice_desc_panel";
+	public static final String lvl_up_choice_reward_panel = "hud_lvl_up_choice_reward_panel";
 	public static final String btn_ok = "btn-ok";
 	
 	public static final String btn_skill_active = "btn-skill-selected";
@@ -97,6 +100,8 @@ public class Assets {
 	public static BitmapFont font;
 	public static BitmapFont greenFont;
 	public static BitmapFont redFont;
+	
+	public static BitmapFont smallFont;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -175,6 +180,9 @@ public class Assets {
 		greenFont.setColor(Color.OLIVE);
 		redFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		redFont.setColor(Color.RED);
+		smallFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		smallFont.getData().setScale(0.8f);
+
 	}
 
 	public static void playSound (String sound) {

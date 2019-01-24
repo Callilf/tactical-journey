@@ -18,14 +18,14 @@ public class PlayerComponent implements Component {
 	private Entity activeSkillIndicator;
 	
 	/** The first skill. */
-	private Entity skill1;
+	private Entity skillMelee;
 	/** The button to activate skill 1. */
-	private Entity skill1Button;
+	private Entity skillMeleeButton;
 
 	/** The second skill. */
-	private Entity skill2;
+	private Entity skillRange;
 	/** The button to activate skill 2. */
-	private Entity skill2Button;
+	private Entity skillRangeButton;
 	
 	
 	
@@ -40,36 +40,36 @@ public class PlayerComponent implements Component {
 		this.endTurnButton = endTurnButton;
 	}
 
-	public Entity getSkill1() {
-		return skill1;
+	public Entity getSkillMelee() {
+		return skillMelee;
 	}
 
-	public void setSkill1(Entity skill1) {
-		this.skill1 = skill1;
+	public void setSkillMelee(Entity skill1) {
+		this.skillMelee = skill1;
 	}
 
-	public Entity getSkill1Button() {
-		return skill1Button;
+	public Entity getSkillMeleeButton() {
+		return skillMeleeButton;
 	}
 
-	public void setSkill1Button(Entity skill1Button) {
-		this.skill1Button = skill1Button;
+	public void setSkillMeleeButton(Entity skill1Button) {
+		this.skillMeleeButton = skill1Button;
 	}
 
-	public Entity getSkill2() {
-		return skill2;
+	public Entity getSkillRange() {
+		return skillRange;
 	}
 
-	public void setSkill2(Entity skill2) {
-		this.skill2 = skill2;
+	public void setSkillRange(Entity skill2) {
+		this.skillRange = skill2;
 	}
 
-	public Entity getSkill2Button() {
-		return skill2Button;
+	public Entity getSkillRangeButton() {
+		return skillRangeButton;
 	}
 
-	public void setSkill2Button(Entity skill2Button) {
-		this.skill2Button = skill2Button;
+	public void setSkillRangeButton(Entity skill2Button) {
+		this.skillRangeButton = skill2Button;
 	}
 
 	public Entity getActiveSkill() {

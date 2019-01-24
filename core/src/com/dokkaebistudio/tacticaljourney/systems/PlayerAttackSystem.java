@@ -74,10 +74,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     		if (skillEntity != null) {
     			//unselect any other skill
-    			if (playerCompo.getSkill1() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkill1(), moveCompo);
-    			} else if (playerCompo.getSkill2() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkill2(), moveCompo);
+    			if (playerCompo.getSkillMelee() != skillEntity) {
+    				stopSkillUse(playerCompo, playerCompo.getSkillMelee(), moveCompo);
+    			} else if (playerCompo.getSkillRange() != skillEntity) {
+    				stopSkillUse(playerCompo, playerCompo.getSkillRange(), moveCompo);
     			}
     			
     			AttackComponent attackComponent = Mappers.attackComponent.get(skillEntity);
@@ -93,11 +93,11 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		
 		    		switch(skillComponent.getSkillNumber()) {
 		    		case 1:
-			    		TransformComponent activeSkill1BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill1Button());
+			    		TransformComponent activeSkill1BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkillMeleeButton());
 			    		indicatorTransfo.pos.set(activeSkill1BtnTransfo.pos);
 			    		break;
 		    		case 2:
-			    		TransformComponent activeSkill2BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkill2Button());
+			    		TransformComponent activeSkill2BtnTransfo = Mappers.transfoComponent.get(playerCompo.getSkillRangeButton());
 			    		indicatorTransfo.pos.set(activeSkill2BtnTransfo.pos);
 			    		break;
 			    		default:
@@ -232,8 +232,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		attackComponent.clearAttackableTiles();
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent != null && playerComponent.getSkill1() != null) {
-			clearAllEntityTiles(playerComponent.getSkill1());
+		if (playerComponent != null && playerComponent.getSkillMelee() != null) {
+			clearAllEntityTiles(playerComponent.getSkillMelee());
 		}
 	}
     

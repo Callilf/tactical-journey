@@ -37,7 +37,9 @@ public enum RoomState {
 	ENEMY_ATTACK,
 	
 	
-	LEVEL_UP;
+	LEVEL_UP,
+	LEVEL_UP_ANIM,
+	LEVEL_UP_WAIT;
 	
 	
 	

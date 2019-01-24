@@ -53,14 +53,14 @@ public final class PositionConstants {
 	
 	
 	// Level up notif popin
-	public static Vector2 POS_LVL_UP_BACKGROUND = new Vector2(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2 );
-	public static float Z_LVL_UP_BACKGROUND = 499f;
+	public static Vector2 POS_LVL_UP_BACKGROUND = new Vector2(GameScreen.SCREEN_W/2, 550f );
+	public static float Z_LVL_UP_BACKGROUND = 510f;
 
 	public static Vector2 POS_LVL_UP_TITLE = new Vector2(GameScreen.SCREEN_W/2, 700f);
-	public static float Z_LVL_UP_TITLE = 500f;
+	public static float Z_LVL_UP_TITLE = 511;
 
 	public static Vector2 POS_LVL_UP_SUBTITLE = new Vector2(GameScreen.SCREEN_W/2, 650f);
-	public static float Z_LVL_UP_SUBTITLE = 500f;
+	public static float Z_LVL_UP_SUBTITLE = 511;
 
 	
 	public static float Z_LVL_UP_BTN = 500f;

@@ -98,8 +98,8 @@ public final class PlayerFactory {
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
 		playerComponent.setEndTurnButton(entityFactory.createEndTurnButton());
-		playerComponent.setSkill1Button(entityFactory.createSkillButton(SkillEnum.SLASH, PositionConstants.POS_SKILL_1_BTN));
-		playerComponent.setSkill2Button(entityFactory.createSkillButton(SkillEnum.BOW, PositionConstants.POS_SKILL_2_BTN));
+		playerComponent.setSkillMeleeButton(entityFactory.createSkillButton(SkillEnum.SLASH, PositionConstants.POS_SKILL_1_BTN));
+		playerComponent.setSkillRangeButton(entityFactory.createSkillButton(SkillEnum.BOW, PositionConstants.POS_SKILL_2_BTN));
 		playerComponent.setActiveSkillIndicator( createSkillIndicator());
 		playerEntity.add(playerComponent);
 		

@@ -84,6 +84,14 @@ public class AttackComponent implements Component, Poolable {
 	public void increaseStrength(int amount) {
 		this.strength += amount;
 	}
+	
+	/**
+	 * Increase the range max by the given amount.
+	 * @param amount the amount to add
+	 */
+	public void increaseRangeMax(int amount) {
+		this.rangeMax += amount;
+	}
 
 	
 

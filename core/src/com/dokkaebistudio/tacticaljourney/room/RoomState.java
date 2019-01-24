@@ -37,9 +37,7 @@ public enum RoomState {
 	ENEMY_ATTACK,
 	
 	
-	LEVEL_UP,
-	LEVEL_UP_ANIM,
-	LEVEL_UP_WAIT;
+	LEVEL_UP_POPIN;
 	
 	
 	
@@ -103,6 +101,6 @@ public enum RoomState {
 	 * @return true if in a state where the game is paused.
 	 */
 	public boolean isPaused() {
-		return this == RoomState.LEVEL_UP;
+		return this == RoomState.LEVEL_UP_POPIN;
 	}
 }

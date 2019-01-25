@@ -30,6 +30,16 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	
 	private Entity hpDisplayer;
 	
+	/**
+	 * Restore the given amount of health.
+	 * @param amount the amount to restore
+	 */
+	public void restoreHealth(int amount) {
+		this.setHp(this.getHp() + amount);
+		if (this.getHp() > this.getMaxHp()) {
+			this.setHp(this.getMaxHp());
+		}
+	}
 	
 	/**
 	 * Increase the max hp by the given amount.
@@ -49,12 +59,18 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	}
 	
 	
+	
+	
+	
 	@Override
 	public void reset() {
 		if (hpDisplayer != null) {
 			engine.removeEntity(hpDisplayer);		
 		}
 	}
+	
+	
+	
 	
 	//**************************************
 	// Movement

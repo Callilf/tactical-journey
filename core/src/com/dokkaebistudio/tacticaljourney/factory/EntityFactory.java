@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -99,26 +100,6 @@ public final class EntityFactory {
     	return endTurnButton;
 	}
 	
-	
-	/**
-	 * Create the ok button.
-	 * @param pos the position
-	 * @return the ok button entity
-	 */
-	public Entity createOkButton() {
-		Entity okTurnButton = engine.createEntity();
-		okTurnButton.flags = EntityFlagEnum.OK_BUTTON.getFlag();
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		okTurnButton.add(transfoCompo);
-		    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_ok)));
-    	okTurnButton.add(spriteCompo);
-    	
-    	engine.addEntity(okTurnButton);
-    	return okTurnButton;
-	}
 	
 	/**
 	 * Create the end turn button.
@@ -434,6 +415,17 @@ public final class EntityFactory {
 	 * @return the text entity
 	 */
 	public Entity createText(Vector3 pos, String text, Room room) {
+		return createText(pos, text, Assets.font, room);
+	}
+	
+	/**
+	 * Create a text that will be displayed on screen.
+	 * @param pos the position of the text
+	 * @param text the text to display
+	 * @param room the parent room of this text
+	 * @return the text entity
+	 */
+	public Entity createText(Vector3 pos, String text, BitmapFont font, Room room) {
 		Entity textTest = engine.createEntity();
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
@@ -443,7 +435,7 @@ public final class EntityFactory {
 		}
 		textTest.add(transfoCompo);
 		
-		TextComponent tc = new TextComponent(Assets.font);
+		TextComponent tc = new TextComponent(font);
 		if (text != null) {
 			tc.setText(text);
 		}
@@ -633,10 +625,10 @@ public final class EntityFactory {
 
 		switch(skillNumber) {
 		case 1:
-			playerComponent.setSkill1(skillEntity);
+			playerComponent.setSkillMelee(skillEntity);
 			break;
 		case 2:
-			playerComponent.setSkill2(skillEntity);
+			playerComponent.setSkillRange(skillEntity);
 			break;
 			default:
 				break;

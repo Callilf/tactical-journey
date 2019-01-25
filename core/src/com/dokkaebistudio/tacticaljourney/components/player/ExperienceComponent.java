@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -26,6 +27,9 @@ public class ExperienceComponent implements Component,Poolable {
 	/** Whether the entity just leveled up. */
 	private boolean leveledUp;
 	
+	/** The number of level up reward choices. */
+	private int choicesNumber = 3;
+	
 	
 	//Displayers
 	private Entity levelDisplayer;
@@ -34,6 +38,7 @@ public class ExperienceComponent implements Component,Poolable {
 	public void init(PooledEngine engine) {
 		this.engine = engine;
 		reset();
+		updateDisplayers();
 	}
 	
 
@@ -42,7 +47,10 @@ public class ExperienceComponent implements Component,Poolable {
 		leveledUp = false;
 		level = 1;
 		currentXp = 0;
-		nextLevelXp = 10;
+		
+		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
+		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
+
 		if (levelDisplayer != null) {
 			engine.removeEntity(levelDisplayer);
 			levelDisplayer = null;
@@ -64,12 +72,7 @@ public class ExperienceComponent implements Component,Poolable {
 		} else {
 			this.levelUp(currentXp + amountToEarn - nextLevelXp);
 		}
-		
-		TextComponent levelText = Mappers.textComponent.get(levelDisplayer);
-		levelText.setText("Level " + level);
-		
-		TextComponent expText = Mappers.textComponent.get(experienceDisplayer);
-		expText.setText("Exp " + currentXp + "/" + nextLevelXp);
+		updateDisplayers();
 	}
 	
 	
@@ -80,10 +83,23 @@ public class ExperienceComponent implements Component,Poolable {
 	private void levelUp(int startingXp) {
 		level += 1;
 		currentXp = startingXp;
-		nextLevelXp = 10 * level;
 		leveledUp = true;
+
+		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
+		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
 	}
 	
+	private void updateDisplayers() {
+		if (levelDisplayer != null) {
+			TextComponent levelText = Mappers.textComponent.get(levelDisplayer);
+			levelText.setText("Level " + level);
+		}
+		
+		if (experienceDisplayer != null) {
+			TextComponent expText = Mappers.textComponent.get(experienceDisplayer);
+			expText.setText("Exp " + currentXp + "/" + nextLevelXp);
+		}
+	}
 	
 	//*********************************
 	// Getters and Setters
@@ -123,6 +139,7 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setLevelDisplayer(Entity levelDisplayer) {
 		this.levelDisplayer = levelDisplayer;
+		updateDisplayers();
 	}
 
 
@@ -133,6 +150,17 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setExperienceDisplayer(Entity experienceDisplayer) {
 		this.experienceDisplayer = experienceDisplayer;
+		updateDisplayers();
+	}
+
+
+	public int getChoicesNumber() {
+		return choicesNumber;
+	}
+
+
+	public void setChoicesNumber(int choicesNumber) {
+		this.choicesNumber = choicesNumber;
 	}
 
 

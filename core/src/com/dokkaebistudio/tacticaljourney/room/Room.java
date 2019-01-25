@@ -150,6 +150,9 @@ public class Room extends EntitySystem {
 			break;
 			
 		case START_FLOOR_ROOM:
+			
+//			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 10), 1);
+//			enemies.add(enemy);
 			break;
 		case END_FLOOR_ROOM:
 			int nextInt = random.nextInt(possibleSpawns.size());

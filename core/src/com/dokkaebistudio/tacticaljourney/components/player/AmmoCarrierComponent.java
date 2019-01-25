@@ -114,6 +114,40 @@ public class AmmoCarrierComponent implements Component {
 	
 	
 	
+	// Increase MAX methods
+	
+	/**
+	 * Increase the max number of arrows.
+	 * @param amount the amount to add
+	 */
+	public void increaseMaxArrows(int amount) {
+		this.maxArrows += amount;
+		this.arrows += amount;
+		updateArrowDisplayer();
+	}
+	
+	/**
+	 * Increase the max number of bombs.
+	 * @param amount the amount to add
+	 */
+	public void increaseMaxBombs(int amount) {
+		this.maxBombs += amount;
+		this.bombs += amount;
+		updateBombDisplayer();
+	}
+	
+	/**
+	 * Increase the max number of bombs and arrows.
+	 * @param amount the amount to add
+	 */
+	public void increaseMaxBombsAndArrows(int amount) {
+		this.increaseMaxArrows(amount);
+		this.increaseMaxBombs(amount);
+		updateArrowDisplayer();
+		updateBombDisplayer();
+	}
+	
+	
 
 
 	private void updateBombDisplayer() {

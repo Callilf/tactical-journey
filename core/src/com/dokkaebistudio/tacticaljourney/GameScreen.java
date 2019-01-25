@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
@@ -69,6 +70,7 @@ public class GameScreen extends ScreenAdapter {
 
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
+	public Stage stage;
 
 	Vector3 touchPoint;
 	
@@ -102,6 +104,9 @@ public class GameScreen extends ScreenAdapter {
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
 		viewport = new FitViewport(SCREEN_W, SCREEN_H, guiCam);
 		
+		/// create stage and set it as input processor
+		stage = new Stage(viewport);
+		
 		//Instanciate the input processor
 		InputSingleton.createInstance(guiCam, viewport);
 
@@ -133,7 +138,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
-		engine.addSystem(new ExperienceSystem(room));
+		engine.addSystem(new ExperienceSystem(room, stage));
 		
 		engine.addSystem(room);
 		engine.addSystem(mapRenderer);

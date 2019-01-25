@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.LevelUpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -51,6 +52,7 @@ public final class Mappers {
 
 	public final static ComponentMapper<HealthComponent> healthComponent = ComponentMapper.getFor(HealthComponent.class);
 	public final static ComponentMapper<ExpRewardComponent> expRewardComponent = ComponentMapper.getFor(ExpRewardComponent.class);
+	public final static ComponentMapper<LevelUpRewardComponent> levelUpRewardComponent = ComponentMapper.getFor(LevelUpRewardComponent.class);
 
 
 	public final static ComponentMapper<TransformComponent> transfoComponent = ComponentMapper.getFor(TransformComponent.class);

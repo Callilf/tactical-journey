@@ -21,10 +21,7 @@ public enum ItemEnum {
 		public void pickUp(Entity picker, Entity item, Room room) {
 			//Heal the picker for 25 HP !
 			HealthComponent healthComponent = Mappers.healthComponent.get(picker);
-			healthComponent.setHp(healthComponent.getHp() + 25);
-			if (healthComponent.getHp() > healthComponent.getMaxHp()) {
-				healthComponent.setHp(healthComponent.getMaxHp());
-			}
+			healthComponent.restoreHealth(25);
 			
 			//Display a DamageDisplayer
 			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(item);

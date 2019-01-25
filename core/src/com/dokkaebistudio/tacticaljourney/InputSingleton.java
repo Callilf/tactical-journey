@@ -147,7 +147,7 @@ public class InputSingleton {
 	/**
 	 * Initialize the inputProcessor.
 	 */
-	private void initInputProcessor() {
+	public void initInputProcessor() {
 		Gdx.input.setInputProcessor(new InputProcessor() {
 
 			@Override

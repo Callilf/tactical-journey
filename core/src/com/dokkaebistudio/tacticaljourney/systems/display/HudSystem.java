@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.systems.display;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -35,11 +38,17 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	/** The current room. */
 	private Room room;
-
+	
+	
+	// Health and Experience
+	private Table healthAndXptable; 
 	private Label levelLabel;
 	private Label expLabel;
 	private Label healthLabel;
 
+	// Skills
+	private Table skillsTable;
+	private List<Button> allSkillButtons = new ArrayList<>();;
 	private Button meleeSkillButton;
 	private Button rangeSkillButton;
 	private Button bombSkillButton;
@@ -71,158 +80,165 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
 
-		Table HealthAndXptable = new Table();
-		HealthAndXptable.setPosition(200, 30);
-
-		LabelStyle hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-
-		// LEVEL
-		if (levelLabel == null) {
-			levelLabel = new Label("", hudStyle);
+		if (healthAndXptable == null) {
+			healthAndXptable = new Table();
+			healthAndXptable.setPosition(200, 30);
+	
+			LabelStyle hudStyle = new LabelStyle(Assets.font, Color.WHITE);
+	
+			// LEVEL
+			if (levelLabel == null) {
+				levelLabel = new Label("", hudStyle);
+			}
+			levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
+			healthAndXptable.add(levelLabel).left().uniformX();
+			healthAndXptable.row();
+	
+			// XP
+			if (expLabel == null) {
+				expLabel = new Label("", hudStyle);
+			}
+			expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
+	
+			healthAndXptable.add(expLabel).left().uniformX();
+			healthAndXptable.row();
+	
+			// LIFE
+			if (healthLabel == null) {
+				healthLabel = new Label("", hudStyle);
+			}
+			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+			healthAndXptable.add(healthLabel).left().uniformX();
+	
+			healthAndXptable.pack();
+			stage.addActor(healthAndXptable);
 		}
+		
 		levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
-		HealthAndXptable.add(levelLabel).left().uniformX();
-		HealthAndXptable.row();
-
-		// XP
-		if (expLabel == null) {
-			expLabel = new Label("", hudStyle);
-		}
-		expLabel.setText(
-				"Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
-
-		HealthAndXptable.add(expLabel).left().uniformX();
-		HealthAndXptable.row();
-
-		// LIFE
-		if (healthLabel == null) {
-			healthLabel = new Label("", hudStyle);
-		}
-		healthLabel.setText(
-				"Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
-		HealthAndXptable.add(healthLabel).left().uniformX();
-
-		HealthAndXptable.pack();
-		stage.addActor(HealthAndXptable);
+		expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
+		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
 	}
 
 	private void displaySkillButtons(final Entity player) {
-		Table skillsTable = new Table();
-		skillsTable.setPosition(1500, 30);
-		skillsTable.setTouchable(Touchable.enabled);
-
-		if (meleeSkillButton == null) {
-			Drawable meleeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_attack)));
-			Drawable meleeSkillButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_attack_pushed)));
-			Drawable meleeSkillButtonChecked = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_attack_checked)));
-			ButtonStyle meleeSkillButtonStyle = new ButtonStyle(meleeSkillButtonUp, meleeSkillButtonDown,
-					meleeSkillButtonChecked);
-			meleeSkillButton = new Button(meleeSkillButtonStyle);
-			meleeSkillButton.setProgrammaticChangeEvents(true);
-
-			meleeSkillButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-
-					if (room.getState().isSkillChangeAllowed()) {
-						if (meleeSkillButton.isChecked()) {
-							rangeSkillButton.setChecked(false);
-
-							activateSkill(meleeSkillButton, player);
-						} else {
-							deactivateSkill(player);
-						}
-					}
-				}
-
-			});
-
-			// Add shortcut to activate the button
-			stage.addListener(new InputListener() {
-				@Override
-				public boolean keyUp(InputEvent event, int keycode) {
-					if (keycode == Input.Keys.NUM_1) {
-						if (!meleeSkillButton.isDisabled()) {
-							meleeSkillButton.toggle();
-						}
-						return false;
-					}
-					return super.keyUp(event, keycode);
-				}
-			});
-
-		}
-		meleeSkillButton.setDisabled(!room.getState().isSkillChangeAllowed());
-		if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED) {
-			meleeSkillButton.setProgrammaticChangeEvents(false);
-			meleeSkillButton.setChecked(false);
-		} else {
-			meleeSkillButton.setProgrammaticChangeEvents(true);
-		}
-
-		skillsTable.add(meleeSkillButton);
 		
-		
-
-		if (rangeSkillButton == null) {
-			Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bow)));
-			Drawable rangeSkillButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bow_pushed)));
-			Drawable rangeSkillButtonChecked = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bow_checked)));
-			ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
-					rangeSkillButtonChecked);
-			rangeSkillButton = new Button(rangeSkillButtonStyle);
-			rangeSkillButton.setProgrammaticChangeEvents(true);
-
-			rangeSkillButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					
-					if (room.getState().isSkillChangeAllowed()) {
-						if (rangeSkillButton.isChecked()) {
-							meleeSkillButton.setChecked(false);
+		if (skillsTable == null) {
+			allSkillButtons.clear();
+			
+			skillsTable = new Table();
+			skillsTable.setPosition(1500, 30);
+			skillsTable.setTouchable(Touchable.enabled);
 	
-							activateSkill(rangeSkillButton, player);
+			if (meleeSkillButton == null) {
+				Drawable meleeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_attack)));
+				Drawable meleeSkillButtonDown = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_attack_pushed)));
+				Drawable meleeSkillButtonChecked = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_attack_checked)));
+				ButtonStyle meleeSkillButtonStyle = new ButtonStyle(meleeSkillButtonUp, meleeSkillButtonDown,
+						meleeSkillButtonChecked);
+				meleeSkillButton = new Button(meleeSkillButtonStyle);
+				meleeSkillButton.setProgrammaticChangeEvents(true);
+	
+				meleeSkillButton.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+	
+						if (room.getState().isSkillChangeAllowed()) {
+							if (meleeSkillButton.isChecked()) {
+								rangeSkillButton.setChecked(false);
+	
+								activateSkill(meleeSkillButton, player);
+							} else {
+								deactivateSkill(player);
+							}
+						}
+					}
+	
+				});
+	
+				// Add shortcut to activate the button
+				stage.addListener(new InputListener() {
+					@Override
+					public boolean keyUp(InputEvent event, int keycode) {
+						if (keycode == Input.Keys.NUM_1) {
+							if (!meleeSkillButton.isDisabled()) {
+								meleeSkillButton.toggle();
+							}
+							return false;
+						}
+						return super.keyUp(event, keycode);
+					}
+				});
+	
+				allSkillButtons.add(meleeSkillButton);
+			}
+			skillsTable.add(meleeSkillButton);
+			
+			
+	
+			if (rangeSkillButton == null) {
+				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bow)));
+				Drawable rangeSkillButtonDown = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_bow_pushed)));
+				Drawable rangeSkillButtonChecked = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_bow_checked)));
+				ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
+						rangeSkillButtonChecked);
+				rangeSkillButton = new Button(rangeSkillButtonStyle);
+				rangeSkillButton.setProgrammaticChangeEvents(true);
+	
+				rangeSkillButton.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						
+						if (room.getState().isSkillChangeAllowed()) {
+							if (rangeSkillButton.isChecked()) {
+								meleeSkillButton.setChecked(false);
+		
+								activateSkill(rangeSkillButton, player);
+							} else {
+								deactivateSkill(player);
+							}
 						} else {
-							deactivateSkill(player);
+							rangeSkillButton.setChecked(!rangeSkillButton.isChecked());
 						}
-					} else {
-						rangeSkillButton.setChecked(!rangeSkillButton.isChecked());
 					}
-				}
-
-			});
-
-			// Add shortcut to activate the button
-			stage.addListener(new InputListener() {
-				@Override
-				public boolean keyUp(InputEvent event, int keycode) {
-					if (keycode == Input.Keys.NUM_2) {
-						if (!rangeSkillButton.isDisabled()) {
-							rangeSkillButton.toggle();
+	
+				});
+	
+				// Add shortcut to activate the button
+				stage.addListener(new InputListener() {
+					@Override
+					public boolean keyUp(InputEvent event, int keycode) {
+						if (keycode == Input.Keys.NUM_2) {
+							if (!rangeSkillButton.isDisabled()) {
+								rangeSkillButton.toggle();
+							}
+							return false;
 						}
-						return false;
+						return super.keyUp(event, keycode);
 					}
-					return super.keyUp(event, keycode);
-				}
-			});
-
-		}
-		rangeSkillButton.setDisabled(!room.getState().isSkillChangeAllowed());
-		if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED) {
-			rangeSkillButton.setProgrammaticChangeEvents(false);
-			rangeSkillButton.setChecked(false);
-		} else {
-			rangeSkillButton.setProgrammaticChangeEvents(true);
+				});
+	
+				allSkillButtons.add(rangeSkillButton);
+			}			
+			skillsTable.add(rangeSkillButton);
+	
+			skillsTable.pack();
+			stage.addActor(skillsTable);
 		}
 		
-		skillsTable.add(rangeSkillButton);
-
-		skillsTable.pack();
-		stage.addActor(skillsTable);
+		
+		for (Button btn : allSkillButtons) {
+			btn.setDisabled(!room.getState().isSkillChangeAllowed());
+			if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED) {
+				btn.setProgrammaticChangeEvents(false);
+				btn.setChecked(false);
+			} else {
+				btn.setProgrammaticChangeEvents(true);
+			}
+		}
+		
 	}
 
 	private void activateSkill(Button button, Entity player) {

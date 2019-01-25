@@ -179,6 +179,7 @@ public class Assets {
 	 */
 	public void loadFont() {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		font.getData().markupEnabled = true;
 		greenFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		greenFont.setColor(Color.OLIVE);
 		redFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);

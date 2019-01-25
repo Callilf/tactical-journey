@@ -81,7 +81,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     	//TODO remove
     	if (test) {
     		test = false;
-    		expCompo.earnXp(10);
+    		expCompo.earnXp(expCompo.getNextLevelXp());
     	}
     	
     	if (expCompo.hasLeveledUp()) {
@@ -121,45 +121,14 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     
     }
 
-	private void createPopinBottom(Table table) {
-		Table popinBottom = new Table();
-		popinBottom.setZIndex(10);
-		TextureRegionDrawable bottomBackground = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background_bottom));
-		popinBottom.setBackground(bottomBackground);
-		table.add(popinBottom).fillX().uniformX().padTop(-1);
-		
-		Drawable continueButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn)));
-		Drawable continueButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn_pushed)));
-		ButtonStyle continueButtonStyle = new ButtonStyle(continueButtonUp, continueButtonDown, null);
-		continueButton = new Button(continueButtonStyle);
-		popinBottom.add(continueButton);
-		
-		// continueButton listener
-		continueButton.addListener(new ClickListener() {
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				// Close the popin and unpause the game
-				closePopin();
-			}
-		});
-	}
-	
-	/**
-	 * Close the level up popin and unpause the game.
-	 */
-	private void closePopin() {
-		stage.clear();
-		room.state = previousState;
-		
-		//Restore the ability to listen to inputs to the InputSingleton
-		InputSingleton.getInstance().initInputProcessor();
-	}
 
 	private void createChoices(final Entity player, int choicesNumber, Table table) {
 		List<LevelUpRewardEnum> list = new ArrayList<>(Arrays.asList(LevelUpRewardEnum.values()));
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 
+		rewards.clear();
+		claimButtons.clear();
+		
 		for (int i=1; i<=choicesNumber ; i++) {
 			int nextInt = unseededRandom.nextInt(list.size());
 			LevelUpRewardEnum reward = list.get(nextInt);
@@ -245,10 +214,55 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 		popinTop.row();
 
 		Label subTitle2Label = new Label("you reached level " + expCompo.getLevel(),subtitleStyle);
-		popinTop.add(subTitle2Label).top().uniformX();
+		popinTop.add(subTitle2Label).top().uniformX().pad(0, 0, 10, 0);;
+		
+		popinTop.row();
+		
+		Label selectChoiceLabel = new Label("Select [GREEN]1[WHITE] reward bellow",subtitleStyle);
+		popinTop.add(selectChoiceLabel).top().uniformX();
 		
 		table.add(popinTop).fillX().uniformX().padTop(-2);
 		table.row();
+	}
+	
+	
+
+	private void createPopinBottom(Table table) {
+		Table popinBottom = new Table();
+		popinBottom.setZIndex(10);
+		TextureRegionDrawable bottomBackground = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background_bottom));
+		popinBottom.setBackground(bottomBackground);
+		table.add(popinBottom).fillX().uniformX().padTop(-1);
+		
+		Drawable continueButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn)));
+		Drawable continueButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn_pushed)));
+		ButtonStyle continueButtonStyle = new ButtonStyle(continueButtonUp, continueButtonDown, null);
+		continueButton = new Button(continueButtonStyle);
+		popinBottom.add(continueButton);
+		
+		// continueButton listener
+		continueButton.addListener(new ClickListener() {
+
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				// Close the popin and unpause the game
+				closePopin();
+			}
+		});
+	}
+	
+	
+	/**
+	 * Close the level up popin and unpause the game.
+	 */
+	private void closePopin() {
+		stage.clear();
+		room.state = previousState;
+		
+		//Restore the ability to listen to inputs to the InputSingleton
+		InputSingleton.getInstance().initInputProcessor();
+		
+		test = true;
 	}
 	
 	/**
@@ -271,6 +285,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 		claimButton.setTouchable(Touchable.disabled);
 		claimButton.setDisabled(true);
 	}
+	
 	
 	private class ApplyRewardAction extends Action {
 		

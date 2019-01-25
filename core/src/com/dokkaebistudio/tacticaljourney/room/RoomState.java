@@ -103,4 +103,8 @@ public enum RoomState {
 	public boolean isPaused() {
 		return this == RoomState.LEVEL_UP_POPIN;
 	}
+	
+	public boolean isSkillChangeAllowed() {
+		return this == PLAYER_MOVE_TILES_DISPLAYED || this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED || this == RoomState.PLAYER_TARGETING;
+	}
 }

@@ -17,12 +17,9 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.skills.SkillSelectionEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -63,14 +60,14 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(moverEntity);
 		PlayerComponent playerCompo = Mappers.playerComponent.get(moverEntity);
 
-		if (!room.state.isPlayerTurn()) {
+		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
 
 		// Check if the end turn button has been pushed
 		handleEndTurnButton(moveCompo, attackCompo, playerCompo);
 
-		switch (room.state) {
+		switch (room.getState()) {
 
 		case PLAYER_TURN_INIT:
 			if (room.hasEnemies()) {
@@ -80,7 +77,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.moveRemaining = 30;
 				moveCompo.freeMove = true;
 			}
-			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
+			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
 			// clear the movable tile
@@ -97,7 +94,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.hideMovableTiles();
 			}
 
-			room.state = RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER;
+			room.setNextState(RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER);
 			break;
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
@@ -109,14 +106,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 				boolean selected = selectDestinationTile(moveCompo, x, y, moverCurrentPos);
 				if (selected) {
-					room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 				}
 			}
 
 			// When right clicking on an ennemy, display it's possible movement
 			handleRightClickOnEnemies(moverEntity);
 
-			handleSkillSelection(moverEntity, room);
 			break;
 
 		case PLAYER_MOVE_DESTINATION_SELECTED:
@@ -136,25 +132,22 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 					// Initiate movement
 					movementHandler.initiateMovement(moverEntity);
 
-					room.state = RoomState.PLAYER_MOVING;
+					room.setNextState(RoomState.PLAYER_MOVING);
 				} else if (playerSprite.containsPoint(x, y)) {
 					// Cancel movement is we click on the character
 					moveCompo.clearSelectedTile();
-					room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+					room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
 				} else {
 					// No confirmation, check if another tile has been selected
 					selectDestinationTile(moveCompo, x, y, moverCurrentPos);
-					room.state = RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 				}
 
 			}
-			
-			handleSkillSelection(moverEntity, room);
 
 			break;
 
 		case PLAYER_MOVING:
-			TransformComponent transfoCompo = Mappers.transfoComponent.get(moverEntity);
 			moveCompo.selectCurrentMoveDestinationTile();
 
 			// Do the movement on screen
@@ -162,7 +155,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (movementFinished == null)
 				return;
 			else if (movementFinished)
-				room.state = RoomState.PLAYER_END_MOVEMENT;
+				room.setNextState(RoomState.PLAYER_END_MOVEMENT);
 
 			break;
 
@@ -175,7 +168,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
 			}
 
-			room.state = RoomState.PLAYER_COMPUTE_MOVABLE_TILES;
+			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 			break;
 
 		default:
@@ -243,135 +236,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 		}
 	}
-
-	/**
-	 * Handle the selection of a skill.
-	 * 
-	 * @param rs        the current room state
-	 * @param moveCompo the move component
-	 */
-	public static void handleSkillSelection(Entity player, Room room) {
-		SkillSelectionEnum skillSelected = null;
-		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
-		MoveComponent moveCompo = Mappers.moveComponent.get(player);
-
-		// Check the click on a skill button
-		if (InputSingleton.getInstance().leftClickJustPressed) {
-			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-			int x = (int) touchPoint.x;
-			int y = (int) touchPoint.y;
-
-			// If click on a skill button, make it look pushed but don't to any thing else.
-			// The real action is on click release.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
-			if (skill1SpriteComponent.containsPoint(x, y)) {
-				pushSkillButton(playerCompo.getSkillMelee(), skill1SpriteComponent);
-			}
-
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
-			if (skill2SpriteComponent.containsPoint(x, y)) {
-				pushSkillButton(playerCompo.getSkillRange(), skill2SpriteComponent);
-			}
-		}
-		if (InputSingleton.getInstance().leftClickJustReleased) {
-			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-			int x = (int) touchPoint.x;
-			int y = (int) touchPoint.y;
-
-			// If release on the button, restore the original texture and end the turn.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
-			SkillSelectionEnum sse = releaseSkillButton(playerCompo.getSkillMelee(), playerCompo.getSkillMeleeButton(),
-					playerCompo, skill1SpriteComponent.containsPoint(x, y));
-			if (sse != null)
-				skillSelected = sse;
-
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
-			sse = releaseSkillButton(playerCompo.getSkillRange(), playerCompo.getSkillRangeButton(), playerCompo,
-					skill2SpriteComponent.containsPoint(x, y));
-			if (sse != null)
-				skillSelected = sse;
-
-		}
-
-		if (InputSingleton.getInstance().skill1JustPressed) {
-			// If skill hotkey pressed, make the skill button look pushed.
-			SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillMeleeButton());
-			pushSkillButton(playerCompo.getSkillMelee(), skill1SpriteComponent);
-		}
-		if (InputSingleton.getInstance().skill1JustReleased) {
-			// If skill hotkey released, restore the button texture and activate/deactivate
-			// the skill.
-			skillSelected = releaseSkillButton(playerCompo.getSkillMelee(), playerCompo.getSkillMeleeButton(), playerCompo,
-					true);
-		}
-
-		if (InputSingleton.getInstance().skill2JustPressed) {
-			// If skill 2 hotkey pressed, make the skill button look pushed.
-			SpriteComponent skill2SpriteComponent = Mappers.spriteComponent.get(playerCompo.getSkillRangeButton());
-			pushSkillButton(playerCompo.getSkillRange(), skill2SpriteComponent);
-		}
-		if (InputSingleton.getInstance().skill2JustReleased) {
-			// If skill 2 hotkey released, restore the button texture and
-			// acticate/deactivate the skill.
-			skillSelected = releaseSkillButton(playerCompo.getSkillRange(), playerCompo.getSkillRangeButton(), playerCompo,
-					true);
-		}
-
-		if (skillSelected != null) {
-			switch (skillSelected) {
-			case SKILL_SELECTED:
-			case NEW_SKILL_SELECTED:
-				room.state = RoomState.PLAYER_TARGETING_START;
-				break;
-
-			case NO_SKILL_SELECTED:
-				room.state = RoomState.PLAYER_TARGETING_STOP;
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Show the button as pushed.
-	 * 
-	 * @param skillEntity the clicked skill entity (not the button skill entity !!)
-	 * @param skillButtonSpriteComponent the skill sprite component
-	 */
-	private static void pushSkillButton(Entity skillEntity, SpriteComponent skillButtonSpriteComponent) {
-		SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);
-		skillButtonSpriteComponent
-				.setSprite(new Sprite(Assets.getTexture(skillComponent.getType().getBtnPushedTexture())));
-	}
-
-	/**
-	 * Release a skill button.
-	 * 
-	 * @param skillEntity       the skill entity (not the button entity)
-	 * @param skillButtonEntity the skill button entity
-	 * @param playerCompo       the player compo
-	 * @param setActive         whether this button is being activated or not
-	 * @return true if the button is being activated, false if not
-	 */
-	private static SkillSelectionEnum releaseSkillButton(Entity skillEntity, Entity skillButtonEntity,
-			PlayerComponent playerCompo, boolean setActive) {
-		SpriteComponent skill1SpriteComponent = Mappers.spriteComponent.get(skillButtonEntity);
-		SkillComponent skill1Component = Mappers.skillComponent.get(skillEntity);
-		skill1SpriteComponent.setSprite(new Sprite(Assets.getTexture(skill1Component.getType().getBtnTexture())));
-		if (setActive) {
-			if (playerCompo.getActiveSkill() == skillEntity) {
-				// Unselect the current skill
-				return SkillSelectionEnum.NO_SKILL_SELECTED;
-			} else {
-				playerCompo.setActiveSkill(skillEntity);
-				if (playerCompo.getActiveSkill() == null) {
-					return SkillSelectionEnum.SKILL_SELECTED;
-				} else {
-					return SkillSelectionEnum.NEW_SKILL_SELECTED;
-				}
-			}
-		}
-		return null;
-	}
+	
 
 	/**
 	 * Handle the end turn button.
@@ -382,7 +247,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 */
 	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo,
 			PlayerComponent playerCompo) {
-		if (room.state.canEndTurn()) {
+		if (room.getState().canEndTurn()) {
 			if (InputSingleton.getInstance().leftClickJustPressed) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;

@@ -20,6 +20,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -116,6 +117,12 @@ public class GameScreen extends ScreenAdapter {
 		
 		//Instanciate the input processor
 		InputSingleton.createInstance(guiCam, viewport);
+		
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(hudStage);
+		inputMultiplexer.addProcessor(InputSingleton.getInstance());
+		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		touchPoint = new Vector3();
 		
@@ -276,5 +283,14 @@ public class GameScreen extends ScreenAdapter {
 	@Override
 	public void pause () {
 		// TODO nothing yet
+	}
+	
+	@Override
+	public void dispose() {
+		Assets.getInstance().dispose();
+		stage.dispose();
+		hudStage.dispose();
+		game.dispose();
+		super.dispose();
 	}
 }

@@ -75,8 +75,12 @@ public class Assets {
 	public static final String btn_skill_active = "btn-skill-selected";
 	public static final String btn_skill_attack = "btn-skill-slash";
 	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
+	public static final String btn_skill_attack_checked = "btn-skill-slash-checked";
+	
 	public static final String btn_skill_bow = "btn-skill-bow";
 	public static final String btn_skill_bow_pushed = "btn-skill-bow-pushed";
+	public static final String btn_skill_bow_checked = "btn-skill-bow-checked";
+
 
 	
 //	public static final String wheel_arc = "wheel-arc";
@@ -119,6 +123,10 @@ public class Assets {
 	public Assets() {
 		manager = new AssetManager();
 		registerAssets();
+	}
+	
+	public void dispose() {
+		manager.dispose();
 	}
 
 	/**

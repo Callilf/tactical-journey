@@ -35,13 +35,13 @@ public class TurnManager {
 	}
 	
 	public void endPlayerTurn() {
-		this.room.state = RoomState.ENEMY_TURN_INIT;
+		this.room.setNextState(RoomState.ENEMY_TURN_INIT);
 	}
 	
 	public void endEnemyTurn() {
 		this.turn ++;
 		textComponent.setText("Turn: " + this.turn);
-		this.room.state = RoomState.PLAYER_TURN_INIT;
+		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
 	}
 
 }

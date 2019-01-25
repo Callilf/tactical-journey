@@ -64,14 +64,14 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     public void update(float deltaTime) {
     	super.update(deltaTime);
     	
-    	if (!room.state.isEnemyTurn()) {
+    	if (!room.getState().isEnemyTurn()) {
     		return;
     	}
     	
     	//Get all enemies of the current room
     	fillEntitiesOfCurrentRoom();
     	
-    	if (room.state == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER) {
+    	if (room.getState() == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER) {
     		//Computing movable tiles of all enemies to display them to the player
     		computeMovableTilesToDisplayToPlayer();
     		return;
@@ -94,11 +94,11 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
         	GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(enemyEntity);
     		
-    		switch(room.state) {
+    		switch(room.getState()) {
         	case ENEMY_TURN_INIT :
             	
             	moveCompo.moveRemaining = moveCompo.moveSpeed;
-            	room.state = RoomState.ENEMY_COMPUTE_MOVABLE_TILES;
+            	room.setNextState(RoomState.ENEMY_COMPUTE_MOVABLE_TILES);
         		
         	case ENEMY_COMPUTE_MOVABLE_TILES :
         		
@@ -111,7 +111,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
-        		room.state = RoomState.ENEMY_MOVE_TILES_DISPLAYED;
+        		room.setNextState(RoomState.ENEMY_MOVE_TILES_DISPLAYED);
         		
         		break;
         		
@@ -130,9 +130,9 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
-            		room.state = RoomState.ENEMY_MOVE_DESTINATION_SELECTED;
+            		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
             	} else {
-            		room.state = RoomState.ENEMY_ATTACK;
+            		room.setNextState(RoomState.ENEMY_ATTACK);
             	}
         		
         		break;
@@ -140,7 +140,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         	case ENEMY_MOVE_DESTINATION_SELECTED :
 
         		movementHandler.initiateMovement(enemyEntity);
-            	room.state = RoomState.ENEMY_MOVING;
+            	room.setNextState(RoomState.ENEMY_MOVING);
 
         		break;
         		
@@ -151,7 +151,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
-        		if (movementFinished) room.state = RoomState.ENEMY_END_MOVEMENT;
+        		if (movementFinished) room.setNextState(RoomState.ENEMY_END_MOVEMENT);
         		
         		break;
         		
@@ -159,7 +159,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		
         		movementHandler.finishRealMovement(enemyEntity);
     	    	moveCompo.clearMovableTiles();
-    	    	room.state = RoomState.ENEMY_ATTACK;
+    	    	room.setNextState(RoomState.ENEMY_ATTACK);
 
         		break;
         		
@@ -182,7 +182,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	    	
     	    	enemyFinishedCount ++;
     	    	turnFinished.put(enemyEntity, new Boolean(true));
-    	    	room.state = RoomState.ENEMY_TURN_INIT;
+    	    	room.setNextState(RoomState.ENEMY_TURN_INIT);
     	    	
         		break;
         		
@@ -238,6 +238,6 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     		attackCompo.hideAttackableTiles();
     	}
     	
-    	room.state = RoomState.PLAYER_MOVE_TILES_DISPLAYED;
+    	room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
     }
 }

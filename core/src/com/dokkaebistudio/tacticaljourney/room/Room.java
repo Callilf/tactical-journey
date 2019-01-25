@@ -41,7 +41,9 @@ public class Room extends EntitySystem {
 	
 	public RoomType type;
 	
-	public RoomState state;
+	private RoomState state;
+	private RoomState nextState;
+	
 	public Entity[][] grid;
 	public List<Vector2> possibleSpawns;
 	
@@ -93,6 +95,8 @@ public class Room extends EntitySystem {
 			TextComponent text = Mappers.textComponent.get(timeDisplayer);
 			text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
 		}
+		
+		updateState();
 	}
 	
 	
@@ -106,6 +110,22 @@ public class Room extends EntitySystem {
 	}
 
 
+	public void setNextState(RoomState nextState) {
+		this.nextState = nextState;
+	}
+	public RoomState getNextState() {
+		return this.nextState;
+	}
+	public RoomState getState() {
+		return this.state;
+	}
+	
+	private void updateState() {
+		if (this.nextState != null) {
+			this.state = this.nextState;
+			this.nextState = null;
+		}
+	}
 
 
 	/**

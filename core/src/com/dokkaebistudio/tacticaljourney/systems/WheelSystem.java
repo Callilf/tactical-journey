@@ -39,9 +39,9 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     @Override
     public void update(float deltaTime) {
     	
-    	if (room.state.isWheelDisplayed()) {
+    	if (room.getState().isWheelDisplayed()) {
     		
-    		switch(room.state) {
+    		switch(room.getState()) {
     		
     		case PLAYER_WHEEL_START:
     			wheel.setDisplayed(true);
@@ -69,7 +69,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 		        }
 		        
 		        
-		        room.state = RoomState.PLAYER_WHEEL_TURNING;
+		        room.setNextState(RoomState.PLAYER_WHEEL_TURNING);
     			
     			break;
     			
@@ -78,7 +78,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			
     			if (InputSingleton.getInstance().leftClickJustPressed) {
 	    			//Stop the spinning
-	    			room.state = RoomState.PLAYER_WHEEL_NEEDLE_STOP;
+	    			room.setNextState(RoomState.PLAYER_WHEEL_NEEDLE_STOP);
 	    		} else {
 	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.0f);
 	    		}
@@ -92,7 +92,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 	    			//Hide the wheel and perform the action
 		        	wheel.setDisplayed(false);
 		        	wheel.setPointedSector();
-		        	room.state = RoomState.PLAYER_WHEEL_FINISHED;    			
+		        	room.setNextState(RoomState.PLAYER_WHEEL_FINISHED);    			
 	    		} 
     			
     			

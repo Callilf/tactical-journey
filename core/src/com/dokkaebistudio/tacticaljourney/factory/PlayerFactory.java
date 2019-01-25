@@ -17,7 +17,6 @@ import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -98,9 +97,6 @@ public final class PlayerFactory {
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
 		playerComponent.setEndTurnButton(entityFactory.createEndTurnButton());
-		playerComponent.setSkillMeleeButton(entityFactory.createSkillButton(SkillEnum.SLASH, PositionConstants.POS_SKILL_1_BTN));
-		playerComponent.setSkillRangeButton(entityFactory.createSkillButton(SkillEnum.BOW, PositionConstants.POS_SKILL_2_BTN));
-		playerComponent.setActiveSkillIndicator( createSkillIndicator());
 		playerEntity.add(playerComponent);
 		
 		// Move compo
@@ -175,24 +171,4 @@ public final class PlayerFactory {
 		return playerEntity;
 	}
 
-	/**
-	 * Create the skill indicator, i.e. the sprite that shows which skill is currently active.
-	 * @return the entity representing the skill indicator.
-	 */
-	private Entity createSkillIndicator() {
-		Entity indicator = engine.createEntity();
-		
-		SpriteComponent indicatorSpriteCompo = engine.createComponent(SpriteComponent.class);
-		indicatorSpriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_skill_active)));
-		indicatorSpriteCompo.hide = true;
-		indicator.add(indicatorSpriteCompo);
-		
-		TransformComponent indicatorTransfoCompo = engine.createComponent(TransformComponent.class);
-		indicator.add(indicatorTransfoCompo);
-		
-		engine.addEntity(indicator);
-		return indicator;
-	}
-	
-	
 }

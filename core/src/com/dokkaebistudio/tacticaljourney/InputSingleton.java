@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * @author Callil
  *
  */
-public class InputSingleton {
+public class InputSingleton implements InputProcessor{
 	
 	/** The instance. */
 	private static InputSingleton instance;
@@ -81,7 +81,6 @@ public class InputSingleton {
 		instance = new InputSingleton();
 		instance.guicam = guicam;
 		instance.viewport = viewport;
-		instance.initInputProcessor();
 	}
 	
 	/**
@@ -144,92 +143,93 @@ public class InputSingleton {
 	}
 	
 	
-	/**
-	 * Initialize the inputProcessor.
-	 */
-	public void initInputProcessor() {
-		Gdx.input.setInputProcessor(new InputProcessor() {
+	
+	
+	// Input processor
+	
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Input.Keys.SPACE) {
+			spaceJustPressed = true;
+			return true;
+		}
+//		if (keycode == Input.Keys.NUM_1) {
+//			skill1JustPressed = true;
+//			return true;
+//		}
+//		if (keycode == Input.Keys.NUM_2) {
+//			skill2JustPressed = true;
+//			return true;
+//		}
+		return true;
+	}
 
-			@Override
-			public boolean keyDown(int keycode) {
-				if (keycode == Input.Keys.SPACE) {
-					spaceJustPressed = true;
-					return true;
-				}
-				if (keycode == Input.Keys.NUM_1) {
-					skill1JustPressed = true;
-					return true;
-				}
-				if (keycode == Input.Keys.NUM_2) {
-					skill2JustPressed = true;
-					return true;
-				}
-				return false;
-			}
+	@Override
+	public boolean keyUp(int keycode) {
+		if (keycode == Input.Keys.SPACE) {
+			spaceJustReleased = true;
+			return true;
+		}
+		
+		if (keycode == Input.Keys.ESCAPE) {
+            Gdx.app.exit();
+            return false;
+		}
+		
+//		if (keycode == Input.Keys.NUM_1) {
+//			skill1JustReleased = true;
+//			return true;
+//		}
+//		if (keycode == Input.Keys.NUM_2) {
+//			skill2JustReleased = true;
+//			return true;
+//		}
+		return true;
+	}
 
-			@Override
-			public boolean keyUp(int keycode) {
-				if (keycode == Input.Keys.SPACE) {
-					spaceJustReleased = true;
-					return true;
-				}
-				if (keycode == Input.Keys.NUM_1) {
-					skill1JustReleased = true;
-					return true;
-				}
-				if (keycode == Input.Keys.NUM_2) {
-					skill2JustReleased = true;
-					return true;
-				}
-				return false;
-			}
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
 
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (button == Input.Buttons.LEFT) {
+			leftClickJustPressed = true;
+			return true;
+		}
+		if (button == Input.Buttons.RIGHT) {
+			rightClickJustPressed = true;
+			return true;
+		}
+		return true;
+	}
 
-			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				if (button == Input.Buttons.LEFT) {
-					leftClickJustPressed = true;
-					return true;
-				}
-				if (button == Input.Buttons.RIGHT) {
-					rightClickJustPressed = true;
-					return true;
-				}
-				return false;
-			}
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (button == Input.Buttons.LEFT) {
+			leftClickJustReleased = true;
+			return true;
+		}
+		if (button == Input.Buttons.RIGHT) {
+			rightClickJustReleased = true;
+			return true;
+		}
+		return true;
+	}
 
-			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				if (button == Input.Buttons.LEFT) {
-					leftClickJustReleased = true;
-					return true;
-				}
-				if (button == Input.Buttons.RIGHT) {
-					rightClickJustReleased = true;
-					return true;
-				}
-				return false;
-			}
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
 
-			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
-				return false;
-			}
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
 
-			@Override
-			public boolean mouseMoved(int screenX, int screenY) {
-				return false;
-			}
-
-			@Override
-			public boolean scrolled(int amount) {
-				return false;
-			}
-
-        });
-	}	
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
+	}
 }

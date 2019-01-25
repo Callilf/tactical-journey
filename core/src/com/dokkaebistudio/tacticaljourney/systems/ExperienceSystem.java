@@ -33,7 +33,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
@@ -86,13 +85,8 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     	
     	if (expCompo.hasLeveledUp()) {
     		expCompo.setLeveledUp(false);
-    		previousState = room.state;
-    		room.state = RoomState.LEVEL_UP_POPIN;
-    		
-    		// Give the stage the ability to listen to inputs.
-    		// This removes this ability to the InputSingleton !!
-    		Gdx.input.setInputProcessor(stage);
-
+    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
+    		room.setNextState(RoomState.LEVEL_UP_POPIN);
     		
     		Table table = new Table();
     		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
@@ -114,7 +108,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     	}
     	
     	
-    	if (room.state == RoomState.LEVEL_UP_POPIN) {
+    	if (room.getState() == RoomState.LEVEL_UP_POPIN) {
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
     	}
@@ -257,12 +251,9 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 	 */
 	private void closePopin() {
 		stage.clear();
-		room.state = previousState;
-		
-		//Restore the ability to listen to inputs to the InputSingleton
-		InputSingleton.getInstance().initInputProcessor();
-		
-		test = true;
+		room.setNextState(previousState);
+				
+//		test = true;
 	}
 	
 	/**

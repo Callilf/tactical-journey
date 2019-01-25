@@ -96,7 +96,6 @@ public final class PlayerFactory {
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerComponent.engine = this.engine;
-		playerComponent.setEndTurnButton(entityFactory.createEndTurnButton());
 		playerEntity.add(playerComponent);
 		
 		// Move compo

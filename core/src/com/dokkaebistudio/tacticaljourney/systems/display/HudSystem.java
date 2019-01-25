@@ -24,9 +24,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -39,8 +42,10 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	/** The current room. */
 	private Room room;
 	
-	
-	// Health and Experience
+
+	// End turn, Health and Experience
+	private Table bottomLeftTable; 
+	private Button endTurnBtn;
 	private Table healthAndXptable; 
 	private Label levelLabel;
 	private Label expLabel;
@@ -66,8 +71,6 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	protected void processEntity(Entity player, float deltaTime) {
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-
 		displayHealthAndXp(player);
 		displaySkillButtons(player);
 
@@ -76,9 +79,55 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	}
 
+
 	private void displayHealthAndXp(Entity player) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
+		final MoveComponent moveComponent = Mappers.moveComponent.get(player);
+		final AttackComponent attackComponent = Mappers.attackComponent.get(player);
+		
+		if (bottomLeftTable == null) {
+			bottomLeftTable = new Table();
+			bottomLeftTable.setPosition(PositionConstants.POS_END_TURN_BTN.x, PositionConstants.POS_END_TURN_BTN.y);
+			bottomLeftTable.setTouchable(Touchable.childrenOnly);
+			
+			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
+			Drawable endTurnButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+			ButtonStyle endTurnButtonStyle = new ButtonStyle(endTurnButtonUp, endTurnButtonDown,null);
+			endTurnBtn = new Button(endTurnButtonStyle);
+			
+			endTurnBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+
+					if (room.getState().canEndTurn()) {
+						moveComponent.clearMovableTiles();
+						attackComponent.clearAttackableTiles();
+						room.turnManager.endPlayerTurn();
+					}
+				}
+
+			});
+			
+			// Add shortcut to activate the end turn button
+			stage.addListener(new InputListener() {
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.SPACE) {
+						if (!endTurnBtn.isDisabled()) {
+							endTurnBtn.toggle();
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
+			});
+
+			bottomLeftTable.add(endTurnBtn);
+			
+			bottomLeftTable.pack();
+			stage.addActor(bottomLeftTable);
+		}
 
 		if (healthAndXptable == null) {
 			healthAndXptable = new Table();

@@ -9,9 +9,6 @@ public class PlayerComponent implements Component {
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
 	
-	/** The button to end the current turn. */
-	private Entity endTurnButton;
-	
 	/** The skill currently active. Null if no skill is active. */
 	private Entity activeSkill;
 	
@@ -25,14 +22,6 @@ public class PlayerComponent implements Component {
 	
 	//**************************
 	// Getter & Setters 
-	
-	public Entity getEndTurnButton() {
-		return endTurnButton;
-	}
-
-	public void setEndTurnButton(Entity endTurnButton) {
-		this.endTurnButton = endTurnButton;
-	}
 
 	public Entity getSkillMelee() {
 		return skillMelee;

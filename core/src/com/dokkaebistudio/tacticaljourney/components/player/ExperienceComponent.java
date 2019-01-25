@@ -25,7 +25,7 @@ public class ExperienceComponent implements Component,Poolable {
 	private boolean leveledUp;
 	
 	/** The number of level up reward choices. */
-	private int choicesNumber = 6;
+	private int choicesNumber = 3;
 	
 
 	public void init(PooledEngine engine) {

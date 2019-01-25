@@ -5,10 +5,8 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
@@ -63,9 +61,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
-
-		// Check if the end turn button has been pushed
-		handleEndTurnButton(moveCompo, attackCompo, playerCompo);
 
 		switch (room.getState()) {
 
@@ -237,60 +232,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		}
 	}
 	
-
-	/**
-	 * Handle the end turn button.
-	 * 
-	 * @param moveCompo   the move component
-	 * @param attackCompo the attack component
-	 * @param playerCompo the player component
-	 */
-	private void handleEndTurnButton(MoveComponent moveCompo, AttackComponent attackCompo,
-			PlayerComponent playerCompo) {
-		if (room.getState().canEndTurn()) {
-			if (InputSingleton.getInstance().leftClickJustPressed) {
-				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-				int x = (int) touchPoint.x;
-				int y = (int) touchPoint.y;
-
-				// If click on the endTurnButton, make it look pushed but don't to any thing
-				// else.
-				// The real action is on click release.
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
-				if (spriteComponent.containsPoint(x, y)) {
-					spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-				}
-			}
-			if (InputSingleton.getInstance().leftClickJustReleased) {
-				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-				int x = (int) touchPoint.x;
-				int y = (int) touchPoint.y;
-
-				// If release on the endTurnButton, restore the original texture and end the
-				// turn.
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
-				spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-				if (spriteComponent.containsPoint(x, y)) {
-					moveCompo.clearMovableTiles();
-					attackCompo.clearAttackableTiles();
-					room.turnManager.endPlayerTurn();
-				}
-			}
-			if (InputSingleton.getInstance().spaceJustPressed) {
-				// If space pressed, make the endTurnButton look pushed.
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
-				spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
-			}
-			if (InputSingleton.getInstance().spaceJustReleased) {
-				// If space released, restore the button texture and end the turn.
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(playerCompo.getEndTurnButton());
-				spriteComponent.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-				moveCompo.clearMovableTiles();
-				attackCompo.clearAttackableTiles();
-				room.turnManager.endPlayerTurn();
-			}
-		}
-	}
 
 	/**
 	 * Return the cost of movement

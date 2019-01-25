@@ -76,31 +76,6 @@ public final class EntityFactory {
 		healthUpTexture = Assets.getTexture(Assets.health_up_item);
 	}
 
-
-	
-	/**
-	 * Create the end turn button.
-	 * @param pos the position
-	 * @return the end turn button entity
-	 */
-	public Entity createEndTurnButton() {
-		Entity endTurnButton = engine.createEntity();
-		endTurnButton.flags = EntityFlagEnum.END_TURN_BUTTON.getFlag();
-
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(PositionConstants.POS_END_TURN_BTN, PositionConstants.Z_END_TURN_BTN);
-		endTurnButton.add(transfoCompo);
-		    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-    	endTurnButton.add(spriteCompo);
-    	
-    	engine.addEntity(endTurnButton);
-    	return endTurnButton;
-	}
-	
-	
 	/**
 	 * Create the end turn button.
 	 * @param pos the position

@@ -98,7 +98,7 @@ public final class EnemyFactory {
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
-		expRewardCompo.setExpGain(10);
+		expRewardCompo.setExpGain(2);
 		enemyEntity.add(expRewardCompo);
 		
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
@@ -156,7 +156,7 @@ public final class EnemyFactory {
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
-		expRewardCompo.setExpGain(10);
+		expRewardCompo.setExpGain(6);
 		enemyEntity.add(expRewardCompo);
 		
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);

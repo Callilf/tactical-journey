@@ -153,23 +153,12 @@ public final class PlayerFactory {
 		healthComponent.engine = engine;
 		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
-		Entity hpText = entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100);
-		healthComponent.setHpDisplayer(hpText);
 		playerEntity.add(healthComponent);
 		
 		// Experience compo
 		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
 		expCompo.init(engine);
-		Entity levelDisp = entityFactory.createText(
-				new Vector3(PositionConstants.POS_LEVEL, PositionConstants.Z_LEVEL),
-				"placeholder");
-		expCompo.setLevelDisplayer(levelDisp);
-		Entity expDisp = entityFactory.createText(
-				new Vector3(PositionConstants.POS_EXPERIENCE, PositionConstants.Z_EXPERIENCE), 
-				"placeholder");
-		expCompo.setExperienceDisplayer(expDisp);
 		playerEntity.add(expCompo);
-
 		
 		//Parent room
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);

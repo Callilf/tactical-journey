@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -58,8 +59,20 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 		return hp <= 0;
 	}
 	
-	
-	
+	/**
+	 * Return the color in which the health must be displayed on the HUD.
+	 * The color depends on the remaining life
+	 * @return the color
+	 */
+	public String getHpColor() {
+		if (hp >= (maxHp * 0.66f)) {
+			return "[GREEN]";
+		} else if (hp >= (maxHp * 0.33f) && hp < (maxHp * 0.66f)) {
+			return "[ORANGE]";
+		} else {
+			return "[RED]";
+		}
+	}
 	
 	
 	@Override

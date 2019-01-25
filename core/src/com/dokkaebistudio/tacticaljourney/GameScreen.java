@@ -47,6 +47,7 @@ import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.HudSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -71,6 +72,10 @@ public class GameScreen extends ScreenAdapter {
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
 	public Stage stage;
+	
+	public FitViewport hudViewport;
+	public Stage hudStage;
+
 
 	Vector3 touchPoint;
 	
@@ -103,9 +108,11 @@ public class GameScreen extends ScreenAdapter {
 		guiCam = new OrthographicCamera(SCREEN_W, SCREEN_H);
 		guiCam.position.set(SCREEN_W / 2, SCREEN_H / 2, 0);
 		viewport = new FitViewport(SCREEN_W, SCREEN_H, guiCam);
+		hudViewport = new FitViewport(SCREEN_W, SCREEN_H, guiCam);
 		
 		/// create stage and set it as input processor
 		stage = new Stage(viewport);
+		hudStage = new Stage(hudViewport);
 		
 		//Instanciate the input processor
 		InputSingleton.createInstance(guiCam, viewport);
@@ -138,6 +145,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
+		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 		engine.addSystem(room);
@@ -253,6 +261,7 @@ public class GameScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+		hudViewport.update(width, height);
 	}
 
 	@Override

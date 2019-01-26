@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -43,6 +44,13 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	/** The current room. */
 	private Room room;
+	
+	private LabelStyle hudStyle;
+	
+	// Time and turns
+	private Table timeAndTurnTable;
+	private Label timeLabel;
+	private Label turnLabel;
 	
 
 	// End turn, Health and Experience
@@ -69,6 +77,8 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		super(Family.all(PlayerComponent.class).get());
 		room = r;
 		this.stage = s;
+		
+		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 	}
 
 	@Override
@@ -78,6 +88,7 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	protected void processEntity(Entity player, float deltaTime) {
+		displayTimeAndTurns();
 		displayHealthAndXp(player);
 		displaySkillButtons(player);
 		displayAmmos(player);
@@ -87,7 +98,46 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		stage.draw();
 
 	}
+	
+	
+	
+	//************************************
+	// TIME AND TURNS
+	//
+	
+	
+	private void displayTimeAndTurns() {
+		
+		if (timeAndTurnTable == null) {
+			timeAndTurnTable = new Table();
+			timeAndTurnTable.setDebug(true);
+			timeAndTurnTable.setPosition(PositionConstants.POS_TIMER.x, PositionConstants.POS_TIMER.y - 20);
+			
+			// Turns
+			turnLabel = new Label("", hudStyle);
+			timeAndTurnTable.add(turnLabel).uniformX();
 
+			timeAndTurnTable.row();
+
+			// Time
+			timeLabel = new Label("", hudStyle);
+			timeAndTurnTable.add(timeLabel).uniformX();
+
+			timeAndTurnTable.pack();
+			stage.addActor(timeAndTurnTable);
+		}
+		
+		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
+		timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		
+		turnLabel.setText("Turn " + room.turnManager.getTurn());
+	}
+	
+	
+	
+	//************************************
+	// LIFE AND EXPERIENCE
+	//
 
 	private void displayHealthAndXp(Entity player) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
@@ -141,9 +191,7 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		if (healthAndXptable == null) {
 			healthAndXptable = new Table();
 			healthAndXptable.setPosition(200, 30);
-	
-			LabelStyle hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-	
+		
 			// LEVEL
 			if (levelLabel == null) {
 				levelLabel = new Label("", hudStyle);
@@ -177,6 +225,11 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
 	}
 
+	
+	//************************************
+	// SKILLS
+	//
+	
 	private void displaySkillButtons(final Entity player) {
 		
 		if (skillsTable == null) {
@@ -318,6 +371,10 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 
 	
 	
+	//************************************
+	// AMMOS
+	//
+	
 	
 	private void displayAmmos(Entity player) {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
@@ -332,7 +389,6 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
 			arrowTable.add(arrowImage).uniformX();
 			
-			LabelStyle hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 			arrowLabel = new Label("", hudStyle);
 			arrowTable.add(arrowLabel).uniformX().padLeft(-15);
 			

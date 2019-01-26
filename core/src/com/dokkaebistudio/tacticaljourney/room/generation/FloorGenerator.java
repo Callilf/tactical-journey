@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -36,7 +35,7 @@ public class FloorGenerator {
 	 * Generate all the layout of the given floor.
 	 * @param floor the floor to generate.
 	 */
-	public static void generateFloor(Floor floor, GameScreen gameScreen, Entity timeDisplayer) {
+	public static void generateFloor(Floor floor, GameScreen gameScreen) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		List<Room> rooms = new ArrayList<>();
 		Map<Room, Vector2> roomsPerPosition = new HashMap<>();
@@ -51,7 +50,7 @@ public class FloorGenerator {
 		endRoomY = random.nextBoolean() ? endRoomY : -endRoomY;
 		
 		// 3 - Build a path from startRoom to endRoom
-		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, timeDisplayer, RoomType.START_FLOOR_ROOM);
+		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
 		roomsPerPosition.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
 		
@@ -81,7 +80,7 @@ public class FloorGenerator {
 			}
 			
 			// Create the room
-			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, timeDisplayer, RoomType.COMMON_ENEMY_ROOM);
+			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory,RoomType.COMMON_ENEMY_ROOM);
 			roomsPerPosition.put(currentRoom, new Vector2(currX, currY));
 			rooms.add(currentRoom);
 			
@@ -96,7 +95,7 @@ public class FloorGenerator {
 		// 5 - Add rooms to this path
 		
 		int additionnalRoomsNumber = 5 + random.nextInt(6);
-		addAdditionalRooms(floor, gameScreen, timeDisplayer, random, rooms, roomsPerPosition, additionnalRoomsNumber);
+		addAdditionalRooms(floor, gameScreen,random, rooms, roomsPerPosition, additionnalRoomsNumber);
 		
 		
 		// 6 - Generate the content of all rooms
@@ -115,12 +114,11 @@ public class FloorGenerator {
 	 * Add rooms to the path from the startRoom to the endRoom.
 	 * @param floor the current floor which layout we are building
 	 * @param gameScreen the gameScreen
-	 * @param timeDisplayer the timeDisplayer
 	 * @param random the random
 	 * @param rooms the list of rooms which are at the moment the path from the start to the end
 	 * @param additionalRoomsNumber the number of rooms we want to add to the main path
 	 */
-	private static void addAdditionalRooms(Floor floor, GameScreen gameScreen, Entity timeDisplayer,
+	private static void addAdditionalRooms(Floor floor, GameScreen gameScreen,
 			RandomXS128 random, List<Room> rooms, Map<Room, Vector2> roomsPerPosition, int additionalRoomsNumber) {
 		int chanceToAddRoom = 100;
 
@@ -143,7 +141,7 @@ public class FloorGenerator {
 						
 						int directionIndex = random.nextInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
-						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, timeDisplayer, RoomType.COMMON_ENEMY_ROOM);
+						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory,RoomType.COMMON_ENEMY_ROOM);
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction, roomsPerPosition);
@@ -151,7 +149,7 @@ public class FloorGenerator {
 						
 						setNeighbors(direction, previousRoom, currentRoom);
 						
-						addAdditionalSubRooms(floor, gameScreen, timeDisplayer, random, currentRoom, chanceToAddRoom/2, rooms, roomsPerPosition);
+						addAdditionalSubRooms(floor, gameScreen, random, currentRoom, chanceToAddRoom/2, rooms, roomsPerPosition);
 						
 						chanceToAddRoom = chanceToAddRoom - 10;
 						if (chanceToAddRoom <= 0) {
@@ -191,13 +189,12 @@ public class FloorGenerator {
 	 * Add new rooms to an additional room, which is a room that is not on the main path.
 	 * @param floor the current floor
 	 * @param gameScreen the gameScreen
-	 * @param timeDisplayer the timeDisplayer
 	 * @param random the random
 	 * @param parentRoom the current room
 	 * @param chanceToAddRoom the chance to add a room (on 100)
 	 * @param allRooms the list of all rooms of this floor that we might complete
 	 */
-	private static void addAdditionalSubRooms(Floor floor, GameScreen gameScreen, Entity timeDisplayer,
+	private static void addAdditionalSubRooms(Floor floor, GameScreen gameScreen,
 			RandomXS128 random, Room parentRoom, int chanceToAddRoom, List<Room> allRooms, Map<Room, Vector2> roomsPerPosition) {
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
 		fillPossibleMoves(parentRoom, possibleMove, roomsPerPosition);
@@ -213,14 +210,14 @@ public class FloorGenerator {
 				//Add room here
 				chanceToAddRoom = chanceToAddRoom/2;
 							
-				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, timeDisplayer, RoomType.COMMON_ENEMY_ROOM);
+				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.COMMON_ENEMY_ROOM);
 				allRooms.add(currentRoom);
 				setNeighbors(direction, parentRoom, currentRoom);
 				
 				Vector2 vector2 = getNewRoomPosition(parentRoom, direction, roomsPerPosition);
 				roomsPerPosition.put(currentRoom, vector2);
 				
-				addAdditionalSubRooms(floor, gameScreen, timeDisplayer, random, currentRoom, chanceToAddRoom, allRooms, roomsPerPosition);
+				addAdditionalSubRooms(floor, gameScreen, random, currentRoom, chanceToAddRoom, allRooms, roomsPerPosition);
 				
 			}
 		}

@@ -28,13 +28,11 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
 	public Floor floor;
@@ -57,8 +55,6 @@ public class Room extends EntitySystem {
 	/** The entities of this room. */
 	private List<Entity> enemies;
 	
-	private Entity timeDisplayer;
-	
 	/** Whether the player has already entered this room or not. */
 	private boolean visited;
 	
@@ -69,11 +65,10 @@ public class Room extends EntitySystem {
 	private Room eastNeighbor;
 	
 
-	public Room (Floor f, PooledEngine engine, EntityFactory ef, Entity timeDisplayer, RoomType type) {
+	public Room (Floor f, PooledEngine engine, EntityFactory ef, RoomType type) {
 		this.floor = f;
 		this.engine = engine;
 		this.entityFactory = ef;
-		this.timeDisplayer = timeDisplayer;
 		this.turnManager = new TurnManager(this);
 		this.type = type;
 		this.visited = false;
@@ -91,9 +86,6 @@ public class Room extends EntitySystem {
 		if (!state.isPaused()) {
 			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
 			gtSingleton.updateElapsedTime(deltaTime);
-			
-			TextComponent text = Mappers.textComponent.get(timeDisplayer);
-			text.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
 		}
 		
 		updateState();

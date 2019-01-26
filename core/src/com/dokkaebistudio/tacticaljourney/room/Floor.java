@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.room;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
@@ -36,10 +35,10 @@ public class Floor {
 	 * @param gameScreen the game screen.
 	 * @param timeDisplayer the timedisplayer that the current room will update
 	 */
-	public Floor(GameScreen gameScreen, Entity timeDisplayer) {
+	public Floor(GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 		
-		FloorGenerator.generateFloor(this, gameScreen, timeDisplayer);
+		FloorGenerator.generateFloor(this, gameScreen);
 	}
 	
 	

@@ -31,9 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
@@ -90,9 +87,7 @@ public class GameScreen extends ScreenAdapter {
 	private int state;
 	
 	AttackWheel attackWheel = new AttackWheel();
-		
-	private Entity timeDisplayer;
-	
+			
 	private MapRenderer mapRenderer;
 	private WheelRenderer wheelRenderer;
 	
@@ -129,9 +124,7 @@ public class GameScreen extends ScreenAdapter {
 		engine = new PooledEngine();
 		this.entityFactory = new EntityFactory(this.engine);
 		
-		createTimeDisplayer();
-
-		floor = new Floor(this, timeDisplayer);
+		floor = new Floor(this);
 		Room room = floor.getActiveRoom();
 		
 		mapRenderer = new MapRenderer(this, game.batcher, game.shapeRenderer, floor);
@@ -246,16 +239,6 @@ public class GameScreen extends ScreenAdapter {
 		
 		//Display map
 		mapRenderer.renderMap();
-	}
-	
-	/** Create the entity that displays the current game time. */
-	private void createTimeDisplayer() {
-		//Display time
-		timeDisplayer = entityFactory.createText();
-		TextComponent text = Mappers.textComponent.get(timeDisplayer);
-		text.setText("Time: " + GameTimeSingleton.getInstance().getElapsedTime());
-		TransformComponent transfo =  Mappers.transfoComponent.get(timeDisplayer);
-		transfo.pos.set(PositionConstants.POS_TIMER, PositionConstants.Z_TIMER);
 	}
 
 

@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -21,7 +20,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
@@ -40,8 +38,6 @@ public final class PlayerFactory {
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion playerTexture;
-	private TextureAtlas.AtlasRegion arrowsTexture;
-	private TextureAtlas.AtlasRegion bombsTexture;
 
 
 	/**
@@ -53,8 +49,6 @@ public final class PlayerFactory {
 		this.entityFactory = ef;
 		
 		playerTexture = Assets.getTexture(Assets.player);
-		arrowsTexture = Assets.getTexture(Assets.arrow_item);
-		bombsTexture = Assets.getTexture(Assets.bomb_item);
 
 	}
 	
@@ -117,26 +111,6 @@ public final class PlayerFactory {
 		ammoCarrierCompo.setMaxArrows(10);
 		ammoCarrierCompo.setBombs(0);
 		ammoCarrierCompo.setMaxBombs(5);
-		
-		Vector3 arrowTextDisplayerPos = new Vector3();
-		arrowTextDisplayerPos.set(PositionConstants.POS_ARROW_TEXT, PositionConstants.Z_ARROW_TEXT);
-		Entity arrowsNbText = entityFactory.createText(arrowTextDisplayerPos, "10/10");
-		ammoCarrierCompo.setArrowsTextDisplayer(arrowsNbText);
-		Vector3 arrowSpriteDisplayerPos = new Vector3();
-		arrowSpriteDisplayerPos.set(PositionConstants.POS_ARROW_SPRITE, PositionConstants.Z_ARROW_SPRITE);
-		Entity arrowsSpriteDisplayer = entityFactory.createSprite(arrowSpriteDisplayerPos, arrowsTexture, EntityFlagEnum.ARROW_NB);
-		ammoCarrierCompo.setArrowsSpriteDisplayer(arrowsSpriteDisplayer);
-		
-		Vector3 bombDisplayerPos = new Vector3();
-		bombDisplayerPos.set(PositionConstants.POS_BOMB_TEXT, PositionConstants.Z_BOMB_TEXT);
-		Entity bombsNbText = entityFactory.createText(bombDisplayerPos, "0/5", null);
-		ammoCarrierCompo.setBombsTextDisplayer(bombsNbText);
-		Vector3 bombSpriteDisplayerPos = new Vector3();
-		bombSpriteDisplayerPos.set(PositionConstants.POS_BOMB_SPRITE, PositionConstants.Z_BOMB_SPRITE);
-		Entity bombsSpriteDisplayer = entityFactory.createSprite(bombSpriteDisplayerPos, bombsTexture, EntityFlagEnum.BOMB_NB);
-		ammoCarrierCompo.setBombsSpriteDisplayer(bombsSpriteDisplayer);
-
-		
 		playerEntity.add(ammoCarrierCompo);
 		
 		// Solid compo

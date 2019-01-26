@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -27,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
@@ -57,6 +59,11 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	private Button meleeSkillButton;
 	private Button rangeSkillButton;
 	private Button bombSkillButton;
+	
+	// Ammos
+	private Table ammoTable;
+	private Label arrowLabel;
+	private Label bombLabel;
 
 	public HudSystem(Room r, Stage s) {
 		super(Family.all(PlayerComponent.class).get());
@@ -73,6 +80,8 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	protected void processEntity(Entity player, float deltaTime) {
 		displayHealthAndXp(player);
 		displaySkillButtons(player);
+		displayAmmos(player);
+
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -307,4 +316,45 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		room.setNextState(RoomState.PLAYER_TARGETING_STOP);
 	}
 
+	
+	
+	
+	private void displayAmmos(Entity player) {
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
+		
+		if (ammoTable == null) {
+			ammoTable = new Table();
+			ammoTable.setPosition(PositionConstants.POS_ARROW_SPRITE.x, PositionConstants.POS_ARROW_SPRITE.y);
+			
+			// Arrows
+			Table arrowTable = new Table();
+
+			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
+			arrowTable.add(arrowImage).uniformX();
+			
+			LabelStyle hudStyle = new LabelStyle(Assets.font, Color.WHITE);
+			arrowLabel = new Label("", hudStyle);
+			arrowTable.add(arrowLabel).uniformX().padLeft(-15);
+			
+			ammoTable.add(arrowTable).uniformX();
+			
+			// Bombs
+			Table bombTable = new Table();
+			Image bombImage = new Image(Assets.getTexture(Assets.bomb_item));
+			bombTable.add(bombImage).uniformX();
+			
+			bombLabel = new Label("", hudStyle);
+			bombTable.add(bombLabel).uniformX().padLeft(-15);
+			
+			ammoTable.add(bombTable).uniformX();
+			
+
+			ammoTable.pack();
+			stage.addActor(ammoTable);
+		}
+		
+		arrowLabel.setText(ammoCarrierComponent.getArrows() + "/" + ammoCarrierComponent.getMaxArrows());
+		bombLabel.setText(ammoCarrierComponent.getBombs() + "/" + ammoCarrierComponent.getMaxBombs());
+	}
+	
 }

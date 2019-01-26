@@ -1,10 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Marker to indicate that this entity is solid so the tile on which it stands is blocked.
@@ -16,16 +13,10 @@ public class AmmoCarrierComponent implements Component {
 	// Arrows
 	private int arrows;
 	private int maxArrows;
-	private Entity arrowsTextDisplayer;
-	private Entity arrowsSpriteDisplayer;
-
 	
 	// Bombs
 	private int bombs;
 	private int maxBombs;
-	private Entity bombsTextDisplayer;
-	private Entity bombsSpriteDisplayer;
-
 	
 	
 	/**
@@ -62,11 +53,9 @@ public class AmmoCarrierComponent implements Component {
 		switch(ammoType) {
 		case ARROWS:
 			arrows -= number;
-			updateArrowDisplayer();
 			break;
 		case BOMBS:
 			bombs -= number;
-			updateBombDisplayer();
 			break;
 			default:
 		}
@@ -102,11 +91,9 @@ public class AmmoCarrierComponent implements Component {
 		switch(ammoType) {
 		case ARROWS:
 			arrows += number;
-			updateArrowDisplayer();
 			break;
 		case BOMBS:
 			bombs += number;
-			updateBombDisplayer();
 			break;
 			default:
 		}
@@ -123,7 +110,6 @@ public class AmmoCarrierComponent implements Component {
 	public void increaseMaxArrows(int amount) {
 		this.maxArrows += amount;
 		this.arrows += amount;
-		updateArrowDisplayer();
 	}
 	
 	/**
@@ -133,7 +119,6 @@ public class AmmoCarrierComponent implements Component {
 	public void increaseMaxBombs(int amount) {
 		this.maxBombs += amount;
 		this.bombs += amount;
-		updateBombDisplayer();
 	}
 	
 	/**
@@ -143,24 +128,9 @@ public class AmmoCarrierComponent implements Component {
 	public void increaseMaxBombsAndArrows(int amount) {
 		this.increaseMaxArrows(amount);
 		this.increaseMaxBombs(amount);
-		updateArrowDisplayer();
-		updateBombDisplayer();
 	}
 	
-	
 
-
-	private void updateBombDisplayer() {
-		TextComponent bombTextComponent = Mappers.textComponent.get(bombsTextDisplayer);
-		bombTextComponent.setText(bombs + "/" + maxBombs);
-	}
-
-	private void updateArrowDisplayer() {
-		TextComponent arrowTextComponent = Mappers.textComponent.get(arrowsTextDisplayer);
-		arrowTextComponent.setText(arrows + "/" + maxArrows);
-	}
-	
-	
 	
 	
 	// Getters and Setters !
@@ -203,54 +173,6 @@ public class AmmoCarrierComponent implements Component {
 
 	public void setMaxBombs(int maxBombs) {
 		this.maxBombs = maxBombs;
-	}
-
-
-
-	public Entity getArrowsTextDisplayer() {
-		return arrowsTextDisplayer;
-	}
-
-
-
-	public void setArrowsTextDisplayer(Entity arrowsDisplayer) {
-		this.arrowsTextDisplayer = arrowsDisplayer;
-	}
-
-
-
-	public Entity getBombsTextDisplayer() {
-		return bombsTextDisplayer;
-	}
-
-
-
-	public void setBombsTextDisplayer(Entity bombsDisplayer) {
-		this.bombsTextDisplayer = bombsDisplayer;
-	}
-
-
-
-	public Entity getArrowsSpriteDisplayer() {
-		return arrowsSpriteDisplayer;
-	}
-
-
-
-	public void setArrowsSpriteDisplayer(Entity arrowsSpriteDisplayer) {
-		this.arrowsSpriteDisplayer = arrowsSpriteDisplayer;
-	}
-
-
-
-	public Entity getBombsSpriteDisplayer() {
-		return bombsSpriteDisplayer;
-	}
-
-
-
-	public void setBombsSpriteDisplayer(Entity bombsSpriteDisplayer) {
-		this.bombsSpriteDisplayer = bombsSpriteDisplayer;
 	}
 
 }

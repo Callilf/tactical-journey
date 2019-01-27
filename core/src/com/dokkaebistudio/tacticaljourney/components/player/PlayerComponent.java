@@ -12,12 +12,14 @@ public class PlayerComponent implements Component {
 	/** The skill currently active. Null if no skill is active. */
 	private Entity activeSkill;
 	
-	/** The first skill. */
+	/** The melee skill. */
 	private Entity skillMelee;
 
-	/** The second skill. */
+	/** The range skill. */
 	private Entity skillRange;
 	
+	/** The bomb skill. */
+	private Entity skillBomb;
 	
 	
 	//**************************
@@ -47,6 +49,14 @@ public class PlayerComponent implements Component {
 
 	public void setActiveSkill(Entity activeSkill) {
 		this.activeSkill = activeSkill;
+	}
+
+	public Entity getSkillBomb() {
+		return skillBomb;
+	}
+
+	public void setSkillBomb(Entity skillBomb) {
+		this.skillBomb = skillBomb;
 	}
 	
 }

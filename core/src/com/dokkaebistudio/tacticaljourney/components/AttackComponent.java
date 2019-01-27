@@ -31,6 +31,9 @@ public class AttackComponent implements Component, Poolable {
 	
 	/** The target entity. */
 	private Entity target;
+	/** The targeted tile entity. */
+	private Entity targetedTile;
+
 	
 	//*************
 	// Skill
@@ -117,6 +120,9 @@ public class AttackComponent implements Component, Poolable {
 			engine.removeEntity(this.attackConfirmationButton);
 		}
 		this.attackConfirmationButton = null;
+		
+		this.target = null;
+		this.targetedTile = null;
 	}
 	
 	
@@ -265,6 +271,14 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setParentAttackCompo(AttackComponent parentAttackCompo) {
 		this.parentAttackCompo = parentAttackCompo;
+	}
+
+	public Entity getTargetedTile() {
+		return targetedTile;
+	}
+
+	public void setTargetedTile(Entity targetedTile) {
+		this.targetedTile = targetedTile;
 	}
 
 

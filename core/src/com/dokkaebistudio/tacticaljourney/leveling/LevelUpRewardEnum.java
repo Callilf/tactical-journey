@@ -65,12 +65,12 @@ public enum LevelUpRewardEnum {
 	BOMB_RANGE_UP(1, 1, "Increase max range of\nbomb throw by 1", "Bomb's range \nincreased by #"){
 		@Override
 		public void select(Entity player) {
-//			PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-//			AttackComponent attackComponent = Mappers.attackComponent.get(playerComponent.getSkillRange());
-//		
-//			if (attackComponent != null) {
-//				attackComponent.increaseRangeMax(getValue());
-//			}
+			PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+			AttackComponent attackComponent = Mappers.attackComponent.get(playerComponent.getSkillBomb());
+		
+			if (attackComponent != null) {
+				attackComponent.increaseRangeMax(getValue());
+			}
 		}
 	},
 	

@@ -26,6 +26,8 @@ public enum RoomState {
 	PLAYER_WHEEL_NEEDLE_STOP,
 	PLAYER_WHEEL_FINISHED,
 	
+	PLAYER_THROWING,
+	
 	
 	ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
 	ENEMY_TURN_INIT,
@@ -58,7 +60,8 @@ public enum RoomState {
     	    	|| this == RoomState.PLAYER_WHEEL_START    			
     			|| this == RoomState.PLAYER_WHEEL_TURNING    			
     			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP
-    			|| this == RoomState.PLAYER_WHEEL_FINISHED;
+    			|| this == RoomState.PLAYER_WHEEL_FINISHED
+    			|| this == RoomState.PLAYER_THROWING;
 	}
 	
 	/**

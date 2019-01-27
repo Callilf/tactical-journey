@@ -1,63 +1,34 @@
 package com.dokkaebistudio.tacticaljourney.skills;
 
-import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 
 
 public enum SkillEnum {
 
-	SLASH(Assets.btn_skill_attack, Assets.btn_skill_attack_pushed, 1, 1, 0, AmmoTypeEnum.NONE, 0),
-	BOW(Assets.btn_skill_bow, Assets.btn_skill_bow_pushed, 2, 5, -2, AmmoTypeEnum.ARROWS, 1);
+	SLASH(1, 1, 0, AmmoTypeEnum.NONE, 0, false),
+	BOW(2, 5, -2, AmmoTypeEnum.ARROWS, 1, false),
+	BOMB(0, 2, 10, AmmoTypeEnum.BOMBS, 1, true);
 	
-	
-	public final static Vector2 SKILL_1_POSITION = new Vector2(1500.0f, 20.0f);
-	public final static Vector2 SKILL_2_POSITION = new Vector2(1580.0f, 20.0f);
-	public final static Vector2 SKILL_3_POSITION = new Vector2(1660.0f, 20.0f);
-
-	/** The image of this skill. */
-	private String btnTexture;
-	/** The image of this skill when pushed. */
-	private String btnPushedTexture;
 	
 	private int rangeMin;
 	private int rangeMax;
 	private int strength;
 	private AmmoTypeEnum ammosType;
 	private int nbOfAmmosPerAttack;
+	private boolean throwing;
 	
-	SkillEnum(String texture, String pushedTexture, int rangeMin, int rangeMax, int strength, AmmoTypeEnum ammoType, int nbAmmoUsed) {
-		setBtnTexture(texture);
-		setBtnPushedTexture(pushedTexture);
+	SkillEnum(int rangeMin, int rangeMax, int strength, AmmoTypeEnum ammoType, int nbAmmoUsed, boolean throwing) {
 		this.setRangeMin(rangeMin);
 		this.setRangeMax(rangeMax);
 		this.setStrength(strength);
 		this.setAmmosType(ammoType);
 		this.setNbOfAmmosPerAttack(nbAmmoUsed);
+		this.setThrowing(throwing);
 	}
 
 	
 	
 	//Getters and Setters
-	
-	
-	public String getBtnTexture() {
-		return btnTexture;
-	}
-
-	public void setBtnTexture(String btnTexture) {
-		this.btnTexture = btnTexture;
-	}
-
-
-	public String getBtnPushedTexture() {
-		return btnPushedTexture;
-	}
-
-	public void setBtnPushedTexture(String btnPushedTexture) {
-		this.btnPushedTexture = btnPushedTexture;
-	}
-
 
 
 	public int getRangeMin() {
@@ -117,6 +88,20 @@ public enum SkillEnum {
 	public void setNbOfAmmosPerAttack(int nbOfAmmosPerAttack) {
 		this.nbOfAmmosPerAttack = nbOfAmmosPerAttack;
 	}
+
+
+
+	public boolean isThrowing() {
+		return throwing;
+	}
+
+
+
+	public void setThrowing(boolean throwing) {
+		this.throwing = throwing;
+	}
+
+
 
 
 	

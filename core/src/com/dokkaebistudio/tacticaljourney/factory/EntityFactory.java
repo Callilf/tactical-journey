@@ -76,28 +76,6 @@ public final class EntityFactory {
 		healthUpTexture = Assets.getTexture(Assets.health_up_item);
 	}
 
-	/**
-	 * Create the end turn button.
-	 * @param pos the position
-	 * @return the end turn button entity
-	 */
-	public Entity createSkillButton(SkillEnum skill, Vector2 pos) {
-		Entity skillButton = engine.createEntity();
-		skillButton.flags = EntityFlagEnum.SKILL1_BUTTON.getFlag();
-
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos.x, pos.y, PositionConstants.Z_SKILL_BTN);
-		skillButton.add(transfoCompo);
-		    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(skill.getBtnTexture())));
-    	skillButton.add(spriteCompo);
-    	
-    	engine.addEntity(skillButton);
-    	return skillButton;
-	}
-	
 	
 	/**
 	 * Create a tile with a given type at the given position
@@ -605,6 +583,10 @@ public final class EntityFactory {
 		case 2:
 			playerComponent.setSkillRange(skillEntity);
 			break;
+		case 3:
+			playerComponent.setSkillBomb(skillEntity);
+			break;
+			
 			default:
 				break;
 		}

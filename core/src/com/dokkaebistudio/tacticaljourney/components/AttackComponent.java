@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -15,6 +16,9 @@ public class AttackComponent implements Component, Poolable {
 		
 	/** The engine that managed entities.*/
 	public PooledEngine engine;
+	
+	/** The type of attack (MELEE, RANGE, THROW...). */
+	private AttackTypeEnum attackType;
 	
 	/** The min attack range. */
 	private int rangeMin;
@@ -78,6 +82,7 @@ public class AttackComponent implements Component, Poolable {
 			engine.removeEntity(ammoDisplayer);
 			ammoDisplayer = null;
 		}
+		this.attackType = null;
 	}
 	
 	/**
@@ -279,6 +284,14 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setTargetedTile(Entity targetedTile) {
 		this.targetedTile = targetedTile;
+	}
+
+	public AttackTypeEnum getAttackType() {
+		return attackType;
+	}
+
+	public void setAttackType(AttackTypeEnum attackType) {
+		this.attackType = attackType;
 	}
 
 

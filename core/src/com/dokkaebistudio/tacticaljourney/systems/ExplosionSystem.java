@@ -103,6 +103,8 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 			if (target != null && explosive != target) {
 				room.attackManager.applyDamage(explosive, target, explosiveComponent.getDamage());
 			}
+			
+			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord);
 		}		
 		
 		

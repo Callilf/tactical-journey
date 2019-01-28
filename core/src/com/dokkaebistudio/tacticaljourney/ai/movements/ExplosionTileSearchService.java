@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService.CheckTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
@@ -41,7 +40,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 			
 		CheckTypeEnum checkType = CheckTypeEnum.ATTACK_FOR_DISPLAY;
 		visitedTilesWithRemainingMove.put(tile, 0);
-		Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, null, room, explosiveComponent.getRadius(), 1);
+		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.RANGE, checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, null, room, explosiveComponent.getRadius(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		

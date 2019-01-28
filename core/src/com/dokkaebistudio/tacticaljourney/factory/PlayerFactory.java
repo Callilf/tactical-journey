@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
@@ -103,6 +104,7 @@ public final class PlayerFactory {
 		attackComponent.engine = this.engine;
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		playerEntity.add(attackComponent);
 		
 		// Ammo carrier

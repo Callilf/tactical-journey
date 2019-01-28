@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
@@ -82,6 +83,7 @@ public final class EnemyFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = this.engine;
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		enemyEntity.add(attackComponent);
@@ -141,6 +143,7 @@ public final class EnemyFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = this.engine;
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(10);
 		enemyEntity.add(attackComponent);

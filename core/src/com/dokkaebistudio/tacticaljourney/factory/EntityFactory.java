@@ -57,6 +57,9 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public EnemyFactory enemyFactory;
 	
+	/** The factory for visual effects. */
+	public EffectFactory effectFactory;
+	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
@@ -75,6 +78,7 @@ public final class EntityFactory {
 		this.engine = e;
 		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
+		this.effectFactory = new EffectFactory( e, this);
 		
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
@@ -565,7 +569,6 @@ public final class EntityFactory {
 		bomb.flags = EntityFlagEnum.BOMB.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.bombTexture));
 		bomb.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -628,6 +631,7 @@ public final class EntityFactory {
 		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = engine;
+		attackComponent.setAttackType(type.getAttackType());
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());
 		attackComponent.setStrength(type.getStrength());

@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
@@ -42,6 +43,8 @@ public final class Mappers {
 	public final static ComponentMapper<SpriteComponent> spriteComponent = ComponentMapper.getFor(SpriteComponent.class);
 	public final static ComponentMapper<AnimationComponent> animationComponent = ComponentMapper.getFor(AnimationComponent.class);
 	public final static ComponentMapper<StateComponent> stateComponent = ComponentMapper.getFor(StateComponent.class);
+	public final static ComponentMapper<VisualEffectComponent> visualEffectComponent = ComponentMapper.getFor(VisualEffectComponent.class);
+
 	
 	public final static ComponentMapper<ParentEntityComponent> parentEntityComponent = ComponentMapper.getFor(ParentEntityComponent.class);
 	public final static ComponentMapper<ParentRoomComponent> parentRoomComponent = ComponentMapper.getFor(ParentRoomComponent.class);

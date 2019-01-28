@@ -84,8 +84,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     				stopSkillUse(playerCompo, playerCompo.getSkillBomb(), moveCompo);
     			}
     			
-    			AttackComponent attackComponent = Mappers.attackComponent.get(skillEntity);
-	    		if (room.attackManager.isAttackAllowed(attackerEntity, attackComponent)) {
+    			AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
+	    		if (room.attackManager.isAttackAllowed(attackerEntity, skillAttackComponent)) {
 	    			// Find attackable tiles with the activated skill
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 		    		skillPos.coord.set(attackerCurrentPos.coord);

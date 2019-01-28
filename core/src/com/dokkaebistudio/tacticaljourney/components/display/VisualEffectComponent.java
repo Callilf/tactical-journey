@@ -17,16 +17,16 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class AnimationComponent implements Component, Poolable {
-	public IntMap<Animation<Sprite>> animations = new IntMap<Animation<Sprite>>();
+/**
+ * Marker to indicate that the entity is a visual effect and has to disappear.
+ * @author Callil
+ *
+ */
+public class VisualEffectComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
-		animations.clear();
 	}
 }

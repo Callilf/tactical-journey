@@ -47,7 +47,7 @@ public class AttackTileSearchService extends TileSearchService {
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
 			visitedTilesWithRemainingMove.put(t, 0);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
+			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
 		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));

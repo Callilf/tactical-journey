@@ -106,6 +106,7 @@ public class Assets {
 	
 	
 	public static final String bomb_animation = "bomb";
+	public static final String explosion_animation = "explosion";
 
 
 	

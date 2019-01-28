@@ -25,14 +25,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -144,10 +149,31 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				}
 
 			} 
+		
+		
+			// Handle visual effects
+			VisualEffectComponent visualEffectComponent = Mappers.visualEffectComponent.get(entity);
+			if (visualEffectComponent != null) {
+				AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
+				StateComponent stateComponent = Mappers.stateComponent.get(entity);
+				if (animationComponent != null && stateComponent != null) {
+					Animation<Sprite> animation = animationComponent.animations.get(stateComponent.get());
+					boolean animationFinished = animation.isAnimationFinished(stateComponent.time);
+					
+					if (animationFinished) {
+						// Remove the visual effect
+						room.engine.removeEntity(entity);
+					}
+				}
+			}
+		
 		}
 		
 		batch.end();
 		renderQueue.clear();
+		
+		
+		
 	}
 	
 	@Override

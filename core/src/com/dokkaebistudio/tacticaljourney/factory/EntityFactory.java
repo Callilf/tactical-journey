@@ -35,6 +35,8 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
+import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -576,21 +578,21 @@ public final class EntityFactory {
 		gridPosition.zIndex = 6;
 		bomb.add(gridPosition);
 		
-		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		Animation<Sprite> bombAnim = new Animation<Sprite>(0.2f, Assets.getAnimation(Assets.bomb_animation), PlayMode.LOOP);
-		animationCompo.animations.put(0, bombAnim);
-		bomb.add(animationCompo);
-		
-		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(0);
-		bomb.add(stateCompo);
-		
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
 		explosionCompo.engine = engine;
 		explosionCompo.setRadius(2);
-		explosionCompo.setTurnsToExplode(1);
+		explosionCompo.setTurnsToExplode(2);
 		explosionCompo.setDamage(20);
 		bomb.add(explosionCompo);
+		
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.animations.put(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationsEnum.BOMB_SLOW.getAnimation());
+		animationCompo.animations.put(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationsEnum.BOMB_FAST.getAnimation());
+		bomb.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
+		bomb.add(stateCompo);
 
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 		parentRoomComponent.setParentRoom(room);

@@ -31,6 +31,8 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
@@ -64,6 +66,17 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	public void update(float deltaTime) {
+		
+		// Update state
+		if (room.getState() == RoomState.PLAYER_TURN_INIT) {
+
+			fillEntitiesOfCurrentRoom();
+			for (Entity explosive : allExplosivesOfCurrentRoom) {
+				updateExplosiveEntityState(explosive);
+			}
+			
+		}
+		
 
 		// Explosive objects explode at the end of a turn
 		if (room.getState() == RoomState.END_TURN_EFFECTS) {
@@ -76,11 +89,17 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 				ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
 				if (explosiveComponent.getExplosionTurn() == null) {
 					explosiveComponent.setExplosionTurn(room.turnManager.getTurn() + explosiveComponent.getTurnsToExplode());
+					
+					StateComponent stateComponent = Mappers.stateComponent.get(explosive);
+					stateComponent.set(
+							explosiveComponent.getExplosionTurn() == room.turnManager.getTurn() ? 
+									StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
 
 					// Compute the explosion tiles
 					computeExplosionTilesToDisplayToPlayer(explosive);
 				}
 
+				
 				// Check whether the explosion is triggered this turn
 				if (explosiveComponent.getExplosionTurn() == room.turnManager.getTurn()) {
 
@@ -90,6 +109,19 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 			}
 			
 			room.turnManager.endTurn();
+		}
+	}
+
+
+	private void updateExplosiveEntityState(Entity explosive) {
+		ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
+		if (explosiveComponent.getExplosionTurn() != null && explosiveComponent.getExplosionTurn() == room.turnManager.getTurn()) {
+
+			StateComponent stateComponent = Mappers.stateComponent.get(explosive);
+			stateComponent.set(
+					explosiveComponent.getExplosionTurn() == room.turnManager.getTurn() ? 
+							StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
+
 		}
 	}
 	

@@ -5,6 +5,8 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,16 +17,20 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
@@ -58,6 +64,7 @@ public final class EntityFactory {
 	private TextureAtlas.AtlasRegion groundTexture;
 	
 	private TextureAtlas.AtlasRegion healthUpTexture;
+	private TextureAtlas.AtlasRegion bombTexture;
 
 
 	/**
@@ -74,6 +81,7 @@ public final class EntityFactory {
 		pitTexture = Assets.getTexture(Assets.tile_pit);
 		mudTexture = Assets.getTexture(Assets.tile_mud);
 		healthUpTexture = Assets.getTexture(Assets.health_up_item);
+		bombTexture = Assets.getTexture(Assets.bomb_item);
 	}
 
 	
@@ -192,7 +200,12 @@ public final class EntityFactory {
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
     	movableTileEntity.add(spriteCompo);
     	
-		engine.addEntity(movableTileEntity);
+		try {
+			engine.addEntity(movableTileEntity);
+		} catch(Exception e) {
+			// Enter here if an entity was removed, reset in the pool and re added in the engine during the same update.
+			System.out.println("movableTile already in the engine.");
+		}
     	return movableTileEntity;
 	}
 	
@@ -538,6 +551,55 @@ public final class EntityFactory {
 		engine.addEntity(healthUp);
 		
 		return healthUp;
+	}
+	
+	/**
+	 * Create a bomb that explodes after x turns.
+	 * @param room the parent room
+	 * @param tilePos the position in tiles
+	 * @param parent the parent entity of the bomb
+	 * @return the entity created
+	 */
+	public Entity createBomb(Room room, Vector2 tilePos, Entity parentEntity) {
+		Entity bomb = engine.createEntity();
+		bomb.flags = EntityFlagEnum.BOMB.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(this.bombTexture));
+		bomb.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(tilePos);
+		gridPosition.zIndex = 6;
+		bomb.add(gridPosition);
+		
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		Animation<Sprite> bombAnim = new Animation<Sprite>(0.2f, Assets.getAnimation(Assets.bomb_animation), PlayMode.LOOP);
+		animationCompo.animations.put(0, bombAnim);
+		bomb.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(0);
+		bomb.add(stateCompo);
+		
+		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
+		explosionCompo.engine = engine;
+		explosionCompo.setRadius(2);
+		explosionCompo.setTurnsToExplode(1);
+		explosionCompo.setDamage(20);
+		bomb.add(explosionCompo);
+
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		bomb.add(parentRoomComponent);
+		
+		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+		parentCompo.setParent(parentEntity);
+		bomb.add(parentCompo);
+		
+		engine.addEntity(bomb);
+		
+		return bomb;
 	}
 	
 	

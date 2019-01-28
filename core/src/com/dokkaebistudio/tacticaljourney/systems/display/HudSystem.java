@@ -353,11 +353,11 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		
 		
 		if (bombSkillButton == null) {
-			Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bow)));
+			Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bomb)));
 			Drawable rangeSkillButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bow_pushed)));
+					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_pushed)));
 			Drawable rangeSkillButtonChecked = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bow_checked)));
+					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_checked)));
 			ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
 					rangeSkillButtonChecked);
 			bombSkillButton = new Button(rangeSkillButtonStyle);

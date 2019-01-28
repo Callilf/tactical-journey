@@ -10,6 +10,8 @@ package com.dokkaebistudio.tacticaljourney.room;
  */
 public enum RoomState {
 	
+	END_TURN_EFFECTS,
+	
 	PLAYER_TURN_INIT,
 	PLAYER_COMPUTE_MOVABLE_TILES,
 	PLAYER_MOVE_TILES_DISPLAYED,

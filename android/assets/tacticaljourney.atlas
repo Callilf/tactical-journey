@@ -11,32 +11,67 @@ background-test-menu
   orig: 1920, 1080
   offset: 0, 0
   index: -1
-btn-end-turn
+bomb
   rotate: false
-  xy: 516, 465
-  size: 165, 110
-  orig: 165, 110
+  xy: 1045, 616
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
-  index: -1
-btn-end-turn-pushed
+  index: 1
+bomb
+  rotate: false
+  xy: 1924, 1801
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 2
+btn-end-turn
   rotate: false
   xy: 963, 698
   size: 165, 110
   orig: 165, 110
   offset: 0, 0
   index: -1
+btn-end-turn-pushed
+  rotate: false
+  xy: 516, 465
+  size: 165, 110
+  orig: 165, 110
+  offset: 0, 0
+  index: -1
 btn-move-confirmation
   rotate: false
-  xy: 454, 73
+  xy: 610, 399
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 btn-ok
   rotate: false
-  xy: 1924, 1719
+  xy: 1924, 1473
   size: 80, 80
   orig: 80, 80
+  offset: 0, 0
+  index: -1
+btn-skill-bomb
+  rotate: false
+  xy: 454, 61
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-skill-bomb-checked
+  rotate: false
+  xy: 454, 139
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-skill-bomb-pushed
+  rotate: false
+  xy: 532, 231
+  size: 76, 76
+  orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow
@@ -55,77 +90,70 @@ btn-skill-bow-checked
   index: -1
 btn-skill-bow-pushed
   rotate: false
-  xy: 454, 295
-  size: 76, 76
-  orig: 76, 76
-  offset: 0, 0
-  index: -1
-btn-skill-selected
-  rotate: false
-  xy: 454, 373
+  xy: 532, 387
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash
   rotate: false
-  xy: 454, 139
+  xy: 454, 295
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-checked
   rotate: false
-  xy: 1924, 1067
+  xy: 454, 373
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-pushed
   rotate: false
-  xy: 1924, 989
+  xy: 532, 309
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 door-closed
   rotate: false
-  xy: 1294, 728
+  xy: 1924, 1555
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 1924, 1801
+  xy: 1924, 1637
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 1924, 1145
+  xy: 683, 495
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 1924, 1473
+  xy: 1924, 1309
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 entrance
   rotate: false
-  xy: 1924, 1555
+  xy: 1924, 1391
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 1045, 616
+  xy: 1294, 728
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -223,35 +251,42 @@ hud_map_plus
   index: -1
 item-consumable-arrow
   rotate: false
-  xy: 765, 495
+  xy: 847, 495
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-bomb
   rotate: false
-  xy: 1924, 1637
+  xy: 765, 495
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
+bomb
+  rotate: false
+  xy: 765, 495
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 0
 item-consumable-health-up
   rotate: false
-  xy: 1924, 1309
+  xy: 1924, 1145
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 1924, 1227
+  xy: 1924, 1063
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 1212, 728
+  xy: 1924, 1719
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -265,14 +300,14 @@ tile-movable
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 1924, 1391
+  xy: 1924, 1227
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 963, 616
+  xy: 1924, 981
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -286,7 +321,7 @@ tile-mud-test
   index: -1
 tile-pit-test
   rotate: false
-  xy: 683, 495
+  xy: 963, 616
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -300,16 +335,9 @@ tile-test
   index: -1
 tile-wall-test
   rotate: false
-  xy: 847, 495
+  xy: 1212, 728
   size: 80, 80
   orig: 80, 80
-  offset: 0, 0
-  index: -1
-tile-wall-test2
-  rotate: false
-  xy: 532, 399
-  size: 64, 64
-  orig: 64, 64
   offset: 0, 0
   index: -1
 wheel-arrow

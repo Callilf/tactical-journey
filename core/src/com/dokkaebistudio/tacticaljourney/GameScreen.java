@@ -39,10 +39,12 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
+import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.HudSystem;
@@ -137,9 +139,11 @@ public class GameScreen extends ScreenAdapter {
 //		int y = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
 		
+		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
 		engine.addSystem(new WheelSystem(attackWheel, room));
+		engine.addSystem(new ExplosionSystem(room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));

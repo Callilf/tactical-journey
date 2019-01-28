@@ -159,7 +159,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);
 	    		
 	
-				Entity createItemHealthUp = room.entityFactory.createItemHealthUp(room, targetedPosition.coord);
+				Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord, attackerEntity);
 				
 				AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attackerEntity);
 				if (ammoCarrierComponent != null) {

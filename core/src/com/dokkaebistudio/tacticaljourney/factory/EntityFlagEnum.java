@@ -29,6 +29,8 @@ public enum EntityFlagEnum {
 	ARROW_NB(550),
 	BOMB_NB(551),
 	
+	BOMB(600),
+
 	
 	ITEM_HEALTH_UP(1000);
 	

@@ -591,7 +591,7 @@ public final class EntityFactory {
 		bomb.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
+		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState() : StatesEnum.EXPLODING_THIS_TURN.getState());
 		bomb.add(stateCompo);
 
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);

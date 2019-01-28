@@ -41,6 +41,12 @@ public class AttackTileSearchService extends TileSearchService {
 		 long time = System.currentTimeMillis();
 		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
+		
+		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+			Entity tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord, room);
+			attackableTiles.add(tileAtGridPos);
+		}
+		
 		for (Entity t : moveCompo.allWalkableTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 			

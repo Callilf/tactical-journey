@@ -44,10 +44,10 @@ public class ExplosionTileSearchService extends TileSearchService {
 		attackableTiles.addAll(foundAttTiles);
 
 		
-//		//Obstacles post process
-//		obstaclesPostProcess(attackerPosCompo, attackableTiles);
-//		
-//		
+		//Obstacles post process
+		obstaclesPostProcess(tilePos, attackableTiles);
+		
+		
 //		//Range Postprocess : remove tiles that cannot be attacked
 //		if (attackCompo.getRangeMin() > 1) {
 //			Iterator<Entity> it = attackableTiles.iterator();

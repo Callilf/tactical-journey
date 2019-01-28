@@ -109,7 +109,12 @@ public class RoomGenerator {
             		break;
             		
             		default:
-            			groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+            			int nextInt = random.nextInt(10);
+            			if (nextInt == 0) {
+            				groom.getTileTypes()[x][realY] = TileEnum.MUD;
+            			} else {
+            				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+            			}
             	
             	}
             }

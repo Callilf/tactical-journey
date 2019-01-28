@@ -14,20 +14,25 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.systems;
 
-import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 
-public class StateComponent implements Component {
-	private int state = 0;
-	public float time = 0.0f;
+public class StateSystem extends IteratingSystem {	
+	private ComponentMapper<StateComponent> sm;
 	
-	public int get() {
-		return state;
+	public StateSystem() {
+		super(Family.all(StateComponent.class).get());
+		
+		sm = ComponentMapper.getFor(StateComponent.class);
 	}
-	
-	public void set(int newState) {
-		state = newState;
-		time = 0.0f;
+
+	@Override
+	public void processEntity(Entity entity, float deltaTime) {
+		sm.get(entity).time += deltaTime;
 	}
 }

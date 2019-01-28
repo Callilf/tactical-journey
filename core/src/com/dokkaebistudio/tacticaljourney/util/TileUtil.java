@@ -48,6 +48,18 @@ public final class TileUtil {
 		return new Vector2(x,y);
 	}
 	
+	
+	/**
+	 * Get the tile on which the given entity is standing.
+	 * @param e the entity
+	 * @param r the room
+	 * @return the tile on which the entity is standing.
+	 */
+	public static Entity getTileFromEntity(Entity e, Room r) {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+		return getTileAtGridPos(gridPositionComponent.coord, r);
+	}
+	
 	/**
 	 * Return the tile at the given grid position.
 	 * @param gridPos the position

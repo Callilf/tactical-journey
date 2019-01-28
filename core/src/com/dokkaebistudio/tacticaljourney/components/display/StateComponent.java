@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2011 See AUTHORS file.
+ * Copyright 2014 See AUTHORS file.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,17 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class AnimationComponent implements Component, Poolable {
-	public IntMap<Animation<Sprite>> animations = new IntMap<Animation<Sprite>>();
+public class StateComponent implements Component {
+	private int state = 0;
+	public float time = 0.0f;
 	
-	@Override
-	public void reset() {
-		animations.clear();
+	public int get() {
+		return state;
+	}
+	
+	public void set(int newState) {
+		state = newState;
+		time = 0.0f;
 	}
 }

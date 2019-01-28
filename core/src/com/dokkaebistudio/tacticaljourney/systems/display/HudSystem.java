@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -110,7 +111,6 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		
 		if (timeAndTurnTable == null) {
 			timeAndTurnTable = new Table();
-			timeAndTurnTable.setDebug(true);
 			timeAndTurnTable.setPosition(PositionConstants.POS_TIMER.x, PositionConstants.POS_TIMER.y - 20);
 			
 			// Turns
@@ -256,9 +256,14 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	
 						if (room.getState().isSkillChangeAllowed()) {
 							if (meleeSkillButton.isChecked()) {
-								rangeSkillButton.setChecked(false);
+								boolean activated = activateSkill(meleeSkillButton, player);
+								if (activated) {
+									uncheckSkill(rangeSkillButton);
+									uncheckSkill(bombSkillButton);
+								} else {
+									uncheckSkill(meleeSkillButton);
+								}
 	
-								activateSkill(meleeSkillButton, player);
 							} else {
 								deactivateSkill(player);
 							}
@@ -304,9 +309,14 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 						
 						if (room.getState().isSkillChangeAllowed()) {
 							if (rangeSkillButton.isChecked()) {
-								meleeSkillButton.setChecked(false);
-		
-								activateSkill(rangeSkillButton, player);
+								boolean activated = activateSkill(rangeSkillButton, player);
+								if (activated) {
+									uncheckSkill(meleeSkillButton);
+									uncheckSkill(bombSkillButton);
+								} else {
+									uncheckSkill(rangeSkillButton);
+								}
+	
 							} else {
 								deactivateSkill(player);
 							}
@@ -340,9 +350,69 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		}
 		
 		
+		
+		
+		if (bombSkillButton == null) {
+			Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bomb)));
+			Drawable rangeSkillButtonDown = new SpriteDrawable(
+					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_pushed)));
+			Drawable rangeSkillButtonChecked = new SpriteDrawable(
+					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_checked)));
+			ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
+					rangeSkillButtonChecked);
+			bombSkillButton = new Button(rangeSkillButtonStyle);
+			bombSkillButton.setProgrammaticChangeEvents(true);
+
+			bombSkillButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					
+					if (room.getState().isSkillChangeAllowed()) {
+						if (bombSkillButton.isChecked()) {							
+							boolean activated = activateSkill(bombSkillButton, player);
+							if (activated) {
+								uncheckSkill(meleeSkillButton);
+								uncheckSkill(rangeSkillButton);
+							} else {
+								uncheckSkill(bombSkillButton);
+							}
+
+						} else {
+							deactivateSkill(player);
+						}
+					} else {
+						bombSkillButton.setChecked(!bombSkillButton.isChecked());
+					}
+				}
+
+			});
+
+			// Add shortcut to activate the button
+			stage.addListener(new InputListener() {
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.NUM_3) {
+						if (!bombSkillButton.isDisabled()) {
+							bombSkillButton.toggle();
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
+			});
+
+			allSkillButtons.add(bombSkillButton);
+		}			
+		skillsTable.add(bombSkillButton);
+		
+		
+		
+		
+		
+		
 		for (Button btn : allSkillButtons) {
 			btn.setDisabled(!room.getState().isSkillChangeAllowed());
-			if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED) {
+			if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED || room.getState() == RoomState.PLAYER_THROWING) {
 				btn.setProgrammaticChangeEvents(false);
 				btn.setChecked(false);
 			} else {
@@ -352,21 +422,46 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		
 	}
 
-	private void activateSkill(Button button, Entity player) {
-		room.setNextState(RoomState.PLAYER_TARGETING_START);
+	private boolean activateSkill(Button button, Entity player) {
+		boolean canActivate = false;
 
 		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		if (button == meleeSkillButton) {
-			playerComponent.setActiveSkill(playerComponent.getSkillMelee());
+			SkillComponent skillComponent = Mappers.skillComponent.get(playerComponent.getSkillMelee());
+			if (ammoCarrierComponent.canUseAmmo(skillComponent.getType().getAmmosType(), skillComponent.getType().getNbOfAmmosPerAttack())) {
+				playerComponent.setActiveSkill(playerComponent.getSkillMelee());
+				canActivate = true;
+			}
 		} else if (button == rangeSkillButton) {
-			playerComponent.setActiveSkill(playerComponent.getSkillRange());
+			SkillComponent skillComponent = Mappers.skillComponent.get(playerComponent.getSkillRange());
+			if (ammoCarrierComponent.canUseAmmo(skillComponent.getType().getAmmosType(), skillComponent.getType().getNbOfAmmosPerAttack())) {
+				playerComponent.setActiveSkill(playerComponent.getSkillRange());
+				canActivate = true;
+			}
 		} else if (button == bombSkillButton) {
-			playerComponent.setActiveSkill(playerComponent.getSkillRange());
+			SkillComponent skillComponent = Mappers.skillComponent.get(playerComponent.getSkillBomb());
+			if (ammoCarrierComponent.canUseAmmo(skillComponent.getType().getAmmosType(), skillComponent.getType().getNbOfAmmosPerAttack())) {
+				playerComponent.setActiveSkill(playerComponent.getSkillBomb());
+				canActivate = true;
+			}
 		}
+	
+		if (canActivate) {
+			room.setNextState(RoomState.PLAYER_TARGETING_START);
+		}
+		return canActivate;
 	}
 
 	private void deactivateSkill(Entity player) {
 		room.setNextState(RoomState.PLAYER_TARGETING_STOP);
+	}
+	
+	
+	private void uncheckSkill(Button button) {
+		button.setProgrammaticChangeEvents(false);
+		button.setChecked(false);
+		button.setProgrammaticChangeEvents(true);
 	}
 
 	

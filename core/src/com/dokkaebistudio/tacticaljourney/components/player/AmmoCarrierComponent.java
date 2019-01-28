@@ -11,11 +11,15 @@ import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 public class AmmoCarrierComponent implements Component {
 	
 	// Arrows
+	/** Current number of arrows. */
 	private int arrows;
+	/** Max number of arrows. */
 	private int maxArrows;
 	
 	// Bombs
+	/** Current number of bombs. */
 	private int bombs;
+	/** Max number of bombs. */
 	private int maxBombs;
 	
 	
@@ -91,9 +95,11 @@ public class AmmoCarrierComponent implements Component {
 		switch(ammoType) {
 		case ARROWS:
 			arrows += number;
+			if (arrows > maxArrows) arrows = maxArrows;
 			break;
 		case BOMBS:
 			bombs += number;
+			if (bombs > maxBombs) bombs = maxBombs;
 			break;
 			default:
 		}

@@ -23,8 +23,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class Assets {
 	
@@ -72,7 +74,6 @@ public class Assets {
 	public static final String lvl_up_continue_btn = "hud_lvl_up_continue_btn";
 	public static final String lvl_up_continue_btn_pushed = "hud_lvl_up_continue_btn_pushed";
 	
-	public static final String btn_skill_active = "btn-skill-selected";
 	public static final String btn_skill_attack = "btn-skill-slash";
 	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
 	public static final String btn_skill_attack_checked = "btn-skill-slash-checked";
@@ -80,8 +81,10 @@ public class Assets {
 	public static final String btn_skill_bow = "btn-skill-bow";
 	public static final String btn_skill_bow_pushed = "btn-skill-bow-pushed";
 	public static final String btn_skill_bow_checked = "btn-skill-bow-checked";
-
-
+	
+	public static final String btn_skill_bomb = "btn-skill-bomb";
+	public static final String btn_skill_bomb_pushed = "btn-skill-bomb-pushed";
+	public static final String btn_skill_bomb_checked = "btn-skill-bomb-checked";
 	
 //	public static final String wheel_arc = "wheel-arc";
 	public static final String wheel_arrow = "wheel-arrow";
@@ -100,6 +103,10 @@ public class Assets {
 	public static final String health_up_item = "item-consumable-health-up";
 	public static final String arrow_item = "item-consumable-arrow";
 	public static final String bomb_item = "item-consumable-bomb";
+	
+	
+	public static final String bomb_animation = "bomb";
+	public static final String explosion_animation = "explosion";
 
 
 	
@@ -162,6 +169,17 @@ public class Assets {
 		AtlasRegion region = getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
 		region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		return region;
+	}
+	
+	public static Array<Sprite> getAnimation(String file){
+		Array<AtlasRegion> regions = getInstance().manager.get(atlas, TextureAtlas.class).findRegions(file);
+		
+		Array<Sprite> a = new Array<>();
+		for (AtlasRegion r : regions) {
+			r.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			a.add(new Sprite(r));
+		}
+		return a;
 	}
 
 	private void registerMusic(String file) {

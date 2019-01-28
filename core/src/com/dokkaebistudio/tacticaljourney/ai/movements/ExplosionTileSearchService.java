@@ -6,93 +6,70 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class AttackTileSearchService extends TileSearchService {
+public class ExplosionTileSearchService extends TileSearchService {
 	
 
-	public AttackTileSearchService() {}
+	public ExplosionTileSearchService() {}
     
 
 	/**
-	 * Compute the tiles where attack is possible.
-	 * @param moverEntity the attacker
+	 * Compute the tiles affected by the explosion.
+	 * @param explosive the explosive entity
 	 * @param room the current room
-	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
-	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities) {
-		long totalTime = System.currentTimeMillis();
-
+	public void buildExplosionTilesSet(Entity explosive, Room room) {
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
 		
-		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
-		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
-		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(moverEntity);
-
-		 long time = System.currentTimeMillis();
+		ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
+		
 		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
-		
-		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
-			Entity tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord, room);
-			attackableTiles.add(tileAtGridPos);
-		}
-		
-		for (Entity t : moveCompo.allWalkableTiles) {
-			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+
+		Entity tile = TileUtil.getTileFromEntity(explosive, room);
+		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(tile);
+		attackableTiles.add(tile);
 			
-			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
-			
-			visitedTilesWithRemainingMove.put(t, 0);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
-			attackableTiles.addAll(foundAttTiles);
-		}
-		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));
+		CheckTypeEnum checkType = CheckTypeEnum.ATTACK_FOR_DISPLAY;
+		visitedTilesWithRemainingMove.put(tile, 0);
+		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.RANGE, checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, null, room, explosiveComponent.getRadius(), 1);
+		attackableTiles.addAll(foundAttTiles);
 
 		
 		//Obstacles post process
-		time = System.currentTimeMillis();
-		obstaclesPostProcess(attackerPosCompo, attackableTiles);
-		System.out.println("obstacles : " + String.valueOf(System.currentTimeMillis() - time));
+		obstaclesPostProcess(tilePos, attackableTiles);
 		
 		
-		time = System.currentTimeMillis();
-		//Range Postprocess : remove tiles that cannot be attacked
-		if (attackCompo.getRangeMin() > 1) {
-			Iterator<Entity> it = attackableTiles.iterator();
-			while (it.hasNext()) {
-				Entity currentAttackableTile = it.next();
-				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
-				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
-					it.remove();
-				}
-			}
-		}
+//		//Range Postprocess : remove tiles that cannot be attacked
+//		if (attackCompo.getRangeMin() > 1) {
+//			Iterator<Entity> it = attackableTiles.iterator();
+//			while (it.hasNext()) {
+//				Entity currentAttackableTile = it.next();
+//				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
+//				//Remove tiles that are too close
+//				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
+//					it.remove();
+//				}
+//			}
+//		}
 
-		attackCompo.allAttackableTiles = attackableTiles;
-		System.out.println("range : " + String.valueOf(System.currentTimeMillis() - time));
+		explosiveComponent.allAttackableTiles = attackableTiles;
 
 		
-		time = System.currentTimeMillis();
 
 		//Create entities for each attackable tiles to display them
-		for (Entity tileCoord : attackCompo.allAttackableTiles) {
+		for (Entity tileCoord : explosiveComponent.allAttackableTiles) {
 			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
-			attackCompo.attackableTiles.add(attackableTileEntity);
+			explosiveComponent.attackableTiles.add(attackableTileEntity);
 		}
-		System.out.println("create entities : " + String.valueOf(System.currentTimeMillis() - time));
-
-		System.out.println("total : " + String.valueOf(System.currentTimeMillis() - totalTime));
 	}
 
 	

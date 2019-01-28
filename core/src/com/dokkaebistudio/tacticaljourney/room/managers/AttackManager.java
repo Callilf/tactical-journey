@@ -10,8 +10,10 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.ComponentsUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -85,30 +87,45 @@ public class AttackManager {
 			damage = attackCompo.getStrength();
 		}
 		
-		
+		applyDamage(attacker, target, damage);
+	}
+	
+	
+	/**
+	 * 'attacker' deals 'damage' damages to 'target'
+	 * @param attacker the attacker entity
+	 * @param target the target entity
+	 * @param damage the amount of damage
+	 */
+	public void applyDamage(Entity attacker, Entity target, int damage) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
-		healthComponent.setHp(healthComponent.getHp() - damage);
 		
-		if (healthComponent.getHp() <= 0) {
-			//target is dead
+		if (healthComponent != null) {
+			healthComponent.setHp(healthComponent.getHp() - damage);
 			
-			//earn xp
-			ExperienceComponent expCompo = Mappers.experienceComponent.get(attacker);
-			ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
-			if (expCompo != null && expRewardCompo != null) {
-				expCompo.earnXp(expRewardCompo.getExpGain());
-				GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attacker);
-				room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord);
+			if (healthComponent.getHp() <= 0) {
+				//target is dead
+				
+				//earn xp
+				ExperienceComponent expCompo = getExperienceComponent(attacker);
+				ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
+				if (expCompo != null && expRewardCompo != null) {
+					expCompo.earnXp(expRewardCompo.getExpGain());
+					
+					Entity mainParent = ComponentsUtil.getMainParent(attacker);
+					GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(mainParent);
+					room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord);
+				}
+				
+				room.removeEnemy(target);
+				//TODO: play death animation
 			}
 			
-			room.removeEnemy(target);
-			//TODO: play death animation
+			
+			//Add a damage displayer
+			GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
+			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord, false);
 		}
-		
-		
-		//Add a damage displayer
-		GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
-		room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord, false);
 	}
 	
 	
@@ -120,6 +137,20 @@ public class AttackManager {
 	public boolean isAttackAllowed(Entity attacker, AttackComponent attackCompo) {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
 		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
+	}
+	
+	private ExperienceComponent getExperienceComponent(Entity attacker) {
+		ExperienceComponent result = null;
+		result = Mappers.experienceComponent.get(attacker);
+		if (result == null) {
+			ParentEntityComponent parentEntityComponent = Mappers.parentEntityComponent.get(attacker);
+			if (parentEntityComponent != null) {
+				Entity parent = parentEntityComponent.getParent();
+				result = getExperienceComponent(parent);
+			}
+		}
+		
+		return result;
 	}
 	
 }

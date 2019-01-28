@@ -12,7 +12,9 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -63,7 +65,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	        
     	case PLAYER_MOVE_TILES_DISPLAYED:
     		//When clicking on an attack tile, display the wheel
-            selectAttackTile(attackCompo, attackerCurrentPos);
+            selectAttackTile(attackCompo, attackerCurrentPos, false);
             break;
 
     	case PLAYER_TARGETING_START:
@@ -74,12 +76,16 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     			//unselect any other skill
     			if (playerCompo.getSkillMelee() != skillEntity) {
     				stopSkillUse(playerCompo, playerCompo.getSkillMelee(), moveCompo);
-    			} else if (playerCompo.getSkillRange() != skillEntity) {
+    			}
+    			if (playerCompo.getSkillRange() != skillEntity) {
     				stopSkillUse(playerCompo, playerCompo.getSkillRange(), moveCompo);
     			}
+    			if (playerCompo.getSkillBomb() != skillEntity) {
+    				stopSkillUse(playerCompo, playerCompo.getSkillBomb(), moveCompo);
+    			}
     			
-    			AttackComponent attackComponent = Mappers.attackComponent.get(skillEntity);
-	    		if (room.attackManager.isAttackAllowed(attackerEntity, attackComponent)) {
+    			AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
+	    		if (room.attackManager.isAttackAllowed(attackerEntity, skillAttackComponent)) {
 	    			// Find attackable tiles with the activated skill
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 		    		skillPos.coord.set(attackerCurrentPos.coord);
@@ -102,10 +108,11 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     		if (skillEntity != null) {
 	    		// Display all attackable tiles
+				SkillComponent skillComponent = Mappers.skillComponent.get(skillEntity);
 	    		
 	    		//Display the wheel is a tile is clicked
 	    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-	    		selectAttackTile(skillAttackCompo, attackerCurrentPos);
+	    		selectAttackTile(skillAttackCompo, attackerCurrentPos, skillComponent.getType().isThrowing());
 	    		
     		}
     		
@@ -142,6 +149,30 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			}
     		
     		break;
+    		
+    		
+    	case PLAYER_THROWING:
+    		
+    		if (skillEntity != null) {
+	    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
+	    		Entity targetedTile = skillAttackCompo.getTargetedTile();
+	    		GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);
+	    		
+	
+				Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord, attackerEntity);
+				
+				AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attackerEntity);
+				if (ammoCarrierComponent != null) {
+					ammoCarrierComponent.useAmmo(skillAttackCompo.getAmmoType(), skillAttackCompo.getAmmosUsedPerAttack());
+				}
+				
+	    		clearAllEntityTiles(attackerEntity);
+	    		
+    			// unselect the skill
+				stopSkillUse(playerCompo, skillEntity, moveCompo);
+				
+				room.turnManager.endPlayerTurn();
+			}
 
     		
     	default:
@@ -166,7 +197,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		
 	}
 
-	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos) {
+	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos, boolean isThrow) {
 		if (InputSingleton.getInstance().leftClickJustReleased) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 			int x = (int) touchPoint.x;
@@ -175,17 +206,24 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			for (Entity tile : attackCompo.attackableTiles) {
 				SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 				if (spriteComponent.containsPoint(x, y)) {
+					
+					//TODO : is this needed ? Distance was already checked when computing the attackable tiles
 					//Check the distance of this attackableTile
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
 					int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord, gridPositionComponent.coord);
 					
 					if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
-
+						attackCompo.setTargetedTile(tile);
+						
 						//Attack is possible !
-		    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
-						attackCompo.setTarget(target);
-						wheel.setAttackComponent(attackCompo);
-						room.setNextState(RoomState.PLAYER_WHEEL_START);
+						if (isThrow) {
+							room.setNextState(RoomState.PLAYER_THROWING);
+						} else {
+			    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
+							attackCompo.setTarget(target);
+							wheel.setAttackComponent(attackCompo);
+							room.setNextState(RoomState.PLAYER_WHEEL_START);
+						}
 
 		    			break;
 					}

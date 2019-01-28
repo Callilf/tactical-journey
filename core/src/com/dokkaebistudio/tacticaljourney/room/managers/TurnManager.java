@@ -30,6 +30,10 @@ public class TurnManager {
 	}
 	
 	public void endEnemyTurn() {
+		this.room.setNextState(RoomState.END_TURN_EFFECTS);
+	}
+	
+	public void endTurn() {
 		this.turn ++;
 		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
 	}

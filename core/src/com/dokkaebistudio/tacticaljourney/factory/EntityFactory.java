@@ -5,6 +5,8 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,20 +17,26 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
+import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -51,6 +59,9 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public EnemyFactory enemyFactory;
 	
+	/** The factory for visual effects. */
+	public EffectFactory effectFactory;
+	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
@@ -58,6 +69,7 @@ public final class EntityFactory {
 	private TextureAtlas.AtlasRegion groundTexture;
 	
 	private TextureAtlas.AtlasRegion healthUpTexture;
+	private TextureAtlas.AtlasRegion bombTexture;
 
 
 	/**
@@ -68,36 +80,16 @@ public final class EntityFactory {
 		this.engine = e;
 		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
+		this.effectFactory = new EffectFactory( e, this);
 		
 		wallTexture = Assets.getTexture(Assets.tile_wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
 		mudTexture = Assets.getTexture(Assets.tile_mud);
 		healthUpTexture = Assets.getTexture(Assets.health_up_item);
+		bombTexture = Assets.getTexture(Assets.bomb_item);
 	}
 
-	/**
-	 * Create the end turn button.
-	 * @param pos the position
-	 * @return the end turn button entity
-	 */
-	public Entity createSkillButton(SkillEnum skill, Vector2 pos) {
-		Entity skillButton = engine.createEntity();
-		skillButton.flags = EntityFlagEnum.SKILL1_BUTTON.getFlag();
-
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(pos.x, pos.y, PositionConstants.Z_SKILL_BTN);
-		skillButton.add(transfoCompo);
-		    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(skill.getBtnTexture())));
-    	skillButton.add(spriteCompo);
-    	
-    	engine.addEntity(skillButton);
-    	return skillButton;
-	}
-	
 	
 	/**
 	 * Create a tile with a given type at the given position
@@ -214,7 +206,12 @@ public final class EntityFactory {
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
     	movableTileEntity.add(spriteCompo);
     	
-		engine.addEntity(movableTileEntity);
+		try {
+			engine.addEntity(movableTileEntity);
+		} catch(Exception e) {
+			// Enter here if an entity was removed, reset in the pool and re added in the engine during the same update.
+			System.out.println("movableTile already in the engine.");
+		}
     	return movableTileEntity;
 	}
 	
@@ -562,6 +559,54 @@ public final class EntityFactory {
 		return healthUp;
 	}
 	
+	/**
+	 * Create a bomb that explodes after x turns.
+	 * @param room the parent room
+	 * @param tilePos the position in tiles
+	 * @param parent the parent entity of the bomb
+	 * @return the entity created
+	 */
+	public Entity createBomb(Room room, Vector2 tilePos, Entity parentEntity) {
+		Entity bomb = engine.createEntity();
+		bomb.flags = EntityFlagEnum.BOMB.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		bomb.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord.set(tilePos);
+		gridPosition.zIndex = 6;
+		bomb.add(gridPosition);
+		
+		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
+		explosionCompo.engine = engine;
+		explosionCompo.setRadius(2);
+		explosionCompo.setTurnsToExplode(2);
+		explosionCompo.setDamage(20);
+		bomb.add(explosionCompo);
+		
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.animations.put(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationsEnum.BOMB_SLOW.getAnimation());
+		animationCompo.animations.put(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationsEnum.BOMB_FAST.getAnimation());
+		bomb.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState() : StatesEnum.EXPLODING_THIS_TURN.getState());
+		bomb.add(stateCompo);
+
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		bomb.add(parentRoomComponent);
+		
+		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+		parentCompo.setParent(parentEntity);
+		bomb.add(parentCompo);
+		
+		engine.addEntity(bomb);
+		
+		return bomb;
+	}
+	
 	
 	public Entity createSkill(Entity parent, SkillEnum type, int skillNumber) {
 		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
@@ -588,6 +633,7 @@ public final class EntityFactory {
 		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.engine = engine;
+		attackComponent.setAttackType(type.getAttackType());
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());
 		attackComponent.setStrength(type.getStrength());
@@ -605,6 +651,10 @@ public final class EntityFactory {
 		case 2:
 			playerComponent.setSkillRange(skillEntity);
 			break;
+		case 3:
+			playerComponent.setSkillBomb(skillEntity);
+			break;
+			
 			default:
 				break;
 		}

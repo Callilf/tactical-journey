@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
@@ -103,14 +104,15 @@ public final class PlayerFactory {
 		attackComponent.engine = this.engine;
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		playerEntity.add(attackComponent);
 		
 		// Ammo carrier
 		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
 		ammoCarrierCompo.setArrows(10);
 		ammoCarrierCompo.setMaxArrows(10);
-		ammoCarrierCompo.setBombs(0);
-		ammoCarrierCompo.setMaxBombs(5);
+		ammoCarrierCompo.setBombs(99);
+		ammoCarrierCompo.setMaxBombs(99);
 		playerEntity.add(ammoCarrierCompo);
 		
 		// Solid compo
@@ -138,8 +140,8 @@ public final class PlayerFactory {
 		//Skills
 		entityFactory.createSkill(playerEntity, SkillEnum.SLASH, 1 );
 		entityFactory.createSkill(playerEntity, SkillEnum.BOW, 2);
+		entityFactory.createSkill(playerEntity, SkillEnum.BOMB, 3);
 
-		
 		engine.addEntity(playerEntity);
 		return playerEntity;
 	}

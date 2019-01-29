@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -97,15 +96,8 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Entity getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
-		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(position);
-		for (Entity e : entitiesAtPosition) {
-			if (ComponentMapper.getFor(componentClass).get(e) != null) {
-				return e;
-			}
-		}
-		
-		return null;
+	public static Set<Entity> getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+		return room.getEntitiesAtPositionWithComponent(position, componentClass);
 	}
 	
 	

@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -331,17 +332,17 @@ public class TileSearchService {
 			}
 		}
 		
-		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tileEntity);
 		
-		if (tileComponent.type.isWall()) {
+		Set<Entity> entityWithComponentOnTile = TileUtil.getEntityWithComponentOnTile(pos, SolidComponent.class, room);
+		if (!entityWithComponentOnTile.isEmpty()) {
 			obstacles.add(gridPositionComponent.coord());
 		}
 		
 		
 		//TODO: this condition will probably have to change, when fighting a flying enemy over a pit
 		//for example.
-		if (attackType.canAttack(tileComponent.type)) {
+		if (attackType.canAttack(tileEntity, room)) {
 			
 			List<Entity> list = attackableTilesPerDistance.get(currentDepth);
 			if (list == null) list = new ArrayList<>();

@@ -8,7 +8,9 @@ import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 /**
@@ -50,6 +52,9 @@ public class Floor {
 		Room oldRoom = this.getActiveRoom();
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
+		
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.gameScreen.player);
+		oldRoom.removeEntityAtPosition(this.gameScreen.player, playerPos.coord());
 		
 		//Place the player
 		if (newRoom.getNorthNeighbor() == oldRoom) {

@@ -69,7 +69,9 @@ public class Room extends EntitySystem {
 
 	
 	
-	// TEST
+	/**
+	 * For each tile, gives the list of entities.
+	 */
 	private Map<Vector2,Set<Entity>> entitiesAtPositions;
 	
 	
@@ -93,7 +95,11 @@ public class Room extends EntitySystem {
 	}
 	
 	
-	
+	/**
+	 * Add an entity at the given position.
+	 * @param e the entity
+	 * @param pos the position
+	 */
 	public void addEntityAtPosition(Entity e, Vector2 pos) {
 		Set<Entity> set = entitiesAtPositions.get(pos);
 		
@@ -104,6 +110,11 @@ public class Room extends EntitySystem {
 		set.add(e);
 	}
 	
+	/**
+	 * Remove an entity at the given position.
+	 * @param e the entity
+	 * @param pos the position
+	 */
 	public void removeEntityAtPosition(Entity e, Vector2 pos) {
 		Set<Entity> set = entitiesAtPositions.get(pos);
 		
@@ -112,26 +123,49 @@ public class Room extends EntitySystem {
 		}
 	}
 	
+	/**
+	 * Get the map that gives the entities at each position of the grid.
+	 */
 	public Set<Entity> getEntitiesAtPosition(Vector2 pos) {
 		return entitiesAtPositions.get(pos);
 	}
 	
+	/**
+	 * Get the set of entities with the given component at the given position.
+	 */
 	public Set<Entity> getEntitiesAtPositionWithComponent(Vector2 pos, Class componentClass) {
-		Set<Entity> result = new HashSet<>();
+		Set<Entity> result = null;
 		Set<Entity> set = entitiesAtPositions.get(pos);
-		for (Entity e : set) {
-			Component component = ComponentMapper.getFor(componentClass).get(e);
-			if (component != null) {
-				result.add(e);
+		if (set != null) {
+			for (Entity e : set) {
+				Component component = ComponentMapper.getFor(componentClass).get(e);
+				if (component != null) {
+					if (result == null) result = new HashSet<>();
+					result.add(e);
+				}
 			}
 		}
-		return result;
+		
+		if (result == null) {
+			return Collections.emptySet();
+		} else {
+			return result;
+		}
 	}
 	
+	
+	/**
+	 * Add an entity to the game.
+	 * @param e the entity to add
+	 */
 	public void addEntity(Entity e) {
 		engine.addEntity(e);
 	}
 	
+	/**
+	 * Remove an entity from the game.
+	 * @param e the entity
+	 */
 	public void removeEntity(Entity e) {
 		GridPositionComponent posCompo = Mappers.gridPositionComponent.get(e);
 		if (posCompo != null) {

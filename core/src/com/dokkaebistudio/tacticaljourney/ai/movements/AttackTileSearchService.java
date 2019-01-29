@@ -162,6 +162,9 @@ public class AttackTileSearchService extends TileSearchService {
 		Iterator<Entity> it = attackableTiles.iterator();
 		while (it.hasNext()) {
 			Entity next = it.next();
+			if (next == null) {
+				System.out.println("wtf");
+			}
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
 			Vector2 currentTilePos = gridPositionComponent.coord();
 			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord().x) : currentTilePos.x - attackerPosCompo.coord().x;

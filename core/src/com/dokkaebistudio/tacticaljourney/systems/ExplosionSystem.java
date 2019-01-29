@@ -18,22 +18,20 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -75,6 +73,9 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 			fillEntitiesOfCurrentRoom();
 			for (Entity explosive : allExplosivesOfCurrentRoom) {
 				updateExplosiveEntityState(explosive);
+				
+				// Compute the explosion tiles
+				computeExplosionTilesToDisplayToPlayer(explosive);
 			}
 			
 		}
@@ -96,7 +97,7 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 					stateComponent.set(
 							explosiveComponent.getExplosionTurn() == room.turnManager.getTurn() ? 
 									StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
-
+					
 					// Compute the explosion tiles
 					computeExplosionTilesToDisplayToPlayer(explosive);
 				}
@@ -177,11 +178,19 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 			}
 
 			// Destroy destructible entities
-			Entity destructible = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(),
+			Set<Entity> destructibles = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(),
 					DestructibleComponent.class, room);
-			if (destructible != null) {
-				room.removeEntity(destructible);
+			for (Entity d : destructibles) {
+				room.removeEntity(d);
+				
+				//Add debris
+				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
+				if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
+					GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
+					room.entityFactory.createSpriteOnTile(tilePos.coord(), destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL, room);
+				}
 			}
+				
 
 			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
 

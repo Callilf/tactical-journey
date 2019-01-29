@@ -83,7 +83,7 @@ public final class EntityFactory {
 		this.enemyFactory = new EnemyFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		
-		wallTexture = Assets.getTexture(Assets.tile_wall);
+		wallTexture = Assets.getTexture(Assets.wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
 		mudTexture = Assets.getTexture(Assets.tile_mud);
@@ -152,7 +152,7 @@ public final class EntityFactory {
     	wallEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.tile_wall));
+    	Sprite s = new Sprite(Assets.getTexture(Assets.wall));
     	spriteCompo.setSprite(s);
     	wallEntity.add(spriteCompo);
     	
@@ -164,6 +164,7 @@ public final class EntityFactory {
 		wallEntity.add(parentRoomComponent);
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.wall_destroyed));
     	wallEntity.add(destructibleCompo);
     	
 		engine.addEntity(wallEntity);
@@ -409,9 +410,40 @@ public final class EntityFactory {
 			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
 			parentRoomComponent.setParentRoom(room);
 			sprite.add(parentRoomComponent);
+			
+			room.addEntity(sprite);
+		} else {
+			engine.addEntity(sprite);
 		}
+		return sprite;
+	}
+	
+	/**
+	 * Create a simple sprite entity.
+	 * @param pos the position
+	 * @param texture the texture
+	 * @param flag the flag of the entity (for debugging purpose)
+	 * @param room the parent room
+	 * @return the sprite entity
+	 */
+	public Entity createSpriteOnTile(Vector2 tilePos, AtlasRegion texture, EntityFlagEnum flag, Room room) {
+		Entity sprite = engine.createEntity();
+		sprite.flags = flag.getFlag();
 		
-		engine.addEntity(sprite);
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(texture));
+		sprite.add(spriteCompo);
+		
+		GridPositionComponent gridPos = engine.createComponent(GridPositionComponent.class);
+		gridPos.coord(sprite, tilePos, room);
+		gridPos.zIndex = 2;
+		sprite.add(gridPos);
+
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		sprite.add(parentRoomComponent);
+		
+		room.addEntity(sprite);
 		return sprite;
 	}
 	

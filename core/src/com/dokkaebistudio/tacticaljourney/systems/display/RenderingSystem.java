@@ -16,9 +16,6 @@
 
 package com.dokkaebistudio.tacticaljourney.systems.display;
 
-import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_H;
-import static com.dokkaebistudio.tacticaljourney.GameScreen.SCREEN_W;
-
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
@@ -104,18 +101,9 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 		batch.begin();
 		
 		for (Entity entity : renderQueue) {
-			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(entity);
-			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
-				continue;
-			}
-			
 			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			TextComponent textCompo = Mappers.textComponent.get(entity);
 			
-			if (spriteCompo == null && textCompo == null) {
-				continue;
-			}
-
 			if (Mappers.transfoComponent.has(entity)) {			
 				// use transform component for drawing position
 				TransformComponent t = Mappers.transfoComponent.get(entity);
@@ -137,7 +125,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				// use grid position to render instead of real screen coordinates
 				GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
 				
-				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord);
+				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord());
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					if (!spriteCompo.hide) {
@@ -162,7 +150,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 					
 					if (animationFinished) {
 						// Remove the visual effect
-						room.engine.removeEntity(entity);
+						room.removeEntity(entity);
 					}
 				}
 			}
@@ -178,6 +166,17 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
+		ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(entity);
+		if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
+			return;
+		}
+		
+		SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
+		TextComponent textCompo = Mappers.textComponent.get(entity);
+		if (spriteCompo == null && textCompo == null) {
+			return;
+		}
+
 		renderQueue.add(entity);
 	}
 	

@@ -53,7 +53,7 @@ public class MovementHandler {
 		
 		//Add the tranfo component to the entity to perform real movement on screen
 		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(moverCurrentPos.coord);
+		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(moverCurrentPos.coord());
 		transfoCompo.pos.x = startPos.x;
 		transfoCompo.pos.y = startPos.y;
 		transfoCompo.pos.z = 1;
@@ -63,7 +63,7 @@ public class MovementHandler {
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {
-				((MovableInterface) c).initiateMovement(moverCurrentPos.coord);
+				((MovableInterface) c).initiateMovement(moverCurrentPos.coord());
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class MovementHandler {
 				DoorComponent doorCompo = Mappers.doorComponent.get(doorEntity);
 				if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
 					//Change room !!!
-					finishRealMovement(mover);
+					finishRealMovement(mover, room);
 					moveCompo.clearMovableTiles();
 					room.leaveRoom(doorCompo.getTargetedRoom());
 					return null;
@@ -197,17 +197,17 @@ public class MovementHandler {
 	}
 	
 	
-	public void finishRealMovement(Entity e) {
+	public void finishRealMovement(Entity e, Room room) {
 		MoveComponent moveCompo = Mappers.moveComponent.get(e);
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		
 		e.remove(TransformComponent.class);
 		GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		gridPositionComponent.coord.set(selectedTilePos.coord);
+		gridPositionComponent.coord(e, selectedTilePos.coord(), room);
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {
-				((MovableInterface) c).endMovement(selectedTilePos.coord);
+				((MovableInterface) c).endMovement(selectedTilePos.coord());
 			}
 		}
 	}
@@ -216,9 +216,9 @@ public class MovementHandler {
     //*********************************************************************
 	
 	
-	public static void placeEntity(Entity e, Vector2 tilePos) {
+	public static void placeEntity(Entity e, Vector2 tilePos, Room room) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
-		gridPositionComponent.coord.set(tilePos.x, tilePos.y);
+		gridPositionComponent.coord(e,tilePos, room);
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {

@@ -33,7 +33,7 @@ public class DamageDisplaySystem extends IteratingSystem implements RoomSystem {
     	transfoCompo.pos.y = transfoCompo.pos.y + 1;
     	
     	if (transfoCompo.pos.y > damageDisplayComponent.getInitialPosition().y + 100) {
-    		room.engine.removeEntity(entity);
+    		room.removeEntity(entity);
     	}
     	
     }

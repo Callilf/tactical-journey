@@ -14,7 +14,7 @@ public class RoomHeuristic implements Heuristic<Entity> {
 	public float estimate(Entity node, Entity endNode) {
 		GridPositionComponent startPos = Mappers.gridPositionComponent.get(node);
 		GridPositionComponent endPos = Mappers.gridPositionComponent.get(endNode);
-		return Math.abs(endPos.coord.x - startPos.coord.x) + Math.abs(endPos.coord.y - startPos.coord.y);
+		return Math.abs(endPos.coord().x - startPos.coord().x) + Math.abs(endPos.coord().y - startPos.coord().y);
 	}
 
 }

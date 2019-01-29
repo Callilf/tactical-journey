@@ -88,7 +88,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		if (room.attackManager.isAttackAllowed(attackerEntity, skillAttackComponent)) {
 	    			// Find attackable tiles with the activated skill
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
-		    		skillPos.coord.set(attackerCurrentPos.coord);
+		    		skillPos.coord(attackerCurrentPos.coord());
 		    		tileSearchService.buildMoveTilesSet(skillEntity, room);
 		    		attackTileSearchService.buildAttackTilesSet(skillEntity, room, false);
 
@@ -159,7 +159,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);
 	    		
 	
-				Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord, attackerEntity);
+				Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord(), attackerEntity);
 				
 				AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attackerEntity);
 				if (ammoCarrierComponent != null) {
@@ -210,7 +210,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					//TODO : is this needed ? Distance was already checked when computing the attackable tiles
 					//Check the distance of this attackableTile
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
-					int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord, gridPositionComponent.coord);
+					int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord(), gridPositionComponent.coord());
 					
 					if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
 						attackCompo.setTargetedTile(tile);
@@ -219,7 +219,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 						if (isThrow) {
 							room.setNextState(RoomState.PLAYER_THROWING);
 						} else {
-			    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
+			    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord(), room);
 							attackCompo.setTarget(target);
 							wheel.setAttackComponent(attackCompo);
 							room.setNextState(RoomState.PLAYER_WHEEL_START);

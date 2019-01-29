@@ -40,7 +40,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 			
 		CheckTypeEnum checkType = CheckTypeEnum.ATTACK_FOR_DISPLAY;
 		visitedTilesWithRemainingMove.put(tile, 0);
-		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.RANGE, checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, null, room, explosiveComponent.getRadius(), 1);
+		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.RANGE, checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, null, room, explosiveComponent.getRadius(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		
@@ -67,7 +67,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : explosiveComponent.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord());
 			explosiveComponent.attackableTiles.add(attackableTileEntity);
 		}
 	}
@@ -83,8 +83,8 @@ public class ExplosionTileSearchService extends TileSearchService {
 		while (obstaclesIt.hasNext()) {
 			Vector2 obstacle = obstaclesIt.next();
 			
-			float xDist = obstacle.x - attackerPosCompo.coord.x;
-			float yDist = obstacle.y - attackerPosCompo.coord.y;
+			float xDist = obstacle.x - attackerPosCompo.coord().x;
+			float yDist = obstacle.y - attackerPosCompo.coord().y;
 			
 			if (xDist > 0 && yDist == 0) {
 				//obstacle on the right (y==0)
@@ -140,9 +140,9 @@ public class ExplosionTileSearchService extends TileSearchService {
 		while (it.hasNext()) {
 			Entity next = it.next();
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Vector2 currentTilePos = gridPositionComponent.coord;
-			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord.x) : currentTilePos.x - attackerPosCompo.coord.x;
-			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord.y) : currentTilePos.y - attackerPosCompo.coord.y;
+			Vector2 currentTilePos = gridPositionComponent.coord();
+			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord().x) : currentTilePos.x - attackerPosCompo.coord().x;
+			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord().y) : currentTilePos.y - attackerPosCompo.coord().y;
 			float obstxDist = Math.abs(currentTilePos.x - obstacle.x); 
 			float obstyDist = Math.abs(currentTilePos.y - obstacle.y); 
 

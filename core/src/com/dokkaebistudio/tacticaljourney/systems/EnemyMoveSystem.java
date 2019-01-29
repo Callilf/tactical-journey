@@ -123,7 +123,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
             		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);
     		    	//Clicked on this tile !!
     				//Create an entity to show that this tile is selected as the destination
-    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord);
+    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord());
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
@@ -157,7 +157,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		
         	case ENEMY_END_MOVEMENT:
         		
-        		movementHandler.finishRealMovement(enemyEntity);
+        		movementHandler.finishRealMovement(enemyEntity, room);
     	    	moveCompo.clearMovableTiles();
     	    	room.setNextState(RoomState.ENEMY_ATTACK);
 
@@ -169,10 +169,10 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
     	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
     	    			GridPositionComponent attTilePos = Mappers.gridPositionComponent.get(attTile);
-    	    			int range = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord, attTilePos.coord);
+    	    			int range = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord(), attTilePos.coord());
 						if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
     	    				//Attack possible
-							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord, room);
+							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord(), room);
             				attackCompo.setTarget(target);
 							room.attackManager.performAttack(enemyEntity, attackCompo);
     	    			}

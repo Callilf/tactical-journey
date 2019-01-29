@@ -41,7 +41,9 @@ public class Assets {
 	public static final String enemy_scorpion = "enemy-scorpion-test";
 	
 	public static final String tile_ground = "tile-test";
-	public static final String tile_wall = "tile-wall-test";
+	public static final String wall = "tile-wall-test";
+	public static final String wall_destroyed = "tile-wall-destroyed";
+
 	public static final String tile_pit = "tile-pit-test";
 	public static final String tile_mud = "tile-mud-test";
 	

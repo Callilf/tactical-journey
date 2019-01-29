@@ -71,7 +71,7 @@ public final class PlayerFactory {
 		
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
+		gridPosition.coord(playerEntity, pos, room);
 		gridPosition.zIndex = 10;
 		playerEntity.add(gridPosition);
 		

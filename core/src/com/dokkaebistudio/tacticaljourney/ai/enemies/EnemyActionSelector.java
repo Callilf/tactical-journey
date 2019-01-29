@@ -82,7 +82,7 @@ public class EnemyActionSelector {
 		Entity target = null;
 		for (Entity p : allPlayers) {
 			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord, playerPos.coord);
+			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
 			if (target == null || distance < shortestDistance) {
 				shortestDistance = distance;
 				target = p;
@@ -97,7 +97,7 @@ public class EnemyActionSelector {
 				shortestDistance = -1;
 		    	for (Entity t : moveComponent.movableTiles) {
 		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord, tilePos.coord);
+		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
 		    		if (selectedTile == null || distance < shortestDistance) {
 		    			selectedTile = t;
 		    			shortestDistance = distance;
@@ -133,7 +133,7 @@ public class EnemyActionSelector {
 		Entity target = null;
 		for (Entity p : allPlayers) {
 			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord, playerPos.coord);
+			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
 			if (target == null || distance < shortestDistance) {
 				shortestDistance = distance;
 				target = p;
@@ -147,7 +147,7 @@ public class EnemyActionSelector {
 				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 		    	for (Entity t : moveComponent.movableTiles) {
 		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord, tilePos.coord);
+		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
 		    		if (distance == 1) {
 		    			selectedTile = t;
 		    			break;

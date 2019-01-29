@@ -26,12 +26,12 @@ public class RoomGraph implements IndexedGraph<Entity> {
 
 		for (Entity nodeToTest :  movableTiles) {
 			GridPositionComponent secondPos = Mappers.gridPositionComponent.get(nodeToTest);
-			if (firstPos.coord.x == secondPos.coord.x && firstPos.coord.y == secondPos.coord.y) continue;
+			if (firstPos.coord().x == secondPos.coord().x && firstPos.coord().y == secondPos.coord().y) continue;
 
-			boolean aboveOrUnder = firstPos.coord.x == secondPos.coord.x 
-					&& (firstPos.coord.y == secondPos.coord.y + 1 || firstPos.coord.y == secondPos.coord.y -1);
-			boolean beside = firstPos.coord.y == secondPos.coord.y 
-					&& (firstPos.coord.x == secondPos.coord.x + 1 || firstPos.coord.x == secondPos.coord.x -1);
+			boolean aboveOrUnder = firstPos.coord().x == secondPos.coord().x 
+					&& (firstPos.coord().y == secondPos.coord().y + 1 || firstPos.coord().y == secondPos.coord().y -1);
+			boolean beside = firstPos.coord().y == secondPos.coord().y 
+					&& (firstPos.coord().x == secondPos.coord().x + 1 || firstPos.coord().x == secondPos.coord().x -1);
 			
 			if (beside || aboveOrUnder) {
 				TileComponent tileComponent = Mappers.tileComponent.get(nodeToTest);

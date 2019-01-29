@@ -9,9 +9,7 @@ package com.dokkaebistudio.tacticaljourney.room;
  *
  */
 public enum RoomState {
-	
-	END_TURN_EFFECTS,
-	
+		
 	PLAYER_TURN_INIT,
 	PLAYER_COMPUTE_MOVABLE_TILES,
 	PLAYER_MOVE_TILES_DISPLAYED,
@@ -30,6 +28,8 @@ public enum RoomState {
 	
 	PLAYER_THROWING,
 	
+	PLAYER_END_TURN,
+	
 	
 	ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
 	ENEMY_TURN_INIT,
@@ -40,6 +40,7 @@ public enum RoomState {
 	ENEMY_END_MOVEMENT,
 	ENEMY_ATTACK,
 	
+	ENEMY_END_TURN,
 	
 	LEVEL_UP_POPIN;
 	

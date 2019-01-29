@@ -35,7 +35,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -67,6 +66,8 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 	@Override
 	public void update(float deltaTime) {
 		
+		
+		
 		// Update state
 		if (room.getState() == RoomState.PLAYER_TURN_INIT) {
 
@@ -79,7 +80,7 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 		
 
 		// Explosive objects explode at the end of a turn
-		if (room.getState() == RoomState.END_TURN_EFFECTS) {
+		if (room.getState() == RoomState.PLAYER_END_TURN) {
 
 			fillEntitiesOfCurrentRoom();
 
@@ -107,8 +108,6 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 					explode(explosive);
 				}
 			}
-			
-			room.turnManager.endTurn();
 		}
 	}
 
@@ -151,8 +150,6 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
     	//Build the movable tiles list
 		explosionTileSearchService.buildExplosionTilesSet(entity, room);
 //		explosionCompo.hideAttackableTiles();
-    	
-    	room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
     }
     
     

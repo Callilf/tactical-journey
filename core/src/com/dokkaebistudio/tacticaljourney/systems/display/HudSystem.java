@@ -90,7 +90,7 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	@Override
 	protected void processEntity(Entity player, float deltaTime) {
 		displayTimeAndTurns();
-		displayHealthAndXp(player);
+		displayBottomLeftHud(player);
 		displaySkillButtons(player);
 		displayAmmos(player);
 
@@ -136,10 +136,10 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 	
 	
 	//************************************
-	// LIFE AND EXPERIENCE
+	// LIFE, EXPERIENCE, END TURN
 	//
 
-	private void displayHealthAndXp(Entity player) {
+	private void displayBottomLeftHud(Entity player) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
 		final MoveComponent moveComponent = Mappers.moveComponent.get(player);

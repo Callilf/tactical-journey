@@ -22,7 +22,8 @@ public class ExperienceComponent implements Component,Poolable {
 	private int nextLevelXp;
 	
 	/** Whether the entity just leveled up. */
-	private boolean leveledUp;
+	private int numberOfNewLevelReached;
+	private boolean levelUpPopinDisplayed = false;
 	
 	/** The number of level up reward choices. */
 	private int choicesNumber = 3;
@@ -36,7 +37,8 @@ public class ExperienceComponent implements Component,Poolable {
 
 	@Override
 	public void reset() {
-		leveledUp = false;
+		levelUpPopinDisplayed = false;
+		numberOfNewLevelReached = 0;
 		level = 1;
 		currentXp = 0;
 		
@@ -65,10 +67,20 @@ public class ExperienceComponent implements Component,Poolable {
 	private void levelUp(int startingXp) {
 		level += 1;
 		currentXp = startingXp;
-		leveledUp = true;
+		numberOfNewLevelReached = numberOfNewLevelReached + 1 ;
 
 		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
+	}
+	
+	/**
+	 * Get the level to display in the level up popin.
+	 * It can differ from the current level if we gain multiple level at the same time and we
+	 * have to display multiple popins in a row.
+	 * @return the level to display in the current popin
+	 */
+	public int getLevelForPopin() {
+		return level - (numberOfNewLevelReached - 1);
 	}
 
 	
@@ -94,15 +106,6 @@ public class ExperienceComponent implements Component,Poolable {
 		this.nextLevelXp = nextLevelXp;
 	}
 
-	public boolean hasLeveledUp() {
-		return leveledUp;
-	}
-
-	public void setLeveledUp(boolean leveledUp) {
-		this.leveledUp = leveledUp;
-	}
-
-
 	public int getChoicesNumber() {
 		return choicesNumber;
 	}
@@ -110,6 +113,27 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void setChoicesNumber(int choicesNumber) {
 		this.choicesNumber = choicesNumber;
+	}
+
+
+	public int getNumberOfNewLevelReached() {
+		return numberOfNewLevelReached;
+	}
+
+
+	public void setNumberOfNewLevelReached(int numberOfNewLevelReached) {
+		this.numberOfNewLevelReached = numberOfNewLevelReached;
+		if (this.numberOfNewLevelReached < 0) this.numberOfNewLevelReached = 0;
+	}
+
+
+	public boolean isLevelUpPopinDisplayed() {
+		return levelUpPopinDisplayed;
+	}
+
+
+	public void setLevelUpPopinDisplayed(boolean levelUpPopinDisplayed) {
+		this.levelUpPopinDisplayed = levelUpPopinDisplayed;
 	}
 
 

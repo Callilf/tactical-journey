@@ -45,6 +45,7 @@ import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
+import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.HudSystem;
@@ -142,6 +143,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
+		
+		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
 		engine.addSystem(new PlayerMoveSystem(room));

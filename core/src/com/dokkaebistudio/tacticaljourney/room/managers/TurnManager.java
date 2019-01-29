@@ -24,18 +24,23 @@ public class TurnManager {
 	public int getTurn() {
 		return turn;
 	}
+
+	
+	/**
+	 * Start a new turn.
+	 */
+	public void startNewTurn() {
+		this.turn ++;
+		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
+	}
+	
 	
 	public void endPlayerTurn() {
-		this.room.setNextState(RoomState.ENEMY_TURN_INIT);
+		this.room.setNextState(RoomState.PLAYER_END_TURN);
 	}
 	
 	public void endEnemyTurn() {
-		this.room.setNextState(RoomState.END_TURN_EFFECTS);
-	}
-	
-	public void endTurn() {
-		this.turn ++;
-		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
+		this.room.setNextState(RoomState.ENEMY_END_TURN);
 	}
 
 }

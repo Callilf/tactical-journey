@@ -3,12 +3,10 @@ package com.dokkaebistudio.tacticaljourney.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -93,15 +91,12 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 		
 		if (hpDisplayer != null) {
 			TextComponent textCompo = Mappers.textComponent.get(hpDisplayer);
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
 			
 			//Add the tranfo component to the entity to perform real movement on screen
-			TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
 			startPos.y = startPos.y + textCompo.getHeight();
-			transfoCompo.pos.x = startPos.x;
-			transfoCompo.pos.y = startPos.y;
-			transfoCompo.pos.z = 100;
-			hpDisplayer.add(transfoCompo);
+			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
 		}
 	}
 
@@ -110,11 +105,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
 		if (hpDisplayer != null) {
-			TransformComponent transformComponent = Mappers.transfoComponent.get(hpDisplayer);
-			if (transformComponent != null) {
-				transformComponent.pos.x = transformComponent.pos.x + xOffset;
-				transformComponent.pos.y = transformComponent.pos.y + yOffset;
-			}
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
+			gridPositionComponent.absolutePos((int)(gridPositionComponent.getAbsolutePos().x + xOffset), 
+					(int)(gridPositionComponent.getAbsolutePos().y + yOffset));
 		}
 	}
 
@@ -123,7 +116,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	@Override
 	public void endMovement(Vector2 finalPos) {
 		if (hpDisplayer != null) {
-			hpDisplayer.remove(TransformComponent.class);
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
 			gridPositionComponent.coord(finalPos);
 		}

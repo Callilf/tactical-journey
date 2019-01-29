@@ -18,7 +18,6 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -146,7 +145,6 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		
         	case ENEMY_MOVING:
         		
-    	    	TransformComponent transfoCompo = Mappers.transfoComponent.get(enemyEntity);
     	    	moveCompo.selectCurrentMoveDestinationTile();
     	    		
     	    	//Do the movement on screen

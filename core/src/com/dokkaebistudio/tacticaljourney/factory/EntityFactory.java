@@ -29,7 +29,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -400,9 +399,10 @@ public final class EntityFactory {
 		spriteCompo.setSprite(new Sprite(texture));
 		sprite.add(spriteCompo);
 		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
+		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
 		if (pos != null) {
-			transfoCompo.pos.set(pos);
+			transfoCompo.absolutePos(pos.x, pos.y);
+			transfoCompo.zIndex = (int) pos.z;
 		}
 		sprite.add(transfoCompo);
 		
@@ -498,9 +498,10 @@ public final class EntityFactory {
 		Entity textTest = engine.createEntity();
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
-		TransformComponent transfoCompo = new TransformComponent();
+		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
 		if (pos != null) {
-			transfoCompo.pos.set(pos);
+			transfoCompo.absolutePos(pos.x, pos.y);
+			transfoCompo.zIndex = (int) pos.z;
 		}
 		textTest.add(transfoCompo);
 		
@@ -577,8 +578,9 @@ public final class EntityFactory {
 		displayCompo.setInitialPosition(initialPos);
 		display.add(displayCompo);
 		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(initialPos, PositionConstants.Z_DAMAGE_DISPLAYER);
+		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
+		transfoCompo.absolutePos(initialPos.x, initialPos.y);
+		transfoCompo.zIndex = (int) PositionConstants.Z_DAMAGE_DISPLAYER;
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
@@ -610,9 +612,10 @@ public final class EntityFactory {
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
 		displayCompo.setInitialPosition(initialPos);
 		display.add(displayCompo);
-		
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		transfoCompo.pos.set(initialPos, PositionConstants.Z_EXP_DISPLAYER);
+		 
+		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
+		transfoCompo.absolutePos(initialPos.x, initialPos.y);
+		transfoCompo.zIndex = (int) PositionConstants.Z_EXP_DISPLAYER;
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);

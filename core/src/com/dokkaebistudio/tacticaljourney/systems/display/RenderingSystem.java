@@ -33,7 +33,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -51,32 +50,17 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	private Room room;
 	
 	public RenderingSystem(SpriteBatch batch, Room room, OrthographicCamera camera) {
-		super(Family.one(SpriteComponent.class, TextComponent.class).get());
+		super(Family.one(GridPositionComponent.class).get());
 				
 		renderQueue = new Array<Entity>();
 		
 		comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
-				if (!Mappers.transfoComponent.has(entityA) && Mappers.transfoComponent.has(entityB)) {
-					return -1;
-				} else if (!Mappers.transfoComponent.has(entityB) && Mappers.transfoComponent.has(entityA)) {
-					return 1;
-				} else if (!Mappers.transfoComponent.has(entityA) && !Mappers.transfoComponent.has(entityB)) {
-					
-					
-					if (!Mappers.gridPositionComponent.has(entityA) && Mappers.gridPositionComponent.has(entityB)) {
-						return -1;
-					} else if (!Mappers.gridPositionComponent.has(entityB) && Mappers.gridPositionComponent.has(entityA)) {
-						return 1;
-					} else if (!Mappers.gridPositionComponent.has(entityA) && !Mappers.gridPositionComponent.has(entityB)) {
-						return 0;
-					}
-					
-					return (int)Math.signum(Mappers.gridPositionComponent.get(entityA).zIndex - Mappers.gridPositionComponent.get(entityB).zIndex);
-				}
-				
-				return (int) Math.signum(Mappers.transfoComponent.get(entityA).pos.z - Mappers.transfoComponent.get(entityB).pos.z);
+				GridPositionComponent gridPositionComponentA = Mappers.gridPositionComponent.get(entityA);
+				GridPositionComponent gridPositionComponentB = Mappers.gridPositionComponent.get(entityB);
+		
+				return (int) Math.signum(gridPositionComponentA.zIndex - gridPositionComponentB.zIndex);
 			}
 		};
 		
@@ -104,17 +88,16 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			TextComponent textCompo = Mappers.textComponent.get(entity);
 			
-			TransformComponent t = Mappers.transfoComponent.get(entity);
-			GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
+			GridPositionComponent gridPosComponent = Mappers.gridPositionComponent.get(entity);
 
 			
-			if (t != null) {		
+			if (gridPosComponent.hasAbsolutePos()) {		
 				// use transform component for drawing position
 				
 				
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
-					float x = t.pos.x;
-					float y = t.pos.y;
+					float x = gridPosComponent.getAbsolutePos().x;
+					float y = gridPosComponent.getAbsolutePos().y;
 				
 					spriteCompo.getSprite().setPosition(x, y);
 					if (!spriteCompo.hide) {
@@ -122,12 +105,12 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {					
-					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
+					textCompo.getFont().draw(batch, textCompo.getText(), gridPosComponent.getAbsolutePos().x, gridPosComponent.getAbsolutePos().y);
 				}
-			} else if (g != null){
+			} else {
 				// use grid position to render instead of real screen coordinates
 				
-				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord());
+				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(gridPosComponent.coord());
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					if (!spriteCompo.hide) {

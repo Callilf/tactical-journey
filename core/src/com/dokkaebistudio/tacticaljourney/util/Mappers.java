@@ -23,7 +23,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
@@ -70,7 +69,6 @@ public final class Mappers {
 	public final static ComponentMapper<LevelUpRewardComponent> levelUpRewardComponent = ComponentMapper.getFor(LevelUpRewardComponent.class);
 
 
-	public final static ComponentMapper<TransformComponent> transfoComponent = ComponentMapper.getFor(TransformComponent.class);
 	public final static ComponentMapper<TextComponent> textComponent = ComponentMapper.getFor(TextComponent.class);
 	public final static ComponentMapper<DamageDisplayComponent> damageDisplayCompoM = ComponentMapper.getFor(DamageDisplayComponent.class);
 	

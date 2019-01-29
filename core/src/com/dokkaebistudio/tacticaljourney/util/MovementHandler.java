@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -48,22 +47,18 @@ public class MovementHandler {
     // Fluent movement BEGIN 
     
 	public void initiateMovement(Entity e) {
-		GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(e);
+		GridPositionComponent moverGridPosCompo = Mappers.gridPositionComponent.get(e);
 		MoveComponent moveComponent = Mappers.moveComponent.get(e);
 		
 		//Add the tranfo component to the entity to perform real movement on screen
-		TransformComponent transfoCompo = engine.createComponent(TransformComponent.class);
-		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(moverCurrentPos.coord());
-		transfoCompo.pos.x = startPos.x;
-		transfoCompo.pos.y = startPos.y;
-		transfoCompo.pos.z = 1;
-		e.add(transfoCompo);
+		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(moverGridPosCompo.coord());
+		moverGridPosCompo.absolutePos((int)startPos.x, (int) startPos.y);
 		
 		moveComponent.currentMoveDestinationIndex = 0;
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {
-				((MovableInterface) c).initiateMovement(moverCurrentPos.coord());
+				((MovableInterface) c).initiateMovement(moverGridPosCompo.coord());
 			}
 		}
 	}
@@ -80,47 +75,49 @@ public class MovementHandler {
 		Boolean result = false;
 		float xOffset = 0;
 		float yOffset = 0;
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(mover);
+		Vector2 absolutePos = gridPositionComponent.getAbsolutePos();
+		
 		MoveComponent moveCompo = Mappers.moveComponent.get(mover);
-		TransformComponent transfoCompo = Mappers.transfoComponent.get(mover);
 		
 		int moveSpeed = room.hasEnemies() ? MOVE_SPEED : MOVE_SPEED_IN_CLEARED_ROOMS;
 		
-		if (moveCompo.currentMoveDestinationPos.x > transfoCompo.pos.x) { 
-			transfoCompo.pos.x = transfoCompo.pos.x + moveSpeed;
+		if (moveCompo.currentMoveDestinationPos.x > absolutePos.x) { 
+			absolutePos.x = absolutePos.x + moveSpeed;
 			
-			if (transfoCompo.pos.x >= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = moveSpeed - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
-				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
+			if (absolutePos.x >= moveCompo.currentMoveDestinationPos.x) {
+				xOffset = moveSpeed - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
+				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);
 			} else {
 				xOffset = moveSpeed;
 			}
-		} else if (moveCompo.currentMoveDestinationPos.x < transfoCompo.pos.x) {
-			transfoCompo.pos.x = transfoCompo.pos.x - moveSpeed;
+		} else if (moveCompo.currentMoveDestinationPos.x < absolutePos.x) {
+			absolutePos.x = absolutePos.x - moveSpeed;
 
-			if (transfoCompo.pos.x <= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = -moveSpeed - (transfoCompo.pos.x - moveCompo.currentMoveDestinationPos.x);
-				transfoCompo.pos.x = moveCompo.currentMoveDestinationPos.x;
+			if (absolutePos.x <= moveCompo.currentMoveDestinationPos.x) {
+				xOffset = -moveSpeed - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
+				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				xOffset = -moveSpeed;
 			}
-		} else if (moveCompo.currentMoveDestinationPos.y > transfoCompo.pos.y) { 
-			transfoCompo.pos.y = transfoCompo.pos.y + moveSpeed;
+		} else if (moveCompo.currentMoveDestinationPos.y > absolutePos.y) { 
+			absolutePos.y = absolutePos.y + moveSpeed;
 			
-			if (transfoCompo.pos.y >= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = moveSpeed - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
-				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
+			if (absolutePos.y >= moveCompo.currentMoveDestinationPos.y) {
+				yOffset = moveSpeed - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
+				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				yOffset = moveSpeed;
 			}
-		} else if (moveCompo.currentMoveDestinationPos.y < transfoCompo.pos.y) {
-			transfoCompo.pos.y = transfoCompo.pos.y - moveSpeed;
+		} else if (moveCompo.currentMoveDestinationPos.y < absolutePos.y) {
+			absolutePos.y = absolutePos.y - moveSpeed;
 			
-			if (transfoCompo.pos.y <= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = -moveSpeed - (transfoCompo.pos.y - moveCompo.currentMoveDestinationPos.y);
-				transfoCompo.pos.y = moveCompo.currentMoveDestinationPos.y;
+			if (absolutePos.y <= moveCompo.currentMoveDestinationPos.y) {
+				yOffset = -moveSpeed - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
+				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				yOffset = -moveSpeed;
@@ -201,7 +198,6 @@ public class MovementHandler {
 		MoveComponent moveCompo = Mappers.moveComponent.get(e);
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		
-		e.remove(TransformComponent.class);
 		GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
 		gridPositionComponent.coord(e, selectedTilePos.coord(), room);
 		

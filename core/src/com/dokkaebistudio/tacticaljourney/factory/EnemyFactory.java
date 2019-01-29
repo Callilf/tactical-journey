@@ -67,7 +67,7 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
+		gridPosition.coord(enemyEntity, pos, room);
 		gridPosition.zIndex = 9;
 		enemyEntity.add(gridPosition);
 		
@@ -127,7 +127,7 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(pos);
+		gridPosition.coord(enemyEntity, pos, room);
 		gridPosition.zIndex = 9;
 		enemyEntity.add(gridPosition);
 		

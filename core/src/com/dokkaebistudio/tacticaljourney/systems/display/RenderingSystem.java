@@ -137,7 +137,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				// use grid position to render instead of real screen coordinates
 				GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
 				
-				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord);
+				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord());
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					if (!spriteCompo.hide) {
@@ -162,7 +162,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 					
 					if (animationFinished) {
 						// Remove the visual effect
-						room.engine.removeEntity(entity);
+						room.removeEntity(entity);
 					}
 				}
 			}

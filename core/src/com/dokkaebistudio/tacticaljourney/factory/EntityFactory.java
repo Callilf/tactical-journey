@@ -5,8 +5,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,9 +14,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
+import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -108,7 +109,9 @@ public final class EntityFactory {
 		tile.type = type;
 		switch (type) {
 			case WALL:
-				spriteCompo.setSprite(new Sprite(wallTexture));
+				this.createWall(room, pos);
+				spriteCompo.setSprite(new Sprite(groundTexture));
+				tile.type = TileEnum.GROUND;
 				break;
 			case GROUND:
 				spriteCompo.setSprite(new Sprite(groundTexture));
@@ -117,11 +120,13 @@ public final class EntityFactory {
 				spriteCompo.setSprite(new Sprite(pitTexture));
 				break;
 			case MUD:
-				spriteCompo.setSprite(new Sprite(mudTexture));
+				this.createMud(room, pos);
+				spriteCompo.setSprite(new Sprite(groundTexture));
+				tile.type = TileEnum.GROUND;
 				break;
 		}
 
-		gridPosition.coord.set(pos);
+		gridPosition.coord(tileEntity, pos, room);
 		gridPosition.zIndex = 1;
 
 		tileEntity.add(spriteCompo);
@@ -137,13 +142,73 @@ public final class EntityFactory {
 		return tileEntity;
 	}
 	
+	public Entity createWall(Room room, Vector2 pos) {
+		Entity wallEntity = engine.createEntity();
+		wallEntity.flags = EntityFlagEnum.WALL.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(wallEntity, pos, room);
+    	movableTilePos.zIndex = 2;
+    	wallEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.tile_wall));
+    	spriteCompo.setSprite(s);
+    	wallEntity.add(spriteCompo);
+    	
+    	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+    	wallEntity.add(solidComponent);    	
+    	
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		wallEntity.add(parentRoomComponent);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	wallEntity.add(destructibleCompo);
+    	
+		engine.addEntity(wallEntity);
+
+    	return wallEntity;
+	}
+	
+	public Entity createMud(Room room, Vector2 pos) {
+		Entity mudEntity = engine.createEntity();
+		mudEntity.flags = EntityFlagEnum.MUD.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(mudEntity, pos, room);
+    	movableTilePos.zIndex = 2;
+    	mudEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.tile_mud));
+    	spriteCompo.setSprite(s);
+    	mudEntity.add(spriteCompo);
+    	    	
+		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
+		parentRoomComponent.setParentRoom(room);
+		mudEntity.add(parentRoomComponent);
+		
+		SlowMovementComponent slowMovementCompo = engine.createComponent(SlowMovementComponent.class);
+		slowMovementCompo.setMovementConsumed(1);
+    	mudEntity.add(slowMovementCompo);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+		mudEntity.add(destructibleCompo);
+    	
+		engine.addEntity(mudEntity);
+
+    	return mudEntity;
+	}
+
+	
 	
 	public Entity createDoor(Room room, Vector2 pos, Room targetedRoom) {
 		Entity doorEntity = engine.createEntity();
 		doorEntity.flags = EntityFlagEnum.DOOR.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
+    	movableTilePos.coord(doorEntity, pos, room);
     	movableTilePos.zIndex = 2;
     	doorEntity.add(movableTilePos);
     	
@@ -166,12 +231,12 @@ public final class EntityFactory {
     	return doorEntity;
 	}
 	
-	public Entity createExit(Room r, Vector2 pos) {
+	public Entity createExit(Room room, Vector2 pos) {
 		Entity exitEntity = engine.createEntity();
 		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
+    	movableTilePos.coord(exitEntity, pos, room);
     	movableTilePos.zIndex = 2;
     	exitEntity.add(movableTilePos);
     	
@@ -185,7 +250,7 @@ public final class EntityFactory {
     	exitEntity.add(exitCompo);
     	
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(r);
+		parentRoomComponent.setParentRoom(room);
 		exitEntity.add(parentRoomComponent);
     	    	
 		engine.addEntity(exitEntity);
@@ -198,7 +263,7 @@ public final class EntityFactory {
 		movableTileEntity.flags = EntityFlagEnum.MOVABLE_TILE.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord.set(pos);
+    	movableTilePos.coord(pos);
     	movableTilePos.zIndex = 2;
     	movableTileEntity.add(movableTilePos);
     	
@@ -220,7 +285,7 @@ public final class EntityFactory {
 		attackableTileEntity.flags = EntityFlagEnum.ATTACK_TILE.getFlag();
 
     	GridPositionComponent attackableTilePos = engine.createComponent(GridPositionComponent.class);
-    	attackableTilePos.coord.set(pos);
+    	attackableTilePos.coord(pos);
     	attackableTilePos.zIndex = 2;
     	attackableTileEntity.add(attackableTilePos);
     	
@@ -243,7 +308,7 @@ public final class EntityFactory {
 		redCross.flags = EntityFlagEnum.DESTINATION_TILE.getFlag();
 
 		GridPositionComponent selectedTilePos = engine.createComponent(GridPositionComponent.class);
-    	selectedTilePos.coord.set(pos);
+    	selectedTilePos.coord(pos);
     	selectedTilePos.zIndex = 100;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -265,7 +330,7 @@ public final class EntityFactory {
 		waypoint.flags = EntityFlagEnum.WAYPOINT.getFlag();
 
 		GridPositionComponent waypointPos = engine.createComponent(GridPositionComponent.class);
-    	waypointPos.coord.set(pos);
+    	waypointPos.coord(pos);
     	waypointPos.zIndex = 100;
     	waypoint.add(waypointPos);
     	
@@ -443,7 +508,7 @@ public final class EntityFactory {
 		textTest.flags = EntityFlagEnum.TEXT_ON_TILE.getFlag();
 
 		GridPositionComponent gridPositionComponent = new GridPositionComponent();
-		gridPositionComponent.coord.set(tilePos);
+		gridPositionComponent.coord(tilePos);
 		gridPositionComponent.zIndex = zIndex;
 		textTest.add(gridPositionComponent);
 		
@@ -542,7 +607,7 @@ public final class EntityFactory {
 		healthUp.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(tilePos);
+		gridPosition.coord(healthUp, tilePos, room);
 		gridPosition.zIndex = 6;
 		healthUp.add(gridPosition);
 		
@@ -555,6 +620,8 @@ public final class EntityFactory {
 		healthUp.add(parentRoomComponent);
 		
 		engine.addEntity(healthUp);
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	healthUp.add(destructibleCompo);
 		
 		return healthUp;
 	}
@@ -574,7 +641,7 @@ public final class EntityFactory {
 		bomb.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord.set(tilePos);
+		gridPosition.coord(bomb, tilePos, room);
 		gridPosition.zIndex = 6;
 		bomb.add(gridPosition);
 		
@@ -621,7 +688,7 @@ public final class EntityFactory {
 		skillEntity.add(skillCompo);
 		
 		GridPositionComponent skillPosCompo = engine.createComponent(GridPositionComponent.class);
-		skillPosCompo.coord.set(parentPos.coord);
+		skillPosCompo.coord(parentPos.coord());
 		skillEntity.add(skillPosCompo);
 		
 		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);

@@ -18,9 +18,15 @@ package com.dokkaebistudio.tacticaljourney.room;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
@@ -28,11 +34,13 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
 	public Floor floor;
@@ -58,6 +66,14 @@ public class Room extends EntitySystem {
 	/** Whether the player has already entered this room or not. */
 	private boolean visited;
 	
+
+	
+	
+	// TEST
+	private Map<Vector2,Set<Entity>> entitiesAtPositions;
+	
+	
+	
 	
 	private Room northNeighbor;
 	private Room southNeighbor;
@@ -72,7 +88,60 @@ public class Room extends EntitySystem {
 		this.turnManager = new TurnManager(this);
 		this.type = type;
 		this.visited = false;
+		
+		this.entitiesAtPositions = new HashMap<>();
 	}
+	
+	
+	
+	public void addEntityAtPosition(Entity e, Vector2 pos) {
+		Set<Entity> set = entitiesAtPositions.get(pos);
+		
+		if (set == null) {
+			set = new HashSet<>();
+			entitiesAtPositions.put(pos, set);
+		}
+		set.add(e);
+	}
+	
+	public void removeEntityAtPosition(Entity e, Vector2 pos) {
+		Set<Entity> set = entitiesAtPositions.get(pos);
+		
+		if (set != null) {
+			set.remove(e);
+		}
+	}
+	
+	public Set<Entity> getEntitiesAtPosition(Vector2 pos) {
+		return entitiesAtPositions.get(pos);
+	}
+	
+	public Set<Entity> getEntitiesAtPositionWithComponent(Vector2 pos, Class componentClass) {
+		Set<Entity> result = new HashSet<>();
+		Set<Entity> set = entitiesAtPositions.get(pos);
+		for (Entity e : set) {
+			Component component = ComponentMapper.getFor(componentClass).get(e);
+			if (component != null) {
+				result.add(e);
+			}
+		}
+		return result;
+	}
+	
+	public void addEntity(Entity e) {
+		engine.addEntity(e);
+	}
+	
+	public void removeEntity(Entity e) {
+		GridPositionComponent posCompo = Mappers.gridPositionComponent.get(e);
+		if (posCompo != null) {
+			this.removeEntityAtPosition(e, posCompo.coord());
+		}
+		
+		engine.removeEntity(e);
+	}
+	
+	
 
 	
 	public void leaveRoom(Room nextRoom) {
@@ -254,7 +323,7 @@ public class Room extends EntitySystem {
 	 * @param enemy the enemy to remove
 	 */
 	public void removeEnemy(Entity enemy) {
-		this.engine.removeEntity(enemy);
+		this.removeEntity(enemy);
 		this.enemies.remove(enemy);
 	}
 	

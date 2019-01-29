@@ -72,8 +72,8 @@ public class MoveComponent implements Component, Poolable {
 			target = this.getSelectedTile();
 		}
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(target);
-		this.currentMoveDestinationTilePos = gridPositionComponent.coord;
-		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord);
+		this.currentMoveDestinationTilePos = gridPositionComponent.coord();
+		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 	}
 	
 	

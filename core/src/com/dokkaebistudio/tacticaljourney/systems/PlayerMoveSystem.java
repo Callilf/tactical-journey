@@ -155,7 +155,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_END_MOVEMENT:
-			movementHandler.finishRealMovement(moverEntity);
+			movementHandler.finishRealMovement(moverEntity, room);
 
 			// Compute the cost of this move
 			if (room.hasEnemies()) {
@@ -243,10 +243,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		int cost = 0;
 		for (Entity wp : moveCompo.getWayPoints()) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
-			cost = cost + getCostOfTileAtPos(gridPositionComponent.coord);
+			cost = cost + getCostOfTileAtPos(gridPositionComponent.coord());
 		}
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		cost = cost + getCostOfTileAtPos(gridPositionComponent.coord);
+		cost = cost + getCostOfTileAtPos(gridPositionComponent.coord());
 		return cost;
 	}
 
@@ -276,7 +276,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
 
-			if (destinationPos.coord.equals(moverCurrentPos.coord)) {
+			if (destinationPos.coord().equals(moverCurrentPos.coord())) {
 				// Cannot move to the tile we already are
 				continue;
 			}
@@ -284,7 +284,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (spriteComponent.containsPoint(x, y)) {
 				// Clicked on this tile !!
 				// Create an entity to show that this tile is selected as the destination
-				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord);
+				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord());
 				moveCompo.setSelectedTile(destinationTileEntity);
 
 				// Display the way to go to this point

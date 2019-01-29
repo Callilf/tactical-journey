@@ -19,7 +19,7 @@ public class ItemComponent implements Component {
 		if (itemType != null) {
 			itemType.pickUp(picker, item, room);
 		}
-		room.engine.removeEntity(item);
+		room.removeEntity(item);
 	}
 
 	

@@ -7,8 +7,10 @@ public enum EntityFlagEnum {
 	ENEMY_SCORPION(2),
 	
 	TILE(100),
-	DOOR(101),
-	EXIT(102),
+	WALL(101),
+	MUD(102),
+	DOOR(103),
+	EXIT(104),
 	
 	END_TURN_BUTTON(500),
 	MOVABLE_TILE(501),

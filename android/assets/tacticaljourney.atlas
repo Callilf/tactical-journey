@@ -132,21 +132,21 @@ door-opened
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 1924, 1719
+  xy: 1924, 1063
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 1924, 1391
+  xy: 1924, 1473
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 entrance
   rotate: false
-  xy: 1924, 1473
+  xy: 1924, 1555
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -202,7 +202,7 @@ explosion
   index: 6
 explosion
   rotate: false
-  xy: 1924, 1555
+  xy: 1924, 1637
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -342,7 +342,7 @@ tile-attackable
   index: -1
 tile-movable
   rotate: false
-  xy: 1924, 1063
+  xy: 1924, 1391
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -370,7 +370,7 @@ tile-mud-test
   index: -1
 tile-pit-test
   rotate: false
-  xy: 1924, 1637
+  xy: 1924, 1719
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

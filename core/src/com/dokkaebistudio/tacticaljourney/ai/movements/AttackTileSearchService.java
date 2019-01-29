@@ -43,7 +43,7 @@ public class AttackTileSearchService extends TileSearchService {
 		Set<Entity> attackableTiles = new HashSet<>();
 		
 		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
-			Entity tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord, room);
+			Entity tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
 			attackableTiles.add(tileAtGridPos);
 		}
 		
@@ -53,7 +53,7 @@ public class AttackTileSearchService extends TileSearchService {
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
 			visitedTilesWithRemainingMove.put(t, 0);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord.x, (int)tilePos.coord.y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
+			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
 		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));
@@ -73,7 +73,7 @@ public class AttackTileSearchService extends TileSearchService {
 				Entity currentAttackableTile = it.next();
 				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
 				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
+				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), tilePos.coord()) < attackCompo.getRangeMin()) {
 					it.remove();
 				}
 			}
@@ -87,7 +87,7 @@ public class AttackTileSearchService extends TileSearchService {
 
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord());
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
 		System.out.println("create entities : " + String.valueOf(System.currentTimeMillis() - time));
@@ -106,8 +106,8 @@ public class AttackTileSearchService extends TileSearchService {
 		while (obstaclesIt.hasNext()) {
 			Vector2 obstacle = obstaclesIt.next();
 			
-			float xDist = obstacle.x - attackerPosCompo.coord.x;
-			float yDist = obstacle.y - attackerPosCompo.coord.y;
+			float xDist = obstacle.x - attackerPosCompo.coord().x;
+			float yDist = obstacle.y - attackerPosCompo.coord().y;
 			
 			if (xDist > 0 && yDist == 0) {
 				//obstacle on the right (y==0)
@@ -163,9 +163,9 @@ public class AttackTileSearchService extends TileSearchService {
 		while (it.hasNext()) {
 			Entity next = it.next();
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Vector2 currentTilePos = gridPositionComponent.coord;
-			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord.x) : currentTilePos.x - attackerPosCompo.coord.x;
-			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord.y) : currentTilePos.y - attackerPosCompo.coord.y;
+			Vector2 currentTilePos = gridPositionComponent.coord();
+			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord().x) : currentTilePos.x - attackerPosCompo.coord().x;
+			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord().y) : currentTilePos.y - attackerPosCompo.coord().y;
 			float obstxDist = Math.abs(currentTilePos.x - obstacle.x); 
 			float obstyDist = Math.abs(currentTilePos.y - obstacle.y); 
 

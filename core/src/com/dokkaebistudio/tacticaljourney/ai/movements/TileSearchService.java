@@ -53,7 +53,7 @@ public class TileSearchService {
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
-		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord.x][(int)gridPositionComponent.coord.y];
+		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
 		
 		//Find all walkable tiles
 		moveCompo.allWalkableTiles = findAllWalkableTiles(moverTileEntity, 1, moveCompo.moveRemaining,room);
@@ -61,7 +61,7 @@ public class TileSearchService {
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : moveCompo.allWalkableTiles) {
-			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord);
+			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord());
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
 		if (moverEntity.flags ==  EntityFlagEnum.PLAYER.getFlag()) {
@@ -83,12 +83,12 @@ public class TileSearchService {
 	 */
 	public List<Entity> buildWaypointList(MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
 			GridPositionComponent destinationPos, Room room) {
-		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord);
+		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord());
 		List<Entity> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
 		RoomGraph roomGraph = new RoomGraph(movableTilesList);
 		IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
 		GraphPath<Entity> path = new DefaultGraphPath<Entity>();
-		indexedAStarPathFinder.searchNodePath(startTileEntity, room.getTileAtGridPosition(destinationPos.coord), new RoomHeuristic(), path);
+		indexedAStarPathFinder.searchNodePath(startTileEntity, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
 		
 		int pathNb = -1;
 		List<Entity> waypoints = new ArrayList<>();
@@ -98,7 +98,7 @@ public class TileSearchService {
 			Entity next = iterator.next();
 			if (pathNb == 0 || !iterator.hasNext()) continue;
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord);
+			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord());
 			waypoints.add(waypoint);
 			
 		}
@@ -138,7 +138,7 @@ public class TileSearchService {
 		//Check whether we reached the maxDepth or not
 		if (currentDepth <= maxDepth) {
 			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(currentTileEntity);
-	        Vector2 currentPosition = gridPosCompo.coord;
+	        Vector2 currentPosition = gridPosCompo.coord();
 	        int currentX = (int)currentPosition.x;
 	        int currentY = (int)currentPosition.y;
 			
@@ -335,7 +335,7 @@ public class TileSearchService {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tileEntity);
 		
 		if (tileComponent.type.isWall()) {
-			obstacles.add(gridPositionComponent.coord);
+			obstacles.add(gridPositionComponent.coord());
 		}
 		
 		

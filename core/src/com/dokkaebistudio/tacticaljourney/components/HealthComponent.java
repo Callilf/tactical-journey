@@ -125,7 +125,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 		if (hpDisplayer != null) {
 			hpDisplayer.remove(TransformComponent.class);
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			gridPositionComponent.coord.set(finalPos);
+			gridPositionComponent.coord(finalPos);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 	public void place(Vector2 tilePos) {
 		if (hpDisplayer != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			gridPositionComponent.coord.set(tilePos);
+			gridPositionComponent.coord(tilePos);
 		}
 	}
 	

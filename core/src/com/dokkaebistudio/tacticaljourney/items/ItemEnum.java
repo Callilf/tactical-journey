@@ -25,7 +25,7 @@ public enum ItemEnum {
 			
 			//Display a DamageDisplayer
 			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(item);
-			room.entityFactory.createDamageDisplayer("25", gridPosCompo.coord, true);
+			room.entityFactory.createDamageDisplayer("25", gridPosCompo.coord(), true);
 		}
 
 		@Override

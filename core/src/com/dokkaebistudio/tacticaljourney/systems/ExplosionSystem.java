@@ -25,6 +25,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -159,36 +160,33 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
     
     
 	/**
-	 * The explosive entity explodes and deals damages to anything caught in the blast.
+	 * The explosive entity explodes and deals damages to anything caught in the
+	 * blast.
+	 * 
 	 * @param explosive the explosive
 	 */
 	private void explode(Entity explosive) {
 		ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
 		for (Entity attackableTile : explosiveComponent.attackableTiles) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(attackableTile);
-			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord, room);
-		
-			
+			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord(), room);
+
 			// Deal damage to any entity on the tile
 			if (target != null && explosive != target) {
 				room.attackManager.applyDamage(explosive, target, explosiveComponent.getDamage());
 			}
-			
-			// Destroy walls and mud
-			Entity tile = TileUtil.getTileAtGridPos(gridPositionComponent.coord, room);
-			TileComponent tileComponent = Mappers.tileComponent.get(tile);
-			if (tileComponent.type == TileEnum.WALL || tileComponent.type == TileEnum.MUD) {
-				tileComponent.type = TileEnum.GROUND;
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
-				spriteComponent.getSprite().setRegion(Assets.getTexture(Assets.tile_ground));
-			}
-			
-			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord);
-		}		
-		
-		
-		room.engine.removeEntity(explosive);
-	}
-	
 
+			// Destroy destructible entities
+			Entity destructible = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(),
+					DestructibleComponent.class, room);
+			if (destructible != null) {
+				room.removeEntity(destructible);
+			}
+
+			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
+
+			room.removeEntity(explosive);
+		}
+
+	}
 }

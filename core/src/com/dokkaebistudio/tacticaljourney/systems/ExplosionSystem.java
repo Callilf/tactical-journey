@@ -150,8 +150,6 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
     	//Build the movable tiles list
 		explosionTileSearchService.buildExplosionTilesSet(entity, room);
 //		explosionCompo.hideAttackableTiles();
-    	
-    	room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
     }
     
     

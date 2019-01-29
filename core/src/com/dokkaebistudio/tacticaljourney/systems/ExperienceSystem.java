@@ -58,7 +58,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     private RoomState previousState;
     
     //TODO remove this when no longer testing the levelup popin
-    private boolean test = true;
+    private boolean test = false;
 
     public ExperienceSystem(Room r, Stage s) {
         super(Family.all(ExperienceComponent.class).get());
@@ -81,10 +81,12 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     	if (test) {
     		test = false;
     		expCompo.earnXp(expCompo.getNextLevelXp());
+    		expCompo.earnXp(expCompo.getNextLevelXp());
     	}
     	
-    	if (expCompo.hasLeveledUp()) {
-    		expCompo.setLeveledUp(false);
+    	if (expCompo.getNumberOfNewLevelReached() > 0 && !expCompo.isLevelUpPopinDisplayed()) {
+    		expCompo.setLevelUpPopinDisplayed(true);
+    		
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.LEVEL_UP_POPIN);
     		
@@ -99,7 +101,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     		createChoices(player, choicesNumber, table);
         	
         	// BOTTOM PART (continue button)
-    		createPopinBottom(table);
+    		createPopinBottom(expCompo,table);
         	
         	table.pack();
         	table.setPosition(table.getX() - table.getWidth()/2, table.getY() - table.getHeight()/2 + 100);
@@ -207,7 +209,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 
 		popinTop.row();
 
-		Label subTitle2Label = new Label("you reached level " + expCompo.getLevel(),subtitleStyle);
+		Label subTitle2Label = new Label("you reached level " + expCompo.getLevelForPopin(),subtitleStyle);
 		popinTop.add(subTitle2Label).top().uniformX().pad(0, 0, 10, 0);;
 		
 		popinTop.row();
@@ -221,7 +223,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 	
 	
 
-	private void createPopinBottom(Table table) {
+	private void createPopinBottom(final ExperienceComponent expCompo, Table table) {
 		Table popinBottom = new Table();
 		popinBottom.setZIndex(10);
 		TextureRegionDrawable bottomBackground = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background_bottom));
@@ -240,7 +242,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				// Close the popin and unpause the game
-				closePopin();
+				closePopin(expCompo);
 			}
 		});
 	}
@@ -249,9 +251,11 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 	/**
 	 * Close the level up popin and unpause the game.
 	 */
-	private void closePopin() {
+	private void closePopin(ExperienceComponent expCompo) {
 		stage.clear();
 		room.setNextState(previousState);
+		expCompo.setLevelUpPopinDisplayed(false);
+		expCompo.setNumberOfNewLevelReached(expCompo.getNumberOfNewLevelReached() - 1);
 				
 //		test = true;
 	}

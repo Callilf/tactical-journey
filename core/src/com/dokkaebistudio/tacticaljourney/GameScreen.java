@@ -143,6 +143,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
+		
+		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
 		engine.addSystem(new PlayerMoveSystem(room));
@@ -152,7 +154,6 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new DamageDisplaySystem(room));
 		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
-		engine.addSystem(new TurnSystem(room));
 		
 		engine.addSystem(room);
 		engine.addSystem(mapRenderer);

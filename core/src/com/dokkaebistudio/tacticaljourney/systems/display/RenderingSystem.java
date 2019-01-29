@@ -104,9 +104,12 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			TextComponent textCompo = Mappers.textComponent.get(entity);
 			
-			if (Mappers.transfoComponent.has(entity)) {			
+			TransformComponent t = Mappers.transfoComponent.get(entity);
+			GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
+
+			
+			if (t != null) {		
 				// use transform component for drawing position
-				TransformComponent t = Mappers.transfoComponent.get(entity);
 				
 				
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
@@ -121,9 +124,8 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 				if (textCompo != null && textCompo.getFont() != null) {					
 					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
 				}
-			} else if (Mappers.gridPositionComponent.has(entity)){
+			} else if (g != null){
 				// use grid position to render instead of real screen coordinates
-				GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
 				
 				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord());
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
@@ -168,12 +170,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	public void processEntity(Entity entity, float deltaTime) {
 		ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(entity);
 		if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
-			return;
-		}
-		
-		SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
-		TextComponent textCompo = Mappers.textComponent.get(entity);
-		if (spriteCompo == null && textCompo == null) {
 			return;
 		}
 

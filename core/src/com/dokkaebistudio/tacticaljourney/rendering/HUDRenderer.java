@@ -34,13 +34,14 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class HUDRenderer {
-	
+public class HUDRenderer implements Renderer, RoomSystem {
 
 	public Stage stage;
 	public Room room;
+	public Entity player;
 	
 	private LabelStyle hudStyle;
 	
@@ -70,18 +71,24 @@ public class HUDRenderer {
 	private Label arrowLabel;
 	private Label bombLabel;
 
-	public HUDRenderer(Stage s) {
+	public HUDRenderer(Stage s, Entity player) {
 		this.stage = s;
+		this.player = player;
 		
 		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 	}
+	
+	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
 
-
-	public void renderHud(Entity player, float deltaTime) {
+	
+	public void render(float deltaTime) {
 		displayTimeAndTurns();
-		displayBottomLeftHud(player);
-		displaySkillButtons(player);
-		displayAmmos(player);
+		displayBottomLeftHud();
+		displaySkillButtons();
+		displayAmmos();
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -116,8 +123,8 @@ public class HUDRenderer {
 		}
 		
 		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
-		//timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
-		timeLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+		timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		//timeLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		turnLabel.setText("Turn " + room.turnManager.getTurn());
 	}
 	
@@ -127,7 +134,7 @@ public class HUDRenderer {
 	// LIFE, EXPERIENCE, END TURN
 	//
 
-	private void displayBottomLeftHud(Entity player) {
+	private void displayBottomLeftHud() {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
 		final MoveComponent moveComponent = Mappers.moveComponent.get(player);
@@ -218,7 +225,7 @@ public class HUDRenderer {
 	// SKILLS
 	//
 	
-	private void displaySkillButtons(final Entity player) {
+	private void displaySkillButtons() {
 		
 		if (skillsTable == null) {
 			allSkillButtons.clear();
@@ -244,7 +251,7 @@ public class HUDRenderer {
 	
 						if (room.getState().isSkillChangeAllowed()) {
 							if (meleeSkillButton.isChecked()) {
-								boolean activated = activateSkill(meleeSkillButton,player);
+								boolean activated = activateSkill(meleeSkillButton);
 								if (activated) {
 									uncheckSkill(rangeSkillButton);
 									uncheckSkill(bombSkillButton);
@@ -297,7 +304,7 @@ public class HUDRenderer {
 						
 						if (room.getState().isSkillChangeAllowed()) {
 							if (rangeSkillButton.isChecked()) {
-								boolean activated = activateSkill(rangeSkillButton,player);
+								boolean activated = activateSkill(rangeSkillButton);
 								if (activated) {
 									uncheckSkill(meleeSkillButton);
 									uncheckSkill(bombSkillButton);
@@ -351,7 +358,7 @@ public class HUDRenderer {
 						
 						if (room.getState().isSkillChangeAllowed()) {
 							if (bombSkillButton.isChecked()) {							
-								boolean activated = activateSkill(bombSkillButton, player);
+								boolean activated = activateSkill(bombSkillButton);
 								if (activated) {
 									uncheckSkill(meleeSkillButton);
 									uncheckSkill(rangeSkillButton);
@@ -405,7 +412,7 @@ public class HUDRenderer {
 		
 	}
 
-	private boolean activateSkill(Button button, Entity player) {
+	private boolean activateSkill(Button button) {
 		boolean canActivate = false;
 
 		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
@@ -454,7 +461,7 @@ public class HUDRenderer {
 	//
 	
 	
-	private void displayAmmos(Entity player) {
+	private void displayAmmos() {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		
 		if (ammoTable == null) {

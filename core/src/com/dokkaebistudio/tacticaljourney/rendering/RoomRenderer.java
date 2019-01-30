@@ -14,12 +14,11 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney.systems.display;
+package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -31,21 +30,19 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class RenderingSystem extends EntitySystem implements RoomSystem {
+public class RoomRenderer implements Renderer, RoomSystem {
 
 	private SpriteBatch batch;
-	private Array<Entity> renderQueue;
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
+	private Array<Entity> renderQueue;
 	
 	/** The current room. */
 	private Room room;
 	
-	public RenderingSystem(SpriteBatch batch, Room room, OrthographicCamera camera) {
-				
-		renderQueue = new Array<Entity>();
-		
-		comparator = new Comparator<Entity>() {
+	public RoomRenderer(SpriteBatch batch, Room room, OrthographicCamera camera) {
+		this.renderQueue = new Array<>();
+		this.comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
 				GridPositionComponent gridPositionComponentA = Mappers.gridPositionComponent.get(entityA);
@@ -59,8 +56,8 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 		};
 		
 		this.batch = batch;
-		
-		cam = camera;
+		this.cam = camera;
+		this.room = room;
 	}
 	
 	@Override
@@ -68,8 +65,7 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 		this.room = newRoom;
 	}
 
-	@Override
-	public void update(float deltaTime) {
+	public void render(float deltaTime) {
 		
 		if (room.getState().updateNeeded()) {
 			renderQueue.clear();

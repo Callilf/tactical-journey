@@ -16,6 +16,9 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -35,6 +38,8 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -49,7 +54,6 @@ import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
-import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -91,10 +95,9 @@ public class GameScreen extends ScreenAdapter {
 	private int state;
 	
 	AttackWheel attackWheel = new AttackWheel();
-			
-	private HUDRenderer hudRenderer;
-	private MapRenderer mapRenderer;
-	private WheelRenderer wheelRenderer;
+	
+	/** The list of renderers. */
+	private List<Renderer> renderers = new ArrayList<>();
 	
 	public Entity player;
 
@@ -131,21 +134,17 @@ public class GameScreen extends ScreenAdapter {
 		
 		floor = new Floor(this);
 		Room room = floor.getActiveRoom();
-		
-		hudRenderer = new HUDRenderer(hudStage);
-		mapRenderer = new MapRenderer(this, game.batcher, game.shapeRenderer, floor);
-		mapRenderer.setMapDisplayed(true);
-		
-		wheelRenderer = new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer);
-		
-//		RandomXS128 random = RandomSingleton.getInstance().getRandom();
-//		int x = 1 + random.nextInt(GameScreen.GRID_W - 2);
-//		int y = 3 + random.nextInt(GameScreen.GRID_H - 5);
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
+
+		
+		renderers.add(new RoomRenderer(game.batcher, room, guiCam));
+		renderers.add(new HUDRenderer(hudStage, player));
+		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
+		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
+		
 		
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem(room));
-		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
 		engine.addSystem(new VisualEffectSystem(room));
 		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
@@ -154,11 +153,9 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new EnemySystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new DamageDisplaySystem(room));
-//		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 		engine.addSystem(room);
-		engine.addSystem(mapRenderer);
 		
 		
 		
@@ -174,8 +171,12 @@ public class GameScreen extends ScreenAdapter {
 	 * Enter a room.
 	 * @param room the room we are entering in
 	 */
-	public void enterRoom(Room newRoom, Room oldRoom) {
-		hudRenderer.room = newRoom;
+	public void enterRoom(Room newRoom, Room oldRoom) {		
+		for (Renderer r : renderers) {
+			if (r instanceof RoomSystem) {
+				((RoomSystem)r).enterRoom(newRoom);
+			}
+		}
 		
 		for (EntitySystem s : engine.getSystems()) {
 			if (s instanceof RoomSystem) {
@@ -265,13 +266,17 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 	private void presentRunning (float delta) {
-		hudRenderer.renderHud(this.player, delta);
+		for (Renderer r : renderers) {
+			r.render(delta);
+		}
 		
-		// draw the attack wheel
-		wheelRenderer.renderWheel();
-		
-		//Display map
-		mapRenderer.renderMap();
+//		hudRenderer.renderHud(this.player, delta);
+//		
+//		// draw the attack wheel
+//		wheelRenderer.renderWheel();
+//		
+//		//Display map
+//		mapRenderer.renderMap();
 	}
 
 

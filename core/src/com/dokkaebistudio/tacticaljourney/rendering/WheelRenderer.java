@@ -11,7 +11,7 @@ import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 
-public class WheelRenderer {
+public class WheelRenderer implements Renderer {
 	
 	public static final int WHEEL_X = GameScreen.SCREEN_W / 2;
 	public static final int WHEEL_Y = GameScreen.SCREEN_H/2;
@@ -41,7 +41,7 @@ public class WheelRenderer {
 		this.batcher = sb;
 	}
 	
-	public void renderWheel() {
+	public void render(float deltaTime) {
 		if (wheel.isDisplayed()) {
 			// first normalize sector values
 			int total = 0;

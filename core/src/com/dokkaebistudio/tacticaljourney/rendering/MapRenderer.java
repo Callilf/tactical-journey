@@ -5,18 +5,23 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.Map.Entry;
 
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.GenerationMoveEnum;
@@ -26,7 +31,7 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.Generat
  * @author Callil
  *
  */
-public class MapRenderer extends EntitySystem {
+public class MapRenderer implements Renderer {
 	
 	// Constants
 	private static final float MAP_ROOM_WIDTH = 20;
@@ -35,6 +40,8 @@ public class MapRenderer extends EntitySystem {
 	
 	float offsetX = GameScreen.SCREEN_W - GameScreen.SCREEN_W/8;
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
+	
+	private Stage stage;
 	
 	
 	/** Whether the map is displayed on screen or not. */
@@ -53,9 +60,8 @@ public class MapRenderer extends EntitySystem {
 	private Floor floor;
 	
 	/** The button to open the map. */
-	private Sprite openMapBtn;
-	/** The button to close the map. */
-	private Sprite closeMapBtn;
+	private Button openMapBtn;
+	
 	/** The background of the map. */
 	private Sprite background;
 	
@@ -65,74 +71,72 @@ public class MapRenderer extends EntitySystem {
 	 * @param sr the shaperenderer
 	 * @param f the floor which map we want to render
 	 */
-	public MapRenderer(GameScreen gs, SpriteBatch sb, ShapeRenderer sr, Floor f) {
+	public MapRenderer(GameScreen gs, Stage s, SpriteBatch sb, ShapeRenderer sr, Floor f) {
+		this.stage = s;
 		this.gameScreen = gs;
 		this.batcher = sb;
 		this.shapeRenderer = sr;
 		this.floor = f;
+		this.mapDisplayed = true;
 		
 		gameScreen.guiCam.update();
-		openMapBtn = new Sprite(Assets.getTexture(Assets.map_plus));
-		openMapBtn.setPosition(GameScreen.SCREEN_W - openMapBtn.getWidth(), GameScreen.SCREEN_H - openMapBtn.getHeight());
-
-		closeMapBtn = new Sprite(Assets.getTexture(Assets.map_minus));
-		closeMapBtn.setPosition(GameScreen.SCREEN_W - closeMapBtn.getWidth(), GameScreen.SCREEN_H - closeMapBtn.getHeight());
 		
+		Table mapTable = new Table();
+		mapTable.setPosition(1830f, 1047f);
+		mapTable.setTouchable(Touchable.childrenOnly);
+		
+		Drawable mapButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_minus)));
+		Drawable mapButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_minus)));
+		Drawable mapButtonChecked = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_plus)));
+		ButtonStyle endTurnButtonStyle = new ButtonStyle(mapButtonUp, mapButtonDown,mapButtonChecked);
+		openMapBtn = new Button(endTurnButtonStyle);
+		
+		openMapBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				mapDisplayed = !openMapBtn.isChecked();
+			}
+
+		});
+		mapTable.add(openMapBtn);
+
+		mapTable.pack();
+		stage.addActor(mapTable);
+
+				
 		background = new Sprite(Assets.getTexture(Assets.map_background));
 		background.setAlpha(0.5f);
 		background.setPosition(GameScreen.SCREEN_W - background.getWidth(), GameScreen.SCREEN_H - background.getHeight());
 	}
 	
-	
-	@Override
-	public void update(float deltaTime) {
-    	
-		if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-    		mapDisplayed = !mapDisplayed;
-    	}
-		
-		InputSingleton inputSingleton = InputSingleton.getInstance();
-		if (inputSingleton.leftClickJustReleased) {
-			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-			int x = (int) touchPoint.x;
-        	int y = (int) touchPoint.y;
-        	
-        	Sprite btn = mapDisplayed ? closeMapBtn : openMapBtn;
-        	
-        	if (btn.getBoundingRectangle().contains(x, y)) {
-        		mapDisplayed = !mapDisplayed;
-        	}
-		}
-	}
-	
+
 	
 	/**
 	 * Render the map of the floor.
 	 */
-	public void renderMap() {
-		gameScreen.guiCam.update();
-		batcher.setProjectionMatrix(gameScreen.guiCam.combined);
-		batcher.begin();
-		
+	public void render(float deltaTime) {
 
-		if (!mapDisplayed) {
-			//Draw the Map + button 
-			openMapBtn.draw(batcher);
-			
+		// 1 - Background
+		if (mapDisplayed) {
+			gameScreen.guiCam.update();
+			batcher.setProjectionMatrix(gameScreen.guiCam.combined);
+			batcher.begin();
+	
+			// Render the background if the map is opened
+			background.draw(batcher);
+					
 			batcher.end();
-			return;
 		}
 		
+		
+		// 2 - Button
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
+		
+		if (!mapDisplayed) return;
+		
 
-		// Render the background if the map is opened
-		background.draw(batcher);
-		
-		//Draw the Map - button 
-		closeMapBtn.draw(batcher);
-		
-		batcher.end();
-		
-		
+		// 3 - Map
 		gameScreen.guiCam.update();
 		shapeRenderer.setProjectionMatrix(gameScreen.guiCam.combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

@@ -32,6 +32,8 @@ public class AnimationSystem extends EntitySystem implements RoomSystem {
 
 	
 	public AnimationSystem(Room room) {
+		this.priority = 3;
+
 		this.room = room;
 	}
 	

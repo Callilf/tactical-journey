@@ -38,6 +38,8 @@ public class VisualEffectSystem extends EntitySystem implements RoomSystem {
 	private List<Entity> entitiesToRemove;
 	
 	public VisualEffectSystem(Room room) {
+		this.priority = 4;
+
 		this.room = room;
 		this.entitiesToRemove = new ArrayList<>();
 	}

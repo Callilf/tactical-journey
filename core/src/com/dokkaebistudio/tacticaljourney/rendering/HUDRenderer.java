@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -44,6 +45,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public Entity player;
 	
 	private LabelStyle hudStyle;
+	
+	// Time and turns
+	private boolean debug = true;
+	private Table fps;
+	private Label fpsLabel;
 	
 	// Time and turns
 	private Table timeAndTurnTable;
@@ -85,6 +91,21 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	
 	public void render(float deltaTime) {
+		if (debug) {
+			if (fps == null) {
+				fps = new Table();
+				fps.setPosition(0, 1050);
+				fps.align(Align.left);
+				// Turns
+				fpsLabel = new Label("", hudStyle);
+				fps.add(fpsLabel).left().uniformX();
+
+				fps.pack();
+				stage.addActor(fps);
+			}
+			fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+		}
+		
 		displayTimeAndTurns();
 		displayBottomLeftHud();
 		displaySkillButtons();

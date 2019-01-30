@@ -44,6 +44,8 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 
 	
 	public ExplosionSystem(Room r) {
+		this.priority = 7;
+
 		this.room = r;
 		
 		allExplosivesOfCurrentRoom = new ArrayList<>();

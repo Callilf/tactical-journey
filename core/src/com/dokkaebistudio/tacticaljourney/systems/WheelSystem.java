@@ -27,6 +27,8 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     private Room room;
 
     public WheelSystem(AttackWheel attackWheel, Room room) {
+		this.priority = 6;
+
         this.wheel = attackWheel;
         this.room = room;
     }

@@ -84,6 +84,8 @@ public class Room extends EntitySystem {
 	
 
 	public Room (Floor f, PooledEngine engine, EntityFactory ef, RoomType type) {
+		this.priority = 1;
+		
 		this.floor = f;
 		this.engine = engine;
 		this.entityFactory = ef;
@@ -228,7 +230,9 @@ public class Room extends EntitySystem {
 
 
 	public void setNextState(RoomState nextState) {
-		this.nextState = nextState;
+		if (this.nextState != RoomState.LEVEL_UP_POPIN) {
+			this.nextState = nextState;
+		}
 	}
 	public RoomState getNextState() {
 		return this.nextState;

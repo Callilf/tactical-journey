@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -42,6 +43,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
+		this.priority = 8;
+
 		this.room = room;
 		this.movementHandler = new MovementHandler(room.engine);
 		this.tileSearchService = new TileSearchService();

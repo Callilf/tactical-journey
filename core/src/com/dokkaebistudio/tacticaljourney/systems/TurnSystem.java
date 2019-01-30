@@ -30,6 +30,9 @@ public class TurnSystem extends IteratingSystem implements RoomSystem {
 	
 	public TurnSystem(Room r) {
 		super(Family.all(PlayerComponent.class).get());
+		
+		this.priority = 5;
+
 		this.room = r;
 	}
 	

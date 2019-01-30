@@ -28,6 +28,8 @@ public class StateSystem extends IteratingSystem {
 	public StateSystem() {
 		super(Family.all(StateComponent.class).get());
 		
+		this.priority = 2;
+
 		sm = ComponentMapper.getFor(StateComponent.class);
 	}
 

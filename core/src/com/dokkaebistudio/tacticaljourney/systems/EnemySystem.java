@@ -41,6 +41,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 
     public EnemySystem(Room r) {
+		this.priority = 9;
+
         room = r;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();

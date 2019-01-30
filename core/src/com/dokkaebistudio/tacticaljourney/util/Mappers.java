@@ -11,7 +11,6 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -49,7 +48,6 @@ public final class Mappers {
 
 	
 	public final static ComponentMapper<ParentEntityComponent> parentEntityComponent = ComponentMapper.getFor(ParentEntityComponent.class);
-	public final static ComponentMapper<ParentRoomComponent> parentRoomComponent = ComponentMapper.getFor(ParentRoomComponent.class);
 	public final static ComponentMapper<GridPositionComponent> gridPositionComponent = ComponentMapper.getFor(GridPositionComponent.class);
 	public final static ComponentMapper<TileComponent> tileComponent = ComponentMapper.getFor(TileComponent.class);
 	public final static ComponentMapper<DoorComponent> doorComponent = ComponentMapper.getFor(DoorComponent.class);

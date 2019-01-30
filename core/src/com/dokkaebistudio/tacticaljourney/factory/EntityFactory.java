@@ -17,7 +17,6 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -124,10 +123,6 @@ public final class EntityFactory {
 		tileEntity.add(spriteCompo);
 		tileEntity.add(gridPosition);
 		tileEntity.add(tile);
-		
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		tileEntity.add(parentRoomComponent);
 
 		engine.addEntity(tileEntity);
 
@@ -150,10 +145,6 @@ public final class EntityFactory {
     	
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
     	wallEntity.add(solidComponent);    	
-    	
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		wallEntity.add(parentRoomComponent);
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.wall_destroyed));
@@ -177,10 +168,6 @@ public final class EntityFactory {
     	Sprite s = new Sprite(Assets.getTexture(Assets.tile_mud));
     	spriteCompo.setSprite(s);
     	mudEntity.add(spriteCompo);
-    	    	
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		mudEntity.add(parentRoomComponent);
 		
 		SlowMovementComponent slowMovementCompo = engine.createComponent(SlowMovementComponent.class);
 		slowMovementCompo.setMovementConsumed(1);
@@ -215,10 +202,6 @@ public final class EntityFactory {
     	doorCompo.setOpened(targetedRoom == null ? false : true);
     	doorEntity.add(doorCompo);
     	
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		doorEntity.add(parentRoomComponent);
-    	
 		engine.addEntity(doorEntity);
 
     	return doorEntity;
@@ -241,11 +224,7 @@ public final class EntityFactory {
     	ExitComponent exitCompo = engine.createComponent(ExitComponent.class);
     	exitCompo.setOpened(true);
     	exitEntity.add(exitCompo);
-    	
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		exitEntity.add(parentRoomComponent);
-    	    	
+
 		engine.addEntity(exitEntity);
 
     	return exitEntity;
@@ -399,15 +378,8 @@ public final class EntityFactory {
 		}
 		sprite.add(transfoCompo);
 		
-		if (room != null) {
-			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-			parentRoomComponent.setParentRoom(room);
-			sprite.add(parentRoomComponent);
-			
-			room.addEntity(sprite);
-		} else {
-			engine.addEntity(sprite);
-		}
+		room.addEntity(sprite);
+
 		return sprite;
 	}
 	
@@ -431,10 +403,6 @@ public final class EntityFactory {
 		gridPos.coord(sprite, tilePos, room);
 		gridPos.zIndex = zIndex;
 		sprite.add(gridPos);
-
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		sprite.add(parentRoomComponent);
 		
 		room.addEntity(sprite);
 		return sprite;
@@ -504,12 +472,6 @@ public final class EntityFactory {
 		}
 		textTest.add(tc);
 		
-		if (room != null) {
-			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-			parentRoomComponent.setParentRoom(room);
-			textTest.add(parentRoomComponent);
-		}
-		
 		engine.addEntity(textTest);
 		return textTest;
 	}
@@ -534,19 +496,17 @@ public final class EntityFactory {
 		textTest.flags = EntityFlagEnum.TEXT_ON_TILE.getFlag();
 
 		GridPositionComponent gridPositionComponent = new GridPositionComponent();
-		gridPositionComponent.coord(tilePos);
+		if (room != null) {
+			gridPositionComponent.coord(textTest, tilePos, room);
+		} else {
+			gridPositionComponent.coord(tilePos);
+		}
 		gridPositionComponent.zIndex = zIndex;
 		textTest.add(gridPositionComponent);
 		
 		TextComponent tc = new TextComponent(Assets.font);
 		tc.setText(text);
 		textTest.add(tc);
-		
-		if (room != null) {
-			ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-			parentRoomComponent.setParentRoom(room);
-			textTest.add(parentRoomComponent);
-		}
 		
 		engine.addEntity(textTest);
 		
@@ -642,10 +602,6 @@ public final class EntityFactory {
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
 		healthUp.add(itemCompo);
-
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		healthUp.add(parentRoomComponent);
 		
 		engine.addEntity(healthUp);
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -688,10 +644,6 @@ public final class EntityFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState() : StatesEnum.EXPLODING_THIS_TURN.getState());
 		bomb.add(stateCompo);
-
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		bomb.add(parentRoomComponent);
 		
 		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
 		parentCompo.setParent(parentEntity);

@@ -19,8 +19,7 @@ package com.dokkaebistudio.tacticaljourney.systems.display;
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,7 +37,7 @@ import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class RenderingSystem extends IteratingSystem implements RoomSystem {
+public class RenderingSystem extends EntitySystem implements RoomSystem {
 
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
@@ -49,7 +48,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	private Room room;
 	
 	public RenderingSystem(SpriteBatch batch, Room room, OrthographicCamera camera) {
-		super(Family.one(GridPositionComponent.class).get());
 				
 		renderQueue = new Array<Entity>();
 		
@@ -78,7 +76,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	public void update(float deltaTime) {
-//		super.update(deltaTime);
 		
 		for(Entity e : room.getAllEntities()) {
 			renderQueue.addAll(e);
@@ -154,9 +151,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 		
 		
 	}
-	
-	@Override
-	public void processEntity(Entity entity, float deltaTime) {}
 	
 	
 	public OrthographicCamera getCamera() {

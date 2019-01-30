@@ -31,7 +31,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -42,7 +41,6 @@ import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
-import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -152,7 +150,6 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemyMoveSystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
-		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
@@ -184,10 +181,9 @@ public class GameScreen extends ScreenAdapter {
 		engine.removeSystem(oldRoom);
 		engine.addSystem(newRoom);
 		
-		//Set the player in the new room
-		ParentRoomComponent prc = Mappers.parentRoomComponent.get(player);
-		prc.setParentRoom(newRoom);
 		
+		//TODO : probably improve this code, especially if any other entity than the player can travel between rooms
+		//Set the player in the new room	
 		updateRoomForComponents(player, newRoom);
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(player);

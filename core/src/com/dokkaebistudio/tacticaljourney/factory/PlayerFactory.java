@@ -12,7 +12,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -128,11 +127,6 @@ public final class PlayerFactory {
 		// Experience compo
 		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
 		playerEntity.add(expCompo);
-		
-		//Parent room
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		playerEntity.add(parentRoomComponent);
 		
 		
 		//Skills

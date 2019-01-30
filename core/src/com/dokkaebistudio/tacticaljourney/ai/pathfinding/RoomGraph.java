@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class RoomGraph implements IndexedGraph<Entity> {
 	
@@ -34,8 +35,10 @@ public class RoomGraph implements IndexedGraph<Entity> {
 					&& (firstPos.coord().x == secondPos.coord().x + 1 || firstPos.coord().x == secondPos.coord().x -1);
 			
 			if (beside || aboveOrUnder) {
+				GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(nodeToTest);
 				TileComponent tileComponent = Mappers.tileComponent.get(nodeToTest);
-				connections.add(new RoomConnection(fromNode, nodeToTest, tileComponent.type.getMoveConsumed()));
+				int cost = TileUtil.getCostOfMovementForTilePos(gridPosCompo.coord(), tileComponent.getRoom());
+				connections.add(new RoomConnection(fromNode, nodeToTest, cost));
 			}
 		}
 		

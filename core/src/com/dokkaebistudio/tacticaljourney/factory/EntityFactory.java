@@ -96,6 +96,7 @@ public final class EntityFactory {
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		TileComponent tile = engine.createComponent(TileComponent.class);
+		tile.setRoom(room);
 
 		tile.type = type;
 		switch (type) {

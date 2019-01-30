@@ -7,6 +7,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -52,6 +53,22 @@ public final class TileUtil {
 	public static Entity getTileFromEntity(Entity e, Room r) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		return getTileAtGridPos(gridPositionComponent.coord(), r);
+	}
+	
+	/**
+	 * Return the cost of movement for the given tile position in the given room.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the cost of movement
+	 */
+	public static int getCostOfMovementForTilePos(Vector2 pos, Room room) {
+		int cost = 1;
+		Set<Entity> slowEntities = TileUtil.getEntityWithComponentOnTile(pos, SlowMovementComponent.class, room);
+		for (Entity e : slowEntities) {
+			SlowMovementComponent slowMovementComponent = Mappers.slowMoveComponent.get(e);
+			cost += slowMovementComponent.getMovementConsumed();
+		}
+		return cost;
 	}
 	
 	/**

@@ -159,8 +159,8 @@ public class TileSearchService {
 			
 			//For each retrieved tile, redo a search until we reach max depth
 			for (Entity tile : previouslyReturnedTiles) {
-				TileComponent tileComponent = Mappers.tileComponent.get(tile);
-				int moveConsumed = tileComponent.type.getMoveConsumed();
+				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
+				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
 	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth, room);
 	        	walkableTiles.addAll(returnedTiles);
 	        }

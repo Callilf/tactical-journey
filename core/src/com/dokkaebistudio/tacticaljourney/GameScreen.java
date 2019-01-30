@@ -251,7 +251,7 @@ public class GameScreen extends ScreenAdapter {
 		}
 	}
 
-	public void drawUI (float delta) {
+	public void draw (float delta) {
 		switch (state) {
 		case GAME_RUNNING:
 			presentRunning(delta);
@@ -269,14 +269,6 @@ public class GameScreen extends ScreenAdapter {
 		for (Renderer r : renderers) {
 			r.render(delta);
 		}
-		
-//		hudRenderer.renderHud(this.player, delta);
-//		
-//		// draw the attack wheel
-//		wheelRenderer.renderWheel();
-//		
-//		//Display map
-//		mapRenderer.renderMap();
 	}
 
 
@@ -292,13 +284,18 @@ public class GameScreen extends ScreenAdapter {
 		hudViewport.update(width, height);
 	}
 
+	
 	@Override
 	public void render (float delta) {
-		//drawBackground();
+		//draw black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		// 1 - Update all entities and systems
 		update(delta);
-		drawUI(delta);
+		
+		// 2 - Render on screen
+		draw(delta);
 	}
 
 	@Override

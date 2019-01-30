@@ -180,9 +180,9 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 				
 
 			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
-
-			room.removeEntity(explosive);
 		}
+		room.removeEntity(explosive);
+
 
 	}
 }

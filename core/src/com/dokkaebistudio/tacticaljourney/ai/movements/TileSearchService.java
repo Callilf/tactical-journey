@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
+import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -334,8 +335,13 @@ public class TileSearchService {
 		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tileEntity);
 		
-		Set<Entity> entityWithComponentOnTile = TileUtil.getEntityWithComponentOnTile(pos, SolidComponent.class, room);
-		if (!entityWithComponentOnTile.isEmpty()) {
+		Set<Entity> blockingEntity = null; 
+		if (attackType == AttackTypeEnum.EXPLOSION) {
+			blockingEntity = TileUtil.getEntityWithComponentOnTile(pos, BlockExplosionComponent.class, room);
+		} else {
+			blockingEntity = TileUtil.getEntityWithComponentOnTile(pos, SolidComponent.class, room);
+		}
+		if (!blockingEntity.isEmpty()) {
 			obstacles.add(gridPositionComponent.coord());
 		}
 		

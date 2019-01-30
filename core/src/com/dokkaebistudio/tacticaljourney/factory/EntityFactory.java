@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
@@ -146,7 +147,10 @@ public final class EntityFactory {
     	
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
     	wallEntity.add(solidComponent);    	
-		
+    	
+    	BlockExplosionComponent blockExplosionComponent = engine.createComponent(BlockExplosionComponent.class);
+		wallEntity.add(blockExplosionComponent);
+    	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.wall_destroyed));
     	wallEntity.add(destructibleCompo);

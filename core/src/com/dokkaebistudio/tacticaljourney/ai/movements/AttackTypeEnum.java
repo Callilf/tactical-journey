@@ -14,7 +14,8 @@ public enum AttackTypeEnum {
 
 	MELEE,
 	RANGE,
-	THROW;
+	THROW,
+	EXPLOSION;
 	
 	
 	public boolean canAttack(Entity tile, Room room) {
@@ -34,6 +35,10 @@ public enum AttackTypeEnum {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
 			Set<Entity> solids = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SolidComponent.class, room);
 			result = tileComponent.type.isWalkable() && solids.isEmpty();
+			break;
+			
+		case EXPLOSION:
+			result = true;
 			break;
 			default:
 		}

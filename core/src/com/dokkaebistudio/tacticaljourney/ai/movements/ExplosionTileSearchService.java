@@ -40,7 +40,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 			
 		CheckTypeEnum checkType = CheckTypeEnum.ATTACK_FOR_DISPLAY;
 		visitedTilesWithRemainingMove.put(tile, 0);
-		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.RANGE, checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, null, room, explosiveComponent.getRadius(), 1);
+		Set<Entity> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.EXPLOSION, checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, null, room, explosiveComponent.getRadius(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		

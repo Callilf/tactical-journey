@@ -170,7 +170,7 @@ public final class EntityFactory {
     	mudEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.tile_mud));
+    	Sprite s = new Sprite(Assets.getTexture(Assets.mud));
     	spriteCompo.setSprite(s);
     	mudEntity.add(spriteCompo);
 		
@@ -179,6 +179,7 @@ public final class EntityFactory {
     	mudEntity.add(slowMovementCompo);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.mud_destroyed));
 		mudEntity.add(destructibleCompo);
     	
 		engine.addEntity(mudEntity);

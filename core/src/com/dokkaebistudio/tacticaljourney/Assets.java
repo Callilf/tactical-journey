@@ -45,7 +45,8 @@ public class Assets {
 	public static final String wall_destroyed = "tile-wall-destroyed";
 
 	public static final String tile_pit = "tile-pit-test";
-	public static final String tile_mud = "tile-mud-test";
+	public static final String mud = "tile-mud-test";
+	public static final String mud_destroyed = "tile-mud-destroyed";
 	
 	public static final String exit = "exit";
 	public static final String entrance = "entrance";

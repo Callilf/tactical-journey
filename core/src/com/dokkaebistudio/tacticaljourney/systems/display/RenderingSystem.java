@@ -108,7 +108,7 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 			} else {
 				// use grid position to render instead of real screen coordinates
 				
-				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(gridPosComponent.coord());
+				Vector2 realPos = gridPosComponent.getWorldPos();
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					if (!spriteCompo.hide) {

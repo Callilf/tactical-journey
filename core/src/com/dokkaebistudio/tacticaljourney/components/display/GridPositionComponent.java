@@ -5,12 +5,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class GridPositionComponent implements Component, Poolable {
 	
+	/** The pixel pos used by the RenderingSystem. NEVER UPDATE THIS VALUE MANUALLY. */
+	private final Vector2 worldPos = new Vector2(0, 0);
+	
+	/** The tile coordinates. */
     private final Vector2 coord = new Vector2(0,0);
     
+    /** Whether this entity is using absolute position or tile position. */
     private boolean hasAbsolutePos = false;
+    /** The absolute position of the entity (if using it). */
 	private Vector2 absolutePos = new Vector2();
 
     
@@ -64,6 +71,14 @@ public class GridPositionComponent implements Component, Poolable {
 	public Vector2 getAbsolutePos() {
 		return absolutePos;
 	}
+
+
+	public Vector2 getWorldPos() {
+		TileUtil.convertGridPosIntoPixelPos(coord, worldPos);
+		return worldPos;
+	}
+	
+	
     
     
 }

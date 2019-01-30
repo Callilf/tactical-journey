@@ -35,6 +35,16 @@ public final class TileUtil {
 	/**
 	 * Convert a grid position for ex (5,4) into pixel position (450,664).
 	 * @param gridPos the grid position
+	 * @param pixelPos the pixel position updated
+	 */
+	public static void convertGridPosIntoPixelPos(Vector2 gridPos, Vector2 pixelPos) {
+		pixelPos.x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+		pixelPos.y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+	}
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
 	 * @return the real position
 	 */
 	public static Vector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {

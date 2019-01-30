@@ -20,7 +20,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class EnemyMoveSystem extends EntitySystem implements RoomSystem {
+public class EnemySystem extends EntitySystem implements RoomSystem {
 	
     /** The movement handler. */
     private final MovementHandler movementHandler;
@@ -40,7 +40,7 @@ public class EnemyMoveSystem extends EntitySystem implements RoomSystem {
 	private AttackTileSearchService attackTileSearchService;
 
 
-    public EnemyMoveSystem(Room r) {
+    public EnemySystem(Room r) {
         room = r;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();

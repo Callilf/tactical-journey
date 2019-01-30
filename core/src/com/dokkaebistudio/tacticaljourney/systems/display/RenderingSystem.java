@@ -19,28 +19,20 @@ package com.dokkaebistudio.tacticaljourney.systems.display;
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class RenderingSystem extends IteratingSystem implements RoomSystem {
+public class RenderingSystem extends EntitySystem implements RoomSystem {
 
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
@@ -51,32 +43,19 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	private Room room;
 	
 	public RenderingSystem(SpriteBatch batch, Room room, OrthographicCamera camera) {
-		super(Family.one(SpriteComponent.class, TextComponent.class).get());
 				
 		renderQueue = new Array<Entity>();
 		
 		comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
-				if (!Mappers.transfoComponent.has(entityA) && Mappers.transfoComponent.has(entityB)) {
-					return -1;
-				} else if (!Mappers.transfoComponent.has(entityB) && Mappers.transfoComponent.has(entityA)) {
-					return 1;
-				} else if (!Mappers.transfoComponent.has(entityA) && !Mappers.transfoComponent.has(entityB)) {
-					
-					
-					if (!Mappers.gridPositionComponent.has(entityA) && Mappers.gridPositionComponent.has(entityB)) {
-						return -1;
-					} else if (!Mappers.gridPositionComponent.has(entityB) && Mappers.gridPositionComponent.has(entityA)) {
-						return 1;
-					} else if (!Mappers.gridPositionComponent.has(entityA) && !Mappers.gridPositionComponent.has(entityB)) {
-						return 0;
-					}
-					
-					return (int)Math.signum(Mappers.gridPositionComponent.get(entityA).zIndex - Mappers.gridPositionComponent.get(entityB).zIndex);
-				}
+				GridPositionComponent gridPositionComponentA = Mappers.gridPositionComponent.get(entityA);
+				GridPositionComponent gridPositionComponentB = Mappers.gridPositionComponent.get(entityB);
+				if (gridPositionComponentA == null && gridPositionComponentB == null) return 0;
+				else if (gridPositionComponentA == null) return -1;
+				else if (gridPositionComponentB == null) return 1;
 				
-				return (int) Math.signum(Mappers.transfoComponent.get(entityA).pos.z - Mappers.transfoComponent.get(entityB).pos.z);
+				return (int) Math.signum(gridPositionComponentA.zIndex - gridPositionComponentB.zIndex);
 			}
 		};
 		
@@ -92,7 +71,10 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
+		
+		for(Entity e : room.getAllEntities()) {
+			renderQueue.addAll(e);
+		}
 		
 		renderQueue.sort(comparator);
 		
@@ -104,17 +86,16 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			TextComponent textCompo = Mappers.textComponent.get(entity);
 			
-			TransformComponent t = Mappers.transfoComponent.get(entity);
-			GridPositionComponent g = Mappers.gridPositionComponent.get(entity);
-
+			GridPositionComponent gridPosComponent = Mappers.gridPositionComponent.get(entity);
+			if (gridPosComponent == null) continue;
 			
-			if (t != null) {		
+			if (gridPosComponent.hasAbsolutePos()) {		
 				// use transform component for drawing position
 				
 				
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
-					float x = t.pos.x;
-					float y = t.pos.y;
+					float x = gridPosComponent.getAbsolutePos().x;
+					float y = gridPosComponent.getAbsolutePos().y;
 				
 					spriteCompo.getSprite().setPosition(x, y);
 					if (!spriteCompo.hide) {
@@ -122,12 +103,12 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {					
-					textCompo.getFont().draw(batch, textCompo.getText(), t.pos.x, t.pos.y);
+					textCompo.getFont().draw(batch, textCompo.getText(), gridPosComponent.getAbsolutePos().x, gridPosComponent.getAbsolutePos().y);
 				}
-			} else if (g != null){
+			} else {
 				// use grid position to render instead of real screen coordinates
 				
-				Vector2 realPos = TileUtil.convertGridPosIntoPixelPos(g.coord());
+				Vector2 realPos = gridPosComponent.getWorldPos();
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
 					if (!spriteCompo.hide) {
@@ -140,23 +121,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
 			} 
 		
-		
-			// Handle visual effects
-			VisualEffectComponent visualEffectComponent = Mappers.visualEffectComponent.get(entity);
-			if (visualEffectComponent != null) {
-				AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
-				StateComponent stateComponent = Mappers.stateComponent.get(entity);
-				if (animationComponent != null && stateComponent != null) {
-					Animation<Sprite> animation = animationComponent.animations.get(stateComponent.get());
-					boolean animationFinished = animation.isAnimationFinished(stateComponent.time);
-					
-					if (animationFinished) {
-						// Remove the visual effect
-						room.removeEntity(entity);
-					}
-				}
-			}
-		
 		}
 		
 		batch.end();
@@ -164,16 +128,6 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 		
 		
 		
-	}
-	
-	@Override
-	public void processEntity(Entity entity, float deltaTime) {
-		ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(entity);
-		if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
-			return;
-		}
-
-		renderQueue.add(entity);
 	}
 	
 	

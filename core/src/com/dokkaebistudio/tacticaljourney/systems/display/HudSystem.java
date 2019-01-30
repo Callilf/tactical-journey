@@ -94,7 +94,6 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		displaySkillButtons(player);
 		displayAmmos(player);
 
-
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
@@ -128,8 +127,8 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		}
 		
 		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
-		timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
-		
+		//timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		timeLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		turnLabel.setText("Turn " + room.turnManager.getTurn());
 	}
 	
@@ -342,72 +341,67 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 				});
 	
 				allSkillButtons.add(rangeSkillButton);
+				skillsTable.add(rangeSkillButton);
+
 			}			
-			skillsTable.add(rangeSkillButton);
+			
+			if (bombSkillButton == null) {
+				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bomb)));
+				Drawable rangeSkillButtonDown = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_bomb_pushed)));
+				Drawable rangeSkillButtonChecked = new SpriteDrawable(
+						new Sprite(Assets.getTexture(Assets.btn_skill_bomb_checked)));
+				ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
+						rangeSkillButtonChecked);
+				bombSkillButton = new Button(rangeSkillButtonStyle);
+				bombSkillButton.setProgrammaticChangeEvents(true);
+
+				bombSkillButton.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						
+						if (room.getState().isSkillChangeAllowed()) {
+							if (bombSkillButton.isChecked()) {							
+								boolean activated = activateSkill(bombSkillButton, player);
+								if (activated) {
+									uncheckSkill(meleeSkillButton);
+									uncheckSkill(rangeSkillButton);
+								} else {
+									uncheckSkill(bombSkillButton);
+								}
+
+							} else {
+								deactivateSkill(player);
+							}
+						} else {
+							bombSkillButton.setChecked(!bombSkillButton.isChecked());
+						}
+					}
+
+				});
+
+				// Add shortcut to activate the button
+				stage.addListener(new InputListener() {
+					@Override
+					public boolean keyUp(InputEvent event, int keycode) {
+						if (keycode == Input.Keys.NUM_3) {
+							if (!bombSkillButton.isDisabled()) {
+								bombSkillButton.toggle();
+							}
+							return false;
+						}
+						return super.keyUp(event, keycode);
+					}
+				});
+
+				allSkillButtons.add(bombSkillButton);
+				skillsTable.add(bombSkillButton);
+			}			
+
 	
 			skillsTable.pack();
 			stage.addActor(skillsTable);
 		}
-		
-		
-		
-		
-		if (bombSkillButton == null) {
-			Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bomb)));
-			Drawable rangeSkillButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_pushed)));
-			Drawable rangeSkillButtonChecked = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_skill_bomb_checked)));
-			ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
-					rangeSkillButtonChecked);
-			bombSkillButton = new Button(rangeSkillButtonStyle);
-			bombSkillButton.setProgrammaticChangeEvents(true);
-
-			bombSkillButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					
-					if (room.getState().isSkillChangeAllowed()) {
-						if (bombSkillButton.isChecked()) {							
-							boolean activated = activateSkill(bombSkillButton, player);
-							if (activated) {
-								uncheckSkill(meleeSkillButton);
-								uncheckSkill(rangeSkillButton);
-							} else {
-								uncheckSkill(bombSkillButton);
-							}
-
-						} else {
-							deactivateSkill(player);
-						}
-					} else {
-						bombSkillButton.setChecked(!bombSkillButton.isChecked());
-					}
-				}
-
-			});
-
-			// Add shortcut to activate the button
-			stage.addListener(new InputListener() {
-				@Override
-				public boolean keyUp(InputEvent event, int keycode) {
-					if (keycode == Input.Keys.NUM_3) {
-						if (!bombSkillButton.isDisabled()) {
-							bombSkillButton.toggle();
-						}
-						return false;
-					}
-					return super.keyUp(event, keycode);
-				}
-			});
-
-			allSkillButtons.add(bombSkillButton);
-		}			
-		skillsTable.add(bombSkillButton);
-		
-		
-		
-		
 		
 		
 		for (Button btn : allSkillButtons) {

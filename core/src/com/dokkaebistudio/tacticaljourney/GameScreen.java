@@ -16,6 +16,7 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
@@ -30,17 +31,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
-import com.dokkaebistudio.tacticaljourney.systems.EnemyMoveSystem;
+import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
-import com.dokkaebistudio.tacticaljourney.systems.KeyInputSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -50,6 +50,7 @@ import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.HudSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
+import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class GameScreen extends ScreenAdapter {
@@ -143,14 +144,14 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new StateSystem());
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
+		engine.addSystem(new VisualEffectSystem(room));
 		
 		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
 		engine.addSystem(new PlayerMoveSystem(room));
-		engine.addSystem(new EnemyMoveSystem(room));
+		engine.addSystem(new EnemySystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
-		engine.addSystem(new KeyInputSystem(room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
@@ -182,10 +183,30 @@ public class GameScreen extends ScreenAdapter {
 		engine.removeSystem(oldRoom);
 		engine.addSystem(newRoom);
 		
-		//Set the player in the new room
-		ParentRoomComponent prc = Mappers.parentRoomComponent.get(player);
-		prc.setParentRoom(newRoom);
+		
+		//TODO : probably improve this code, especially if any other entity than the player can travel between rooms
+		//Set the player in the new room	
+		updateRoomForComponents(player, newRoom);
+		
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		updateRoomForComponents(playerComponent.getSkillMelee(), newRoom);
+		updateRoomForComponents(playerComponent.getSkillRange(), newRoom);
+		updateRoomForComponents(playerComponent.getSkillBomb(), newRoom);
 	}
+
+	private void updateRoomForComponents(Entity e, Room newRoom) {
+		for (Component compo : e.getComponents()) {
+			if (compo instanceof RoomSystem) {
+				((RoomSystem)compo).enterRoom(newRoom);
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
 
 	public void update (float deltaTime) {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;

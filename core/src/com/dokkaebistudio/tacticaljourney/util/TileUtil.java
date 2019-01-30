@@ -7,6 +7,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -34,6 +35,16 @@ public final class TileUtil {
 	/**
 	 * Convert a grid position for ex (5,4) into pixel position (450,664).
 	 * @param gridPos the grid position
+	 * @param pixelPos the pixel position updated
+	 */
+	public static void convertGridPosIntoPixelPos(Vector2 gridPos, Vector2 pixelPos) {
+		pixelPos.x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
+		pixelPos.y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
+	}
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
 	 * @return the real position
 	 */
 	public static Vector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {
@@ -52,6 +63,22 @@ public final class TileUtil {
 	public static Entity getTileFromEntity(Entity e, Room r) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		return getTileAtGridPos(gridPositionComponent.coord(), r);
+	}
+	
+	/**
+	 * Return the cost of movement for the given tile position in the given room.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the cost of movement
+	 */
+	public static int getCostOfMovementForTilePos(Vector2 pos, Room room) {
+		int cost = 1;
+		Set<Entity> slowEntities = TileUtil.getEntityWithComponentOnTile(pos, SlowMovementComponent.class, room);
+		for (Entity e : slowEntities) {
+			SlowMovementComponent slowMovementComponent = Mappers.slowMoveComponent.get(e);
+			cost += slowMovementComponent.getMovementConsumed();
+		}
+		return cost;
 	}
 	
 	/**

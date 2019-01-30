@@ -68,7 +68,7 @@ public class Room extends EntitySystem {
 	
 
 	
-	
+	private Set<Entity> allEntities;
 	/**
 	 * For each tile, gives the list of entities.
 	 */
@@ -91,7 +91,16 @@ public class Room extends EntitySystem {
 		this.type = type;
 		this.visited = false;
 		
+		this.allEntities = new HashSet<>();
 		this.entitiesAtPositions = new HashMap<>();
+	}
+	
+	public Set<Entity> getAllEntities() {
+		return allEntities;
+	}
+	
+	public void addToAllEntities(Entity e) {
+		this.allEntities.add(e);
 	}
 	
 	
@@ -108,6 +117,8 @@ public class Room extends EntitySystem {
 			entitiesAtPositions.put(pos, set);
 		}
 		set.add(e);
+		
+		this.addToAllEntities(e);
 	}
 	
 	/**
@@ -159,6 +170,9 @@ public class Room extends EntitySystem {
 	 * @param e the entity to add
 	 */
 	public void addEntity(Entity e) {
+		if (Mappers.gridPositionComponent.has(e)) {
+			this.addToAllEntities(e);
+		}
 		engine.addEntity(e);
 	}
 	
@@ -172,6 +186,7 @@ public class Room extends EntitySystem {
 			this.removeEntityAtPosition(e, posCompo.coord());
 		}
 		
+		this.allEntities.remove(e);		
 		engine.removeEntity(e);
 	}
 	
@@ -189,6 +204,13 @@ public class Room extends EntitySystem {
 		if (!state.isPaused()) {
 			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
 			gtSingleton.updateElapsedTime(deltaTime);
+		}
+		
+		
+		for (Entity e : allEntities) {
+			if (!Mappers.gridPositionComponent.has(e)) {
+				System.out.println("Pas de grid pos");
+			}
 		}
 		
 		updateState();

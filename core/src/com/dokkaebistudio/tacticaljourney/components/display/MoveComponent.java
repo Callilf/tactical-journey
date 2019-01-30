@@ -7,16 +7,17 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class MoveComponent implements Component, Poolable {
-		
-	/** The engine that managed entities.*/
-	public PooledEngine engine;
+public class MoveComponent implements Component, Poolable, RoomSystem {
+
+	/** The room that managed entities.*/
+	public Room room;
 	
 	/** The number of tiles the player can move. */
 	public int moveSpeed;
@@ -45,9 +46,14 @@ public class MoveComponent implements Component, Poolable {
 	
 	
 	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
+	
+	@Override
 	public void reset() {
 		clearMovableTiles();
-		engine = null;
+		this.room = null;
 	}
 	
 	
@@ -83,7 +89,7 @@ public class MoveComponent implements Component, Poolable {
 	 */
 	public void clearMovableTiles() {
 		for (Entity e : movableTiles) {
-			engine.removeEntity(e);
+			room.removeEntity(e);
 		}
 		movableTiles.clear();
 		
@@ -99,12 +105,12 @@ public class MoveComponent implements Component, Poolable {
 	 */
 	public void clearSelectedTile() {
 		if (this.selectedTile != null) {
-			engine.removeEntity(this.selectedTile);
+			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = null;
 
 		for (Entity e : wayPoints) {
-			engine.removeEntity(e);
+			room.removeEntity(e);
 		}
 		wayPoints.clear();
 	}
@@ -117,7 +123,7 @@ public class MoveComponent implements Component, Poolable {
 
 	public void setSelectedTile(Entity selectedTile) {
 		if (this.selectedTile != null) {
-			engine.removeEntity(this.selectedTile);
+			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = selectedTile;
 	}
@@ -131,7 +137,7 @@ public class MoveComponent implements Component, Poolable {
 
 	public void setWayPoints(List<Entity> wayPoints) {
 		for (Entity e : this.wayPoints) {
-			engine.removeEntity(e);
+			room.removeEntity(e);
 		}
 		this.wayPoints = wayPoints;
 	}

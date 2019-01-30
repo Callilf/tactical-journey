@@ -15,7 +15,6 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -68,21 +67,20 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 9;
+		gridPosition.zIndex = 10;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
 		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
+		moveComponent.room = room;
 		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
+		attackComponent.room = room;
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
@@ -92,7 +90,7 @@ public final class EnemyFactory {
 		enemyEntity.add(solidComponent);
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
+		healthComponent.room = room;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		Entity hpEntity = this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room);
@@ -102,10 +100,6 @@ public final class EnemyFactory {
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
 		expRewardCompo.setExpGain(2);
 		enemyEntity.add(expRewardCompo);
-		
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		enemyEntity.add(parentRoomComponent);
 		
 		engine.addEntity(enemyEntity);
 		
@@ -128,21 +122,20 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 9;
+		gridPosition.zIndex = 10;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
 		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
+		moveComponent.room = room;
 		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
+		attackComponent.room = room;
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(10);
@@ -152,7 +145,7 @@ public final class EnemyFactory {
 		enemyEntity.add(solidComponent);
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
+		healthComponent.room = room;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room));
@@ -161,10 +154,6 @@ public final class EnemyFactory {
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
 		expRewardCompo.setExpGain(6);
 		enemyEntity.add(expRewardCompo);
-		
-		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
-		parentRoomComponent.setParentRoom(room);
-		enemyEntity.add(parentRoomComponent);
 		
 		engine.addEntity(enemyEntity);
 		

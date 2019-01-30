@@ -4,8 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -16,7 +15,7 @@ public class DamageDisplaySystem extends IteratingSystem implements RoomSystem {
     private Room room;
 
     public DamageDisplaySystem(Room r) {
-        super(Family.all(DamageDisplayComponent.class, TransformComponent.class, TextComponent.class).get());
+        super(Family.all(DamageDisplayComponent.class).get());
         room = r;
     }
     
@@ -29,10 +28,10 @@ public class DamageDisplaySystem extends IteratingSystem implements RoomSystem {
     protected void processEntity(Entity entity, float deltaTime) {
     	DamageDisplayComponent damageDisplayComponent = Mappers.damageDisplayCompoM.get(entity);
     	
-    	TransformComponent transfoCompo = Mappers.transfoComponent.get(entity);
-    	transfoCompo.pos.y = transfoCompo.pos.y + 1;
+    	GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(entity);
+    	gridPosCompo.absolutePos(gridPosCompo.getAbsolutePos().x, gridPosCompo.getAbsolutePos().y + 1);
     	
-    	if (transfoCompo.pos.y > damageDisplayComponent.getInitialPosition().y + 100) {
+    	if (gridPosCompo.getAbsolutePos().y > damageDisplayComponent.getInitialPosition().y + 100) {
     		room.removeEntity(entity);
     	}
     	

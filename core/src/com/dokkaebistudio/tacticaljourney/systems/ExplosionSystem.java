@@ -21,13 +21,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.EntitySystem;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -37,7 +34,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class ExplosionSystem extends IteratingSystem implements RoomSystem {	
+public class ExplosionSystem extends EntitySystem implements RoomSystem {	
 	
 	private Room room;
 	private ExplosionTileSearchService explosionTileSearchService = new ExplosionTileSearchService();
@@ -47,7 +44,6 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 
 	
 	public ExplosionSystem(Room r) {
-		super(Family.all(ExplosiveComponent.class).get());
 		this.room = r;
 		
 		allExplosivesOfCurrentRoom = new ArrayList<>();
@@ -59,13 +55,8 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
     	this.room = newRoom;	
     }
     
-    @Override
-    protected void processEntity(Entity moverEntity, float deltaTime) {}
-
 	@Override
 	public void update(float deltaTime) {
-		
-		
 		
 		// Update state
 		if (room.getState() == RoomState.PLAYER_TURN_INIT) {
@@ -129,13 +120,9 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 	
 	private void fillEntitiesOfCurrentRoom() {
 		allExplosivesOfCurrentRoom.clear();
-    	ImmutableArray<Entity> allExplosives = getEntities();
-    	for (Entity explosiveEntity : allExplosives) {
-			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(explosiveEntity);
-			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() == this.room) {
-				allExplosivesOfCurrentRoom.add(explosiveEntity);
-			}
-    	}
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.explosiveComponent.has(e)) allExplosivesOfCurrentRoom.add(e);
+		}
 	}
 
 	
@@ -187,7 +174,7 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
 				if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
 					GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
-					room.entityFactory.createSpriteOnTile(tilePos.coord(), destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL, room);
+					room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL_DESTROYED, room);
 				}
 			}
 				

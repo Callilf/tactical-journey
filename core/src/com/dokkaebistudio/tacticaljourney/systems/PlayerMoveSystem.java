@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -11,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -243,24 +245,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		int cost = 0;
 		for (Entity wp : moveCompo.getWayPoints()) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
-			cost = cost + getCostOfTileAtPos(gridPositionComponent.coord());
+			cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
 		}
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		cost = cost + getCostOfTileAtPos(gridPositionComponent.coord());
+		cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
 		return cost;
 	}
 
-	/**
-	 * Return the cost of move to a given tile.
-	 * 
-	 * @param pos the position of the tile.
-	 * @return the cost
-	 */
-	private int getCostOfTileAtPos(Vector2 pos) {
-		Entity tileEntity = room.getTileAtGridPosition(pos);
-		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
-		return tileComponent.type.getMoveConsumed();
-	}
 
 	/**
 	 * Set the destination of the movement.
@@ -284,7 +275,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (spriteComponent.containsPoint(x, y)) {
 				// Clicked on this tile !!
 				// Create an entity to show that this tile is selected as the destination
-				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord());
+				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
 				moveCompo.setSelectedTile(destinationTileEntity);
 
 				// Display the way to go to this point

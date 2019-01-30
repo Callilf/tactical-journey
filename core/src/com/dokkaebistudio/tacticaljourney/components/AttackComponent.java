@@ -5,17 +5,18 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class AttackComponent implements Component, Poolable {
+public class AttackComponent implements Component, Poolable, RoomSystem {
 		
-	/** The engine that managed entities.*/
-	public PooledEngine engine;
+	/** The room.*/
+	public Room room;
 	
 	/** The type of attack (MELEE, RANGE, THROW...). */
 	private AttackTypeEnum attackType;
@@ -75,14 +76,21 @@ public class AttackComponent implements Component, Poolable {
 	
 	
 	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
+	
+	
+	@Override
 	public void reset() {
 		clearAttackableTiles();
 		this.target = null;
 		if (ammoDisplayer != null) {
-			engine.removeEntity(ammoDisplayer);
+			room.removeEntity(ammoDisplayer);
 			ammoDisplayer = null;
 		}
 		this.attackType = null;
+		this.room = null;
 	}
 	
 	/**
@@ -108,7 +116,7 @@ public class AttackComponent implements Component, Poolable {
 	 */
 	public void clearAttackableTiles() {
 		for (Entity e : attackableTiles) {
-			engine.removeEntity(e);
+			room.removeEntity(e);
 		}
 		attackableTiles.clear();
 		
@@ -117,12 +125,12 @@ public class AttackComponent implements Component, Poolable {
 		}
 		
 		if (this.selectedTile != null) {
-			engine.removeEntity(this.selectedTile);
+			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = null;
 		
 		if (this.attackConfirmationButton != null) {
-			engine.removeEntity(this.attackConfirmationButton);
+			room.removeEntity(this.attackConfirmationButton);
 		}
 		this.attackConfirmationButton = null;
 		
@@ -138,7 +146,7 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setSelectedTile(Entity selectedTile) {
 		if (this.selectedTile != null) {
-			engine.removeEntity(this.selectedTile);
+			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = selectedTile;
 	}
@@ -151,7 +159,7 @@ public class AttackComponent implements Component, Poolable {
 
 	public void setMovementConfirmationButton(Entity movementConfirmationButton) {
 		if (this.attackConfirmationButton != null) {
-			engine.removeEntity(this.attackConfirmationButton);
+			room.removeEntity(this.attackConfirmationButton);
 		}
 		this.attackConfirmationButton = movementConfirmationButton;
 	}

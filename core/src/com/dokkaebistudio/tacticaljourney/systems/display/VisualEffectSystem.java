@@ -14,51 +14,69 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney.systems;
+package com.dokkaebistudio.tacticaljourney.systems.display;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class AnimationSystem extends EntitySystem implements RoomSystem {
+public class VisualEffectSystem extends EntitySystem implements RoomSystem {
 
+	
+	/** The current room. */
 	private Room room;
-
+	private List<Entity> entitiesToRemove;
 	
-	public AnimationSystem(Room room) {
+	public VisualEffectSystem(Room room) {
 		this.room = room;
+		this.entitiesToRemove = new ArrayList<>();
 	}
-	
 	
 	@Override
 	public void enterRoom(Room newRoom) {
 		this.room = newRoom;
 	}
-	
+
 	@Override
 	public void update(float deltaTime) {
-		
-		for(Entity entity : room.getAllEntities()) {
-			if (!Mappers.animationComponent.has(entity))	continue;
-			
-			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
-			AnimationComponent anim = Mappers.animationComponent.get(entity);
-			StateComponent state = Mappers.stateComponent.get(entity);
-			
-			Animation<Sprite> animation = anim.animations.get(state.get());
-			
-			if (animation != null) {
-				spriteCompo.setSprite(new Sprite(animation.getKeyFrame(state.time))); 
-			}
-			
-			state.time += deltaTime;
-		}
+		entitiesToRemove.clear();
 
+		for (Entity entity : room.getAllEntities()) {
+		
+			// Handle visual effects
+			VisualEffectComponent visualEffectComponent = Mappers.visualEffectComponent.get(entity);
+			if (visualEffectComponent != null) {
+				AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
+				StateComponent stateComponent = Mappers.stateComponent.get(entity);
+				if (animationComponent != null && stateComponent != null) {
+					Animation<Sprite> animation = animationComponent.animations.get(stateComponent.get());
+					boolean animationFinished = animation.isAnimationFinished(stateComponent.time);
+					
+					if (animationFinished) {
+						// Remove the visual effect
+						entitiesToRemove.add(entity);
+					}
+				}
+			}
+		
+		}
+		
+		// Remove entities from the game
+		for(Entity e : entitiesToRemove) {
+			room.removeEntity(e);
+		}
+		
 	}
+	
+
 }

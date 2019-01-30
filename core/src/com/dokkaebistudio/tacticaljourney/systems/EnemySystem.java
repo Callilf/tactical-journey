@@ -6,26 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.EntitySystem;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TransformComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
+public class EnemySystem extends EntitySystem implements RoomSystem {
 	
     /** The movement handler. */
     private final MovementHandler movementHandler;
@@ -45,8 +40,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 	private AttackTileSearchService attackTileSearchService;
 
 
-    public EnemyMoveSystem(Room r) {
-        super(Family.all(EnemyComponent.class, MoveComponent.class, GridPositionComponent.class).get());
+    public EnemySystem(Room r) {
         room = r;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
@@ -123,7 +117,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
             		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);
     		    	//Clicked on this tile !!
     				//Create an entity to show that this tile is selected as the destination
-    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord());
+    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
@@ -146,7 +140,6 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
         		
         	case ENEMY_MOVING:
         		
-    	    	TransformComponent transfoCompo = Mappers.transfoComponent.get(enemyEntity);
     	    	moveCompo.selectCurrentMoveDestinationTile();
     	    		
     	    	//Do the movement on screen
@@ -204,18 +197,11 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
 
 	private void fillEntitiesOfCurrentRoom() {
 		allEnemiesOfCurrentRoom.clear();
-    	ImmutableArray<Entity> allEnemies = getEntities();
-    	for (Entity enemyEntity : allEnemies) {
-			ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(enemyEntity);
-			if (parentRoomComponent != null && parentRoomComponent.getParentRoom() == this.room) {
-				allEnemiesOfCurrentRoom.add(enemyEntity);
-			}
-    	}
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.enemyComponent.has(e)) allEnemiesOfCurrentRoom.add(e);
+		}
 	}
-    
-    @Override
-    protected void processEntity(Entity moverEntity, float deltaTime) {}
-    
+
     
     /**
      * For each enemy, compute the list of tiles where they can move and attack.

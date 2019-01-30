@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -104,7 +105,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
             		
             	//Build the movable tiles list
         		tileSearchService.buildMoveTilesSet(enemyEntity, room);
-        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true);
+        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
         		room.setNextState(RoomState.ENEMY_MOVE_TILES_DISPLAYED);
@@ -221,7 +222,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         	//Build the movable tiles list
     		tileSearchService.buildMoveTilesSet(enemyEntity, room);
-    		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, false);
+    		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, false, true);
     		moveCompo.hideMovableTiles();
     		attackCompo.hideAttackableTiles();
     	}

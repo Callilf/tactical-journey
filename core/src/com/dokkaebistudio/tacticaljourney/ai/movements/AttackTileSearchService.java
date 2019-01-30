@@ -27,7 +27,7 @@ public class AttackTileSearchService extends TileSearchService {
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities) {
+	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
 		long totalTime = System.currentTimeMillis();
 
 		visitedTilesWithRemainingMove.clear();
@@ -58,11 +58,12 @@ public class AttackTileSearchService extends TileSearchService {
 		}
 		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));
 
-		
-		//Obstacles post process
-		time = System.currentTimeMillis();
-		obstaclesPostProcess(attackerPosCompo, attackableTiles);
-		System.out.println("obstacles : " + String.valueOf(System.currentTimeMillis() - time));
+		if (!ignoreObstacles) {
+			//Obstacles post process
+			time = System.currentTimeMillis();
+			obstaclesPostProcess(attackerPosCompo, attackableTiles);
+			System.out.println("obstacles : " + String.valueOf(System.currentTimeMillis() - time));
+		}
 		
 		
 		time = System.currentTimeMillis();

@@ -1,23 +1,20 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.List;
-import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -40,6 +37,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	private TileSearchService tileSearchService;
 	/** The attack tile search service. */
 	private AttackTileSearchService attackTileSearchService;
+
+	//TEST
+	float timer = 0;
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
@@ -88,7 +88,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			// Build the movable tiles list
 			tileSearchService.buildMoveTilesSet(moverEntity, room);
 			if (attackCompo != null)
-				attackTileSearchService.buildAttackTilesSet(moverEntity, room,true);
+				attackTileSearchService.buildAttackTilesSet(moverEntity, room,true, false);
 
 			if (!room.hasEnemies()) {
 				moveCompo.hideMovableTiles();
@@ -181,6 +181,40 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * Holding right click on an enemy displays it's possible movements and attacks.
 	 */
 	private void handleRightClickOnEnemies(Entity player) {
+		if (Gdx.input.isTouched()) {
+		  //Finger touching the screen
+		  // You can actually start calling onClick here, if those variables and logic you are using there are correct.
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+			int y = (int) touchPoint.y;
+			
+			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x, y));
+			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
+			if (attackableEntity != null) {
+				timer += Gdx.graphics.getDeltaTime();
+				
+				if (enemyHighlighted != null && attackableEntity != enemyHighlighted) {
+					hideEnemyTiles(player);
+				} else if (timer >= 0.5f) {
+					displayEnemyTiles(player, attackableEntity);
+				}
+			} else {
+				if (enemyHighlighted != null) {
+					hideEnemyTiles(player);
+				}
+			}
+		} else {
+			timer = 0;
+			if (enemyHighlighted != null) {
+				hideEnemyTiles(player);
+			}
+
+		}
+		
+		
+		
+		
+		
 		if (InputSingleton.getInstance().rightClickJustPressed) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 			int x = (int) touchPoint.x;
@@ -189,51 +223,58 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x, y));
 			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
 			if (attackableEntity != null) {
-				// There is an enemy at this location, display it's tiles
-				MoveComponent enemyMoveCompo = Mappers.moveComponent.get(attackableEntity);
-				if (enemyMoveCompo != null) {
-					enemyHighlighted = attackableEntity;
-					enemyMoveCompo.showMovableTiles();
-				}
-				AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
-				if (enemyAttackCompo != null) {
-					enemyHighlighted = attackableEntity;
-					enemyAttackCompo.showAttackableTiles();
-				}
-				// Hide the player's tiles
-				MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
-				if (playerMoveComponent != null) {
-					playerMoveComponent.hideMovableTiles();
-				}
-				AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
-				if (playerAttackComponent != null) {
-					playerAttackComponent.hideAttackableTiles();
-				}
+				displayEnemyTiles(player, attackableEntity);
 			}
 		} else if (InputSingleton.getInstance().rightClickJustReleased && enemyHighlighted != null) {
 			// Released right click
+			hideEnemyTiles(player);
+		}
+	}
 
-			// hide the enemy tiles
-			MoveComponent enemyMoveCompo = Mappers.moveComponent.get(enemyHighlighted);
-			if (enemyMoveCompo != null) {
-				enemyMoveCompo.hideMovableTiles();
-			}
-			AttackComponent enemyAttackCompo = Mappers.attackComponent.get(enemyHighlighted);
-			if (enemyAttackCompo != null) {
-				enemyAttackCompo.hideAttackableTiles();
-			}
-			enemyHighlighted = null;
+	private void hideEnemyTiles(Entity player) {
+		// hide the enemy tiles
+		MoveComponent enemyMoveCompo = Mappers.moveComponent.get(enemyHighlighted);
+		if (enemyMoveCompo != null) {
+			enemyMoveCompo.hideMovableTiles();
+		}
+		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(enemyHighlighted);
+		if (enemyAttackCompo != null) {
+			enemyAttackCompo.hideAttackableTiles();
+		}
+		enemyHighlighted = null;
 
-			// Display the player's ones
-			// Hide the player's tiles
-			MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
-			if (playerMoveComponent != null) {
-				playerMoveComponent.showMovableTiles();
-			}
-			AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
-			if (playerAttackComponent != null) {
-				playerAttackComponent.showAttackableTiles();
-			}
+		// Display the player's ones
+		// Hide the player's tiles
+		MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
+		if (playerMoveComponent != null) {
+			playerMoveComponent.showMovableTiles();
+		}
+		AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
+		if (playerAttackComponent != null) {
+			playerAttackComponent.showAttackableTiles();
+		}
+	}
+
+	private void displayEnemyTiles(Entity player, Entity attackableEntity) {
+		// There is an enemy at this location, display it's tiles
+		MoveComponent enemyMoveCompo = Mappers.moveComponent.get(attackableEntity);
+		if (enemyMoveCompo != null) {
+			enemyHighlighted = attackableEntity;
+			enemyMoveCompo.showMovableTiles();
+		}
+		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
+		if (enemyAttackCompo != null) {
+			enemyHighlighted = attackableEntity;
+			enemyAttackCompo.showAttackableTiles();
+		}
+		// Hide the player's tiles
+		MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
+		if (playerMoveComponent != null) {
+			playerMoveComponent.hideMovableTiles();
+		}
+		AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
+		if (playerAttackComponent != null) {
+			playerAttackComponent.hideAttackableTiles();
 		}
 	}
 	

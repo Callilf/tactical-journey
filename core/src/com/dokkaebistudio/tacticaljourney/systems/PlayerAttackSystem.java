@@ -93,7 +93,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		GridPositionComponent skillPos = Mappers.gridPositionComponent.get(skillEntity);
 		    		skillPos.coord(attackerCurrentPos.coord());
 		    		tileSearchService.buildMoveTilesSet(skillEntity, room);
-		    		attackTileSearchService.buildAttackTilesSet(skillEntity, room, false);
+		    		attackTileSearchService.buildAttackTilesSet(skillEntity, room, false, false);
 
 		    		room.setNextState(RoomState.PLAYER_TARGETING);
 	    		} else {

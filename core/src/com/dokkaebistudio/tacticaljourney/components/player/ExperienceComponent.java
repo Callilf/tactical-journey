@@ -11,9 +11,7 @@ import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
  *
  */
 public class ExperienceComponent implements Component,Poolable {
-	
-	public PooledEngine engine;
-	
+		
 	/** The current level of the entity. */
 	private int level;
 	/** The current amount of xp. */
@@ -27,12 +25,6 @@ public class ExperienceComponent implements Component,Poolable {
 	
 	/** The number of level up reward choices. */
 	private int choicesNumber = 3;
-	
-
-	public void init(PooledEngine engine) {
-		this.engine = engine;
-		reset();
-	}
 	
 
 	@Override

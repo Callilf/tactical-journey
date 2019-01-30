@@ -2,12 +2,13 @@ package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -16,10 +17,10 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  * @author Callil
  *
  */
-public class HealthComponent implements Component, Poolable, MovableInterface {
+public class HealthComponent implements Component, Poolable, MovableInterface, RoomSystem {
 		
 	/** The engine that managed entities.*/
-	public PooledEngine engine;
+	public Room room;
 	
 	/** The max number of h. */
 	private int maxHp;
@@ -72,12 +73,17 @@ public class HealthComponent implements Component, Poolable, MovableInterface {
 		}
 	}
 	
+	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
 	
 	@Override
 	public void reset() {
 		if (hpDisplayer != null) {
-			engine.removeEntity(hpDisplayer);		
+			room.removeEntity(hpDisplayer);		
 		}
+		hpDisplayer = null;
 	}
 	
 	

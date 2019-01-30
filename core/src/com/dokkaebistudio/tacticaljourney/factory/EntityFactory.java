@@ -63,13 +63,9 @@ public final class EntityFactory {
 	public EffectFactory effectFactory;
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion wallTexture;
 	private TextureAtlas.AtlasRegion pitTexture;
-	private TextureAtlas.AtlasRegion mudTexture;
 	private TextureAtlas.AtlasRegion groundTexture;
-	
 	private TextureAtlas.AtlasRegion healthUpTexture;
-	private TextureAtlas.AtlasRegion bombTexture;
 
 
 	/**
@@ -82,12 +78,9 @@ public final class EntityFactory {
 		this.enemyFactory = new EnemyFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		
-		wallTexture = Assets.getTexture(Assets.wall);
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
-		mudTexture = Assets.getTexture(Assets.tile_mud);
 		healthUpTexture = Assets.getTexture(Assets.health_up_item);
-		bombTexture = Assets.getTexture(Assets.bomb_item);
 	}
 
 	
@@ -258,13 +251,13 @@ public final class EntityFactory {
     	return exitEntity;
 	}
 	
-	public Entity createMovableTile(Vector2 pos) {
+	public Entity createMovableTile(Vector2 pos, Room room) {
 		Entity movableTileEntity = engine.createEntity();
 		movableTileEntity.flags = EntityFlagEnum.MOVABLE_TILE.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(pos);
-    	movableTilePos.zIndex = 2;
+    	movableTilePos.coord(movableTileEntity, pos, room);
+    	movableTilePos.zIndex = 5;
     	movableTileEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -280,13 +273,13 @@ public final class EntityFactory {
     	return movableTileEntity;
 	}
 	
-	public Entity createAttackableTile(Vector2 pos) {
+	public Entity createAttackableTile(Vector2 pos, Room room) {
 		Entity attackableTileEntity = engine.createEntity();
 		attackableTileEntity.flags = EntityFlagEnum.ATTACK_TILE.getFlag();
 
     	GridPositionComponent attackableTilePos = engine.createComponent(GridPositionComponent.class);
-    	attackableTilePos.coord(pos);
-    	attackableTilePos.zIndex = 2;
+    	attackableTilePos.coord(attackableTileEntity, pos, room);
+    	attackableTilePos.zIndex = 5;
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -303,13 +296,13 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the destination tile entity
 	 */
-	public Entity createDestinationTile(Vector2 pos) {
+	public Entity createDestinationTile(Vector2 pos, Room room) {
 		Entity redCross = engine.createEntity();
 		redCross.flags = EntityFlagEnum.DESTINATION_TILE.getFlag();
 
 		GridPositionComponent selectedTilePos = engine.createComponent(GridPositionComponent.class);
-    	selectedTilePos.coord(pos);
-    	selectedTilePos.zIndex = 100;
+		selectedTilePos.coord(redCross, pos, room);
+    	selectedTilePos.zIndex = 6;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
@@ -325,13 +318,13 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the waypoint entity
 	 */
-	public Entity createWaypoint(Vector2 pos) {
+	public Entity createWaypoint(Vector2 pos, Room room) {
 		Entity waypoint = engine.createEntity();
 		waypoint.flags = EntityFlagEnum.WAYPOINT.getFlag();
 
 		GridPositionComponent waypointPos = engine.createComponent(GridPositionComponent.class);
-    	waypointPos.coord(pos);
-    	waypointPos.zIndex = 100;
+		waypointPos.coord(waypoint, pos, room);
+    	waypointPos.zIndex = 6;
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -426,7 +419,7 @@ public final class EntityFactory {
 	 * @param room the parent room
 	 * @return the sprite entity
 	 */
-	public Entity createSpriteOnTile(Vector2 tilePos, AtlasRegion texture, EntityFlagEnum flag, Room room) {
+	public Entity createSpriteOnTile(Vector2 tilePos, int zIndex, AtlasRegion texture, EntityFlagEnum flag, Room room) {
 		Entity sprite = engine.createEntity();
 		sprite.flags = flag.getFlag();
 		
@@ -436,7 +429,7 @@ public final class EntityFactory {
 		
 		GridPositionComponent gridPos = engine.createComponent(GridPositionComponent.class);
 		gridPos.coord(sprite, tilePos, room);
-		gridPos.zIndex = 2;
+		gridPos.zIndex = zIndex;
 		sprite.add(gridPos);
 
 		ParentRoomComponent parentRoomComponent = engine.createComponent(ParentRoomComponent.class);
@@ -567,7 +560,7 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal) {
+	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
@@ -592,7 +585,7 @@ public final class EntityFactory {
 		textCompo.setText(damage);
 		display.add(textCompo);
 		
-		engine.addEntity(display);
+		room.addEntity(display);
 		return display;
 	}
 	
@@ -602,7 +595,7 @@ public final class EntityFactory {
 	 * @param initialPos the initial position
 	 * @return the exp displayer entity
 	 */
-	public Entity createExpDisplayer(int exp, Vector2 gridPos) {
+	public Entity createExpDisplayer(int exp, Vector2 gridPos, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
 
@@ -623,7 +616,7 @@ public final class EntityFactory {
 		textCompo.setText("Exp+" + exp);
 		display.add(textCompo);
 		
-		engine.addEntity(display);
+		room.addEntity(display);
 		return display;
 	}
 	
@@ -643,7 +636,7 @@ public final class EntityFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(healthUp, tilePos, room);
-		gridPosition.zIndex = 6;
+		gridPosition.zIndex = 8;
 		healthUp.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
@@ -677,11 +670,11 @@ public final class EntityFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(bomb, tilePos, room);
-		gridPosition.zIndex = 6;
+		gridPosition.zIndex = 9;
 		bomb.add(gridPosition);
 		
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
-		explosionCompo.engine = engine;
+		explosionCompo.room = room;
 		explosionCompo.setRadius(2);
 		explosionCompo.setTurnsToExplode(2);
 		explosionCompo.setDamage(20);
@@ -710,7 +703,7 @@ public final class EntityFactory {
 	}
 	
 	
-	public Entity createSkill(Entity parent, SkillEnum type, int skillNumber) {
+	public Entity createSkill(Room room, Entity parent, SkillEnum type, int skillNumber) {
 		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
 		PlayerComponent playerComponent = Mappers.playerComponent.get(parent);
 		
@@ -727,14 +720,14 @@ public final class EntityFactory {
 		skillEntity.add(skillPosCompo);
 		
 		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);
-		skillMoveComponent.engine = engine;
+		skillMoveComponent.room = room;
 		skillMoveComponent.moveSpeed = 0;
 		skillMoveComponent.moveRemaining = 0;
 		skillEntity.add(skillMoveComponent);
 		
 		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = engine;
+		attackComponent.room = room;
 		attackComponent.setAttackType(type.getAttackType());
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());

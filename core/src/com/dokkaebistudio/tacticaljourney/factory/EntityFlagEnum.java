@@ -11,6 +11,8 @@ public enum EntityFlagEnum {
 	MUD(102),
 	DOOR(103),
 	EXIT(104),
+	WALL_DESTROYED(105),
+
 	
 	END_TURN_BUTTON(500),
 	MOVABLE_TILE(501),

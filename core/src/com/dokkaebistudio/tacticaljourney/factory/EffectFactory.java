@@ -56,7 +56,7 @@ public final class EffectFactory {
 		explosion.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(tilePos);
+		gridPosition.coord(explosion, tilePos, room);
 		gridPosition.zIndex = 10;
 		explosion.add(gridPosition);
 		

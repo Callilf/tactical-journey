@@ -5,9 +5,10 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -15,9 +16,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ExplosiveComponent implements Component, Poolable {
-	public PooledEngine engine;
-	
+public class ExplosiveComponent implements Component, Poolable, RoomSystem {
+	public Room room;
 	
 	/** The number of turns for the entity to explode. */
 	private int turnsToExplode;
@@ -64,7 +64,7 @@ public class ExplosiveComponent implements Component, Poolable {
 	 */
 	public void clearExplosionTiles() {
 		for (Entity e : attackableTiles) {
-			engine.removeEntity(e);
+			room.removeEntity(e);
 		}
 		attackableTiles.clear();
 		
@@ -73,12 +73,16 @@ public class ExplosiveComponent implements Component, Poolable {
 		}
 	}
 	
+	@Override
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
 	
 	@Override
 	public void reset() {
 		clearExplosionTiles();
 		explosionTurn = null;
-		engine = null;
+		room = null;
 	}
 	
 	

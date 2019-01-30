@@ -114,7 +114,7 @@ public class AttackManager {
 					
 					Entity mainParent = ComponentsUtil.getMainParent(attacker);
 					GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(mainParent);
-					room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord());
+					room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord(), room);
 				}
 				
 				room.removeEnemy(target);
@@ -124,7 +124,7 @@ public class AttackManager {
 			
 			//Add a damage displayer
 			GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
-			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord(), false);
+			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord(), false, room);
 		}
 	}
 	

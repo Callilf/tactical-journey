@@ -87,7 +87,7 @@ public class AttackTileSearchService extends TileSearchService {
 
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord());
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
 		System.out.println("create entities : " + String.valueOf(System.currentTimeMillis() - time));

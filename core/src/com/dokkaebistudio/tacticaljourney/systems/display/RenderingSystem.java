@@ -27,7 +27,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -59,7 +58,10 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 			public int compare(Entity entityA, Entity entityB) {
 				GridPositionComponent gridPositionComponentA = Mappers.gridPositionComponent.get(entityA);
 				GridPositionComponent gridPositionComponentB = Mappers.gridPositionComponent.get(entityB);
-		
+				if (gridPositionComponentA == null && gridPositionComponentB == null) return 0;
+				else if (gridPositionComponentA == null) return -1;
+				else if (gridPositionComponentB == null) return 1;
+				
 				return (int) Math.signum(gridPositionComponentA.zIndex - gridPositionComponentB.zIndex);
 			}
 		};
@@ -76,7 +78,11 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
+//		super.update(deltaTime);
+		
+		for(Entity e : room.getAllEntities()) {
+			renderQueue.addAll(e);
+		}
 		
 		renderQueue.sort(comparator);
 		
@@ -89,7 +95,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 			TextComponent textCompo = Mappers.textComponent.get(entity);
 			
 			GridPositionComponent gridPosComponent = Mappers.gridPositionComponent.get(entity);
-
+			if (gridPosComponent == null) continue;
 			
 			if (gridPosComponent.hasAbsolutePos()) {		
 				// use transform component for drawing position
@@ -150,14 +156,7 @@ public class RenderingSystem extends IteratingSystem implements RoomSystem {
 	}
 	
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
-		ParentRoomComponent parentRoomComponent = Mappers.parentRoomComponent.get(entity);
-		if (parentRoomComponent != null && parentRoomComponent.getParentRoom() != this.room) {
-			return;
-		}
-
-		renderQueue.add(entity);
-	}
+	public void processEntity(Entity entity, float deltaTime) {}
 	
 	
 	public OrthographicCamera getCamera() {

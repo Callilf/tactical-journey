@@ -6,9 +6,6 @@ import com.badlogic.ashley.core.PooledEngine;
 
 public class PlayerComponent implements Component {
 	
-	/** The engine that managed entities.*/
-	public PooledEngine engine;
-	
 	/** The skill currently active. Null if no skill is active. */
 	private Entity activeSkill;
 	

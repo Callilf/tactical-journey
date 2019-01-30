@@ -122,7 +122,7 @@ public class EnemyMoveSystem extends IteratingSystem implements RoomSystem {
             		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);
     		    	//Clicked on this tile !!
     				//Create an entity to show that this tile is selected as the destination
-    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord());
+    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point

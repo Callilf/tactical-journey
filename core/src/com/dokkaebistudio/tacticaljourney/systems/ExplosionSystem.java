@@ -187,7 +187,7 @@ public class ExplosionSystem extends IteratingSystem implements RoomSystem {
 				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
 				if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
 					GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
-					room.entityFactory.createSpriteOnTile(tilePos.coord(), destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL, room);
+					room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL_DESTROYED, room);
 				}
 			}
 				

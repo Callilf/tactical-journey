@@ -68,21 +68,20 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 9;
+		gridPosition.zIndex = 10;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
 		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
+		moveComponent.room = room;
 		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
+		attackComponent.room = room;
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
@@ -92,7 +91,7 @@ public final class EnemyFactory {
 		enemyEntity.add(solidComponent);
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
+		healthComponent.room = room;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		Entity hpEntity = this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room);
@@ -128,21 +127,20 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 9;
+		gridPosition.zIndex = 10;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.engine = this.engine;
 		enemyComponent.setMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
+		moveComponent.room = room;
 		moveComponent.moveSpeed = speed;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
+		attackComponent.room = room;
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(10);
@@ -152,7 +150,7 @@ public final class EnemyFactory {
 		enemyEntity.add(solidComponent);
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
+		healthComponent.room = room;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), 100, room));

@@ -72,7 +72,7 @@ public final class PlayerFactory {
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(playerEntity, pos, room);
-		gridPosition.zIndex = 10;
+		gridPosition.zIndex = 15;
 		playerEntity.add(gridPosition);
 		
 		// Wheel
@@ -90,18 +90,17 @@ public final class PlayerFactory {
 		
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
-		playerComponent.engine = this.engine;
 		playerEntity.add(playerComponent);
 		
 		// Move compo
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.engine = this.engine;
+		moveComponent.room = room;
 		moveComponent.moveSpeed = moveSpeed;
 		playerEntity.add(moveComponent);
 		
 		// Attack compo
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.engine = this.engine;
+		attackComponent.room = room;
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
@@ -121,14 +120,13 @@ public final class PlayerFactory {
 		
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.engine = engine;
+		healthComponent.room = room;
 		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
 		playerEntity.add(healthComponent);
 		
 		// Experience compo
 		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
-		expCompo.init(engine);
 		playerEntity.add(expCompo);
 		
 		//Parent room
@@ -138,9 +136,9 @@ public final class PlayerFactory {
 		
 		
 		//Skills
-		entityFactory.createSkill(playerEntity, SkillEnum.SLASH, 1 );
-		entityFactory.createSkill(playerEntity, SkillEnum.BOW, 2);
-		entityFactory.createSkill(playerEntity, SkillEnum.BOMB, 3);
+		entityFactory.createSkill(room,playerEntity, SkillEnum.SLASH, 1 );
+		entityFactory.createSkill(room,playerEntity, SkillEnum.BOW, 2);
+		entityFactory.createSkill(room,playerEntity, SkillEnum.BOMB, 3);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;

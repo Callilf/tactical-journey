@@ -128,7 +128,9 @@ public class HudSystem extends IteratingSystem implements RoomSystem {
 		}
 		
 		GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
-		timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		//timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
+		timeLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+
 		
 		turnLabel.setText("Turn " + room.turnManager.getTurn());
 	}

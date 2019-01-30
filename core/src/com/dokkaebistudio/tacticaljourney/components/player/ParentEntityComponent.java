@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
@@ -11,8 +10,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  *
  */
 public class ParentEntityComponent implements Component, Poolable {
-	public PooledEngine engine;
-	
 	
 	/** The parent entity. */
 	private Entity parent;

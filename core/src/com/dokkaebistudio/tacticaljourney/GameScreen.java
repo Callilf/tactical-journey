@@ -16,6 +16,7 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ParentRoomComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
@@ -185,7 +187,28 @@ public class GameScreen extends ScreenAdapter {
 		//Set the player in the new room
 		ParentRoomComponent prc = Mappers.parentRoomComponent.get(player);
 		prc.setParentRoom(newRoom);
+		
+		updateRoomForComponents(player, newRoom);
+		
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		updateRoomForComponents(playerComponent.getSkillMelee(), newRoom);
+		updateRoomForComponents(playerComponent.getSkillRange(), newRoom);
+		updateRoomForComponents(playerComponent.getSkillBomb(), newRoom);
 	}
+
+	private void updateRoomForComponents(Entity e, Room newRoom) {
+		for (Component compo : e.getComponents()) {
+			if (compo instanceof RoomSystem) {
+				((RoomSystem)compo).enterRoom(newRoom);
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
 
 	public void update (float deltaTime) {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;

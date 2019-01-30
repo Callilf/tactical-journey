@@ -62,7 +62,7 @@ public class TileSearchService {
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : moveCompo.allWalkableTiles) {
-			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord());
+			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
 		if (moverEntity.flags ==  EntityFlagEnum.PLAYER.getFlag()) {
@@ -99,7 +99,7 @@ public class TileSearchService {
 			Entity next = iterator.next();
 			if (pathNb == 0 || !iterator.hasNext()) continue;
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord());
+			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord(), room);
 			waypoints.add(waypoint);
 			
 		}

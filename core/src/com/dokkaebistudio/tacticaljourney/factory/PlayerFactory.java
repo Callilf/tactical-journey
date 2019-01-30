@@ -126,6 +126,7 @@ public final class PlayerFactory {
 		
 		// Experience compo
 		ExperienceComponent expCompo = engine.createComponent(ExperienceComponent.class);
+		expCompo.reset();
 		playerEntity.add(expCompo);
 		
 		

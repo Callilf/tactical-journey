@@ -114,4 +114,12 @@ public enum RoomState {
 		return this == PLAYER_MOVE_TILES_DISPLAYED || this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED || this == RoomState.PLAYER_TARGETING;
 	}
 
+	
+	/**
+	 * Whether the game needs to update or not.
+	 * @return true is th game needs to update.
+	 */
+	public boolean updateNeeded() {
+		return !isWheelDisplayed() && !isPaused();
+	}
 }

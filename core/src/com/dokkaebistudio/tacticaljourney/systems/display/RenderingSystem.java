@@ -71,7 +71,7 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 	@Override
 	public void update(float deltaTime) {
 		
-		if (!room.getState().isWheelDisplayed()) {
+		if (room.getState().updateNeeded()) {
 			renderQueue.clear();
 			
 			for(Entity e : room.getAllEntities()) {

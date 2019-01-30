@@ -30,7 +30,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class RenderingSystem extends EntitySystem implements RoomSystem {
 
@@ -72,11 +71,16 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 	@Override
 	public void update(float deltaTime) {
 		
-		for(Entity e : room.getAllEntities()) {
-			renderQueue.addAll(e);
+		if (!room.getState().isWheelDisplayed()) {
+			renderQueue.clear();
+			
+			for(Entity e : room.getAllEntities()) {
+				renderQueue.addAll(e);
+			}
+			
+			renderQueue.sort(comparator);
 		}
 		
-		renderQueue.sort(comparator);
 		
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
@@ -123,9 +127,7 @@ public class RenderingSystem extends EntitySystem implements RoomSystem {
 		
 		}
 		
-		batch.end();
-		renderQueue.clear();
-		
+		batch.end();		
 		
 		
 	}

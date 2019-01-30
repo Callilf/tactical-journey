@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
@@ -48,7 +49,6 @@ import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
-import com.dokkaebistudio.tacticaljourney.systems.display.HudSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.RenderingSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -92,6 +92,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	AttackWheel attackWheel = new AttackWheel();
 			
+	private HUDRenderer hudRenderer;
 	private MapRenderer mapRenderer;
 	private WheelRenderer wheelRenderer;
 	
@@ -131,6 +132,7 @@ public class GameScreen extends ScreenAdapter {
 		floor = new Floor(this);
 		Room room = floor.getActiveRoom();
 		
+		hudRenderer = new HUDRenderer(hudStage);
 		mapRenderer = new MapRenderer(this, game.batcher, game.shapeRenderer, floor);
 		mapRenderer.setMapDisplayed(true);
 		
@@ -145,7 +147,6 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new RenderingSystem(game.batcher, room, guiCam));
 		engine.addSystem(new VisualEffectSystem(room));
-		
 		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
@@ -153,7 +154,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new EnemySystem(room));
 		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
 		engine.addSystem(new DamageDisplaySystem(room));
-		engine.addSystem(new HudSystem(room, hudStage));
+//		engine.addSystem(new HudSystem(room, hudStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 		engine.addSystem(room);
@@ -174,6 +175,8 @@ public class GameScreen extends ScreenAdapter {
 	 * @param room the room we are entering in
 	 */
 	public void enterRoom(Room newRoom, Room oldRoom) {
+		hudRenderer.room = newRoom;
+		
 		for (EntitySystem s : engine.getSystems()) {
 			if (s instanceof RoomSystem) {
 				((RoomSystem)s).enterRoom(newRoom);
@@ -247,10 +250,10 @@ public class GameScreen extends ScreenAdapter {
 		}
 	}
 
-	public void drawUI () {
+	public void drawUI (float delta) {
 		switch (state) {
 		case GAME_RUNNING:
-			presentRunning();
+			presentRunning(delta);
 			break;
 		case GAME_LEVEL_END:
 			presentLevelEnd();
@@ -261,7 +264,9 @@ public class GameScreen extends ScreenAdapter {
 		}
 	}
 
-	private void presentRunning () {
+	private void presentRunning (float delta) {
+		hudRenderer.renderHud(this.player, delta);
+		
 		// draw the attack wheel
 		wheelRenderer.renderWheel();
 		
@@ -288,7 +293,7 @@ public class GameScreen extends ScreenAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		update(delta);
-		drawUI();
+		drawUI(delta);
 	}
 
 	@Override

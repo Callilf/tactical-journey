@@ -73,17 +73,18 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	case PLAYER_TARGETING_START:
     		moveCompo.hideMovableTiles();
 			moveCompo.clearSelectedTile();
+			attackCompo.hideAttackableTiles();
     		
     		if (skillEntity != null) {
     			//unselect any other skill
     			if (playerCompo.getSkillMelee() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkillMelee(), moveCompo);
+    				stopSkillUse(playerCompo, playerCompo.getSkillMelee(), moveCompo, attackCompo);
     			}
     			if (playerCompo.getSkillRange() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkillRange(), moveCompo);
+    				stopSkillUse(playerCompo, playerCompo.getSkillRange(), moveCompo, attackCompo);
     			}
     			if (playerCompo.getSkillBomb() != skillEntity) {
-    				stopSkillUse(playerCompo, playerCompo.getSkillBomb(), moveCompo);
+    				stopSkillUse(playerCompo, playerCompo.getSkillBomb(), moveCompo, attackCompo);
     			}
     			
     			AttackComponent skillAttackComponent = Mappers.attackComponent.get(skillEntity);
@@ -98,7 +99,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		} else {
 	    			//Cannot attack because the skill has run out of ammos
 	    			// unselect the skill
-					stopSkillUse(playerCompo, skillEntity, moveCompo);
+					stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
 					
 					room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
 	    		}
@@ -124,7 +125,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     		if (skillEntity != null) {
     			// unselect the skill
-				stopSkillUse(playerCompo, skillEntity, moveCompo);
+				stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
 				
 				room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
     		}
@@ -147,7 +148,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			
 			if (skillEntity != null) {
     			// unselect the skill
-				stopSkillUse(playerCompo, skillEntity, moveCompo);
+				stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
 			}
     		
     		break;
@@ -171,7 +172,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		clearAllEntityTiles(attackerEntity);
 	    		
     			// unselect the skill
-				stopSkillUse(playerCompo, skillEntity, moveCompo);
+				stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
 				
 				room.turnManager.endPlayerTurn();
 			}
@@ -184,7 +185,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	
     }
 
-	private void stopSkillUse(PlayerComponent playerCompo, Entity skillEntity, MoveComponent playerMoveCompo) {
+	private void stopSkillUse(PlayerComponent playerCompo, Entity skillEntity, MoveComponent playerMoveCompo, AttackComponent playerAttackCompo) {
 		//Clear the skill
 		MoveComponent skillMoveCompo = Mappers.moveComponent.get(skillEntity);
 		skillMoveCompo.clearMovableTiles();
@@ -195,6 +196,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		if (playerCompo.getActiveSkill() == skillEntity) {
 			playerCompo.setActiveSkill(null);			
 			playerMoveCompo.showMovableTiles();
+			playerAttackCompo.showAttackableTiles();
 		}
 		
 	}

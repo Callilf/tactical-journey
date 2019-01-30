@@ -92,18 +92,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public void render(float deltaTime) {
 		if (debug) {
-			if (fps == null) {
-				fps = new Table();
-				fps.setPosition(0, 1050);
-				fps.align(Align.left);
-				// Turns
-				fpsLabel = new Label("", hudStyle);
-				fps.add(fpsLabel).left().uniformX();
-
-				fps.pack();
-				stage.addActor(fps);
-			}
-			fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+			displayFPS();
 		}
 		
 		displayTimeAndTurns();
@@ -114,6 +103,24 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
+	}
+
+	
+	//***************
+	// FPS (debug only)
+	private void displayFPS() {
+		if (fps == null) {
+			fps = new Table();
+			fps.setPosition(0, 1050);
+			fps.align(Align.left);
+			// Turns
+			fpsLabel = new Label("", hudStyle);
+			fps.add(fpsLabel).left().uniformX();
+
+			fps.pack();
+			stage.addActor(fps);
+		}
+		fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 	}
 	
 	

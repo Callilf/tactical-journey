@@ -44,7 +44,6 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	
 	public RoomRenderer(Stage s, SpriteBatch batch, Room room, OrthographicCamera camera) {
 		this.stage = s;
-		this.renderQueue = new Array<>();
 		this.comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
@@ -71,12 +70,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	public void render(float deltaTime) {
 		
 		if (room.getState().updateNeeded()) {
-			renderQueue.clear();
-			
-			for(Entity e : room.getAllEntities()) {
-				renderQueue.addAll(e);
-			}
-			
+			renderQueue = room.getAllEntities();
 			renderQueue.sort(comparator);
 		}
 		

@@ -44,6 +44,7 @@ public enum RoomState {
 	
 	ENEMY_END_TURN,
 	
+	PROFILE_POPIN,
 	LEVEL_UP_POPIN;
 	
 	
@@ -110,7 +111,8 @@ public enum RoomState {
 	 * @return true if in a state where the game is paused.
 	 */
 	public boolean isPaused() {
-		return this == RoomState.LEVEL_UP_POPIN;
+		return this == RoomState.PROFILE_POPIN
+				|| this == RoomState.LEVEL_UP_POPIN;
 	}
 	
 	public boolean isSkillChangeAllowed() {

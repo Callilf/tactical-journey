@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 
 public class PlayerComponent implements Component {
 	
@@ -17,6 +16,12 @@ public class PlayerComponent implements Component {
 	
 	/** The bomb skill. */
 	private Entity skillBomb;
+	
+	/** Whether the profile popin is opened or not. */
+	private boolean profilePopinDisplayed;
+	
+	
+	
 	
 	
 	//**************************
@@ -54,6 +59,14 @@ public class PlayerComponent implements Component {
 
 	public void setSkillBomb(Entity skillBomb) {
 		this.skillBomb = skillBomb;
+	}
+
+	public boolean isProfilePopinDisplayed() {
+		return profilePopinDisplayed;
+	}
+
+	public void setProfilePopinDisplayed(boolean profilePopinDisplayed) {
+		this.profilePopinDisplayed = profilePopinDisplayed;
 	}
 	
 }

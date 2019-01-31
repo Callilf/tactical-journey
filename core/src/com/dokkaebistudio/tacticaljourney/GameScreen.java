@@ -39,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
@@ -146,6 +147,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
+		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		
 		engine.addSystem(room);
 		engine.addSystem(new StateSystem());
@@ -220,9 +222,7 @@ public class GameScreen extends ScreenAdapter {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
 
 		engine.update(deltaTime);
-		
-		InputSingleton.getInstance().resetEvents();
-		
+				
 		switch (state) {
 		case GAME_RUNNING:
 			updateRunning(deltaTime);
@@ -300,6 +300,10 @@ public class GameScreen extends ScreenAdapter {
 		
 		// 2 - Render on screen
 		draw(delta);
+		
+		
+		InputSingleton.getInstance().resetEvents();
+
 	}
 
 	@Override

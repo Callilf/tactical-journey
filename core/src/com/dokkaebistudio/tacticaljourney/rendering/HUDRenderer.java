@@ -57,13 +57,16 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Label turnLabel;
 	
 
-	// End turn, Health and Experience
+	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
 	private Button endTurnBtn;
 	private Table healthAndXptable; 
 	private Label levelLabel;
 	private Label expLabel;
 	private Label healthLabel;
+	
+	private Table profileTable; 
+	private Button profileBtn;
 
 	// Skills
 	private Table skillsTable;
@@ -170,6 +173,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		if (bottomLeftTable == null) {
 			bottomLeftTable = new Table();
+//			bottomLeftTable.setDebug(true);
 			bottomLeftTable.setPosition(PositionConstants.POS_END_TURN_BTN.x, PositionConstants.POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
@@ -246,6 +250,36 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
 		expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
 		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+		
+		
+		final PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+
+		if (profileTable == null) {
+			profileTable = new Table();
+			profileTable.setPosition(500, 30);
+		
+			// Profile btn
+			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_profile)));
+			Drawable profileButtonDown = new SpriteDrawable(
+					new Sprite(Assets.getTexture(Assets.btn_profile_pushed)));
+			ButtonStyle profileButtonStyle = new ButtonStyle(profileButtonUp, profileButtonDown, null);
+			profileBtn = new Button(profileButtonStyle);
+			
+			profileBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
+				}
+			});
+			
+			profileTable.add(profileBtn);
+			
+			profileTable.pack();
+			stage.addActor(profileTable);
+		}
+		
+		
+		
 	}
 
 	

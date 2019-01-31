@@ -77,6 +77,12 @@ public class Assets {
 	public static final String lvl_up_continue_btn = "hud_lvl_up_continue_btn";
 	public static final String lvl_up_continue_btn_pushed = "hud_lvl_up_continue_btn_pushed";
 	
+	public static final String profile_background = "hud_profile_background";
+	public static final String btn_profile = "btn-profile";
+	public static final String btn_profile_pushed = "btn-profile-pushed";
+
+	
+	
 	public static final String btn_skill_attack = "btn-skill-slash";
 	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
 	public static final String btn_skill_attack_checked = "btn-skill-slash-checked";

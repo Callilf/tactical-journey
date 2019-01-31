@@ -103,6 +103,10 @@ public class AttackManager {
 		if (healthComponent != null) {
 			healthComponent.setHp(healthComponent.getHp() - damage);
 			
+			//Add a damage displayer
+			GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
+			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord(), false, room);
+			
 			if (healthComponent.getHp() <= 0) {
 				//target is dead
 				
@@ -116,11 +120,7 @@ public class AttackManager {
 				room.removeEnemy(target);
 				//TODO: play death animation
 			}
-			
-			
-			//Add a damage displayer
-			GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
-			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord(), false, room);
+
 		}
 	}
 	
@@ -134,6 +134,17 @@ public class AttackManager {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
 		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//********************************
+	// Private methods
 	
 	private ExperienceComponent getExperienceComponent(Entity attacker) {
 		ExperienceComponent result = null;

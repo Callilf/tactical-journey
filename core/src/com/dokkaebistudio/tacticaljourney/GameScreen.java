@@ -79,6 +79,8 @@ public class GameScreen extends ScreenAdapter {
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
 	public Stage stage;
+	public Stage fxStage;
+
 	
 	public FitViewport hudViewport;
 	public Stage hudStage;
@@ -117,6 +119,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		/// create stage and set it as input processor
 		stage = new Stage(viewport);
+		fxStage = new Stage(viewport);
 		hudStage = new Stage(hudViewport);
 		
 		//Instanciate the input processor
@@ -138,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
 
 		
-		renderers.add(new RoomRenderer(game.batcher, room, guiCam));
+		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
@@ -153,7 +156,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new ExplosionSystem(room));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemySystem(room));
-		engine.addSystem(new PlayerAttackSystem(room, attackWheel));
+		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new DamageDisplaySystem(room));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		

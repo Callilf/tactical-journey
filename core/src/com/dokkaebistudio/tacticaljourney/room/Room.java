@@ -32,6 +32,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -68,7 +69,7 @@ public class Room extends EntitySystem {
 	
 
 	
-	private Set<Entity> allEntities;
+	private Array<Entity> allEntities;
 	/**
 	 * For each tile, gives the list of entities.
 	 */
@@ -93,16 +94,18 @@ public class Room extends EntitySystem {
 		this.type = type;
 		this.visited = false;
 		
-		this.allEntities = new HashSet<>();
+		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
 	}
 	
-	public Set<Entity> getAllEntities() {
+	public Array<Entity> getAllEntities() {
 		return allEntities;
 	}
 	
 	public void addToAllEntities(Entity e) {
-		this.allEntities.add(e);
+		if (!this.allEntities.contains(e, true)) {
+			this.allEntities.add(e);
+		}
 	}
 	
 	
@@ -188,7 +191,7 @@ public class Room extends EntitySystem {
 			this.removeEntityAtPosition(e, posCompo.coord());
 		}
 		
-		this.allEntities.remove(e);		
+		this.allEntities.removeValue(e, true);		
 		engine.removeEntity(e);
 	}
 	

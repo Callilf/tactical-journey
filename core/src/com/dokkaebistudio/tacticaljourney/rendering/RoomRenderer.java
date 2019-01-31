@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -32,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class RoomRenderer implements Renderer, RoomSystem {
 
+	private Stage stage;
 	private SpriteBatch batch;
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
@@ -40,8 +42,8 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	/** The current room. */
 	private Room room;
 	
-	public RoomRenderer(SpriteBatch batch, Room room, OrthographicCamera camera) {
-		this.renderQueue = new Array<>();
+	public RoomRenderer(Stage s, SpriteBatch batch, Room room, OrthographicCamera camera) {
+		this.stage = s;
 		this.comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
@@ -68,12 +70,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	public void render(float deltaTime) {
 		
 		if (room.getState().updateNeeded()) {
-			renderQueue.clear();
-			
-			for(Entity e : room.getAllEntities()) {
-				renderQueue.addAll(e);
-			}
-			
+			renderQueue = room.getAllEntities();
 			renderQueue.sort(comparator);
 		}
 		
@@ -123,7 +120,11 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		
 		}
 		
-		batch.end();		
+		batch.end();
+		
+		
+		stage.act(deltaTime);
+		stage.draw();
 		
 		
 	}

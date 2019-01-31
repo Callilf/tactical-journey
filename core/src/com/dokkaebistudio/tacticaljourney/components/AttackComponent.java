@@ -5,13 +5,21 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class AttackComponent implements Component, Poolable, RoomSystem {
 		
@@ -38,6 +46,10 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private Entity target;
 	/** The targeted tile entity. */
 	private Entity targetedTile;
+	
+	
+	
+	private Image projectileImage;
 
 	
 	//*************
@@ -300,6 +312,46 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public void setAttackType(AttackTypeEnum attackType) {
 		this.attackType = attackType;
+	}
+
+
+	public Image getProjectileImage() {
+		return projectileImage;
+	}
+
+
+	public void setProjectileImage(Image image) {
+		this.projectileImage = image;
+	}
+	
+	/**
+	 * Set the projectile image to use.
+	 * @param texture the texture to use
+	 * @param startGridPos the start pos (the attacker pos)
+	 * @param targetGridPos the end pos (the target pos)
+	 * @param rotate whether the projectile has to be oriented towards the target
+	 * @param finishAttackAction the action to call after the movement is over
+	 */
+	public void setProjectileImage(String texture, Vector2 startGridPos, Vector2 targetGridPos, boolean rotate, Action finishAttackAction) {
+		Image arrow = new Image(Assets.getTexture(texture));
+		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
+		arrow.setPosition(playerPixelPos.x, playerPixelPos.y);
+		
+		Vector2 targetPosInPixel = TileUtil.convertGridPosIntoPixelPos(targetGridPos);
+
+		if (rotate) {
+			double degrees = Math.atan2(
+					targetPosInPixel.y - playerPixelPos.y,
+				    targetPosInPixel.x - playerPixelPos.x
+				) * 180.0d / Math.PI;
+			arrow.setOrigin(Align.center);
+			arrow.setRotation((float) degrees);
+		}
+		
+		arrow.addAction(Actions.sequence(Actions.moveTo(targetPosInPixel.x, targetPosInPixel.y, 0.2f), 
+					finishAttackAction));
+			
+		this.setProjectileImage(arrow);
 	}
 
 

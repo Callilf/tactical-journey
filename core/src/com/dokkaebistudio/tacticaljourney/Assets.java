@@ -107,7 +107,7 @@ public class Assets {
 	public static final String arrow_item = "item-consumable-arrow";
 	public static final String bomb_item = "item-consumable-bomb";
 	
-	
+	public static final String arrow = "arrow";
 	public static final String bomb_animation = "bomb";
 	public static final String explosion_animation = "explosion";
 

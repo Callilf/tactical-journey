@@ -111,10 +111,6 @@ public class AttackManager {
 				ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
 				if (expCompo != null && expRewardCompo != null) {
 					expCompo.earnXp(expRewardCompo.getExpGain());
-					
-					Entity mainParent = ComponentsUtil.getMainParent(attacker);
-					GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(mainParent);
-					room.entityFactory.createExpDisplayer(expRewardCompo.getExpGain(), attackerPosCompo.coord(), room);
 				}
 				
 				room.removeEnemy(target);

@@ -561,12 +561,12 @@ public final class EntityFactory {
 	 * @param initialPos the initial position
 	 * @return the exp displayer entity
 	 */
-	public Entity createExpDisplayer(int exp, Vector2 gridPos, Room room) {
+	public Entity createExpDisplayer(int exp, Vector2 gridPos, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
 
 		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
-		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
+		initialPos.add(0, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
 		displayCompo.setInitialPosition(initialPos);
@@ -638,7 +638,7 @@ public final class EntityFactory {
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
 		explosionCompo.room = room;
 		explosionCompo.setRadius(2);
-		explosionCompo.setTurnsToExplode(2);
+		explosionCompo.setTurnsToExplode(1);
 		explosionCompo.setDamage(20);
 		bomb.add(explosionCompo);
 		

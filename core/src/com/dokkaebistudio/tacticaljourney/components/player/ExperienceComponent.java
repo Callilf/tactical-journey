@@ -1,7 +1,9 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 
@@ -19,6 +21,8 @@ public class ExperienceComponent implements Component,Poolable {
 	/** The amount of xp to reach next level. */
 	private int nextLevelXp;
 	
+	private List<Integer> xpGainedAtCurrentFrame = new ArrayList<>();
+	
 	/** Whether the entity just leveled up. */
 	private int numberOfNewLevelReached;
 	private boolean levelUpPopinDisplayed = false;
@@ -29,6 +33,7 @@ public class ExperienceComponent implements Component,Poolable {
 
 	@Override
 	public void reset() {
+		xpGainedAtCurrentFrame.clear();
 		levelUpPopinDisplayed = false;
 		numberOfNewLevelReached = 0;
 		level = 1;
@@ -44,6 +49,8 @@ public class ExperienceComponent implements Component,Poolable {
 	 * @param amountToEarn the amount to earn.
 	 */
 	public void earnXp(int amountToEarn) {
+		this.xpGainedAtCurrentFrame.add(amountToEarn);
+		
 		if (nextLevelXp > currentXp + amountToEarn) {
 			currentXp += amountToEarn;
 		} else {
@@ -128,5 +135,16 @@ public class ExperienceComponent implements Component,Poolable {
 		this.levelUpPopinDisplayed = levelUpPopinDisplayed;
 	}
 
+
+	public List<Integer> getXpGainedAtCurrentFrame() {
+		return xpGainedAtCurrentFrame;
+	}
+
+
+	public void addXpGainedAtCurrentFrame(Integer xpGainedAtCurrentFrame) {
+		this.xpGainedAtCurrentFrame.add(xpGainedAtCurrentFrame);
+	}
+
+	
 
 }

@@ -208,13 +208,6 @@ public class Room extends EntitySystem {
 			gtSingleton.updateElapsedTime(deltaTime);
 		}
 		
-		
-		for (Entity e : allEntities) {
-			if (!Mappers.gridPositionComponent.has(e)) {
-				System.out.println("Pas de grid pos");
-			}
-		}
-		
 		updateState();
 	}
 	

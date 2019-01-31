@@ -638,7 +638,7 @@ public final class EntityFactory {
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
 		explosionCompo.room = room;
 		explosionCompo.setRadius(2);
-		explosionCompo.setTurnsToExplode(1);
+		explosionCompo.setTurnsToExplode(2);
 		explosionCompo.setDamage(20);
 		bomb.add(explosionCompo);
 		

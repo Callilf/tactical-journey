@@ -28,8 +28,6 @@ public class AttackTileSearchService extends TileSearchService {
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
 	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
-		long totalTime = System.currentTimeMillis();
-
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
@@ -38,7 +36,6 @@ public class AttackTileSearchService extends TileSearchService {
 		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(moverEntity);
 
-		 long time = System.currentTimeMillis();
 		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
 		
@@ -56,17 +53,13 @@ public class AttackTileSearchService extends TileSearchService {
 			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
-		System.out.println("search : " + String.valueOf(System.currentTimeMillis() - time));
 
 		if (!ignoreObstacles) {
 			//Obstacles post process
-			time = System.currentTimeMillis();
 			obstaclesPostProcess(attackerPosCompo, attackableTiles);
-			System.out.println("obstacles : " + String.valueOf(System.currentTimeMillis() - time));
 		}
 		
 		
-		time = System.currentTimeMillis();
 		//Range Postprocess : remove tiles that cannot be attacked
 		if (attackCompo.getRangeMin() > 1) {
 			Iterator<Entity> it = attackableTiles.iterator();
@@ -81,19 +74,13 @@ public class AttackTileSearchService extends TileSearchService {
 		}
 
 		attackCompo.allAttackableTiles = attackableTiles;
-		System.out.println("range : " + String.valueOf(System.currentTimeMillis() - time));
 
 		
-		time = System.currentTimeMillis();
-
 		//Create entities for each attackable tiles to display them
 		for (Entity tileCoord : attackCompo.allAttackableTiles) {
 			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
-		System.out.println("create entities : " + String.valueOf(System.currentTimeMillis() - time));
-
-		System.out.println("total : " + String.valueOf(System.currentTimeMillis() - totalTime));
 	}
 
 	
@@ -163,9 +150,6 @@ public class AttackTileSearchService extends TileSearchService {
 		Iterator<Entity> it = attackableTiles.iterator();
 		while (it.hasNext()) {
 			Entity next = it.next();
-			if (next == null) {
-				System.out.println("wtf");
-			}
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
 			Vector2 currentTilePos = gridPositionComponent.coord();
 			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord().x) : currentTilePos.x - attackerPosCompo.coord().x;

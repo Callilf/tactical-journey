@@ -22,7 +22,6 @@ import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -50,8 +49,6 @@ public class TileSearchService {
 	
 	
 	public void buildMoveTilesSet(Entity moverEntity, Room room) {
-		long time = System.currentTimeMillis();
-
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
@@ -66,10 +63,6 @@ public class TileSearchService {
 			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
-		if (moverEntity.flags ==  EntityFlagEnum.PLAYER.getFlag()) {
-			System.out.println("search for movement : " + String.valueOf(System.currentTimeMillis() - time));
-		}
-
 	}
 
 	

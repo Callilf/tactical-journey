@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -34,8 +33,12 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The max attack range. */
 	private int rangeMax;
 	
+	
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
+	
+	/** Whether the value of strength is a differential from the parentAttackCompo's strength or not. */
+	private boolean isStrengthDifferential = true;
 	
 	/** The type of ammunition used by this attack component. */
 	private AmmoTypeEnum ammoType = AmmoTypeEnum.NONE;
@@ -46,6 +49,12 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private Entity target;
 	/** The targeted tile entity. */
 	private Entity targetedTile;
+	
+	//************
+	// Bombs
+	
+	private int bombRadius;
+	private int bombTurnsToExplode;
 	
 	
 	
@@ -63,10 +72,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	 * is a differential which is added to the base strength (positive or negative).
 	 */
 	private AttackComponent parentAttackCompo;
-	
-	//**************
-	// Ammo display
-	private Entity ammoDisplayer;
 	
 	
 	
@@ -97,12 +102,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	public void reset() {
 		clearAttackableTiles();
 		this.target = null;
-		if (ammoDisplayer != null) {
-			room.removeEntity(ammoDisplayer);
-			ammoDisplayer = null;
-		}
 		this.attackType = null;
 		this.room = null;
+		this.isStrengthDifferential = true;
 	}
 	
 	/**
@@ -200,6 +202,38 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 			spriteComponent.hide = true;
 		}
 	}
+	
+	
+	
+	/**
+	 * Set the projectile image to use.
+	 * @param texture the texture to use
+	 * @param startGridPos the start pos (the attacker pos)
+	 * @param targetGridPos the end pos (the target pos)
+	 * @param rotate whether the projectile has to be oriented towards the target
+	 * @param finishAttackAction the action to call after the movement is over
+	 */
+	public void setProjectileImage(String texture, Vector2 startGridPos, Vector2 targetGridPos, boolean rotate, Action finishAttackAction) {
+		Image arrow = new Image(Assets.getTexture(texture));
+		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
+		arrow.setPosition(playerPixelPos.x, playerPixelPos.y);
+		
+		Vector2 targetPosInPixel = TileUtil.convertGridPosIntoPixelPos(targetGridPos);
+
+		if (rotate) {
+			double degrees = Math.atan2(
+					targetPosInPixel.y - playerPixelPos.y,
+				    targetPosInPixel.x - playerPixelPos.x
+				) * 180.0d / Math.PI;
+			arrow.setOrigin(Align.center);
+			arrow.setRotation((float) degrees);
+		}
+		
+		arrow.addAction(Actions.sequence(Actions.moveTo(targetPosInPixel.x, targetPosInPixel.y, 0.2f), 
+					finishAttackAction));
+			
+		this.setProjectileImage(arrow);
+	}
 
 	
 	//***************************
@@ -227,7 +261,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public int getStrength() {
 		int result = strength;
-		if (parentAttackCompo != null) {
+		if (isStrengthDifferential && parentAttackCompo != null) {
 			result += parentAttackCompo.getStrength();
 		}
 		return result;
@@ -257,17 +291,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	public void setSkillNumber(int skillNumber) {
 		this.skillNumber = skillNumber;
 	}
-
-
-	public Entity getAmmoDisplayer() {
-		return ammoDisplayer;
-	}
-
-
-	public void setAmmoDisplayer(Entity ammoDisplayer) {
-		this.ammoDisplayer = ammoDisplayer;
-	}
-
 
 	public AmmoTypeEnum getAmmoType() {
 		return ammoType;
@@ -324,36 +347,30 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.projectileImage = image;
 	}
 	
-	/**
-	 * Set the projectile image to use.
-	 * @param texture the texture to use
-	 * @param startGridPos the start pos (the attacker pos)
-	 * @param targetGridPos the end pos (the target pos)
-	 * @param rotate whether the projectile has to be oriented towards the target
-	 * @param finishAttackAction the action to call after the movement is over
-	 */
-	public void setProjectileImage(String texture, Vector2 startGridPos, Vector2 targetGridPos, boolean rotate, Action finishAttackAction) {
-		Image arrow = new Image(Assets.getTexture(texture));
-		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
-		arrow.setPosition(playerPixelPos.x, playerPixelPos.y);
-		
-		Vector2 targetPosInPixel = TileUtil.convertGridPosIntoPixelPos(targetGridPos);
-
-		if (rotate) {
-			double degrees = Math.atan2(
-					targetPosInPixel.y - playerPixelPos.y,
-				    targetPosInPixel.x - playerPixelPos.x
-				) * 180.0d / Math.PI;
-			arrow.setOrigin(Align.center);
-			arrow.setRotation((float) degrees);
-		}
-		
-		arrow.addAction(Actions.sequence(Actions.moveTo(targetPosInPixel.x, targetPosInPixel.y, 0.2f), 
-					finishAttackAction));
-			
-		this.setProjectileImage(arrow);
+	
+	public int getBombRadius() {
+		return bombRadius;
+	}
+	public void setBombRadius(int bombRadius) {
+		this.bombRadius = bombRadius;
+	}
+	public int getBombTurnsToExplode() {
+		return bombTurnsToExplode;
+	}
+	public void setBombTurnsToExplode(int bombTurnsToExplode) {
+		this.bombTurnsToExplode = bombTurnsToExplode;
 	}
 
 
+	public boolean isStrengthDifferential() {
+		return isStrengthDifferential;
+	}
+
+
+	public void setStrengthDifferential(boolean isStrengthDifferential) {
+		this.isStrengthDifferential = isStrengthDifferential;
+	}
+	
+	
 	
 }

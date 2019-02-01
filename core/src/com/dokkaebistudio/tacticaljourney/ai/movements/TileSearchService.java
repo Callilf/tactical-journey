@@ -49,6 +49,7 @@ public class TileSearchService {
 	
 	
 	public void buildMoveTilesSet(Entity moverEntity, Room room) {
+		long time = System.currentTimeMillis();
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
@@ -63,6 +64,7 @@ public class TileSearchService {
 			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
+//		System.out.println("Search movable tiles : " + (System.currentTimeMillis() - time));
 	}
 
 	

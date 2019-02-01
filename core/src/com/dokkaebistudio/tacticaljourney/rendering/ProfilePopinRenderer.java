@@ -121,12 +121,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	    		table.add(bombDmg).uniformX().left();
 	    		table.row();
 	    		
-	    		
-	    		//TODO
-	    		Label bombDuration = new Label("Bomb dur.: 2 turns" , hudStyle);
+	    		Label bombDuration = new Label("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" , hudStyle);
 	    		table.add(bombDuration).uniformX().left();
 	    		table.row();
-	    		Label bombRadius = new Label("Bomb radius: 2" , hudStyle);
+	    		Label bombRadius = new Label("Bomb radius: " + bombAttackCompo.getBombRadius() , hudStyle);
 	    		table.add(bombRadius).uniformX().left();
 	    		table.row();
 

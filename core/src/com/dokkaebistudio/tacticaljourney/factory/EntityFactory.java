@@ -623,7 +623,7 @@ public final class EntityFactory {
 	 * @param parent the parent entity of the bomb
 	 * @return the entity created
 	 */
-	public Entity createBomb(Room room, Vector2 tilePos, Entity parentEntity) {
+	public Entity createBomb(Room room, Vector2 tilePos, Entity parentEntity, int radius, int turnsToExplode, int damage) {
 		Entity bomb = engine.createEntity();
 		bomb.flags = EntityFlagEnum.BOMB.getFlag();
 
@@ -637,9 +637,9 @@ public final class EntityFactory {
 		
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
 		explosionCompo.room = room;
-		explosionCompo.setRadius(2);
-		explosionCompo.setTurnsToExplode(2);
-		explosionCompo.setDamage(20);
+		explosionCompo.setRadius(radius);
+		explosionCompo.setTurnsToExplode(turnsToExplode);
+		explosionCompo.setDamage(damage);
 		bomb.add(explosionCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
@@ -684,6 +684,8 @@ public final class EntityFactory {
 		skillEntity.add(skillMoveComponent);
 		
 		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
+		
+		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
 		attackComponent.setAttackType(type.getAttackType());
@@ -695,6 +697,12 @@ public final class EntityFactory {
 		attackComponent.setSkillNumber(skillNumber);
 		attackComponent.setParentAttackCompo(parentAttackCompo);
 		skillEntity.add(attackComponent);
+		
+		if (type == SkillEnum.BOMB) {
+			attackComponent.setStrengthDifferential(false);
+			attackComponent.setBombRadius(2);
+			attackComponent.setBombTurnsToExplode(2);
+		}
 		
 
 		switch(skillNumber) {

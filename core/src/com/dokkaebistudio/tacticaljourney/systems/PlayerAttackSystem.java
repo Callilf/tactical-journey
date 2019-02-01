@@ -233,7 +233,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			skillAttackCompo.setProjectileImage(null);
 		}
 		
-		Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord(), player);
+		Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord(), player,
+				skillAttackCompo.getBombRadius(), skillAttackCompo.getBombTurnsToExplode(), skillAttackCompo.getStrength());
 		
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		if (ammoCarrierComponent != null) {

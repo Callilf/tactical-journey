@@ -82,6 +82,13 @@ public class Assets {
 	public static final String btn_profile_pushed = "btn-profile-pushed";
 
 	
+	public static final String inventory_background = "hud_inventory_background";
+	public static final String inventory_slot = "hud_inventory_slot";
+	public static final String inventory_slot_disabled = "hud_inventory_slot_disabled";
+	public static final String btn_inventory = "btn-inventory";
+	public static final String btn_inventory_pushed = "btn-inventory-pushed";
+
+	
 	
 	public static final String btn_skill_attack = "btn-skill-slash";
 	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";

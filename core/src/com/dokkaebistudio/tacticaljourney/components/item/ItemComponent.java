@@ -16,12 +16,19 @@ public class ItemComponent implements Component {
 	 * @param picker the entity that picks it up
 	 */
 	public void pickUp(Entity picker, Entity item, Room room) {
-		if (itemType != null) {
-			itemType.pickUp(picker, item, room);
+		boolean pickedUp = itemType.pickUp(picker, item, room);
+		if (!pickedUp) {
+			//TODO : display "no space in inventory"
 		}
-		room.removeEntity(item);
 	}
 
+	/**
+	 * Pick up this item.
+	 * @param picker the entity that picks it up
+	 */
+	public boolean use(Entity picker, Entity item, Room room) {
+		return itemType.use(picker, item, room);
+	}
 	
 	
 	// Getters and Setters

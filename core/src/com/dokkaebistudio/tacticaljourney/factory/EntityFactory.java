@@ -600,19 +600,22 @@ public final class EntityFactory {
 		spriteCompo.setSprite(new Sprite(this.healthUpTexture));
 		healthUp.add(spriteCompo);
 
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(healthUp, tilePos, room);
-		gridPosition.zIndex = 8;
-		healthUp.add(gridPosition);
+		if (tilePos != null) {
+			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+			gridPosition.coord(healthUp, tilePos, room);
+			gridPosition.zIndex = 8;
+			healthUp.add(gridPosition);
+		}
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
 		healthUp.add(itemCompo);
 		
-		engine.addEntity(healthUp);
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	healthUp.add(destructibleCompo);
 		
+		engine.addEntity(healthUp);
+
 		return healthUp;
 	}
 	

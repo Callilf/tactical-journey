@@ -6,434 +6,469 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 1924, 1474
+  xy: 1924, 1384
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 background-test-menu
   rotate: false
-  xy: 2, 966
+  xy: 2, 958
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 bomb
   rotate: false
-  xy: 1924, 1720
+  xy: 1924, 1220
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 2
 bomb
   rotate: false
-  xy: 454, 124
+  xy: 1268, 251
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 1
 btn-end-turn
   rotate: false
-  xy: 1325, 587
+  xy: 920, 87
   size: 165, 110
   orig: 165, 110
   offset: 0, 0
   index: -1
 btn-end-turn-pushed
   rotate: false
-  xy: 1325, 699
+  xy: 753, 87
   size: 165, 110
   orig: 165, 110
   offset: 0, 0
   index: -1
+btn-inventory
+  rotate: false
+  xy: 1826, 242
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-inventory-pushed
+  rotate: false
+  xy: 1670, 242
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
 btn-move-confirmation
   rotate: false
-  xy: 536, 2
+  xy: 1104, 378
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 btn-ok
   rotate: false
-  xy: 536, 224
+  xy: 1432, 216
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 btn-profile
   rotate: false
-  xy: 778, 314
+  xy: 1904, 246
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-profile-pushed
   rotate: false
-  xy: 1690, 733
+  xy: 1748, 164
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb
   rotate: false
-  xy: 536, 68
+  xy: 1939, 324
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb-checked
   rotate: false
-  xy: 700, 392
+  xy: 1861, 324
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb-pushed
   rotate: false
-  xy: 778, 392
+  xy: 1748, 242
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow
   rotate: false
-  xy: 700, 314
+  xy: 1514, 164
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow-checked
   rotate: false
-  xy: 1768, 724
+  xy: 1826, 164
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow-pushed
   rotate: false
-  xy: 1936, 904
+  xy: 1592, 164
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash
   rotate: false
-  xy: 536, 146
+  xy: 1514, 242
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-checked
   rotate: false
-  xy: 1936, 826
+  xy: 1670, 164
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-pushed
   rotate: false
-  xy: 618, 228
+  xy: 1592, 242
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 door-closed
   rotate: false
-  xy: 618, 388
+  xy: 1615, 320
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 536, 306
+  xy: 1533, 320
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 454, 288
+  xy: 1186, 251
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 1924, 1146
+  xy: 951, 5
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 entrance
   rotate: false
-  xy: 1924, 1228
+  xy: 1104, 214
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 exit
   rotate: false
-  xy: 1924, 1638
+  xy: 1697, 320
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 1924, 1966
+  xy: 1924, 1958
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 0
 explosion
   rotate: false
-  xy: 1772, 884
+  xy: 1924, 1876
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 1
 explosion
   rotate: false
-  xy: 1492, 682
+  xy: 1924, 1794
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 2
 explosion
   rotate: false
-  xy: 1924, 1884
+  xy: 1924, 1712
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 4
 explosion
   rotate: false
-  xy: 1492, 600
+  xy: 1924, 1630
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 5
 explosion
   rotate: false
-  xy: 1574, 682
+  xy: 1924, 1548
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 6
 explosion
   rotate: false
-  xy: 1924, 1310
+  xy: 1104, 296
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 3
+hud_inventory_background
+  rotate: false
+  xy: 2, 210
+  size: 653, 746
+  orig: 653, 746
+  offset: 0, 0
+  index: -1
+hud_inventory_slot
+  rotate: false
+  xy: 601, 47
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+hud_inventory_slot_disabled
+  rotate: false
+  xy: 449, 58
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
 hud_lvl_up_background_bottom
   rotate: false
-  xy: 1325, 811
+  xy: 657, 199
   size: 445, 63
   orig: 445, 63
   offset: 0, 0
   index: -1
 hud_lvl_up_background_top
   rotate: false
-  xy: 878, 758
+  xy: 2, 2
   size: 445, 206
   orig: 445, 206
   offset: 0, 0
   index: -1
 hud_lvl_up_btn
   rotate: false
-  xy: 878, 514
+  xy: 1533, 402
   size: 421, 62
   orig: 421, 62
   offset: 0, 0
   index: -1
 hud_lvl_up_choice_claim_btn
   rotate: false
-  xy: 1846, 730
+  xy: 1904, 210
   size: 58, 34
   orig: 58, 34
   offset: 0, 0
   index: -1
 hud_lvl_up_choice_claim_btn_pushed
   rotate: false
-  xy: 1846, 766
+  xy: 541, 22
   size: 58, 34
   orig: 58, 34
   offset: 0, 0
   index: -1
 hud_lvl_up_choice_desc_panel
   rotate: false
-  xy: 878, 578
+  xy: 657, 264
   size: 445, 88
   orig: 445, 88
   offset: 0, 0
   index: -1
 hud_lvl_up_choice_frame
   rotate: false
-  xy: 1325, 876
+  xy: 1533, 466
   size: 445, 88
   orig: 445, 88
   offset: 0, 0
   index: -1
 hud_lvl_up_choice_reward_panel
   rotate: false
-  xy: 878, 668
+  xy: 657, 354
   size: 445, 88
   orig: 445, 88
   offset: 0, 0
   index: -1
 hud_lvl_up_continue_btn
   rotate: false
-  xy: 2, 3
+  xy: 753, 40
   size: 196, 45
   orig: 196, 45
   offset: 0, 0
   index: -1
 hud_lvl_up_continue_btn_pushed
   rotate: false
-  xy: 1492, 764
+  xy: 1171, 415
   size: 196, 45
   orig: 196, 45
   offset: 0, 0
   index: -1
 hud_map_background
   rotate: false
-  xy: 2, 50
+  xy: 1533, 556
   size: 450, 400
   orig: 450, 400
   offset: 0, 0
   index: -1
 hud_map_less
   rotate: false
-  xy: 878, 479
+  xy: 449, 23
   size: 90, 33
   orig: 90, 33
   offset: 0, 0
   index: -1
 hud_map_plus
   rotate: false
-  xy: 200, 15
+  xy: 1186, 216
   size: 90, 33
   orig: 90, 33
   offset: 0, 0
   index: -1
 hud_profile_background
   rotate: false
-  xy: 516, 470
+  xy: 1171, 462
   size: 360, 494
   orig: 360, 494
   offset: 0, 0
   index: -1
 item-consumable-arrow
   rotate: false
-  xy: 1574, 600
+  xy: 1924, 1302
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-bomb
   rotate: false
-  xy: 1924, 1802
+  xy: 1924, 1466
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 bomb
   rotate: false
-  xy: 1924, 1802
+  xy: 1924, 1466
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 0
 item-consumable-health-up
   rotate: false
-  xy: 1924, 982
+  xy: 1033, 5
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 player-test
   rotate: false
-  xy: 618, 306
+  xy: 1779, 320
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-attackable
   rotate: false
-  xy: 1924, 1556
+  xy: 1924, 1056
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable
   rotate: false
-  xy: 1924, 1064
+  xy: 1924, 1138
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 536, 388
+  xy: 1350, 216
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-waypoint
   rotate: false
-  xy: 1772, 802
+  xy: 1369, 380
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-mud-destroyed
   rotate: false
-  xy: 1854, 884
+  xy: 1451, 380
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-mud-test
   rotate: false
-  xy: 1854, 802
+  xy: 1186, 333
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-pit-test
   rotate: false
-  xy: 1924, 1392
+  xy: 1924, 974
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-test
   rotate: false
-  xy: 454, 206
+  xy: 1268, 333
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-destroyed
   rotate: false
-  xy: 454, 370
+  xy: 1350, 298
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 454, 42
+  xy: 1432, 298
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 wheel-arrow
   rotate: false
-  xy: 2, 452
+  xy: 657, 444
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

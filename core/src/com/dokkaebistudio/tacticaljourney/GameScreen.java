@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
@@ -146,6 +147,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
+		renderers.add(new InventoryPopinRenderer(room, stage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		

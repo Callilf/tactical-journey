@@ -23,6 +23,12 @@ public class GridPositionComponent implements Component, Poolable {
     
     public int zIndex = 0;
     
+    /** Whether the gridPositionComponent is inactive, meaning that the entity has no real
+     * effect on the room at the moment. For example, if an item is in the inventory, it's gridPosCompo
+     * is inactive since it is not in the room at this moment.
+     */
+    private boolean inactive;
+    
     
     @Override
     public void reset() {
@@ -59,6 +65,18 @@ public class GridPositionComponent implements Component, Poolable {
     }
     
     
+	public void setInactive(Entity e, Room r) {
+		this.inactive = true;
+		r.removeEntityAtPosition(e, this.coord);    	
+	}
+    
+    
+	public void setActive(Entity e, Room r) {
+		this.inactive = false;
+	    r.addEntityAtPosition(e, this.coord);
+	}
+    
+    
     public void absolutePos(float x, float y) {
     	this.hasAbsolutePos = true;
     	this.absolutePos.set(x,y);
@@ -76,6 +94,11 @@ public class GridPositionComponent implements Component, Poolable {
 	public Vector2 getWorldPos() {
 		TileUtil.convertGridPosIntoPixelPos(coord, worldPos);
 		return worldPos;
+	}
+
+
+	public boolean isInactive() {
+		return inactive;
 	}
 	
 	

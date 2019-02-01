@@ -136,6 +136,7 @@ public class Room extends EntitySystem {
 		
 		if (set != null) {
 			set.remove(e);
+			this.allEntities.removeValue(e, true);
 		}
 	}
 	
@@ -288,6 +289,9 @@ public class Room extends EntitySystem {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.createItemHealthUp(this, new Vector2(11, 9));
+//			entityFactory.createItemHealthUp(this, new Vector2(6, 8));
+			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
@@ -392,6 +396,10 @@ public class Room extends EntitySystem {
 	 */
 	public boolean hasEnemies() {
 		return this.enemies.size() > 0;
+	}
+	
+	public List<Entity> getEnemies() {
+		return this.enemies;
 	}
 	
 	

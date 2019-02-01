@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
@@ -67,6 +68,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	private Table profileTable; 
 	private Button profileBtn;
+	private Button inventoryBtn;
 
 	// Skills
 	private Table skillsTable;
@@ -253,6 +255,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		
 		final PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 
 		if (profileTable == null) {
 			profileTable = new Table();
@@ -271,8 +274,24 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
 				}
 			});
-			
 			profileTable.add(profileBtn);
+
+			
+			// Inventory btn
+			Drawable inventoryButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_inventory)));
+			Drawable inventoryButtonDown = new SpriteDrawable(
+					new Sprite(Assets.getTexture(Assets.btn_inventory_pushed)));
+			ButtonStyle inventoryButtonStyle = new ButtonStyle(inventoryButtonUp, inventoryButtonDown, null);
+			inventoryBtn = new Button(inventoryButtonStyle);
+			
+			inventoryBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					inventoryComponent.setInventoryDisplayed(!inventoryComponent.isInventoryDisplayed());
+				}
+			});
+			profileTable.add(inventoryBtn);
+
 			
 			profileTable.pack();
 			stage.addActor(profileTable);

@@ -87,6 +87,10 @@ public class Assets {
 	public static final String inventory_slot_disabled = "hud_inventory_slot_disabled";
 	public static final String btn_inventory = "btn-inventory";
 	public static final String btn_inventory_pushed = "btn-inventory-pushed";
+	
+	public static final String inventory_item_popin_background = "hud_inventory_item_popin_background";
+	public static final String inventory_item_popin_btn_up = "hud_inventory_item_popin_btn_up";
+	public static final String inventory_item_popin_btn_down = "hud_inventory_item_popin_btn_down";
 
 	
 	

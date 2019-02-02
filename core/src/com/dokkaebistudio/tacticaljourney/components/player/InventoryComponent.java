@@ -29,6 +29,9 @@ public class InventoryComponent implements Component, Poolable {
 	
 	
 	public enum InventoryActionEnum {
+		DISPLAY_POPIN,
+		PICKUP,
+		PICKUP_AND_USE,
 		USE,
 		DROP;
 	}

@@ -15,11 +15,8 @@ public class ItemComponent implements Component {
 	 * Pick up this item.
 	 * @param picker the entity that picks it up
 	 */
-	public void pickUp(Entity picker, Entity item, Room room) {
-		boolean pickedUp = itemType.pickUp(picker, item, room);
-		if (!pickedUp) {
-			//TODO : display "no space in inventory"
-		}
+	public boolean pickUp(Entity picker, Entity item, Room room) {
+		return itemType.pickUp(picker, item, room);
 	}
 
 	/**

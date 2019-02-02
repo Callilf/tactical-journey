@@ -18,7 +18,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public enum ItemEnum {
 		
 	/** A consumable item that heals 25 HP. */
-	CONSUMABLE_HEALTH_UP("Small health potion", Assets.health_up_item, true) {
+	CONSUMABLE_HEALTH_UP("Small health potion", Assets.health_up_item, false) {
 		
 		@Override
 		public String getDescription() {

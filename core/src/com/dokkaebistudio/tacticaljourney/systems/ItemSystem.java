@@ -18,12 +18,16 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.List;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -65,7 +69,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			// Items pickup
 			List<Entity> items = TileUtil.getItemEntityOnTile(playerMoveCompo.currentMoveDestinationTilePos, room);
 			for (Entity item : items) {
-				ItemComponent itemComponent = ComponentMapper.getFor(ItemComponent.class).get(item);
+				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
 					System.out.println("Picked up a " + itemComponent.getItemType().getLabel());
 
@@ -75,7 +79,29 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			}
 
 			
-		} else if (playerIventoryCompo.getCurrentAction() != null) {
+		} else if (room.getState() == RoomState.PLAYER_END_MOVEMENT) {
+			
+			// The player just arrived on a tile, check if there is an item
+			checkItemPresenceToDisplayPopin();
+			
+		} else if (playerIventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
+			
+			// If the user click on the player and there is an item on this tile, display the popin
+			if (InputSingleton.getInstance().leftClickJustReleased) {
+				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+				int x = (int) touchPoint.x;
+				int y = (int) touchPoint.y;
+				
+				SpriteComponent spriteComponent = Mappers.spriteComponent.get(player);
+				if (spriteComponent.containsPoint(x, y)) {
+					
+					// Touched the player, if there is an item on this tile, display the popin
+					checkItemPresenceToDisplayPopin();
+				}
+				
+			}
+			
+		} else if (playerIventoryCompo.getCurrentAction() != null && playerIventoryCompo.getCurrentAction() != InventoryActionEnum.DISPLAY_POPIN) {
 			
 			Entity currentItem = playerIventoryCompo.getCurrentItem();
 			ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
@@ -84,6 +110,46 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			// An action has been done in the inventory
 			switch(playerIventoryCompo.getCurrentAction()) {
 			
+			case PICKUP:
+				
+				// USE ITEM
+				boolean pickedUp = itemComponent.pickUp(player, currentItem, room);
+				
+				if (pickedUp) {
+					System.out.println("Picked up a " + itemComponent.getItemType().getLabel());
+
+					room.turnManager.endPlayerTurn();
+				} else {
+					System.out.println("Impossible to pick up the " + itemComponent.getItemType().getLabel());
+
+					//TODO warn message
+				}
+				
+				playerIventoryCompo.setCurrentAction(null);
+				
+				
+				break;
+				
+			case PICKUP_AND_USE:
+				
+				// USE ITEM
+				boolean instaUsed = itemComponent.use(player, currentItem, room);
+				
+				if (instaUsed) {
+					System.out.println("Insta used a " + itemComponent.getItemType().getLabel());
+
+					room.removeEntity(currentItem);
+					room.turnManager.endPlayerTurn();
+				} else {
+					System.out.println("Impossible to insta use the " + itemComponent.getItemType().getLabel());
+
+					//TODO warn message
+				}
+				
+				playerIventoryCompo.setCurrentAction(null);
+				
+				
+				break;
 			case USE:
 				
 				// USE ITEM
@@ -129,6 +195,23 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 			
 		}		
+	}
+
+
+	private void checkItemPresenceToDisplayPopin() {
+		// Item popin
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
+		List<Entity> itemEntityOnTile = TileUtil.getItemEntityOnTile(gridPositionComponent.coord(), room);
+		if (!itemEntityOnTile.isEmpty()) {
+			for (Entity item : itemEntityOnTile) {
+				// Open the popin for the first item that is not a "instant pickup" item
+				ItemComponent itemComponent = Mappers.itemComponent.get(item);
+				if (!itemComponent.getItemType().isInstantPickUp()) {
+					playerIventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
+					break;
+				}
+			}
+		}
 	}
 
 

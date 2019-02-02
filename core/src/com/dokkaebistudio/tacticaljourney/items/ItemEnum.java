@@ -19,12 +19,21 @@ public enum ItemEnum {
 		
 	/** A consumable item that heals 25 HP. */
 	CONSUMABLE_HEALTH_UP("Small health potion", Assets.health_up_item, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Heal 25 HP upon use.\n"
+					+ "No one knows how it's made and why is the colour so close to the blood colour, but rumor has it that is tastes like cinnamon latte.";		
+		}
+		
 		@Override
 		public boolean pickUp(Entity picker, Entity item, Room room) {
 			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
-			if (!inventoryComponent.canStore()) return false;
-			
-			inventoryComponent.store(item, room);
+			if (inventoryComponent != null) {
+				if (!inventoryComponent.canStore()) return false;
+				
+				inventoryComponent.store(item, room);
+			}
 			return true;
 		}
 		
@@ -41,7 +50,16 @@ public enum ItemEnum {
 		}
 
 		@Override
-		public boolean drop(Entity picker, Entity item, Room room) {return true;}
+		public boolean drop(Entity user, Entity item, Room room) {
+			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
+			inventoryComponent.remove(item);
+			
+			GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(user);
+			GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
+			itemPosCompo.coord().set(playerPosCompo.coord());
+			itemPosCompo.setActive(item, room);
+			return true;
+		}
 	};
 	
 	/** The name displayed. */
@@ -70,6 +88,8 @@ public enum ItemEnum {
 	/** Called when the item is removed from an entity. */
 	public abstract boolean drop(Entity picker, Entity item, Room room);
 
+	/** Return the description of the item. */
+	public abstract String getDescription();
 	
 	
 	

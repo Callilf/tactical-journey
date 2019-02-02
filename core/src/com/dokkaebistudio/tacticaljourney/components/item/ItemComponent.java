@@ -23,11 +23,33 @@ public class ItemComponent implements Component {
 	}
 
 	/**
-	 * Pick up this item.
-	 * @param picker the entity that picks it up
+	 * Use the given item.
+	 * @param user the entity that uses the item (usually the player).
+	 * @param item the item to use
+	 * @param room the room in which the item is used
+	 * @return true if the item was used
 	 */
-	public boolean use(Entity picker, Entity item, Room room) {
-		return itemType.use(picker, item, room);
+	public boolean use(Entity user, Entity item, Room room) {
+		boolean used = itemType.use(user, item, room);
+		if (used) {
+			room.turnManager.endPlayerTurn();
+		}
+		return used;
+	}
+	
+	/**
+	 * Drop the given item.
+	 * @param dropper the entity that drops the item (usually the player).
+	 * @param item the item to drop
+	 * @param room the room in which the item is dropped
+	 * @return true if the item was dropped
+	 */
+	public boolean drop(Entity dropper, Entity item, Room room) {
+		boolean dropped = itemType.drop(dropper, item, room);
+		if (dropped) {
+			room.turnManager.endPlayerTurn();
+		}
+		return dropped;
 	}
 	
 	

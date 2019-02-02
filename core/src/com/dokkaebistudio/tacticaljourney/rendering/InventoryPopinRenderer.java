@@ -50,6 +50,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     boolean itemPopinDisplayer = false;
     private Label itemTitle;
     private Label itemDesc;
+    private TextButton dropItemBtn;
+    private ChangeListener dropListener;
     private TextButton useItemBtn;
     private ChangeListener useListener;
     
@@ -74,7 +76,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     }
 
     @Override
-	public void render(float deltaTime) {
+    public void render(float deltaTime) {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
@@ -83,6 +85,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	if (inventoryCompo != null && inventoryCompo.isInventoryDisplayed()) {
 
     		if (mainTable == null) {
+    			// Create the inventory table for the first time
+    			
 	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
 	    		room.setNextState(RoomState.INVENTORY_POPIN);
 	    			    		
@@ -99,18 +103,18 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    		
 	    		mainTable.align(Align.top);
 	    		
-	    		// TITLE
+	    		// 1 - Title
 	    		Label title = new Label("Inventory", hudStyle);
 	    		mainTable.add(title).uniformX().pad(40, 0, 40, 0);
 	    		mainTable.row();
 	    		
 	    		
-	    		// Slots
+	    		// 2 - Inventory slots
 	    		Table slotsTable = new Table();
 	    		int index = 0;
 	    		for (int row = 0 ; row < 4 ; row++) {
 		    		for (int col=0 ; col<4 ; col++) {
-		    			Table slot = createSlot(slotsTable, index);
+		    			Table slot = createSlot( index);
 		    			slotsTable.add(slot);
 		    			slots[index] = slot;
 		    			
@@ -126,21 +130,28 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    		stage.addActor(mainTable);
     		}
     		
+    		// Draw the table
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
     		
-    		
+    		// Close the inventory on a left click outside the popin
     		if (InputSingleton.getInstance().leftClickJustPressed) {
     			closePopin();
     		}
 
     	} else if (room.getState() == RoomState.INVENTORY_POPIN) {
+    		// Close the inventory if inventoryCompo.isInventoryDisplayed() was switched to false
     		closePopin();
     	}
     
     }
 
-	private Table createSlot(Table slotsTable, int index) {
+    /**
+     * Create an inventory slot (filled or empty).
+     * @param index the index of the slot
+     * @return the created slot
+     */
+	private Table createSlot(int index) {
 		boolean activeSlot = index < inventoryCompo.getNumberOfSlots();
 		
 		final Table slot = new Table();
@@ -190,6 +201,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+	/**
+	 * DIsplay the popin of the selected item with it's title, description and possible actions.
+	 * @param item the item selected
+	 * @param slot the slot on which the item was
+	 */
 	private void displaySelectedItemPopin(final Entity item, final Table slot) {
 		if (selectedItemPopin == null) {
 			selectedItemPopin = new Table();
@@ -199,26 +215,31 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			selectedItemPopin.setTouchable(Touchable.enabled);
 			selectedItemPopin.addListener(new ClickListener() {});
 			
+			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
 			selectedItemPopin.setBackground(textureRegionDrawable);
 			
-			// Title
-			itemTitle = new Label("Title", hudStyle);
-			selectedItemPopin.add(itemTitle).align(Align.center).top().pad(20, 0, 20, 0);
-			selectedItemPopin.row();
+			selectedItemPopin.align(Align.top);
 			
-			// Description
+			// 1 - Title
+			itemTitle = new Label("Title", hudStyle);
+			selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
+			selectedItemPopin.row().align(Align.center);
+			
+			// 2 - Description
 			itemDesc = new Label("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller.", hudStyle);
 			itemDesc.setWrap(true);
-			selectedItemPopin.add(itemDesc).width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 20, 20);
+			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 			
-			// Action buttons
+			// 3 - Action buttons
 			Table buttonTable = new Table();
 			Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
 			Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
 			TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+			
+			// 3.1 - Close button
 			final TextButton closeBtn = new TextButton("Close",btnStyle);			
 			// continueButton listener
 			closeBtn.addListener(new ChangeListener() {
@@ -229,19 +250,41 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			});
 			buttonTable.add(closeBtn).pad(0, 20,0,20);
 			
+			// 3.2 - Drop button
+			dropItemBtn = new TextButton("Drop",btnStyle);			
+			buttonTable.add(dropItemBtn).pad(0, 20,0,20);
+
+			// 3.3 - Use button
 			useItemBtn = new TextButton("Use",btnStyle);			
 			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 			
-			selectedItemPopin.add(buttonTable).padBottom(20);
+			selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
 			
-			selectedItemPopin.pack();
-			selectedItemPopin.setPosition(selectedItemPopin.getX() - selectedItemPopin.getWidth()/2, selectedItemPopin.getY() - selectedItemPopin.getHeight()/2);
-
 		}
 		
 		
-		// Use item listener
 		final ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		// Update the content
+		itemTitle.setText(itemComponent.getItemType().getLabel());
+		itemDesc.setText(itemComponent.getItemType().getDescription());
+		
+		// Update the Drop item listener
+		updateDropListener(item, slot, itemComponent);
+		
+		// Update the Use item listener
+		updateUseListener(item, slot, itemComponent);
+
+		
+		// Place the popin properly
+		selectedItemPopin.pack();
+		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+	
+		itemPopinDisplayer = true;
+		this.stage.addActor(selectedItemPopin);
+	}
+
+	private void updateUseListener(final Entity item, final Table slot, final ItemComponent itemComponent) {
 		if (useListener != null) {
 			useItemBtn.removeListener(useListener);
 		}
@@ -258,10 +301,25 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			}
 		};
 		useItemBtn.addListener(useListener);
+	}
 
-		
-		this.stage.addActor(selectedItemPopin);
-		itemPopinDisplayer = true;
+	private void updateDropListener(final Entity item, final Table slot, final ItemComponent itemComponent) {
+		if (dropListener != null) {
+			dropItemBtn.removeListener(dropListener);
+		}
+		dropListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				boolean dropped = itemComponent.drop(player, item, room);
+				if (dropped) {
+					slot.removeListener(this);
+					inventoryCompo.remove(item);
+					hideSelectedItemPopin();
+					closePopin();
+				}
+			}
+		};
+		dropItemBtn.addListener(dropListener);
 	}
 	
 	private void hideSelectedItemPopin() {
@@ -280,7 +338,10 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		mainTable.clear();
 		mainTable.remove();
 		mainTable = null;
-		room.setNextState(previousState);
+		
+		if (room.getNextState() == null) {
+			room.setNextState(previousState);
+		}
 	}
 
 }

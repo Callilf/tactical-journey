@@ -483,7 +483,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		for (Button btn : allSkillButtons) {
 			btn.setDisabled(!room.getState().isSkillChangeAllowed());
-			if (room.getState() == RoomState.PLAYER_WHEEL_FINISHED || room.getState() == RoomState.PLAYER_THROWING) {
+			if (room.getState() == RoomState.PLAYER_END_TURN) {
 				btn.setProgrammaticChangeEvents(false);
 				btn.setChecked(false);
 			} else {

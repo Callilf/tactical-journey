@@ -16,12 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -56,9 +57,9 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     /** The main table of the popin. */
     private Table table;
 
-    private List<Button> claimButtons = new ArrayList<>();
+    private List<TextButton> claimButtons = new ArrayList<>();
     
-    private Button continueButton;
+    private TextButton continueButton;
     
     /** The state before the level up state. */
     private RoomState previousState;
@@ -91,6 +92,10 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		table.setTouchable(Touchable.childrenOnly);
 	    		
+	    		TextureRegionDrawable background = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background));
+	    		table.setBackground(background);
+
+	    		
 	    		// TOP PART (labels)
 	    		createPopinTop(expCompo, table);
 	        	
@@ -121,6 +126,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		rewards.clear();
 		claimButtons.clear();
 		
+		Table choiceTable = new Table();
+		
 		for (int i=1; i<=choicesNumber ; i++) {
 			int nextInt = unseededRandom.nextInt(list.size());
 			LevelUpRewardEnum reward = list.get(nextInt);
@@ -139,8 +146,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			Table rewardTable = new Table();
 			Label rewardText = new Label(levelUpRewardEnum.getFinalDescription(),smallTitleStyle);
 			rewardText.setAlignment(Align.center);
-			rewardTable.add(rewardText).width(Value.percentWidth(.85F, rewardTable));
-			rewardTable.add().width(Value.percentWidth(.15F, rewardTable));
+			rewardTable.add(rewardText).width(Value.percentWidth(.70F, rewardTable));
+			rewardTable.add().width(Value.percentWidth(.30F, rewardTable));
 			rewardPanelGroup.addActor(rewardTextBackground);
 			rewardPanelGroup.addActor(rewardTable);
 			choiceGroup.addActor(rewardPanelGroup);
@@ -150,8 +157,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			Table descTable = new Table();
 			Label descText = new Label(levelUpRewardEnum.getDescription(),smallTitleStyle);
 			descText.setAlignment(Align.center);
-			descTable.add(descText).width(Value.percentWidth(.85F, descTable));
-			descTable.add().width(Value.percentWidth(.15F, descTable));
+			descTable.add(descText).width(Value.percentWidth(.70F, descTable));
+			descTable.add().width(Value.percentWidth(.30F, descTable));
 			descPanelGroup.addActor(descTextBackground);
 			descPanelGroup.addActor(descTable);
 			choiceGroup.addActor(descPanelGroup);
@@ -159,14 +166,15 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			
 			
 			Table frameTable = new Table();
+
 			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_choice_frame));
 			frameTable.setBackground(frame);
 			
 			Drawable claimButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn)));
 			Drawable claimButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));
-			ButtonStyle claimButtonStyle = new ButtonStyle(claimButtonUp, claimButtonDown, null);
+			TextButtonStyle claimButtonStyle = new TextButtonStyle(claimButtonUp, claimButtonDown, null, Assets.font);
 			claimButtonStyle.disabled = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));;
-			final Button claimButton = new Button(claimButtonStyle);
+			final TextButton claimButton = new TextButton("Claim", claimButtonStyle);
 			claimButtons.add(claimButton);
 			
 			// continueButton listener
@@ -178,24 +186,28 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 				}
 			});
 			
-			frameTable.add().width(Value.percentWidth(.85F, descTable));
-			frameTable.add(claimButton);
+			frameTable.add().width(Value.percentWidth(.70F, descTable));
+			frameTable.add(claimButton).center();
 			choiceGroup.addActor(frameTable);
 			
-			table.add(choiceGroup).fillX().uniformX().padTop(-1);
-			table.row();
+			choiceTable.add(choiceGroup).padTop(-1);
+			choiceTable.row();
 		
 		}
+		
+		choiceTable.pack();
+		
+		table.add(choiceTable).expandY().growX();
+		table.row();
+	
 	}
 
 	private void createPopinTop(ExperienceComponent expCompo, Table table) {
 		Table popinTop = new Table();
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background_top));
-		popinTop.setBackground(topBackground);
 		
 		LabelStyle titleStyle = new LabelStyle(Assets.font, Color.WHITE);
-		Label titleLabel = new Label("LEVEL UP",titleStyle);
-		popinTop.add(titleLabel).top().uniformX().pad(0, 0, 10, 0);
+		Label titleLabel = new Label("[GREEN]LEVEL UP",titleStyle);
+		popinTop.add(titleLabel).top().uniformX().pad(20, 0, 10, 0);
 		
 		popinTop.row();
 		
@@ -205,15 +217,15 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 		popinTop.row();
 
-		Label subTitle2Label = new Label("you reached level " + expCompo.getLevelForPopin(),subtitleStyle);
-		popinTop.add(subTitle2Label).top().uniformX().pad(0, 0, 10, 0);;
+		Label subTitle2Label = new Label("you reached level [GREEN]" + expCompo.getLevelForPopin(),subtitleStyle);
+		popinTop.add(subTitle2Label).top().uniformX().pad(0, 0, 10, 0);
 		
 		popinTop.row();
 		
 		Label selectChoiceLabel = new Label("Select [GREEN]1[WHITE] reward bellow",subtitleStyle);
-		popinTop.add(selectChoiceLabel).top().uniformX();
+		popinTop.add(selectChoiceLabel).top().uniformX().padBottom(20);
 		
-		table.add(popinTop).fillX().uniformX().padTop(-2);
+		table.add(popinTop).fillX().uniformX();
 		table.row();
 	}
 	
@@ -222,15 +234,13 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private void createPopinBottom(final ExperienceComponent expCompo, Table table) {
 		Table popinBottom = new Table();
 		popinBottom.setZIndex(10);
-		TextureRegionDrawable bottomBackground = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background_bottom));
-		popinBottom.setBackground(bottomBackground);
-		table.add(popinBottom).fillX().uniformX().padTop(-1);
+		table.add(popinBottom).fillX().uniformX();
 		
-		Drawable continueButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn)));
-		Drawable continueButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_continue_btn_pushed)));
-		ButtonStyle continueButtonStyle = new ButtonStyle(continueButtonUp, continueButtonDown, null);
-		continueButton = new Button(continueButtonStyle);
-		popinBottom.add(continueButton);
+		Drawable continueButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
+		Drawable continueButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
+		TextButtonStyle continueButtonStyle = new TextButtonStyle(continueButtonUp, continueButtonDown, null, Assets.font);
+		continueButton = new TextButton("Skip", continueButtonStyle);
+		popinBottom.add(continueButton).pad(10, 0, 20, 0);
 		
 		// continueButton listener
 		continueButton.addListener(new ClickListener() {
@@ -264,8 +274,9 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void claimReward(final Entity player, final LevelUpRewardEnum levelUpRewardEnum,
 			final Stack descPanelGroup, final Button claimButton) {
+		continueButton.setText("Continue");
 		continueButton.setTouchable(Touchable.disabled);
-		descPanelGroup.addAction(Actions.sequence(Actions.alpha(0, 2), new ApplyRewardAction(player, levelUpRewardEnum)));
+		descPanelGroup.addAction(Actions.sequence(Actions.alpha(0, 1), new ApplyRewardAction(player, levelUpRewardEnum)));
 		
 		for(Button cb : claimButtons) {
 			if (cb != claimButton) {

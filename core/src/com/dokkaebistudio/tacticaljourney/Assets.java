@@ -67,15 +67,12 @@ public class Assets {
 	public static final String btn_end_turn = "btn-end-turn";
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
 	
-	public static final String lvl_up_background_top = "hud_lvl_up_background_top";
-	public static final String lvl_up_background_bottom = "hud_lvl_up_background_bottom";
+	public static final String lvl_up_background = "hud_lvl_up_background";
 	public static final String lvl_up_choice_frame = "hud_lvl_up_choice_frame";
 	public static final String lvl_up_choice_desc_panel = "hud_lvl_up_choice_desc_panel";
 	public static final String lvl_up_choice_reward_panel = "hud_lvl_up_choice_reward_panel";
 	public static final String lvl_up_choice_claim_btn = "hud_lvl_up_choice_claim_btn";
 	public static final String lvl_up_choice_claim_btn_pushed = "hud_lvl_up_choice_claim_btn_pushed";
-	public static final String lvl_up_continue_btn = "hud_lvl_up_continue_btn";
-	public static final String lvl_up_continue_btn_pushed = "hud_lvl_up_continue_btn_pushed";
 	
 	public static final String profile_background = "hud_profile_background";
 	public static final String btn_profile = "btn-profile";

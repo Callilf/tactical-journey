@@ -23,7 +23,7 @@ public enum ItemEnum {
 		@Override
 		public String getDescription() {
 			return "Heal 25 HP upon use.\n"
-					+ "No one knows how it's made and why is the colour so close to the blood colour, but rumor has it that is tastes like cinnamon latte.";		
+					+ "No one knows how it's made and why is it red, but rumor has it that it tastes like cinnamon latte.";		
 		}
 		
 		@Override

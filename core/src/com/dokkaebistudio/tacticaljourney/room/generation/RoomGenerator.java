@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomType;
 
 /**
  * Util class to generate a room.
@@ -56,7 +57,10 @@ public class RoomGenerator {
 		
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		int roomNb = 1 + random.nextInt(10);
+		int roomNb = 1;
+		if (currentRoom.type != RoomType.START_FLOOR_ROOM) {
+			roomNb = 1 + random.nextInt(10);
+		}
 		FileHandle roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
 		Reader reader = roomPattern.reader();
 		

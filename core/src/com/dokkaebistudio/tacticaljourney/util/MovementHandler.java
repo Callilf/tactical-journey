@@ -90,6 +90,7 @@ public class MovementHandler {
 				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);
 			} else {
+				moveCompo.arrivedOnTile = false;
 				xOffset = moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.x < absolutePos.x) {
@@ -100,6 +101,7 @@ public class MovementHandler {
 				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
+				moveCompo.arrivedOnTile = false;
 				xOffset = -moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y > absolutePos.y) { 
@@ -110,6 +112,7 @@ public class MovementHandler {
 				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
+				moveCompo.arrivedOnTile = false;
 				yOffset = moveSpeed;
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y < absolutePos.y) {
@@ -120,6 +123,7 @@ public class MovementHandler {
 				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
+				moveCompo.arrivedOnTile = false;
 				yOffset = -moveSpeed;
 			}
 		} else {
@@ -146,26 +150,16 @@ public class MovementHandler {
 	 * @return true if the movement has ended, false if still in progress.
 	 */
 	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
-		
+		moveCompo.arrivedOnTile = true;
 		
 		//Perform any action related to the current tile such as picking up consumables,
 		//receiving damages from spikes or fire...
-		//TODO move this
+		//TODO
 		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
 		
-		// Items pickup
-		List<Entity> items = TileUtil.getItemEntityOnTile(moveCompo.currentMoveDestinationTilePos, room);
-		for (Entity item : items) {
-			ItemComponent itemComponent = ComponentMapper.getFor(ItemComponent.class).get(item);
-			if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
-				//Pick up this consumable
-				itemComponent.pickUp(mover, item, room);
-			}
-		}
 		
 		
-		
-		// Things that only the player can do, such are go through a door
+		// Things that only the player can do, such as go through a door
 		PlayerComponent playerCompo = Mappers.playerComponent.get(mover);
 		if (playerCompo != null) {
 			// Doors

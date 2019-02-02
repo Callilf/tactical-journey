@@ -40,6 +40,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
 	
+	
+	public boolean arrivedOnTile;
 	public Vector2 currentMoveDestinationTilePos;
 	public Vector2 currentMoveDestinationPos;
 	public int currentMoveDestinationIndex;

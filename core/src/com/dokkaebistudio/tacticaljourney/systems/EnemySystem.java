@@ -200,8 +200,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 	private void fillEntitiesOfCurrentRoom() {
 		allEnemiesOfCurrentRoom.clear();
-		for (Entity e : room.getAllEntities()) {
-			if (Mappers.enemyComponent.has(e)) allEnemiesOfCurrentRoom.add(e);
+		for (Entity e : room.getEnemies()) {
+			allEnemiesOfCurrentRoom.add(e);
 		}
 	}
 

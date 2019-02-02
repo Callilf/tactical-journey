@@ -82,6 +82,17 @@ public class Assets {
 	public static final String btn_profile_pushed = "btn-profile-pushed";
 
 	
+	public static final String inventory_background = "hud_inventory_background";
+	public static final String inventory_slot = "hud_inventory_slot";
+	public static final String inventory_slot_disabled = "hud_inventory_slot_disabled";
+	public static final String btn_inventory = "btn-inventory";
+	public static final String btn_inventory_pushed = "btn-inventory-pushed";
+	
+	public static final String inventory_item_popin_background = "hud_inventory_item_popin_background";
+	public static final String inventory_item_popin_btn_up = "hud_inventory_item_popin_btn_up";
+	public static final String inventory_item_popin_btn_down = "hud_inventory_item_popin_btn_down";
+
+	
 	
 	public static final String btn_skill_attack = "btn-skill-slash";
 	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
@@ -109,6 +120,8 @@ public class Assets {
 	//******
 	// Items
 	
+	public static final String tutorial_page_item = "item-tutorial-page";
+
 	public static final String health_up_item = "item-consumable-health-up";
 	public static final String arrow_item = "item-consumable-arrow";
 	public static final String bomb_item = "item-consumable-bomb";

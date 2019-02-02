@@ -205,7 +205,16 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					stage.addActor(skillAttackCompo.getProjectileImage());
 	    		}
 			}
+    		break;
+    		
+    	case PLAYER_END_TURN:
+    		clearAllEntityTiles(player);
 
+    		// unselect the skill
+    		if (skillEntity != null) {
+    			stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
+    		}
+    		break;
     		
     	default:
     		break;
@@ -221,11 +230,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
      * @param skillEntity the skill used
      * @param targetedPosition the targeted position
      */
-	private void finishBombThrow(final Entity player, final Entity skillEntity, GridPositionComponent targetedPosition) {
-		AttackComponent attackCompo = Mappers.attackComponent.get(player);
-		MoveComponent moveCompo = Mappers.moveComponent.get(player);
-		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
-		
+	private void finishBombThrow(final Entity player, final Entity skillEntity, GridPositionComponent targetedPosition) {		
 		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
 		if (skillAttackCompo.getProjectileImage() != null) {
@@ -241,11 +246,6 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			ammoCarrierComponent.useAmmo(skillAttackCompo.getAmmoType(), skillAttackCompo.getAmmosUsedPerAttack());
 		}
 		
-		clearAllEntityTiles(player);
-		
-		// unselect the skill
-		stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
-		
 		room.turnManager.endPlayerTurn();
 	}
 
@@ -256,29 +256,20 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	 * @param wheelAttackCompo the attack component used for the wheel
 	 * @param skillEntity the skill entity (if any).
 	 */
-	private void finishAttack(Entity player, AttackComponent wheelAttackCompo, Entity skillEntity) {
-		MoveComponent moveCompo = Mappers.moveComponent.get(player);
-		PlayerComponent playerCompo = Mappers.playerComponent.get(player);
-		
+	private void finishAttack(Entity player, AttackComponent wheelAttackCompo, Entity skillEntity) {		
 		if (wheelAttackCompo.getProjectileImage() != null) {
 			wheelAttackCompo.getProjectileImage().remove();
 			wheelAttackCompo.setProjectileImage(null);
 		}
 		
-		room.turnManager.endPlayerTurn();
-
 		Sector pointedSector = wheel.getPointedSector();
 		room.attackManager.performAttack(player, wheel.getAttackComponent(), pointedSector);
-		clearAllEntityTiles(player);
 		
 		//TODO : remove this or move it elsewhere
 		wheel.getAttackComponent().clearAttackableTiles();
 		wheel.setAttackComponent(null);
 		
-		if (skillEntity != null) {
-			// unselect the skill
-			stopSkillUse(playerCompo, skillEntity, moveCompo, wheelAttackCompo);
-		}
+		room.turnManager.endPlayerTurn();
 	}
 
 	/**

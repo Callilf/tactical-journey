@@ -45,7 +45,9 @@ public enum RoomState {
 	ENEMY_END_TURN,
 	
 	PROFILE_POPIN,
-	LEVEL_UP_POPIN;
+	LEVEL_UP_POPIN,
+	INVENTORY_POPIN,
+	ITEM_POPIN;
 	
 	
 	
@@ -68,7 +70,8 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP
     			|| this == RoomState.PLAYER_WHEEL_FINISHED
     			|| this == RoomState.PLAYER_ATTACK_ANIMATION
-    			|| this == RoomState.PLAYER_THROWING;
+    			|| this == RoomState.PLAYER_THROWING
+    			|| this == RoomState.PLAYER_END_TURN;
 	}
 	
 	/**
@@ -112,7 +115,9 @@ public enum RoomState {
 	 */
 	public boolean isPaused() {
 		return this == RoomState.PROFILE_POPIN
-				|| this == RoomState.LEVEL_UP_POPIN;
+				|| this == RoomState.LEVEL_UP_POPIN
+				|| this == RoomState.INVENTORY_POPIN
+				|| this == RoomState.ITEM_POPIN;
 	}
 	
 	public boolean isSkillChangeAllowed() {

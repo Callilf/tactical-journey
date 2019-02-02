@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -104,6 +105,15 @@ public final class PlayerFactory {
 		attackComponent.setStrength(5);
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		playerEntity.add(attackComponent);
+		
+		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
+		inventoryComponent.setNumberOfSlots(8);
+		inventoryComponent.setInventoryDisplayed(false);
+		
+		//TODO remove
+//		inventoryComponent.store(this.entityFactory.createItemHealthUp(null, null), room);
+		
+		playerEntity.add(inventoryComponent);
 		
 		// Ammo carrier
 		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);

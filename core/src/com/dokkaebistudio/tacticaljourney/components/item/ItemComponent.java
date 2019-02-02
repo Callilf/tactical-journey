@@ -9,19 +9,35 @@ public class ItemComponent implements Component {
 		
 	/** The king of item. */
 	private ItemEnum itemType;
-	
+
 	
 	/**
 	 * Pick up this item.
 	 * @param picker the entity that picks it up
 	 */
-	public void pickUp(Entity picker, Entity item, Room room) {
-		if (itemType != null) {
-			itemType.pickUp(picker, item, room);
-		}
-		room.removeEntity(item);
+	public boolean pickUp(Entity picker, Entity item, Room room) {
+		return itemType.pickUp(picker, item, room);
 	}
 
+	/**
+	 * Use the given item.
+	 * @param user the entity that uses the item (usually the player).
+	 * @param item the item to use
+	 */
+	public boolean use(Entity user, Entity item, Room room) {
+		return itemType.use(user, item, room);
+	}
+	
+	/**
+	 * Drop the given item.
+	 * @param dropper the entity that drops the item (usually the player).
+	 * @param item the item to drop
+	 * @param room the room in which the item is dropped
+	 * @return true if the item was dropped
+	 */
+	public boolean drop(Entity dropper, Entity item, Room room) {
+		return itemType.drop(dropper, item, room);
+	}
 	
 	
 	// Getters and Setters

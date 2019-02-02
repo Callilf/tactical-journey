@@ -600,20 +600,55 @@ public final class EntityFactory {
 		spriteCompo.setSprite(new Sprite(this.healthUpTexture));
 		healthUp.add(spriteCompo);
 
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(healthUp, tilePos, room);
-		gridPosition.zIndex = 8;
-		healthUp.add(gridPosition);
+		if (tilePos != null) {
+			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+			gridPosition.coord(healthUp, tilePos, room);
+			gridPosition.zIndex = 8;
+			healthUp.add(gridPosition);
+		}
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
 		healthUp.add(itemCompo);
 		
-		engine.addEntity(healthUp);
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	healthUp.add(destructibleCompo);
 		
+		engine.addEntity(healthUp);
+
 		return healthUp;
+	}
+	
+	/**
+	 * Create a tutorial page.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemTutorialPage(Room room, Vector2 tilePos) {
+		Entity item = engine.createEntity();
+		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tutorial_page_item)));
+		item.add(spriteCompo);
+
+		if (tilePos != null) {
+			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+			gridPosition.coord(item, tilePos, room);
+			gridPosition.zIndex = 8;
+			item.add(gridPosition);
+		}
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(ItemEnum.TUTORIAL_PAGE_1);
+		item.add(itemCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	item.add(destructibleCompo);
+		
+		engine.addEntity(item);
+
+		return item;
 	}
 	
 	/**

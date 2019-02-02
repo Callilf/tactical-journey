@@ -37,6 +37,8 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
@@ -49,6 +51,7 @@ import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ItemSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -146,6 +149,8 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
+		renderers.add(new ItemPopinRenderer(room, stage, player));
+		renderers.add(new InventoryPopinRenderer(room, stage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		
@@ -159,6 +164,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemySystem(room));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
+		engine.addSystem(new ItemSystem(	player, room));
 		engine.addSystem(new DamageDisplaySystem(room));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		

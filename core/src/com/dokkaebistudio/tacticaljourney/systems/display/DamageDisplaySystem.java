@@ -16,7 +16,7 @@ public class DamageDisplaySystem extends IteratingSystem implements RoomSystem {
 
     public DamageDisplaySystem(Room r) {
         super(Family.all(DamageDisplayComponent.class).get());
-		this.priority = 11;
+		this.priority = 20;
 
         room = r;
     }

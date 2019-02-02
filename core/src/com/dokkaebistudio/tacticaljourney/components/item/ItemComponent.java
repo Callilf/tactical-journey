@@ -9,7 +9,7 @@ public class ItemComponent implements Component {
 		
 	/** The king of item. */
 	private ItemEnum itemType;
-	
+
 	
 	/**
 	 * Pick up this item.
@@ -26,15 +26,9 @@ public class ItemComponent implements Component {
 	 * Use the given item.
 	 * @param user the entity that uses the item (usually the player).
 	 * @param item the item to use
-	 * @param room the room in which the item is used
-	 * @return true if the item was used
 	 */
 	public boolean use(Entity user, Entity item, Room room) {
-		boolean used = itemType.use(user, item, room);
-		if (used) {
-			room.turnManager.endPlayerTurn();
-		}
-		return used;
+		return itemType.use(user, item, room);
 	}
 	
 	/**
@@ -45,11 +39,7 @@ public class ItemComponent implements Component {
 	 * @return true if the item was dropped
 	 */
 	public boolean drop(Entity dropper, Entity item, Room room) {
-		boolean dropped = itemType.drop(dropper, item, room);
-		if (dropped) {
-			room.turnManager.endPlayerTurn();
-		}
-		return dropped;
+		return itemType.drop(dropper, item, room);
 	}
 	
 	

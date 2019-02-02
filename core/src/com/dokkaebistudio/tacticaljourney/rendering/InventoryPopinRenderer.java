@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -273,7 +274,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		updateDropListener(item, slot, itemComponent);
 		
 		// Update the Use item listener
-		updateUseListener(item, slot, itemComponent);
+		updateUseListener(item, slot);
 
 		
 		// Place the popin properly
@@ -284,20 +285,17 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		this.stage.addActor(selectedItemPopin);
 	}
 
-	private void updateUseListener(final Entity item, final Table slot, final ItemComponent itemComponent) {
+	private void updateUseListener(final Entity item, final Table slot) {
 		if (useListener != null) {
 			useItemBtn.removeListener(useListener);
 		}
 		useListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				boolean used = itemComponent.use(player, item, room);
-				if (used) {
-					slot.removeListener(this);
-					inventoryCompo.remove(item);
-					hideSelectedItemPopin();
-					closePopin();
-				}
+				inventoryCompo.requestAction(InventoryActionEnum.USE, item);
+				slot.removeListener(this);
+				hideSelectedItemPopin();
+				closePopin();
 			}
 		};
 		useItemBtn.addListener(useListener);
@@ -310,13 +308,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		dropListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				boolean dropped = itemComponent.drop(player, item, room);
-				if (dropped) {
-					slot.removeListener(this);
-					inventoryCompo.remove(item);
-					hideSelectedItemPopin();
-					closePopin();
-				}
+				inventoryCompo.requestAction(InventoryActionEnum.DROP, item);
+				slot.removeListener(this);
+				inventoryCompo.remove(item);
+				hideSelectedItemPopin();
+				closePopin();
 			}
 		};
 		dropItemBtn.addListener(dropListener);

@@ -24,6 +24,14 @@ public class InventoryComponent implements Component, Poolable {
 	
 	private int firstEmptySlot = 0;
 	
+	private InventoryActionEnum currentAction;
+	private Entity currentItem;
+	
+	
+	public enum InventoryActionEnum {
+		USE,
+		DROP;
+	}
 	
 	
 	@Override
@@ -96,6 +104,20 @@ public class InventoryComponent implements Component, Poolable {
 	}
 
 	
+	/**
+	 * Set a flag to inform that we want to use the given item.
+	 * @param item the item to use
+	 */
+	public void requestAction(InventoryActionEnum action, Entity item) {
+		this.currentAction = action;
+		this.currentItem = item;
+	}
+	
+	public void clearCurrentAction() {
+		this.currentAction = null;
+		this.currentItem = null;
+	}
+	
 	
 	// Getters and Setters !
 	
@@ -118,5 +140,31 @@ public class InventoryComponent implements Component, Poolable {
 	public void setInventoryDisplayed(boolean inventoryDisplayed) {
 		this.inventoryDisplayed = inventoryDisplayed;
 	}
+
+
+
+	public InventoryActionEnum getCurrentAction() {
+		return currentAction;
+	}
+
+
+
+	public void setCurrentAction(InventoryActionEnum currentAction) {
+		this.currentAction = currentAction;
+	}
+
+
+
+	public Entity getCurrentItem() {
+		return currentItem;
+	}
+
+
+
+	public void setCurrentItem(Entity currentItem) {
+		this.currentItem = currentItem;
+	}
+
+
 
 }

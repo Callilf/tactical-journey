@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.ComponentsUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class ExperienceSystem extends IteratingSystem implements RoomSystem {
@@ -22,7 +21,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 
     public ExperienceSystem(Room r, Stage s) {
         super(Family.all(ExperienceComponent.class).get());
-		this.priority = 12;
+		this.priority = 21;
 
         room = r;
         this.stage = s;

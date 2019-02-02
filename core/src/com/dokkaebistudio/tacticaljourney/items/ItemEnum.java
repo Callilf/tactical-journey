@@ -27,14 +27,8 @@ public enum ItemEnum {
 		}
 		
 		@Override
-		public boolean pickUp(Entity picker, Entity item, Room room) {
-			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
-			if (inventoryComponent != null) {
-				if (!inventoryComponent.canStore()) return false;
-				
-				inventoryComponent.store(item, room);
-			}
-			return true;
+		public String getActionLabel() {
+			return "Drink";
 		}
 		
 		@Override
@@ -48,19 +42,31 @@ public enum ItemEnum {
 			room.entityFactory.createDamageDisplayer("25", gridPosCompo.coord(), true, room);
 			return true;
 		}
-
+	},
+	
+	
+	/** A tutorial page. */
+	TUTORIAL_PAGE_1("Tutorial page 1", Assets.tutorial_page_item, false) {
+		
 		@Override
-		public boolean drop(Entity user, Entity item, Room room) {
-			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
-			inventoryComponent.remove(item);
-			
-			GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(user);
-			GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
-			itemPosCompo.coord().set(playerPosCompo.coord());
-			itemPosCompo.setActive(item, room);
-			return true;
+		public String getDescription() {
+			return "Welcome to Tactical Journey.\n"
+					+ "You won't be assisted much in this game so go explore and try to understand it by yourself.";		
 		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Tear";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {return true;}
+
 	};
+	
+	
+	
+	
 	
 	/** The name displayed. */
 	private String label;
@@ -80,16 +86,36 @@ public enum ItemEnum {
 	// Abstract methods
 	
 	/** Called when the item is picked up. */
-	public abstract boolean pickUp(Entity picker, Entity item, Room room);
+	public boolean pickUp(Entity picker, Entity item, Room room) {
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
+		if (inventoryComponent != null) {
+			if (!inventoryComponent.canStore()) return false;
+			
+			inventoryComponent.store(item, room);
+		}
+		return true;
+	}
 	
 	/** Called when the item is used. */
 	public abstract boolean use(Entity user, Entity item, Room room);
 	
 	/** Called when the item is removed from an entity. */
-	public abstract boolean drop(Entity picker, Entity item, Room room);
+	public boolean drop(Entity picker, Entity item, Room room) {
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
+		inventoryComponent.remove(item);
+		
+		GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(picker);
+		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
+		itemPosCompo.coord().set(playerPosCompo.coord());
+		itemPosCompo.setActive(item, room);
+		return true;
+	}
 
 	/** Return the description of the item. */
 	public abstract String getDescription();
+	
+	/** Return the label on the action button for the item. */
+	public abstract String getActionLabel();
 	
 	
 	

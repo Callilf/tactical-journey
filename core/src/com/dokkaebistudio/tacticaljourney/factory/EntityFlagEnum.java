@@ -36,8 +36,8 @@ public enum EntityFlagEnum {
 	BOMB(600),
 	EXPLOSION_EFFECT(601),
 
-	
-	ITEM_HEALTH_UP(1000);
+	ITEM_TUTORIAL_PAGE(1000),
+	ITEM_HEALTH_UP(1001);
 	
 	private int flag;
 	

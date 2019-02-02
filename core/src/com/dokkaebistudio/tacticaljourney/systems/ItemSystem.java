@@ -159,6 +159,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					System.out.println("Used a " + itemComponent.getItemType().getLabel());
 
 					playerIventoryCompo.remove(currentItem);
+					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
 					System.out.println("Impossible to use the " + itemComponent.getItemType().getLabel());

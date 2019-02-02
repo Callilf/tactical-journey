@@ -269,6 +269,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		// Update the content
 		itemTitle.setText(itemComponent.getItemType().getLabel());
 		itemDesc.setText(itemComponent.getItemType().getDescription());
+		useItemBtn.setText(itemComponent.getItemType().getActionLabel());
 		
 		// Update the Drop item listener
 		updateDropListener(item, slot, itemComponent);

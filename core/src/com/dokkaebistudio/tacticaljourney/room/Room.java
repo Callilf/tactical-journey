@@ -289,8 +289,9 @@ public class Room extends EntitySystem {
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.createItemHealthUp(this, new Vector2(11, 9));
-
+			entityFactory.createItemHealthUp(this, new Vector2(5, 3));
+			entityFactory.createItemTutorialPage(this, new Vector2(8, 9));
+			
 			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);

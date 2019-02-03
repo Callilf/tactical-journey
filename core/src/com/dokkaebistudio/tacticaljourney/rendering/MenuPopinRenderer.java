@@ -115,6 +115,7 @@ public class MenuPopinRenderer implements Renderer {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					//Quit the game
+					gamescreen.dispose();
 		            Gdx.app.exit();;
 				}
 			});

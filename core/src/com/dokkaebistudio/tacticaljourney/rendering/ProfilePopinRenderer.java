@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -79,7 +80,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	    		
 	    		table = new Table();
 //	    		table.setDebug(true, true);
-	    		table.setPosition(361, 24);
+	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		//table.setTouchable(Touchable.childrenOnly);
 	    		
 	    		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
@@ -130,6 +131,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	        	
 	        	table.pack();
+	    		table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
 	
 	    		stage.addActor(table);
     		}

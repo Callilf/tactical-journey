@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.width = 1920;
 		config.height = 1080;
 		config.fullscreen = false;
+		config.forceExit = true;
 		new LwjglApplication(new TacticalJourney(), config);
 	}
 }

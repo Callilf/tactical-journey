@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -19,6 +20,9 @@ public class InputSingleton implements InputProcessor{
 	
 	/** The instance. */
 	private static InputSingleton instance;
+	
+	/** The game screen. */
+	private GameScreen gamescreen;
 	
 	/** The camera. */
 	private OrthographicCamera guicam;
@@ -77,10 +81,11 @@ public class InputSingleton implements InputProcessor{
 	 * Instanciate the InputSingleton with the camera.
 	 * @param guicam the game camera
 	 */
-	public static void createInstance(OrthographicCamera guicam, FitViewport viewport) {
+	public static void createInstance(GameScreen gs, OrthographicCamera guicam, FitViewport viewport) {
 		instance = new InputSingleton();
 		instance.guicam = guicam;
 		instance.viewport = viewport;
+		instance.gamescreen = gs;
 	}
 	
 	/**
@@ -153,6 +158,12 @@ public class InputSingleton implements InputProcessor{
 			spaceJustPressed = true;
 			return true;
 		}
+		
+		if (keycode == Keys.BACK) {
+			gamescreen.state = GameScreen.GAME_PAUSED;
+			return false;
+		}
+		
 //		if (keycode == Input.Keys.NUM_1) {
 //			skill1JustPressed = true;
 //			return true;
@@ -172,7 +183,11 @@ public class InputSingleton implements InputProcessor{
 		}
 		
 		if (keycode == Input.Keys.ESCAPE) {
-            Gdx.app.exit();
+			if (gamescreen.state == GameScreen.GAME_PAUSED) {
+				gamescreen.state = GameScreen.GAME_RUNNING;
+			} else {
+				gamescreen.state = GameScreen.GAME_PAUSED;
+			}
             return false;
 		}
 		

@@ -24,6 +24,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.MenuPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
@@ -63,9 +65,9 @@ import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class GameScreen extends ScreenAdapter {
-	private static final int GAME_RUNNING = 1;
-	private static final int GAME_LEVEL_END = 3;
-	private static final int GAME_OVER = 4;
+	public static final int GAME_RUNNING = 1;
+	public static final int GAME_PAUSED = 2;
+	public static final int GAME_OVER = 4;
 
 	// dimensions
 	public static final int SCREEN_H = 1080;
@@ -99,7 +101,7 @@ public class GameScreen extends ScreenAdapter {
 	Rectangle quitBounds;
 	
 	public PooledEngine engine;	
-	private int state;
+	public int state;
 	
 	AttackWheel attackWheel = new AttackWheel();
 	
@@ -110,6 +112,8 @@ public class GameScreen extends ScreenAdapter {
 
 	public GameScreen (TacticalJourney game) {
 		this.game = game;
+		
+		Gdx.input.setCatchBackKey(true);
 		
 		//Instanciate the RNG
 		RandomSingleton.createInstance();
@@ -127,7 +131,7 @@ public class GameScreen extends ScreenAdapter {
 		hudStage = new Stage(hudViewport);
 		
 		//Instanciate the input processor
-		InputSingleton.createInstance(guiCam, viewport);
+		InputSingleton.createInstance(this,guiCam, viewport);
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
@@ -153,6 +157,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new InventoryPopinRenderer(room, stage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
+		renderers.add(new MenuPopinRenderer(this, hudStage));
 		
 		engine.addSystem(room);
 		engine.addSystem(new StateSystem());
@@ -219,58 +224,37 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	
-	
-	
-	
-	
-
 	public void update (float deltaTime) {
 		if (deltaTime > 0.1f) deltaTime = 0.1f;
-
-		engine.update(deltaTime);
 				
 		switch (state) {
 		case GAME_RUNNING:
-			updateRunning(deltaTime);
-			break;
-		case GAME_LEVEL_END:
-			updateLevelEnd();
+			
+			engine.update(deltaTime);
+			
 			break;
 		case GAME_OVER:
-			updateGameOver();
+			
+			//TODO 
+			
 			break;
+			default:
 		}
 	}
 
-	private void updateRunning (float deltaTime) {
-		if (Gdx.input.justTouched()) {
-			// TODO do nothing yet
-		}
-	}
-
-
-	private void updateLevelEnd () {
-		if (Gdx.input.justTouched()) {
-
-		}
-	}
-
-	private void updateGameOver () {
-		if (Gdx.input.justTouched()) {
-			game.setScreen(new MainMenuScreen(game));
-		}
-	}
 
 	public void draw (float delta) {
 		switch (state) {
 		case GAME_RUNNING:
+		case GAME_PAUSED:
+			
 			presentRunning(delta);
-			break;
-		case GAME_LEVEL_END:
-			presentLevelEnd();
+			
 			break;
 		case GAME_OVER:
-			presentGameOver();
+			
+			//TODO
+			
 			break;
 		}
 	}
@@ -279,13 +263,6 @@ public class GameScreen extends ScreenAdapter {
 		for (Renderer r : renderers) {
 			r.render(delta);
 		}
-	}
-
-
-	private void presentLevelEnd () {
-	}
-
-	private void presentGameOver () {
 	}
 	
 	@Override
@@ -307,6 +284,10 @@ public class GameScreen extends ScreenAdapter {
 		// 2 - Render on screen
 		draw(delta);
 		
+		//TODO move this ?
+//		if (Gdx.input.isKeyPressed(Keys.BACK)){
+//			state = GAME_PAUSED;
+//		}
 		
 		InputSingleton.getInstance().resetEvents();
 

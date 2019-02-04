@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -179,7 +180,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
-				inventoryComponent.setLootInventoryDisplayed(true);
+				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
 				closePopin();
 			}

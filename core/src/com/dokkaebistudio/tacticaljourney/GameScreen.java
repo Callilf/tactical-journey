@@ -87,6 +87,7 @@ public class GameScreen extends ScreenAdapter {
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
 	public Stage stage;
+	public Stage inventoryStage;
 	public Stage fxStage;
 
 	
@@ -130,6 +131,7 @@ public class GameScreen extends ScreenAdapter {
 		/// create stage and set it as input processor
 		stage = new Stage(viewport);
 		fxStage = new Stage(viewport);
+		inventoryStage = new Stage(hudViewport);
 		hudStage = new Stage(hudViewport);
 		
 		//Instanciate the input processor
@@ -137,6 +139,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(inventoryStage);
 		inputMultiplexer.addProcessor(hudStage);
 		inputMultiplexer.addProcessor(InputSingleton.getInstance());
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -157,7 +160,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
-		renderers.add(new InventoryPopinRenderer(room, stage, player));
+		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		renderers.add(new MenuPopinRenderer(this, hudStage));

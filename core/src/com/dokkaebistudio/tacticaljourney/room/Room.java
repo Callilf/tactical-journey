@@ -30,6 +30,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -275,9 +276,13 @@ public class Room extends EntitySystem {
 			if (isLoot) {
 				Vector2 lootPos = enemyPositions.get(0);
 				if (lootRandom <= 5) {
-					entityFactory.createRemainsBones(this, lootPos);
+					Entity bones = entityFactory.createRemainsBones(this, lootPos);
+					fillLootable(bones, 2);
+					
 				} else {
-					entityFactory.createRemainsSatchel(this, lootPos);
+					Entity satchel = entityFactory.createRemainsSatchel(this, lootPos);
+					fillLootable(satchel, 4);
+
 				}
 				enemyPositions.remove(0);
 			}
@@ -307,31 +312,8 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
 			
 			Entity satchel = entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
-			
-			// Fill satchel
-			LootableComponent lootableComponent = Mappers.lootableComponent.get(satchel);
-			Entity potion = entityFactory.itemFactory.createItemHealthUp(null, null);
-			lootableComponent.getItems().add(potion);
-			Entity tutoPage = entityFactory.itemFactory.createItemTutorialPage(null, null);
-			lootableComponent.getItems().add(tutoPage);
-			Entity potion2 = entityFactory.itemFactory.createItemHealthUp(null, null);
-			lootableComponent.getItems().add(potion2);
-			Entity tutoPage2 = entityFactory.itemFactory.createItemTutorialPage(null, null);
-			lootableComponent.getItems().add(tutoPage2);
-			Entity potion3 = entityFactory.itemFactory.createItemHealthUp(null, null);
-			lootableComponent.getItems().add(potion3);
-			Entity tutoPage3 = entityFactory.itemFactory.createItemTutorialPage(null, null);
-			lootableComponent.getItems().add(tutoPage3);
-			Entity potion4 = entityFactory.itemFactory.createItemHealthUp(null, null);
-			lootableComponent.getItems().add(potion4);
-			Entity tutoPage4 = entityFactory.itemFactory.createItemTutorialPage(null, null);
-			lootableComponent.getItems().add(tutoPage4);
-			Entity potion5 = entityFactory.itemFactory.createItemHealthUp(null, null);
-			lootableComponent.getItems().add(potion5);
-			Entity tutoPage5 = entityFactory.itemFactory.createItemTutorialPage(null, null);
-			lootableComponent.getItems().add(tutoPage5);
+			fillLootable(satchel, 10);
 
-			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
@@ -345,6 +327,24 @@ public class Room extends EntitySystem {
 			entityFactory.createExit(this, pos);
 			default:
 			break;
+		}
+	}
+	
+	private void fillLootable(Entity lootable, int nbMaxItems) {
+		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
+		
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		int nbLoot = random.nextInt(nbMaxItems + 1);
+		for (int i=0 ; i<nbLoot ; i++) {
+			int nextInt = random.nextInt(2);
+			Entity item = null;
+			
+			if (nextInt == 0) {
+				item = entityFactory.itemFactory.createItemHealthUp(null, null);
+			} else {
+				item = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			}
+			lootableComponent.getItems().add(item);
 		}
 	}
 	

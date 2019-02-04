@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -39,6 +40,9 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	public Stage stage;
 	
 	private Entity player;
+	
+	/** Whether we are in loot mode or just plain inventory mode. */
+	private boolean isLoot;
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
@@ -99,7 +103,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
     	}
     	
-    	if (inventoryCompo != null && ( inventoryCompo.isInventoryDisplayed() || inventoryCompo.isLootInventoryDisplayed())) {
+    	if (inventoryCompo != null && inventoryCompo.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
+    		this.isLoot = inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.LOOT;
 
     		if (mainTable == null) {
     			// Create the inventory table for the first time
@@ -112,7 +117,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		if (needsRefresh) {
     			mainTable.clear();
     			
-	    		if (inventoryCompo.isLootInventoryDisplayed()) {
+	    		if (this.isLoot) {
 	    			createLootTable();
 		    		mainTable.add(lootTable).padRight(20);
 	    		}
@@ -375,7 +380,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			dropItemBtn = new TextButton("Drop",btnStyle);			
 			buttonTable.add(dropItemBtn).pad(0, 20,0,20);
 
-			if (!inventoryCompo.isLootInventoryDisplayed()) {
+			if (!this.isLoot) {
 				// 3.3 - Use button
 				useItemBtn = new TextButton("Use",btnStyle);			
 				buttonTable.add(useItemBtn).pad(0, 20,0,20);
@@ -395,7 +400,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		// Update the Drop item listener
 		updateDropListener(item, slot, itemComponent);
 		
-		if (!inventoryCompo.isLootInventoryDisplayed()) {
+		if (!this.isLoot) {
 			useItemBtn.setText(itemComponent.getItemType().getActionLabel());
 			// Update the Use item listener
 			updateUseListener(item, slot);
@@ -429,10 +434,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		if (dropListener != null) {
 			dropItemBtn.removeListener(dropListener);
 		}
+		final Boolean isLoot = this.isLoot;
 		dropListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (inventoryCompo.isLootInventoryDisplayed()) {
+				if (isLoot) {
 					//Loot mode, drop into the lootable
 					lootableCompo.getItems().add(item);
 					inventoryCompo.remove(item);
@@ -463,13 +469,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
-		inventoryCompo.setInventoryDisplayed(false);
-		inventoryCompo.setLootInventoryDisplayed(false);
+		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
 		if (itemPopinDisplayer) hideSelectedItemPopin();
 
 		mainTable.clear();
 		mainTable.remove();
+		mainTable = null;
 		needsRefresh = true;
 		
 		if (room.getNextState() == null) {

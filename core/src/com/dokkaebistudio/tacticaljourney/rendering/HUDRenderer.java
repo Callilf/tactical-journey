@@ -34,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -287,7 +288,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					inventoryComponent.setInventoryDisplayed(!inventoryComponent.isInventoryDisplayed());
+					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
+					} else {
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INVENTORY);
+					}
 				}
 			});
 			profileTable.add(inventoryBtn);

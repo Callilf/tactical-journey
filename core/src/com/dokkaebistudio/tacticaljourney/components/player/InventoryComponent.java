@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -14,12 +15,10 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public class InventoryComponent implements Component, Poolable {
 	
-	/** Whether the inventory is being displayed or not. */
-	private boolean inventoryDisplayed;
+	/** The display mode of the inventory. */
+	private InventoryDisplayModeEnum displayMode;
 	
-	/** Whether the inventory is being displayed because of looting or not. */
-	private boolean lootInventoryDisplayed;
-	/** The entity being looted. */
+	/** The entity being looted (if any). */
 	private Entity lootableEntity;
 	
 	/** The number of slots in the inventory. */
@@ -47,7 +46,7 @@ public class InventoryComponent implements Component, Poolable {
 	public void reset() {
 		slots = new Entity[16];
 		firstEmptySlot = 0;
-		inventoryDisplayed = false;
+		displayMode = InventoryDisplayModeEnum.NONE;
 	}
 	
 	
@@ -141,19 +140,6 @@ public class InventoryComponent implements Component, Poolable {
 	}
 
 
-
-	public boolean isInventoryDisplayed() {
-		return inventoryDisplayed;
-	}
-
-
-
-	public void setInventoryDisplayed(boolean inventoryDisplayed) {
-		this.inventoryDisplayed = inventoryDisplayed;
-	}
-
-
-
 	public InventoryActionEnum getCurrentAction() {
 		return currentAction;
 	}
@@ -178,18 +164,6 @@ public class InventoryComponent implements Component, Poolable {
 
 
 
-	public boolean isLootInventoryDisplayed() {
-		return lootInventoryDisplayed;
-	}
-
-
-
-	public void setLootInventoryDisplayed(boolean lootInventoryDisplayed) {
-		this.lootInventoryDisplayed = lootInventoryDisplayed;
-	}
-
-
-
 	public Entity getLootableEntity() {
 		return lootableEntity;
 	}
@@ -198,6 +172,18 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setLootableEntity(Entity lootableEntity) {
 		this.lootableEntity = lootableEntity;
+	}
+
+
+
+	public InventoryDisplayModeEnum getDisplayMode() {
+		return displayMode;
+	}
+
+
+
+	public void setDisplayMode(InventoryDisplayModeEnum displayMode) {
+		this.displayMode = displayMode;
 	}
 
 

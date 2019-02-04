@@ -12,6 +12,8 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -201,6 +203,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (inventoryComponent.getTurnsToWaitBeforeLooting().intValue() <= 0) {
 			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 			inventoryComponent.setTurnsToWaitBeforeLooting(null);
+			LootableComponent lootableComponent = Mappers.lootableComponent.get(inventoryComponent.getLootableEntity());
+			lootableComponent.setLootableState(LootableStateEnum.OPENED);
 		} else {
 			inventoryComponent.setTurnsToWaitBeforeLooting(inventoryComponent.getTurnsToWaitBeforeLooting() - 1);
 			room.turnManager.endPlayerTurn();

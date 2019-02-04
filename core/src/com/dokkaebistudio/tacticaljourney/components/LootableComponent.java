@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 
 /**
@@ -12,7 +13,7 @@ import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
  * @author Callil
  *
  */
-public class LootableComponent implements Component {
+public class LootableComponent implements Component, Poolable {
 	
 	/** The type of lootable. */
 	private LootableEnum type;
@@ -20,7 +21,31 @@ public class LootableComponent implements Component {
 	/** The loot. */
 	private List<Entity> items = new ArrayList<>();
 
+	private LootableStateEnum lootableState = LootableStateEnum.CLOSED;
 	
+	public enum LootableStateEnum {
+		CLOSED,
+		OPENED;
+	}
+	
+	
+	@Override
+	public void reset() {
+		items.clear();
+		lootableState = LootableStateEnum.CLOSED;
+	}
+	
+	/**
+	 * Get the number of turns to open the lootable.
+	 * @return the number of turns
+	 */
+	public int getNbTurnsToOpen() {
+		if (lootableState == LootableStateEnum.CLOSED) {
+			return type.getNbTurnsToOpen();
+		} else {
+			return 0;
+		}
+	}
 	
 	
 	
@@ -40,6 +65,16 @@ public class LootableComponent implements Component {
 
 	public void setType(LootableEnum type) {
 		this.type = type;
+	}
+
+
+	public LootableStateEnum getLootableState() {
+		return lootableState;
+	}
+
+
+	public void setLootableState(LootableStateEnum lootableState) {
+		this.lootableState = lootableState;
 	}
 
 	

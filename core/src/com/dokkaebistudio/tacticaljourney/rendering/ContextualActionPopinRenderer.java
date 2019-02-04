@@ -22,9 +22,9 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -47,6 +47,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     private Table mainPopin;
     private Label title;
     private Label desc;
+    private Label nbTurns;
     private TextButton yesBtn;
     private ChangeListener yesBtnListener;
     
@@ -89,8 +90,14 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			// Update the content
 			title.setText(lootableComponent.getType().getLabel());
 			desc.setText(lootableComponent.getType().getDescription());
-			yesBtn.setText("Loot (" + lootableComponent.getType().getNbTurnsToOpen() + " turns)");
-						
+			
+			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
+				nbTurns.setText("It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
+			} else {
+				nbTurns.setText("It is already [GREEN]opened[WHITE]. It won't take any turn.");
+			}
+			yesBtn.setText("Open");
+		
 			// Update the Use item listener
 			updateLootListener(lootableEntity, lootableComponent);
 			
@@ -148,13 +155,19 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
-		// 3 - Action buttons
+		// 3 - Nb turns
+		nbTurns = new Label("Nb turns", hudStyle);
+		mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
+		mainPopin.row().align(Align.center);
+
+		
+		// 4 - Action buttons
 		Table buttonTable = new Table();
 		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
 		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
 		TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
 		
-		// 3.1 - No button
+		// 4.1 - No button
 		final TextButton closeBtn = new TextButton("Close",btnStyle);			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
@@ -165,7 +178,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		});
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
-		// 3.2 - Yes button
+		// 4.2 - Yes button
 		yesBtn = new TextButton("Loot",btnStyle);			
 		buttonTable.add(yesBtn).pad(0, 20,0,20);
 		
@@ -180,8 +193,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
-				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getType().getNbTurnsToOpen());
-//				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
+				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
 				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
 				closePopin();
 			}

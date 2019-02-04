@@ -312,7 +312,7 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
 			
 			Entity satchel = entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
-			fillLootable(satchel, 10);
+			fillLootable(satchel, 30);
 
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);

@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Pools;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
@@ -63,12 +67,12 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     /** The loot table. */
     private Table lootTable;
-    
+    private List<TextButton> lootTakeBtns = new ArrayList<>();
     
     
     private Table selectedItemPopin;
     
-    boolean itemPopinDisplayer = false;
+    boolean itemPopinDisplayed = false;
     private Label itemTitle;
     private Label itemDesc;
     private TextButton dropItemBtn;
@@ -161,12 +165,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		lootTable.align(Align.top);
 
 		// 1 - Title
-		Label title = new Label("Loot", hudStyle);
+		Label title = new Label(lootableCompo.getType().getLabel() + " ([GREEN]" + lootableCompo.getItems().size() + "[WHITE] items)", hudStyle);
 		lootTable.add(title).uniformX().pad(40, 0, 40, 0);
 		lootTable.row();
 		
 		Table lootableItemsTable = new Table();
 		lootableItemsTable.top();
+		lootTakeBtns.clear();
 		for (Entity item : lootableCompo.getItems()) {
 			Table oneItem = createOneLootItem(item);
 			lootableItemsTable.add(oneItem).pad(0, 10, 10, 10);
@@ -179,6 +184,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		lootTable.add(lootableItems).fill().expand().maxHeight(535);
 		lootTable.row();
 		
+		Table btnTable = new Table();
 		
 		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
 		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
@@ -191,9 +197,32 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				closePopin();
 			}
 		});
-		lootTable.add(closeBtn).pad(40, 0, 40, 0);
+		btnTable.add(closeBtn).pad(0, 0, 0, 20);
 
 		
+		TextButton takeAllBtn = new TextButton("Take all", btnStyle);
+		// Close listener
+		takeAllBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+			    InputEvent inputEvent = Pools.obtain(InputEvent.class);
+			    inputEvent.reset();
+			    inputEvent.setButton(0);
+			    
+				for (TextButton btn : lootTakeBtns) {
+			        inputEvent.setType(InputEvent.Type.touchDown);
+					btn.fire(inputEvent);
+					inputEvent.setType(InputEvent.Type.touchUp);
+					btn.fire(inputEvent);
+				}
+			}
+		});
+		
+		btnTable.add(takeAllBtn).pad(0, 20, 0, 0);
+		btnTable.pack();
+		
+		lootTable.add(btnTable).pad(40, 0, 40, 0);
+
 		
 		lootTable.pack();
 	}
@@ -230,6 +259,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				}
 			}
 		});
+		lootTakeBtns.add(takeBtn);
 		
 		oneItem.add(takeBtn).padRight(20);
 		
@@ -410,7 +440,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		selectedItemPopin.pack();
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
 	
-		itemPopinDisplayer = true;
+		itemPopinDisplayed = true;
 		this.stage.addActor(selectedItemPopin);
 	}
 
@@ -458,7 +488,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	private void hideSelectedItemPopin() {
 		selectedItemPopin.remove();
-		itemPopinDisplayer = false;
+		selectedItemPopin = null;
+		itemPopinDisplayed = false;
 	}
 	
 	private void refreshPopin() {
@@ -471,7 +502,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	private void closePopin() {
 		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
-		if (itemPopinDisplayer) hideSelectedItemPopin();
+		if (itemPopinDisplayed) hideSelectedItemPopin();
 
 		mainTable.clear();
 		mainTable.remove();

@@ -92,7 +92,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			yesBtn.setText("Loot (" + lootableComponent.getType().getNbTurnsToOpen() + " turns)");
 						
 			// Update the Use item listener
-			updateLootListener(lootableEntity);
+			updateLootListener(lootableEntity, lootableComponent);
 			
 			// Place the popin properly
 			mainPopin.pack();
@@ -172,7 +172,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);
 	}
 
-	private void updateLootListener(final Entity item) {
+	private void updateLootListener(final Entity item, final LootableComponent lootableComponent) {
 		if (yesBtnListener != null) {
 			yesBtn.removeListener(yesBtnListener);
 		}
@@ -180,7 +180,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
-				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
+				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getType().getNbTurnsToOpen());
+//				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
 				closePopin();
 			}

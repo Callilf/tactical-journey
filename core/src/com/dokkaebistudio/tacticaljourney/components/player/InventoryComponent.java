@@ -20,6 +20,7 @@ public class InventoryComponent implements Component, Poolable {
 	
 	/** The entity being looted (if any). */
 	private Entity lootableEntity;
+	private Integer turnsToWaitBeforeLooting;
 	
 	/** The number of slots in the inventory. */
 	private int numberOfSlots;
@@ -184,6 +185,18 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setDisplayMode(InventoryDisplayModeEnum displayMode) {
 		this.displayMode = displayMode;
+	}
+
+
+
+	public Integer getTurnsToWaitBeforeLooting() {
+		return turnsToWaitBeforeLooting;
+	}
+
+
+
+	public void setTurnsToWaitBeforeLooting(Integer turnsToWaitBeforeLooting) {
+		this.turnsToWaitBeforeLooting = turnsToWaitBeforeLooting;
 	}
 
 

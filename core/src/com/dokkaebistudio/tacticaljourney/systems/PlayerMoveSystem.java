@@ -15,7 +15,9 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -43,7 +45,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
-		this.priority = 8;
+		this.priority = 10;
 
 		this.room = room;
 		this.movementHandler = new MovementHandler(room.engine);
@@ -66,10 +68,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
-
+		
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(moverEntity);
+		boolean waitingForLooting = inventoryComponent.getTurnsToWaitBeforeLooting() != null;
+		
 		switch (room.getState()) {
 
-		case PLAYER_TURN_INIT:
+		case PLAYER_TURN_INIT:	
 			if (room.hasEnemies()) {
 				moveCompo.moveRemaining = moveCompo.moveSpeed;
 				moveCompo.freeMove = false;
@@ -80,6 +85,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
+			if (waitingForLooting) {
+				handleWaitForLooting(inventoryComponent);
+				return;
+			}
+			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();
 			if (attackCompo != null)
@@ -98,6 +108,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
+			
+			if (waitingForLooting) {
+				handleWaitForLooting(inventoryComponent);
+				return;
+			}
+			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
@@ -174,6 +190,20 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		default:
 			break;
 
+		}
+	}
+
+	/**
+	 * Update the number of turns to wait for opening a lootable.
+	 * @param inventoryComponent the inventory component
+	 */
+	private void handleWaitForLooting(InventoryComponent inventoryComponent) {
+		if (inventoryComponent.getTurnsToWaitBeforeLooting().intValue() <= 0) {
+			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
+			inventoryComponent.setTurnsToWaitBeforeLooting(null);
+		} else {
+			inventoryComponent.setTurnsToWaitBeforeLooting(inventoryComponent.getTurnsToWaitBeforeLooting() - 1);
+			room.turnManager.endPlayerTurn();
 		}
 	}
 

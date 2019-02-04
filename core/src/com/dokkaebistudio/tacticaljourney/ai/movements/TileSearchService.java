@@ -332,9 +332,9 @@ public class TileSearchService {
 		
 		Set<Entity> blockingEntity = null; 
 		if (attackType == AttackTypeEnum.EXPLOSION) {
-			blockingEntity = TileUtil.getEntityWithComponentOnTile(pos, BlockExplosionComponent.class, room);
+			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockExplosionComponent.class, room);
 		} else {
-			blockingEntity = TileUtil.getEntityWithComponentOnTile(pos, SolidComponent.class, room);
+			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
 			obstacles.add(gridPositionComponent.coord());

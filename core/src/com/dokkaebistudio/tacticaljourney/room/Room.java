@@ -305,6 +305,8 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
 			
+			entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
+
 			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);

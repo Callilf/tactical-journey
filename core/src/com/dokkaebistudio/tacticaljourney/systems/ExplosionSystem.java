@@ -167,7 +167,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			}
 
 			// Destroy destructible entities
-			Set<Entity> destructibles = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(),
+			Set<Entity> destructibles = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(),
 					DestructibleComponent.class, room);
 			for (Entity d : destructibles) {
 				room.removeEntity(d);

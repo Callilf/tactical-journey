@@ -20,7 +20,15 @@ public class PlayerComponent implements Component {
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
+	/** Whether the popin to ask for loot should open or not. */
+	private boolean lootRequested;
+	private Entity lootableEntity;
 	
+	
+	public void clearLootRequested() {
+		this.lootableEntity = null;
+		this.lootRequested = false;
+	}
 	
 	
 	
@@ -67,6 +75,22 @@ public class PlayerComponent implements Component {
 
 	public void setProfilePopinDisplayed(boolean profilePopinDisplayed) {
 		this.profilePopinDisplayed = profilePopinDisplayed;
+	}
+
+	public boolean isLootRequested() {
+		return lootRequested;
+	}
+
+	public void setLootRequested(boolean lootRequested) {
+		this.lootRequested = lootRequested;
+	}
+
+	public Entity getLootableEntity() {
+		return lootableEntity;
+	}
+
+	public void setLootableEntity(Entity lootableEntity) {
+		this.lootableEntity = lootableEntity;
 	}
 	
 }

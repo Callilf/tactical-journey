@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -35,6 +36,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -702,22 +704,26 @@ public final class EntityFactory {
 	 * @return the lootable bones
 	 */
 	public Entity createRemainsBones(Room room, Vector2 pos) {
-		Entity exitEntity = engine.createEntity();
-		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		Entity remainsEntity = engine.createEntity();
+		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(exitEntity, pos, room);
+    	movableTilePos.coord(remainsEntity, pos, room);
     	movableTilePos.zIndex = 3;
-    	exitEntity.add(movableTilePos);
+    	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	Sprite s = new Sprite(Assets.getTexture(Assets.remains_bones));
     	spriteCompo.setSprite(s);
-    	exitEntity.add(spriteCompo);
+    	remainsEntity.add(spriteCompo);
 
-		engine.addEntity(exitEntity);
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.BONES);
+    	remainsEntity.add(lootComponent);
+    	
+		engine.addEntity(remainsEntity);
 
-    	return exitEntity;
+    	return remainsEntity;
 	}
 	
 	/**
@@ -727,22 +733,26 @@ public final class EntityFactory {
 	 * @return the lootable satchel
 	 */
 	public Entity createRemainsSatchel(Room room, Vector2 pos) {
-		Entity exitEntity = engine.createEntity();
-		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		Entity remainsEntity = engine.createEntity();
+		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(exitEntity, pos, room);
+    	movableTilePos.coord(remainsEntity, pos, room);
     	movableTilePos.zIndex = 3;
-    	exitEntity.add(movableTilePos);
+    	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	Sprite s = new Sprite(Assets.getTexture(Assets.remains_satchel));
     	spriteCompo.setSprite(s);
-    	exitEntity.add(spriteCompo);
+    	remainsEntity.add(spriteCompo);
+    	
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.SATCHEL);
+    	remainsEntity.add(lootComponent);
 
-		engine.addEntity(exitEntity);
+		engine.addEntity(remainsEntity);
 
-    	return exitEntity;
+    	return remainsEntity;
 	}
 	
 	

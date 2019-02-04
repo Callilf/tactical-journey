@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -68,8 +69,9 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		
 		if (room.getState() == RoomState.PLAYER_END_MOVEMENT) {
 			
-			// The player just arrived on a tile, check for lootables
+			// The player just arrived on a tile
 			checkForLootablesToDisplayPopin();
+			checkForExitToDisplayPopin();
 			
 		} else if (room.getState().canEndTurn()) {
 			
@@ -82,8 +84,9 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 				SpriteComponent spriteComponent = Mappers.spriteComponent.get(player);
 				if (spriteComponent.containsPoint(x, y)) {
 					
-					// Touched the player, if there is a lootable on this tile, display the popin
+					// Touched the player, if there is a contextual action entity on this tile, display a popin
 					checkForLootablesToDisplayPopin();
+					checkForExitToDisplayPopin();
 				}
 				
 			}
@@ -104,7 +107,17 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
-
+	/**
+	 * Check whether there is a doorway to another floor on the current tile, if so
+	 * display the "Would you like to leave?" popin.
+	 */
+	private void checkForExitToDisplayPopin() {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
+		Entity exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
+		if (exit != null) {
+			playerCompo.setExitRequested(exit);
+		}
+	}
 
 
 }

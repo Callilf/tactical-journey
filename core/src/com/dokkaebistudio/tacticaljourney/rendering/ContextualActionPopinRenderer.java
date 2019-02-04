@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -79,27 +80,13 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(player);
     	}
     	
-    	if (playerCompo.isLootRequested()) {
+    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested()) {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
 			initTable();
-						
-			Entity lootableEntity = playerCompo.getLootableEntity();
-			LootableComponent lootableComponent = Mappers.lootableComponent.get(lootableEntity);
-			// Update the content
-			title.setText(lootableComponent.getType().getLabel());
-			desc.setText(lootableComponent.getType().getDescription());
 			
-			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
-				nbTurns.setText("It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
-			} else {
-				nbTurns.setText("It is already [GREEN]opened[WHITE]. It won't take any turn.");
-			}
-			yesBtn.setText("Open");
-		
-			// Update the Use item listener
-			updateLootListener(lootableEntity, lootableComponent);
+			updateContentForAction();
 			
 			// Place the popin properly
 			mainPopin.pack();
@@ -109,6 +96,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			this.stage.addActor(mainPopin);
 			
 			playerCompo.clearLootRequested();
+			playerCompo.clearExitRequested();
     	}
     	
     	if (popinDisplayed) {
@@ -121,6 +109,34 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     			closePopin();
     		}
     	}
+	}
+
+	private void updateContentForAction() {
+		
+		if (playerCompo.isLootRequested()) {
+			Entity lootableEntity = playerCompo.getLootableEntity();
+			LootableComponent lootableComponent = Mappers.lootableComponent.get(lootableEntity);
+			// Update the content
+			title.setText(lootableComponent.getType().getLabel());
+			desc.setText(lootableComponent.getType().getDescription());
+			
+			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
+				nbTurns.setText("It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
+			} else {
+				nbTurns.setText("It is already [GREEN]opened[WHITE]. It won't take any turn.");
+			}
+			yesBtn.setText("Open");
+	
+			// Update the Use item listener
+			updateLootListener(lootableEntity, lootableComponent);
+		} else if (playerCompo.isExitRequested()) {
+			Entity exitEntity = playerCompo.getExitEntity();
+			ExitComponent exitComponent = Mappers.exitComponent.get(exitEntity);
+			title.setText("Doorway to lower floor");
+			desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
+					+ "\nSadness galore.");
+			yesBtn.setText("Wait for months");
+		}
 	}
     
 
@@ -155,10 +171,12 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
-		// 3 - Nb turns
-		nbTurns = new Label("Nb turns", hudStyle);
-		mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
-		mainPopin.row().align(Align.center);
+		// 3 - Nb turns (optional)
+		if (playerCompo.isLootRequested()) {
+			nbTurns = new Label("Nb turns", hudStyle);
+			mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
+			mainPopin.row().align(Align.center);
+		}
 
 		
 		// 4 - Action buttons

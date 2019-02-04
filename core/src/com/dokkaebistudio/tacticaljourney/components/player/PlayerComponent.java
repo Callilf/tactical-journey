@@ -20,11 +20,17 @@ public class PlayerComponent implements Component {
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
+
+	
+
+	
+	
+	
+	// LOOT action
+	
 	/** Whether the popin to ask for loot should open or not. */
 	private boolean lootRequested;
 	private Entity lootableEntity;
-	
-	
 
 	public void setLootRequested(Entity lootableEntity) {
 		this.lootRequested = true;
@@ -33,6 +39,22 @@ public class PlayerComponent implements Component {
 
 	public void clearLootRequested() {
 		this.lootRequested = false;
+	}
+	
+	
+	// EXIT action
+	
+	/** Whether the popin to ask for exit should open or not. */
+	private boolean exitRequested;
+	private Entity exitEntity;
+	
+	public void setExitRequested(Entity exitEntity) {
+		this.exitRequested = true;
+		this.exitEntity = exitEntity;
+	}
+
+	public void clearExitRequested() {
+		this.exitRequested = false;
 	}
 	
 	
@@ -89,5 +111,13 @@ public class PlayerComponent implements Component {
 	public Entity getLootableEntity() {
 		return lootableEntity;
 	}
-	
+
+	public boolean isExitRequested() {
+		return exitRequested;
+	}
+
+
+	public Entity getExitEntity() {
+		return exitEntity;
+	}
 }

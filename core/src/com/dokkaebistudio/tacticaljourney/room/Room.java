@@ -35,6 +35,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -305,7 +306,30 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
 			
-			entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
+			Entity satchel = entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
+			
+			// Fill satchel
+			LootableComponent lootableComponent = Mappers.lootableComponent.get(satchel);
+			Entity potion = entityFactory.itemFactory.createItemHealthUp(null, null);
+			lootableComponent.getItems().add(potion);
+			Entity tutoPage = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			lootableComponent.getItems().add(tutoPage);
+			Entity potion2 = entityFactory.itemFactory.createItemHealthUp(null, null);
+			lootableComponent.getItems().add(potion2);
+			Entity tutoPage2 = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			lootableComponent.getItems().add(tutoPage2);
+			Entity potion3 = entityFactory.itemFactory.createItemHealthUp(null, null);
+			lootableComponent.getItems().add(potion3);
+			Entity tutoPage3 = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			lootableComponent.getItems().add(tutoPage3);
+			Entity potion4 = entityFactory.itemFactory.createItemHealthUp(null, null);
+			lootableComponent.getItems().add(potion4);
+			Entity tutoPage4 = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			lootableComponent.getItems().add(tutoPage4);
+			Entity potion5 = entityFactory.itemFactory.createItemHealthUp(null, null);
+			lootableComponent.getItems().add(potion5);
+			Entity tutoPage5 = entityFactory.itemFactory.createItemTutorialPage(null, null);
+			lootableComponent.getItems().add(tutoPage5);
 
 			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);

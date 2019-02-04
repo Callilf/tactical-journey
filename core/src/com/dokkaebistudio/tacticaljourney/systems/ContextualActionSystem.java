@@ -100,8 +100,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Entity lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
 		if (lootable != null) {
-			playerCompo.setLootRequested(true);
-			playerCompo.setLootableEntity(lootable);
+			playerCompo.setLootRequested(lootable);
 		}
 	}
 

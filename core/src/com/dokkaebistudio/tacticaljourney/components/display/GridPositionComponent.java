@@ -10,10 +10,10 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class GridPositionComponent implements Component, Poolable {
 	
 	/** The pixel pos used by the RenderingSystem. NEVER UPDATE THIS VALUE MANUALLY. */
-	private final Vector2 worldPos = new Vector2(0, 0);
+	private final Vector2 worldPos = new Vector2(-100, -100);
 	
 	/** The tile coordinates. */
-    private final Vector2 coord = new Vector2(0,0);
+    private final Vector2 coord = new Vector2(-100,-100);
     
     /** Whether this entity is using absolute position or tile position. */
     private boolean hasAbsolutePos = false;
@@ -32,9 +32,9 @@ public class GridPositionComponent implements Component, Poolable {
     
     @Override
     public void reset() {
-    	coord.set(0,0);
+    	coord.set(-100,-100);
     	hasAbsolutePos = false;
-    	absolutePos.set(0,0);
+    	absolutePos.set(-100,-100);
     	zIndex = 0;
     }
     

@@ -25,8 +25,13 @@ public class PlayerComponent implements Component {
 	private Entity lootableEntity;
 	
 	
+
+	public void setLootRequested(Entity lootableEntity) {
+		this.lootRequested = true;
+		this.lootableEntity = lootableEntity;
+	}
+
 	public void clearLootRequested() {
-		this.lootableEntity = null;
 		this.lootRequested = false;
 	}
 	
@@ -81,16 +86,8 @@ public class PlayerComponent implements Component {
 		return lootRequested;
 	}
 
-	public void setLootRequested(boolean lootRequested) {
-		this.lootRequested = lootRequested;
-	}
-
 	public Entity getLootableEntity() {
 		return lootableEntity;
-	}
-
-	public void setLootableEntity(Entity lootableEntity) {
-		this.lootableEntity = lootableEntity;
 	}
 	
 }

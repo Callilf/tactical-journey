@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -154,7 +155,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		
 		// 3.1 - No button
 		final TextButton closeBtn = new TextButton("Close",btnStyle);			
-		// continueButton listener
+		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -177,6 +178,9 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				inventoryComponent.setLootInventoryDisplayed(true);
+				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
 				closePopin();
 			}
 		};

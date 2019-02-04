@@ -59,12 +59,10 @@ public final class ItemFactory {
 		spriteCompo.setSprite(new Sprite( this.smallHealthPotionTexture));
 		healthUp.add(spriteCompo);
 
-		if (tilePos != null) {
-			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-			gridPosition.coord(healthUp, tilePos, room);
-			gridPosition.zIndex = 8;
-			healthUp.add(gridPosition);
-		}
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) gridPosition.coord(healthUp, tilePos, room);
+		gridPosition.zIndex = 8;
+		healthUp.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
@@ -91,12 +89,10 @@ public final class ItemFactory {
 		spriteCompo.setSprite(new Sprite( this.tutorialPageTexture));
 		item.add(spriteCompo);
 
-		if (tilePos != null) {
-			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-			gridPosition.coord(item, tilePos, room);
-			gridPosition.zIndex = 8;
-			item.add(gridPosition);
-		}
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) gridPosition.coord(item, tilePos, room);
+		gridPosition.zIndex = 8;
+		item.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.TUTORIAL_PAGE_1);

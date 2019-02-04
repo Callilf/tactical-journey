@@ -89,6 +89,8 @@ public class Assets {
 	public static final String inventory_item_popin_btn_up = "hud_inventory_item_popin_btn_up";
 	public static final String inventory_item_popin_btn_down = "hud_inventory_item_popin_btn_down";
 
+	public static final String inventory_lootable_item_background = "hud_lootable_item_background";
+
 	
 	
 	public static final String btn_skill_attack = "btn-skill-slash";

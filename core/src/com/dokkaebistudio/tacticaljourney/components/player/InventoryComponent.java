@@ -13,8 +13,14 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  *
  */
 public class InventoryComponent implements Component, Poolable {
+	
 	/** Whether the inventory is being displayed or not. */
 	private boolean inventoryDisplayed;
+	
+	/** Whether the inventory is being displayed because of looting or not. */
+	private boolean lootInventoryDisplayed;
+	/** The entity being looted. */
+	private Entity lootableEntity;
 	
 	/** The number of slots in the inventory. */
 	private int numberOfSlots;
@@ -59,8 +65,10 @@ public class InventoryComponent implements Component, Poolable {
 		slots[firstEmptySlot] = e;
 		firstEmptySlot ++;
 		
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
-		gridPositionComponent.setInactive(e, r);
+		if (r != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+			gridPositionComponent.setInactive(e, r);
+		}
 	}
 	
 	/**
@@ -166,6 +174,30 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setCurrentItem(Entity currentItem) {
 		this.currentItem = currentItem;
+	}
+
+
+
+	public boolean isLootInventoryDisplayed() {
+		return lootInventoryDisplayed;
+	}
+
+
+
+	public void setLootInventoryDisplayed(boolean lootInventoryDisplayed) {
+		this.lootInventoryDisplayed = lootInventoryDisplayed;
+	}
+
+
+
+	public Entity getLootableEntity() {
+		return lootableEntity;
+	}
+
+
+
+	public void setLootableEntity(Entity lootableEntity) {
+		this.lootableEntity = lootableEntity;
 	}
 
 

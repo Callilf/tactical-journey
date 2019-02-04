@@ -721,6 +721,9 @@ public final class EntityFactory {
     	lootComponent.setType(LootableEnum.BONES);
     	remainsEntity.add(lootComponent);
     	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	remainsEntity.add(destructibleCompo);
+    	
 		engine.addEntity(remainsEntity);
 
     	return remainsEntity;
@@ -749,6 +752,9 @@ public final class EntityFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
     	remainsEntity.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	remainsEntity.add(destructibleCompo);
 
 		engine.addEntity(remainsEntity);
 

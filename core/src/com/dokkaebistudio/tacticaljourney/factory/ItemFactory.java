@@ -81,7 +81,7 @@ public final class ItemFactory {
 	 * @param tilePos the position in tiles
 	 * @return the entity created
 	 */
-	public Entity createItemTutorialPage(Room room, Vector2 tilePos) {
+	public Entity createItemTutorialPage(int pageNumber, Room room, Vector2 tilePos) {
 		Entity item = engine.createEntity();
 		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
 
@@ -95,7 +95,7 @@ public final class ItemFactory {
 		item.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.TUTORIAL_PAGE_1);
+		itemCompo.setItemType(ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
 		item.add(itemCompo);
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);

@@ -62,6 +62,63 @@ public enum ItemEnum {
 		@Override
 		public boolean use(Entity user, Entity item, Room room) {return true;}
 
+	},
+	
+	/** A tutorial page. */
+	TUTORIAL_PAGE_2("Tutorial page 2", Assets.tutorial_page_item, false) {
+		
+		@Override
+		public String getDescription() {
+			return "Page 2: Le verbe Ouamoulure (4eme groupe).\n"
+					+ "Je ouamoului, tu ouamouluis, il ouamoului, nous ouamouluissons, vous ouamouluissez, ils ouamouluissent.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Tear";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {return true;}
+
+	},
+	
+	/** A tutorial page. */
+	TUTORIAL_PAGE_3("Tutorial page 3", Assets.tutorial_page_item, false) {
+		
+		@Override
+		public String getDescription() {
+			return "Page 3: Le chant des herons.\n"
+					+ "Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Tear";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {return true;}
+
+	},
+	
+	/** A tutorial page. */
+	TUTORIAL_PAGE_4("Tutorial page 4", Assets.tutorial_page_item, false) {
+		
+		@Override
+		public String getDescription() {
+			return "Page 4: The best game.\n"
+					+ "Marmotte de terre, Windows tournevista, Tortulipe, Salamandragore.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Tear";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {return true;}
+
 	};
 	
 	

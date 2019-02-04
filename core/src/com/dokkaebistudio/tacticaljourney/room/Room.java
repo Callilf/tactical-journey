@@ -30,7 +30,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -309,10 +308,10 @@ public class Room extends EntitySystem {
 		case START_FLOOR_ROOM:
 			
 			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
-			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
+			entityFactory.itemFactory.createItemTutorialPage(1,this, new Vector2(8, 9));
 			
 			Entity satchel = entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
-			fillLootable(satchel, 30);
+			fillLootable(satchel, 8);
 
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
 //			enemies.add(enemy);
@@ -342,7 +341,7 @@ public class Room extends EntitySystem {
 			if (nextInt == 0) {
 				item = entityFactory.itemFactory.createItemHealthUp(null, null);
 			} else {
-				item = entityFactory.itemFactory.createItemTutorialPage(null, null);
+				item = entityFactory.itemFactory.createItemTutorialPage( 1 +random.nextInt(4), null, null);
 			}
 			lootableComponent.getItems().add(item);
 		}

@@ -112,6 +112,10 @@ public class Assets {
 	public static final String map_minus = "hud_map_less";
 	public static final String map_background = "hud_map_background";
 	
+	
+	public static final String remains_bones = "remains_bones";
+	public static final String remains_satchel = "remains_satchel";
+
 
 	
 	//******

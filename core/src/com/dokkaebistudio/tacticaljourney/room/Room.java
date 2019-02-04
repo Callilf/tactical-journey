@@ -268,6 +268,19 @@ public class Room extends EntitySystem {
 			List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(enemyPositions, random);
 			
+			// Place a loot
+			int lootRandom = random.nextInt(10);
+			boolean isLoot = lootRandom != 0;
+			if (isLoot) {
+				Vector2 lootPos = enemyPositions.get(0);
+				if (lootRandom <= 5) {
+					entityFactory.createRemainsBones(this, lootPos);
+				} else {
+					entityFactory.createRemainsSatchel(this, lootPos);
+				}
+				enemyPositions.remove(0);
+			}
+			
 			// Place enemies
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
@@ -283,14 +296,14 @@ public class Room extends EntitySystem {
 			
 			// Place health
 			if (iterator.hasNext() && random.nextInt(3) == 0) {
-				entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
+				entityFactory.itemFactory.createItemHealthUp(this, new Vector2(iterator.next()));
 			}
 			break;
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.createItemHealthUp(this, new Vector2(5, 3));
-			entityFactory.createItemTutorialPage(this, new Vector2(8, 9));
+			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
+			entityFactory.itemFactory.createItemTutorialPage(this, new Vector2(8, 9));
 			
 			
 //			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -63,7 +64,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     private Table inventoryTable;
     private Table[] slots = new Table[16];
-    
+    private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
     /** The loot table. */
     private Table lootTable;
@@ -285,6 +286,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		
 		// 2 - Inventory slots
+		inventoryDropButtons.clear();
 		Table slotsTable = new Table();
 		int index = 0;
 		for (int row = 0 ; row < 4 ; row++) {
@@ -333,15 +335,68 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				final ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				Image img = new Image(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
 				
-				slot.addListener(new ClickListener() {
+				if (isLoot) {
 					
-					@Override
-					public void clicked(InputEvent event, float x, float y) {
-						displaySelectedItemPopin( item, slot);
-					}
-				});
+					// LOOT case :
+					// Display the item. If there is a click on it, display a "Drop button".
+					// On a click on this drop button, store the item in the lootable.
+					
+					final Stack slotStack = new Stack();
+					Table imageStackTable = new Table();
+					imageStackTable.add(img);
+					slotStack.add(imageStackTable);
+
+					//Add the drop button
+					Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn)));
+					Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));
+					TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+					final TextButton dropBtn = new TextButton("Drop", btnStyle);
+					dropBtn.setVisible(false);
+					inventoryDropButtons.add(dropBtn);
+					
+					img.addListener(new ClickListener() {
+						
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							for (TextButton tb : inventoryDropButtons) {
+								tb.setVisible(false);
+							}
+							dropBtn.setVisible(true);
+						}
+					});
+					dropBtn.addListener(new ClickListener() {
+						
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							//Loot mode, drop into the lootable
+							lootableCompo.getItems().add(item);
+							inventoryCompo.remove(item);
+							refreshPopin();					
+						}
+					});
+					
+					
+					
+					Table slotStackTable = new Table();
+					slotStackTable.add(dropBtn);
+					slotStack.add(slotStackTable);
+					slot.add(slotStack);
+				} else {
+					
+					// Simple inventory case : 
+					// display the image, and on a click on it display the item popin
+					slot.add(img);
+
+					slot.addListener(new ClickListener() {
+						
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							displaySelectedItemPopin( item, slot);
+						}
+					});
+					
+				}
 				
-				slot.add(img);
 				
 			} else {
 				
@@ -428,7 +483,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		itemDesc.setText(itemComponent.getItemType().getDescription());
 		
 		// Update the Drop item listener
-		updateDropListener(item, slot, itemComponent);
+		updateDropListener(item, slot);
 		
 		if (!this.isLoot) {
 			useItemBtn.setText(itemComponent.getItemType().getActionLabel());
@@ -460,27 +515,18 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		useItemBtn.addListener(useListener);
 	}
 
-	private void updateDropListener(final Entity item, final Table slot, final ItemComponent itemComponent) {
+	private void updateDropListener(final Entity item, final Table slot) {
 		if (dropListener != null) {
 			dropItemBtn.removeListener(dropListener);
 		}
-		final Boolean isLoot = this.isLoot;
 		dropListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (isLoot) {
-					//Loot mode, drop into the lootable
-					lootableCompo.getItems().add(item);
-					inventoryCompo.remove(item);
-					hideSelectedItemPopin();
-					refreshPopin();
-				} else {
-					//Drop on the floor
-					inventoryCompo.requestAction(InventoryActionEnum.DROP, item);
-					slot.removeListener(this);
-					inventoryCompo.remove(item);
-					closePopin();
-				}
+				//Drop on the floor
+				inventoryCompo.requestAction(InventoryActionEnum.DROP, item);
+				slot.removeListener(this);
+				inventoryCompo.remove(item);
+				closePopin();
 			}
 		};
 		dropItemBtn.addListener(dropListener);

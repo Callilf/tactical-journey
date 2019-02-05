@@ -102,9 +102,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
 			
-			boolean looting = handleLoot(moverEntity,  waitingForLooting);
-			if (looting) return;
-			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();
 			AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
@@ -125,10 +122,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
 			
-			if (waitingForLooting) {
-				handleWaitForLooting(moverEntity);
-				return;
-			}
+			boolean looting = handleLoot(moverEntity,  waitingForLooting);
+			if (looting) return;
 			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -208,6 +203,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		}
 	}
+	
+	
+	
+	
+	//**********************************
+	// LOOT related methods
 
 	/**
 	 * Handle the loot.
@@ -224,7 +225,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		}
 		
 		if (inventoryComponent.isInventoryActionInProgress()) {
-			room.setNextState(RoomState.INVENTORY_POPIN);
+			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 			if (healthComponent.isReceivedDamageLastTurn()) {
 				// INTERRUPTED
 				inventoryComponent.interrupt();
@@ -266,6 +267,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 		}
 	}
+	
+	
+	
+	
+	
+	//****************************
+	// Enemy related methods
 
 	/**
 	 * Holding right click on an enemy displays it's possible movements and attacks.
@@ -300,10 +308,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 
 		}
-		
-		
-		
-		
+
 		
 		if (InputSingleton.getInstance().rightClickJustPressed) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
@@ -369,23 +374,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	}
 	
 
-	/**
-	 * Return the cost of movement
-	 * 
-	 * @param moveCompo the moveComponent
-	 * @return the cost of movement
-	 */
-	private int computeCostOfMovement() {
-		int cost = 0;
-		for (Entity wp : moveCompo.getWayPoints()) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
-			cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-		}
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-		return cost;
-	}
 
+	
+	
+	//************************************
+	// Movement computation and selection
 
 	/**
 	 * Set the destination of the movement.
@@ -422,5 +415,23 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		}
 		return false;
 	}
+	
+	/**
+	 * Return the cost of movement
+	 * 
+	 * @param moveCompo the moveComponent
+	 * @return the cost of movement
+	 */
+	private int computeCostOfMovement() {
+		int cost = 0;
+		for (Entity wp : moveCompo.getWayPoints()) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
+			cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
+		}
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
+		cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
+		return cost;
+	}
+
 
 }

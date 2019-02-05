@@ -92,6 +92,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				return;
 			}
 			
+			if (inventoryComponent.isInventoryActionInProgress()) {
+				room.setNextState(RoomState.INVENTORY_POPIN);
+				inventoryComponent.setInventoryActionInProgress(false);
+				inventoryComponent.setNeedInventoryRefresh(true);
+				return;
+			}
+			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();
 			if (attackCompo != null)

@@ -310,17 +310,17 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemTutorialPage(1,this, new Vector2(8, 9));
 			
-			Entity satchel = entityFactory.createRemainsSatchel(this, new Vector2(14, 11));
+			Entity satchel = entityFactory.createRemainsBones(this, new Vector2(14, 11));
 			fillLootable(satchel, 8);
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 
-//			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
-//			enemies.add(enemy);
-//			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
-//			enemies.add(enemy2);
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 1);
-//			enemies.add(enemy3);
+			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
+			enemies.add(enemy);
+			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
+			enemies.add(enemy2);
+			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 1);
+			enemies.add(enemy3);
 			break;
 		case END_FLOOR_ROOM:
 			int nextInt = random.nextInt(possibleSpawns.size());

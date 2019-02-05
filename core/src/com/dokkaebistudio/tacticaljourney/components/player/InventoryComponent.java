@@ -32,6 +32,8 @@ public class InventoryComponent implements Component, Poolable {
 	
 	private InventoryActionEnum currentAction;
 	private Entity currentItem;
+	private boolean inventoryActionInProgress;
+	private boolean needInventoryRefresh = false;
 	
 	
 	public enum InventoryActionEnum {
@@ -197,6 +199,29 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setTurnsToWaitBeforeLooting(Integer turnsToWaitBeforeLooting) {
 		this.turnsToWaitBeforeLooting = turnsToWaitBeforeLooting;
+	}
+
+
+
+	public boolean isInventoryActionInProgress() {
+		return inventoryActionInProgress;
+	}
+
+
+
+	public void setInventoryActionInProgress(boolean inventoryActionInProgress) {
+		this.inventoryActionInProgress = inventoryActionInProgress;
+	}
+
+
+	public boolean isNeedInventoryRefresh() {
+		return needInventoryRefresh;
+	}
+
+
+
+	public void setNeedInventoryRefresh(boolean needInventoryRefresh) {
+		this.needInventoryRefresh = needInventoryRefresh;
 	}
 
 

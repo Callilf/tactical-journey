@@ -18,6 +18,8 @@ import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -29,15 +31,14 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
-import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -59,13 +60,16 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public EnemyFactory enemyFactory;
 	
+	/** The enemy factory. */
+	public ItemFactory itemFactory;
+	
+	
 	/** The factory for visual effects. */
 	public EffectFactory effectFactory;
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion pitTexture;
 	private TextureAtlas.AtlasRegion groundTexture;
-	private TextureAtlas.AtlasRegion healthUpTexture;
 
 
 	/**
@@ -76,11 +80,11 @@ public final class EntityFactory {
 		this.engine = e;
 		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
+		this.itemFactory = new ItemFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		
 		groundTexture = Assets.getTexture(Assets.tile_ground);
 		pitTexture = Assets.getTexture(Assets.tile_pit);
-		healthUpTexture = Assets.getTexture(Assets.health_up_item);
 	}
 
 	
@@ -215,7 +219,7 @@ public final class EntityFactory {
 	
 	public Entity createExit(Room room, Vector2 pos) {
 		Entity exitEntity = engine.createEntity();
-		exitEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		exitEntity.flags = EntityFlagEnum.REMAINS_BONES.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(exitEntity, pos, room);
@@ -526,12 +530,12 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, Room room) {
+	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
 		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
-		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
+		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
 		displayCompo.setInitialPosition(initialPos);
@@ -586,70 +590,6 @@ public final class EntityFactory {
 		return display;
 	}
 	
-	
-	/**
-	 * Create a health up item that is consumed when picked up.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
-		Entity healthUp = engine.createEntity();
-		healthUp.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.healthUpTexture));
-		healthUp.add(spriteCompo);
-
-		if (tilePos != null) {
-			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-			gridPosition.coord(healthUp, tilePos, room);
-			gridPosition.zIndex = 8;
-			healthUp.add(gridPosition);
-		}
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
-		healthUp.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	healthUp.add(destructibleCompo);
-		
-		engine.addEntity(healthUp);
-
-		return healthUp;
-	}
-	
-	/**
-	 * Create a tutorial page.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemTutorialPage(Room room, Vector2 tilePos) {
-		Entity item = engine.createEntity();
-		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tutorial_page_item)));
-		item.add(spriteCompo);
-
-		if (tilePos != null) {
-			GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-			gridPosition.coord(item, tilePos, room);
-			gridPosition.zIndex = 8;
-			item.add(gridPosition);
-		}
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.TUTORIAL_PAGE_1);
-		item.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	item.add(destructibleCompo);
-		
-		engine.addEntity(item);
-
-		return item;
-	}
 	
 	/**
 	 * Create a bomb that explodes after x turns.
@@ -757,4 +697,71 @@ public final class EntityFactory {
 		
 		return skillEntity;
 	}
+	
+	/**
+	 * Create a lootable skeleton.
+	 * @param room the room
+	 * @param pos the tile position
+	 * @return the lootable bones
+	 */
+	public Entity createRemainsBones(Room room, Vector2 pos) {
+		Entity remainsEntity = engine.createEntity();
+		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(remainsEntity, pos, room);
+    	movableTilePos.zIndex = 3;
+    	remainsEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.remains_bones));
+    	spriteCompo.setSprite(s);
+    	remainsEntity.add(spriteCompo);
+
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.BONES);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED);
+    	remainsEntity.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	remainsEntity.add(destructibleCompo);
+    	
+		engine.addEntity(remainsEntity);
+
+    	return remainsEntity;
+	}
+	
+	/**
+	 * Create a lootable satchel
+	 * @param room the room
+	 * @param pos the tile position
+	 * @return the lootable satchel
+	 */
+	public Entity createRemainsSatchel(Room room, Vector2 pos) {
+		Entity remainsEntity = engine.createEntity();
+		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(remainsEntity, pos, room);
+    	movableTilePos.zIndex = 3;
+    	remainsEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.remains_satchel));
+    	spriteCompo.setSprite(s);
+    	remainsEntity.add(spriteCompo);
+    	
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.SATCHEL);
+    	remainsEntity.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	remainsEntity.add(destructibleCompo);
+
+		engine.addEntity(remainsEntity);
+
+    	return remainsEntity;
+	}
+	
+	
 }

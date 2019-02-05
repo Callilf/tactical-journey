@@ -35,6 +35,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -268,6 +269,23 @@ public class Room extends EntitySystem {
 			List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(enemyPositions, random);
 			
+			// Place a loot
+			int lootRandom = random.nextInt(10);
+			boolean isLoot = lootRandom != 0;
+			if (isLoot) {
+				Vector2 lootPos = enemyPositions.get(0);
+				if (lootRandom <= 5) {
+					Entity bones = entityFactory.createRemainsBones(this, lootPos);
+					fillLootable(bones, 2);
+					
+				} else {
+					Entity satchel = entityFactory.createRemainsSatchel(this, lootPos);
+					fillLootable(satchel, 4);
+
+				}
+				enemyPositions.remove(0);
+			}
+			
 			// Place enemies
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
@@ -283,21 +301,25 @@ public class Room extends EntitySystem {
 			
 			// Place health
 			if (iterator.hasNext() && random.nextInt(3) == 0) {
-				entityFactory.createItemHealthUp(this, new Vector2(iterator.next()));
+				entityFactory.itemFactory.createItemHealthUp(this, new Vector2(iterator.next()));
 			}
 			break;
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.createItemHealthUp(this, new Vector2(5, 3));
-			entityFactory.createItemTutorialPage(this, new Vector2(8, 9));
+			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
+			entityFactory.itemFactory.createItemTutorialPage(1,this, new Vector2(8, 9));
 			
+			Entity satchel = entityFactory.createRemainsBones(this, new Vector2(14, 11));
+			fillLootable(satchel, 8);
 			
-//			Entity enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(11, 8), 1);
+//			entityFactory.createExit(this, new Vector2(16, 4));
+
+//			Entity enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(14, 5), 4);
 //			enemies.add(enemy);
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
 //			enemies.add(enemy2);
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 1);
+//			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 3);
 //			enemies.add(enemy3);
 			break;
 		case END_FLOOR_ROOM:
@@ -306,6 +328,24 @@ public class Room extends EntitySystem {
 			entityFactory.createExit(this, pos);
 			default:
 			break;
+		}
+	}
+	
+	private void fillLootable(Entity lootable, int nbMaxItems) {
+		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
+		
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		int nbLoot = random.nextInt(nbMaxItems + 1);
+		for (int i=0 ; i<nbLoot ; i++) {
+			int nextInt = random.nextInt(2);
+			Entity item = null;
+			
+			if (nextInt == 0) {
+				item = entityFactory.itemFactory.createItemHealthUp(null, null);
+			} else {
+				item = entityFactory.itemFactory.createItemTutorialPage( 1 +random.nextInt(4), null, null);
+			}
+			lootableComponent.getItems().add(item);
 		}
 	}
 	

@@ -24,7 +24,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,6 +36,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
@@ -44,15 +44,18 @@ import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MenuPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
-import com.dokkaebistudio.tacticaljourney.rendering.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
+import com.dokkaebistudio.tacticaljourney.systems.HealthSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ItemSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
@@ -60,7 +63,6 @@ import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
-import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -85,6 +87,7 @@ public class GameScreen extends ScreenAdapter {
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
 	public Stage stage;
+	public Stage inventoryStage;
 	public Stage fxStage;
 
 	
@@ -128,6 +131,7 @@ public class GameScreen extends ScreenAdapter {
 		/// create stage and set it as input processor
 		stage = new Stage(viewport);
 		fxStage = new Stage(viewport);
+		inventoryStage = new Stage(hudViewport);
 		hudStage = new Stage(hudViewport);
 		
 		//Instanciate the input processor
@@ -135,6 +139,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(inventoryStage);
 		inputMultiplexer.addProcessor(hudStage);
 		inputMultiplexer.addProcessor(InputSingleton.getInstance());
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -153,8 +158,9 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
+		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
-		renderers.add(new InventoryPopinRenderer(room, stage, player));
+		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		renderers.add(new MenuPopinRenderer(this, hudStage));
@@ -166,11 +172,12 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
-		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new EnemySystem(room));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
+		engine.addSystem(new PlayerMoveSystem(room));
+		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new ItemSystem(	player, room));
-		engine.addSystem(new DamageDisplaySystem(room));
+		engine.addSystem(new HealthSystem(room, stage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 
@@ -304,6 +311,7 @@ public class GameScreen extends ScreenAdapter {
 		stage.dispose();
 		hudStage.dispose();
 		game.dispose();
+		PopinService.dispose();
 		super.dispose();
 	}
 }

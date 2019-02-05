@@ -12,10 +12,15 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -37,13 +42,23 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	private TileSearchService tileSearchService;
 	/** The attack tile search service. */
 	private AttackTileSearchService attackTileSearchService;
+	
+	
+	//******************
+	// component cache
+	
+	private PlayerComponent playerCompo;
+	private MoveComponent moveCompo;
+	private GridPositionComponent moverCurrentPos;
+	private InventoryComponent inventoryComponent;
+	private HealthComponent healthComponent;
 
 	//TEST
 	float timer = 0;
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
-		this.priority = 8;
+		this.priority = 10;
 
 		this.room = room;
 		this.movementHandler = new MovementHandler(room.engine);
@@ -58,18 +73,22 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	@Override
 	protected void processEntity(Entity moverEntity, float deltaTime) {
-		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
-		AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
-		GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(moverEntity);
-		PlayerComponent playerCompo = Mappers.playerComponent.get(moverEntity);
+		
+		if (playerCompo == null) {
+			moveCompo = Mappers.moveComponent.get(moverEntity);
+			moverCurrentPos = Mappers.gridPositionComponent.get(moverEntity);
+			playerCompo = Mappers.playerComponent.get(moverEntity);
+			inventoryComponent = Mappers.inventoryComponent.get(moverEntity);
+			healthComponent = Mappers.healthComponent.get(moverEntity);
+		}
 
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
-
+				
 		switch (room.getState()) {
 
-		case PLAYER_TURN_INIT:
+		case PLAYER_TURN_INIT:	
 			if (room.hasEnemies()) {
 				moveCompo.moveRemaining = moveCompo.moveSpeed;
 				moveCompo.freeMove = false;
@@ -80,8 +99,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
+			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();
+			AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
 			if (attackCompo != null)
 				attackCompo.clearAttackableTiles();
 
@@ -98,13 +119,17 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
+			
+			boolean looting = handleLoot(moverEntity,  inventoryComponent.getTurnsToWaitBeforeLooting() != null);
+			if (looting) return;
+			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 
-				boolean selected = selectDestinationTile(moveCompo, x, y, moverCurrentPos);
+				boolean selected = selectDestinationTile(x, y);
 				if (selected) {
 					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 				}
@@ -139,7 +164,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 					room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
 				} else {
 					// No confirmation, check if another tile has been selected
-					selectDestinationTile(moveCompo, x, y, moverCurrentPos);
+					selectDestinationTile(x, y);
 					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 				}
 
@@ -164,7 +189,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			// Compute the cost of this move
 			if (room.hasEnemies()) {
-				int cost = computeCostOfMovement(moveCompo);
+				int cost = computeCostOfMovement();
 				moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
 			}
 
@@ -176,6 +201,77 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		}
 	}
+	
+	
+	
+	
+	//**********************************
+	// LOOT related methods
+
+	/**
+	 * Handle the loot.
+	 * Check whether the player is currently looting or opening a lootable.
+	 * @param moverEntity the player
+	 * @param waitingForLooting 
+	 * @return true if the player is looting or opening a lootable
+	 */
+	private boolean handleLoot(Entity moverEntity, boolean waitingForLooting) {
+		
+		if (waitingForLooting) {
+			handleWaitForLooting(moverEntity);
+			return true;
+		}
+		
+		if (inventoryComponent.isInventoryActionInProgress()) {
+			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
+			if (healthComponent.isReceivedDamageLastTurn()) {
+				// INTERRUPTED
+				inventoryComponent.interrupt();
+				if (inventoryComponent != null && inventoryComponent.isInterrupted()) {
+					GridPositionComponent gridPos = Mappers.gridPositionComponent.get(moverEntity);
+					room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), false, 15, room);
+				}
+			} else {
+				inventoryComponent.setInventoryActionInProgress(false);
+				inventoryComponent.setNeedInventoryRefresh(true);
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
+	/**
+	 * Update the number of turns to wait for opening a lootable.
+	 */
+	private void handleWaitForLooting(Entity player) {
+		if (inventoryComponent.getTurnsToWaitBeforeLooting().intValue() <= 0) {
+			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
+			inventoryComponent.setTurnsToWaitBeforeLooting(null);
+			LootableComponent lootableComponent = Mappers.lootableComponent.get(inventoryComponent.getLootableEntity());
+			lootableComponent.setLootableState(LootableStateEnum.OPENED);
+		} else {
+			
+			//TODO
+			if (healthComponent.isReceivedDamageLastTurn()) {
+				//INTERRUPTED
+				inventoryComponent.setTurnsToWaitBeforeLooting(null);
+				
+				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(player);
+				room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), false, 15, room);
+			} else {
+				inventoryComponent.setTurnsToWaitBeforeLooting(inventoryComponent.getTurnsToWaitBeforeLooting() - 1);
+				room.turnManager.endPlayerTurn();
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	//****************************
+	// Enemy related methods
 
 	/**
 	 * Holding right click on an enemy displays it's possible movements and attacks.
@@ -210,10 +306,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 
 		}
-		
-		
-		
-		
+
 		
 		if (InputSingleton.getInstance().rightClickJustPressed) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
@@ -279,23 +372,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	}
 	
 
-	/**
-	 * Return the cost of movement
-	 * 
-	 * @param moveCompo the moveComponent
-	 * @return the cost of movement
-	 */
-	private int computeCostOfMovement(MoveComponent moveCompo) {
-		int cost = 0;
-		for (Entity wp : moveCompo.getWayPoints()) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
-			cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-		}
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-		return cost;
-	}
 
+	
+	
+	//************************************
+	// Movement computation and selection
 
 	/**
 	 * Set the destination of the movement.
@@ -305,8 +386,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * @param y               the ordinate of the destination
 	 * @param moverCurrentPos the current position of the mover
 	 */
-	private boolean selectDestinationTile(MoveComponent moveCompo, int x, int y,
-			GridPositionComponent moverCurrentPos) {
+	private boolean selectDestinationTile(int x, int y) {
 		for (Entity tile : moveCompo.movableTiles) {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
@@ -333,5 +413,23 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		}
 		return false;
 	}
+	
+	/**
+	 * Return the cost of movement
+	 * 
+	 * @param moveCompo the moveComponent
+	 * @return the cost of movement
+	 */
+	private int computeCostOfMovement() {
+		int cost = 0;
+		for (Entity wp : moveCompo.getWayPoints()) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(wp);
+			cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
+		}
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
+		cost = cost + TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
+		return cost;
+	}
+
 
 }

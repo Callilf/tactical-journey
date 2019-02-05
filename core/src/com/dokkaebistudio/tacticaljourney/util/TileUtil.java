@@ -73,7 +73,7 @@ public final class TileUtil {
 	 */
 	public static int getCostOfMovementForTilePos(Vector2 pos, Room room) {
 		int cost = 1;
-		Set<Entity> slowEntities = TileUtil.getEntityWithComponentOnTile(pos, SlowMovementComponent.class, room);
+		Set<Entity> slowEntities = TileUtil.getEntitiesWithComponentOnTile(pos, SlowMovementComponent.class, room);
 		for (Entity e : slowEntities) {
 			SlowMovementComponent slowMovementComponent = Mappers.slowMoveComponent.get(e);
 			cost += slowMovementComponent.getMovementConsumed();
@@ -118,12 +118,26 @@ public final class TileUtil {
 	
 	
 	/**
+	 * Return the entity with the given component standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The entity with the given component standing on the tile at the given position, null if there is none.
+	 */
+	public static Entity getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
+		for (Entity e : entities) {
+			return e;
+		}
+		return null;
+	}
+	
+	/**
 	 * Return the solid entity standing on the tile at the given position.
 	 * @param position the position
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Set<Entity> getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+	public static Set<Entity> getEntitiesWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
 		return room.getEntitiesAtPositionWithComponent(position, componentClass);
 	}
 	

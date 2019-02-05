@@ -47,7 +47,8 @@ public enum RoomState {
 	PROFILE_POPIN,
 	LEVEL_UP_POPIN,
 	INVENTORY_POPIN,
-	ITEM_POPIN;
+	ITEM_POPIN,
+	CONTEXTUAL_ACTION_POPIN;
 	
 	
 	
@@ -114,10 +115,19 @@ public enum RoomState {
 	 * @return true if in a state where the game is paused.
 	 */
 	public boolean isPaused() {
+		return this == RoomState.LEVEL_UP_POPIN;
+	}
+	
+	/**
+	 * Whether the room is partially hidden by a popin or not.
+	 * @return true if a popin is opened.
+	 */
+	public boolean isPopinDisplayed() {
 		return this == RoomState.PROFILE_POPIN
 				|| this == RoomState.LEVEL_UP_POPIN
 				|| this == RoomState.INVENTORY_POPIN
-				|| this == RoomState.ITEM_POPIN;
+				|| this == RoomState.ITEM_POPIN
+				|| this == RoomState.CONTEXTUAL_ACTION_POPIN;
 	}
 	
 	public boolean isSkillChangeAllowed() {

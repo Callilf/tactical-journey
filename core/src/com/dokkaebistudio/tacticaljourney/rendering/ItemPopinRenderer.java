@@ -2,20 +2,14 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -24,6 +18,12 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -52,8 +52,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener useListener;
     
     
-	private LabelStyle hudStyle;
-    
     /** The state before the level up state. */
     private RoomState previousState;
     
@@ -61,9 +59,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
         this.room = r;
         this.player = p;
         this.stage = s;
-        
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-
     }
     
     @Override
@@ -128,7 +123,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
      */
 	private void initTable() {
 		if (selectedItemPopin == null) {
-			selectedItemPopin = new Table();
+			selectedItemPopin = PoolableTable.create();
 		}
 //			selectedItemPopin.setDebug(true);
 
@@ -138,30 +133,29 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
+		TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
 		selectedItemPopin.setBackground(textureRegionDrawable);
 		
 		selectedItemPopin.align(Align.top);
 		
 		// 1 - Title
-		itemTitle = new Label("Title", hudStyle);
+		itemTitle = PoolableLabel.create("Title", PopinService.hudStyle());
 		selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
 		selectedItemPopin.row().align(Align.center);
 		
 		// 2 - Description
-		itemDesc = new Label("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller.", hudStyle);
+		itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. "
+				+ "Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui "
+				+ "est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
 		itemDesc.setWrap(true);
 		selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		selectedItemPopin.row();
 		
 		// 3 - Action buttons
-		Table buttonTable = new Table();
-		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
-		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
-		TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+		Table buttonTable = PoolableTable.create();
 		
 		// 3.1 - Close button
-		final TextButton closeBtn = new TextButton("Close",btnStyle);			
+		final TextButton closeBtn = PoolableTextButton.create("Close", PopinService.bigButtonStyle());			
 		// continueButton listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -172,11 +166,11 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 		
 		// 3.2 - Drop button
-		pickupItemBtn = new TextButton("Take",btnStyle);			
+		pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
-		useItemBtn = new TextButton("Use",btnStyle);			
+		useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
 		buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		
 		selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);

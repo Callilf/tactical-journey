@@ -99,28 +99,8 @@ public class AttackManager {
 	 */
 	public void applyDamage(Entity attacker, Entity target, int damage) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
-		
 		if (healthComponent != null) {
-			healthComponent.setHp(healthComponent.getHp() - damage);
-			
-			//Add a damage displayer
-			GridPositionComponent targetGridPos = Mappers.gridPositionComponent.get(target);
-			room.entityFactory.createDamageDisplayer(String.valueOf(damage), targetGridPos.coord(), false, room);
-			
-			if (healthComponent.getHp() <= 0) {
-				//target is dead
-				
-				//earn xp
-				ExperienceComponent expCompo = getExperienceComponent(attacker);
-				ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
-				if (expCompo != null && expRewardCompo != null) {
-					expCompo.earnXp(expRewardCompo.getExpGain());
-				}
-				
-				room.removeEnemy(target);
-				//TODO: play death animation
-			}
-
+			healthComponent.hit(damage, attacker);
 		}
 	}
 	
@@ -135,29 +115,6 @@ public class AttackManager {
 		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	//********************************
-	// Private methods
-	
-	private ExperienceComponent getExperienceComponent(Entity attacker) {
-		ExperienceComponent result = null;
-		result = Mappers.experienceComponent.get(attacker);
-		if (result == null) {
-			ParentEntityComponent parentEntityComponent = Mappers.parentEntityComponent.get(attacker);
-			if (parentEntityComponent != null) {
-				Entity parent = parentEntityComponent.getParent();
-				result = getExperienceComponent(parent);
-			}
-		}
-		
-		return result;
-	}
+
 	
 }

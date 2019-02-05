@@ -6,7 +6,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -34,6 +32,12 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -44,9 +48,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public Stage stage;
 	public Room room;
 	public Entity player;
-	
-	private LabelStyle hudStyle;
-	
+		
 	// Time and turns
 	private boolean debug = true;
 	private Table fps;
@@ -85,8 +87,6 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public HUDRenderer(Stage s, Entity player) {
 		this.stage = s;
 		this.player = player;
-		
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 	}
 	
 	@Override
@@ -115,11 +115,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	// FPS (debug only)
 	private void displayFPS() {
 		if (fps == null) {
-			fps = new Table();
+			fps = PoolableTable.create();
 			fps.setPosition(0, 1050);
 			fps.align(Align.left);
 			// Turns
-			fpsLabel = new Label("", hudStyle);
+			fpsLabel = PoolableLabel.create("", PopinService.hudStyle());
 			fps.add(fpsLabel).left().uniformX();
 
 			fps.pack();
@@ -138,17 +138,17 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private void displayTimeAndTurns() {
 		
 		if (timeAndTurnTable == null) {
-			timeAndTurnTable = new Table();
+			timeAndTurnTable = PoolableTable.create();
 			timeAndTurnTable.setPosition(PositionConstants.POS_TIMER.x, PositionConstants.POS_TIMER.y - 20);
 			
 			// Turns
-			turnLabel = new Label("", hudStyle);
+			turnLabel = PoolableLabel.create("", PopinService.hudStyle());
 			timeAndTurnTable.add(turnLabel).uniformX();
 
 			timeAndTurnTable.row();
 
 			// Time
-			timeLabel = new Label("", hudStyle);
+			timeLabel = PoolableLabel.create("", PopinService.hudStyle());
 			timeAndTurnTable.add(timeLabel).uniformX();
 
 			timeAndTurnTable.pack();
@@ -174,7 +174,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		final AttackComponent attackComponent = Mappers.attackComponent.get(player);
 		
 		if (bottomLeftTable == null) {
-			bottomLeftTable = new Table();
+			bottomLeftTable = PoolableTable.create();
 //			bottomLeftTable.setDebug(true);
 			bottomLeftTable.setPosition(PositionConstants.POS_END_TURN_BTN.x, PositionConstants.POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
@@ -218,12 +218,12 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 
 		if (healthAndXptable == null) {
-			healthAndXptable = new Table();
+			healthAndXptable = PoolableTable.create();
 			healthAndXptable.setPosition(200, 30);
 		
 			// LEVEL
 			if (levelLabel == null) {
-				levelLabel = new Label("", hudStyle);
+				levelLabel = PoolableLabel.create("", PopinService.hudStyle());
 			}
 			levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
 			healthAndXptable.add(levelLabel).left().uniformX();
@@ -231,7 +231,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 			// XP
 			if (expLabel == null) {
-				expLabel = new Label("", hudStyle);
+				expLabel = PoolableLabel.create("", PopinService.hudStyle());
 			}
 			expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
 	
@@ -240,7 +240,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 			// LIFE
 			if (healthLabel == null) {
-				healthLabel = new Label("", hudStyle);
+				healthLabel = PoolableLabel.create("", PopinService.hudStyle());
 			}
 			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
 			healthAndXptable.add(healthLabel).left().uniformX();
@@ -258,7 +258,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 
 		if (profileTable == null) {
-			profileTable = new Table();
+			profileTable = PoolableTable.create();
 			profileTable.setPosition(500, 30);
 		
 			// Profile btn
@@ -287,7 +287,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					inventoryComponent.setInventoryDisplayed(!inventoryComponent.isInventoryDisplayed());
+					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
+					} else {
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INVENTORY);
+					}
 				}
 			});
 			profileTable.add(inventoryBtn);
@@ -311,7 +315,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		if (skillsTable == null) {
 			allSkillButtons.clear();
 			
-			skillsTable = new Table();
+			skillsTable = PoolableTable.create();
 			skillsTable.setPosition(1500, 30);
 			skillsTable.setTouchable(Touchable.enabled);
 	
@@ -546,26 +550,26 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		
 		if (ammoTable == null) {
-			ammoTable = new Table();
+			ammoTable = PoolableTable.create();
 			ammoTable.setPosition(PositionConstants.POS_ARROW_SPRITE.x, PositionConstants.POS_ARROW_SPRITE.y);
 			
 			// Arrows
-			Table arrowTable = new Table();
+			Table arrowTable = PoolableTable.create();
 
-			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
+			Image arrowImage = PoolableImage.create(Assets.getTexture(Assets.arrow_item));
 			arrowTable.add(arrowImage).uniformX();
 			
-			arrowLabel = new Label("", hudStyle);
+			arrowLabel = PoolableLabel.create("", PopinService.hudStyle());
 			arrowTable.add(arrowLabel).uniformX().padLeft(-15);
 			
 			ammoTable.add(arrowTable).uniformX();
 			
 			// Bombs
-			Table bombTable = new Table();
-			Image bombImage = new Image(Assets.getTexture(Assets.bomb_item));
+			Table bombTable = PoolableTable.create();
+			Image bombImage = PoolableImage.create(Assets.getTexture(Assets.bomb_item));
 			bombTable.add(bombImage).uniformX();
 			
-			bombLabel = new Label("", hudStyle);
+			bombLabel = PoolableLabel.create("", PopinService.hudStyle());
 			bombTable.add(bombLabel).uniformX().padLeft(-15);
 			
 			ammoTable.add(bombTable).uniformX();

@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
@@ -108,7 +109,7 @@ public final class PlayerFactory {
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
 		inventoryComponent.setNumberOfSlots(8);
-		inventoryComponent.setInventoryDisplayed(false);
+		inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
 		//TODO remove
 //		inventoryComponent.store(this.entityFactory.createItemHealthUp(null, null), room);

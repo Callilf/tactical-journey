@@ -1,31 +1,43 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableScrollPane;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableStack;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -33,22 +45,59 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    
-	public Stage stage;
+	//****************************
+	// Main attributes
 	
+	/** The stage. */
+	public Stage stage;
+	/** The player. */
 	private Entity player;
+	/** The current room. */
+    private Room room;
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
-	
-	/** The current room. */
-    private Room room;
+	/** The current lootable component. */
+	private LootableComponent lootableCompo;
+    
+    /** The state before the level up state. */
+    private RoomState previousState;
+    
+    
+    
+    //***************************
+    // BOOLEANS
+    
+	/** Whether we are in loot mode or just plain inventory mode. */
+	private boolean isLoot;
+
+	/** Whether the inventory needs refreshing. */
+    private boolean needsRefresh = true;
+    
+    /** Whether the item popin is displayed. */
+    private boolean itemPopinDisplayed = false;
+
+    /** Whether we are in the process of "take all" items. */
+    private boolean takeAllInProgess = false;
+    
+    
+    //*****************************
+    // ACTORS
     
     /** The main table of the popin. */
     private Table mainTable;
-    private Table[] slots = new Table[16];
-    private Table selectedItemPopin;
     
-    boolean itemPopinDisplayer = false;
+    /** The inventory table. */
+    private Table inventoryTable;
+    private Table[] slots = new Table[16];
+    private List<TextButton> inventoryDropButtons = new ArrayList<>();
+    
+    /** The loot table. */
+    private Table lootTable;
+    private List<TextButton> lootTakeBtns = new ArrayList<>();
+    
+    /** The selected item popin. */
+    private Table selectedItemPopin;
     private Label itemTitle;
     private Label itemDesc;
     private TextButton dropItemBtn;
@@ -56,26 +105,27 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private TextButton useItemBtn;
     private ChangeListener useListener;
     
+
     
-	private LabelStyle hudStyle;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
+    /**
+     * Constructor.
+     * @param r the room
+     * @param s the stage to draw on
+     * @param p the player
+     */
     public InventoryPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
         this.player = p;
         this.stage = s;
-        
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-
     }
+    
     
     @Override
     public void enterRoom(Room newRoom) {
     	this.room = newRoom;	
     }
 
+    
     @Override
     public void render(float deltaTime) {
     	
@@ -83,57 +133,49 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
     	}
     	
-    	if (inventoryCompo != null && inventoryCompo.isInventoryDisplayed()) {
+    	
+    	//Handle interruption
+    	boolean interrupted = handleInterruption();
+    	if (interrupted) return;
+    	
+    	
+    	// Check if the inventory is displayed
+    	if (inventoryCompo != null && inventoryCompo.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
+    		this.isLoot = inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.LOOT;
 
     		if (mainTable == null) {
-    			// Create the inventory table for the first time
-    			
+    			// Create the inventory table and set the state
 	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
 	    		room.setNextState(RoomState.INVENTORY_POPIN);
-	    			    		
-	    		mainTable = new Table();
-//	    		table.setDebug(true, true);
-	    		mainTable.setTouchable(Touchable.enabled);
-	    		mainTable.addListener(new ClickListener() {});
 	    		
-	        	mainTable.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-	    		//table.setTouchable(Touchable.childrenOnly);
+	    		mainTable = PoolableTable.create();
+    		}
 	    		
-	    		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_background));
-	    		mainTable.setBackground(topBackground);
-	    		
-	    		mainTable.align(Align.top);
-	    		
-	    		// 1 - Title
-	    		Label title = new Label("Inventory", hudStyle);
-	    		mainTable.add(title).uniformX().pad(40, 0, 40, 0);
-	    		mainTable.row();
-	    		
-	    		
-	    		// 2 - Inventory slots
-	    		Table slotsTable = new Table();
-	    		int index = 0;
-	    		for (int row = 0 ; row < 4 ; row++) {
-		    		for (int col=0 ; col<4 ; col++) {
-		    			Table slot = createSlot( index);
-		    			slotsTable.add(slot);
-		    			slots[index] = slot;
-		    			
-		    			index ++;
-		    		}
-		    		slotsTable.row();
+    		if (needsRefresh || inventoryCompo.isNeedInventoryRefresh()) {
+    			mainTable.clear();
+    			
+    			// Build the loot panel
+	    		if (this.isLoot) {
+	    			createLootTable();
+		    		mainTable.add(lootTable).padRight(20);
 	    		}
-	    		mainTable.add(slotsTable);
-	    		
+	    			    		
+	    		// Build the inventory panel
+	    		createInventoryTable();	        	
+	        	mainTable.add(inventoryTable);
+	        	
+	        	// pack the main table and place it at the center
 	        	mainTable.pack();
-	        	mainTable.setPosition(mainTable.getX() - mainTable.getWidth()/2, mainTable.getY() - mainTable.getHeight()/2);
-	
+	        	mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
 	    		stage.addActor(mainTable);
+	    		
+	    		
+	    		finishRefresh();
     		}
     		
     		// Draw the table
-            stage.act(Gdx.graphics.getDeltaTime());
-    		stage.draw();
+			stage.act(Gdx.graphics.getDeltaTime());
+			stage.draw();
     		
     		// Close the inventory on a left click outside the popin
     		if (InputSingleton.getInstance().leftClickJustPressed) {
@@ -147,6 +189,159 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     }
 
+
+	
+	//*******************************
+	// LOOT TABLE
+	
+	
+	private void createLootTable() {
+		lootableCompo = Mappers.lootableComponent.get(inventoryCompo.getLootableEntity());
+		
+		lootTable = PoolableTable.create();
+//		    		table.setDebug(true, true);
+		lootTable.setTouchable(Touchable.enabled);
+		lootTable.addListener(new ClickListener() {});
+		
+		TextureRegionDrawable lootBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_background));
+		lootTable.setBackground(lootBackground);
+		lootTable.align(Align.top);
+
+		// 1 - Title
+		Label title = PoolableLabel.create(lootableCompo.getType().getLabel() + " ([GREEN]" + lootableCompo.getItems().size() + "[WHITE] items)", PopinService.hudStyle());
+		lootTable.add(title).uniformX().pad(40, 0, 40, 0);
+		lootTable.row();
+		
+		Table lootableItemsTable = PoolableTable.create();
+		lootableItemsTable.top();
+		lootTakeBtns.clear();
+		for (Entity item : lootableCompo.getItems()) {
+			Table oneItem = createOneLootItem(item);
+			lootableItemsTable.add(oneItem).pad(0, 10, 10, 10);
+			lootableItemsTable.row();
+		}
+		
+		lootableItemsTable.pack();
+		
+		ScrollPane lootableItems = PoolableScrollPane.create(lootableItemsTable);
+		lootTable.add(lootableItems).fill().expand().maxHeight(535);
+		lootTable.row();
+		
+		Table btnTable = PoolableTable.create();
+		
+		TextButton closeBtn = PoolableTextButton.create("Close", PopinService.bigButtonStyle());
+		// Close listener
+		closeBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				closePopin();
+			}
+		});
+		btnTable.add(closeBtn).pad(0, 0, 0, 20);
+
+		
+		TextButton takeAllBtn = PoolableTextButton.create("Take all", PopinService.bigButtonStyle());
+		// Close listener
+		takeAllBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				takeAllInProgess = true;
+				refreshPopin();
+			}
+		});
+		if (inventoryCompo.isInventoryActionInProgress()) takeAllBtn.setDisabled(true);
+
+		btnTable.add(takeAllBtn).pad(0, 20, 0, 0);
+		btnTable.pack();
+		
+		lootTable.add(btnTable).pad(40, 0, 40, 0);
+
+		
+		lootTable.pack();
+	}
+
+	private Table createOneLootItem(final Entity item) {
+		ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		Table oneItem = PoolableTable.create();
+//		oneItem.setDebug(true);
+
+		TextureRegionDrawable lootBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_lootable_item_background));
+		oneItem.setBackground(lootBackground);
+		
+		oneItem.left();
+		Image image = PoolableImage.create(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
+		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(0, 20, 0, 20);
+		
+		Label itemName = PoolableLabel.create(itemComponent.getItemType().getLabel(), PopinService.hudStyle());
+		itemName.setWrap(true);
+		oneItem.add(itemName).width(Value.percentWidth(0.50f, oneItem)).padRight(20);
+		
+		TextButton takeBtn = PoolableTextButton.create("Take", PopinService.smallButtonStyle());
+		takeBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//TODO add item in inventory and remove it from lootable entity
+				if (inventoryCompo.canStore()) {
+					inventoryCompo.store(item, null);
+					inventoryCompo.setInventoryActionInProgress(true);
+					room.turnManager.endPlayerTurn();
+					lootableCompo.getItems().remove(item);
+					refreshPopin();
+				}
+			}
+		});
+		if (inventoryCompo.isInventoryActionInProgress()) takeBtn.setDisabled(true);
+		lootTakeBtns.add(takeBtn);
+		
+		oneItem.add(takeBtn).padRight(20);
+		
+		oneItem.pack();
+		return oneItem;
+	}
+
+	
+	
+	
+	//*****************************
+	// INVENTORY
+	
+	
+	private void createInventoryTable() {
+		inventoryTable = PoolableTable.create();
+//	    		table.setDebug(true, true);
+		inventoryTable.setTouchable(Touchable.enabled);
+		inventoryTable.addListener(new ClickListener() {});
+			    		
+		TextureRegionDrawable topBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_background));
+		inventoryTable.setBackground(topBackground);
+		
+		inventoryTable.align(Align.top);
+		
+		// 1 - Title
+		Label title = PoolableLabel.create("Inventory", PopinService.hudStyle());
+		inventoryTable.add(title).uniformX().pad(40, 0, 40, 0);
+		inventoryTable.row();
+		
+		
+		// 2 - Inventory slots
+		inventoryDropButtons.clear();
+		Table slotsTable = PoolableTable.create();
+		int index = 0;
+		for (int row = 0 ; row < 4 ; row++) {
+			for (int col=0 ; col<4 ; col++) {
+				Table slot = createSlot( index);
+				slotsTable.add(slot);
+				slots[index] = slot;
+				
+				index ++;
+			}
+			slotsTable.row();
+		}
+		inventoryTable.add(slotsTable);
+		
+		inventoryTable.pack();
+	}
+
     /**
      * Create an inventory slot (filled or empty).
      * @param index the index of the slot
@@ -155,15 +350,15 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	private Table createSlot(int index) {
 		boolean activeSlot = index < inventoryCompo.getNumberOfSlots();
 		
-		final Table slot = new Table();
+		final Table slot = PoolableTable.create();
 //		slot.setDebug(true);
 
 		//Background
 		TextureRegionDrawable slotBackground = null;
 		if (!activeSlot) {
-			slotBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot_disabled));
+			slotBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_slot_disabled));
 		} else {
-			slotBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot));
+			slotBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_slot));
 		}
 		slot.setBackground(slotBackground);
 		
@@ -176,22 +371,77 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				
 				// An item is present in this inventory slot
 				final ItemComponent itemComponent = Mappers.itemComponent.get(item);
-				Image img = new Image(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
+				Image img = PoolableImage.create(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
 				
-				slot.addListener(new ClickListener() {
+				if (isLoot) {
 					
-					@Override
-					public void clicked(InputEvent event, float x, float y) {
-						displaySelectedItemPopin( item, slot);
+					// LOOT case :
+					// Display the item. If there is a click on it, display a "Drop button".
+					// On a click on this drop button, store the item in the lootable.
+					
+					final Stack slotStack = PoolableStack.create();
+					Table imageStackTable = PoolableTable.create();
+					imageStackTable.add(img);
+					slotStack.add(imageStackTable);
+
+					//Add the drop button
+					final TextButton dropBtn = PoolableTextButton.create("Drop", PopinService.smallButtonStyle());
+					dropBtn.setVisible(false);
+					inventoryDropButtons.add(dropBtn);
+					
+					if (!inventoryCompo.isInventoryActionInProgress()) {
+						img.addListener(new ClickListener() {
+							
+							@Override
+							public void clicked(InputEvent event, float x, float y) {
+								for (TextButton tb : inventoryDropButtons) {
+									tb.setVisible(false);
+								}
+								dropBtn.setVisible(true);
+							}
+						});
 					}
-				});
+					
+					dropBtn.addListener(new ClickListener() {
+						
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							//Loot mode, drop into the lootable
+							lootableCompo.getItems().add(item);
+							inventoryCompo.remove(item);
+							inventoryCompo.setInventoryActionInProgress(true);
+							room.turnManager.endPlayerTurn();
+							refreshPopin();					
+						}
+					});
+					
+					
+					
+					Table slotStackTable = PoolableTable.create();
+					slotStackTable.add(dropBtn);
+					slotStack.add(slotStackTable);
+					slot.add(slotStack);
+				} else {
+					
+					// Simple inventory case : 
+					// display the image, and on a click on it display the item popin
+					slot.add(img);
+
+					slot.addListener(new ClickListener() {
+						
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							displaySelectedItemPopin( item, slot);
+						}
+					});
+					
+				}
 				
-				slot.add(img);
 				
 			} else {
 				
 				// Empty slot
-				Label l = new Label("empty", hudStyle);
+				Label l = PoolableLabel.create("empty", PopinService.hudStyle());
 				slot.add(l);
 			
 			}
@@ -202,14 +452,23 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+	
+	
+	
+	
+	
+	//*********************************
+	// Selected item popin
+	
+	
 	/**
-	 * DIsplay the popin of the selected item with it's title, description and possible actions.
+	 * Display the popin of the selected item with it's title, description and possible actions.
 	 * @param item the item selected
 	 * @param slot the slot on which the item was
 	 */
 	private void displaySelectedItemPopin(final Entity item, final Table slot) {
 		if (selectedItemPopin == null) {
-			selectedItemPopin = new Table();
+			selectedItemPopin = PoolableTable.create();
 //			selectedItemPopin.setDebug(true);
 
 			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
@@ -218,30 +477,27 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
+			TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
 			selectedItemPopin.setBackground(textureRegionDrawable);
 			
 			selectedItemPopin.align(Align.top);
 			
 			// 1 - Title
-			itemTitle = new Label("Title", hudStyle);
+			itemTitle = PoolableLabel.create("Title", PopinService.hudStyle());
 			selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
 			selectedItemPopin.row().align(Align.center);
 			
 			// 2 - Description
-			itemDesc = new Label("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller.", hudStyle);
+			itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
 			itemDesc.setWrap(true);
 			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 			
 			// 3 - Action buttons
-			Table buttonTable = new Table();
-			Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
-			Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
-			TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+			Table buttonTable = PoolableTable.create();
 			
 			// 3.1 - Close button
-			final TextButton closeBtn = new TextButton("Close",btnStyle);			
+			final TextButton closeBtn = PoolableTextButton.create("Close",PopinService.bigButtonStyle());			
 			// continueButton listener
 			closeBtn.addListener(new ChangeListener() {
 				@Override
@@ -252,12 +508,14 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			buttonTable.add(closeBtn).pad(0, 20,0,20);
 			
 			// 3.2 - Drop button
-			dropItemBtn = new TextButton("Drop",btnStyle);			
+			dropItemBtn = PoolableTextButton.create("Drop",PopinService.bigButtonStyle());			
 			buttonTable.add(dropItemBtn).pad(0, 20,0,20);
 
-			// 3.3 - Use button
-			useItemBtn = new TextButton("Use",btnStyle);			
-			buttonTable.add(useItemBtn).pad(0, 20,0,20);
+			if (!this.isLoot) {
+				// 3.3 - Use button
+				useItemBtn = PoolableTextButton.create("Use",PopinService.bigButtonStyle());			
+				buttonTable.add(useItemBtn).pad(0, 20,0,20);
+			}
 			
 			selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
 			
@@ -269,20 +527,21 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		// Update the content
 		itemTitle.setText(itemComponent.getItemType().getLabel());
 		itemDesc.setText(itemComponent.getItemType().getDescription());
-		useItemBtn.setText(itemComponent.getItemType().getActionLabel());
 		
 		// Update the Drop item listener
-		updateDropListener(item, slot, itemComponent);
+		updateDropListener(item, slot);
 		
-		// Update the Use item listener
-		updateUseListener(item, slot);
-
+		if (!this.isLoot) {
+			useItemBtn.setText(itemComponent.getItemType().getActionLabel());
+			// Update the Use item listener
+			updateUseListener(item, slot);
+		}
 		
 		// Place the popin properly
 		selectedItemPopin.pack();
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
 	
-		itemPopinDisplayer = true;
+		itemPopinDisplayed = true;
 		this.stage.addActor(selectedItemPopin);
 	}
 
@@ -302,17 +561,17 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		useItemBtn.addListener(useListener);
 	}
 
-	private void updateDropListener(final Entity item, final Table slot, final ItemComponent itemComponent) {
+	private void updateDropListener(final Entity item, final Table slot) {
 		if (dropListener != null) {
 			dropItemBtn.removeListener(dropListener);
 		}
 		dropListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				//Drop on the floor
 				inventoryCompo.requestAction(InventoryActionEnum.DROP, item);
 				slot.removeListener(this);
 				inventoryCompo.remove(item);
-				hideSelectedItemPopin();
 				closePopin();
 			}
 		};
@@ -321,20 +580,101 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	private void hideSelectedItemPopin() {
 		selectedItemPopin.remove();
-		itemPopinDisplayer = false;
+		selectedItemPopin = null;
+		itemPopinDisplayed = false;
+	}
+	
+	
+	
+	
+	//*****************************
+	// Take all and interruption
+	
+    /**
+     * Handle the "Take all" action.
+     * Take items one at a time and spend a turn for each item.
+     */
+	private void handleTakeAllAction() {
+		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
+			Entity firstItem = lootableCompo.getItems().get(0);
+			if (inventoryCompo.canStore()) {
+				inventoryCompo.store(firstItem, null);
+				inventoryCompo.setInventoryActionInProgress(true);
+				room.turnManager.endPlayerTurn();
+				lootableCompo.getItems().remove(firstItem);
+				refreshPopin();
+			} else {
+				takeAllInProgess = false;
+			}
+		} else {
+			takeAllInProgess = false;
+		}
+	}
+
+
+    /**
+     * Check if the player was interrupted during a looting action.
+     * @return true if interrupted
+     */
+	private boolean handleInterruption() {
+		if (inventoryCompo.isInterrupted()) {
+    		takeAllInProgess = false;
+    		inventoryCompo.setInterrupted(false);
+    		closePopin();
+    		return true;
+    	}
+		return false;
+	}
+	
+	
+
+    /**
+     * If an action is being processed in the inventory while enemies are playing their turn,
+     * reduce the opacity of the inventory to show enemies actions.
+     */
+	private void displayRoomIfEnemiesArePlaying() {
+		if (room.hasEnemies()) {
+			if (inventoryCompo.isInventoryActionInProgress()) {
+				mainTable.addAction(Actions.alpha(0.6f));
+			} else {
+				mainTable.addAction(Actions.alpha(1f));
+			}
+		}
+	}
+	
+	
+	
+	
+	//*****************************
+	// CLOSE and REFRESH
+	
+	/**
+	 * Perform misc actions and clear all refresh statuses.
+	 */
+	private void finishRefresh() {
+		handleTakeAllAction();
+		displayRoomIfEnemiesArePlaying();
+		
+		needsRefresh = false;
+		inventoryCompo.setNeedInventoryRefresh(false);
+	}
+	
+	private void refreshPopin() {
+		needsRefresh = true;		
 	}
 
 	/**
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
-		inventoryCompo.setInventoryDisplayed(false);
+		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
-		if (itemPopinDisplayer) hideSelectedItemPopin();
+		if (itemPopinDisplayed) hideSelectedItemPopin();
 
 		mainTable.clear();
 		mainTable.remove();
 		mainTable = null;
+		needsRefresh = true;
 		
 		if (room.getNextState() == null) {
 			room.setNextState(previousState);

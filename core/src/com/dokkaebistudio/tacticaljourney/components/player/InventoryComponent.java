@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -13,8 +14,13 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  *
  */
 public class InventoryComponent implements Component, Poolable {
-	/** Whether the inventory is being displayed or not. */
-	private boolean inventoryDisplayed;
+	
+	/** The display mode of the inventory. */
+	private InventoryDisplayModeEnum displayMode;
+	
+	/** The entity being looted (if any). */
+	private Entity lootableEntity;
+	private Integer turnsToWaitBeforeLooting;
 	
 	/** The number of slots in the inventory. */
 	private int numberOfSlots;
@@ -26,6 +32,9 @@ public class InventoryComponent implements Component, Poolable {
 	
 	private InventoryActionEnum currentAction;
 	private Entity currentItem;
+	private boolean inventoryActionInProgress;
+	private boolean needInventoryRefresh = false;
+	private boolean interrupted = false;
 	
 	
 	public enum InventoryActionEnum {
@@ -41,7 +50,7 @@ public class InventoryComponent implements Component, Poolable {
 	public void reset() {
 		slots = new Entity[16];
 		firstEmptySlot = 0;
-		inventoryDisplayed = false;
+		displayMode = InventoryDisplayModeEnum.NONE;
 	}
 	
 	
@@ -59,8 +68,10 @@ public class InventoryComponent implements Component, Poolable {
 		slots[firstEmptySlot] = e;
 		firstEmptySlot ++;
 		
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
-		gridPositionComponent.setInactive(e, r);
+		if (r != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+			gridPositionComponent.setInactive(e, r);
+		}
 	}
 	
 	/**
@@ -122,6 +133,13 @@ public class InventoryComponent implements Component, Poolable {
 	}
 	
 	
+	public void interrupt() {
+		this.interrupted = true;
+		this.inventoryActionInProgress = false;
+		this.needInventoryRefresh = true;
+	}
+	
+	//*************************************
 	// Getters and Setters !
 	
 	public int getNumberOfSlots() {
@@ -131,19 +149,6 @@ public class InventoryComponent implements Component, Poolable {
 	public void setNumberOfSlots(int numberOfSlots) {
 		this.numberOfSlots = numberOfSlots;
 	}
-
-
-
-	public boolean isInventoryDisplayed() {
-		return inventoryDisplayed;
-	}
-
-
-
-	public void setInventoryDisplayed(boolean inventoryDisplayed) {
-		this.inventoryDisplayed = inventoryDisplayed;
-	}
-
 
 
 	public InventoryActionEnum getCurrentAction() {
@@ -166,6 +171,77 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setCurrentItem(Entity currentItem) {
 		this.currentItem = currentItem;
+	}
+
+
+
+	public Entity getLootableEntity() {
+		return lootableEntity;
+	}
+
+
+
+	public void setLootableEntity(Entity lootableEntity) {
+		this.lootableEntity = lootableEntity;
+	}
+
+
+
+	public InventoryDisplayModeEnum getDisplayMode() {
+		return displayMode;
+	}
+
+
+
+	public void setDisplayMode(InventoryDisplayModeEnum displayMode) {
+		this.displayMode = displayMode;
+	}
+
+
+
+	public Integer getTurnsToWaitBeforeLooting() {
+		return turnsToWaitBeforeLooting;
+	}
+
+
+
+	public void setTurnsToWaitBeforeLooting(Integer turnsToWaitBeforeLooting) {
+		this.turnsToWaitBeforeLooting = turnsToWaitBeforeLooting;
+	}
+
+
+
+	public boolean isInventoryActionInProgress() {
+		return inventoryActionInProgress;
+	}
+
+
+
+	public void setInventoryActionInProgress(boolean inventoryActionInProgress) {
+		this.inventoryActionInProgress = inventoryActionInProgress;
+	}
+
+
+	public boolean isNeedInventoryRefresh() {
+		return needInventoryRefresh;
+	}
+
+
+
+	public void setNeedInventoryRefresh(boolean needInventoryRefresh) {
+		this.needInventoryRefresh = needInventoryRefresh;
+	}
+
+
+
+	public boolean isInterrupted() {
+		return interrupted;
+	}
+
+
+
+	public void setInterrupted(boolean interrupted) {
+		this.interrupted = interrupted;
 	}
 
 

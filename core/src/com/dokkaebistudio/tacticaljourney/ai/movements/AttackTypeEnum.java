@@ -33,7 +33,7 @@ public enum AttackTypeEnum {
 			
 		case THROW:
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
-			Set<Entity> solids = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SolidComponent.class, room);
+			Set<Entity> solids = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), SolidComponent.class, room);
 			result = tileComponent.type.isWalkable() && solids.isEmpty();
 			break;
 			

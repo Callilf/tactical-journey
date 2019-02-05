@@ -28,7 +28,39 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	/** The current number of hp. */
 	private int hp;
 	
+	/** The displayer that shows the amount of HP beside the entity (for enemies). */
 	private Entity hpDisplayer;
+	
+	/** Whether the entity received damages during the previous turn. */
+	private boolean receivedDamageLastTurn;
+	
+	/** The last entity that attacked this entity. */
+	private Entity attacker;
+	
+	/** Whether the entity has been hit or healed at this frame. */
+	private HealthChangeEnum healthChange = HealthChangeEnum.NONE;
+	private int healthLostAtCurrentFrame;
+	private int healthRecoveredAtCurrentFrame;
+	
+	public enum HealthChangeEnum {
+		NONE,
+		HIT,
+		HEALED;
+	}
+	
+	
+	/**
+	 * Receive damages.
+	 * @param amountOfDamage the amount of damages
+	 */
+	public void hit(int amountOfDamage, Entity attacker) {
+		this.setHp(this.getHp() - amountOfDamage);
+		this.healthLostAtCurrentFrame += amountOfDamage;
+		this.healthChange = HealthChangeEnum.HIT;
+		
+		this.attacker = attacker;
+	}
+	
 	
 	/**
 	 * Restore the given amount of health.
@@ -39,6 +71,14 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		if (this.getHp() > this.getMaxHp()) {
 			this.setHp(this.getMaxHp());
 		}
+		this.healthRecoveredAtCurrentFrame += amount;
+		this.healthChange = HealthChangeEnum.HEALED;
+	}
+	
+	public void clearModified() {
+		this.healthChange = HealthChangeEnum.NONE;
+		this.healthLostAtCurrentFrame = 0;
+		this.healthRecoveredAtCurrentFrame = 0;
 	}
 	
 	/**
@@ -84,6 +124,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			room.removeEntity(hpDisplayer);		
 		}
 		hpDisplayer = null;
+		this.clearModified();
+		this.receivedDamageLastTurn = false;
 	}
 	
 	
@@ -164,6 +206,56 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 
 	public void setMaxHp(int maxHp) {
 		this.maxHp = maxHp;
+	}
+
+
+	public int getHealthLostAtCurrentFrame() {
+		return healthLostAtCurrentFrame;
+	}
+
+
+	public void setHealthLostAtCurrentFrame(int healthLostAtCurrentFrame) {
+		this.healthLostAtCurrentFrame = healthLostAtCurrentFrame;
+	}
+
+
+	public int getHealthRecoveredAtCurrentFrame() {
+		return healthRecoveredAtCurrentFrame;
+	}
+
+
+	public void setHealthRecoveredAtCurrentFrame(int healthRecoveredAtCurrentFrame) {
+		this.healthRecoveredAtCurrentFrame = healthRecoveredAtCurrentFrame;
+	}
+
+
+	public HealthChangeEnum getHealthChange() {
+		return healthChange;
+	}
+
+
+	public void setHealthChange(HealthChangeEnum healthChange) {
+		this.healthChange = healthChange;
+	}
+
+
+	public boolean isReceivedDamageLastTurn() {
+		return receivedDamageLastTurn;
+	}
+
+
+	public void setReceivedDamageLastTurn(boolean receivedDamageLastTurn) {
+		this.receivedDamageLastTurn = receivedDamageLastTurn;
+	}
+
+
+	public Entity getAttacker() {
+		return attacker;
+	}
+
+
+	public void setAttacker(Entity attacker) {
+		this.attacker = attacker;
 	}
 
 

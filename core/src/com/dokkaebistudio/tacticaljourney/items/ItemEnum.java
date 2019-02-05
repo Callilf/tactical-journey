@@ -36,10 +36,6 @@ public enum ItemEnum {
 			//Heal the picker for 25 HP !
 			HealthComponent healthComponent = Mappers.healthComponent.get(user);
 			healthComponent.restoreHealth(25);
-			
-			//Display a DamageDisplayer
-			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(user);
-			room.entityFactory.createDamageDisplayer("25", gridPosCompo.coord(), true, room);
 			return true;
 		}
 	},

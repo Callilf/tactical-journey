@@ -133,11 +133,18 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
     	}
     	
+    	
+    	//Handle interruption
+    	boolean interrupted = handleInterruption();
+    	if (interrupted) return;
+    	
+    	
+    	// Check if the inventory is displayed
     	if (inventoryCompo != null && inventoryCompo.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
     		this.isLoot = inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.LOOT;
 
     		if (mainTable == null) {
-    			// Create the inventory table for the first time
+    			// Create the inventory table and set the state
 	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
 	    		room.setNextState(RoomState.INVENTORY_POPIN);
 	    		
@@ -147,40 +154,23 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		if (needsRefresh || inventoryCompo.isNeedInventoryRefresh()) {
     			mainTable.clear();
     			
+    			// Build the loot panel
 	    		if (this.isLoot) {
 	    			createLootTable();
 		    		mainTable.add(lootTable).padRight(20);
 	    		}
 	    			    		
+	    		// Build the inventory panel
 	    		createInventoryTable();	        	
 	        	mainTable.add(inventoryTable);
 	        	
+	        	// pack the main table and place it at the center
 	        	mainTable.pack();
 	        	mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
-	        	
 	    		stage.addActor(mainTable);
 	    		
 	    		
-	    		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
-	    			Entity firstItem = lootableCompo.getItems().get(0);
-	    			if (inventoryCompo.canStore()) {
-						inventoryCompo.store(firstItem, null);
-						inventoryCompo.setInventoryActionInProgress(true);
-						room.turnManager.endPlayerTurn();
-						lootableCompo.getItems().remove(firstItem);
-						refreshPopin();
-					} else {
-						takeAllInProgess = false;
-					}
-	    		} else {
-	    			takeAllInProgess = false;
-	    		}
-	    		
-	    		
-	    		displayRoomIfEnemiesArePlaying();
-	    		
-	    		needsRefresh = false;
-	    		inventoryCompo.setNeedInventoryRefresh(false);
+	    		finishRefresh();
     		}
     		
     		// Draw the table
@@ -199,21 +189,12 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     }
 
-    /**
-     * If an action is being processed in the inventory while enemies are playing their turn,
-     * reduce the opacity of the inventory to show enemies actions.
-     */
-	private void displayRoomIfEnemiesArePlaying() {
-		if (room.hasEnemies()) {
-			if (inventoryCompo.isInventoryActionInProgress()) {
-				mainTable.addAction(Actions.alpha(0.6f));
-			} else {
-				mainTable.addAction(Actions.alpha(1f));
-			}
-		}
-	}
-	
 
+	
+	//*******************************
+	// LOOT TABLE
+	
+	
 	private void createLootTable() {
 		lootableCompo = Mappers.lootableComponent.get(inventoryCompo.getLootableEntity());
 		
@@ -318,6 +299,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		return oneItem;
 	}
 
+	
+	
+	
+	//*****************************
+	// INVENTORY
+	
+	
 	private void createInventoryTable() {
 		inventoryTable = PoolableTable.create();
 //	    		table.setDebug(true, true);
@@ -464,8 +452,17 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+	
+	
+	
+	
+	
+	//*********************************
+	// Selected item popin
+	
+	
 	/**
-	 * DIsplay the popin of the selected item with it's title, description and possible actions.
+	 * Display the popin of the selected item with it's title, description and possible actions.
 	 * @param item the item selected
 	 * @param slot the slot on which the item was
 	 */
@@ -585,6 +582,81 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		selectedItemPopin.remove();
 		selectedItemPopin = null;
 		itemPopinDisplayed = false;
+	}
+	
+	
+	
+	
+	//*****************************
+	// Take all and interruption
+	
+    /**
+     * Handle the "Take all" action.
+     * Take items one at a time and spend a turn for each item.
+     */
+	private void handleTakeAllAction() {
+		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
+			Entity firstItem = lootableCompo.getItems().get(0);
+			if (inventoryCompo.canStore()) {
+				inventoryCompo.store(firstItem, null);
+				inventoryCompo.setInventoryActionInProgress(true);
+				room.turnManager.endPlayerTurn();
+				lootableCompo.getItems().remove(firstItem);
+				refreshPopin();
+			} else {
+				takeAllInProgess = false;
+			}
+		} else {
+			takeAllInProgess = false;
+		}
+	}
+
+
+    /**
+     * Check if the player was interrupted during a looting action.
+     * @return true if interrupted
+     */
+	private boolean handleInterruption() {
+		if (inventoryCompo.isInterrupted()) {
+    		takeAllInProgess = false;
+    		inventoryCompo.setInterrupted(false);
+    		closePopin();
+    		return true;
+    	}
+		return false;
+	}
+	
+	
+
+    /**
+     * If an action is being processed in the inventory while enemies are playing their turn,
+     * reduce the opacity of the inventory to show enemies actions.
+     */
+	private void displayRoomIfEnemiesArePlaying() {
+		if (room.hasEnemies()) {
+			if (inventoryCompo.isInventoryActionInProgress()) {
+				mainTable.addAction(Actions.alpha(0.6f));
+			} else {
+				mainTable.addAction(Actions.alpha(1f));
+			}
+		}
+	}
+	
+	
+	
+	
+	//*****************************
+	// CLOSE and REFRESH
+	
+	/**
+	 * Perform misc actions and clear all refresh statuses.
+	 */
+	private void finishRefresh() {
+		handleTakeAllAction();
+		displayRoomIfEnemiesArePlaying();
+		
+		needsRefresh = false;
+		inventoryCompo.setNeedInventoryRefresh(false);
 	}
 	
 	private void refreshPopin() {

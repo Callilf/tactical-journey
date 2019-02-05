@@ -24,7 +24,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -55,6 +54,7 @@ import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
+import com.dokkaebistudio.tacticaljourney.systems.HealthSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ItemSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
@@ -62,7 +62,6 @@ import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
-import com.dokkaebistudio.tacticaljourney.systems.display.DamageDisplaySystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -177,7 +176,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new ItemSystem(	player, room));
-		engine.addSystem(new DamageDisplaySystem(room));
+		engine.addSystem(new HealthSystem(room, stage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 

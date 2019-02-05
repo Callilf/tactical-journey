@@ -34,6 +34,7 @@ public class InventoryComponent implements Component, Poolable {
 	private Entity currentItem;
 	private boolean inventoryActionInProgress;
 	private boolean needInventoryRefresh = false;
+	private boolean interrupted = false;
 	
 	
 	public enum InventoryActionEnum {
@@ -132,6 +133,13 @@ public class InventoryComponent implements Component, Poolable {
 	}
 	
 	
+	public void interrupt() {
+		this.interrupted = true;
+		this.inventoryActionInProgress = false;
+		this.needInventoryRefresh = true;
+	}
+	
+	//*************************************
 	// Getters and Setters !
 	
 	public int getNumberOfSlots() {
@@ -222,6 +230,18 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setNeedInventoryRefresh(boolean needInventoryRefresh) {
 		this.needInventoryRefresh = needInventoryRefresh;
+	}
+
+
+
+	public boolean isInterrupted() {
+		return interrupted;
+	}
+
+
+
+	public void setInterrupted(boolean interrupted) {
+		this.interrupted = interrupted;
 	}
 
 

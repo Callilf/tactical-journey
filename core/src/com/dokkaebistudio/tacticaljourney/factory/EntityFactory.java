@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
@@ -529,12 +530,12 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, Room room) {
+	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
 		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
-		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE);
+		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
 		displayCompo.setInitialPosition(initialPos);
@@ -719,6 +720,7 @@ public final class EntityFactory {
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);

@@ -85,9 +85,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
-		
-		boolean waitingForLooting = inventoryComponent.getTurnsToWaitBeforeLooting() != null;
-		
+				
 		switch (room.getState()) {
 
 		case PLAYER_TURN_INIT:	
@@ -122,7 +120,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
 			
-			boolean looting = handleLoot(moverEntity,  waitingForLooting);
+			boolean looting = handleLoot(moverEntity,  inventoryComponent.getTurnsToWaitBeforeLooting() != null);
 			if (looting) return;
 			
 			// When clicking on a moveTile, display it as the destination

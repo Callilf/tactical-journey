@@ -17,7 +17,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     private Room room;
     
     //TODO remove this when no longer testing the levelup popin
-    private boolean test = true;
+    private boolean test = false;
 
     public ExperienceSystem(Room r, Stage s) {
         super(Family.all(ExperienceComponent.class).get());

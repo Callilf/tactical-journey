@@ -48,26 +48,49 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    
+	//****************************
+	// Main attributes
+	
+	/** The stage. */
 	public Stage stage;
-	
+	/** The player. */
 	private Entity player;
-	
-	/** Whether we are in loot mode or just plain inventory mode. */
-	private boolean isLoot;
+	/** The current room. */
+    private Room room;
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
 	/** The current lootable component. */
 	private LootableComponent lootableCompo;
-	
-	/** The current room. */
-    private Room room;
     
+    /** The state before the level up state. */
+    private RoomState previousState;
+    
+    
+    
+    //***************************
+    // BOOLEANS
+    
+	/** Whether we are in loot mode or just plain inventory mode. */
+	private boolean isLoot;
+
+	/** Whether the inventory needs refreshing. */
     private boolean needsRefresh = true;
+    
+    /** Whether the item popin is displayed. */
+    private boolean itemPopinDisplayed = false;
+
+    /** Whether we are in the process of "take all" items. */
+    private boolean takeAllInProgess = false;
+    
+    
+    //*****************************
+    // ACTORS
     
     /** The main table of the popin. */
     private Table mainTable;
     
+    /** The inventory table. */
     private Table inventoryTable;
     private Table[] slots = new Table[16];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
@@ -76,10 +99,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private Table lootTable;
     private List<TextButton> lootTakeBtns = new ArrayList<>();
     
-    
+    /** The selected item popin. */
     private Table selectedItemPopin;
-    
-    boolean itemPopinDisplayed = false;
     private Label itemTitle;
     private Label itemDesc;
     private TextButton dropItemBtn;
@@ -88,18 +109,20 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener useListener;
     
     
+    //*****************************
+    // STYLES
+    
 	private LabelStyle hudStyle;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
-    
     private TextButtonStyle bigButtonStyle;
     private TextButtonStyle smallButtonStyle;
+
     
-    private boolean takeAllInProgess = false;
-    
-    
+    /**
+     * Constructor. Initialize the styles and the main attributes.
+     * @param r the room
+     * @param s the stage to draw on
+     * @param p the player
+     */
     public InventoryPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
         this.player = p;
@@ -130,6 +153,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	this.room = newRoom;	
     }
 
+    
     @Override
     public void render(float deltaTime) {
     	

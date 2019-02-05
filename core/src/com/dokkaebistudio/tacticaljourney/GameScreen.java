@@ -47,6 +47,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
@@ -310,6 +311,7 @@ public class GameScreen extends ScreenAdapter {
 		stage.dispose();
 		hudStage.dispose();
 		game.dispose();
+		PopinService.dispose();
 		super.dispose();
 	}
 }

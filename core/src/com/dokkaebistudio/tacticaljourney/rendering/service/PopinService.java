@@ -64,5 +64,8 @@ public class PopinService {
     	return instance.smallButtonStyle;
     }
     
+    public static void dispose() {
+    	instance = null;
+    }
 }
 

@@ -67,17 +67,24 @@ public class Assets {
 	public static final String btn_end_turn = "btn-end-turn";
 	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
 	
+	
+	//**********
+	// Popins
+	
+	public static final String popin_big_btn_up = "hud_inventory_item_popin_btn_up";
+	public static final String popin_big_btn_down = "hud_inventory_item_popin_btn_down";
+	public static final String popin_small_btn_up = "hud_lvl_up_choice_claim_btn";
+	public static final String popin_small_btn_down = "hud_lvl_up_choice_claim_btn_pushed";
+
+	
 	public static final String lvl_up_background = "hud_lvl_up_background";
 	public static final String lvl_up_choice_frame = "hud_lvl_up_choice_frame";
 	public static final String lvl_up_choice_desc_panel = "hud_lvl_up_choice_desc_panel";
 	public static final String lvl_up_choice_reward_panel = "hud_lvl_up_choice_reward_panel";
-	public static final String lvl_up_choice_claim_btn = "hud_lvl_up_choice_claim_btn";
-	public static final String lvl_up_choice_claim_btn_pushed = "hud_lvl_up_choice_claim_btn_pushed";
 	
 	public static final String profile_background = "hud_profile_background";
 	public static final String btn_profile = "btn-profile";
 	public static final String btn_profile_pushed = "btn-profile-pushed";
-
 	
 	public static final String inventory_background = "hud_inventory_background";
 	public static final String inventory_slot = "hud_inventory_slot";
@@ -86,9 +93,6 @@ public class Assets {
 	public static final String btn_inventory_pushed = "btn-inventory-pushed";
 	
 	public static final String inventory_item_popin_background = "hud_inventory_item_popin_background";
-	public static final String inventory_item_popin_btn_up = "hud_inventory_item_popin_btn_up";
-	public static final String inventory_item_popin_btn_down = "hud_inventory_item_popin_btn_down";
-
 	public static final String inventory_lootable_item_background = "hud_lootable_item_background";
 
 	

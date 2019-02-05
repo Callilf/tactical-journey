@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.GenerationMoveEnum;
@@ -81,7 +83,7 @@ public class MapRenderer implements Renderer {
 		
 		gameScreen.guiCam.update();
 		
-		Table mapTable = new Table();
+		Table mapTable = PoolableTable.create();
 		mapTable.setPosition(1830f, 1047f);
 		mapTable.setTouchable(Touchable.childrenOnly);
 		

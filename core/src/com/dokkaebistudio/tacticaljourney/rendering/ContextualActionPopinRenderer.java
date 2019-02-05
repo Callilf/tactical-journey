@@ -2,20 +2,14 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -26,6 +20,12 @@ import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableS
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -53,8 +53,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener yesBtnListener;
     
     
-	private LabelStyle hudStyle;
-    
     /** The state before the level up state. */
     private RoomState previousState;
     
@@ -62,9 +60,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
         this.room = r;
         this.player = p;
         this.stage = s;
-        
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-
     }
     
     @Override
@@ -145,7 +140,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
      */
 	private void initTable() {
 		if (mainPopin == null) {
-			mainPopin = new Table();
+			mainPopin = PoolableTable.create();
 		}
 //			selectedItemPopin.setDebug(true);
 
@@ -155,38 +150,35 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
+		TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
 		mainPopin.setBackground(textureRegionDrawable);
 		
 		mainPopin.align(Align.top);
 		
 		// 1 - Title
-		title = new Label("Title", hudStyle);
+		title = PoolableLabel.create("Title", PopinService.hudStyle());
 		mainPopin.add(title).top().align(Align.top).pad(20, 0, 20, 0);
 		mainPopin.row().align(Align.center);
 		
 		// 2 - Description
-		desc = new Label("Description", hudStyle);
+		desc = PoolableLabel.create("Description", PopinService.hudStyle());
 		desc.setWrap(true);
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
 		// 3 - Nb turns (optional)
 		if (playerCompo.isLootRequested()) {
-			nbTurns = new Label("Nb turns", hudStyle);
+			nbTurns = PoolableLabel.create("Nb turns", PopinService.hudStyle());
 			mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
 			mainPopin.row().align(Align.center);
 		}
 
 		
 		// 4 - Action buttons
-		Table buttonTable = new Table();
-		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
-		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
-		TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+		Table buttonTable = PoolableTable.create();
 		
 		// 4.1 - No button
-		final TextButton closeBtn = new TextButton("Close",btnStyle);			
+		final TextButton closeBtn = PoolableTextButton.create("Close",PopinService.bigButtonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -197,7 +189,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
 		// 4.2 - Yes button
-		yesBtn = new TextButton("Loot",btnStyle);			
+		yesBtn = PoolableTextButton.create("Loot",PopinService.bigButtonStyle());			
 		buttonTable.add(yesBtn).pad(0, 20,0,20);
 		
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);

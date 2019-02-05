@@ -1,24 +1,24 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
 public class MenuPopinRenderer implements Renderer {
 	    
@@ -27,14 +27,10 @@ public class MenuPopinRenderer implements Renderer {
     
 	boolean menuDisplayed = false;
     private Table table;    
-    
-	private LabelStyle hudStyle;
-        
+            
     public MenuPopinRenderer(GameScreen gs, Stage s) {
     	this.gamescreen = gs;
         this.stage = s;
-        
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
     }
 
 
@@ -62,7 +58,7 @@ public class MenuPopinRenderer implements Renderer {
      */
 	private void initTable() {
 		if (table == null) {
-			table = new Table();
+			table = PoolableTable.create();
 	//			selectedItemPopin.setDebug(true);
 	
 			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
@@ -71,23 +67,20 @@ public class MenuPopinRenderer implements Renderer {
 			
 			// Place the popin and add the background texture
 			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
+			TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.profile_background));
 			table.setBackground(textureRegionDrawable);
 			
 			table.align(Align.top);
 			
 			// 1 - Title
-			Label title = new Label("Game paused", hudStyle);
+			Label title = PoolableLabel.create("Game paused", PopinService.hudStyle());
 			table.add(title).top().align(Align.top).pad(20, 0, 60, 0);
 			table.row().align(Align.center);
 			
 	
 			// 2 - Resume button
-			Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
-			Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
-			TextButtonStyle btnStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
 			
-			final TextButton resumeBtn = new TextButton("Resume",btnStyle);			
+			final TextButton resumeBtn = PoolableTextButton.create("Resume", PopinService.bigButtonStyle());			
 			resumeBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -98,7 +91,7 @@ public class MenuPopinRenderer implements Renderer {
 			table.row();
 			
 			// 3 - Return to menu
-			final TextButton mainMenuBtn = new TextButton("Main menu",btnStyle);			
+			final TextButton mainMenuBtn = PoolableTextButton.create("Main menu", PopinService.bigButtonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -110,7 +103,7 @@ public class MenuPopinRenderer implements Renderer {
 			table.row();
 			
 			// 4 - Quit game
-			final TextButton quitBtn = new TextButton("Quit game",btnStyle);			
+			final TextButton quitBtn = PoolableTextButton.create("Quit game", PopinService.bigButtonStyle());			
 			quitBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {

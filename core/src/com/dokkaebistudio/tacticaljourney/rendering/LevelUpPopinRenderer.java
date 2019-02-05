@@ -7,7 +7,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,12 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -35,6 +31,14 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableStack;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -88,11 +92,11 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
 	    		room.setNextState(RoomState.LEVEL_UP_POPIN);
 	    		
-	    		table = new Table();
+	    		table = PoolableTable.create();
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		table.setTouchable(Touchable.childrenOnly);
 	    		
-	    		TextureRegionDrawable background = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background));
+	    		TextureRegionDrawable background = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.lvl_up_background));
 	    		table.setBackground(background);
 
 	    		
@@ -126,7 +130,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		rewards.clear();
 		claimButtons.clear();
 		
-		Table choiceTable = new Table();
+		Table choiceTable = PoolableTable.create();
 		
 		for (int i=1; i<=choicesNumber ; i++) {
 			int nextInt = unseededRandom.nextInt(list.size());
@@ -138,13 +142,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		
 		for (int i=0 ; i<rewards.size() ; i++) {
 			final LevelUpRewardEnum levelUpRewardEnum = rewards.get(i);
-			LabelStyle smallTitleStyle = new LabelStyle(Assets.smallFont, Color.WHITE);
-			Stack choiceGroup = new Stack();
+			Stack choiceGroup = PoolableStack.create();
 			
-			Stack rewardPanelGroup = new Stack();
-			Image rewardTextBackground = new Image(Assets.getTexture(Assets.lvl_up_choice_reward_panel));
-			Table rewardTable = new Table();
-			Label rewardText = new Label(levelUpRewardEnum.getFinalDescription(),smallTitleStyle);
+			Stack rewardPanelGroup = PoolableStack.create();
+			Image rewardTextBackground = PoolableImage.create(Assets.getTexture(Assets.lvl_up_choice_reward_panel));
+			Table rewardTable = PoolableTable.create();
+			Label rewardText = PoolableLabel.create(levelUpRewardEnum.getFinalDescription(), PopinService.smallTextStyle());
 			rewardText.setAlignment(Align.center);
 			rewardTable.add(rewardText).width(Value.percentWidth(.70F, rewardTable));
 			rewardTable.add().width(Value.percentWidth(.30F, rewardTable));
@@ -152,10 +155,10 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			rewardPanelGroup.addActor(rewardTable);
 			choiceGroup.addActor(rewardPanelGroup);
 
-			final Stack descPanelGroup = new Stack();
-			Image descTextBackground = new Image(Assets.getTexture(Assets.lvl_up_choice_desc_panel));
-			Table descTable = new Table();
-			Label descText = new Label(levelUpRewardEnum.getDescription(),smallTitleStyle);
+			final Stack descPanelGroup = PoolableStack.create();
+			Image descTextBackground = PoolableImage.create(Assets.getTexture(Assets.lvl_up_choice_desc_panel));
+			Table descTable = PoolableTable.create();
+			Label descText = PoolableLabel.create(levelUpRewardEnum.getDescription(), PopinService.smallTextStyle());
 			descText.setAlignment(Align.center);
 			descTable.add(descText).width(Value.percentWidth(.70F, descTable));
 			descTable.add().width(Value.percentWidth(.30F, descTable));
@@ -165,16 +168,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			
 			
 			
-			Table frameTable = new Table();
+			Table frameTable = PoolableTable.create();
 
-			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_choice_frame));
+			TextureRegionDrawable frame = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.lvl_up_choice_frame));
 			frameTable.setBackground(frame);
 			
-			Drawable claimButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn)));
-			Drawable claimButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));
-			TextButtonStyle claimButtonStyle = new TextButtonStyle(claimButtonUp, claimButtonDown, null, Assets.font);
-			claimButtonStyle.disabled = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.lvl_up_choice_claim_btn_pushed)));;
-			final TextButton claimButton = new TextButton("Claim", claimButtonStyle);
+			final TextButton claimButton = PoolableTextButton.create("Claim", PopinService.smallButtonStyle());
 			claimButtons.add(claimButton);
 			
 			// continueButton listener
@@ -203,26 +202,26 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	}
 
 	private void createPopinTop(ExperienceComponent expCompo, Table table) {
-		Table popinTop = new Table();
+		Table popinTop = PoolableTable.create();
 		
 		LabelStyle titleStyle = new LabelStyle(Assets.font, Color.WHITE);
-		Label titleLabel = new Label("[GREEN]LEVEL UP",titleStyle);
+		Label titleLabel = PoolableLabel.create("[GREEN]LEVEL UP",titleStyle);
 		popinTop.add(titleLabel).top().uniformX().pad(20, 0, 10, 0);
 		
 		popinTop.row();
 		
 		LabelStyle subtitleStyle = new LabelStyle(Assets.font, Color.WHITE);
-		Label subTitleLabel = new Label("Congratulations",subtitleStyle);
+		Label subTitleLabel = PoolableLabel.create("Congratulations",subtitleStyle);
 		popinTop.add(subTitleLabel).top().uniformX();
 
 		popinTop.row();
 
-		Label subTitle2Label = new Label("you reached level [GREEN]" + expCompo.getLevelForPopin(),subtitleStyle);
+		Label subTitle2Label = PoolableLabel.create("you reached level [GREEN]" + expCompo.getLevelForPopin(),subtitleStyle);
 		popinTop.add(subTitle2Label).top().uniformX().pad(0, 0, 10, 0);
 		
 		popinTop.row();
 		
-		Label selectChoiceLabel = new Label("Select [GREEN]1[WHITE] reward bellow",subtitleStyle);
+		Label selectChoiceLabel = PoolableLabel.create("Select [GREEN]1[WHITE] reward bellow",subtitleStyle);
 		popinTop.add(selectChoiceLabel).top().uniformX().padBottom(20);
 		
 		table.add(popinTop).fillX().uniformX();
@@ -232,17 +231,11 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	
 
 	private void createPopinBottom(final ExperienceComponent expCompo, Table table) {
-		Table popinBottom = new Table();
+		Table popinBottom = PoolableTable.create();
 		popinBottom.setZIndex(10);
 		table.add(popinBottom).fillX().uniformX();
 		
-		Drawable continueButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_up)));
-		Drawable continueButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.inventory_item_popin_btn_down)));
-		TextButtonStyle continueButtonStyle = new TextButtonStyle(continueButtonUp, continueButtonDown, null, Assets.font);
-		continueButton = new TextButton("Skip", continueButtonStyle);
-		popinBottom.add(continueButton).pad(10, 0, 20, 0);
-		
-		// continueButton listener
+		continueButton = PoolableTextButton.create("Skip", PopinService.bigButtonStyle());
 		continueButton.addListener(new ClickListener() {
 
 			@Override
@@ -251,6 +244,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 				closePopin(expCompo);
 			}
 		});
+		popinBottom.add(continueButton).pad(10, 0, 20, 0);
+
 	}
 	
 	

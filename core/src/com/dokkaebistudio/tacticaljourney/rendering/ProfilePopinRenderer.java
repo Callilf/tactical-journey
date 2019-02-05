@@ -2,10 +2,8 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -17,6 +15,11 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
+import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -39,8 +42,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     /** The main table of the popin. */
     private Table table;
     
-	private LabelStyle hudStyle;
-    
     /** The state before the level up state. */
     private RoomState previousState;
     
@@ -48,9 +49,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
         this.room = r;
         this.player = p;
         this.stage = s;
-        
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-
     }
     
     @Override
@@ -78,54 +76,54 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	    		AttackComponent attackComponent = Mappers.attackComponent.get(player);
 	    		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 	    		
-	    		table = new Table();
+	    		table = PoolableTable.create();
 //	    		table.setDebug(true, true);
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		//table.setTouchable(Touchable.childrenOnly);
 	    		
-	    		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
+	    		TextureRegionDrawable topBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.profile_background));
 	    		table.setBackground(topBackground);
 	    		
 	    		table.align(Align.top);
 	    		
 	    		// TITLE
-	    		Label title = new Label("Profile", hudStyle);
+	    		Label title = PoolableLabel.create("Profile", PopinService.hudStyle());
 	    		table.add(title).uniformX().pad(20, 0, 20, 0);
 	    		table.row();
 	    		
-	    		Label maxHphLbl = new Label("Max hp: " + healthComponent.getMaxHp(), hudStyle);
+	    		Label maxHphLbl = PoolableLabel.create("Max hp: " + healthComponent.getMaxHp(), PopinService.hudStyle());
 	    		table.add(maxHphLbl).uniformX().left();
 	    		table.row();
 	    		
-	    		Label strengthLbl = new Label("Strength: " + attackComponent.getStrength(), hudStyle);
+	    		Label strengthLbl = PoolableLabel.create("Strength: " + attackComponent.getStrength(), PopinService.hudStyle());
 	    		table.add(strengthLbl).uniformX().left();
 	    		table.row();
 	    		
-	    		Label moveLbl = new Label("Move: " + moveComponent.moveSpeed, hudStyle);
+	    		Label moveLbl = PoolableLabel.create("Move: " + moveComponent.moveSpeed, PopinService.hudStyle());
 	    		table.add(moveLbl).uniformX().left().padBottom(20);
 	    		table.row();
 	    		
 	    		
 	    		AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillRange());
-	    		Label rangeDistLbl = new Label("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax(), hudStyle);
+	    		Label rangeDistLbl = PoolableLabel.create("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax(), PopinService.hudStyle());
 	    		table.add(rangeDistLbl).uniformX().left();
 	    		table.row();
-	    		Label rangeStrengthLbl = new Label("Bow damage: " + rangeAttackCompo.getStrength(), hudStyle);
+	    		Label rangeStrengthLbl = PoolableLabel.create("Bow damage: " + rangeAttackCompo.getStrength(), PopinService.hudStyle());
 	    		table.add(rangeStrengthLbl).uniformX().left().padBottom(20);
 	    		table.row();
 	    		
 	    		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
-	    		Label bombDistLbl = new Label("Bomb throw range: " + bombAttackCompo.getRangeMax(), hudStyle);
+	    		Label bombDistLbl = PoolableLabel.create("Bomb throw range: " + bombAttackCompo.getRangeMax(), PopinService.hudStyle());
 	    		table.add(bombDistLbl).uniformX().left();
 	    		table.row();
-	    		Label bombDmg = new Label("Bomb damage: " + bombAttackCompo.getStrength(), hudStyle);
+	    		Label bombDmg = PoolableLabel.create("Bomb damage: " + bombAttackCompo.getStrength(), PopinService.hudStyle());
 	    		table.add(bombDmg).uniformX().left();
 	    		table.row();
 	    		
-	    		Label bombDuration = new Label("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" , hudStyle);
+	    		Label bombDuration = PoolableLabel.create("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" , PopinService.hudStyle());
 	    		table.add(bombDuration).uniformX().left();
 	    		table.row();
-	    		Label bombRadius = new Label("Bomb radius: " + bombAttackCompo.getBombRadius() , hudStyle);
+	    		Label bombRadius = PoolableLabel.create("Bomb radius: " + bombAttackCompo.getBombRadius() , PopinService.hudStyle());
 	    		table.add(bombRadius).uniformX().left();
 	    		table.row();
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.rendering;
+package com.dokkaebistudio.tacticaljourney.rendering.interfaces;
 
 /**
  * Marker to explain that this class can render things on screen.

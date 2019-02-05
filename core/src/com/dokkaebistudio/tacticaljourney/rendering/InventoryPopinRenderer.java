@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -176,13 +177,15 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    		}
 	    		
 	    		
+	    		displayRoomIfEnemiesArePlaying();
+	    		
 	    		needsRefresh = false;
 	    		inventoryCompo.setNeedInventoryRefresh(false);
     		}
     		
     		// Draw the table
-            stage.act(Gdx.graphics.getDeltaTime());
-    		stage.draw();
+			stage.act(Gdx.graphics.getDeltaTime());
+			stage.draw();
     		
     		// Close the inventory on a left click outside the popin
     		if (InputSingleton.getInstance().leftClickJustPressed) {
@@ -195,6 +198,21 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	}
     
     }
+
+    /**
+     * If an action is being processed in the inventory while enemies are playing their turn,
+     * reduce the opacity of the inventory to show enemies actions.
+     */
+	private void displayRoomIfEnemiesArePlaying() {
+		if (room.hasEnemies()) {
+			if (inventoryCompo.isInventoryActionInProgress()) {
+				mainTable.addAction(Actions.alpha(0.6f));
+			} else {
+				mainTable.addAction(Actions.alpha(1f));
+			}
+		}
+	}
+	
 
 	private void createLootTable() {
 		lootableCompo = Mappers.lootableComponent.get(inventoryCompo.getLootableEntity());

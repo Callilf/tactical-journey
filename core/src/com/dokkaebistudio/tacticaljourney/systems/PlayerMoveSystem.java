@@ -236,12 +236,15 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			} else {
 				inventoryComponent.setInventoryActionInProgress(false);
 				inventoryComponent.setNeedInventoryRefresh(true);
+				room.setNextState(RoomState.INVENTORY_POPIN);
 				isLooting = true;
 			}
 		}
 	
 		if (isLooting) {
 			moveCompo.hideMovableTiles();
+		} else {
+			moveCompo.showMovableTiles();
 		}
 		return isLooting;
 	}

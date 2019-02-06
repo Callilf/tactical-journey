@@ -84,6 +84,14 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 	}
 	
+	public void incrementCurrentMoveDestinationIndex() {
+		if (this.getWayPoints().size() > this.currentMoveDestinationIndex) {
+			Entity reachedWayPoint = this.getWayPoints().get(this.currentMoveDestinationIndex);
+			SpriteComponent wayPointSprite = Mappers.spriteComponent.get(reachedWayPoint);
+			wayPointSprite.hide = true;
+		}
+		this.currentMoveDestinationIndex++;	
+	}
 	
 	
 	/**

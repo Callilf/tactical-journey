@@ -3,10 +3,7 @@
  */
 package com.dokkaebistudio.tacticaljourney.util;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
@@ -14,7 +11,6 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -178,13 +174,9 @@ public class MovementHandler {
 		
 		
 		
-		
-		if (moveCompo.currentMoveDestinationIndex >= moveCompo.getWayPoints().size()) {
-			moveCompo.currentMoveDestinationIndex ++;
-			return true;
-		}
-		moveCompo.currentMoveDestinationIndex ++;
-		return false;
+		boolean movementOver = moveCompo.currentMoveDestinationIndex >= moveCompo.getWayPoints().size();
+		moveCompo.incrementCurrentMoveDestinationIndex();
+		return movementOver;
 	}
 	
 	

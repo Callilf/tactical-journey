@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -31,7 +32,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
-import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
@@ -44,6 +44,11 @@ import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class HUDRenderer implements Renderer, RoomSystem {
+	
+	public static Vector2 POS_TIMER = new Vector2(200f, 1030.0f);
+	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
+	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
+
 
 	public Stage stage;
 	public Room room;
@@ -139,7 +144,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		if (timeAndTurnTable == null) {
 			timeAndTurnTable = PoolableTable.create();
-			timeAndTurnTable.setPosition(PositionConstants.POS_TIMER.x, PositionConstants.POS_TIMER.y - 20);
+			timeAndTurnTable.setPosition(POS_TIMER.x, POS_TIMER.y - 20);
 			
 			// Turns
 			turnLabel = PoolableLabel.create("", PopinService.hudStyle());
@@ -176,7 +181,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		if (bottomLeftTable == null) {
 			bottomLeftTable = PoolableTable.create();
 //			bottomLeftTable.setDebug(true);
-			bottomLeftTable.setPosition(PositionConstants.POS_END_TURN_BTN.x, PositionConstants.POS_END_TURN_BTN.y);
+			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
 			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
@@ -551,7 +556,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		if (ammoTable == null) {
 			ammoTable = PoolableTable.create();
-			ammoTable.setPosition(PositionConstants.POS_ARROW_SPRITE.x, PositionConstants.POS_ARROW_SPRITE.y);
+			ammoTable.setPosition(POS_ARROW_SPRITE.x, POS_ARROW_SPRITE.y);
 			
 			// Arrows
 			Table arrowTable = PoolableTable.create();

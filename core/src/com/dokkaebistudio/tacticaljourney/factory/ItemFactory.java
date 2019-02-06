@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -63,7 +64,7 @@ public final class ItemFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = 8;
+		gridPosition.zIndex = ZIndexConstants.ITEM;
 		item.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
@@ -93,7 +94,7 @@ public final class ItemFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		if (tilePos != null) gridPosition.coord(healthUp, tilePos, room);
-		gridPosition.zIndex = 8;
+		gridPosition.zIndex = ZIndexConstants.ITEM;
 		healthUp.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
@@ -123,7 +124,7 @@ public final class ItemFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = 8;
+		gridPosition.zIndex = ZIndexConstants.ITEM;
 		item.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);

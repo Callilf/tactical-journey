@@ -232,7 +232,6 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 	private void createPopinBottom(final ExperienceComponent expCompo, Table table) {
 		Table popinBottom = PoolableTable.create();
-		popinBottom.setZIndex(10);
 		table.add(popinBottom).fillX().uniformX();
 		
 		continueButton = PoolableTextButton.create("Skip", PopinService.bigButtonStyle());

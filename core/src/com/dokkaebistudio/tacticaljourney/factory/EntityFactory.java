@@ -35,7 +35,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponen
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
-import com.dokkaebistudio.tacticaljourney.constants.PositionConstants;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -50,7 +50,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  *
  */
 public final class EntityFactory {
-	
+
 	/** The gdx pooled engine. */
 	public PooledEngine engine;
 	
@@ -124,7 +124,7 @@ public final class EntityFactory {
 		}
 
 		gridPosition.coord(tileEntity, pos, room);
-		gridPosition.zIndex = 1;
+		gridPosition.zIndex = ZIndexConstants.TILE;
 
 		tileEntity.add(spriteCompo);
 		tileEntity.add(gridPosition);
@@ -141,7 +141,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(wallEntity, pos, room);
-    	movableTilePos.zIndex = 2;
+    	movableTilePos.zIndex = ZIndexConstants.WALL;
     	wallEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -170,7 +170,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(mudEntity, pos, room);
-    	movableTilePos.zIndex = 2;
+    	movableTilePos.zIndex = ZIndexConstants.MUD;
     	mudEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -199,7 +199,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(doorEntity, pos, room);
-    	movableTilePos.zIndex = 2;
+    	movableTilePos.zIndex = ZIndexConstants.DOOR;
     	doorEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -223,7 +223,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(exitEntity, pos, room);
-    	movableTilePos.zIndex = 2;
+    	movableTilePos.zIndex = ZIndexConstants.EXIT;
     	exitEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -246,7 +246,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(movableTileEntity, pos, room);
-    	movableTilePos.zIndex = 5;
+    	movableTilePos.zIndex = ZIndexConstants.MOVABLE_TILE;
     	movableTileEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -268,7 +268,7 @@ public final class EntityFactory {
 
     	GridPositionComponent attackableTilePos = engine.createComponent(GridPositionComponent.class);
     	attackableTilePos.coord(attackableTileEntity, pos, room);
-    	attackableTilePos.zIndex = 5;
+    	attackableTilePos.zIndex = ZIndexConstants.ATTACKABLE_TILE;
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -291,7 +291,7 @@ public final class EntityFactory {
 
 		GridPositionComponent selectedTilePos = engine.createComponent(GridPositionComponent.class);
 		selectedTilePos.coord(redCross, pos, room);
-    	selectedTilePos.zIndex = 6;
+    	selectedTilePos.zIndex = ZIndexConstants.DESTINATION_TILE;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
@@ -313,7 +313,7 @@ public final class EntityFactory {
 
 		GridPositionComponent waypointPos = engine.createComponent(GridPositionComponent.class);
 		waypointPos.coord(waypoint, pos, room);
-    	waypointPos.zIndex = 6;
+    	waypointPos.zIndex = ZIndexConstants.WAYPOINT;
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -324,24 +324,6 @@ public final class EntityFactory {
     	return waypoint;
 	}
 	
-//	/**
-//	 * Create the movement confirmation button.
-//	 * @param pos the position
-//	 * @return the confirmation button entity
-//	 */
-//	public Entity createMoveConfirmationButton(Vector2 pos) {
-//		Entity confirmButton = engine.createEntity();
-//		
-//		GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-//    	movableTilePos.coord.set(pos);
-//    	confirmButton.add(movableTilePos);
-//    	
-//    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-//    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.btn_move_confirmation)));
-//    	confirmButton.add(spriteCompo);
-//    	
-//    	return confirmButton;
-//	}
 	
 	
 	/**
@@ -543,7 +525,7 @@ public final class EntityFactory {
 		
 		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
 		transfoCompo.absolutePos(initialPos.x, initialPos.y);
-		transfoCompo.zIndex = (int) PositionConstants.Z_DAMAGE_DISPLAYER;
+		transfoCompo.zIndex = ZIndexConstants.DAMAGE_DISPLAYER;
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
@@ -578,7 +560,7 @@ public final class EntityFactory {
 		 
 		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
 		transfoCompo.absolutePos(initialPos.x, initialPos.y);
-		transfoCompo.zIndex = (int) PositionConstants.Z_EXP_DISPLAYER;
+		transfoCompo.zIndex = ZIndexConstants.EXP_DISPLAYER;
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
@@ -607,7 +589,7 @@ public final class EntityFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(bomb, tilePos, room);
-		gridPosition.zIndex = 9;
+		gridPosition.zIndex = ZIndexConstants.BOMB;
 		bomb.add(gridPosition);
 		
 		ExplosiveComponent explosionCompo = engine.createComponent(ExplosiveComponent.class);
@@ -710,7 +692,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = 3;
+    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -743,7 +725,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = 3;
+    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);

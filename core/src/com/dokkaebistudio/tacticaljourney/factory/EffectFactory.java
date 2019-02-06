@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -57,7 +58,7 @@ public final class EffectFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(explosion, tilePos, room);
-		gridPosition.zIndex = 10;
+		gridPosition.zIndex = ZIndexConstants.EXPLOSION;
 		explosion.add(gridPosition);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);

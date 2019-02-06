@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -67,7 +68,7 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 10;
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -122,7 +123,7 @@ public final class EnemyFactory {
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = 10;
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);

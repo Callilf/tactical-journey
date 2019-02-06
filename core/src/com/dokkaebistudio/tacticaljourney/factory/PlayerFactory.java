@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -74,7 +75,7 @@ public final class PlayerFactory {
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(playerEntity, pos, room);
-		gridPosition.zIndex = 15;
+		gridPosition.zIndex = ZIndexConstants.PLAYER;
 		playerEntity.add(gridPosition);
 		
 		// Wheel

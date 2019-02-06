@@ -30,6 +30,7 @@ public final class ItemFactory {
 	public EntityFactory entityFactory;
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
+	private TextureAtlas.AtlasRegion moneyTexture;
 	private TextureAtlas.AtlasRegion smallHealthPotionTexture;
 	private TextureAtlas.AtlasRegion tutorialPageTexture;
 
@@ -41,13 +42,44 @@ public final class ItemFactory {
 		this.engine = e;
 		this.entityFactory = ef;
 		
+		moneyTexture = Assets.getTexture(Assets.money_item	);
 		smallHealthPotionTexture = Assets.getTexture(Assets.health_up_item);
 		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item	);
 	}
 	
 
 	/**
-	 * Create a health up item that is consumed when picked up.
+	 * Create a money item that is consumed when picked up.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemMoney(Room room, Vector2 tilePos) {
+		Entity item = engine.createEntity();
+		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite( this.moneyTexture));
+		item.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) gridPosition.coord(item, tilePos, room);
+		gridPosition.zIndex = 8;
+		item.add(gridPosition);
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(ItemEnum.MONEY);
+		item.add(itemCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	item.add(destructibleCompo);
+		
+		engine.addEntity(item);
+
+		return item;
+	}
+	
+	/**
+	 * Create a health potion.
 	 * @param tilePos the position in tiles
 	 * @return the entity created
 	 */

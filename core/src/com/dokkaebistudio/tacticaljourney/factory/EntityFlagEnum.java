@@ -41,7 +41,9 @@ public enum EntityFlagEnum {
 	REMAINS_SATCHEL(991),
 	
 	ITEM_TUTORIAL_PAGE(1000),
-	ITEM_HEALTH_UP(1001);
+	ITEM_HEALTH_UP(1001),
+	ITEM_MONEY(1002);
+
 	
 	private int flag;
 	

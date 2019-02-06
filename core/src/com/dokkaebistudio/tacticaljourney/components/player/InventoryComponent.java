@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -14,6 +15,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  *
  */
 public class InventoryComponent implements Component, Poolable {
+	/** The player. */
+	public Entity player;
 	
 	/** The display mode of the inventory. */
 	private InventoryDisplayModeEnum displayMode;
@@ -48,6 +51,7 @@ public class InventoryComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
+		player = null;
 		slots = new Entity[16];
 		firstEmptySlot = 0;
 		displayMode = InventoryDisplayModeEnum.NONE;
@@ -55,22 +59,33 @@ public class InventoryComponent implements Component, Poolable {
 	
 	
 
-	/** Check whether there is space in the inventory. */
-	public boolean canStore() {
-		return firstEmptySlot < numberOfSlots;
+	/** Check whether there is space in the inventory for the given item component. */
+	public boolean canStore(ItemComponent itemCompo) {
+		//TODO : handle stackable items here later
+		if (itemCompo != null && itemCompo.getItemType().isGoIntoInventory()) {
+			return firstEmptySlot < numberOfSlots;
+		} else {
+			return true;
+		}
 	}
 	
 	/**
 	 * Store the given entity in the inventory.
-	 * @param e the entity to store
+	 * @param item the entity to store
 	 */
-	public void store(Entity e, Room r) {
-		slots[firstEmptySlot] = e;
-		firstEmptySlot ++;
-		
-		if (r != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
-			gridPositionComponent.setInactive(e, r);
+	public void store(Entity item, ItemComponent itemCompo, Room room) {
+		if (itemCompo != null && itemCompo.getItemType().isGoIntoInventory()) {
+			//This item can be stored in the intentory
+			slots[firstEmptySlot] = item;
+			firstEmptySlot ++;
+			
+			if (room != null) {
+				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
+				gridPositionComponent.setInactive(item, room);
+			}
+		} else {
+			//This item does not go into inventory, it's used right away
+			itemCompo.use(player, item, room);
 		}
 	}
 	

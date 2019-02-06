@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
@@ -59,6 +60,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	private InventoryComponent inventoryCompo;
 	/** The current lootable component. */
 	private LootableComponent lootableCompo;
+	/** The wallet component. */
+	private WalletComponent walletCompo;
     
     /** The state before the level up state. */
     private RoomState previousState;
@@ -131,6 +134,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
+    		walletCompo = Mappers.walletComponent.get(player);
     	}
     	
     	
@@ -261,7 +265,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 
 	private Table createOneLootItem(final Entity item) {
-		ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		final ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		Table oneItem = PoolableTable.create();
 //		oneItem.setDebug(true);
 
@@ -281,8 +285,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//TODO add item in inventory and remove it from lootable entity
-				if (inventoryCompo.canStore()) {
-					inventoryCompo.store(item, null);
+				if (inventoryCompo.canStore(itemComponent)) {
+					inventoryCompo.store(item, itemComponent, null);
 					inventoryCompo.setInventoryActionInProgress(true);
 					room.turnManager.endPlayerTurn();
 					lootableCompo.getItems().remove(item);
@@ -308,7 +312,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	private void createInventoryTable() {
 		inventoryTable = PoolableTable.create();
-//	    		table.setDebug(true, true);
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
@@ -317,9 +320,25 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		inventoryTable.align(Align.top);
 		
-		// 1 - Title
+		// 1 - Title and money
+		Table topTable = PoolableTable.create();
+		topTable.add().width(Value.percentWidth(0.25f, inventoryTable));
+		
+		// 1.1 - Title
 		Label title = PoolableLabel.create("Inventory", PopinService.hudStyle());
-		inventoryTable.add(title).uniformX().pad(40, 0, 40, 0);
+		title.setAlignment(Align.center);
+		topTable.add(title).width(Value.percentWidth(0.5f, inventoryTable));
+		
+		// 1.2 - Money
+		Table moneyTable = PoolableTable.create();
+		Image moneyImage = PoolableImage.create(Assets.getTexture(Assets.money_item));
+		moneyTable.add(moneyImage);
+		Label money = PoolableLabel.create("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
+		moneyTable.add(money);
+		money.setAlignment(Align.right);
+		topTable.add(moneyTable).width(Value.percentWidth(0.25f, inventoryTable));
+		
+		inventoryTable.add(topTable).uniformX().pad(20, 20, 20, 20);
 		inventoryTable.row();
 		
 		
@@ -597,8 +616,9 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	private void handleTakeAllAction() {
 		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
 			Entity firstItem = lootableCompo.getItems().get(0);
-			if (inventoryCompo.canStore()) {
-				inventoryCompo.store(firstItem, null);
+			ItemComponent itemComponent = Mappers.itemComponent.get(firstItem);
+			if (inventoryCompo.canStore(itemComponent)) {
+				inventoryCompo.store(firstItem, itemComponent, null);
 				inventoryCompo.setInventoryActionInProgress(true);
 				room.turnManager.endPlayerTurn();
 				lootableCompo.getItems().remove(firstItem);

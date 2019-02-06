@@ -2,9 +2,12 @@ package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -17,8 +20,25 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public enum ItemEnum {
 		
+	/** Add money to the player's wallet. */
+	MONEY(" # gold coins", Assets.money_item, true, false, 1, 10) {
+
+		@Override
+		public String getDescription() {return null;}
+		
+		@Override
+		public String getActionLabel() {return null;}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			WalletComponent walletComponent = Mappers.walletComponent.get(user);
+			walletComponent.receive(this.getRandomValue());
+			return true;
+		}
+	},
+	
 	/** A consumable item that heals 25 HP. */
-	CONSUMABLE_HEALTH_UP("Small health potion", Assets.health_up_item, false) {
+	CONSUMABLE_HEALTH_UP("Small health potion", Assets.health_up_item, false, true) {
 		
 		@Override
 		public String getDescription() {
@@ -42,7 +62,7 @@ public enum ItemEnum {
 	
 	
 	/** A tutorial page. */
-	TUTORIAL_PAGE_1("Tutorial page 1", Assets.tutorial_page_item, false) {
+	TUTORIAL_PAGE_1("Tutorial page 1", Assets.tutorial_page_item, false, true) {
 		
 		@Override
 		public String getDescription() {
@@ -61,7 +81,7 @@ public enum ItemEnum {
 	},
 	
 	/** A tutorial page. */
-	TUTORIAL_PAGE_2("Tutorial page 2", Assets.tutorial_page_item, false) {
+	TUTORIAL_PAGE_2("Tutorial page 2", Assets.tutorial_page_item, false, true) {
 		
 		@Override
 		public String getDescription() {
@@ -80,7 +100,7 @@ public enum ItemEnum {
 	},
 	
 	/** A tutorial page. */
-	TUTORIAL_PAGE_3("Tutorial page 3", Assets.tutorial_page_item, false) {
+	TUTORIAL_PAGE_3("Tutorial page 3", Assets.tutorial_page_item, false, true) {
 		
 		@Override
 		public String getDescription() {
@@ -99,7 +119,7 @@ public enum ItemEnum {
 	},
 	
 	/** A tutorial page. */
-	TUTORIAL_PAGE_4("Tutorial page 4", Assets.tutorial_page_item, false) {
+	TUTORIAL_PAGE_4("Tutorial page 4", Assets.tutorial_page_item, false, true) {
 		
 		@Override
 		public String getDescription() {
@@ -127,12 +147,41 @@ public enum ItemEnum {
 	private String imageName;
 	/** Whether this item is picked up automatically while walking on its tile. */
 	private boolean instantPickUp;
+	/** Whether this item can go into the inventory. */
+	private boolean goIntoInventory;
+	
+	private int valueMin;
+	private int valueMax;
+	/** Random amount used for some items like money. */
+	private Integer randomValue;
 	
 	
-	ItemEnum(String label, String imageName, boolean instaPickUp) {
+	/**
+	 * Constructor for basic items without random values
+	 * @param label
+	 * @param imageName
+	 * @param instaPickUp
+	 */
+	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
 		this.setImageName(imageName);
 		this.setInstantPickUp(instaPickUp);
+		this.setGoIntoInventory(goIntoInventory);
+	}
+	
+	/**
+	 * Constructor for items with random values.
+	 * @param label
+	 * @param imageName
+	 * @param instaPickUp
+	 * @param valMin
+	 * @param valMax
+	 */
+	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory, int valMin, int valMax) {
+		this(label, imageName, instaPickUp, goIntoInventory);
+		this.valueMin = valMin;
+		this.valueMax = valMax;
+		computeRandomAmount();
 	}
 	
 	
@@ -140,11 +189,12 @@ public enum ItemEnum {
 	
 	/** Called when the item is picked up. */
 	public boolean pickUp(Entity picker, Entity item, Room room) {
+		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
 		if (inventoryComponent != null) {
-			if (!inventoryComponent.canStore()) return false;
+			if (!inventoryComponent.canStore(itemComponent)) return false;
 			
-			inventoryComponent.store(item, room);
+			inventoryComponent.store(item, itemComponent, room);
 		}
 		return true;
 	}
@@ -171,6 +221,14 @@ public enum ItemEnum {
 	public abstract String getActionLabel();
 	
 	
+	/**
+	 * Compute the random value based on the valueMin and valueMax.
+	 */
+	private void computeRandomAmount() {
+		if (this.randomValue == null) {
+			setRandomValue(this.valueMin + RandomSingleton.getInstance().getSeededRandom().nextInt(this.valueMax - this.valueMin));
+		}
+	}
 	
 	
 	
@@ -187,6 +245,9 @@ public enum ItemEnum {
 
 
 	public String getLabel() {
+		if (this.randomValue != null) {
+			return label.replace("#", String.valueOf(this.randomValue.intValue()));
+		}
 		return label;
 	}
 
@@ -203,6 +264,24 @@ public enum ItemEnum {
 
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
+	}
+
+
+	public Integer getRandomValue() {
+		return randomValue;
+	}
+
+
+	public void setRandomValue(Integer randomValue) {
+		this.randomValue = randomValue;
+	}
+
+	public boolean isGoIntoInventory() {
+		return goIntoInventory;
+	}
+
+	public void setGoIntoInventory(boolean goIntoInventory) {
+		this.goIntoInventory = goIntoInventory;
 	}
 	
 

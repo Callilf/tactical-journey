@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -108,6 +109,7 @@ public final class PlayerFactory {
 		playerEntity.add(attackComponent);
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
+		inventoryComponent.player = playerEntity;
 		inventoryComponent.setNumberOfSlots(8);
 		inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
@@ -123,6 +125,11 @@ public final class PlayerFactory {
 		ammoCarrierCompo.setBombs(5);
 		ammoCarrierCompo.setMaxBombs(5);
 		playerEntity.add(ammoCarrierCompo);
+		
+		// Money carrier
+		WalletComponent walletCompo = engine.createComponent(WalletComponent.class);
+		walletCompo.setAmount(0);
+		playerEntity.add(walletCompo);
 		
 		// Solid compo
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

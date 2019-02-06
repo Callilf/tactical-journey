@@ -335,6 +335,14 @@ public class Room extends EntitySystem {
 		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
 		
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		
+		boolean isMoney = random.nextInt(2) == 0;
+		//TODO change
+		if (true) {
+			Entity moneyItem = entityFactory.itemFactory.createItemMoney(null, null);
+			lootableComponent.getItems().add(moneyItem);
+		}
+		
 		int nbLoot = random.nextInt(nbMaxItems + 1);
 		for (int i=0 ; i<nbLoot ; i++) {
 			int nextInt = random.nextInt(2);

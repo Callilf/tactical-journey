@@ -85,6 +85,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
+		
+		boolean isLooting = inventoryComponent.getTurnsToWaitBeforeLooting() != null || inventoryComponent.isInventoryActionInProgress();
 				
 		switch (room.getState()) {
 
@@ -111,7 +113,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			if (attackCompo != null)
 				attackTileSearchService.buildAttackTilesSet(moverEntity, room,true, false);
 
-			if (!room.hasEnemies()) {
+			if (!room.hasEnemies() || isLooting) {
 				moveCompo.hideMovableTiles();
 			}
 
@@ -120,8 +122,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
 			
-			boolean looting = handleLoot(moverEntity,  inventoryComponent.getTurnsToWaitBeforeLooting() != null);
-			if (looting) return;
+			boolean stillLooting = handleLoot(moverEntity);
+			if (stillLooting) return;
 			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -212,17 +214,17 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * Handle the loot.
 	 * Check whether the player is currently looting or opening a lootable.
 	 * @param moverEntity the player
-	 * @param waitingForLooting 
 	 * @return true if the player is looting or opening a lootable
 	 */
-	private boolean handleLoot(Entity moverEntity, boolean waitingForLooting) {
+	private boolean handleLoot(Entity moverEntity) {
+		boolean isLooting = false;
 		
-		if (waitingForLooting) {
+		if (inventoryComponent.getTurnsToWaitBeforeLooting() != null) {
 			handleWaitForLooting(moverEntity);
-			return true;
+			isLooting = true;
 		}
 		
-		if (inventoryComponent.isInventoryActionInProgress()) {
+		if (!isLooting && inventoryComponent.isInventoryActionInProgress()) {
 			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 			if (healthComponent.isReceivedDamageLastTurn()) {
 				// INTERRUPTED
@@ -234,11 +236,14 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			} else {
 				inventoryComponent.setInventoryActionInProgress(false);
 				inventoryComponent.setNeedInventoryRefresh(true);
-				return true;
+				isLooting = true;
 			}
 		}
 	
-		return false;
+		if (isLooting) {
+			moveCompo.hideMovableTiles();
+		}
+		return isLooting;
 	}
 
 	/**

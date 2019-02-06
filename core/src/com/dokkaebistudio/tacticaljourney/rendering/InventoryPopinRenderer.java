@@ -331,7 +331,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		// 1.2 - Money
 		Table moneyTable = PoolableTable.create();
-		Image moneyImage = PoolableImage.create(Assets.getTexture(Assets.money_item));
+		Image moneyImage = PoolableImage.create(Assets.getTexture(Assets.inventory_money));
 		moneyTable.add(moneyImage);
 		Label money = PoolableLabel.create("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
 		moneyTable.add(money);

@@ -87,6 +87,7 @@ public class Assets {
 	public static final String btn_profile_pushed = "btn-profile-pushed";
 	
 	public static final String inventory_background = "hud_inventory_background";
+	public static final String inventory_money = "hud_money";
 	public static final String inventory_slot = "hud_inventory_slot";
 	public static final String inventory_slot_disabled = "hud_inventory_slot_disabled";
 	public static final String btn_inventory = "btn-inventory";

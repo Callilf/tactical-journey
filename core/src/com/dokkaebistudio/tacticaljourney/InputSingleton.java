@@ -185,7 +185,7 @@ public class InputSingleton implements InputProcessor{
 		if (keycode == Input.Keys.ESCAPE) {
 			if (gamescreen.state == GameScreen.GAME_PAUSED) {
 				gamescreen.state = GameScreen.GAME_RUNNING;
-			} else {
+			} else if (gamescreen.state == GameScreen.GAME_RUNNING){
 				gamescreen.state = GameScreen.GAME_PAUSED;
 			}
             return false;

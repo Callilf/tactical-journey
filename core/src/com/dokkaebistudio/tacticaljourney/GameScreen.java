@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.GameOverPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
@@ -164,6 +165,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		renderers.add(new MenuPopinRenderer(this, hudStage));
+		renderers.add(new GameOverPopinRenderer(this, hudStage));
 		
 		engine.addSystem(room);
 		engine.addSystem(new StateSystem());
@@ -177,7 +179,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new ItemSystem(	player, room));
-		engine.addSystem(new HealthSystem(room, stage));
+		engine.addSystem(new HealthSystem(this,room, stage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 
@@ -254,15 +256,12 @@ public class GameScreen extends ScreenAdapter {
 		switch (state) {
 		case GAME_RUNNING:
 		case GAME_PAUSED:
+		case GAME_OVER:
 			
 			presentRunning(delta);
 			
 			break;
-		case GAME_OVER:
-			
-			//TODO
-			
-			break;
+
 		}
 	}
 
@@ -290,11 +289,6 @@ public class GameScreen extends ScreenAdapter {
 		
 		// 2 - Render on screen
 		draw(delta);
-		
-		//TODO move this ?
-//		if (Gdx.input.isKeyPressed(Keys.BACK)){
-//			state = GAME_PAUSED;
-//		}
 		
 		InputSingleton.getInstance().resetEvents();
 

@@ -276,11 +276,11 @@ public class Room extends EntitySystem {
 				Vector2 lootPos = enemyPositions.get(0);
 				if (lootRandom <= 5) {
 					Entity bones = entityFactory.createRemainsBones(this, lootPos);
-					fillLootable(bones, 2);
+					fillLootable(bones, 1);
 					
 				} else {
 					Entity satchel = entityFactory.createRemainsSatchel(this, lootPos);
-					fillLootable(satchel, 4);
+					fillLootable(satchel, 3);
 
 				}
 				enemyPositions.remove(0);
@@ -299,10 +299,10 @@ public class Room extends EntitySystem {
 				iterator.remove();
 			}
 			
-			// Place health
-			if (iterator.hasNext() && random.nextInt(3) == 0) {
-				entityFactory.itemFactory.createItemHealthUp(this, new Vector2(iterator.next()));
-			}
+//			// Place health
+//			if (iterator.hasNext() && random.nextInt(3) == 0) {
+//				entityFactory.itemFactory.createItemHealthUp(this, new Vector2(iterator.next()));
+//			}
 			break;
 			
 		case START_FLOOR_ROOM:
@@ -311,7 +311,7 @@ public class Room extends EntitySystem {
 			entityFactory.itemFactory.createItemTutorialPage(1,this, new Vector2(8, 9));
 			
 			Entity satchel = entityFactory.createRemainsBones(this, new Vector2(14, 11));
-			fillLootable(satchel, 8);
+			fillLootable(satchel, 3);
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 
@@ -377,57 +377,8 @@ public class Room extends EntitySystem {
 		return grid[(int) pos.x][(int) pos.y];
 	}
 
-//	/**
-//	 * Generates a random room by creating an array of {@link TileEnum}. There are walls on each border of the room.
-//	 */
-//	private TileEnum[][] generateRoom() {
-//		TileEnum[][] tiles = new TileEnum[GRID_W][GRID_H];
-//		// fill with ground first
-//		for(TileEnum[] tileCol: tiles){
-//			Arrays.fill(tileCol, TileEnum.GROUND);
-//		}
-//		for (int x = 0; x < GRID_W; x++) {
-//			for (int y = 0; y < GameScreen.GRID_H; y++) {
-//				if (x == 0 || x == GRID_W-1 || y == 0 || y == 1 || y == GRID_H - 2 || y == GRID_H - 1) {
-//					
-//					//Spaces for doors
-//					if ( (x == 0 && y== GRID_H/2) ) {
-//						tiles[x][y] = TileEnum.GROUND;
-//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), westNeighboor);
-//					} else if ( x== GRID_W-1 && y== GRID_H/2) {
-//						tiles[x][y] = TileEnum.GROUND;
-//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), easthNeighboor);
-//					} else if ( x == GRID_W/2 && y == 1) {
-//						tiles[x][y] = TileEnum.GROUND;
-//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), southNeighboor);
-//					} else if ( x == GRID_W/2 && y == GRID_H-2) {
-//						tiles[x][y] = TileEnum.GROUND;
-//						Entity door = entityFactory.createDoor(this, new Vector2(x,y), northNeighboor);
-//					} else {
-//						// walls
-//						tiles[x][y] = TileEnum.WALL;
-//					}
-//				} else {
-//					// generate some random walls and pits
-//					RandomXS128 random = RandomSingleton.getInstance().getRandom();
-//					int r = random.nextInt(15);
-//					if (r == 0) {
-//						// PIT
-//						tiles[x][y] = TileEnum.PIT;
-//					} else if (r == 1) {
-//						// WALL
-//						tiles[x][y] = TileEnum.WALL;
-//					} else if (r == 2) {
-//						// WALL
-//						tiles[x][y] = TileEnum.MUD;
-//					}
-//				}
-//			}
-//		}
-//		return tiles;
-//	}
-
-
+	
+	
 	
 	// Getters and Setters
 	

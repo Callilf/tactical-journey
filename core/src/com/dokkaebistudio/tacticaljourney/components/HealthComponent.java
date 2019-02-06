@@ -54,7 +54,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * @param amountOfDamage the amount of damages
 	 */
 	public void hit(int amountOfDamage, Entity attacker) {
-		this.setHp(this.getHp() - amountOfDamage);
+		this.setHp(Math.max(0, this.getHp() - amountOfDamage));
 		this.healthLostAtCurrentFrame += amountOfDamage;
 		this.healthChange = HealthChangeEnum.HIT;
 		

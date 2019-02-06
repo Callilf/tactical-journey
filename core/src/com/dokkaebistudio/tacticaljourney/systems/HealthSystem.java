@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
@@ -11,22 +12,25 @@ import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayCompon
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
+	public GameScreen gameScreen;
 	public Stage stage;
 	
 	/** The current room. */
     private Room room;    
 
-    public HealthSystem(Room r, Stage s) {
+    public HealthSystem(GameScreen gameScreen, Room r, Stage s) {
         super(Family.one(HealthComponent.class, DamageDisplayComponent.class).get());
 		this.priority = 21;
 
-        room = r;
+		this.gameScreen = gameScreen;
+        this.room = r;
         this.stage = s;
     }
     
@@ -76,15 +80,28 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 				//Entity is dead
 				
 				//earn xp
-				ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
-				ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
-				if (expCompo != null && expRewardCompo != null) {
-					expCompo.earnXp(expRewardCompo.getExpGain());
-				}
+	    		if (healthCompo.getAttacker() != null) {
+					ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
+					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
+					if (expCompo != null && expRewardCompo != null) {
+						expCompo.earnXp(expRewardCompo.getExpGain());
+					}
+	    		}
 				
-				room.removeEnemy(entity);
-				//TODO: play death animation
-			}
+				
+				PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
+				if (playerComponent != null) {
+					// Death of the player!
+					gameScreen.state = GameScreen.GAME_OVER;
+					
+				} else {
+					
+					// Death of any other entity than the player
+					room.removeEnemy(entity);
+					//TODO: play death animation
+				}
+			
+	    	}
 
 	    	healthCompo.setAttacker(null);
     	}

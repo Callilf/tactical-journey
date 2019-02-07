@@ -42,7 +42,9 @@ public enum EntityFlagEnum {
 	
 	ITEM_TUTORIAL_PAGE(1000),
 	ITEM_HEALTH_UP(1001),
-	ITEM_MONEY(1002);
+	ITEM_MONEY(1002),
+	ITEM_ARROWS(1003),
+	ITEM_BOMBS(1004);
 
 	
 	private int flag;

@@ -345,12 +345,16 @@ public class Room extends EntitySystem {
 		
 		int nbLoot = random.nextInt(nbMaxItems + 1);
 		for (int i=0 ; i<nbLoot ; i++) {
-			int nextInt = random.nextInt(2);
+			int nextInt = random.nextInt(4);
 			Entity item = null;
 			
 			if (nextInt == 0) {
 				item = entityFactory.itemFactory.createItemHealthUp(null, null);
-			} else {
+			} else if (nextInt == 1) {
+				item = entityFactory.itemFactory.createItemArrows( null, null);
+			} else if (nextInt == 2) {
+				item = entityFactory.itemFactory.createItemBombs( null, null);
+			} else if (nextInt == 3) {
 				item = entityFactory.itemFactory.createItemTutorialPage( 1 +random.nextInt(4), null, null);
 			}
 			lootableComponent.getItems().add(item);

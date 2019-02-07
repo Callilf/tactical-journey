@@ -273,10 +273,10 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		oneItem.setBackground(lootBackground);
 		
 		oneItem.left();
-		Image image = PoolableImage.create(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
+		Image image = PoolableImage.create(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
 		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(0, 20, 0, 20);
 		
-		Label itemName = PoolableLabel.create(itemComponent.getItemType().getLabel(), PopinService.hudStyle());
+		Label itemName = PoolableLabel.create(itemComponent.getItemLabel(), PopinService.hudStyle());
 		itemName.setWrap(true);
 		oneItem.add(itemName).width(Value.percentWidth(0.50f, oneItem)).padRight(20);
 		
@@ -390,7 +390,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				
 				// An item is present in this inventory slot
 				final ItemComponent itemComponent = Mappers.itemComponent.get(item);
-				Image img = PoolableImage.create(Assets.getTexture(itemComponent.getItemType().getImageName() + "-full"));
+				Image img = PoolableImage.create(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
 				
 				if (isLoot) {
 					
@@ -544,14 +544,14 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		final ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
 		// Update the content
-		itemTitle.setText(itemComponent.getItemType().getLabel());
-		itemDesc.setText(itemComponent.getItemType().getDescription());
+		itemTitle.setText(itemComponent.getItemLabel());
+		itemDesc.setText(itemComponent.getItemDescription());
 		
 		// Update the Drop item listener
 		updateDropListener(item, slot);
 		
 		if (!this.isLoot) {
-			useItemBtn.setText(itemComponent.getItemType().getActionLabel());
+			useItemBtn.setText(itemComponent.getItemActionLabel());
 			// Update the Use item listener
 			updateUseListener(item, slot);
 		}

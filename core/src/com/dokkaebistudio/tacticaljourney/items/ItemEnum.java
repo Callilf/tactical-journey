@@ -2,12 +2,13 @@ package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -21,7 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public enum ItemEnum {
 		
 	/** Add money to the player's wallet. */
-	MONEY(" # gold coins", Assets.money_item, true, false, 1, 10) {
+	MONEY(" # gold coin[s]", Assets.money_item, true, false, 1, 10) {
 
 		@Override
 		public String getDescription() {return null;}
@@ -31,9 +32,54 @@ public enum ItemEnum {
 		
 		@Override
 		public boolean use(Entity user, Entity item, Room room) {
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			WalletComponent walletComponent = Mappers.walletComponent.get(user);
-			walletComponent.receive(this.getRandomValue());
+			walletComponent.receive(itemComponent.getRandomValue());
 			return true;
+		}
+	},
+	
+	/** Add arrows to the player's quiver. */
+	ARROW(" # arrow[s]", Assets.arrow_item, true, false, 1, 8) {
+
+		@Override
+		public String getDescription() {return null;}
+		
+		@Override
+		public String getActionLabel() {return null;}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
+			if (ammoCarrierComponent.canPickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue())) {
+				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue());
+				return true;
+			} else {
+				return false;
+			}
+		}
+	},
+	
+	/** Add bombs to the player's bag. */
+	BOMB(" # bomb[s]", Assets.bomb_item, true, false, 1, 5) {
+
+		@Override
+		public String getDescription() {return null;}
+		
+		@Override
+		public String getActionLabel() {return null;}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
+			if (ammoCarrierComponent.canPickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue())) {
+				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue());
+				return true;
+			} else {
+				return false;
+			}
 		}
 	},
 	
@@ -150,11 +196,8 @@ public enum ItemEnum {
 	/** Whether this item can go into the inventory. */
 	private boolean goIntoInventory;
 	
-	private int valueMin;
-	private int valueMax;
-	/** Random amount used for some items like money. */
-	private Integer randomValue;
-	
+	private Integer randomValueMin;
+	private Integer randomValueMax;	
 	
 	/**
 	 * Constructor for basic items without random values
@@ -177,11 +220,10 @@ public enum ItemEnum {
 	 * @param valMin
 	 * @param valMax
 	 */
-	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory, int valMin, int valMax) {
+	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, imageName, instaPickUp, goIntoInventory);
-		this.valueMin = valMin;
-		this.valueMax = valMax;
-		computeRandomAmount();
+		this.setRandomValueMin(valMin);
+		this.setRandomValueMax(valMax);
 	}
 	
 	
@@ -221,16 +263,6 @@ public enum ItemEnum {
 	public abstract String getActionLabel();
 	
 	
-	/**
-	 * Compute the random value based on the valueMin and valueMax.
-	 */
-	private void computeRandomAmount() {
-		if (this.randomValue == null) {
-			setRandomValue(this.valueMin + RandomSingleton.getInstance().getSeededRandom().nextInt(this.valueMax - this.valueMin));
-		}
-	}
-	
-	
 	
 	// Getters and Setters
 
@@ -245,9 +277,6 @@ public enum ItemEnum {
 
 
 	public String getLabel() {
-		if (this.randomValue != null) {
-			return label.replace("#", String.valueOf(this.randomValue.intValue()));
-		}
 		return label;
 	}
 
@@ -266,22 +295,29 @@ public enum ItemEnum {
 		this.imageName = imageName;
 	}
 
-
-	public Integer getRandomValue() {
-		return randomValue;
-	}
-
-
-	public void setRandomValue(Integer randomValue) {
-		this.randomValue = randomValue;
-	}
-
+	
 	public boolean isGoIntoInventory() {
 		return goIntoInventory;
 	}
 
 	public void setGoIntoInventory(boolean goIntoInventory) {
 		this.goIntoInventory = goIntoInventory;
+	}
+
+	public Integer getRandomValueMin() {
+		return randomValueMin;
+	}
+
+	public void setRandomValueMin(Integer randomValueMin) {
+		this.randomValueMin = randomValueMin;
+	}
+
+	public Integer getRandomValueMax() {
+		return randomValueMax;
+	}
+
+	public void setRandomValueMax(Integer randomValueMax) {
+		this.randomValueMax = randomValueMax;
 	}
 	
 

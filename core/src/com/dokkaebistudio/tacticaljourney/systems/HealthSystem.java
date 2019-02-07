@@ -79,14 +79,16 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	if (healthCompo.getHp() <= 0) {
 				//Entity is dead
 				
-				//earn xp
-	    		if (healthCompo.getAttacker() != null) {
-					ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
-					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
-					if (expCompo != null && expRewardCompo != null) {
-						expCompo.earnXp(expRewardCompo.getExpGain());
-					}
-	    		}
+	    		//TODO : try to handle experience here, but for now it's in AttackManager since
+	    		// when a bomb explodes, it is removed from the game before this code is executed...
+//				//earn xp
+//	    		if (healthCompo.getAttacker() != null) {
+//					ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
+//					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
+//					if (expCompo != null && expRewardCompo != null) {
+//						expCompo.earnXp(expRewardCompo.getExpGain());
+//					}
+//	    		}
 				
 				
 				PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
@@ -120,22 +122,4 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     	}
     }
 
-    
-    
-	//********************************
-	// Private methods
-	
-	private ExperienceComponent getExperienceComponent(Entity attacker) {
-		ExperienceComponent result = null;
-		result = Mappers.experienceComponent.get(attacker);
-		if (result == null) {
-			ParentEntityComponent parentEntityComponent = Mappers.parentEntityComponent.get(attacker);
-			if (parentEntityComponent != null) {
-				Entity parent = parentEntityComponent.getParent();
-				result = getExperienceComponent(parent);
-			}
-		}
-		
-		return result;
-	}
 }

@@ -121,9 +121,9 @@ public final class PlayerFactory {
 		
 		// Ammo carrier
 		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
-		ammoCarrierCompo.setArrows(10);
+		ammoCarrierCompo.setArrows(0);
 		ammoCarrierCompo.setMaxArrows(10);
-		ammoCarrierCompo.setBombs(5);
+		ammoCarrierCompo.setBombs(0);
 		ammoCarrierCompo.setMaxBombs(5);
 		playerEntity.add(ammoCarrierCompo);
 		

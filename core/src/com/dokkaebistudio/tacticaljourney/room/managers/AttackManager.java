@@ -101,6 +101,19 @@ public class AttackManager {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
 		if (healthComponent != null) {
 			healthComponent.hit(damage, attacker);
+			
+			if (healthComponent.isDead()) {
+				//earn xp
+	    		if (healthComponent.getAttacker() != null) {
+					ExperienceComponent expCompo = getExperienceComponent(healthComponent.getAttacker());
+					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(target);
+					if (expCompo != null && expRewardCompo != null) {
+						expCompo.earnXp(expRewardCompo.getExpGain());
+					}
+	    		
+	    		}
+    		}
+
 		}
 	}
 	
@@ -116,5 +129,22 @@ public class AttackManager {
 	}
 	
 
+    
+	//********************************
+	// Private methods
+	
+	private ExperienceComponent getExperienceComponent(Entity attacker) {
+		ExperienceComponent result = null;
+		result = Mappers.experienceComponent.get(attacker);
+		if (result == null) {
+			ParentEntityComponent parentEntityComponent = Mappers.parentEntityComponent.get(attacker);
+			if (parentEntityComponent != null) {
+				Entity parent = parentEntityComponent.getParent();
+				result = getExperienceComponent(parent);
+			}
+		}
+		
+		return result;
+	}
 	
 }

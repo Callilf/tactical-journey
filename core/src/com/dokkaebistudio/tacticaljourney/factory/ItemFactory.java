@@ -32,6 +32,9 @@ public final class ItemFactory {
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion moneyTexture;
+	private TextureAtlas.AtlasRegion arrowsTexture;
+	private TextureAtlas.AtlasRegion bombsTexture;
+
 	private TextureAtlas.AtlasRegion smallHealthPotionTexture;
 	private TextureAtlas.AtlasRegion tutorialPageTexture;
 
@@ -43,7 +46,9 @@ public final class ItemFactory {
 		this.engine = e;
 		this.entityFactory = ef;
 		
-		moneyTexture = Assets.getTexture(Assets.money_item	);
+		moneyTexture = Assets.getTexture(Assets.money_item );
+		arrowsTexture = Assets.getTexture(Assets.arrow_item );
+		bombsTexture = Assets.getTexture(Assets.bomb_item );
 		smallHealthPotionTexture = Assets.getTexture(Assets.health_up_item);
 		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item	);
 	}
@@ -69,6 +74,66 @@ public final class ItemFactory {
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
 		itemCompo.setItemType(ItemEnum.MONEY);
+		item.add(itemCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	item.add(destructibleCompo);
+		
+		engine.addEntity(item);
+
+		return item;
+	}
+	
+	/**
+	 * Create a arrow item that is consumed when picked up.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemArrows(Room room, Vector2 tilePos) {
+		Entity item = engine.createEntity();
+		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite( this.arrowsTexture));
+		item.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) gridPosition.coord(item, tilePos, room);
+		gridPosition.zIndex = ZIndexConstants.ITEM;
+		item.add(gridPosition);
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(ItemEnum.ARROW);
+		item.add(itemCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	item.add(destructibleCompo);
+		
+		engine.addEntity(item);
+
+		return item;
+	}
+	
+	/**
+	 * Create a bomb item that is consumed when picked up.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemBombs(Room room, Vector2 tilePos) {
+		Entity item = engine.createEntity();
+		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite( this.bombsTexture));
+		item.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) gridPosition.coord(item, tilePos, room);
+		gridPosition.zIndex = ZIndexConstants.ITEM;
+		item.add(gridPosition);
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(ItemEnum.BOMB);
 		item.add(itemCompo);
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);

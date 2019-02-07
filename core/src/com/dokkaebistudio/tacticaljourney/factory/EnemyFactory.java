@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -58,7 +59,7 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createSpider(Room room, Vector2 pos, int speed) {
+	public Entity createSpider(Room room, Vector2 pos, int speed, Entity loot) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
 
@@ -102,6 +103,10 @@ public final class EnemyFactory {
 		expRewardCompo.setExpGain(2);
 		enemyEntity.add(expRewardCompo);
 		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setDrop(loot);
+		enemyEntity.add(lootRewardCompo);
+		
 		engine.addEntity(enemyEntity);
 		
 		return enemyEntity;
@@ -113,7 +118,7 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createScorpion(Room room, Vector2 pos, int speed) {
+	public Entity createScorpion(Room room, Vector2 pos, int speed, Entity loot) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
 
@@ -155,6 +160,10 @@ public final class EnemyFactory {
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
 		expRewardCompo.setExpGain(6);
 		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setDrop(loot);
+		enemyEntity.add(lootRewardCompo);
 		
 		engine.addEntity(enemyEntity);
 		

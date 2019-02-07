@@ -291,9 +291,9 @@ public class Room extends EntitySystem {
 			for (int i=0 ; i<enemyNb ; i++) {
 				Entity enemy = null;
 				if (random.nextInt(5) == 0) {
-					enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(iterator.next()), 4);
+					enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(iterator.next()), 4, generateEnemyLoot());
 				} else {
-					enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3);
+					enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3, generateEnemyLoot());
 				}
 				enemies.add(enemy);
 				iterator.remove();
@@ -359,6 +359,26 @@ public class Room extends EntitySystem {
 			}
 			lootableComponent.getItems().add(item);
 		}
+	}
+	
+	private Entity generateEnemyLoot() {
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		
+		if (random.nextInt(5) != 0) return null;
+		
+		int nextInt = random.nextInt(5);
+		if (nextInt == 0) {
+			return entityFactory.itemFactory.createItemMoney(null, null);
+		} else if (nextInt == 1) {
+			return entityFactory.itemFactory.createItemHealthUp(null, null);
+		} else if (nextInt == 2) {
+			return entityFactory.itemFactory.createItemArrows(null, null);
+		} else if (nextInt == 3) {
+			return entityFactory.itemFactory.createItemBombs(null, null);
+		} else if (nextInt == 4) {
+			return entityFactory.itemFactory.createItemTutorialPage(1 + random.nextInt(4), null, null);
+		}
+		return null;
 	}
 	
 	

@@ -256,11 +256,13 @@ public enum ItemEnum {
 	public abstract boolean use(Entity user, Entity item, Room room);
 	
 	/** Called when the item is removed from an entity. */
-	public boolean drop(Entity picker, Entity item, Room room) {
-		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
-		inventoryComponent.remove(item);
+	public boolean drop(Entity dropper, Entity item, Room room) {
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(dropper);
+		if (inventoryComponent != null) {
+			inventoryComponent.remove(item);
+		}
 		
-		GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(picker);
+		GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(dropper);
 		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
 		itemPosCompo.coord().set(playerPosCompo.coord());
 		itemPosCompo.setActive(item, room);

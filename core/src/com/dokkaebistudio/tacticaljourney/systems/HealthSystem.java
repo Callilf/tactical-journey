@@ -8,8 +8,10 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -97,6 +99,14 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					gameScreen.state = GameScreen.GAME_OVER;
 					
 				} else {
+					
+					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
+					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
+						// Drop reward
+						Entity dropItem = lootRewardComponent.getDrop();
+						ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
+						itemComponent.drop(entity, dropItem, room);
+					}
 					
 					// Death of any other entity than the player
 					room.removeEnemy(entity);

@@ -40,10 +40,13 @@ public enum ItemEnum {
 	},
 	
 	/** Add arrows to the player's quiver. */
-	ARROW(" # arrow[s]", Assets.arrow_item, true, false, 1, 8) {
+	ARROW(" # arrow[s]", Assets.arrow_item, false, false, 1, 8) {
 
 		@Override
-		public String getDescription() {return null;}
+		public String getDescription() {
+			return "Arrows can be shot from a distance. If there are too much arrows for your quiver, the remaining "
+				+ "arrows will stay on the ground.";
+		}
 		
 		@Override
 		public String getActionLabel() {return null;}
@@ -52,20 +55,24 @@ public enum ItemEnum {
 		public boolean use(Entity user, Entity item, Room room) {
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
-			if (ammoCarrierComponent.canPickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue())) {
-				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue());
-				return true;
-			} else {
+			int remainingArrows = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue());
+			
+			if (remainingArrows > 0) {
+				itemComponent.setRandomValue(remainingArrows);
 				return false;
 			}
+			return true;
 		}
 	},
 	
 	/** Add bombs to the player's bag. */
-	BOMB(" # bomb[s]", Assets.bomb_item, true, false, 1, 5) {
+	BOMB(" # bomb[s]", Assets.bomb_item, false, false, 1, 5) {
 
 		@Override
-		public String getDescription() {return null;}
+		public String getDescription() {
+			return "Bombs can be thrown on the ground and explode after some turns. Be sure to stay away from the blast. "
+					+ "If there are too much bombs for your bag, the remaining bombs will stay on the ground.";
+		}
 		
 		@Override
 		public String getActionLabel() {return null;}
@@ -74,13 +81,13 @@ public enum ItemEnum {
 		public boolean use(Entity user, Entity item, Room room) {
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
-			if (ammoCarrierComponent.canPickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue())) {
-				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue());
-				return true;
-			} else {
+			int remainingBombs = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue());
+			
+			if (remainingBombs > 0) {
+				itemComponent.setRandomValue(remainingBombs);
 				return false;
 			}
-		}
+			return true;		}
 	},
 	
 	/** A consumable item that heals 25 HP. */
@@ -236,8 +243,12 @@ public enum ItemEnum {
 		if (inventoryComponent != null) {
 			if (!inventoryComponent.canStore(itemComponent)) return false;
 			
-			inventoryComponent.store(item, itemComponent, room);
+			boolean stored = inventoryComponent.store(item, itemComponent, room);
+			if (stored && !this.goIntoInventory) {
+				room.removeEntity(item);
+			}
 		}
+
 		return true;
 	}
 	

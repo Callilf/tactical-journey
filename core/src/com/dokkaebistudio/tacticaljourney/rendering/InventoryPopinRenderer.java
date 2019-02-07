@@ -160,6 +160,9 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     			
     			// Build the loot panel
 	    		if (this.isLoot) {
+	    			lootableCompo = Mappers.lootableComponent.get(inventoryCompo.getLootableEntity());
+	    			handleTakeAllAction();
+
 	    			createLootTable();
 		    		mainTable.add(lootTable).padRight(20);
 	    		}
@@ -199,9 +202,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	// LOOT TABLE
 	
 	
-	private void createLootTable() {
-		lootableCompo = Mappers.lootableComponent.get(inventoryCompo.getLootableEntity());
-		
+	private void createLootTable() {		
 		lootTable = PoolableTable.create();
 //		    		table.setDebug(true, true);
 		lootTable.setTouchable(Touchable.enabled);
@@ -219,7 +220,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		Table lootableItemsTable = PoolableTable.create();
 		lootableItemsTable.top();
 		lootTakeBtns.clear();
-		for (Entity item : lootableCompo.getItems()) {
+		for (Entity item : lootableCompo.getAllItems()) {
 			Table oneItem = createOneLootItem(item);
 			lootableItemsTable.add(oneItem).pad(0, 10, 10, 10);
 			lootableItemsTable.row();
@@ -286,10 +287,12 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				//TODO add item in inventory and remove it from lootable entity
 				if (inventoryCompo.canStore(itemComponent)) {
-					inventoryCompo.store(item, itemComponent, null);
+					boolean stored = inventoryCompo.store(item, itemComponent, null);
+					if (stored) {
+						lootableCompo.getItems().remove(item);
+					}
 					inventoryCompo.setInventoryActionInProgress(true);
 					room.turnManager.endPlayerTurn();
-					lootableCompo.getItems().remove(item);
 					refreshPopin();
 				}
 			}
@@ -618,16 +621,24 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			Entity firstItem = lootableCompo.getItems().get(0);
 			ItemComponent itemComponent = Mappers.itemComponent.get(firstItem);
 			if (inventoryCompo.canStore(itemComponent)) {
-				inventoryCompo.store(firstItem, itemComponent, null);
+				boolean stored = inventoryCompo.store(firstItem, itemComponent, null);
+				if (!stored) {
+					lootableCompo.getStandByItems().add(firstItem);
+				}
+				lootableCompo.getItems().remove(firstItem);
 				inventoryCompo.setInventoryActionInProgress(true);
 				room.turnManager.endPlayerTurn();
 				lootableCompo.getItems().remove(firstItem);
 				refreshPopin();
 			} else {
 				takeAllInProgess = false;
+				lootableCompo.finishTakeAll();
+				refreshPopin();
 			}
 		} else {
 			takeAllInProgess = false;
+			lootableCompo.finishTakeAll();
+			refreshPopin();
 		}
 	}
 
@@ -639,6 +650,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	private boolean handleInterruption() {
 		if (inventoryCompo.isInterrupted()) {
     		takeAllInProgess = false;
+    		lootableCompo.finishTakeAll();
     		inventoryCompo.setInterrupted(false);
     		closePopin();
     		return true;
@@ -672,7 +684,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	 * Perform misc actions and clear all refresh statuses.
 	 */
 	private void finishRefresh() {
-		handleTakeAllAction();
 		displayRoomIfEnemiesArePlaying();
 		
 		needsRefresh = false;

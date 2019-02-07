@@ -90,19 +90,28 @@ public class AmmoCarrierComponent implements Component {
 	 * Pick up the given number of the given type of ammunitions.
 	 * @param ammoType the type of ammo
 	 * @param number the number of ammo picked.
+	 * @return the remaining number of ammos that cannot be picked up
 	 */
-	public void pickUpAmmo(AmmoTypeEnum ammoType, int number) {
+	public int pickUpAmmo(AmmoTypeEnum ammoType, int number) {
+		int remaining = 0;
 		switch(ammoType) {
 		case ARROWS:
 			arrows += number;
-			if (arrows > maxArrows) arrows = maxArrows;
+			if (arrows > maxArrows) {
+				remaining = arrows - maxArrows;
+				arrows = maxArrows;
+			}
 			break;
 		case BOMBS:
 			bombs += number;
-			if (bombs > maxBombs) bombs = maxBombs;
+			if (bombs > maxBombs) {
+				remaining = bombs - maxBombs;
+				bombs = maxBombs;
+			}
 			break;
 			default:
 		}
+		return remaining;
 	}
 	
 	

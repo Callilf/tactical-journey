@@ -116,11 +116,11 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean pickedUp = itemComponent.pickUp(player, currentItem, room);
 				
 				if (pickedUp) {
-					System.out.println("Picked up a " + itemComponent.getItemType().getLabel());
+					System.out.println("Picked up a " + itemComponent.getItemLabel());
 
 					room.turnManager.endPlayerTurn();
 				} else {
-					System.out.println("Impossible to pick up the " + itemComponent.getItemType().getLabel());
+					System.out.println("Impossible to pick up the " + itemComponent.getItemLabel());
 
 					//TODO warn message
 				}

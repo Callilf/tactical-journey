@@ -103,4 +103,7 @@ public class ItemComponent implements Component {
 		return randomValue;
 	}
 
+	public void setRandomValue(Integer value) {
+		this.randomValue = value;
+	}
 }

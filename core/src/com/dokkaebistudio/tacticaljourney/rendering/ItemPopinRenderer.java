@@ -37,6 +37,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent playerInventoryCompo;
+	private ItemComponent itemComponent;
+
 	
 	/** The current room. */
     private Room room;
@@ -77,22 +79,29 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN) {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.ITEM_POPIN);
+    		
+			itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
 
 			initTable();
 			
 			Entity item = playerInventoryCompo.getCurrentItem();
-			ItemComponent itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
 			
 			// Update the content
-			itemTitle.setText(itemComponent.getItemType().getLabel());
-			itemDesc.setText(itemComponent.getItemType().getDescription());
-			useItemBtn.setText(itemComponent.getItemType().getActionLabel());
+			itemTitle.setText(itemComponent.getItemLabel());
+			if (itemComponent.getItemDescription() != null) {
+				itemDesc.setText(itemComponent.getItemDescription());
+			}
+			if (itemComponent.getItemActionLabel() != null) {
+				useItemBtn.setText(itemComponent.getItemActionLabel());
+			}
 			
 			// Update the Drop item listener
 			updatePickupListener(item, itemComponent);
 			
-			// Update the Use item listener
-			updateUseListener(item);
+			if (itemComponent.getItemActionLabel() != null) {
+				// Update the Use item listener
+				updateUseListener(item);
+			}
 	
 			
 			// Place the popin properly
@@ -144,12 +153,14 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		selectedItemPopin.row().align(Align.center);
 		
 		// 2 - Description
-		itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. "
-				+ "Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui "
-				+ "est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
-		itemDesc.setWrap(true);
-		selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
-		selectedItemPopin.row();
+		if (itemComponent.getItemDescription() != null) {
+			itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. "
+					+ "Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui "
+					+ "est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
+			itemDesc.setWrap(true);
+			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.row();
+		}
 		
 		// 3 - Action buttons
 		Table buttonTable = PoolableTable.create();
@@ -165,13 +176,15 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		});
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 		
-		// 3.2 - Drop button
+		// 3.2 - Take button
 		pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
-		useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
-		buttonTable.add(useItemBtn).pad(0, 20,0,20);
+		if (itemComponent.getItemActionLabel() != null) {
+			useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
+			buttonTable.add(useItemBtn).pad(0, 20,0,20);
+		}
 		
 		selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
 	}

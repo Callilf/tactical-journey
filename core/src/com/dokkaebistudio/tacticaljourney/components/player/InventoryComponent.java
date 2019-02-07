@@ -72,8 +72,9 @@ public class InventoryComponent implements Component, Poolable {
 	/**
 	 * Store the given entity in the inventory.
 	 * @param item the entity to store
+	 * @return true if the item was fully stored. False not stored or a part of it remains.
 	 */
-	public void store(Entity item, ItemComponent itemCompo, Room room) {
+	public boolean store(Entity item, ItemComponent itemCompo, Room room) {
 		if (itemCompo != null && itemCompo.getItemType().isGoIntoInventory()) {
 			//This item can be stored in the intentory
 			slots[firstEmptySlot] = item;
@@ -83,9 +84,10 @@ public class InventoryComponent implements Component, Poolable {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
 				gridPositionComponent.setInactive(item, room);
 			}
+			return true;
 		} else {
 			//This item does not go into inventory, it's used right away
-			itemCompo.use(player, item, room);
+			return itemCompo.use(player, item, room);
 		}
 	}
 	

@@ -20,6 +20,11 @@ public class LootableComponent implements Component, Poolable {
 	
 	/** The loot. */
 	private List<Entity> items = new ArrayList<>();
+	
+	/** Items that could not be fully picked up (used for the take all action). */
+	private List<Entity> standByItems = new ArrayList<>();
+	private List<Entity> allItems = new ArrayList<>();
+
 
 	private LootableStateEnum lootableState = LootableStateEnum.CLOSED;
 	
@@ -48,6 +53,25 @@ public class LootableComponent implements Component, Poolable {
 	}
 	
 	
+	public List<Entity> getAllItems() {
+		allItems.clear();
+		for (Entity item : standByItems) {
+			allItems.add(item);
+		}
+		for (Entity item : items) {
+			allItems.add(item);
+		}
+		return allItems;
+	}
+
+	
+	public void finishTakeAll() {
+		for (Entity e : this.standByItems) {
+			this.items.add(e);
+		}
+		this.standByItems.clear();
+	}
+	
 	
 	// Getters and Setters
 	
@@ -75,6 +99,14 @@ public class LootableComponent implements Component, Poolable {
 
 	public void setLootableState(LootableStateEnum lootableState) {
 		this.lootableState = lootableState;
+	}
+
+	public List<Entity> getStandByItems() {
+		return standByItems;
+	}
+
+	public void setStandByItems(List<Entity> standByItems) {
+		this.standByItems = standByItems;
 	}
 
 	

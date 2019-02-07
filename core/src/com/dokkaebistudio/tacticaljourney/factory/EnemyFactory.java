@@ -59,7 +59,7 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createSpider(Room room, Vector2 pos, int speed, Entity loot) {
+	public Entity createSpider(Room room, Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
 
@@ -104,7 +104,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setDrop(loot);
+		lootRewardCompo.setDropRate(10);
 		enemyEntity.add(lootRewardCompo);
 		
 		engine.addEntity(enemyEntity);
@@ -118,7 +118,7 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createScorpion(Room room, Vector2 pos, int speed, Entity loot) {
+	public Entity createScorpion(Room room, Vector2 pos, int speed) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
 
@@ -162,7 +162,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setDrop(loot);
+		lootRewardCompo.setDropRate(20);
 		enemyEntity.add(lootRewardCompo);
 		
 		engine.addEntity(enemyEntity);

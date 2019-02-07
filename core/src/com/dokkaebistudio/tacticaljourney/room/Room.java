@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,12 +29,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -53,7 +49,6 @@ public class Room extends EntitySystem {
 	private RoomState nextState;
 	
 	public Entity[][] grid;
-	public List<Vector2> possibleSpawns;
 	
 	public PooledEngine engine;
 	public EntityFactory entityFactory;
@@ -217,13 +212,22 @@ public class Room extends EntitySystem {
 	}
 	
 	
+	/**
+	 * Create the room. Generate it's layout and content.
+	 */
 	public void create() {
 		this.state = RoomState.PLAYER_TURN_INIT;
 
 		enemies = new ArrayList<>();
 		attackManager = new AttackManager(this);
-		createLayout();
-		createContent();
+		
+		// Layout
+		RoomGenerator generator = new RoomGenerator(this.entityFactory);
+		GeneratedRoom generatedRoom = generator.generateRoomLayout(this, this.northNeighbor, this.eastNeighbor, this.southNeighbor, this.westNeighbor);
+		grid = generatedRoom.getTileEntities();
+
+		// Content
+		generator.generateRoomContent(this, generatedRoom);
 	}
 
 
@@ -247,140 +251,6 @@ public class Room extends EntitySystem {
 	}
 
 
-	/**
-	 * Create the grid, ie. fille the 2 dimensional array of tile entities.
-	 */
-	private void createLayout() {
-		RoomGenerator generator = new RoomGenerator(this.entityFactory);
-		GeneratedRoom generateRoom = generator.generateRoom(this, this.northNeighbor, this.eastNeighbor, this.southNeighbor, this.westNeighbor);
-		grid = generateRoom.getTileEntities();
-		possibleSpawns = generateRoom.getPossibleSpawns();
-	}
-	
-	
-	private void createContent() {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-
-		switch(type) {
-		case COMMON_ENEMY_ROOM :
-			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
-			
-			// Retrieve the spawn points and shuffle them
-			List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(enemyPositions, random);
-			
-			// Place a loot
-			int lootRandom = random.nextInt(10);
-			boolean isLoot = lootRandom != 0;
-			if (isLoot) {
-				Vector2 lootPos = enemyPositions.get(0);
-				if (lootRandom <= 5) {
-					Entity bones = entityFactory.createRemainsBones(this, lootPos);
-					fillLootable(bones, 1);
-					
-				} else {
-					Entity satchel = entityFactory.createRemainsSatchel(this, lootPos);
-					fillLootable(satchel, 3);
-
-				}
-				enemyPositions.remove(0);
-			}
-			
-			// Place enemies
-			Iterator<Vector2> iterator = enemyPositions.iterator();
-			for (int i=0 ; i<enemyNb ; i++) {
-				Entity enemy = null;
-				if (random.nextInt(5) == 0) {
-					enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(iterator.next()), 4, generateEnemyLoot());
-				} else {
-					enemy = entityFactory.enemyFactory.createSpider(this, new Vector2(iterator.next()), 3, generateEnemyLoot());
-				}
-				enemies.add(enemy);
-				iterator.remove();
-			}
-			
-//			// Place health
-//			if (iterator.hasNext() && random.nextInt(3) == 0) {
-//				entityFactory.itemFactory.createItemHealthUp(this, new Vector2(iterator.next()));
-//			}
-			break;
-			
-		case START_FLOOR_ROOM:
-			
-			entityFactory.itemFactory.createItemHealthUp(this, new Vector2(5, 3));
-			entityFactory.itemFactory.createItemTutorialPage(1,this, new Vector2(8, 9));
-			
-			Entity satchel = entityFactory.createRemainsBones(this, new Vector2(14, 11));
-			fillLootable(satchel, 3);
-			
-//			entityFactory.createExit(this, new Vector2(16, 4));
-
-//			Entity enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(14, 5), 4);
-//			enemies.add(enemy);
-//			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
-//			enemies.add(enemy2);
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 3);
-//			enemies.add(enemy3);
-			break;
-		case END_FLOOR_ROOM:
-			int nextInt = random.nextInt(possibleSpawns.size());
-			Vector2 pos = possibleSpawns.get(nextInt);
-			entityFactory.createExit(this, pos);
-			default:
-			break;
-		}
-	}
-	
-	private void fillLootable(Entity lootable, int nbMaxItems) {
-		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
-		
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		
-		boolean isMoney = random.nextInt(2) == 0;
-		//TODO change
-		if (true) {
-			Entity moneyItem = entityFactory.itemFactory.createItemMoney(null, null);
-			lootableComponent.getItems().add(moneyItem);
-		}
-		
-		int nbLoot = random.nextInt(nbMaxItems + 1);
-		for (int i=0 ; i<nbLoot ; i++) {
-			int nextInt = random.nextInt(4);
-			Entity item = null;
-			
-			if (nextInt == 0) {
-				item = entityFactory.itemFactory.createItemHealthUp(null, null);
-			} else if (nextInt == 1) {
-				item = entityFactory.itemFactory.createItemArrows( null, null);
-			} else if (nextInt == 2) {
-				item = entityFactory.itemFactory.createItemBombs( null, null);
-			} else if (nextInt == 3) {
-				item = entityFactory.itemFactory.createItemTutorialPage( 1 +random.nextInt(4), null, null);
-			}
-			lootableComponent.getItems().add(item);
-		}
-	}
-	
-	private Entity generateEnemyLoot() {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		
-		if (random.nextInt(5) != 0) return null;
-		
-		int nextInt = random.nextInt(5);
-		if (nextInt == 0) {
-			return entityFactory.itemFactory.createItemMoney(null, null);
-		} else if (nextInt == 1) {
-			return entityFactory.itemFactory.createItemHealthUp(null, null);
-		} else if (nextInt == 2) {
-			return entityFactory.itemFactory.createItemArrows(null, null);
-		} else if (nextInt == 3) {
-			return entityFactory.itemFactory.createItemBombs(null, null);
-		} else if (nextInt == 4) {
-			return entityFactory.itemFactory.createItemTutorialPage(1 + random.nextInt(4), null, null);
-		}
-		return null;
-	}
-	
 	
 	/**
 	 * Return the entity for the tile at the given position.

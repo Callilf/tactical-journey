@@ -11,7 +11,11 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class LootRewardComponent implements Component, Poolable {
 
+	/** The item to drop. Null if no drop. */
 	private Entity drop;
+
+	/** The drop rate in percent for the given entity. */
+	private float dropRate;
 
 	
 	
@@ -29,6 +33,16 @@ public class LootRewardComponent implements Component, Poolable {
 
 	public void setDrop(Entity drop) {
 		this.drop = drop;
+	}
+
+
+	public float getDropRate() {
+		return dropRate;
+	}
+
+
+	public void setDropRate(float dropRate) {
+		this.dropRate = dropRate;
 	}
 	
 }

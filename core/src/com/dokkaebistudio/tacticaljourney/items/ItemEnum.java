@@ -22,7 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public enum ItemEnum {
 		
 	/** Add money to the player's wallet. */
-	MONEY(" # gold coin[s]", Assets.money_item, true, false, 1, 10) {
+	MONEY(" # gold coin[s]", Assets.money_item, true, false, 1, 5) {
 
 		@Override
 		public String getDescription() {return null;}
@@ -40,7 +40,7 @@ public enum ItemEnum {
 	},
 	
 	/** Add arrows to the player's quiver. */
-	ARROW(" # arrow[s]", Assets.arrow_item, false, false, 1, 8) {
+	ARROW(" # arrow[s]", Assets.arrow_item, false, false, 1, 5) {
 
 		@Override
 		public String getDescription() {
@@ -66,7 +66,7 @@ public enum ItemEnum {
 	},
 	
 	/** Add bombs to the player's bag. */
-	BOMB(" # bomb[s]", Assets.bomb_item, false, false, 1, 5) {
+	BOMB(" # bomb[s]", Assets.bomb_item, false, false, 1, 2) {
 
 		@Override
 		public String getDescription() {

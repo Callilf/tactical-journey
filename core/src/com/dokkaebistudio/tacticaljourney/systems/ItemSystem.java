@@ -22,6 +22,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -39,14 +42,16 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ItemSystem extends EntitySystem implements RoomSystem {	
 	
+	private Stage fxStage;
 	private Room room;
 	private Entity player;
 	private MoveComponent playerMoveCompo;
 	private InventoryComponent playerIventoryCompo;
 	
-	public ItemSystem(Entity player, Room r) {
+	public ItemSystem(Entity player, Room r, Stage stage) {
 		this.priority = 11;
 
+		this.fxStage = stage;
 		this.player = player;
 		this.room = r;
 	}
@@ -107,8 +112,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 		} else if (playerIventoryCompo.getCurrentAction() != null && playerIventoryCompo.getCurrentAction() != InventoryActionEnum.DISPLAY_POPIN) {
 			
-			Entity currentItem = playerIventoryCompo.getCurrentItem();
-			ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
+			final Entity currentItem = playerIventoryCompo.getCurrentItem();
+			final ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
 
 			
 			// An action has been done in the inventory
@@ -120,7 +125,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean pickedUp = itemComponent.pickUp(player, currentItem, room);
 				
 				if (pickedUp) {
-					System.out.println("Picked up a " + itemComponent.getItemLabel());
+					System.out.println("Picked up " + itemComponent.getItemLabel());
 					
 					room.getRemovedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
@@ -141,7 +146,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean instaUsed = itemComponent.use(player, currentItem, room);
 				
 				if (instaUsed) {
-					System.out.println("Insta used a " + itemComponent.getItemType().getLabel());
+					System.out.println("Insta used " + itemComponent.getItemType().getLabel());
 
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
@@ -162,7 +167,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean used = itemComponent.use(player, currentItem, room);
 				
 				if (used) {
-					System.out.println("Used a " + itemComponent.getItemType().getLabel());
+					System.out.println("Used " + itemComponent.getItemType().getLabel());
 
 					playerIventoryCompo.remove(currentItem);
 					room.getRemovedItems().add(currentItem);
@@ -180,21 +185,29 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				break;
 			case DROP:
 				
-				// USE ITEM
-				boolean dropped = itemComponent.drop(player, currentItem, room);
-				
-				if (dropped) {
-					System.out.println("Dropped a " + itemComponent.getItemType().getLabel());
+				Action finishDropAction = new Action(){
+					  @Override
+					  public boolean act(float delta){
+							System.out.println("Dropped " + itemComponent.getItemType().getLabel());
 
-					playerIventoryCompo.remove(currentItem);
-					room.getAddedItems().add(currentItem);
-					room.turnManager.endPlayerTurn();
-				} else {
-					System.out.println("Impossible to drop the " + itemComponent.getItemType().getLabel());
+							itemComponent.drop(player, currentItem, room);
 
-					//TODO warn message
-				}
+							playerIventoryCompo.remove(currentItem);
+							room.getAddedItems().add(currentItem);
+							room.turnManager.endPlayerTurn();
+							
+					    return true;
+					  }
+				};
 				
+				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(player);
+				itemComponent.setDropAnimationImage( Assets.getTexture(itemComponent.getItemType().getImageName()),
+						tilePos.coord(), finishDropAction);
+				
+				fxStage.addActor(itemComponent.getDropAnimationImage());
+				room.setNextState(RoomState.ITEM_DROP_ANIM);
+				
+								
 				playerIventoryCompo.setCurrentAction(null);
 				
 				break;
@@ -205,6 +218,10 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 		}		
 	
+		
+		
+		
+		
 	
 		// Display items quantities
 		for (Entity item : room.getAddedItems()) {

@@ -178,8 +178,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new ContextualActionSystem(	player, room));
-		engine.addSystem(new ItemSystem(	player, room));
-		engine.addSystem(new HealthSystem(this,room, stage));
+		engine.addSystem(new ItemSystem(	player, room, fxStage));
+		engine.addSystem(new HealthSystem(this,room, fxStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		
 

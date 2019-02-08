@@ -200,15 +200,19 @@ public class RoomGenerator {
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemTutorialPage(1,room, new Vector2(8, 9));
 			
-			Entity satchel = entityFactory.createRemainsBones(room, new Vector2(14, 11));
-			fillLootable(satchel, 1);
+			Entity bones = entityFactory.createRemainsBones(room, new Vector2(12, 9));
+			fillLootable(bones, 1);
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 
-//			Entity enemy = entityFactory.enemyFactory.createScorpion(this, new Vector2(14, 5), 4);
-//			enemies.add(enemy);
-//			Entity enemy2 = entityFactory.enemyFactory.createSpider(this, new Vector2(10, 8), 1);
-//			enemies.add(enemy2);
+//			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);
+//			room.getEnemies().add(enemy);
+			
+//			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+//			room.getEnemies().add(enemy2);
+//			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
+//			lootRewardComponent.setDrop( generateEnemyLoot(100f));
+
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 3);
 //			enemies.add(enemy3);
 			break;
@@ -255,7 +259,7 @@ public class RoomGenerator {
 	private Entity generateEnemyLoot(float dropRate) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
-		float unit = (float) random.nextInt();
+		float unit = (float) random.nextInt(100);
 		float decimal = random.nextFloat();
 		float randomValue = unit + decimal;
 		

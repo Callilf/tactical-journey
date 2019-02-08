@@ -3,17 +3,18 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -22,7 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
 	public GameScreen gameScreen;
-	public Stage stage;
+	public Stage fxStage;
 	
 	/** The current room. */
     private Room room;    
@@ -33,7 +34,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 
 		this.gameScreen = gameScreen;
         this.room = r;
-        this.stage = s;
+        this.fxStage = s;
     }
     
     @Override
@@ -99,18 +100,22 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					gameScreen.state = GameScreen.GAME_OVER;
 					
 				} else {
-					
+					// Death of any other entity than the player
+
 					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
 					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
 						// Drop reward
-						Entity dropItem = lootRewardComponent.getDrop();
-						ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
-						itemComponent.drop(entity, dropItem, room);
-					}
+						dropItem(entity, lootRewardComponent);
+						
+						// Do not remove the entity from the room yet, remove it once the drop animation if over
+						entity.remove(EnemyComponent.class);
+						entity.remove(HealthComponent.class);
+						entity.remove(SpriteComponent.class);
+					} else {
 					
-					// Death of any other entity than the player
-					room.removeEnemy(entity);
-					//TODO: play death animation
+						room.removeEnemy(entity);
+						//TODO: play death animation
+					}
 				}
 			
 	    	}
@@ -131,5 +136,31 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	}
     	}
     }
+
+    /**
+     * Drop an item on death.
+     * @param entity the entity that died and will drop the item
+     * @param lootRewardComponent the lootRewardComponent of the entity
+     */
+	private void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent) {
+		final Entity dropItem = lootRewardComponent.getDrop();
+		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
+		
+		Action finishDropAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			itemComponent.drop(entity, dropItem, room);
+			
+			room.getAddedItems().add(dropItem);
+			room.removeEnemy(entity);
+		    return true;
+		  }
+		};
+		
+		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(entity);
+		itemComponent.setDropAnimationImage( Assets.getTexture(itemComponent.getItemType().getImageName()), tilePos.coord(), finishDropAction);
+		
+		fxStage.addActor(itemComponent.getDropAnimationImage());
+	}
 
 }

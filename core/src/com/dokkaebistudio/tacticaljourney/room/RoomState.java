@@ -44,6 +44,10 @@ public enum RoomState {
 	
 	ENEMY_END_TURN,
 	
+	
+	ITEM_DROP_ANIM,
+	
+	
 	PROFILE_POPIN,
 	LEVEL_UP_POPIN,
 	INVENTORY_POPIN,

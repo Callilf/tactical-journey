@@ -2,13 +2,20 @@ package com.dokkaebistudio.tacticaljourney.components.item;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ItemComponent implements Component, Poolable {
 		
@@ -26,6 +33,12 @@ public class ItemComponent implements Component, Poolable {
 	
 	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
 	private Entity priceDisplayer;
+	
+	
+	/** The sprite used for the drop animation. */
+	private Image dropAnimationImage;
+
+
 
 
 
@@ -35,6 +48,7 @@ public class ItemComponent implements Component, Poolable {
 		this.quantityDisplayer = null;
 		this.price = null;
 		this.priceDisplayer = null;
+		this.setDropAnimationImage(null);
 	}
 	
 	/**
@@ -63,6 +77,37 @@ public class ItemComponent implements Component, Poolable {
 	 */
 	public boolean drop(Entity dropper, Entity item, Room room) {
 		return itemType.drop(dropper, item, room);
+	}
+	
+	
+	
+	
+	/**
+	 * Set up the drop animation.
+	 * @param texture the texture to use
+	 * @param tilePos the tile on which the animation takes place
+	 * @param dropAction the action to call after the movement is over
+	 */
+	public void setDropAnimationImage(AtlasRegion texture, Vector2 tilePos, Action dropAction) {
+		final Image drop = new Image(texture);
+		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+		drop.setPosition(playerPixelPos.x, playerPixelPos.y);
+		
+		Action removeImageAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			  drop.remove();
+			  return true;
+		  }
+		};
+
+		
+		drop.addAction(Actions.sequence(Actions.moveBy(0, 50, 0.2f, Interpolation.pow3Out),
+				Actions.moveBy(0, -50, 0.5f, Interpolation.bounceOut), 
+				dropAction,
+				removeImageAction));
+			
+		this.dropAnimationImage = drop;
 	}
 	
 	
@@ -102,7 +147,7 @@ public class ItemComponent implements Component, Poolable {
 	
 	
 	
-	
+	//*******************************
 	// Getters and Setters
 
 	public ItemEnum getItemType() {
@@ -161,5 +206,13 @@ public class ItemComponent implements Component, Poolable {
 
 	public void setPriceDisplayer(Entity priceDisplayer) {
 		this.priceDisplayer = priceDisplayer;
+	}
+
+	public Image getDropAnimationImage() {
+		return dropAnimationImage;
+	}
+
+	public void setDropAnimationImage(Image dropAnimationImage) {
+		this.dropAnimationImage = dropAnimationImage;
 	}
 }

@@ -1,8 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.components.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ItemComponent implements Component, Poolable {
 		
@@ -25,7 +26,7 @@ public class ItemComponent implements Component, Poolable {
 	private ItemEnum itemType;
 	
 	/** The random value used by some items. Null if not used. */
-	private Integer randomValue;
+	private Integer quantity;
 	
 	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
 	private Entity quantityDisplayer;
@@ -37,8 +38,13 @@ public class ItemComponent implements Component, Poolable {
 	private Entity priceDisplayer;
 	
 	
+	//******************************
+	// Animation related attributes
+	
+	private Integer quantityPickedUp;
+	
 	/** The sprite used for the drop animation. */
-	private Image pickupAnimationImage;
+	private List<Image> pickupAnimationImages = new ArrayList<>();
 	/** The sprite used for the drop animation. */
 	private Image dropAnimationImage;
 
@@ -48,11 +54,13 @@ public class ItemComponent implements Component, Poolable {
 
 	@Override
 	public void reset() {
-		this.randomValue = null;
+		this.quantity = null;
+		this.quantityPickedUp = null;
 		this.quantityDisplayer = null;
 		this.price = null;
 		this.priceDisplayer = null;
 		this.setDropAnimationImage(null);
+		this.pickupAnimationImages.clear();
 	}
 	
 	/**
@@ -91,28 +99,40 @@ public class ItemComponent implements Component, Poolable {
 	 * @param pixelPos the tile on which the animation takes place
 	 * @param dropAction the action to call after the movement is over
 	 */
-	public Image getPickupAnimationImage(Entity item) {
+	public List<Image> getPickupAnimationImage(Entity item) {
+		this.pickupAnimationImages.clear();
+		
 		GridPositionComponent itemPositionComponent = Mappers.gridPositionComponent.get(item);
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
-		final Image pickupImage = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
 		
-		Vector2 worldPos = itemPositionComponent.getWorldPos();
-		pickupImage.setPosition(worldPos.x, worldPos.y);
+		int numberOfImages = 1;
+		if (itemComponent.getQuantity() != null) {
+			numberOfImages = itemComponent.getQuantityPickedUp() != null ? itemComponent.getQuantityPickedUp() : itemComponent.getQuantity();
+		}
 		
-		Action removeImageAction = new Action(){
-		  @Override
-		  public boolean act(float delta){
-			  pickupImage.remove();
-			  return true;
-		  }
-		};
-
-		pickupImage.addAction(Actions.sequence(Actions.moveTo(580, 30, 1f, Interpolation.circle),
-				removeImageAction));
+		for (int i=0 ; i<numberOfImages ; i++) {
+		
+			final Image pickupImage = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
 			
-		this.pickupAnimationImage = pickupImage;
-		return pickupImage;
+			Vector2 worldPos = itemPositionComponent.getWorldPos();
+			pickupImage.setPosition(worldPos.x, worldPos.y);
+			
+			Action removeImageAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				  pickupImage.remove();
+				  return true;
+			  }
+			};
+	
+			float duration = 0.1f * i;
+			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(580, 30, 1f, Interpolation.circle),
+					removeImageAction));
+				
+			this.pickupAnimationImages.add(pickupImage);
+		}
+		return this.pickupAnimationImages;
 	}
 	
 	
@@ -157,9 +177,9 @@ public class ItemComponent implements Component, Poolable {
 	 * @return the label to display
 	 */
 	public String getItemLabel() {
-		if (this.getRandomValue() != null) {
-			String label = itemType.getLabel().replace("#", String.valueOf(this.getRandomValue().intValue()));
-			Integer val = this.getRandomValue();
+		if (this.getQuantity() != null) {
+			String label = itemType.getLabel().replace("#", String.valueOf(this.getQuantity().intValue()));
+			Integer val = this.getQuantity();
 			if (val.intValue() == 1) {
 				label = label.replaceAll("\\[.*?\\]", "");
 			} else {
@@ -196,20 +216,20 @@ public class ItemComponent implements Component, Poolable {
 		this.itemType = itemType;
 	}
 
-	public Integer getRandomValue() {
-		if (randomValue == null && this.itemType.getRandomValueMax() != null) {
+	public Integer getQuantity() {
+		if (quantity == null && this.itemType.getRandomValueMax() != null) {
 			RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 			int value = this.itemType.getRandomValueMin();
 			if (this.itemType.getRandomValueMax() > this.itemType.getRandomValueMin()) {
 				value += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin());
 			}
-			setRandomValue(value);
+			setQuantity(value);
 		}
-		return randomValue;
+		return quantity;
 	}
 
-	public void setRandomValue(Integer value) {
-		this.randomValue = value;
+	public void setQuantity(Integer value) {
+		this.quantity = value;
 		
 		if (quantityDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
@@ -254,11 +274,15 @@ public class ItemComponent implements Component, Poolable {
 		this.dropAnimationImage = dropAnimationImage;
 	}
 
-	public Image getPickupAnimationImage() {
-		return pickupAnimationImage;
+	public List<Image> getPickupAnimationImage() {
+		return pickupAnimationImages;
 	}
 
-	public void setPickupAnimationImage(Image pickupAnimationImage) {
-		this.pickupAnimationImage = pickupAnimationImage;
+	public Integer getQuantityPickedUp() {
+		return quantityPickedUp;
+	}
+
+	public void setQuantityPickedUp(Integer quantityPickedUp) {
+		this.quantityPickedUp = quantityPickedUp;
 	}
 }

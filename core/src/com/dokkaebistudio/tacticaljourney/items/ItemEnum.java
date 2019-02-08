@@ -33,8 +33,9 @@ public enum ItemEnum {
 		@Override
 		public boolean use(Entity user, Entity item, Room room) {
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			itemComponent.setQuantityPickedUp(itemComponent.getQuantity());
 			WalletComponent walletComponent = Mappers.walletComponent.get(user);
-			walletComponent.receive(itemComponent.getRandomValue());
+			walletComponent.receive(itemComponent.getQuantity());
 			return true;
 		}
 	},
@@ -55,10 +56,11 @@ public enum ItemEnum {
 		public boolean use(Entity user, Entity item, Room room) {
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
-			int remainingArrows = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getRandomValue());
+			int remainingArrows = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getQuantity());
 			
 			if (remainingArrows > 0) {
-				itemComponent.setRandomValue(remainingArrows);
+				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
+				itemComponent.setQuantity(remainingArrows);
 				return false;
 			}
 			return true;
@@ -81,10 +83,11 @@ public enum ItemEnum {
 		public boolean use(Entity user, Entity item, Room room) {
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
-			int remainingBombs = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getRandomValue());
+			int remainingBombs = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getQuantity());
 			
 			if (remainingBombs > 0) {
-				itemComponent.setRandomValue(remainingBombs);
+				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
+				itemComponent.setQuantity(remainingBombs);
 				return false;
 			}
 			return true;		}

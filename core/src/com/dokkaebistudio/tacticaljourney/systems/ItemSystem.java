@@ -86,8 +86,10 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					itemComponent.pickUp(player, item, room);
 					
 					// Pickup animation
-					Image pickupAnimationImage = itemComponent.getPickupAnimationImage(item);
-					fxStage.addActor(pickupAnimationImage);
+					List<Image> pickupAnimationImages = itemComponent.getPickupAnimationImage(item);
+					for (Image i : pickupAnimationImages) {
+						fxStage.addActor(i);
+					}
 
 					room.getRemovedItems().add(item);
 				}
@@ -134,8 +136,10 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					System.out.println("Picked up " + itemComponent.getItemLabel());
 					
 					// Pickup animation
-					Image pickupAnimationImage = itemComponent.getPickupAnimationImage(currentItem);
-					fxStage.addActor(pickupAnimationImage);
+					List<Image> pickupAnimationImages = itemComponent.getPickupAnimationImage(currentItem);
+					for (Image i : pickupAnimationImages) {
+						fxStage.addActor(i);
+					}
 
 					room.getRemovedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
@@ -264,9 +268,9 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
 		Vector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 
-		if (itemComponent.getRandomValue() != null) {
+		if (itemComponent.getQuantity() != null) {
 			Entity quantityDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
-					String.valueOf(itemComponent.getRandomValue()), room);
+					String.valueOf(itemComponent.getQuantity()), room);
 			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
 			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(quantityDisplayer);
 			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + 10, displayerPosCompo.getAbsolutePos().y + 10 + textComponent.getHeight());

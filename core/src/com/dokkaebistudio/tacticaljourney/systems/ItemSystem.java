@@ -80,7 +80,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			for (Entity item : items) {
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
-					System.out.println("Picked up a " + itemComponent.getItemType().getLabel());
+					System.out.println("Picked up " + itemComponent.getItemLabel());
 
 					//Pick up this consumable
 					itemComponent.pickUp(player, item, room);

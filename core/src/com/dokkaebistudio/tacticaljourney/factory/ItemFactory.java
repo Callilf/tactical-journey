@@ -53,6 +53,35 @@ public final class ItemFactory {
 		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item	);
 	}
 	
+	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, ItemEnum itemType) {
+		Entity item = engine.createEntity();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite( texture));
+		item.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		if (tilePos != null) {
+			gridPosition.coord(item, tilePos, room);
+			if (room != null) {
+				room.getAddedItems().add(item);
+			}
+		}
+		gridPosition.zIndex = ZIndexConstants.ITEM;
+		item.add(gridPosition);
+		
+		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
+		itemCompo.setItemType(itemType);
+		item.add(itemCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	item.add(destructibleCompo);
+		
+		engine.addEntity(item);
+		
+		return item;
+	}
+	
 
 	/**
 	 * Create a money item that is consumed when picked up.
@@ -60,27 +89,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemMoney(Room room, Vector2 tilePos) {
-		Entity item = engine.createEntity();
+		Entity item = createItemBase(room, tilePos, this.moneyTexture, ItemEnum.MONEY);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( this.moneyTexture));
-		item.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = ZIndexConstants.ITEM;
-		item.add(gridPosition);
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.MONEY);
-		item.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	item.add(destructibleCompo);
-		
-		engine.addEntity(item);
-
 		return item;
 	}
 	
@@ -90,27 +100,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemArrows(Room room, Vector2 tilePos) {
-		Entity item = engine.createEntity();
+		Entity item = createItemBase(room, tilePos, this.arrowsTexture, ItemEnum.ARROW);
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( this.arrowsTexture));
-		item.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = ZIndexConstants.ITEM;
-		item.add(gridPosition);
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.ARROW);
-		item.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	item.add(destructibleCompo);
-		
-		engine.addEntity(item);
-
 		return item;
 	}
 	
@@ -120,27 +111,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemBombs(Room room, Vector2 tilePos) {
-		Entity item = engine.createEntity();
+		Entity item = createItemBase(room, tilePos, this.bombsTexture, ItemEnum.BOMB);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( this.bombsTexture));
-		item.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = ZIndexConstants.ITEM;
-		item.add(gridPosition);
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.BOMB);
-		item.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	item.add(destructibleCompo);
-		
-		engine.addEntity(item);
-
 		return item;
 	}
 	
@@ -150,28 +122,9 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
-		Entity healthUp = engine.createEntity();
-		healthUp.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( this.smallHealthPotionTexture));
-		healthUp.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		if (tilePos != null) gridPosition.coord(healthUp, tilePos, room);
-		gridPosition.zIndex = ZIndexConstants.ITEM;
-		healthUp.add(gridPosition);
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.CONSUMABLE_HEALTH_UP);
-		healthUp.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	healthUp.add(destructibleCompo);
-		
-		engine.addEntity(healthUp);
-
-		return healthUp;
+		Entity item = createItemBase(room, tilePos, this.smallHealthPotionTexture, ItemEnum.CONSUMABLE_HEALTH_UP);
+		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
+		return item;
 	}
 	
 	/**
@@ -180,27 +133,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemTutorialPage(int pageNumber, Room room, Vector2 tilePos) {
-		Entity item = engine.createEntity();
+		Entity item = createItemBase(room, tilePos, this.tutorialPageTexture, ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
 		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( this.tutorialPageTexture));
-		item.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		if (tilePos != null) gridPosition.coord(item, tilePos, room);
-		gridPosition.zIndex = ZIndexConstants.ITEM;
-		item.add(gridPosition);
-		
-		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
-		item.add(itemCompo);
-		
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	item.add(destructibleCompo);
-		
-		engine.addEntity(item);
-
 		return item;
 	}
 	

@@ -464,7 +464,11 @@ public final class EntityFactory {
 		}
 		textTest.add(tc);
 		
-		engine.addEntity(textTest);
+		if (room != null) {
+			room.addEntity(textTest);
+		} else {
+			engine.addEntity(textTest);
+		}
 		return textTest;
 	}
 	

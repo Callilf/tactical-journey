@@ -3,18 +3,39 @@ package com.dokkaebistudio.tacticaljourney.components.item;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class ItemComponent implements Component {
+public class ItemComponent implements Component, Poolable {
 		
 	/** The king of item. */
 	private ItemEnum itemType;
 	
 	/** The random value used by some items. Null if not used. */
 	private Integer randomValue;
+	
+	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
+	private Entity quantityDisplayer;
+	
+	/** The price of the item. Null if no price. */
+	private Integer price;
+	
+	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
+	private Entity priceDisplayer;
 
+
+
+	@Override
+	public void reset() {
+		this.randomValue = null;
+		this.quantityDisplayer = null;
+		this.price = null;
+		this.priceDisplayer = null;
+	}
 	
 	/**
 	 * Pick up this item.
@@ -95,15 +116,50 @@ public class ItemComponent implements Component {
 	public Integer getRandomValue() {
 		if (randomValue == null && this.itemType.getRandomValueMax() != null) {
 			RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-			randomValue = this.itemType.getRandomValueMin();
+			int value = this.itemType.getRandomValueMin();
 			if (this.itemType.getRandomValueMax() > this.itemType.getRandomValueMin()) {
-				randomValue += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin());
+				value += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin());
 			}
+			setRandomValue(value);
 		}
 		return randomValue;
 	}
 
 	public void setRandomValue(Integer value) {
 		this.randomValue = value;
+		
+		if (quantityDisplayer != null) {
+			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
+			textComponent.setText(String.valueOf(value));
+		}
+	}
+
+	public Entity getQuantityDisplayer() {
+		return quantityDisplayer;
+	}
+
+	public void setQuantityDisplayer(Entity quantityDisplayer) {
+		this.quantityDisplayer = quantityDisplayer;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+		
+		if (priceDisplayer != null) {
+			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
+			textComponent.setText(String.valueOf(price));
+		}
+	}
+
+	public Entity getPriceDisplayer() {
+		return priceDisplayer;
+	}
+
+	public void setPriceDisplayer(Entity priceDisplayer) {
+		this.priceDisplayer = priceDisplayer;
 	}
 }

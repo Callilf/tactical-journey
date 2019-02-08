@@ -20,14 +20,18 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -117,7 +121,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 				if (pickedUp) {
 					System.out.println("Picked up a " + itemComponent.getItemLabel());
-
+					
+					room.getRemovedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
 					System.out.println("Impossible to pick up the " + itemComponent.getItemLabel());
@@ -138,6 +143,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				if (instaUsed) {
 					System.out.println("Insta used a " + itemComponent.getItemType().getLabel());
 
+					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
@@ -159,6 +165,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					System.out.println("Used a " + itemComponent.getItemType().getLabel());
 
 					playerIventoryCompo.remove(currentItem);
+					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
@@ -180,6 +187,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					System.out.println("Dropped a " + itemComponent.getItemType().getLabel());
 
 					playerIventoryCompo.remove(currentItem);
+					room.getAddedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
 					System.out.println("Impossible to drop the " + itemComponent.getItemType().getLabel());
@@ -196,9 +204,68 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 			
 		}		
+	
+	
+		// Display items quantities
+		for (Entity item : room.getAddedItems()) {
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			// Display quantity or price
+			createValueAndPriceDisplayers(item, itemComponent);
+		}
+		room.getAddedItems().clear();
+	
+		for (Entity item : room.getRemovedItems()) {
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			if (itemComponent.getQuantityDisplayer() != null) {
+				room.removeEntity(itemComponent.getQuantityDisplayer());
+				itemComponent.setQuantityDisplayer(null);
+			}
+			if (itemComponent.getPriceDisplayer() != null) {
+				room.removeEntity(itemComponent.getPriceDisplayer());
+				itemComponent.setPriceDisplayer(null);
+			}
+		}
+		room.getRemovedItems().clear();
+	
+	
 	}
 
 
+	/**
+	 * Create the displayers for quantity and price on items on the floor.
+	 * @param item the item
+	 * @param itemComponent the item component
+	 */
+	private void createValueAndPriceDisplayers(Entity item, ItemComponent itemComponent) {
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
+		Vector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
+
+		if (itemComponent.getRandomValue() != null) {
+			Entity quantityDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
+					String.valueOf(itemComponent.getRandomValue()), room);
+			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
+			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(quantityDisplayer);
+			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + 10, displayerPosCompo.getAbsolutePos().y + 10 + textComponent.getHeight());
+			itemComponent.setQuantityDisplayer(quantityDisplayer);
+		}
+		
+		if (itemComponent.getPrice() != null) {
+			Entity priceDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
+					String.valueOf(itemComponent.getPrice()), room);
+			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
+			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(priceDisplayer);
+			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + GameScreen.GRID_SIZE/2 - textComponent.getWidth()/2,
+					displayerPosCompo.getAbsolutePos().y + GameScreen.GRID_SIZE/2 + 10);
+			
+			textComponent.setText("[GOLD]" + textComponent.getText());
+			itemComponent.setPriceDisplayer(priceDisplayer);
+		}
+	}
+
+
+	/**
+	 * Check whether there is an item at the location of the player to display the item popin.
+	 */
 	private void checkItemPresenceToDisplayPopin() {
 		// Item popin
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);

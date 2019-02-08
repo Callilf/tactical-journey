@@ -247,9 +247,10 @@ public enum ItemEnum {
 			if (stored && !this.goIntoInventory) {
 				room.removeEntity(item);
 			}
+			return stored;
 		}
 
-		return true;
+		return false;
 	}
 	
 	/** Called when the item is used. */

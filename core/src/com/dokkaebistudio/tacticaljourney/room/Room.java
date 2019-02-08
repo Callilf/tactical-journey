@@ -72,6 +72,11 @@ public class Room extends EntitySystem {
 	private Map<Vector2,Set<Entity>> entitiesAtPositions;
 	
 	
+	/** The items added to this room at the current frame. */
+	private List<Entity> addedItems;
+	/** The items removed from the room at the current frame. */
+	private List<Entity> removedItems;
+
 	
 	
 	private Room northNeighbor;
@@ -92,6 +97,8 @@ public class Room extends EntitySystem {
 		
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
+		this.addedItems = new ArrayList<>();
+		this.removedItems = new ArrayList<>();
 	}
 	
 	public Array<Entity> getAllEntities() {
@@ -374,6 +381,22 @@ public class Room extends EntitySystem {
 
 	public void setVisited(boolean visited) {
 		this.visited = visited;
+	}
+
+	public List<Entity> getAddedItems() {
+		return addedItems;
+	}
+
+	public void setAddedItems(List<Entity> addedItems) {
+		this.addedItems = addedItems;
+	}
+
+	public List<Entity> getRemovedItems() {
+		return removedItems;
+	}
+
+	public void setRemovedItems(List<Entity> removedItems) {
+		this.removedItems = removedItems;
 	}
 	
 }

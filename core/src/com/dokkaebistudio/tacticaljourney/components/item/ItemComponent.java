@@ -36,6 +36,8 @@ public class ItemComponent implements Component, Poolable {
 	
 	
 	/** The sprite used for the drop animation. */
+	private Image pickupAnimationImage;
+	/** The sprite used for the drop animation. */
 	private Image dropAnimationImage;
 
 
@@ -79,6 +81,31 @@ public class ItemComponent implements Component, Poolable {
 		return itemType.drop(dropper, item, room);
 	}
 	
+	
+	
+	/**
+	 * Set up the pickup animation.
+	 * @param texture the texture to use
+	 * @param pixelPos the tile on which the animation takes place
+	 * @param dropAction the action to call after the movement is over
+	 */
+	public void setPickupAnimationImage(AtlasRegion texture, Vector2 pixelPos) {
+		final Image pickupImage = new Image(texture);
+		pickupImage.setPosition(pixelPos.x, pixelPos.y);
+		
+		Action removeImageAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			  pickupImage.remove();
+			  return true;
+		  }
+		};
+
+		pickupImage.addAction(Actions.sequence(Actions.moveTo(580, 30, 1f, Interpolation.circle),
+				removeImageAction));
+			
+		this.pickupAnimationImage = pickupImage;
+	}
 	
 	
 	
@@ -214,5 +241,13 @@ public class ItemComponent implements Component, Poolable {
 
 	public void setDropAnimationImage(Image dropAnimationImage) {
 		this.dropAnimationImage = dropAnimationImage;
+	}
+
+	public Image getPickupAnimationImage() {
+		return pickupAnimationImage;
+	}
+
+	public void setPickupAnimationImage(Image pickupAnimationImage) {
+		this.pickupAnimationImage = pickupAnimationImage;
 	}
 }

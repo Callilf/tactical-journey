@@ -84,6 +84,12 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 
 					//Pick up this consumable
 					itemComponent.pickUp(player, item, room);
+					
+					// Pickup animation
+					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
+					itemComponent.setPickupAnimationImage(Assets.getTexture(itemComponent.getItemType().getImageName()), gridPositionComponent.getWorldPos());
+					fxStage.addActor(itemComponent.getPickupAnimationImage());
+
 					room.getRemovedItems().add(item);
 				}
 			}
@@ -128,6 +134,11 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				if (pickedUp) {
 					System.out.println("Picked up " + itemComponent.getItemLabel());
 					
+					// Pickup animation
+					GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(currentItem);
+					itemComponent.setPickupAnimationImage(Assets.getTexture(itemComponent.getItemType().getImageName()), itemPosCompo.getWorldPos());
+					fxStage.addActor(itemComponent.getPickupAnimationImage());
+
 					room.getRemovedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {

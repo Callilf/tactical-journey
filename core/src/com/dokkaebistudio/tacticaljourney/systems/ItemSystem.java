@@ -24,7 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -86,9 +86,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					itemComponent.pickUp(player, item, room);
 					
 					// Pickup animation
-					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
-					itemComponent.setPickupAnimationImage(Assets.getTexture(itemComponent.getItemType().getImageName()), gridPositionComponent.getWorldPos());
-					fxStage.addActor(itemComponent.getPickupAnimationImage());
+					Image pickupAnimationImage = itemComponent.getPickupAnimationImage(item);
+					fxStage.addActor(pickupAnimationImage);
 
 					room.getRemovedItems().add(item);
 				}
@@ -135,9 +134,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					System.out.println("Picked up " + itemComponent.getItemLabel());
 					
 					// Pickup animation
-					GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(currentItem);
-					itemComponent.setPickupAnimationImage(Assets.getTexture(itemComponent.getItemType().getImageName()), itemPosCompo.getWorldPos());
-					fxStage.addActor(itemComponent.getPickupAnimationImage());
+					Image pickupAnimationImage = itemComponent.getPickupAnimationImage(currentItem);
+					fxStage.addActor(pickupAnimationImage);
 
 					room.getRemovedItems().add(currentItem);
 					room.turnManager.endPlayerTurn();
@@ -197,6 +195,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				break;
 			case DROP:
 				
+				// Drop animation
 				Action finishDropAction = new Action(){
 					  @Override
 					  public boolean act(float delta){
@@ -211,12 +210,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					    return true;
 					  }
 				};
-				
-				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(player);
-				itemComponent.setDropAnimationImage( Assets.getTexture(itemComponent.getItemType().getImageName()),
-						tilePos.coord(), finishDropAction);
-				
-				fxStage.addActor(itemComponent.getDropAnimationImage());
+				Image dropImage = itemComponent.getDropAnimationImage(player, currentItem, finishDropAction);
+				fxStage.addActor(dropImage);
 				room.setNextState(RoomState.ITEM_DROP_ANIM);
 				
 								

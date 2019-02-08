@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -146,6 +147,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		final Entity dropItem = lootRewardComponent.getDrop();
 		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
 		
+		// Drop animation
 		Action finishDropAction = new Action(){
 		  @Override
 		  public boolean act(float delta){
@@ -156,11 +158,8 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    return true;
 		  }
 		};
-		
-		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(entity);
-		itemComponent.setDropAnimationImage( Assets.getTexture(itemComponent.getItemType().getImageName()), tilePos.coord(), finishDropAction);
-		
-		fxStage.addActor(itemComponent.getDropAnimationImage());
+		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
+		fxStage.addActor(dropAnimationImage);
 	}
 
 }

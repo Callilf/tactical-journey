@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -89,9 +91,14 @@ public class ItemComponent implements Component, Poolable {
 	 * @param pixelPos the tile on which the animation takes place
 	 * @param dropAction the action to call after the movement is over
 	 */
-	public void setPickupAnimationImage(AtlasRegion texture, Vector2 pixelPos) {
-		final Image pickupImage = new Image(texture);
-		pickupImage.setPosition(pixelPos.x, pixelPos.y);
+	public Image getPickupAnimationImage(Entity item) {
+		GridPositionComponent itemPositionComponent = Mappers.gridPositionComponent.get(item);
+		ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		final Image pickupImage = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
+		
+		Vector2 worldPos = itemPositionComponent.getWorldPos();
+		pickupImage.setPosition(worldPos.x, worldPos.y);
 		
 		Action removeImageAction = new Action(){
 		  @Override
@@ -105,8 +112,8 @@ public class ItemComponent implements Component, Poolable {
 				removeImageAction));
 			
 		this.pickupAnimationImage = pickupImage;
+		return pickupImage;
 	}
-	
 	
 	
 	/**
@@ -115,10 +122,14 @@ public class ItemComponent implements Component, Poolable {
 	 * @param tilePos the tile on which the animation takes place
 	 * @param dropAction the action to call after the movement is over
 	 */
-	public void setDropAnimationImage(AtlasRegion texture, Vector2 tilePos, Action dropAction) {
-		final Image drop = new Image(texture);
-		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-		drop.setPosition(playerPixelPos.x, playerPixelPos.y);
+	public Image getDropAnimationImage(Entity dropper, Entity item, Action dropAction) {
+		ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		final Image drop = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
+		
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(dropper);
+		Vector2 worldPos = gridPositionComponent.getWorldPos();
+		drop.setPosition(worldPos.x, worldPos.y);
 		
 		Action removeImageAction = new Action(){
 		  @Override
@@ -127,7 +138,6 @@ public class ItemComponent implements Component, Poolable {
 			  return true;
 		  }
 		};
-
 		
 		drop.addAction(Actions.sequence(Actions.moveBy(0, 50, 0.2f, Interpolation.pow3Out),
 				Actions.moveBy(0, -50, 0.5f, Interpolation.bounceOut), 
@@ -135,6 +145,7 @@ public class ItemComponent implements Component, Poolable {
 				removeImageAction));
 			
 		this.dropAnimationImage = drop;
+		return drop;
 	}
 	
 	

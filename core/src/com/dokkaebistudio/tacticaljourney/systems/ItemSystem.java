@@ -84,6 +84,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 
 					//Pick up this consumable
 					itemComponent.pickUp(player, item, room);
+					room.getRemovedItems().add(item);
 				}
 			}
 

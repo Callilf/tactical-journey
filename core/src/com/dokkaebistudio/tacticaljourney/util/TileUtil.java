@@ -161,6 +161,26 @@ public final class TileUtil {
 		return null;
 	}
 	
+	
+	/**
+	 * Return the enemy entity standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The entity standing at this position, null if no entity there.
+	 */
+	public static Entity getEnemyEntityOnTile(Vector2 position, Room room) {
+		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(position);
+		if (entitiesAtPosition != null) {
+			for (Entity e : entitiesAtPosition) {
+				if (Mappers.enemyComponent.get(e) != null) {
+					return e;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Return the attackable entity standing on the tile at the given position.
 	 * @param position the position

@@ -37,6 +37,8 @@ public class Assets {
 	
 	
 	public static final String player = "player-test";
+	public static final String shopkeeper = "shopkeeper";
+	
 	public static final String enemy_spider = "enemy-test";
 	public static final String enemy_scorpion = "enemy-scorpion-test";
 	
@@ -95,6 +97,9 @@ public class Assets {
 	
 	public static final String inventory_item_popin_background = "hud_inventory_item_popin_background";
 	public static final String inventory_lootable_item_background = "hud_lootable_item_background";
+
+	public static final String dialog_background = "dialog_background";
+	public static final String shop_item_background = "shop-item-background";
 
 	
 	

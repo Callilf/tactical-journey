@@ -92,13 +92,13 @@ public class FloorGenerator {
 		previousRoom.type = RoomType.END_FLOOR_ROOM;
 		
 		
-		// 5 - Add rooms to this path
+		// 4 - Add rooms to this path
 		
 		int additionnalRoomsNumber = 5 + random.nextInt(6);
 		addAdditionalRooms(floor, gameScreen,random, rooms, roomsPerPosition, additionnalRoomsNumber);
 		
 		
-		// 6 - Generate the content of all rooms
+		// 5 - Generate the content of all rooms
 		for (Room r : rooms) {
 			r.create();
 		}
@@ -121,6 +121,7 @@ public class FloorGenerator {
 	private static void addAdditionalRooms(Floor floor, GameScreen gameScreen,
 			RandomXS128 random, List<Room> rooms, Map<Room, Vector2> roomsPerPosition, int additionalRoomsNumber) {
 		int chanceToAddRoom = 100;
+		boolean shopPlaced = false;
 
 		Room previousRoom;
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
@@ -141,7 +142,7 @@ public class FloorGenerator {
 						
 						int directionIndex = random.nextInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
-						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory,RoomType.COMMON_ENEMY_ROOM);
+						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, shopPlaced ? RoomType.COMMON_ENEMY_ROOM : RoomType.SHOP_ROOM);
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction, roomsPerPosition);
@@ -156,6 +157,7 @@ public class FloorGenerator {
 							chanceToAddRoom = 100;
 						}
 						
+						shopPlaced = true;
 						break;
 					}
 				}

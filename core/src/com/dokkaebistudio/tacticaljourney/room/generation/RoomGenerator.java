@@ -18,12 +18,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -61,11 +65,7 @@ public class RoomGenerator {
 		
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		int roomNb = 1;
-		if (currentRoom.type != RoomType.START_FLOOR_ROOM) {
-			roomNb = 1 + random.nextInt(10);
-		}
-		FileHandle roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
+		FileHandle roomPattern = chooseRoomPattern(currentRoom);
 		Reader reader = roomPattern.reader();
 		
 		//Load the pattern
@@ -118,7 +118,7 @@ public class RoomGenerator {
             		
             		default:
             			int nextInt = random.nextInt(10);
-            			if (nextInt == 0) {
+            			if (nextInt == 0 && currentRoom.type != RoomType.SHOP_ROOM) {
             				groom.getTileTypes()[x][realY] = TileEnum.MUD;
             			} else {
             				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
@@ -142,6 +142,34 @@ public class RoomGenerator {
 		
 
 		return groom;
+	}
+
+
+	private FileHandle chooseRoomPattern(Room currentRoom) {
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		
+		FileHandle roomPattern = null;
+		switch(currentRoom.type) {
+		case START_FLOOR_ROOM:
+			roomPattern = Gdx.files.internal("data/rooms/room1.csv");
+
+			break;
+		case COMMON_ENEMY_ROOM:
+		case END_FLOOR_ROOM:
+			
+			int roomNb = 1 + random.nextInt(10);
+			roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
+
+			break;
+		case SHOP_ROOM:
+			roomPattern = Gdx.files.internal("data/rooms/shopRoom.csv");
+
+			break;
+			default:
+				roomPattern = Gdx.files.internal("data/rooms/room1.csv");
+		}
+
+		return roomPattern;
 	}
 	
 	
@@ -189,32 +217,64 @@ public class RoomGenerator {
 				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getDropRate()));
 				
-				room.getEnemies().add(enemy);
 				iterator.remove();
 			}
+			
+			break;
+			
+		case SHOP_ROOM:
+			entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
+
+			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
+					ZIndexConstants.WALL, 
+					Assets.getTexture(Assets.shop_item_background), 
+					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
+			Entity firstItem = entityFactory.itemFactory.createItemHealthUp(room, new Vector2(9, 5));
+			ItemComponent ic = Mappers.itemComponent.get(firstItem);
+			ic.setPrice(5);
+			
+			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
+					ZIndexConstants.WALL, 
+					Assets.getTexture(Assets.shop_item_background), 
+					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
+			Entity secondItem = entityFactory.itemFactory.createItemArrows(room, new Vector2(11, 5));
+			ic = Mappers.itemComponent.get(secondItem);
+			ic.setQuantity(5);
+			ic.setPrice(10);
+
+			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
+					ZIndexConstants.WALL, 
+					Assets.getTexture(Assets.shop_item_background), 
+					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
+			Entity thirdItem = entityFactory.itemFactory.createItemBombs(room, new Vector2(13, 5));
+			ic = Mappers.itemComponent.get(thirdItem);
+			ic.setQuantity(2);
+			ic.setPrice(6);
+
+			
 			
 			break;
 			
 		case START_FLOOR_ROOM:
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
+			entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
+			Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
+			Mappers.itemComponent.get(money).setQuantity(10);
+			
 			entityFactory.itemFactory.createItemTutorialPage(1,room, new Vector2(8, 9));
 			
 			Entity bones = entityFactory.createRemainsBones(room, new Vector2(12, 9));
 			fillLootable(bones, 1);
 			
-//			entityFactory.createExit(this, new Vector2(16, 4));
-
-//			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);
-//			room.getEnemies().add(enemy);
 			
+//			entityFactory.createExit(this, new Vector2(16, 4));
+//			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
-//			room.getEnemies().add(enemy2);
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
-
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 3);
-//			enemies.add(enemy3);
+			
 			break;
 		case END_FLOOR_ROOM:
 			int nextInt = random.nextInt(possibleSpawns.size());

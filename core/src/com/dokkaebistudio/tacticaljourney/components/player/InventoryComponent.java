@@ -45,7 +45,8 @@ public class InventoryComponent implements Component, Poolable {
 		PICKUP,
 		PICKUP_AND_USE,
 		USE,
-		DROP;
+		DROP,
+		BUY;
 	}
 	
 	

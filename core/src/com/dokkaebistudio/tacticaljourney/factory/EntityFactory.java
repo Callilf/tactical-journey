@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
@@ -747,6 +748,26 @@ public final class EntityFactory {
 		engine.addEntity(remainsEntity);
 
     	return remainsEntity;
+	}
+	
+	/**
+	 * Create a dialog popin
+	 * @param pos the position
+	 * @return the dialog
+	 */
+	public Entity createDialogPopin(String text, Vector2 pos, float duration) {
+		Entity dialogEntity = engine.createEntity();
+		dialogEntity.flags = EntityFlagEnum.DIALOG_POPIN.getFlag();
+
+		DialogComponent dialogCompo = engine.createComponent(DialogComponent.class);
+		dialogCompo.setPos(pos);
+		dialogCompo.setDuration(duration);
+		dialogCompo.setText(text);
+		dialogEntity.add(dialogCompo);
+		
+		engine.addEntity(dialogEntity);
+
+    	return dialogEntity;
 	}
 	
 	

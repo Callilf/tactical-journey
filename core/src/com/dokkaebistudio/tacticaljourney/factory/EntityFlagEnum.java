@@ -5,6 +5,7 @@ public enum EntityFlagEnum {
 	PLAYER(0),
 	ENEMY_SPIDER(1),
 	ENEMY_SCORPION(2),
+	SHOPKEEPER(3),
 	
 	TILE(100),
 	WALL(101),
@@ -12,6 +13,7 @@ public enum EntityFlagEnum {
 	DOOR(103),
 	EXIT(104),
 	WALL_DESTROYED(105),
+	SHOP_ITEM_BACKGROUND(106),
 
 	
 	END_TURN_BUTTON(500),
@@ -25,6 +27,8 @@ public enum EntityFlagEnum {
 	EXP_DISPLAYER(507),
 	SKILL1_BUTTON(508),
 	SKILL2_BUTTON(509),
+	DIALOG_POPIN(210),
+
 	
 	OK_BUTTON(510),
 	LEVEL_UP_REWARD_BUTTON(511),

@@ -121,7 +121,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
-			
+						
 			boolean stillLooting = handleLoot(moverEntity);
 			if (stillLooting) return;
 			

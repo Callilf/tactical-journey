@@ -163,7 +163,9 @@ public class MapRenderer implements Renderer {
 			case EMPTY_ROOM:
 				shapeRenderer.setColor(Color.CYAN);
 				break;
-
+			case SHOP_ROOM:
+				shapeRenderer.setColor(Color.FIREBRICK);
+				break;
 			}
 			
 			float rx = offsetX + (pos.x * (MAP_ROOM_WIDTH + MAP_CORRIDOR_LENGTH));

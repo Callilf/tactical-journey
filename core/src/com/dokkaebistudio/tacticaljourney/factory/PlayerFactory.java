@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -42,6 +43,7 @@ public final class PlayerFactory {
 	
 	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
 	private TextureAtlas.AtlasRegion playerTexture;
+	private TextureAtlas.AtlasRegion shopkeeperTexture;
 
 
 	/**
@@ -53,6 +55,7 @@ public final class PlayerFactory {
 		this.entityFactory = ef;
 		
 		playerTexture = Assets.getTexture(Assets.player);
+		shopkeeperTexture = Assets.getTexture(Assets.shopkeeper);
 
 	}
 	
@@ -157,5 +160,55 @@ public final class PlayerFactory {
 		engine.addEntity(playerEntity);
 		return playerEntity;
 	}
+	
+	
+	/**
+	 * Create a shopkeeper.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the player entity
+	 */
+	public Entity createShopkeeper(Vector2 pos, Room room) {
+		Entity shopKeeperEntity = engine.createEntity();
+		shopKeeperEntity.flags = EntityFlagEnum.SHOPKEEPER.getFlag();
+
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(this.shopkeeperTexture));
+		shopKeeperEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(shopKeeperEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.PLAYER;
+		shopKeeperEntity.add(gridPosition);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		shopKeeperEntity.add(solidComponent);
+		
+//		// Health compo
+//		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+//		healthComponent.room = room;
+//		healthComponent.setMaxHp(100);
+//		healthComponent.setHp(100);
+//		shopKeeperEntity.add(healthComponent);
+		
+		// Attack compo
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(10);
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		shopKeeperEntity.add(attackComponent);
+		
+		// Shop keeper component
+		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
+		shopKeeperEntity.add(shopKeeperCompo);
+		
+		room.addNeutral(shopKeeperEntity);
+		return shopKeeperEntity;
+	}
+	
 
 }

@@ -107,7 +107,7 @@ public final class EnemyFactory {
 		lootRewardCompo.setDropRate(10);
 		enemyEntity.add(lootRewardCompo);
 		
-		engine.addEntity(enemyEntity);
+		room.addEnemy(enemyEntity);
 		
 		return enemyEntity;
 	}
@@ -165,7 +165,7 @@ public final class EnemyFactory {
 		lootRewardCompo.setDropRate(20);
 		enemyEntity.add(lootRewardCompo);
 		
-		engine.addEntity(enemyEntity);
+		room.addEnemy(enemyEntity);
 		
 		return enemyEntity;
 	}

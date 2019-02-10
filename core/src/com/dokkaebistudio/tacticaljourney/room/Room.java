@@ -56,10 +56,7 @@ public class Room extends EntitySystem {
 	public TurnManager turnManager;
 
 	public AttackManager attackManager;
-	
-	/** The entities of this room. */
-	private List<Entity> enemies;
-	
+		
 	/** Whether the player has already entered this room or not. */
 	private boolean visited;
 	
@@ -70,6 +67,13 @@ public class Room extends EntitySystem {
 	 * For each tile, gives the list of entities.
 	 */
 	private Map<Vector2,Set<Entity>> entitiesAtPositions;
+	
+	/** The enemy entities of this room. */
+	private List<Entity> enemies;
+
+	/** The neutral entities of this room. */
+	private List<Entity> neutrals;
+
 	
 	
 	/** The items added to this room at the current frame. */
@@ -226,6 +230,7 @@ public class Room extends EntitySystem {
 		this.state = RoomState.PLAYER_TURN_INIT;
 
 		enemies = new ArrayList<>();
+		neutrals = new ArrayList<>();
 		attackManager = new AttackManager(this);
 		
 		// Layout
@@ -282,6 +287,15 @@ public class Room extends EntitySystem {
 	
 	
 	// Getters and Setters
+	
+	/**
+	 * Add an enemy in the room.
+	 * @param enemy the enemy to add
+	 */
+	public void addEnemy(Entity enemy) {
+		this.addEntity(enemy);
+		this.enemies.add(enemy);
+	}
 	
 	/**
 	 * Remove an enemy from the room.
@@ -397,6 +411,33 @@ public class Room extends EntitySystem {
 
 	public void setRemovedItems(List<Entity> removedItems) {
 		this.removedItems = removedItems;
+	}
+	
+	
+	/**
+	 * Add a neutral in the room.
+	 * @param neutral the neutral to add
+	 */
+	public void addNeutral(Entity neutral) {
+		this.addEntity(neutral);
+		this.neutrals.add(neutral);
+	}
+	
+	/**
+	 * Remove a neutral from the room.
+	 * @param neutral the neutral to add
+	 */
+	public void removeNeutral(Entity neutral) {
+		this.removeEntity(neutral);
+		this.neutrals.remove(neutral);
+	}
+
+	public List<Entity> getNeutrals() {
+		return neutrals;
+	}
+
+	public void setNeutrals(List<Entity> neutrals) {
+		this.neutrals = neutrals;
 	}
 	
 }

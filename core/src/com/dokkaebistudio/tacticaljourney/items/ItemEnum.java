@@ -58,12 +58,10 @@ public enum ItemEnum {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
 			int remainingArrows = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getQuantity());
 			
-			if (remainingArrows > 0) {
-				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
-				itemComponent.setQuantity(remainingArrows);
-				return false;
-			}
-			return true;
+			itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
+			itemComponent.setQuantity(remainingArrows);
+
+			return remainingArrows == 0;
 		}
 	},
 	
@@ -85,12 +83,11 @@ public enum ItemEnum {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
 			int remainingBombs = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getQuantity());
 			
-			if (remainingBombs > 0) {
-				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
-				itemComponent.setQuantity(remainingBombs);
-				return false;
-			}
-			return true;		}
+			itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
+			itemComponent.setQuantity(remainingBombs);
+
+			return remainingBombs == 0;
+		}
 	},
 	
 	/** A consumable item that heals 25 HP. */

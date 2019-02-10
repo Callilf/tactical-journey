@@ -52,11 +52,9 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     private Label itemDesc;
     private TextButton pickupItemBtn;
     private ChangeListener pickupListener;
+    private ChangeListener buyListener;
     private TextButton useItemBtn;
     private ChangeListener useListener;
-    
-    private TextButton buyItemBtn;
-    private ChangeListener buyListener;
 
     
     
@@ -89,42 +87,11 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
 			isShop = itemComponent.getPrice() != null;
 
-			initTable();
-			
-			Entity item = playerInventoryCompo.getCurrentItem();
-			
-			// Update the content
-			itemTitle.setText(itemComponent.getItemLabel());
-			if (itemComponent.getPrice() != null) {
-				itemTitle.setText(itemTitle.getText() + " ([GOLD]" + itemComponent.getPrice() + "coins[WHITE])");
-			}
-			if (itemComponent.getItemDescription() != null) {
-				itemDesc.setText(itemComponent.getItemDescription());
+			if (selectedItemPopin == null) {
+				initTable();
 			}
 			
-			
-			if (isShop) {
-				// Update the Drop item listener
-				updateBuyListener(item, itemComponent);
-
-			} else {
-				if (itemComponent.getItemActionLabel() != null) {
-					useItemBtn.setText(itemComponent.getItemActionLabel());
-				}
-				
-				// Update the Drop item listener
-				updatePickupListener(item, itemComponent);
-				
-				if (itemComponent.getItemActionLabel() != null) {
-					// Update the Use item listener
-					updateUseListener(item);
-				}
-			}
-	
-			
-			// Place the popin properly
-			selectedItemPopin.pack();
-			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+			refreshTable();
 		
 			itemPopinDisplayed = true;
 			this.stage.addActor(selectedItemPopin);
@@ -132,7 +99,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			playerInventoryCompo.clearCurrentAction();
     	}
     	
-    	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN || room.getState() == RoomState.ITEM_POPIN) {
+    	
+    	if (room.getState() == RoomState.ITEM_POPIN) {
     		// Draw the table
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
@@ -143,16 +111,55 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     		}
     	}
 	}
+
+	private void refreshTable() {
+		Entity item = playerInventoryCompo.getCurrentItem();
+		
+		// Update the content
+		itemTitle.setText(itemComponent.getItemLabel());
+		if (itemComponent.getPrice() != null) {
+			itemTitle.setText(itemTitle.getText() + " ([GOLD]" + itemComponent.getPrice() + "coins[WHITE])");
+		}
+		if (itemComponent.getItemDescription() != null) {
+			itemDesc.setText(itemComponent.getItemDescription());
+		}
+
+		if (isShop) {
+			pickupItemBtn.setText("Buy");
+			// Update the Drop item listener
+			updateBuyListener(item, itemComponent);
+
+			useItemBtn.setVisible(false);
+		} else {
+			pickupItemBtn.setText("Take");
+			useItemBtn.setVisible(true);
+			if (itemComponent.getItemActionLabel() != null) {
+				useItemBtn.setText(itemComponent.getItemActionLabel());
+			}
+			
+			
+			// Update the Drop item listener
+			updatePickupListener(item, itemComponent);
+			
+			if (itemComponent.getItemActionLabel() != null) {
+				// Update the Use item listener
+				updateUseListener(item);
+			}
+		}
+
+		
+		// Place the popin properly
+		selectedItemPopin.pack();
+		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+	}
     
 
     /**
      * Initialize the popin table (only the first time it is displayed).
      */
 	private void initTable() {
-		if (selectedItemPopin == null) {
-			selectedItemPopin = PoolableTable.create();
-		}
-//			selectedItemPopin.setDebug(true);
+		selectedItemPopin = PoolableTable.create();
+//		selectedItemPopin.setDebug(true);
 
 		// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
 		selectedItemPopin.setTouchable(Touchable.enabled);
@@ -172,9 +179,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 		// 2 - Description
 		if (itemComponent.getItemDescription() != null) {
-			itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. "
-					+ "Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui "
-					+ "est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
+			itemDesc = PoolableLabel.create("Desc", PopinService.hudStyle());
 			itemDesc.setWrap(true);
 			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
@@ -193,22 +198,15 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
-		
-		if (isShop) {
-			// 3.2 - Buy button
-			buyItemBtn = PoolableTextButton.create("Buy", PopinService.bigButtonStyle());			
-			buttonTable.add(buyItemBtn).pad(0, 20,0,20);
 
-		} else {
-			// 3.2 - Take button
-			pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
-			buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
-	
-			// 3.3 - Use button
-			if (itemComponent.getItemActionLabel() != null) {
-				useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
-				buttonTable.add(useItemBtn).pad(0, 20,0,20);
-			}
+		// 3.2 - Take button
+		pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
+		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
+
+		// 3.3 - Use button
+		if (itemComponent.getItemActionLabel() != null) {
+			useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
+			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		}
 		
 		selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
@@ -244,7 +242,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 
 	private void updateBuyListener(final Entity item, final ItemComponent itemComponent) {
 		if (buyListener != null) {
-			buyItemBtn.removeListener(buyListener);
+			pickupItemBtn.removeListener(buyListener);
 		}
 		buyListener = new ChangeListener() {
 			@Override
@@ -253,7 +251,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 				closePopin();
 			}
 		};
-		buyItemBtn.addListener(buyListener);
+		pickupItemBtn.addListener(buyListener);
 	}
 
 	/**
@@ -261,7 +259,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void closePopin() {
 		selectedItemPopin.remove();
-		selectedItemPopin.clear();
 		
 		if (room.getNextState() == null) {
 			room.setNextState(previousState);

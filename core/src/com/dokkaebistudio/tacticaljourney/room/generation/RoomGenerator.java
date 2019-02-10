@@ -258,12 +258,15 @@ public class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
-			entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
-			Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
-			Mappers.itemComponent.get(money).setQuantity(10);
+			//entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
+			//Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
+			//Mappers.itemComponent.get(money).setQuantity(10);
 			
 			entityFactory.itemFactory.createItemTutorialPage(1,room, new Vector2(8, 9));
-			
+			entityFactory.itemFactory.createItemTutorialPage(2,room, new Vector2(8, 8));
+			entityFactory.itemFactory.createItemTutorialPage(3,room, new Vector2(8, 7));
+			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
+
 			Entity bones = entityFactory.createRemainsBones(room, new Vector2(12, 9));
 			fillLootable(bones, 1);
 			

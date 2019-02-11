@@ -19,10 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -159,7 +155,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
      * Initialize the popin table (only the first time it is displayed).
      */
 	private void initTable() {
-		selectedItemPopin = PoolableTable.create();
+		selectedItemPopin = new Table();
 //		selectedItemPopin.setDebug(true);
 
 		// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
@@ -168,29 +164,29 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
 		selectedItemPopin.setBackground(textureRegionDrawable);
 		
 		selectedItemPopin.align(Align.top);
 		
 		// 1 - Title
-		itemTitle = PoolableLabel.create("Title", PopinService.hudStyle());
+		itemTitle = new Label("Title", PopinService.hudStyle());
 		selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
 		selectedItemPopin.row().align(Align.center);
 		
 		// 2 - Description
 		if (itemComponent.getItemDescription() != null) {
-			itemDesc = PoolableLabel.create("Desc", PopinService.hudStyle());
+			itemDesc = new Label("Desc", PopinService.hudStyle());
 			itemDesc.setWrap(true);
 			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 		}
 		
 		// 3 - Action buttons
-		Table buttonTable = PoolableTable.create();
+		Table buttonTable = new Table();
 		
 		// 3.1 - Close button
-		final TextButton closeBtn = PoolableTextButton.create("Close", PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close", PopinService.bigButtonStyle());			
 		// continueButton listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -201,12 +197,12 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
 		// 3.2 - Take button
-		pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
+		pickupItemBtn = new TextButton("Take", PopinService.bigButtonStyle());			
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
 		if (itemComponent.getItemActionLabel() != null) {
-			useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
+			useItemBtn = new TextButton("Use", PopinService.bigButtonStyle());			
 			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		}
 		

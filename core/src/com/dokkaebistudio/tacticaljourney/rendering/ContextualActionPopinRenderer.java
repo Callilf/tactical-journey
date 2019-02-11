@@ -21,10 +21,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -145,7 +141,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
      */
 	private void initTable() {
 		if (mainPopin == null) {
-			mainPopin = PoolableTable.create();
+			mainPopin = new Table();
 		}
 //			selectedItemPopin.setDebug(true);
 
@@ -155,27 +151,27 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
 		mainPopin.setBackground(textureRegionDrawable);
 		
 		mainPopin.align(Align.top);
 		
 		// 1 - Title
-		title = PoolableLabel.create("Title", PopinService.hudStyle());
+		title = new Label("Title", PopinService.hudStyle());
 		mainPopin.add(title).top().align(Align.top).pad(20, 0, 20, 0);
 		mainPopin.row().align(Align.center);
 		
 		// 2 - Description
-		desc = PoolableLabel.create("Description", PopinService.hudStyle());
+		desc = new Label("Description", PopinService.hudStyle());
 		desc.setWrap(true);
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
 		// 4 - Action buttons
-		Table buttonTable = PoolableTable.create();
+		Table buttonTable = new Table();
 		
 		// 4.1 - No button
-		final TextButton closeBtn = PoolableTextButton.create("Close",PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -186,7 +182,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
 		// 4.2 - Yes button
-		yesBtn = PoolableTextButton.create("Loot",PopinService.bigButtonStyle());			
+		yesBtn = new TextButton("Loot",PopinService.bigButtonStyle());			
 		buttonTable.add(yesBtn).pad(0, 20,0,20);
 		
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);

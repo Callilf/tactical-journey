@@ -83,7 +83,7 @@ public class MapRenderer implements Renderer {
 		
 		gameScreen.guiCam.update();
 		
-		Table mapTable = PoolableTable.create();
+		Table mapTable = new Table();
 		mapTable.setPosition(1830f, 1047f);
 		mapTable.setTouchable(Touchable.childrenOnly);
 		

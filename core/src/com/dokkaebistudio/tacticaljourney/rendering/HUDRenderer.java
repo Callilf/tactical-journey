@@ -273,6 +273,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			profileBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
 				}
 			});
@@ -289,6 +290,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					playerComponent.setProfilePopinDisplayed(false);
+
 					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					} else {

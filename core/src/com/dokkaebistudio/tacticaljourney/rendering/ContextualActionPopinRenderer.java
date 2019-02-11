@@ -49,7 +49,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     private Table mainPopin;
     private Label title;
     private Label desc;
-    private Label nbTurns;
     private TextButton yesBtn;
     private ChangeListener yesBtnListener;
     
@@ -117,11 +116,10 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			title.setText(lootableComponent.getType().getLabel());
 			desc.setText(lootableComponent.getType().getDescription());
 			
-			nbTurns.setVisible(true);
 			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
-				nbTurns.setText("It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
+				desc.setText(desc.getText() + "\n" + "It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
 			} else {
-				nbTurns.setText("It is already [GREEN]opened[WHITE]. It won't take any turn.");
+				desc.setText(desc.getText() + "\n" + "It is already [GREEN]opened[WHITE]. It won't take any turn.");
 			}
 			yesBtn.setText("Open");
 	
@@ -134,8 +132,10 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			title.setText("Doorway to lower floor");
 			desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
 					+ "\nSadness galore.");
-			nbTurns.setVisible(false);
 			yesBtn.setText("Wait for months");
+			if (yesBtnListener != null) {
+				yesBtn.removeListener(yesBtnListener);
+			}
 		}
 	}
     
@@ -170,12 +170,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		desc.setWrap(true);
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
-		
-		// 3 - Nb turns (optional)
-		nbTurns = PoolableLabel.create("Nb turns", PopinService.hudStyle());
-		mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
-		mainPopin.row().align(Align.center);
-
 		
 		// 4 - Action buttons
 		Table buttonTable = PoolableTable.create();

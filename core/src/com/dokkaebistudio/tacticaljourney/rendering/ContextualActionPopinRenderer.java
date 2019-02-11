@@ -42,9 +42,10 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The current room. */
     private Room room;
+        
+    //**************************
+    // Actors
     
-    
-    boolean popinDisplayed = false;
     private Table mainPopin;
     private Label title;
     private Label desc;
@@ -79,7 +80,9 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
-			initTable();
+			if (mainPopin == null) {
+				initTable();
+			}
 			
 			updateContentForAction();
 			
@@ -87,14 +90,13 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			mainPopin.pack();
 			mainPopin.setPosition(GameScreen.SCREEN_W/2 - mainPopin.getWidth()/2, GameScreen.SCREEN_H/2 - mainPopin.getHeight()/2);
 		
-			popinDisplayed = true;
 			this.stage.addActor(mainPopin);
 			
 			playerCompo.clearLootRequested();
 			playerCompo.clearExitRequested();
     	}
     	
-    	if (popinDisplayed) {
+    	if (room.getState() == RoomState.CONTEXTUAL_ACTION_POPIN) {
     		// Draw the table
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
@@ -115,6 +117,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			title.setText(lootableComponent.getType().getLabel());
 			desc.setText(lootableComponent.getType().getDescription());
 			
+			nbTurns.setVisible(true);
 			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
 				nbTurns.setText("It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
 			} else {
@@ -124,12 +127,14 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	
 			// Update the Use item listener
 			updateLootListener(lootableEntity, lootableComponent);
+			
 		} else if (playerCompo.isExitRequested()) {
 			Entity exitEntity = playerCompo.getExitEntity();
 			ExitComponent exitComponent = Mappers.exitComponent.get(exitEntity);
 			title.setText("Doorway to lower floor");
 			desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
 					+ "\nSadness galore.");
+			nbTurns.setVisible(false);
 			yesBtn.setText("Wait for months");
 		}
 	}
@@ -167,11 +172,9 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.row();
 		
 		// 3 - Nb turns (optional)
-		if (playerCompo.isLootRequested()) {
-			nbTurns = PoolableLabel.create("Nb turns", PopinService.hudStyle());
-			mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
-			mainPopin.row().align(Align.center);
-		}
+		nbTurns = PoolableLabel.create("Nb turns", PopinService.hudStyle());
+		mainPopin.add(nbTurns).top().align(Align.top).pad(20, 0, 20, 0);
+		mainPopin.row().align(Align.center);
 
 		
 		// 4 - Action buttons
@@ -217,8 +220,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void closePopin() {
 		mainPopin.remove();
-		mainPopin.clear();
-		popinDisplayed = false;
 		
 		if (room.getNextState() == null) {
 			room.setNextState(previousState);

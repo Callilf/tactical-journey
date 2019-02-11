@@ -46,7 +46,9 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     private boolean isShop;
     
     
-    boolean itemPopinDisplayed = false;
+    //**************************
+    // Actors
+    
     private Table selectedItemPopin;
     private Label itemTitle;
     private Label itemDesc;
@@ -93,7 +95,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			
 			refreshTable();
 		
-			itemPopinDisplayed = true;
 			this.stage.addActor(selectedItemPopin);
 			
 			playerInventoryCompo.clearCurrentAction();

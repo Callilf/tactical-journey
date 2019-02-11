@@ -39,8 +39,13 @@ public class GameOverPopinRenderer implements Renderer {
     public void render(float deltaTime) {
     	
     	if (gamescreen.state == GameScreen.GAME_OVER) {
-			initTable();
-			menuDisplayed = true;
+    		
+    		if (!menuDisplayed) {
+				initTable();
+				menuDisplayed = true;
+				this.stage.addActor(table);
+    		}
+    		
     	} else if (menuDisplayed) {
     		closePopin();
     	}
@@ -118,7 +123,6 @@ public class GameOverPopinRenderer implements Renderer {
 			table.pack();
 			table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
 		
-			this.stage.addActor(table);
 		}
 	}
 
@@ -127,8 +131,6 @@ public class GameOverPopinRenderer implements Renderer {
 	 */
 	private void closePopin() {
 		table.remove();
-		table.clear();
-		table = null;
 		menuDisplayed = false;
 		
 		gamescreen.state = GameScreen.GAME_RUNNING;

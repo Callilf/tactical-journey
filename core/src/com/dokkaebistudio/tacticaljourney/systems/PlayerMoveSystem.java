@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -231,7 +232,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				inventoryComponent.interrupt();
 				if (inventoryComponent != null && inventoryComponent.isInterrupted()) {
 					GridPositionComponent gridPos = Mappers.gridPositionComponent.get(moverEntity);
-					room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), false, 15, room);
+					room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), HealthChangeEnum.HIT, 15, room);
 				}
 			} else {
 				inventoryComponent.setInventoryActionInProgress(false);
@@ -266,7 +267,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				inventoryComponent.setTurnsToWaitBeforeLooting(null);
 				
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(player);
-				room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), false, 15, room);
+				room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos.coord(), HealthChangeEnum.HIT, 15, room);
 			} else {
 				inventoryComponent.setTurnsToWaitBeforeLooting(inventoryComponent.getTurnsToWaitBeforeLooting() - 1);
 				room.turnManager.endPlayerTurn();

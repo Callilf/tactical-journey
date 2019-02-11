@@ -144,6 +144,8 @@ public final class PlayerFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(100);
 		healthComponent.setHp(100);
+		healthComponent.setMaxArmor(30);
+		healthComponent.setArmor(0);
 		playerEntity.add(healthComponent);
 		
 		// Experience compo

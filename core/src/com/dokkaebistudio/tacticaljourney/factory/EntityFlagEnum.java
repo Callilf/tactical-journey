@@ -48,7 +48,10 @@ public enum EntityFlagEnum {
 	ITEM_HEALTH_UP(1001),
 	ITEM_MONEY(1002),
 	ITEM_ARROWS(1003),
-	ITEM_BOMBS(1004);
+	ITEM_BOMBS(1004),
+	ITEM_ARMOR_UP(1005),
+	ITEM_ARMOR_PIECE(1006);
+
 
 	
 	private int flag;

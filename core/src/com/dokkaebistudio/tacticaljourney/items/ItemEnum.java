@@ -114,6 +114,53 @@ public enum ItemEnum {
 	},
 	
 	
+	/** A consumable item that restore 30 Armor. */
+	CONSUMABLE_ARMOR_UP("Piece of armor", Assets.armor_up_item, false, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Gives 30 armor upon use.\n"
+					+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Equip";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			//Restore 30 Armor !
+			HealthComponent healthComponent = Mappers.healthComponent.get(user);
+			healthComponent.restoreArmor(30);
+			return true;
+		}
+	},
+	
+	/** A consumable item that restore 10 Armor. */
+	CONSUMABLE_ARMOR_PIECE("Piece of armor", Assets.armor_piece_item, false, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Gives 10 armor upon use.\n"
+					+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Equip";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			//Restore 10 Armor !
+			HealthComponent healthComponent = Mappers.healthComponent.get(user);
+			healthComponent.restoreArmor(10);
+			return true;
+		}
+	},
+	
+	
 	/** A tutorial page. */
 	TUTORIAL_PAGE_1("Tutorial page 1", Assets.tutorial_page_item, false, true) {
 		

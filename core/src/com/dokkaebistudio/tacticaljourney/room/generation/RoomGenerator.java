@@ -258,6 +258,10 @@ public class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
+			entityFactory.itemFactory.createItemLightArmor(room, new Vector2(5, 5));
+			entityFactory.itemFactory.createItemArmorPiece(room, new Vector2(6, 5));
+
+			
 			//entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
 			//Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
 			//Mappers.itemComponent.get(money).setQuantity(10);

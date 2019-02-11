@@ -65,10 +65,12 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
 	private Button endTurnBtn;
-	private Table healthAndXptable; 
+	private Table healthTable;
+	private Label healthLabel;
+	private Label armorLabel;
+	private Table xpTable;
 	private Label levelLabel;
 	private Label expLabel;
-	private Label healthLabel;
 	
 	private Table profileTable; 
 	private Button profileBtn;
@@ -219,49 +221,69 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			stage.addActor(bottomLeftTable);
 		}
 
-		if (healthAndXptable == null) {
-			healthAndXptable = new Table();
-			healthAndXptable.setPosition(200, 30);
+		// HEALTH
+		if (healthTable == null) {
+			healthTable = new Table();
+			healthTable.setPosition(200, 30);
+
+			// LIFE
+			if (healthLabel == null) {
+				healthLabel = new Label("", PopinService.hudStyle());
+			}
+			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+			healthTable.add(healthLabel).left().uniformX();
+			healthTable.row();
+			
+			// ARMOR
+			if (armorLabel == null) {
+				armorLabel = new Label("", PopinService.hudStyle());
+			}
+			armorLabel.setText("Armor: " + healthComponent.getArmor() + "/" + healthComponent.getMaxArmor());
+			healthTable.add(armorLabel).left().uniformX();
+	
+			healthTable.pack();
+			stage.addActor(healthTable);
+		}
+		
+		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+		armorLabel.setText("Armor: " + healthComponent.getArmorColor() + healthComponent.getArmor() + "[]/" + healthComponent.getMaxArmor());
+
+		
+		// XP
+		if (xpTable == null) {
+			xpTable = new Table();
+			xpTable.setPosition(450, 30);
 		
 			// LEVEL
 			if (levelLabel == null) {
 				levelLabel = new Label("", PopinService.hudStyle());
 			}
 			levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
-			healthAndXptable.add(levelLabel).left().uniformX();
-			healthAndXptable.row();
+			xpTable.add(levelLabel).left().uniformX();
+			xpTable.row();
 	
 			// XP
 			if (expLabel == null) {
 				expLabel = new Label("", PopinService.hudStyle());
 			}
 			expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
-	
-			healthAndXptable.add(expLabel).left().uniformX();
-			healthAndXptable.row();
-	
-			// LIFE
-			if (healthLabel == null) {
-				healthLabel = new Label("", PopinService.hudStyle());
-			}
-			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
-			healthAndXptable.add(healthLabel).left().uniformX();
-	
-			healthAndXptable.pack();
-			stage.addActor(healthAndXptable);
+			xpTable.add(expLabel).left().uniformX();	
+			
+			xpTable.pack();
+			stage.addActor(xpTable);
 		}
 		
 		levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
 		expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
-		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
 		
 		
+		// PROFILE and INVENTORY
 		final PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 
 		if (profileTable == null) {
 			profileTable = new Table();
-			profileTable.setPosition(500, 30);
+			profileTable.setPosition(700, 30);
 		
 			// Profile btn
 			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_profile)));

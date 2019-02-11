@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -137,6 +136,9 @@ public class Assets {
 
 	public static final String money_item = "item-money";
 	public static final String health_up_item = "item-consumable-health-up";
+	public static final String armor_up_item = "item-consumable-armor-up";
+	public static final String armor_piece_item = "item-consumable-armor-piece";
+	
 	public static final String arrow_item = "item-consumable-arrow";
 	public static final String bomb_item = "item-consumable-bomb";
 	
@@ -147,10 +149,7 @@ public class Assets {
 
 	
 
-	public static BitmapFont font;
-	public static BitmapFont greenFont;
-	public static BitmapFont redFont;
-	
+	public static BitmapFont font;	
 	public static BitmapFont smallFont;
 
 	private static Assets instance;
@@ -243,10 +242,6 @@ public class Assets {
 	public void loadFont() {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		font.getData().markupEnabled = true;
-		greenFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		greenFont.setColor(Color.OLIVE);
-		redFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		redFont.setColor(Color.RED);
 		smallFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		smallFont.getData().setScale(0.8f);
 

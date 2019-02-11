@@ -43,7 +43,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     /** The main table of the popin. */
     private Table table;
     private Label title;
-    private Label maxHphLbl;
+    private Label maxHpLbl;
+    private Label maxArmorLbl;
     private Label strengthLbl;
 	private Label moveLbl;
 	private Label rangeDistLbl;
@@ -118,7 +119,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 
 		title.setText("Profile");
-		maxHphLbl.setText("Max hp: " + healthComponent.getMaxHp());
+		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
+		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
 		strengthLbl.setText("Strength: " + attackComponent.getStrength());
 		moveLbl.setText("Move: " + moveComponent.moveSpeed);
 
@@ -156,8 +158,12 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		table.add(title).uniformX().pad(20, 0, 20, 0);
 		table.row();
 		
-		maxHphLbl = new Label("Max hp", PopinService.hudStyle());
-		table.add(maxHphLbl).uniformX().left();
+		maxHpLbl = new Label("Max hp", PopinService.hudStyle());
+		table.add(maxHpLbl).uniformX().left();
+		table.row();
+		
+		maxArmorLbl = new Label("Max armor", PopinService.hudStyle());
+		table.add(maxArmorLbl).uniformX().left();
 		table.row();
 		
 		strengthLbl = new Label("Strength", PopinService.hudStyle());

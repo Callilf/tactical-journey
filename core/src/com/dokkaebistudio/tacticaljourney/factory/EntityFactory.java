@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
@@ -517,7 +518,7 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, float offsetY, Room room) {
+	public Entity createDamageDisplayer(String damage, Vector2 gridPos, HealthChangeEnum healthChange, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
@@ -534,12 +535,24 @@ public final class EntityFactory {
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		if (heal) {
-			textCompo.setFont(Assets.greenFont);
-		} else {
-			textCompo.setFont(Assets.redFont);
+		textCompo.setFont(Assets.font);
+		
+		String color = "";
+		switch(healthChange) {
+		case HEALED:
+			color = "[GREEN]";
+			break;
+		case HIT:
+			color = "[RED]";
+			break;
+		case ARMOR:
+			color = "[BLUE]";
+			break;
+			default:
+				color = "[WHITE]";
+
 		}
-		textCompo.setText(damage);
+		textCompo.setText(color + damage);
 		display.add(textCompo);
 		
 		room.addEntity(display);

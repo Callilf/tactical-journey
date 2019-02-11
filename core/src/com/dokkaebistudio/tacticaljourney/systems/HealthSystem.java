@@ -63,12 +63,13 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    		switch(healthCompo.getHealthChange()) {
 	    		case HIT:
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
-							gridPos.coord(), false, 0, room);
+							gridPos.coord(), healthCompo.getHealthChange(), 0, room);
 	
 	    			break;
 	    		case HEALED:
+	    		case ARMOR:
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame()), 
-							gridPos.coord(), true, 0, room);
+							gridPos.coord(), healthCompo.getHealthChange(), 0, room);
 	
 	    			break;
 	    		default:

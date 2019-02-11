@@ -127,7 +127,7 @@ public class ItemComponent implements Component, Poolable {
 			};
 	
 			float duration = 0.1f * i;
-			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(580, 30, 1f, Interpolation.circle),
+			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(780, 30, 0.75f, Interpolation.circle),
 					removeImageAction));
 				
 			this.pickupAnimationImages.add(pickupImage);

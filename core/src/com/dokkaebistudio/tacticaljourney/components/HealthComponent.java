@@ -22,6 +22,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	/** The engine that managed entities.*/
 	public Room room;
 	
+	
+	//************
+	// HP
+	
 	/** The max number of h. */
 	private int maxHp;
 	
@@ -30,6 +34,18 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	/** The displayer that shows the amount of HP beside the entity (for enemies). */
 	private Entity hpDisplayer;
+
+	
+	//*************
+	// Armor
+	
+	/** The max amount of armor. */
+	private int maxArmor;
+	
+	/** The current number of armor. */
+	private int armor;
+	
+	
 	
 	/** Whether the entity received damages during the previous turn. */
 	private boolean receivedDamageLastTurn;
@@ -45,7 +61,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public enum HealthChangeEnum {
 		NONE,
 		HIT,
-		HEALED;
+		HEALED,
+		ARMOR;
 	}
 	
 	
@@ -54,7 +71,12 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * @param amountOfDamage the amount of damages
 	 */
 	public void hit(int amountOfDamage, Entity attacker) {
-		this.setHp(Math.max(0, this.getHp() - amountOfDamage));
+		int damageToHealth = Math.max(amountOfDamage - this.armor, 0);
+		if (this.armor > 0) {
+			this.armor = Math.max(this.armor - amountOfDamage, 0);
+		}
+		
+		this.setHp(Math.max(0, this.getHp() - damageToHealth));
 		this.healthLostAtCurrentFrame += amountOfDamage;
 		this.healthChange = HealthChangeEnum.HIT;
 		
@@ -75,6 +97,19 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.healthChange = HealthChangeEnum.HEALED;
 	}
 	
+	/**
+	 * Restore the given amount of armor.
+	 * @param amount the amount to restore
+	 */
+	public void restoreArmor(int amount) {
+		this.setArmor(this.getArmor() + amount);
+		if (this.getArmor() > this.getMaxArmor()) {
+			this.setArmor(this.getMaxArmor());
+		}
+		this.healthRecoveredAtCurrentFrame += amount;
+		this.healthChange = HealthChangeEnum.ARMOR;
+	}
+	
 	public void clearModified() {
 		this.healthChange = HealthChangeEnum.NONE;
 		this.healthLostAtCurrentFrame = 0;
@@ -88,6 +123,14 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void increaseMaxHealth(int amount) {
 		this.setMaxHp(this.maxHp + amount);
 		this.setHp(this.hp + amount);
+	}
+	
+	/**
+	 * Increase the max armor by the given amount.
+	 * @param amount the amount to add.
+	 */
+	public void increaseMaxArmor(int amount) {
+		this.setMaxArmor(this.maxHp + amount);
 	}
 	
 	/**
@@ -110,6 +153,19 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			return "[ORANGE]";
 		} else {
 			return "[RED]";
+		}
+	}
+	
+	/**
+	 * Return the color in which the armor must be displayed on the HUD.
+	 * The color depends on the amount or armor
+	 * @return the color
+	 */
+	public String getArmorColor() {
+		if (armor > 0) {
+			return "[BLUE]";
+		} else {
+			return "[WHITE]";
 		}
 	}
 	
@@ -256,6 +312,26 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 
 	public void setAttacker(Entity attacker) {
 		this.attacker = attacker;
+	}
+
+
+	public int getMaxArmor() {
+		return maxArmor;
+	}
+
+
+	public void setMaxArmor(int maxArmor) {
+		this.maxArmor = maxArmor;
+	}
+
+
+	public int getArmor() {
+		return armor;
+	}
+
+
+	public void setArmor(int armor) {
+		this.armor = armor;
 	}
 
 

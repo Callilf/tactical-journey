@@ -13,11 +13,15 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class RoomGraph implements IndexedGraph<Entity> {
 	
+	/** The moving entity. */
+	private Entity mover;
+	
 	/** the list of tiles where movement is possible. */
 	private List<Entity> movableTiles;
 	
-	public RoomGraph(List<Entity> movableTiles) {
+	public RoomGraph(Entity mover, List<Entity> movableTiles) {
         this.movableTiles = movableTiles;
+        this.mover = mover;
 	}
 
 	@Override
@@ -37,7 +41,7 @@ public class RoomGraph implements IndexedGraph<Entity> {
 			if (beside || aboveOrUnder) {
 				GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(nodeToTest);
 				TileComponent tileComponent = Mappers.tileComponent.get(nodeToTest);
-				int cost = TileUtil.getCostOfMovementForTilePos(gridPosCompo.coord(), tileComponent.getRoom());
+				int cost = TileUtil.getCostOfMovementForTilePos(gridPosCompo.coord(), mover, tileComponent.getRoom());
 				connections.add(new RoomConnection(fromNode, nodeToTest, cost));
 			}
 		}

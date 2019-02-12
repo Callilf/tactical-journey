@@ -62,7 +62,7 @@ public class TileSearchService {
 		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = findAllWalkableTiles(moverTileEntity, 1, moveCompo.moveRemaining,room);
+		moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTileEntity, 1, moveCompo.moveRemaining,room);
 		moveCompo.allWalkableTiles.add(moverTileEntity);
 		
 		//Create entities for each movable tiles to display them
@@ -84,11 +84,11 @@ public class TileSearchService {
 	 * @param room the room
 	 * @return the list of waypoints entities
 	 */
-	public List<Entity> buildWaypointList(MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
+	public List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
 			GridPositionComponent destinationPos, Room room) {
 		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord());
 		List<Entity> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
-		RoomGraph roomGraph = new RoomGraph(movableTilesList);
+		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
 		IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
 		GraphPath<Entity> path = new DefaultGraphPath<Entity>();
 		indexedAStarPathFinder.searchNodePath(startTileEntity, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
@@ -115,26 +115,28 @@ public class TileSearchService {
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
+     * @param mover the moving entity
      * @param currentTileEntity the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @return the set of tiles where the entity can move
      */
-	public Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
+	public Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
     	Map<Integer, Set<Entity>> allTilesByDepth = new HashMap<>();
-    	return findAllWalkableTiles(currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
+    	return findAllWalkableTiles(mover, currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
 	}
 	
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
+     * @param the moving entity
      * @param currentTileEntity the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @param allTilesByDepth the map containing for each depth all the tiles the entity can move onto
      * @return the set of tiles where the entity can move
      */
-	private Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, 
+	private Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, 
 			Map<Integer, Set<Entity>> allTilesByDepth, Room room) {		
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		
@@ -162,8 +164,9 @@ public class TileSearchService {
 			//For each retrieved tile, redo a search until we reach max depth
 			for (Entity tile : previouslyReturnedTiles) {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
-				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth, room);
+				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), mover, room);
+	        	Set<Entity> returnedTiles = findAllWalkableTiles(mover, tile, currentDepth + moveConsumed, 
+	        			maxDepth, allTilesByDepth, room);
 	        	walkableTiles.addAll(returnedTiles);
 	        }
 		}

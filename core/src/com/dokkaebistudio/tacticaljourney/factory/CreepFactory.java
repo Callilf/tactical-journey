@@ -9,22 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
-import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -63,7 +53,7 @@ public final class CreepFactory {
 	 */
 	public Entity createWeb(Room room, Vector2 pos) {
 		Entity creepEntity = engine.createEntity();
-		creepEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
+		creepEntity.flags = EntityFlagEnum.CREEP_WEB.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(this.webTexture));
@@ -85,6 +75,37 @@ public final class CreepFactory {
 		room.addEntity(creepEntity);
 		
 		return creepEntity;
+	}
+	
+	
+	
+	public Entity createMud(Room room, Vector2 pos) {
+		Entity creepEntity = engine.createEntity();
+		creepEntity.flags = EntityFlagEnum.CREEP_WEB.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(creepEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.CREEP;
+    	creepEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.getTexture(Assets.mud));
+    	spriteCompo.setSprite(s);
+    	creepEntity.add(spriteCompo);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.mud_destroyed));
+		creepEntity.add(destructibleCompo);
+		
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(CreepEnum.MUD);
+		creepCompo.setDuration(0);
+		creepEntity.add(creepCompo);
+
+    	
+		engine.addEntity(creepEntity);
+
+    	return creepEntity;
 	}
 	
 	

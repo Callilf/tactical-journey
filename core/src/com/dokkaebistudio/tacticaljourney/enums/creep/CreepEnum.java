@@ -16,7 +16,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public enum CreepEnum {
 		
 	/** Add money to the player's wallet. */
-	WEB("Spider web", Assets.money_item) {
+	WEB("Spider web", Assets.creep_web) {
 		
 		@Override
 		public void onWalk(Entity walker, Entity creep, Room room) {
@@ -29,6 +29,27 @@ public enum CreepEnum {
 					}
 				}
 			}
+		}
+		
+		@Override
+		public int getMovementConsumed(Entity mover) {
+			if (Mappers.enemyComponent.has(mover)) {
+				if (Mappers.enemyComponent.get(mover).getFaction() == EnemyFactionEnum.SPIDERS) return -1;
+			}
+			return 100;
+		}
+
+	},
+	
+	/** Add money to the player's wallet. */
+	MUD("mud", Assets.mud) {
+		
+		@Override
+		public void onWalk(Entity walker, Entity creep, Room room) {}
+		
+		@Override
+		public int getMovementConsumed(Entity mover) {
+			return 1;
 		}
 
 	};
@@ -60,6 +81,15 @@ public enum CreepEnum {
 	
 	/** Emit the creep. */
 	public void onEmit(Entity emitter, Entity emittedCreep, Room room) {};
+	
+	/**
+	 * Get the movement consumed when walking on this creep.
+	 * @param mover the moving entity
+	 * @return the number of movement consumed
+	 */
+	public int getMovementConsumed(Entity mover) {
+		return 1;
+	}
 	
 	
 	// Getters and Setters

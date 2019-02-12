@@ -302,7 +302,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		
 		
 		// Take all button
-		takeAllBtn.setText("Pouet");
+		takeAllBtn.setText("Take all");
 		
 		if (takeAllListener != null) takeAllBtn.removeListener(takeAllListener);
 		takeAllListener = new ChangeListener() {

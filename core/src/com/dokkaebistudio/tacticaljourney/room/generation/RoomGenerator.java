@@ -181,6 +181,7 @@ public class RoomGenerator {
 
 		switch(room.type) {
 		case COMMON_ENEMY_ROOM :
+			
 			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 			
 			// Retrieve the spawn points and shuffle them
@@ -208,16 +209,23 @@ public class RoomGenerator {
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
 				Entity enemy = null;
-				if (random.nextInt(5) == 0) {
+				int enemyTypeRandom = random.nextInt(6);
+				if (enemyTypeRandom == 0) {
 					enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
+					iterator.remove();
+				} else if (enemyTypeRandom == 1) {
+					enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
+					iterator.remove();
+					if (iterator.hasNext()) {
+						enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+					}
 				} else {
 					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+					iterator.remove();
 				}
 				
 				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getDropRate()));
-				
-				iterator.remove();
 			}
 			
 			break;
@@ -279,12 +287,12 @@ public class RoomGenerator {
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
-			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
-			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(11, 8), 1);
+//			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+//			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(11, 8), 1);
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
-			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
-			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
+//			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
+//			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 			break;
 		case END_FLOOR_ROOM:

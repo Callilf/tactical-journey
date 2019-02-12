@@ -134,7 +134,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, enemyCurrentPos, destinationPos, room);
+    				List<Entity> waypoints = tileSearchService.buildWaypointList(enemyEntity,moveCompo, enemyCurrentPos, 
+    						destinationPos, room);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);

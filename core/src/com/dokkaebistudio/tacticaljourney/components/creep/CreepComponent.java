@@ -25,7 +25,7 @@ public class CreepComponent implements Component, Poolable {
 	/** The type of creep. */
 	private CreepEnum type;
 
-	/** The number of turns this creep stays on the floor. */
+	/** The number of turns this creep stays on the floor. 0 means infinite. */
 	private int duration;
 	
 	/** The current number of turns this creep has been here. */
@@ -52,6 +52,14 @@ public class CreepComponent implements Component, Poolable {
 		type.onWalk(walker, creep, room);
 	}
 	
+	/**
+	 * Get the movement consumed when walking on this tile.
+	 * @param mover the moving entity
+	 * @return the cost of movement
+	 */
+	public int getMovementConsumed(Entity mover) {
+		return type.getMovementConsumed(mover);
+	}
 	
 	
 	

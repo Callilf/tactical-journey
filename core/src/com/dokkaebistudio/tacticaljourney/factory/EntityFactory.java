@@ -21,7 +21,6 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
-import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -124,7 +123,7 @@ public final class EntityFactory {
 				spriteCompo.setSprite(new Sprite(pitTexture));
 				break;
 			case MUD:
-				this.createMud(room, pos);
+				this.creepFactory.createMud(room, pos);
 				spriteCompo.setSprite(new Sprite(groundTexture));
 				tile.type = TileEnum.GROUND;
 				break;
@@ -169,36 +168,7 @@ public final class EntityFactory {
 		engine.addEntity(wallEntity);
 
     	return wallEntity;
-	}
-	
-	public Entity createMud(Room room, Vector2 pos) {
-		Entity mudEntity = engine.createEntity();
-		mudEntity.flags = EntityFlagEnum.MUD.getFlag();
-
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(mudEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.MUD;
-    	mudEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.mud));
-    	spriteCompo.setSprite(s);
-    	mudEntity.add(spriteCompo);
-		
-		SlowMovementComponent slowMovementCompo = engine.createComponent(SlowMovementComponent.class);
-		slowMovementCompo.setMovementConsumed(1);
-    	mudEntity.add(slowMovementCompo);
-    	
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.mud_destroyed));
-		mudEntity.add(destructibleCompo);
-    	
-		engine.addEntity(mudEntity);
-
-    	return mudEntity;
-	}
-
-	
+	}	
 	
 	public Entity createDoor(Room room, Vector2 pos, Room targetedRoom) {
 		Entity doorEntity = engine.createEntity();

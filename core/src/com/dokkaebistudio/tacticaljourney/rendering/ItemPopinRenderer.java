@@ -126,12 +126,15 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			// Update the Drop item listener
 			updateBuyListener(item, itemComponent);
 
-			useItemBtn.setVisible(false);
+			if (useItemBtn != null) useItemBtn.setVisible(false);
 		} else {
 			pickupItemBtn.setText("Take");
-			useItemBtn.setVisible(true);
-			if (itemComponent.getItemActionLabel() != null) {
-				useItemBtn.setText(itemComponent.getItemActionLabel());
+			
+			if (useItemBtn != null) {
+				useItemBtn.setVisible(true);
+				if (itemComponent.getItemActionLabel() != null) {
+					useItemBtn.setText(itemComponent.getItemActionLabel());
+				}
 			}
 			
 			

@@ -14,13 +14,13 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -59,7 +59,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	public PlayerMoveSystem(Room room) {
 		super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
-		this.priority = 10;
+		this.priority = 11;
 
 		this.room = room;
 		this.movementHandler = new MovementHandler(room.engine);

@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -30,6 +31,9 @@ public class TileSearchService {
 	
 	/** The speed at which entities move on screen. */
 	public static final int MOVE_SPEED = 7;
+	
+	/** The entity for which we are searching tiles. */
+	protected Entity currentEntity;
 	
 	/** The list of tiles already visited, and the remaining move when they were visited. */
 	protected Map<Entity, Integer> visitedTilesWithRemainingMove;
@@ -50,6 +54,8 @@ public class TileSearchService {
 	
 	public void buildMoveTilesSet(Entity moverEntity, Room room) {
 		long time = System.currentTimeMillis();
+		
+		currentEntity = moverEntity;
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
@@ -320,16 +326,8 @@ public class TileSearchService {
 			return true;
 		}
 		
-		if (checkEntityToAttack) {
-			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
-			if (entityOnTile == null) {
-				//Nothing to attack on this tile
-				return true;
-			}
-		}
-		
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tileEntity);
-		
+		// Obstacles		
+		GridPositionComponent currentTilePos = Mappers.gridPositionComponent.get(tileEntity);
 		Set<Entity> blockingEntity = null; 
 		if (attackType == AttackTypeEnum.EXPLOSION) {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockExplosionComponent.class, room);
@@ -337,9 +335,29 @@ public class TileSearchService {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
-			obstacles.add(gridPositionComponent.coord());
+			obstacles.add(currentTilePos.coord());
 		}
 		
+		
+		// Check entities to attack
+		if (checkEntityToAttack) {
+			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
+			if (entityOnTile == null) {
+				//Nothing to attack on this tile
+				return true;
+			} else {
+				EnemyComponent currentEnemyCompo = Mappers.enemyComponent.get(currentEntity);
+				if (currentEnemyCompo != null) {
+					EnemyComponent targetEnemyComponent = Mappers.enemyComponent.get(entityOnTile);
+					if (targetEnemyComponent != null && targetEnemyComponent.getFaction() == currentEnemyCompo.getFaction()) {
+						//Same faction, do not add the attackable tiles
+						return true;
+					}
+				}
+			}
+		}
+		
+
 		
 		//TODO: this condition will probably have to change, when fighting a flying enemy over a pit
 		//for example.

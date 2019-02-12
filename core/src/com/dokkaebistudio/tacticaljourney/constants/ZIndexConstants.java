@@ -15,7 +15,8 @@ public final class ZIndexConstants {
 	public static final int MUD = 2;
 	public static final int DOOR = 2;
 	public static final int EXIT = 2;
-	public static final int LOOTABLE = 3;
+	public static final int CREEP = 3;
+	public static final int LOOTABLE = 4;
 
 	// INDICATORS
 	public static final int MOVABLE_TILE = 5;
@@ -29,6 +30,7 @@ public final class ZIndexConstants {
 	
 	// ENEMIES
 	public static final int ENEMY = 10;
+	public static final int HEALTH_DISPLAYER = 10;
 	
 	// PLAYER
 	public static final int PLAYER = 15;

@@ -3,9 +3,12 @@ package com.dokkaebistudio.tacticaljourney.factory;
 public enum EntityFlagEnum {
 
 	PLAYER(0),
-	ENEMY_SPIDER(1),
-	ENEMY_SCORPION(2),
-	SHOPKEEPER(3),
+	SHOPKEEPER(1),
+
+	ENEMY_SPIDER(2),
+	ENEMY_SPIDER_WEB(3),
+	ENEMY_SPIDER_VENOM(4),
+	ENEMY_SCORPION(5),
 	
 	TILE(100),
 	WALL(101),

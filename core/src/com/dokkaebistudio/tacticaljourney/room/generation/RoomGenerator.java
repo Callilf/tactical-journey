@@ -275,12 +275,16 @@ public class RoomGenerator {
 			fillLootable(bones, 1);
 			
 			
+			entityFactory.creepFactory.createWeb(room, new Vector2(9, 11));
+			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
-//			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(11, 8), 1);
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(this, new Vector2(12, 8), 3);
+			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
+			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 			break;
 		case END_FLOOR_ROOM:

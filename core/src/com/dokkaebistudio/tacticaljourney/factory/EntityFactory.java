@@ -19,7 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
@@ -39,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -65,6 +65,10 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public ItemFactory itemFactory;
 	
+	/** The creep factory. */
+	public CreepFactory creepFactory;
+
+	
 	
 	/** The factory for visual effects. */
 	public EffectFactory effectFactory;
@@ -83,6 +87,7 @@ public final class EntityFactory {
 		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
 		this.itemFactory = new ItemFactory(e, this);
+		this.creepFactory = new CreepFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		
 		groundTexture = Assets.getTexture(Assets.tile_ground);

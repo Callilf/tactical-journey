@@ -41,7 +41,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
     public PlayerAttackSystem(Stage s, Room room, AttackWheel attackWheel) {
         super(Family.all(PlayerComponent.class, GridPositionComponent.class).get());
-		this.priority = 9;
+		this.priority = 10;
 
 		this.stage = s;
         this.room = room;

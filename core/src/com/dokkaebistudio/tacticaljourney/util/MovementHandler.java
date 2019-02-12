@@ -7,11 +7,14 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -153,6 +156,13 @@ public class MovementHandler {
 		//TODO
 		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
 		
+		
+		// Creep
+		Entity creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
+		if (creep != null) {
+			// There is creep on this tile, play its effect
+			Mappers.creepComponent.get(creep).onWalk(mover, creep, room);
+		}
 		
 		
 		// Things that only the player can do, such as go through a door

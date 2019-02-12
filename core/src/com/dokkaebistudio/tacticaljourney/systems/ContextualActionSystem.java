@@ -45,7 +45,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	private MoveComponent playerMoveCompo;
 	
 	public ContextualActionSystem(Entity player, Room r) {
-		this.priority = 11;
+		this.priority = 13;
 
 		this.player = player;
 		this.room = r;

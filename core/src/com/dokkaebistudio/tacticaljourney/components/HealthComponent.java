@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -19,7 +20,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  */
 public class HealthComponent implements Component, Poolable, MovableInterface, RoomSystem {
 		
-	/** The engine that managed entities.*/
+	/** The room.*/
 	public Room room;
 	
 	
@@ -57,13 +58,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private HealthChangeEnum healthChange = HealthChangeEnum.NONE;
 	private int healthLostAtCurrentFrame;
 	private int healthRecoveredAtCurrentFrame;
-	
-	public enum HealthChangeEnum {
-		NONE,
-		HIT,
-		HEALED,
-		ARMOR;
-	}
 	
 	
 	/**

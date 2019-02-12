@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.enums.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**

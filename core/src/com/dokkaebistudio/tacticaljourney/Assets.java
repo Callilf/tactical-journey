@@ -38,8 +38,6 @@ public class Assets {
 	public static final String player = "player-test";
 	public static final String shopkeeper = "shopkeeper";
 	
-	public static final String enemy_spider = "enemy-test";
-	public static final String enemy_scorpion = "enemy-scorpion-test";
 	
 	public static final String tile_ground = "tile-test";
 	public static final String wall = "tile-wall-test";
@@ -127,7 +125,19 @@ public class Assets {
 	public static final String remains_bones = "remains_bones";
 	public static final String remains_satchel = "remains_satchel";
 
+	
+	//********
+	// Creep
+	public static final String creep_web = "creep-web";
 
+
+	//********
+	// Enemies
+	
+	public static final String enemy_spider = "enemy-test";
+	public static final String enemy_spider_venom = "enemy-spider-venom";
+	public static final String enemy_spider_web = "enemy-spider-web";
+	public static final String enemy_scorpion = "enemy-scorpion-test";
 	
 	//******
 	// Items

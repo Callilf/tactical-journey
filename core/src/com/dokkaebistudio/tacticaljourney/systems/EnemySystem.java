@@ -42,7 +42,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 
     public EnemySystem(Room r) {
-		this.priority = 8;
+		this.priority = 9;
 
         room = r;
         movementHandler = new MovementHandler(r.engine);
@@ -101,11 +101,11 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         		//clear the movable tile
         		moveCompo.clearMovableTiles();
-        		if (attackCompo != null) attackCompo.clearAttackableTiles();
+//        		if (attackCompo != null) attackCompo.clearAttackableTiles();
             		
             	//Build the movable tiles list
         		tileSearchService.buildMoveTilesSet(enemyEntity, room);
-        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
+//        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
         		moveCompo.hideMovableTiles();
         		attackCompo.hideAttackableTiles();
         		room.setNextState(RoomState.ENEMY_MOVE_TILES_DISPLAYED);
@@ -155,6 +155,10 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         		movementHandler.finishRealMovement(enemyEntity, room);
     	    	moveCompo.clearMovableTiles();
+
+        		if (attackCompo != null) attackCompo.clearAttackableTiles();
+        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
+
     	    	room.setNextState(RoomState.ENEMY_ATTACK);
 
         		break;

@@ -51,7 +51,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 	private InventoryComponent playerIventoryCompo;
 	
 	public ItemSystem(Entity player, Room r, Stage stage) {
-		this.priority = 11;
+		this.priority = 12;
 
 		this.fxStage = stage;
 		this.player = player;

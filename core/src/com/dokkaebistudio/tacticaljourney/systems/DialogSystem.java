@@ -42,7 +42,7 @@ public class DialogSystem extends IteratingSystem implements RoomSystem {
 	
 	public DialogSystem(Room r, Stage s) {
         super(Family.all(DialogComponent.class).get());
-		this.priority = 12;
+		this.priority = 13;
 
 		this.room = r;
 		this.stage = s;

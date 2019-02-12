@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.items;
+package com.dokkaebistudio.tacticaljourney.enums.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;

@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
@@ -89,6 +90,7 @@ public final class Mappers {
 
 	
 	public final static ComponentMapper<SolidComponent> solidComponent = ComponentMapper.getFor(SolidComponent.class);
+	public final static ComponentMapper<CreepComponent> creepComponent = ComponentMapper.getFor(CreepComponent.class);
 	public final static ComponentMapper<SlowMovementComponent> slowMoveComponent = ComponentMapper.getFor(SlowMovementComponent.class);
 	public final static ComponentMapper<ExplosiveComponent> explosiveComponent = ComponentMapper.getFor(ExplosiveComponent.class);
 	public final static ComponentMapper<DestructibleComponent> destructibleComponent = ComponentMapper.getFor(DestructibleComponent.class);

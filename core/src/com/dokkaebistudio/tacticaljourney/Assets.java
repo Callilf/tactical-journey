@@ -126,6 +126,14 @@ public class Assets {
 	public static final String remains_satchel = "remains_satchel";
 
 	
+	//**************
+	// Projectiles
+	
+	public static final String projectile_arrow = "arrow";
+	public static final String projectile_bomb = "bomb";
+	public static final String projectile_web = "projectile-web";
+
+	
 	//********
 	// Creep
 	public static final String creep_web = "creep-web";

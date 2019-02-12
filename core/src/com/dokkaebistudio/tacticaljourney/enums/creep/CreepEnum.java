@@ -58,6 +58,8 @@ public enum CreepEnum {
 	/** Called when the item is used. */
 	public abstract void onWalk(Entity walker, Entity creep, Room room);
 	
+	/** Emit the creep. */
+	public void onEmit(Entity emitter, Entity emittedCreep, Room room) {};
 	
 	
 	// Getters and Setters

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -28,6 +31,9 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
     /** The room. */
     private Room room;
+    
+    /** The fx stage for attack animations. */
+    private Stage fxStage;
    
     /** The enemies of the current room that need updating. */
     private List<Entity> allEnemiesOfCurrentRoom;
@@ -39,12 +45,16 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	private TileSearchService tileSearchService;
 	/** The attack tile search service. */
 	private AttackTileSearchService attackTileSearchService;
+	
+	
+	private int enemyFinishedCount = 0;
 
 
-    public EnemySystem(Room r) {
+    public EnemySystem(Room r, Stage stage) {
 		this.priority = 9;
 
         room = r;
+        fxStage = stage;
         movementHandler = new MovementHandler(r.engine);
         allEnemiesOfCurrentRoom = new ArrayList<>();
 		this.tileSearchService = new TileSearchService();
@@ -75,8 +85,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	}
     	
     	
-    	int enemyFinishedCount = 0;
-    	for (Entity enemyEntity : allEnemiesOfCurrentRoom) {
+    	enemyFinishedCount = 0;
+    	for (final Entity enemyEntity : allEnemiesOfCurrentRoom) {
     		HealthComponent healthComponent = Mappers.healthComponent.get(enemyEntity);
     		if (healthComponent == null || healthComponent.isDead()) {
     			continue;
@@ -88,8 +98,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		}
     		
         	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
-        	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
-        	GridPositionComponent moverCurrentPos = Mappers.gridPositionComponent.get(enemyEntity);
+        	final AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
+        	GridPositionComponent enemyCurrentPos = Mappers.gridPositionComponent.get(enemyEntity);
     		
     		switch(room.getState()) {
         	case ENEMY_TURN_INIT :
@@ -124,7 +134,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     				moveCompo.setSelectedTile(destinationTileEntity);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, moverCurrentPos, destinationPos, room);
+    				List<Entity> waypoints = tileSearchService.buildWaypointList(moveCompo, enemyCurrentPos, destinationPos, room);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
@@ -166,24 +176,61 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         	case ENEMY_ATTACK:
         		
         		//Check if attack possible
+        		boolean attacked = false;
     	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
     	    			GridPositionComponent attTilePos = Mappers.gridPositionComponent.get(attTile);
-    	    			int range = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord(), attTilePos.coord());
+    	    			int range = TileUtil.getDistanceBetweenTiles(enemyCurrentPos.coord(), attTilePos.coord());
 						if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
     	    				//Attack possible
 							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord(), room);
             				attackCompo.setTarget(target);
-							room.attackManager.performAttack(enemyEntity, attackCompo);
+            				
+            				attacked = true;
+            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
     	    			}
     	    		}
     	    	}
-    	    	attackCompo.clearAttackableTiles();
+    	    	attackCompo.hideAttackableTiles();
     	    	
-    	    	enemyFinishedCount ++;
-    	    	turnFinished.put(enemyEntity, new Boolean(true));
-    	    	room.setNextState(RoomState.ENEMY_TURN_INIT);
+    	    	if (!attacked) {
+    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+    	    	}
     	    	
+        		break;
+        		
+        	case ENEMY_ATTACK_ANIMATION:
+        		
+        		// Play attack animation
+				if (attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
+	    			
+	    			if (attackCompo.getProjectileImage() == null) {
+	    				
+	    				Action finishAttackAction = new Action(){
+						  @Override
+						  public boolean act(float delta){
+							room.attackManager.performAttack(enemyEntity, attackCompo);
+		    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+						    return true;
+						  }
+						};
+	    				
+	    				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(attackCompo.getTarget());
+	    				attackCompo.setProjectileImage(Assets.projectile_web,
+	    						enemyCurrentPos.coord(), 
+	    						targetPos.coord(), 
+	    						true,
+	    						finishAttackAction);
+	    				
+	    				fxStage.addActor(attackCompo.getProjectileImage());
+	    			}
+	    			
+	    		} else {
+					room.attackManager.performAttack(enemyEntity, attackCompo);
+    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+	    		}
+
+        		
         		break;
         		
         	default:
@@ -201,6 +248,18 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 		}
     	
     }
+
+	private void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo) {
+    	attackCompo.clearAttackableTiles();
+		if (attackCompo.getProjectileImage() != null) {
+			attackCompo.getProjectileImage().remove();
+			attackCompo.setProjectileImage(null);
+		}
+    	
+		enemyFinishedCount ++;
+		turnFinished.put(enemyEntity, new Boolean(true));
+		room.setNextState(RoomState.ENEMY_TURN_INIT);
+	}
 
 	private void fillEntitiesOfCurrentRoom() {
 		allEnemiesOfCurrentRoom.clear();

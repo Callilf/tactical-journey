@@ -16,10 +16,12 @@ import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -183,6 +185,10 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setDropRate(15);
 		enemyEntity.add(lootRewardCompo);
+		
+		CreepEmitterComponent creepEmitter = engine.createComponent(CreepEmitterComponent.class);
+		creepEmitter.setType(CreepEnum.WEB);
+		enemyEntity.add(creepEmitter);
 		
 		room.addEnemy(enemyEntity);
 		

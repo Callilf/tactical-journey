@@ -161,7 +161,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					};
     				
     				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(attackComponent.getTargetedTile());
-    				attackCompo.setProjectileImage(Assets.arrow,
+    				attackCompo.setProjectileImage(Assets.projectile_arrow,
     						attackerCurrentPos.coord(), 
     						targetPos.coord(), 
     						true,
@@ -195,7 +195,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					  }
 					};
 					
-					skillAttackCompo.setProjectileImage(Assets.bomb_animation,
+					skillAttackCompo.setProjectileImage(Assets.projectile_bomb,
 							attackerCurrentPos.coord(), 
 							targetedPosition.coord(), 
 							false,

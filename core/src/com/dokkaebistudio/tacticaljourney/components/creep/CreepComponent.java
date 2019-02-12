@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.creep;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -69,7 +69,7 @@ public class CreepComponent implements Component, Poolable {
 		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
 
 		if (removeCreepImage == null) {
-			this.removeCreepImage = new Image(Assets.getTexture(Assets.creep_web));
+			this.removeCreepImage = new Image(Assets.getTexture(creepComponent.getType().getImageName()));
 		} else {
 			this.removeCreepImage.clear();
 		}

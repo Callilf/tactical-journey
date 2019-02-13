@@ -126,17 +126,14 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			// Update the Drop item listener
 			updateBuyListener(item, itemComponent);
 
-			if (useItemBtn != null) useItemBtn.setVisible(false);
+			useItemBtn.setVisible(false);
 		} else {
 			pickupItemBtn.setText("Take");
-			
-			if (useItemBtn != null) {
-				useItemBtn.setVisible(true);
-				if (itemComponent.getItemActionLabel() != null) {
-					useItemBtn.setText(itemComponent.getItemActionLabel());
-				}
+
+			useItemBtn.setVisible(true);
+			if (itemComponent.getItemActionLabel() != null) {
+				useItemBtn.setText(itemComponent.getItemActionLabel());
 			}
-			
 			
 			// Update the Drop item listener
 			updatePickupListener(item, itemComponent);
@@ -204,10 +201,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
-		if (itemComponent.getItemActionLabel() != null) {
-			useItemBtn = new TextButton("Use", PopinService.bigButtonStyle());			
-			buttonTable.add(useItemBtn).pad(0, 20,0,20);
-		}
+		useItemBtn = new TextButton("Use", PopinService.bigButtonStyle());			
+		buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		
 		selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
 	}

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -93,8 +94,13 @@ public final class CreepFactory {
 		creepCompo.setDuration(3);
 		creepEntity.add(creepCompo);
 		
-		room.addEntity(creepEntity);
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(true);
+		creepEntity.add(flammable);
 		
+		room.addEntity(creepEntity);		
+		creepCompo.onAppear(creepEntity, room);
 		return creepEntity;
 	}
 	
@@ -113,7 +119,7 @@ public final class CreepFactory {
 		creepEntity.add(creepCompo);
     	
 		engine.addEntity(creepEntity);
-
+		creepCompo.onAppear(creepEntity, room);
     	return creepEntity;
 	}
 	
@@ -136,7 +142,7 @@ public final class CreepFactory {
 		creepEntity.add(stateCompo);
     	
 		engine.addEntity(creepEntity);
-
+		creepCompo.onAppear(creepEntity, room);
     	return creepEntity;
 	}
 	

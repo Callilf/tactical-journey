@@ -41,7 +41,7 @@ public class RoomGraph implements IndexedGraph<Entity> {
 			if (beside || aboveOrUnder) {
 				GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(nodeToTest);
 				TileComponent tileComponent = Mappers.tileComponent.get(nodeToTest);
-				int cost = TileUtil.getCostOfMovementForTilePos(gridPosCompo.coord(), mover, tileComponent.getRoom());
+				int cost = TileUtil.getHeuristicCostForTilePos(gridPosCompo.coord(), mover, tileComponent.getRoom());
 				connections.add(new RoomConnection(fromNode, nodeToTest, cost));
 			}
 		}

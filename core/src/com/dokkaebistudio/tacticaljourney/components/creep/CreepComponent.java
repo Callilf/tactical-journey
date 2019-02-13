@@ -52,6 +52,35 @@ public class CreepComponent implements Component, Poolable {
 		type.onWalk(walker, creep, room);
 	}
 	
+	
+	/**
+	 * Play the effect of this creep when an entity ends it's turn on it.
+	 * @param walker the entity
+	 * @param creep the creep
+	 * @param room the room
+	 */
+	public void onStop(Entity walker, Entity creep, Room room) {
+		type.onStop(walker, creep, room);
+	}
+	
+	/**
+	 * Play the end turn effect of the creep.
+	 * @param creep the creep
+	 * @param room the room
+	 */
+	public void onEndTurn(Entity creep, Room room) {
+		type.onEndTurn(creep, room);
+	}
+
+	
+	public void onAppear(Entity creep, Room room) {
+		type.onAppear(creep, room);
+	}
+	
+	public void onDisappear(Entity creep, Room room) {
+		type.onDisappear(creep, room);
+	}
+	
 	/**
 	 * Get the movement consumed when walking on this tile.
 	 * @param mover the moving entity
@@ -59,6 +88,18 @@ public class CreepComponent implements Component, Poolable {
 	 */
 	public int getMovementConsumed(Entity mover) {
 		return type.getMovementConsumed(mover);
+	}
+	
+	/**
+	 * Get the heuristic influence of walking on this creep.
+	 * 0 means no influence
+	 * a negative value is a good influence and the pathfinding will tend to use this tile
+	 * a positive value is a bad influence and the pathfinding will tend to avoid this tile
+	 * @param mover the moving entity
+	 * @return the influence of this creep on the heuristic for the pathfinding.
+	 */
+	public int getHeuristic(Entity mover) {
+		return type.getHeuristic(mover);
 	}
 	
 	

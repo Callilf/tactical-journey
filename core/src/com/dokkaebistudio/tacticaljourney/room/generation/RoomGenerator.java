@@ -208,6 +208,8 @@ public class RoomGenerator {
 			// Place enemies
 			Iterator<Vector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
+				if (!iterator.hasNext()) break;
+				
 				Entity enemy = null;
 				int enemyTypeRandom = random.nextInt(6);
 				if (enemyTypeRandom == 0) {
@@ -283,9 +285,31 @@ public class RoomGenerator {
 			fillLootable(bones, 1);
 			
 			
-//			entityFactory.creepFactory.createWeb(room, new Vector2(9, 11));
+			// Fire test
+			entityFactory.creepFactory.createFire(room, new Vector2(14, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(15, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(16, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(17, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(13, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(12, 8));
+			entityFactory.creepFactory.createWeb(room, new Vector2(11, 8));
+
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 9));
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 10));
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 11));
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 7));
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 6));
+			entityFactory.creepFactory.createWeb(room, new Vector2(14, 5));
 			
-//			entityFactory.creepFactory.createFire(room, new Vector2(11, 9));
+			entityFactory.creepFactory.createWeb(room, new Vector2(13, 7));
+			entityFactory.creepFactory.createWeb(room, new Vector2(13, 9));
+			entityFactory.creepFactory.createWeb(room, new Vector2(15, 7));
+			entityFactory.creepFactory.createWeb(room, new Vector2(15, 9));
+			entityFactory.creepFactory.createWeb(room, new Vector2(12, 6));
+			entityFactory.creepFactory.createWeb(room, new Vector2(12, 10));
+			entityFactory.creepFactory.createWeb(room, new Vector2(16, 6));
+			entityFactory.creepFactory.createWeb(room, new Vector2(16, 10));
+
 
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));

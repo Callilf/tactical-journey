@@ -82,6 +82,23 @@ public final class TileUtil {
 	}
 	
 	/**
+	 * Return the cost of movement for the given tile position in the given room.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the cost of movement
+	 */
+	public static int getHeuristicCostForTilePos(Vector2 pos, Entity mover, Room room) {
+		int cost = 1;
+		Set<Entity> creepEntities = TileUtil.getEntitiesWithComponentOnTile(pos, CreepComponent.class, room);
+		for (Entity e : creepEntities) {
+			CreepComponent creepComponent = Mappers.creepComponent.get(e);
+			cost += creepComponent.getMovementConsumed(mover);
+			cost += creepComponent.getHeuristic(mover);
+		}
+		return cost;
+	}
+	
+	/**
 	 * Return the tile at the given grid position.
 	 * @param gridPos the position
 	 * @param room the room
@@ -252,5 +269,52 @@ public final class TileUtil {
 		float xDistance = Math.abs(startTilePos.x - endTilePos.x);
 		float yDistance = Math.abs(startTilePos.y - endTilePos.y);
 		return (int) xDistance + (int) yDistance;
+	}
+	
+	/**
+	 * Get adjacent entities with the given component. Adjacent means on adjacent tiles.
+	 * @param pos the position
+	 * @param componentClass the component class
+	 * @param room the room
+	 * @return a list with 4 entities max
+	 */
+	public static List<Entity> getAdjacentEntitiesWithComponent(Vector2 pos, Class componentClass, Room room) {
+		List<Entity> tiles = new ArrayList<>();
+		
+		PoolableVector2 temp = PoolableVector2.create(pos);
+		if (temp.x > 0) {
+			temp.x -= 1;
+			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e != null) {
+				tiles.add(e);
+			}
+			temp.x += 1;
+		}
+		if (temp.x < GameScreen.GRID_W - 1) {
+			temp.x += 1;
+			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e != null) {
+				tiles.add(e);
+			}
+			temp.x -= 1;
+		}
+		if (temp.y > 0) {
+			temp.y -= 1;
+			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e != null) {
+				tiles.add(e);
+			}
+			temp.y += 1;
+		}
+		if (temp.y < GameScreen.GRID_H - 1) {
+			temp.y += 1;
+			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e != null) {
+				tiles.add(e);
+			}
+			temp.y -= 1;
+		}
+		
+		return tiles;
 	}
 }

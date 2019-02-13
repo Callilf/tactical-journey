@@ -36,6 +36,7 @@ public final class ItemFactory {
 	private TextureAtlas.AtlasRegion bombsTexture;
 
 	private TextureAtlas.AtlasRegion smallHealthPotionTexture;
+	private TextureAtlas.AtlasRegion firePotionTexture;
 	private TextureAtlas.AtlasRegion lightArmorTexture;
 	private TextureAtlas.AtlasRegion pieceOfArmorTexture;
 	private TextureAtlas.AtlasRegion tutorialPageTexture;
@@ -52,6 +53,7 @@ public final class ItemFactory {
 		arrowsTexture = Assets.getTexture(Assets.arrow_item );
 		bombsTexture = Assets.getTexture(Assets.bomb_item );
 		smallHealthPotionTexture = Assets.getTexture(Assets.health_up_item);
+		firePotionTexture = Assets.getTexture(Assets.fire_potion_item);
 		lightArmorTexture = Assets.getTexture(Assets.armor_up_item);
 		pieceOfArmorTexture = Assets.getTexture(Assets.armor_piece_item);
 		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item);
@@ -128,6 +130,17 @@ public final class ItemFactory {
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, this.smallHealthPotionTexture, ItemEnum.CONSUMABLE_HEALTH_UP);
 		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create a fire potion.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemFirePotion(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, this.firePotionTexture, ItemEnum.FIRE_POTION);
+		item.flags = EntityFlagEnum.ITEM_FIRE_POTION.getFlag();
 		return item;
 	}
 	

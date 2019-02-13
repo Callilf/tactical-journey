@@ -271,6 +271,7 @@ public final class TileUtil {
 		return (int) xDistance + (int) yDistance;
 	}
 	
+	
 	/**
 	 * Get adjacent entities with the given component. Adjacent means on adjacent tiles.
 	 * @param pos the position

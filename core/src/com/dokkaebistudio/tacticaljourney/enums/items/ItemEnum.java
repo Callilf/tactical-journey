@@ -1,9 +1,13 @@
 package com.dokkaebistudio.tacticaljourney.enums.items;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
@@ -12,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 
 /**
@@ -111,6 +116,46 @@ public enum ItemEnum {
 			HealthComponent healthComponent = Mappers.healthComponent.get(user);
 			healthComponent.restoreHealth(25);
 			return true;
+		}
+	},
+	
+	/** A potion that bursts into flames when used or thrown. */
+	FIRE_POTION("Fire potion", Assets.fire_potion_item, false, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Contains a very volatile liquid that will burst into flames when released.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Drink";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			//Damage for 10 HP + set ablaze
+			HealthComponent healthComponent = Mappers.healthComponent.get(user);
+			healthComponent.hit(10, item);
+			
+			//TODO set ablaze
+			return true;
+		}
+		
+		@Override
+		public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(thrower);
+			if (inventoryComponent != null) {
+				inventoryComponent.remove(item);
+			}
+			
+			room.entityFactory.creepFactory.createFire(room, thrownPosition);
+			List<Entity> adjacentTiles = TileUtil.getAdjacentEntitiesWithComponent(thrownPosition, TileComponent.class, room);
+			for (Entity tile : adjacentTiles) {
+				if (Mappers.tileComponent.get(tile).type.isWalkable()) {
+					room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord());
+				}
+			}
 		}
 	},
 	

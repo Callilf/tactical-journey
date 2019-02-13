@@ -155,6 +155,7 @@ public class Assets {
 
 	public static final String money_item = "item-money";
 	public static final String health_up_item = "item-consumable-health-up";
+	public static final String fire_potion_item = "item-consumable-fire-potion";
 	public static final String armor_up_item = "item-consumable-armor-up";
 	public static final String armor_piece_item = "item-consumable-armor-piece";
 	

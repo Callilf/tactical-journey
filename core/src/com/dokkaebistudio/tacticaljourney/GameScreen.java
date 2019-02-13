@@ -42,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.LootPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MenuPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
@@ -53,6 +54,8 @@ import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
+import com.dokkaebistudio.tacticaljourney.systems.CreepSystem;
+import com.dokkaebistudio.tacticaljourney.systems.DialogSystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
@@ -162,6 +165,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
 		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
+		renderers.add(new LootPopinRenderer(room, inventoryStage, player));
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		renderers.add(new MenuPopinRenderer(this, hudStage));
@@ -174,13 +178,16 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new TurnSystem(room));
 		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room));
-		engine.addSystem(new EnemySystem(room));
+		engine.addSystem(new CreepSystem(this, room, fxStage));
+		engine.addSystem(new EnemySystem(room, fxStage));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));
-		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new ItemSystem(	player, room, fxStage));
+		engine.addSystem(new ContextualActionSystem(	player, room));
+		engine.addSystem(new DialogSystem(room, fxStage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));
 		engine.addSystem(new ExperienceSystem(room, stage));
+
 		
 
 		

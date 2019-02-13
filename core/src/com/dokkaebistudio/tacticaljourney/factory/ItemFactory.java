@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.enums.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -36,6 +36,8 @@ public final class ItemFactory {
 	private TextureAtlas.AtlasRegion bombsTexture;
 
 	private TextureAtlas.AtlasRegion smallHealthPotionTexture;
+	private TextureAtlas.AtlasRegion lightArmorTexture;
+	private TextureAtlas.AtlasRegion pieceOfArmorTexture;
 	private TextureAtlas.AtlasRegion tutorialPageTexture;
 
 	/**
@@ -50,7 +52,9 @@ public final class ItemFactory {
 		arrowsTexture = Assets.getTexture(Assets.arrow_item );
 		bombsTexture = Assets.getTexture(Assets.bomb_item );
 		smallHealthPotionTexture = Assets.getTexture(Assets.health_up_item);
-		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item	);
+		lightArmorTexture = Assets.getTexture(Assets.armor_up_item);
+		pieceOfArmorTexture = Assets.getTexture(Assets.armor_piece_item);
+		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item);
 	}
 	
 	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, ItemEnum itemType) {
@@ -124,6 +128,28 @@ public final class ItemFactory {
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, this.smallHealthPotionTexture, ItemEnum.CONSUMABLE_HEALTH_UP);
 		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create a light armor.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemLightArmor(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, this.lightArmorTexture, ItemEnum.CONSUMABLE_ARMOR_UP);
+		item.flags = EntityFlagEnum.ITEM_ARMOR_UP.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create a piece of armor.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemArmorPiece(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, this.pieceOfArmorTexture, ItemEnum.CONSUMABLE_ARMOR_PIECE);
+		item.flags = EntityFlagEnum.ITEM_ARMOR_PIECE.getFlag();
 		return item;
 	}
 	

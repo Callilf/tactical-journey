@@ -22,19 +22,21 @@ public class AttackTileSearchService extends TileSearchService {
 
 	/**
 	 * Compute the tiles where attack is possible.
-	 * @param moverEntity the attacker
+	 * @param attackerEntity the attacker
 	 * @param room the current room
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public void buildAttackTilesSet(Entity moverEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+	public void buildAttackTilesSet(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
 		
-		 MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
-		 AttackComponent attackCompo = Mappers.attackComponent.get(moverEntity);
-		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(moverEntity);
+		currentEntity = attackerEntity;
+		
+		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
+		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
 
 		//Search all attackable tiles for each movable tile
 		Set<Entity> attackableTiles = new HashSet<>();
@@ -44,7 +46,11 @@ public class AttackTileSearchService extends TileSearchService {
 			attackableTiles.add(tileAtGridPos);
 		}
 		
-		for (Entity t : moveCompo.allWalkableTiles) {
+		Set<Entity> moveTiles = moveCompo.allWalkableTiles;
+		if (moveTiles.isEmpty()) {
+			moveTiles.add(TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room));
+		}
+		for (Entity t : moveTiles) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;

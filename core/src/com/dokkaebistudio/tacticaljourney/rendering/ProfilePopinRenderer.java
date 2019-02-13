@@ -16,9 +16,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -39,8 +36,26 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	/** The current room. */
     private Room room;
     
+    
+    //*****************
+    // Actors 
+    
     /** The main table of the popin. */
     private Table table;
+    private Label title;
+    private Label maxHpLbl;
+    private Label maxArmorLbl;
+    private Label strengthLbl;
+	private Label moveLbl;
+	private Label rangeDistLbl;
+	private Label rangeStrengthLbl;
+	private Label bombDistLbl;
+	private Label bombDmg;
+	private Label bombDuration;
+	private Label bombRadius;
+
+    
+    
     
     /** The state before the level up state. */
     private RoomState previousState;
@@ -66,97 +81,128 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		expCompo = Mappers.experienceComponent.get(player);
     	}
     	
-    	if (playerCompo != null && playerCompo.isProfilePopinDisplayed()) {
-
+    	if (playerCompo.isProfilePopinDisplayed() && room.getState() != RoomState.PROFILE_POPIN) {
+    		// Popin has just been opened
+    		
+    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
+    		room.setNextState(RoomState.PROFILE_POPIN);
+    		
     		if (table == null) {
-	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
-	    		room.setNextState(RoomState.PROFILE_POPIN);
-	    		
-	    		MoveComponent moveComponent = Mappers.moveComponent.get(player);
-	    		AttackComponent attackComponent = Mappers.attackComponent.get(player);
-	    		HealthComponent healthComponent = Mappers.healthComponent.get(player);
-	    		
-	    		table = PoolableTable.create();
-//	    		table.setDebug(true, true);
-	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-	    		//table.setTouchable(Touchable.childrenOnly);
-	    		
-	    		TextureRegionDrawable topBackground = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.profile_background));
-	    		table.setBackground(topBackground);
-	    		
-	    		table.align(Align.top);
-	    		
-	    		// TITLE
-	    		Label title = PoolableLabel.create("Profile", PopinService.hudStyle());
-	    		table.add(title).uniformX().pad(20, 0, 20, 0);
-	    		table.row();
-	    		
-	    		Label maxHphLbl = PoolableLabel.create("Max hp: " + healthComponent.getMaxHp(), PopinService.hudStyle());
-	    		table.add(maxHphLbl).uniformX().left();
-	    		table.row();
-	    		
-	    		Label strengthLbl = PoolableLabel.create("Strength: " + attackComponent.getStrength(), PopinService.hudStyle());
-	    		table.add(strengthLbl).uniformX().left();
-	    		table.row();
-	    		
-	    		Label moveLbl = PoolableLabel.create("Move: " + moveComponent.moveSpeed, PopinService.hudStyle());
-	    		table.add(moveLbl).uniformX().left().padBottom(20);
-	    		table.row();
-	    		
-	    		
-	    		AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillRange());
-	    		Label rangeDistLbl = PoolableLabel.create("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax(), PopinService.hudStyle());
-	    		table.add(rangeDistLbl).uniformX().left();
-	    		table.row();
-	    		Label rangeStrengthLbl = PoolableLabel.create("Bow damage: " + rangeAttackCompo.getStrength(), PopinService.hudStyle());
-	    		table.add(rangeStrengthLbl).uniformX().left().padBottom(20);
-	    		table.row();
-	    		
-	    		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
-	    		Label bombDistLbl = PoolableLabel.create("Bomb throw range: " + bombAttackCompo.getRangeMax(), PopinService.hudStyle());
-	    		table.add(bombDistLbl).uniformX().left();
-	    		table.row();
-	    		Label bombDmg = PoolableLabel.create("Bomb damage: " + bombAttackCompo.getStrength(), PopinService.hudStyle());
-	    		table.add(bombDmg).uniformX().left();
-	    		table.row();
-	    		
-	    		Label bombDuration = PoolableLabel.create("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" , PopinService.hudStyle());
-	    		table.add(bombDuration).uniformX().left();
-	    		table.row();
-	    		Label bombRadius = PoolableLabel.create("Bomb radius: " + bombAttackCompo.getBombRadius() , PopinService.hudStyle());
-	    		table.add(bombRadius).uniformX().left();
-	    		table.row();
-
-	        	
-	        	table.pack();
-	    		table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
-	
-	    		stage.addActor(table);
+    			initTable();
     		}
     		
+    		refreshTable();
+    		
+    		stage.addActor(table);
+    
+    	}
+    	
+    	if (!playerCompo.isProfilePopinDisplayed() && room.getState() == RoomState.PROFILE_POPIN) {
+    		// Popin has just been closed
+    		closePopin();
+    	}
+    
+    	
+    	if (room.getState() == RoomState.PROFILE_POPIN) {
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
-    		
     		
     		if (InputSingleton.getInstance().leftClickJustPressed) {
     			closePopin();
     		}
-
-    	} else if (room.getState() == RoomState.PROFILE_POPIN) {
-    		closePopin();
     	}
-    
     }
+
+	private void refreshTable() {
+		MoveComponent moveComponent = Mappers.moveComponent.get(player);
+		AttackComponent attackComponent = Mappers.attackComponent.get(player);
+		HealthComponent healthComponent = Mappers.healthComponent.get(player);
+
+		title.setText("Profile");
+		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
+		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
+		strengthLbl.setText("Strength: " + attackComponent.getStrength());
+		moveLbl.setText("Move: " + moveComponent.moveSpeed);
+
+		AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillRange());
+		rangeDistLbl.setText("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax());
+		rangeStrengthLbl.setText("Bow damage: " + rangeAttackCompo.getStrength());
+
+		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
+		bombDistLbl.setText("Bomb throw range: " + bombAttackCompo.getRangeMax());
+		bombDmg.setText("Bomb damage: " + bombAttackCompo.getStrength());
+		bombDuration.setText("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" );
+		bombRadius.setText("Bomb radius: " + bombAttackCompo.getBombRadius());
+		
+		table.pack();
+		table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
+	}
+
+    
+    /**
+     * Initialize the table the first time the profile is opened.
+     */
+	private void initTable() {
+		table = new Table();
+//	    		table.setDebug(true, true);
+		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+		//table.setTouchable(Touchable.childrenOnly);
+		
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
+		table.setBackground(topBackground);
+		
+		table.align(Align.top);
+		
+		// TITLE
+		title = new Label("Profile", PopinService.hudStyle());
+		table.add(title).uniformX().pad(20, 0, 20, 0);
+		table.row();
+		
+		maxHpLbl = new Label("Max hp", PopinService.hudStyle());
+		table.add(maxHpLbl).uniformX().left();
+		table.row();
+		
+		maxArmorLbl = new Label("Max armor", PopinService.hudStyle());
+		table.add(maxArmorLbl).uniformX().left();
+		table.row();
+		
+		strengthLbl = new Label("Strength", PopinService.hudStyle());
+		table.add(strengthLbl).uniformX().left();
+		table.row();
+		
+		moveLbl = new Label("Move", PopinService.hudStyle());
+		table.add(moveLbl).uniformX().left().padBottom(20);
+		table.row();
+		
+		
+		rangeDistLbl = new Label("Bow range", PopinService.hudStyle());
+		table.add(rangeDistLbl).uniformX().left();
+		table.row();
+		rangeStrengthLbl = new Label("Bow damage", PopinService.hudStyle());
+		table.add(rangeStrengthLbl).uniformX().left().padBottom(20);
+		table.row();
+		
+		bombDistLbl = new Label("Bomb throw range", PopinService.hudStyle());
+		table.add(bombDistLbl).uniformX().left();
+		table.row();
+		bombDmg = new Label("Bomb damage", PopinService.hudStyle());
+		table.add(bombDmg).uniformX().left();
+		table.row();
+		
+		bombDuration = new Label("Bomb dur.", PopinService.hudStyle());
+		table.add(bombDuration).uniformX().left();
+		table.row();
+		bombRadius = new Label("Bomb radius", PopinService.hudStyle());
+		table.add(bombRadius).uniformX().left();
+		table.row();
+	}
 
 	/**
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
 		playerCompo.setProfilePopinDisplayed(false);
-
-		table.clear();
 		table.remove();
-		table = null;
 		room.setNextState(previousState);
 	}
 

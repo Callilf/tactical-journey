@@ -6,17 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -61,14 +60,18 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(entity);
 	
 	    		switch(healthCompo.getHealthChange()) {
-	    		case HIT:
+	    		case HIT:	    			
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
-							gridPos.coord(), false, 0, room);
+							gridPos, healthCompo.getHealthChange(), 0, room);
 	
+    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
+	    			alertEnemy(entity, healthCompo);
+
 	    			break;
 	    		case HEALED:
+	    		case ARMOR:
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame()), 
-							gridPos.coord(), true, 0, room);
+							gridPos, healthCompo.getHealthChange(), 0, room);
 	
 	    			break;
 	    		default:
@@ -137,6 +140,21 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	}
     	}
     }
+
+    /**
+     * Switch the alert state of an enemy if the player attacked it or it the enemy came close enough to
+     * the player to attack it.
+     * @param entity the entity that received damage
+     * @param healthCompo the health component
+     */
+	private void alertEnemy(final Entity entity, HealthComponent healthCompo) {
+		if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
+			Mappers.enemyComponent.get(entity).setAlerted(true);
+		}
+		if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
+			Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
+		}
+	}
 
     /**
      * Drop an item on death.

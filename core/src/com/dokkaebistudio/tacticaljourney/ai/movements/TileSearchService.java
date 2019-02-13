@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -30,6 +31,9 @@ public class TileSearchService {
 	
 	/** The speed at which entities move on screen. */
 	public static final int MOVE_SPEED = 7;
+	
+	/** The entity for which we are searching tiles. */
+	protected Entity currentEntity;
 	
 	/** The list of tiles already visited, and the remaining move when they were visited. */
 	protected Map<Entity, Integer> visitedTilesWithRemainingMove;
@@ -50,13 +54,15 @@ public class TileSearchService {
 	
 	public void buildMoveTilesSet(Entity moverEntity, Room room) {
 		long time = System.currentTimeMillis();
+		
+		currentEntity = moverEntity;
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
 		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = findAllWalkableTiles(moverTileEntity, 1, moveCompo.moveRemaining,room);
+		moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTileEntity, 1, moveCompo.moveRemaining,room);
 		moveCompo.allWalkableTiles.add(moverTileEntity);
 		
 		//Create entities for each movable tiles to display them
@@ -78,11 +84,11 @@ public class TileSearchService {
 	 * @param room the room
 	 * @return the list of waypoints entities
 	 */
-	public List<Entity> buildWaypointList(MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
+	public List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
 			GridPositionComponent destinationPos, Room room) {
 		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord());
 		List<Entity> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
-		RoomGraph roomGraph = new RoomGraph(movableTilesList);
+		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
 		IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
 		GraphPath<Entity> path = new DefaultGraphPath<Entity>();
 		indexedAStarPathFinder.searchNodePath(startTileEntity, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
@@ -109,26 +115,28 @@ public class TileSearchService {
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
+     * @param mover the moving entity
      * @param currentTileEntity the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @return the set of tiles where the entity can move
      */
-	public Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
+	public Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
     	Map<Integer, Set<Entity>> allTilesByDepth = new HashMap<>();
-    	return findAllWalkableTiles(currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
+    	return findAllWalkableTiles(mover, currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
 	}
 	
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
+     * @param the moving entity
      * @param currentTileEntity the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @param allTilesByDepth the map containing for each depth all the tiles the entity can move onto
      * @return the set of tiles where the entity can move
      */
-	private Set<Entity> findAllWalkableTiles(Entity currentTileEntity, int currentDepth, int maxDepth, 
+	private Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, 
 			Map<Integer, Set<Entity>> allTilesByDepth, Room room) {		
 		Set<Entity> walkableTiles = new LinkedHashSet<>();
 		
@@ -156,8 +164,9 @@ public class TileSearchService {
 			//For each retrieved tile, redo a search until we reach max depth
 			for (Entity tile : previouslyReturnedTiles) {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
-				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), room);
-	        	Set<Entity> returnedTiles = findAllWalkableTiles(tile, currentDepth + moveConsumed, maxDepth, allTilesByDepth, room);
+				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), mover, room);
+	        	Set<Entity> returnedTiles = findAllWalkableTiles(mover, tile, currentDepth + moveConsumed, 
+	        			maxDepth, allTilesByDepth, room);
 	        	walkableTiles.addAll(returnedTiles);
 	        }
 		}
@@ -320,16 +329,8 @@ public class TileSearchService {
 			return true;
 		}
 		
-		if (checkEntityToAttack) {
-			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
-			if (entityOnTile == null) {
-				//Nothing to attack on this tile
-				return true;
-			}
-		}
-		
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tileEntity);
-		
+		// Obstacles		
+		GridPositionComponent currentTilePos = Mappers.gridPositionComponent.get(tileEntity);
 		Set<Entity> blockingEntity = null; 
 		if (attackType == AttackTypeEnum.EXPLOSION) {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockExplosionComponent.class, room);
@@ -337,9 +338,29 @@ public class TileSearchService {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
-			obstacles.add(gridPositionComponent.coord());
+			obstacles.add(currentTilePos.coord());
 		}
 		
+		
+		// Check entities to attack
+		if (checkEntityToAttack) {
+			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
+			if (entityOnTile == null) {
+				//Nothing to attack on this tile
+				return true;
+			} else {
+				EnemyComponent currentEnemyCompo = Mappers.enemyComponent.get(currentEntity);
+				if (currentEnemyCompo != null) {
+					EnemyComponent targetEnemyComponent = Mappers.enemyComponent.get(entityOnTile);
+					if (targetEnemyComponent != null && targetEnemyComponent.getFaction() == currentEnemyCompo.getFaction()) {
+						//Same faction, do not add the attackable tiles
+						return true;
+					}
+				}
+			}
+		}
+		
+
 		
 		//TODO: this condition will probably have to change, when fighting a flying enemy over a pit
 		//for example.

@@ -19,10 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextButton;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -43,15 +39,21 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	/** The current room. */
     private Room room;
     
+    private boolean isShop;
     
-    boolean itemPopinDisplayed = false;
+    
+    //**************************
+    // Actors
+    
     private Table selectedItemPopin;
     private Label itemTitle;
     private Label itemDesc;
     private TextButton pickupItemBtn;
     private ChangeListener pickupListener;
+    private ChangeListener buyListener;
     private TextButton useItemBtn;
     private ChangeListener useListener;
+
     
     
     /** The state before the level up state. */
@@ -81,40 +83,21 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     		room.setNextState(RoomState.ITEM_POPIN);
     		
 			itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
+			isShop = itemComponent.getPrice() != null;
 
-			initTable();
-			
-			Entity item = playerInventoryCompo.getCurrentItem();
-			
-			// Update the content
-			itemTitle.setText(itemComponent.getItemLabel());
-			if (itemComponent.getItemDescription() != null) {
-				itemDesc.setText(itemComponent.getItemDescription());
-			}
-			if (itemComponent.getItemActionLabel() != null) {
-				useItemBtn.setText(itemComponent.getItemActionLabel());
+			if (selectedItemPopin == null) {
+				initTable();
 			}
 			
-			// Update the Drop item listener
-			updatePickupListener(item, itemComponent);
-			
-			if (itemComponent.getItemActionLabel() != null) {
-				// Update the Use item listener
-				updateUseListener(item);
-			}
-	
-			
-			// Place the popin properly
-			selectedItemPopin.pack();
-			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+			refreshTable();
 		
-			itemPopinDisplayed = true;
 			this.stage.addActor(selectedItemPopin);
 			
 			playerInventoryCompo.clearCurrentAction();
     	}
     	
-    	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN || room.getState() == RoomState.ITEM_POPIN) {
+    	
+    	if (room.getState() == RoomState.ITEM_POPIN) {
     		// Draw the table
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
@@ -125,16 +108,58 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     		}
     	}
 	}
+
+	private void refreshTable() {
+		Entity item = playerInventoryCompo.getCurrentItem();
+		
+		// Update the content
+		itemTitle.setText(itemComponent.getItemLabel());
+		if (itemComponent.getPrice() != null) {
+			itemTitle.setText(itemTitle.getText() + " ([GOLD]" + itemComponent.getPrice() + "coins[WHITE])");
+		}
+		if (itemComponent.getItemDescription() != null) {
+			itemDesc.setText(itemComponent.getItemDescription());
+		}
+
+		if (isShop) {
+			pickupItemBtn.setText("Buy");
+			// Update the Drop item listener
+			updateBuyListener(item, itemComponent);
+
+			if (useItemBtn != null) useItemBtn.setVisible(false);
+		} else {
+			pickupItemBtn.setText("Take");
+			
+			if (useItemBtn != null) {
+				useItemBtn.setVisible(true);
+				if (itemComponent.getItemActionLabel() != null) {
+					useItemBtn.setText(itemComponent.getItemActionLabel());
+				}
+			}
+			
+			
+			// Update the Drop item listener
+			updatePickupListener(item, itemComponent);
+			
+			if (itemComponent.getItemActionLabel() != null) {
+				// Update the Use item listener
+				updateUseListener(item);
+			}
+		}
+
+		
+		// Place the popin properly
+		selectedItemPopin.pack();
+		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+	}
     
 
     /**
      * Initialize the popin table (only the first time it is displayed).
      */
 	private void initTable() {
-		if (selectedItemPopin == null) {
-			selectedItemPopin = PoolableTable.create();
-		}
-//			selectedItemPopin.setDebug(true);
+		selectedItemPopin = new Table();
+//		selectedItemPopin.setDebug(true);
 
 		// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
 		selectedItemPopin.setTouchable(Touchable.enabled);
@@ -142,31 +167,29 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.inventory_item_popin_background));
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
 		selectedItemPopin.setBackground(textureRegionDrawable);
 		
 		selectedItemPopin.align(Align.top);
 		
 		// 1 - Title
-		itemTitle = PoolableLabel.create("Title", PopinService.hudStyle());
+		itemTitle = new Label("Title", PopinService.hudStyle());
 		selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
 		selectedItemPopin.row().align(Align.center);
 		
 		// 2 - Description
 		if (itemComponent.getItemDescription() != null) {
-			itemDesc = PoolableLabel.create("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. "
-					+ "Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui "
-					+ "est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
+			itemDesc = new Label("Desc", PopinService.hudStyle());
 			itemDesc.setWrap(true);
 			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 		}
 		
 		// 3 - Action buttons
-		Table buttonTable = PoolableTable.create();
+		Table buttonTable = new Table();
 		
 		// 3.1 - Close button
-		final TextButton closeBtn = PoolableTextButton.create("Close", PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close", PopinService.bigButtonStyle());			
 		// continueButton listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -175,14 +198,14 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
-		
+
 		// 3.2 - Take button
-		pickupItemBtn = PoolableTextButton.create("Take", PopinService.bigButtonStyle());			
+		pickupItemBtn = new TextButton("Take", PopinService.bigButtonStyle());			
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
 		if (itemComponent.getItemActionLabel() != null) {
-			useItemBtn = PoolableTextButton.create("Use", PopinService.bigButtonStyle());			
+			useItemBtn = new TextButton("Use", PopinService.bigButtonStyle());			
 			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		}
 		
@@ -217,13 +240,25 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		pickupItemBtn.addListener(pickupListener);
 	}
 
+	private void updateBuyListener(final Entity item, final ItemComponent itemComponent) {
+		if (buyListener != null) {
+			pickupItemBtn.removeListener(buyListener);
+		}
+		buyListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				playerInventoryCompo.requestAction(InventoryActionEnum.BUY, item);
+				closePopin();
+			}
+		};
+		pickupItemBtn.addListener(buyListener);
+	}
 
 	/**
 	 * Close the popin and unpause the game.
 	 */
 	private void closePopin() {
 		selectedItemPopin.remove();
-		selectedItemPopin.clear();
 		
 		if (room.getNextState() == null) {
 			room.setNextState(previousState);

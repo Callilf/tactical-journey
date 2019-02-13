@@ -16,11 +16,11 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.LootableComponent.LootableStateEnum;
-import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -63,6 +64,10 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public ItemFactory itemFactory;
 	
+	/** The creep factory. */
+	public CreepFactory creepFactory;
+
+	
 	
 	/** The factory for visual effects. */
 	public EffectFactory effectFactory;
@@ -81,6 +86,7 @@ public final class EntityFactory {
 		this.playerFactory = new PlayerFactory(e, this);
 		this.enemyFactory = new EnemyFactory(e, this);
 		this.itemFactory = new ItemFactory(e, this);
+		this.creepFactory = new CreepFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		
 		groundTexture = Assets.getTexture(Assets.tile_ground);
@@ -117,7 +123,7 @@ public final class EntityFactory {
 				spriteCompo.setSprite(new Sprite(pitTexture));
 				break;
 			case MUD:
-				this.createMud(room, pos);
+				this.creepFactory.createMud(room, pos);
 				spriteCompo.setSprite(new Sprite(groundTexture));
 				tile.type = TileEnum.GROUND;
 				break;
@@ -162,36 +168,7 @@ public final class EntityFactory {
 		engine.addEntity(wallEntity);
 
     	return wallEntity;
-	}
-	
-	public Entity createMud(Room room, Vector2 pos) {
-		Entity mudEntity = engine.createEntity();
-		mudEntity.flags = EntityFlagEnum.MUD.getFlag();
-
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(mudEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.MUD;
-    	mudEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.mud));
-    	spriteCompo.setSprite(s);
-    	mudEntity.add(spriteCompo);
-		
-		SlowMovementComponent slowMovementCompo = engine.createComponent(SlowMovementComponent.class);
-		slowMovementCompo.setMovementConsumed(1);
-    	mudEntity.add(slowMovementCompo);
-    	
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.mud_destroyed));
-		mudEntity.add(destructibleCompo);
-    	
-		engine.addEntity(mudEntity);
-
-    	return mudEntity;
-	}
-
-	
+	}	
 	
 	public Entity createDoor(Room room, Vector2 pos, Room targetedRoom) {
 		Entity doorEntity = engine.createEntity();
@@ -516,11 +493,16 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, boolean heal, float offsetY, Room room) {
+	public Entity createDamageDisplayer(String damage, GridPositionComponent gridPosCompo, HealthChangeEnum healthChange, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
-		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		Vector2 initialPos = null;
+		if (gridPosCompo.hasAbsolutePos()) {
+			initialPos = new Vector2(gridPosCompo.getAbsolutePos());
+		} else {
+			initialPos = TileUtil.convertGridPosIntoPixelPos(gridPosCompo.coord());
+		}
 		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
@@ -533,12 +515,24 @@ public final class EntityFactory {
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		if (heal) {
-			textCompo.setFont(Assets.greenFont);
-		} else {
-			textCompo.setFont(Assets.redFont);
+		textCompo.setFont(Assets.font);
+		
+		String color = "";
+		switch(healthChange) {
+		case HEALED:
+			color = "[GREEN]";
+			break;
+		case HIT:
+			color = "[RED]";
+			break;
+		case ARMOR:
+			color = "[BLUE]";
+			break;
+			default:
+				color = "[WHITE]";
+
 		}
-		textCompo.setText(damage);
+		textCompo.setText(color + damage);
 		display.add(textCompo);
 		
 		room.addEntity(display);
@@ -747,6 +741,26 @@ public final class EntityFactory {
 		engine.addEntity(remainsEntity);
 
     	return remainsEntity;
+	}
+	
+	/**
+	 * Create a dialog popin
+	 * @param pos the position
+	 * @return the dialog
+	 */
+	public Entity createDialogPopin(String text, Vector2 pos, float duration) {
+		Entity dialogEntity = engine.createEntity();
+		dialogEntity.flags = EntityFlagEnum.DIALOG_POPIN.getFlag();
+
+		DialogComponent dialogCompo = engine.createComponent(DialogComponent.class);
+		dialogCompo.setPos(pos);
+		dialogCompo.setDuration(duration);
+		dialogCompo.setText(text);
+		dialogEntity.add(dialogCompo);
+		
+		engine.addEntity(dialogEntity);
+
+    	return dialogEntity;
 	}
 	
 	

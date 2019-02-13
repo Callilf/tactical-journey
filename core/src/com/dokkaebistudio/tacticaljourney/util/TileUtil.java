@@ -7,7 +7,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.SlowMovementComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -71,12 +71,12 @@ public final class TileUtil {
 	 * @param room the room
 	 * @return the cost of movement
 	 */
-	public static int getCostOfMovementForTilePos(Vector2 pos, Room room) {
+	public static int getCostOfMovementForTilePos(Vector2 pos, Entity mover, Room room) {
 		int cost = 1;
-		Set<Entity> slowEntities = TileUtil.getEntitiesWithComponentOnTile(pos, SlowMovementComponent.class, room);
-		for (Entity e : slowEntities) {
-			SlowMovementComponent slowMovementComponent = Mappers.slowMoveComponent.get(e);
-			cost += slowMovementComponent.getMovementConsumed();
+		Set<Entity> creepEntities = TileUtil.getEntitiesWithComponentOnTile(pos, CreepComponent.class, room);
+		for (Entity e : creepEntities) {
+			CreepComponent creepComponent = Mappers.creepComponent.get(e);
+			cost += creepComponent.getMovementConsumed(mover);
 		}
 		return cost;
 	}
@@ -153,6 +153,26 @@ public final class TileUtil {
 		if (entitiesAtPosition != null) {
 			for (Entity e : entitiesAtPosition) {
 				if (Mappers.solidComponent.get(e) != null) {
+					return e;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	/**
+	 * Return the enemy entity standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The entity standing at this position, null if no entity there.
+	 */
+	public static Entity getEnemyEntityOnTile(Vector2 position, Room room) {
+		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(position);
+		if (entitiesAtPosition != null) {
+			for (Entity e : entitiesAtPosition) {
+				if (Mappers.enemyComponent.get(e) != null) {
 					return e;
 				}
 			}

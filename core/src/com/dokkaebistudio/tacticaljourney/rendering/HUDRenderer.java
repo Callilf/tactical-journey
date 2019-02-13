@@ -34,9 +34,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableImage;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -68,10 +65,12 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
 	private Button endTurnBtn;
-	private Table healthAndXptable; 
+	private Table healthTable;
+	private Label healthLabel;
+	private Label armorLabel;
+	private Table xpTable;
 	private Label levelLabel;
 	private Label expLabel;
-	private Label healthLabel;
 	
 	private Table profileTable; 
 	private Button profileBtn;
@@ -120,11 +119,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	// FPS (debug only)
 	private void displayFPS() {
 		if (fps == null) {
-			fps = PoolableTable.create();
+			fps = new Table();
 			fps.setPosition(0, 1050);
 			fps.align(Align.left);
 			// Turns
-			fpsLabel = PoolableLabel.create("", PopinService.hudStyle());
+			fpsLabel = new Label("", PopinService.hudStyle());
 			fps.add(fpsLabel).left().uniformX();
 
 			fps.pack();
@@ -143,17 +142,17 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private void displayTimeAndTurns() {
 		
 		if (timeAndTurnTable == null) {
-			timeAndTurnTable = PoolableTable.create();
+			timeAndTurnTable = new Table();
 			timeAndTurnTable.setPosition(POS_TIMER.x, POS_TIMER.y - 20);
 			
 			// Turns
-			turnLabel = PoolableLabel.create("", PopinService.hudStyle());
+			turnLabel = new Label("", PopinService.hudStyle());
 			timeAndTurnTable.add(turnLabel).uniformX();
 
 			timeAndTurnTable.row();
 
 			// Time
-			timeLabel = PoolableLabel.create("", PopinService.hudStyle());
+			timeLabel = new Label("", PopinService.hudStyle());
 			timeAndTurnTable.add(timeLabel).uniformX();
 
 			timeAndTurnTable.pack();
@@ -179,7 +178,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		final AttackComponent attackComponent = Mappers.attackComponent.get(player);
 		
 		if (bottomLeftTable == null) {
-			bottomLeftTable = PoolableTable.create();
+			bottomLeftTable = new Table();
 //			bottomLeftTable.setDebug(true);
 			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
@@ -222,49 +221,69 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			stage.addActor(bottomLeftTable);
 		}
 
-		if (healthAndXptable == null) {
-			healthAndXptable = PoolableTable.create();
-			healthAndXptable.setPosition(200, 30);
+		// HEALTH
+		if (healthTable == null) {
+			healthTable = new Table();
+			healthTable.setPosition(200, 30);
+
+			// LIFE
+			if (healthLabel == null) {
+				healthLabel = new Label("", PopinService.hudStyle());
+			}
+			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+			healthTable.add(healthLabel).left().uniformX();
+			healthTable.row();
+			
+			// ARMOR
+			if (armorLabel == null) {
+				armorLabel = new Label("", PopinService.hudStyle());
+			}
+			armorLabel.setText("Armor: " + healthComponent.getArmor() + "/" + healthComponent.getMaxArmor());
+			healthTable.add(armorLabel).left().uniformX();
+	
+			healthTable.pack();
+			stage.addActor(healthTable);
+		}
+		
+		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+		armorLabel.setText("Armor: " + healthComponent.getArmorColor() + healthComponent.getArmor() + "[]/" + healthComponent.getMaxArmor());
+
+		
+		// XP
+		if (xpTable == null) {
+			xpTable = new Table();
+			xpTable.setPosition(450, 30);
 		
 			// LEVEL
 			if (levelLabel == null) {
-				levelLabel = PoolableLabel.create("", PopinService.hudStyle());
+				levelLabel = new Label("", PopinService.hudStyle());
 			}
 			levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
-			healthAndXptable.add(levelLabel).left().uniformX();
-			healthAndXptable.row();
+			xpTable.add(levelLabel).left().uniformX();
+			xpTable.row();
 	
 			// XP
 			if (expLabel == null) {
-				expLabel = PoolableLabel.create("", PopinService.hudStyle());
+				expLabel = new Label("", PopinService.hudStyle());
 			}
 			expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
-	
-			healthAndXptable.add(expLabel).left().uniformX();
-			healthAndXptable.row();
-	
-			// LIFE
-			if (healthLabel == null) {
-				healthLabel = PoolableLabel.create("", PopinService.hudStyle());
-			}
-			healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
-			healthAndXptable.add(healthLabel).left().uniformX();
-	
-			healthAndXptable.pack();
-			stage.addActor(healthAndXptable);
+			xpTable.add(expLabel).left().uniformX();	
+			
+			xpTable.pack();
+			stage.addActor(xpTable);
 		}
 		
 		levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
 		expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
-		healthLabel.setText("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
 		
 		
+		// PROFILE and INVENTORY
 		final PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 
 		if (profileTable == null) {
-			profileTable = PoolableTable.create();
-			profileTable.setPosition(500, 30);
+			profileTable = new Table();
+			profileTable.setPosition(700, 30);
 		
 			// Profile btn
 			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_profile)));
@@ -276,6 +295,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			profileBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
 				}
 			});
@@ -292,6 +312,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					playerComponent.setProfilePopinDisplayed(false);
+
 					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					} else {
@@ -320,7 +342,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		if (skillsTable == null) {
 			allSkillButtons.clear();
 			
-			skillsTable = PoolableTable.create();
+			skillsTable = new Table();
 			skillsTable.setPosition(1500, 30);
 			skillsTable.setTouchable(Touchable.enabled);
 	
@@ -555,26 +577,26 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		
 		if (ammoTable == null) {
-			ammoTable = PoolableTable.create();
+			ammoTable = new Table();
 			ammoTable.setPosition(POS_ARROW_SPRITE.x, POS_ARROW_SPRITE.y);
 			
 			// Arrows
-			Table arrowTable = PoolableTable.create();
+			Table arrowTable = new Table();
 
-			Image arrowImage = PoolableImage.create(Assets.getTexture(Assets.arrow_item));
+			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
 			arrowTable.add(arrowImage).uniformX();
 			
-			arrowLabel = PoolableLabel.create("", PopinService.hudStyle());
+			arrowLabel = new Label("", PopinService.hudStyle());
 			arrowTable.add(arrowLabel).uniformX().padLeft(-15);
 			
 			ammoTable.add(arrowTable).uniformX();
 			
 			// Bombs
-			Table bombTable = PoolableTable.create();
-			Image bombImage = PoolableImage.create(Assets.getTexture(Assets.bomb_item));
+			Table bombTable = new Table();
+			Image bombImage = new Image(Assets.getTexture(Assets.bomb_item));
 			bombTable.add(bombImage).uniformX();
 			
-			bombLabel = PoolableLabel.create("", PopinService.hudStyle());
+			bombLabel = new Label("", PopinService.hudStyle());
 			bombTable.add(bombLabel).uniformX().padLeft(-15);
 			
 			ammoTable.add(bombTable).uniformX();

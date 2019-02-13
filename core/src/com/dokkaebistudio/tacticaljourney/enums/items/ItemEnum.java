@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.items;
+package com.dokkaebistudio.tacticaljourney.enums.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -45,7 +45,7 @@ public enum ItemEnum {
 
 		@Override
 		public String getDescription() {
-			return "Arrows can be shot from a distance. If there are too much arrows for your quiver, the remaining "
+			return "Arrows can be shot from a distance using your bow skill (down left of the screen). If there are too much arrows for your quiver, the remaining "
 				+ "arrows will stay on the ground.";
 		}
 		
@@ -58,12 +58,10 @@ public enum ItemEnum {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
 			int remainingArrows = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, itemComponent.getQuantity());
 			
-			if (remainingArrows > 0) {
-				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
-				itemComponent.setQuantity(remainingArrows);
-				return false;
-			}
-			return true;
+			itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
+			itemComponent.setQuantity(remainingArrows);
+
+			return remainingArrows == 0;
 		}
 	},
 	
@@ -72,7 +70,7 @@ public enum ItemEnum {
 
 		@Override
 		public String getDescription() {
-			return "Bombs can be thrown on the ground and explode after some turns. Be sure to stay away from the blast. "
+			return "Bombs can be thrown on the ground by using your bomb skill and explode after some turns. Be sure to stay away from the blast. "
 					+ "If there are too much bombs for your bag, the remaining bombs will stay on the ground.";
 		}
 		
@@ -85,12 +83,11 @@ public enum ItemEnum {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(user);
 			int remainingBombs = ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, itemComponent.getQuantity());
 			
-			if (remainingBombs > 0) {
-				itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
-				itemComponent.setQuantity(remainingBombs);
-				return false;
-			}
-			return true;		}
+			itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
+			itemComponent.setQuantity(remainingBombs);
+
+			return remainingBombs == 0;
+		}
 	},
 	
 	/** A consumable item that heals 25 HP. */
@@ -99,7 +96,7 @@ public enum ItemEnum {
 		@Override
 		public String getDescription() {
 			return "Heal 25 HP upon use.\n"
-					+ "No one knows how it's made and why is it red, but rumor has it that it tastes like cinnamon latte.";		
+					+ "Remember that drinking this potion will take a turn, so don't stay too close from the enemy while doing it.";		
 		}
 		
 		@Override
@@ -117,13 +114,60 @@ public enum ItemEnum {
 	},
 	
 	
+	/** A consumable item that restore 30 Armor. */
+	CONSUMABLE_ARMOR_UP("Piece of armor", Assets.armor_up_item, false, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Gives 30 armor upon use.\n"
+					+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Equip";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			//Restore 30 Armor !
+			HealthComponent healthComponent = Mappers.healthComponent.get(user);
+			healthComponent.restoreArmor(30);
+			return true;
+		}
+	},
+	
+	/** A consumable item that restore 10 Armor. */
+	CONSUMABLE_ARMOR_PIECE("Piece of armor", Assets.armor_piece_item, false, true) {
+		
+		@Override
+		public String getDescription() {
+			return "Gives 10 armor upon use.\n"
+					+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
+		}
+		
+		@Override
+		public String getActionLabel() {
+			return "Equip";
+		}
+		
+		@Override
+		public boolean use(Entity user, Entity item, Room room) {
+			//Restore 10 Armor !
+			HealthComponent healthComponent = Mappers.healthComponent.get(user);
+			healthComponent.restoreArmor(10);
+			return true;
+		}
+	},
+	
+	
 	/** A tutorial page. */
 	TUTORIAL_PAGE_1("Tutorial page 1", Assets.tutorial_page_item, false, true) {
 		
 		@Override
 		public String getDescription() {
 			return "Welcome to Tactical Journey.\n"
-					+ "You won't be assisted much in this game so go explore and try to understand it by yourself.";		
+					+ "Your goal is to reach the end of the last floor. As of now, there is only one floor, so reaching the end of this floor will be enough.";		
 		}
 		
 		@Override
@@ -141,8 +185,11 @@ public enum ItemEnum {
 		
 		@Override
 		public String getDescription() {
-			return "Page 2: Le verbe Ouamoulure (4eme groupe).\n"
-					+ "Je ouamoului, tu ouamouluis, il ouamoului, nous ouamouluissons, vous ouamouluissez, ils ouamouluissent.";		
+			return "Skills: \n"
+					+ "On the bottom right of the screen you have 3 skills:\n"
+					+ " - The melee skill allowing you to attack anything close\n"
+					+ " - The range skill, allowing you to use your bow given you have arrows\n"
+					+ " - The bomb skill that allows you throwing bombs that explode after 2 turns.";		
 		}
 		
 		@Override
@@ -160,8 +207,9 @@ public enum ItemEnum {
 		
 		@Override
 		public String getDescription() {
-			return "Page 3: Le chant des herons.\n"
-					+ "Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron Heron.";		
+			return "Turns:\n"
+					+ "Remember that mostly everything in this game except movement takes a turn. Using, droping or picking up an item will"
+					+ " end your turn, so stay away from enemies when managing your inventory. Note that picking up money does not end your turn.";		
 		}
 		
 		@Override
@@ -179,8 +227,12 @@ public enum ItemEnum {
 		
 		@Override
 		public String getDescription() {
-			return "Page 4: The best game.\n"
-					+ "Marmotte de terre, Windows tournevista, Tortulipe, Salamandragore.";		
+			return "The wheel:\n"
+					+ "When attacking an enemy, the attack wheel pops up. The damage you deal depends on the color you hit.\n"
+					+ " - [GREEN]Green[WHITE]: normal hit, the amount you deal is equal to your strength\n"
+					+ " - [GRAY]Gray[WHITE]: graze, the amount you deal is a bit lower than your strength\n"
+					+ " - [BLACK]Black[WHITE]: miss, you don't deal any damage\n"
+					+ " - [RED]Red[WHITE]: critical, the amount you deal is 2 times your strength.";		
 		}
 		
 		@Override

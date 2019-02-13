@@ -16,7 +16,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.items.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.enums.items.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -127,7 +127,7 @@ public class ItemComponent implements Component, Poolable {
 			};
 	
 			float duration = 0.1f * i;
-			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(580, 30, 1f, Interpolation.circle),
+			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(780, 30, 0.75f, Interpolation.circle),
 					removeImageAction));
 				
 			this.pickupAnimationImages.add(pickupImage);
@@ -253,8 +253,12 @@ public class ItemComponent implements Component, Poolable {
 		this.price = price;
 		
 		if (priceDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
-			textComponent.setText(String.valueOf(price));
+			if (price != null) {
+				TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
+				textComponent.setText(String.valueOf(price));
+			} else {
+				priceDisplayer = null;
+			}
 		}
 	}
 

@@ -83,7 +83,7 @@ public class MapRenderer implements Renderer {
 		
 		gameScreen.guiCam.update();
 		
-		Table mapTable = PoolableTable.create();
+		Table mapTable = new Table();
 		mapTable.setPosition(1830f, 1047f);
 		mapTable.setTouchable(Touchable.childrenOnly);
 		
@@ -163,7 +163,9 @@ public class MapRenderer implements Renderer {
 			case EMPTY_ROOM:
 				shapeRenderer.setColor(Color.CYAN);
 				break;
-
+			case SHOP_ROOM:
+				shapeRenderer.setColor(Color.FIREBRICK);
+				break;
 			}
 			
 			float rx = offsetX + (pos.x * (MAP_ROOM_WIDTH + MAP_CORRIDOR_LENGTH));

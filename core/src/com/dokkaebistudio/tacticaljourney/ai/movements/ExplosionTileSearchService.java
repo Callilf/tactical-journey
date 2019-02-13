@@ -28,6 +28,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
+		currentEntity = explosive;
 		
 		ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
 		

@@ -137,6 +137,7 @@ public class Assets {
 	//********
 	// Creep
 	public static final String creep_web = "creep-web";
+	public static final String creep_fire = "creep-fire";
 
 
 	//********

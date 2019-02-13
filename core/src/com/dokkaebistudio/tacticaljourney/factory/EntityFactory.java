@@ -493,11 +493,16 @@ public final class EntityFactory {
 	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
 	 * @return the damage displayer entity
 	 */
-	public Entity createDamageDisplayer(String damage, Vector2 gridPos, HealthChangeEnum healthChange, float offsetY, Room room) {
+	public Entity createDamageDisplayer(String damage, GridPositionComponent gridPosCompo, HealthChangeEnum healthChange, float offsetY, Room room) {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
-		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		Vector2 initialPos = null;
+		if (gridPosCompo.hasAbsolutePos()) {
+			initialPos = new Vector2(gridPosCompo.getAbsolutePos());
+		} else {
+			initialPos = TileUtil.convertGridPosIntoPixelPos(gridPosCompo.coord());
+		}
 		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);

@@ -94,7 +94,7 @@ public class CreepComponent implements Component, Poolable {
 		};
 
 		this.removeCreepImage.setOrigin(Align.center);
-		this.removeCreepImage.addAction(Actions.sequence(Actions.scaleTo(0, 0, 1f),removeImageAction));
+		this.removeCreepImage.addAction(Actions.sequence(Actions.scaleTo(0, 0, 0.5f),removeImageAction));
 				
 		
 		return this.removeCreepImage;

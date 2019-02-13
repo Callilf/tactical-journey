@@ -283,7 +283,10 @@ public class RoomGenerator {
 			fillLootable(bones, 1);
 			
 			
-			entityFactory.creepFactory.createWeb(room, new Vector2(9, 11));
+//			entityFactory.creepFactory.createWeb(room, new Vector2(9, 11));
+			
+//			entityFactory.creepFactory.createFire(room, new Vector2(11, 9));
+
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			

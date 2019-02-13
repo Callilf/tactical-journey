@@ -62,7 +62,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    		switch(healthCompo.getHealthChange()) {
 	    		case HIT:	    			
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
-							gridPos.coord(), healthCompo.getHealthChange(), 0, room);
+							gridPos, healthCompo.getHealthChange(), 0, room);
 	
     				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
 	    			alertEnemy(entity, healthCompo);
@@ -71,7 +71,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    		case HEALED:
 	    		case ARMOR:
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame()), 
-							gridPos.coord(), healthCompo.getHealthChange(), 0, room);
+							gridPos, healthCompo.getHealthChange(), 0, room);
 	
 	    			break;
 	    		default:

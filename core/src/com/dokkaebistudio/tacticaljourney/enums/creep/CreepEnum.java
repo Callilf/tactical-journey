@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.enums.creep;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -15,7 +16,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public enum CreepEnum {
 		
-	/** Add money to the player's wallet. */
+	/** Spider web that slows player, gives free movement to spiders and alert all spiders of the room. */
 	WEB("Spider web", Assets.creep_web) {
 		
 		@Override
@@ -41,7 +42,7 @@ public enum CreepEnum {
 
 	},
 	
-	/** Add money to the player's wallet. */
+	/** Mud that slows movements. */
 	MUD("mud", Assets.mud) {
 		
 		@Override
@@ -50,6 +51,24 @@ public enum CreepEnum {
 		@Override
 		public int getMovementConsumed(Entity mover) {
 			return 1;
+		}
+
+	},
+	
+	/** Fire that burns entities and propagate is inflammable entities are nearby. */
+	FIRE("Fire", Assets.creep_fire) {
+		
+		@Override
+		public void onWalk(Entity walker, Entity creep, Room room) {
+			HealthComponent healthComponent = Mappers.healthComponent.get(walker);
+			if (healthComponent != null) {
+				healthComponent.hit(3, creep);
+			}
+		}
+		
+		@Override
+		public int getMovementConsumed(Entity mover) {
+			return 0;
 		}
 
 	};

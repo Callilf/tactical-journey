@@ -87,7 +87,9 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener dropListener;
     private TextButton useItemBtn;
     private ChangeListener useListener;
-    
+    private TextButton throwItemBtn;
+    private ChangeListener throwListener;
+
 
     
     /**
@@ -336,6 +338,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			useItemBtn = new TextButton("Use",PopinService.bigButtonStyle());			
 			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 			
+			// 3.4 - Throw button
+			throwItemBtn = new TextButton("Throw",PopinService.bigButtonStyle());		
+			buttonTable.add(throwItemBtn).pad(0, 20,0,20);
+
+			
 			selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
 			
 		}
@@ -346,13 +353,16 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		// Update the content
 		itemTitle.setText(itemComponent.getItemLabel());
 		itemDesc.setText(itemComponent.getItemDescription());
-		
+		useItemBtn.setText(itemComponent.getItemActionLabel());
+
 		// Update the Drop item listener
 		updateDropListener(item, slot);
 		
-		useItemBtn.setText(itemComponent.getItemActionLabel());
 		// Update the Use item listener
 		updateUseListener(item, slot);
+		
+		// Update the throw item listener
+		updateThrowListener(item, slot);
 		
 		// Place the popin properly
 		selectedItemPopin.pack();
@@ -376,6 +386,22 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			}
 		};
 		useItemBtn.addListener(useListener);
+	}
+	
+	private void updateThrowListener(final Entity item, final Table slot) {
+		if (throwListener != null) {
+			throwItemBtn.removeListener(throwListener);
+		}
+		throwListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				inventoryCompo.requestAction(InventoryActionEnum.THROW, item);
+				slot.removeListener(this);
+				hideSelectedItemPopin();
+				closePopin();
+			}
+		};
+		throwItemBtn.addListener(throwListener);
 	}
 
 	private void updateDropListener(final Entity item, final Table slot) {

@@ -92,6 +92,17 @@ public class ItemComponent implements Component, Poolable {
 	}
 	
 	
+	/**
+	 * Throw the item at the desired location.
+	 * @param thrownPosition the location of the throw
+	 * @param thrower the entity that threw this item
+	 * @param item the item
+	 * @param room the room
+	 */
+	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+		itemType.onThrow( thrownPosition, thrower, item, room);
+	}
+	
 	
 	/**
 	 * Set up the pickup animation.

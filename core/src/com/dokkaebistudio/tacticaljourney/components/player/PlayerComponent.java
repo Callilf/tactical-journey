@@ -17,6 +17,9 @@ public class PlayerComponent implements Component {
 	/** The bomb skill. */
 	private Entity skillBomb;
 	
+	/** The throwing skill. */
+	private Entity skillThrow;
+	
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
@@ -119,5 +122,13 @@ public class PlayerComponent implements Component {
 
 	public Entity getExitEntity() {
 		return exitEntity;
+	}
+
+	public Entity getSkillThrow() {
+		return skillThrow;
+	}
+
+	public void setSkillThrow(Entity skillThrow) {
+		this.skillThrow = skillThrow;
 	}
 }

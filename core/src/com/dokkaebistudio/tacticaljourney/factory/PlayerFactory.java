@@ -126,7 +126,7 @@ public final class PlayerFactory {
 		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
 		ammoCarrierCompo.setArrows(0);
 		ammoCarrierCompo.setMaxArrows(10);
-		ammoCarrierCompo.setBombs(0);
+		ammoCarrierCompo.setBombs(5);
 		ammoCarrierCompo.setMaxBombs(5);
 		playerEntity.add(ammoCarrierCompo);
 		
@@ -158,6 +158,7 @@ public final class PlayerFactory {
 		entityFactory.createSkill(room,playerEntity, SkillEnum.SLASH, 1 );
 		entityFactory.createSkill(room,playerEntity, SkillEnum.BOW, 2);
 		entityFactory.createSkill(room,playerEntity, SkillEnum.BOMB, 3);
+		entityFactory.createSkill(room,playerEntity, SkillEnum.THROW, 4);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;

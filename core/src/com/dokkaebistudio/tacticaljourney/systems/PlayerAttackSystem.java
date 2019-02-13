@@ -16,7 +16,9 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
@@ -183,27 +185,44 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		if (skillEntity != null) {
 	    		final AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
+	    		String projectileTexture = Assets.projectile_bomb;
 	    		if (skillAttackCompo.getProjectileImage() == null) {
 		    		Entity targetedTile = skillAttackCompo.getTargetedTile();
 		    		final GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);
 		    		
-					Action finishBombThrowAction = new Action(){
-					  @Override
-					  public boolean act(float delta){
-						  finishBombThrow(player, skillEntity, targetedPosition);
-					    return true;
-					  }
-					};
+		    		Action finishThrowAction = null;
+		    		if (skillAttackCompo.getThrownEntity() != null) {
+		    			ItemComponent itemComponent = Mappers.itemComponent.get(skillAttackCompo.getThrownEntity());
+		    			projectileTexture = itemComponent.getItemImageName();
+		    			// Throw item from inventory
+		    			finishThrowAction = new Action(){
+							  @Override
+							  public boolean act(float delta){
+								  finishItemThrow(player, skillEntity, targetedPosition);
+							    return true;
+							  }
+							};
+		    		} else {
+		    			// Throw bomb
+						finishThrowAction = new Action(){
+						  @Override
+						  public boolean act(float delta){
+							  finishBombThrow(player, skillEntity, targetedPosition);
+						    return true;
+						  }
+						};
+		    		}
 					
-					skillAttackCompo.setProjectileImage(Assets.projectile_bomb,
+					skillAttackCompo.setProjectileImage(projectileTexture,
 							attackerCurrentPos.coord(), 
 							targetedPosition.coord(), 
 							false,
-							finishBombThrowAction);
+							finishThrowAction);
 	
 					
 					stage.addActor(skillAttackCompo.getProjectileImage());
 	    		}
+	    		
 			}
     		break;
     		
@@ -245,6 +264,27 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		if (ammoCarrierComponent != null) {
 			ammoCarrierComponent.useAmmo(skillAttackCompo.getAmmoType(), skillAttackCompo.getAmmosUsedPerAttack());
 		}
+		
+		room.turnManager.endPlayerTurn();
+	}
+	
+    /**
+     * Finish the bomb throw. This is called after the animation of the bomb being thrown is done.
+     * @param player the player
+     * @param skillEntity the skill used
+     * @param targetedPosition the targeted position
+     */
+	private void finishItemThrow(final Entity player, final Entity skillEntity, GridPositionComponent targetedPosition) {		
+		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
+
+		if (skillAttackCompo.getProjectileImage() != null) {
+			skillAttackCompo.getProjectileImage().remove();
+			skillAttackCompo.setProjectileImage(null);
+		}
+		
+		Entity thrownEntity = skillAttackCompo.getThrownEntity();
+		ItemComponent itemComponent = Mappers.itemComponent.get(thrownEntity);
+		itemComponent.onThrow(targetedPosition.coord(), player, thrownEntity, room);		
 		
 		room.turnManager.endPlayerTurn();
 	}

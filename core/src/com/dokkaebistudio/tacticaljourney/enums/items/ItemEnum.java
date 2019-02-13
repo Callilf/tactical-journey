@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.enums.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -311,7 +312,7 @@ public enum ItemEnum {
 	/** Called when the item is used. */
 	public abstract boolean use(Entity user, Entity item, Room room);
 	
-	/** Called when the item is removed from an entity. */
+	/** Called when the item is dropped from an entity or the inventory. */
 	public boolean drop(Entity dropper, Entity item, Room room) {
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(dropper);
 		if (inventoryComponent != null) {
@@ -323,6 +324,18 @@ public enum ItemEnum {
 		itemPosCompo.coord().set(playerPosCompo.coord());
 		itemPosCompo.setActive(item, room);
 		return true;
+	}
+	
+	/** Throw the item at the desired location. */
+	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(thrower);
+		if (inventoryComponent != null) {
+			inventoryComponent.remove(item);
+		}
+		
+		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
+		itemPosCompo.coord().set(thrownPosition);
+		itemPosCompo.setActive(item, room);
 	}
 
 	/** Return the description of the item. */

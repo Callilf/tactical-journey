@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -35,6 +36,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -124,6 +126,9 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 			final Entity currentItem = playerIventoryCompo.getCurrentItem();
 			final ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
+			
+			
+			
 			
 			// An action has been done in the inventory
 			switch(playerIventoryCompo.getCurrentAction()) {
@@ -247,9 +252,25 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				playerIventoryCompo.setCurrentAction(null);
 				
 				break;
+				
+			case THROW:
+				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+				playerComponent.setActiveSkill(playerComponent.getSkillThrow());
+				
+				Entity skillThrow = playerComponent.getSkillThrow();
+				AttackComponent attackComponent = Mappers.attackComponent.get(skillThrow);
+				attackComponent.setThrownEntity(currentItem);
+				
+				room.setNextState(RoomState.PLAYER_TARGETING_START);
+				
+				playerIventoryCompo.setCurrentAction(null);
+				break;
+				
 				default :
 			
 			}
+			
+			
 			
 			
 		}		

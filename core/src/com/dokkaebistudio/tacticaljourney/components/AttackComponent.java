@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
@@ -55,6 +56,11 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	private int bombRadius;
 	private int bombTurnsToExplode;
+	
+	//************
+	// Throwing
+	
+	private Entity thrownEntity;
 	
 	
 	
@@ -229,7 +235,15 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 			arrow.setRotation((float) degrees);
 		}
 		
-		arrow.addAction(Actions.sequence(Actions.moveTo(targetPosInPixel.x, targetPosInPixel.y, 0.2f), 
+		arrow.setOrigin(Align.center);
+		
+		double distance = Math.hypot(playerPixelPos.x-targetPosInPixel.x, playerPixelPos.y-targetPosInPixel.y);
+		double nbTiles = Math.ceil(distance / GameScreen.GRID_SIZE);
+		float duration = (float) (nbTiles * 0.1f);
+		float rotation = (float) (nbTiles * 90);
+		
+		arrow.addAction(Actions.sequence(
+				Actions.parallel(Actions.moveTo(targetPosInPixel.x, targetPosInPixel.y, duration),Actions.rotateBy(rotation, duration)), 
 					finishAttackAction));
 			
 		this.setProjectileImage(arrow);
@@ -369,6 +383,16 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public void setStrengthDifferential(boolean isStrengthDifferential) {
 		this.isStrengthDifferential = isStrengthDifferential;
+	}
+
+
+	public Entity getThrownEntity() {
+		return thrownEntity;
+	}
+
+
+	public void setThrownEntity(Entity thrownEntity) {
+		this.thrownEntity = thrownEntity;
 	}
 	
 	

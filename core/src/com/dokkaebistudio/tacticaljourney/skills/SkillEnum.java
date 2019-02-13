@@ -8,7 +8,8 @@ public enum SkillEnum {
 
 	SLASH(AttackTypeEnum.MELEE, 1, 1, 0, AmmoTypeEnum.NONE, 0, false),
 	BOW(AttackTypeEnum.RANGE, 2, 5, -2, AmmoTypeEnum.ARROWS, 1, false),
-	BOMB(AttackTypeEnum.THROW, 0, 2, 20, AmmoTypeEnum.BOMBS, 1, true);
+	BOMB(AttackTypeEnum.THROW, 0, 2, 20, AmmoTypeEnum.BOMBS, 1, true),
+	THROW(AttackTypeEnum.THROW, 0, 5, 0, AmmoTypeEnum.NONE, 0, true);
 	
 	private AttackTypeEnum attackType;
 	private int rangeMin;

@@ -670,6 +670,9 @@ public final class EntityFactory {
 		case 3:
 			playerComponent.setSkillBomb(skillEntity);
 			break;
+		case 4:
+			playerComponent.setSkillThrow(skillEntity);
+			break;
 			
 			default:
 				break;

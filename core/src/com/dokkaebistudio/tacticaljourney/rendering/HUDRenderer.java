@@ -47,6 +47,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
 	public static Vector2 POS_MONEY = new Vector2(730f,1000f);
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
+	public static Vector2 POS_BOMB_SPRITE = new Vector2(1230f,1000f);
+
+	
+	public static Vector2 POS_INVENTORY = new Vector2(780f, 30f);
+
 
 
 	public Stage stage;
@@ -90,8 +95,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Button bombSkillButton;
 	
 	// Ammos
-	private Table ammoTable;
+	private Table ammoArrowTable;
 	private Label arrowLabel;
+	private Table ammoBombTable;
 	private Label bombLabel;
 
 	public HUDRenderer(Stage s, Entity player) {
@@ -604,34 +610,34 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private void displayAmmos() {
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		
-		if (ammoTable == null) {
-			ammoTable = new Table();
-			ammoTable.setPosition(POS_ARROW_SPRITE.x, POS_ARROW_SPRITE.y);
+		if (ammoArrowTable == null) {
+			ammoArrowTable = new Table();
+			ammoArrowTable.setPosition(POS_ARROW_SPRITE.x, POS_ARROW_SPRITE.y);
 			
 			// Arrows
-			Table arrowTable = new Table();
-
 			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
-			arrowTable.add(arrowImage).uniformX();
+			ammoArrowTable.add(arrowImage).uniformX();
 			
 			arrowLabel = new Label("", PopinService.hudStyle());
-			arrowTable.add(arrowLabel).left().uniformX();
+			ammoArrowTable.add(arrowLabel).left().uniformX();
 			
-			ammoTable.add(arrowTable).uniformX();
-			
+			ammoArrowTable.pack();
+			stage.addActor(ammoArrowTable);
+		}
+		
+		if (ammoBombTable == null) {
+			ammoBombTable = new Table();
+			ammoBombTable.setPosition(POS_BOMB_SPRITE.x, POS_BOMB_SPRITE.y);
+
 			// Bombs
-			Table bombTable = new Table();
 			Image bombImage = new Image(Assets.getTexture(Assets.bomb_item));
-			bombTable.add(bombImage).uniformX();
+			ammoBombTable.add(bombImage).uniformX();
 			
 			bombLabel = new Label("", PopinService.hudStyle());
-			bombTable.add(bombLabel).left().uniformX();
-			
-			ammoTable.add(bombTable).uniformX();
-			
+			ammoBombTable.add(bombLabel).left().uniformX();			
 
-			ammoTable.pack();
-			stage.addActor(ammoTable);
+			ammoBombTable.pack();
+			stage.addActor(ammoBombTable);
 		}
 		
 		arrowLabel.setText(ammoCarrierComponent.getArrows() + "/" + ammoCarrierComponent.getMaxArrows());

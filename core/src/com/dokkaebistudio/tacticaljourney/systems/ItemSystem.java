@@ -191,7 +191,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean instaUsed = itemComponent.use(player, currentItem, room);
 				
 				if (instaUsed) {
-					System.out.println("Insta used " + itemComponent.getItemType().getLabel());
+					System.out.println("Insta used " + itemComponent.getItemLabel());
 
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);

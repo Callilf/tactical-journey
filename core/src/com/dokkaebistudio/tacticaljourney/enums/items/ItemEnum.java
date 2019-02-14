@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -28,7 +28,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public enum ItemEnum {
 		
 	/** Add money to the player's wallet. */
-	MONEY(" # gold coin[s]", Assets.money_item, true, false, 1, 5) {
+	MONEY("# gold coin[s]", Assets.money_item, true, false, 1, 5) {
 
 		@Override
 		public String getDescription() {return null;}
@@ -44,10 +44,15 @@ public enum ItemEnum {
 			walletComponent.receive(itemComponent.getQuantity());
 			return true;
 		}
+		
+		@Override
+		public Vector2 getPickupImageMoveDestination() {
+			return HUDRenderer.POS_MONEY;
+		}
 	},
 	
 	/** Add arrows to the player's quiver. */
-	ARROW(" # arrow[s]", Assets.arrow_item, false, false, 1, 5) {
+	ARROW("# arrow[s]", Assets.arrow_item, false, false, 1, 5) {
 
 		@Override
 		public String getDescription() {
@@ -69,10 +74,15 @@ public enum ItemEnum {
 
 			return remainingArrows == 0;
 		}
+		
+		@Override
+		public Vector2 getPickupImageMoveDestination() {
+			return HUDRenderer.POS_ARROW_SPRITE;
+		}
 	},
 	
 	/** Add bombs to the player's bag. */
-	BOMB(" # bomb[s]", Assets.bomb_item, false, false, 1, 2) {
+	BOMB("# bomb[s]", Assets.bomb_item, false, false, 1, 2) {
 
 		@Override
 		public String getDescription() {
@@ -93,6 +103,11 @@ public enum ItemEnum {
 			itemComponent.setQuantity(remainingBombs);
 
 			return remainingBombs == 0;
+		}
+		
+		@Override
+		public Vector2 getPickupImageMoveDestination() {
+			return HUDRenderer.POS_BOMB_SPRITE;
 		}
 	},
 	
@@ -388,6 +403,14 @@ public enum ItemEnum {
 	
 	/** Return the label on the action button for the item. */
 	public abstract String getActionLabel();
+	
+	/** Return the location of the HUD element where the item is moved when picked up.
+	 * Default is the inventory, but for money or ammos it's different.
+	 * @return the location
+	 */
+	public Vector2 getPickupImageMoveDestination() {
+		return HUDRenderer.POS_INVENTORY;
+	}
 	
 	
 	

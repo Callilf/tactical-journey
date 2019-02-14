@@ -280,7 +280,9 @@ public class RoomGenerator {
 			entityFactory.itemFactory.createItemArmorPiece(room, new Vector2(6, 5));
 
 			
-			//entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
+			entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
+			entityFactory.itemFactory.createItemBombs(room, new Vector2(17, 8));
+
 			Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
 			Mappers.itemComponent.get(money).setQuantity(10);
 			

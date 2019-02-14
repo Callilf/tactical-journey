@@ -138,7 +138,8 @@ public class ItemComponent implements Component, Poolable {
 			};
 	
 			float duration = 0.1f * i;
-			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(780, 30, 0.75f, Interpolation.circle),
+			Vector2 moveDest = itemComponent.getItemType().getPickupImageMoveDestination();
+			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(moveDest.x, moveDest.y, 0.75f, Interpolation.circle),
 					removeImageAction));
 				
 			this.pickupAnimationImages.add(pickupImage);

@@ -229,6 +229,7 @@ public class GameScreen extends ScreenAdapter {
 		updateRoomForComponents(playerComponent.getSkillMelee(), newRoom);
 		updateRoomForComponents(playerComponent.getSkillRange(), newRoom);
 		updateRoomForComponents(playerComponent.getSkillBomb(), newRoom);
+		updateRoomForComponents(playerComponent.getSkillThrow(), newRoom);
 	}
 
 	private void updateRoomForComponents(Entity e, Room newRoom) {

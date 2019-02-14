@@ -61,11 +61,10 @@ public class Room extends EntitySystem {
 	private boolean visited;
 	
 
-	
+	/** All the entities of this room. */
 	private Array<Entity> allEntities;
-	/**
-	 * For each tile, gives the list of entities.
-	 */
+	
+	/** For each tile, gives the list of entities. */
 	private Map<Vector2,Set<Entity>> entitiesAtPositions;
 	
 	/** The enemy entities of this room. */
@@ -73,6 +72,9 @@ public class Room extends EntitySystem {
 
 	/** The neutral entities of this room. */
 	private List<Entity> neutrals;
+	
+	/** The entities to remove during this frame. */
+	private List<Entity> entitiesToRemove;
 
 	
 	
@@ -101,6 +103,7 @@ public class Room extends EntitySystem {
 		
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
+		this.entitiesToRemove = new ArrayList<>();
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
 	}
@@ -200,7 +203,7 @@ public class Room extends EntitySystem {
 		}
 		
 		this.allEntities.removeValue(e, true);		
-		engine.removeEntity(e);
+		this.entitiesToRemove.add(e);
 	}
 	
 	
@@ -218,6 +221,11 @@ public class Room extends EntitySystem {
 			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
 			gtSingleton.updateElapsedTime(deltaTime);
 		}
+		
+		for (Entity e : this.entitiesToRemove) {
+			engine.removeEntity(e);
+		}
+		this.entitiesToRemove.clear();
 		
 		updateState();
 	}

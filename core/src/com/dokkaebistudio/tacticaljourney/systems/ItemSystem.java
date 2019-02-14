@@ -42,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ItemSystem extends EntitySystem implements RoomSystem {	
@@ -314,8 +315,9 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
-				Vector2 pixelPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x,y));
-				Entity shopKeeper = TileUtil.getEntityWithComponentOnTile(pixelPos, ShopKeeperComponent.class, room);
+				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+				Entity shopKeeper = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
+				tempPos.free();
 				
 			if (shopKeeper != null) {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);

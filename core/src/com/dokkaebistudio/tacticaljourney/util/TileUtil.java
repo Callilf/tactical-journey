@@ -26,10 +26,10 @@ public final class TileUtil {
 	 * @param gridPos the grid position
 	 * @return the real position
 	 */
-	public static Vector2 convertGridPosIntoPixelPos(Vector2 gridPos) {
+	public static PoolableVector2 convertGridPosIntoPixelPos(Vector2 gridPos) {
 		float x = gridPos.x * GameScreen.GRID_SIZE + GameScreen.LEFT_RIGHT_PADDING;
 		float y = gridPos.y * GameScreen.GRID_SIZE + GameScreen.BOTTOM_MENU_HEIGHT;
-		return new Vector2(x,y);
+		return PoolableVector2.create(x,y);
 	}
 	
 	/**
@@ -47,10 +47,21 @@ public final class TileUtil {
 	 * @param gridPos the grid position
 	 * @return the real position
 	 */
-	public static Vector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {
+	public static PoolableVector2 convertPixelPosIntoGridPos(Vector2 pixelPos) {
 		float x = (float)Math.floor((pixelPos.x - GameScreen.LEFT_RIGHT_PADDING) / GameScreen.GRID_SIZE);
 		float y = (float)Math.floor((pixelPos.y - GameScreen.BOTTOM_MENU_HEIGHT) / GameScreen.GRID_SIZE);
-		return new Vector2(x,y);
+		return PoolableVector2.create(x,y);
+	}
+	
+	/**
+	 * Convert a grid position for ex (5,4) into pixel position (450,664).
+	 * @param gridPos the grid position
+	 * @return the real position
+	 */
+	public static PoolableVector2 convertPixelPosIntoGridPos(int x, int y) {
+		float newX = (float)Math.floor((x - GameScreen.LEFT_RIGHT_PADDING) / GameScreen.GRID_SIZE);
+		float newY = (float)Math.floor((y - GameScreen.BOTTOM_MENU_HEIGHT) / GameScreen.GRID_SIZE);
+		return PoolableVector2.create(newX, newY);
 	}
 	
 	
@@ -128,8 +139,11 @@ public final class TileUtil {
 	 * @return the tile at the given position
 	 */
 	public static Entity getTileAtPixelPos(Vector2 pixelPos, Room room) {
-		Vector2 gridPos = convertPixelPosIntoGridPos(pixelPos);
-		return getTileAtGridPos(gridPos, room);
+		PoolableVector2 gridPos = convertPixelPosIntoGridPos(pixelPos);
+		Entity e = getTileAtGridPos(gridPos, room);
+		gridPos.free();
+		
+		return e;
 	}
 	
 	

@@ -43,6 +43,7 @@ import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -497,9 +498,9 @@ public final class EntityFactory {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
 
-		Vector2 initialPos = null;
+		PoolableVector2 initialPos = null;
 		if (gridPosCompo.hasAbsolutePos()) {
-			initialPos = new Vector2(gridPosCompo.getAbsolutePos());
+			initialPos = PoolableVector2.create(gridPosCompo.getAbsolutePos());
 		} else {
 			initialPos = TileUtil.convertGridPosIntoPixelPos(gridPosCompo.coord());
 		}
@@ -535,6 +536,8 @@ public final class EntityFactory {
 		textCompo.setText(color + damage);
 		display.add(textCompo);
 		
+		initialPos.free();
+		
 		room.addEntity(display);
 		return display;
 	}
@@ -549,7 +552,7 @@ public final class EntityFactory {
 		Entity display = engine.createEntity();
 		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
 
-		Vector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		PoolableVector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
 		initialPos.add(0, GameScreen.GRID_SIZE + offsetY);
 		
 		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
@@ -565,6 +568,8 @@ public final class EntityFactory {
 		textCompo.setFont(Assets.font);
 		textCompo.setText("Exp+" + exp);
 		display.add(textCompo);
+		
+		initialPos.free();
 		
 		room.addEntity(display);
 		return display;

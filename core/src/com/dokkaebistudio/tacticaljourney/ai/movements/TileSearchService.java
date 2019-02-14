@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class TileSearchService {
@@ -208,14 +209,16 @@ public class TileSearchService {
 		if (currentX > 0) {
 			int newX = currentX - 1;
 			int newY = currentY;
-			if (type == CheckTypeEnum.MOVEMENT) {
-				continueSearching = checkOneTileForMovement(new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore);
-			} else if (type == CheckTypeEnum.ATTACK) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, true);
-			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, false);
-			}
+			PoolableVector2 tempPos = PoolableVector2.create(newX, newY);
 			
+			if (type == CheckTypeEnum.MOVEMENT) {
+				continueSearching = checkOneTileForMovement(tempPos, room, currentDepth, foundTiles, tilesToIgnore);
+			} else if (type == CheckTypeEnum.ATTACK) {
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, true);
+			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, false);
+			}
+			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
 				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
@@ -227,13 +230,16 @@ public class TileSearchService {
 		if (currentY < GameScreen.GRID_H - 1) {
 			int newX = currentX;
 			int newY = currentY + 1;
+			PoolableVector2 tempPos = PoolableVector2.create(newX, newY);
+
 			if (type == CheckTypeEnum.MOVEMENT) {
-				continueSearching = checkOneTileForMovement(new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore);
+				continueSearching = checkOneTileForMovement(tempPos, room, currentDepth, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, true);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, false);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, false);
 			}
+			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
 				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
@@ -244,13 +250,16 @@ public class TileSearchService {
 		if (currentX < GameScreen.GRID_W - 1) {
 			int newX = currentX + 1;
 			int newY = currentY;
+			PoolableVector2 tempPos = PoolableVector2.create(newX, newY);
+
 			if (type == CheckTypeEnum.MOVEMENT) {
-				continueSearching = checkOneTileForMovement(new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore);
+				continueSearching = checkOneTileForMovement(tempPos, room, currentDepth, foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, true);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, false);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, false);
 			}
+			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
 				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
@@ -261,13 +270,16 @@ public class TileSearchService {
 		if (currentY > 0) {
 			int newX = currentX;
 			int newY = currentY - 1;
+			PoolableVector2 tempPos = PoolableVector2.create(newX, newY);
+
 			if (type == CheckTypeEnum.MOVEMENT) {
-				continueSearching = checkOneTileForMovement(new Vector2(newX, newY), room,currentDepth,foundTiles, tilesToIgnore);
+				continueSearching = checkOneTileForMovement(tempPos, room,currentDepth,foundTiles, tilesToIgnore);
 			} else if (type == CheckTypeEnum.ATTACK) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, true);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, true);
 			} else if (type == CheckTypeEnum.ATTACK_FOR_DISPLAY) {
-				continueSearching = checkOneTileForAttack(attackType,new Vector2(newX, newY), room, currentDepth, foundTiles, tilesToIgnore, false);
+				continueSearching = checkOneTileForAttack(attackType, tempPos, room, currentDepth, foundTiles, tilesToIgnore, false);
 			}
+			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
 				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);

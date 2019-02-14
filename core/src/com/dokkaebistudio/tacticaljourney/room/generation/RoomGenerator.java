@@ -31,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 /**
  * Util class to generate a room.
@@ -61,7 +62,7 @@ public class RoomGenerator {
 		GeneratedRoom groom = new GeneratedRoom();
         groom.setTileEntities(new Entity[GRID_W][GameScreen.GRID_H]);
         groom.setTileTypes(new TileEnum[GRID_W][GRID_H]);
-        groom.setPossibleSpawns(new ArrayList<Vector2>());
+        groom.setPossibleSpawns(new ArrayList<PoolableVector2>());
 		
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
@@ -85,22 +86,25 @@ public class RoomGenerator {
             for (int x=0 ; x < GameScreen.GRID_W ; x++) {
             	String tileValStr = line[x];
             	RoomGenerationTileEnum tileVal = tileValStr.equals("") ? RoomGenerationTileEnum.GROUND : RoomGenerationTileEnum.valueOf(line[x]);
+            	
+				PoolableVector2 tempPos = PoolableVector2.create(x,realY);
+
             	switch(tileVal) {
             	case N_DOOR :
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, new Vector2(x,realY), nn);
+					entityFactory.createDoor(currentRoom, tempPos, nn);
             		break;
             	case E_DOOR :
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, new Vector2(x,realY), en);
+					entityFactory.createDoor(currentRoom, tempPos, en);
             		break;
             	case S_DOOR :
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, new Vector2(x,realY), sn);
+					entityFactory.createDoor(currentRoom, tempPos, sn);
             		break;
             	case W_DOOR :
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, new Vector2(x,realY), wn);
+					entityFactory.createDoor(currentRoom, tempPos, wn);
             		break;
             		
             	case WALL :
@@ -112,7 +116,7 @@ public class RoomGenerator {
             		break;
             		
             	case SPAWN:
-            		groom.getPossibleSpawns().add(new Vector2(x, realY));
+            		groom.getPossibleSpawns().add(PoolableVector2.create(tempPos));
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
             		break;
             		
@@ -125,6 +129,7 @@ public class RoomGenerator {
             			}
             	
             	}
+            	tempPos.free();
             }
             y ++;
 		}
@@ -135,8 +140,10 @@ public class RoomGenerator {
         //Create the tile entities
 		for (int x = 0; x < GRID_W; x++) {
 			for (y = 0; y < GameScreen.GRID_H; y++) {
-				Entity tileEntity = entityFactory.createTile(currentRoom, new Vector2(x, y), groom.getTileTypes()[x][y]);
+				PoolableVector2 tempPos = PoolableVector2.create(x, y);
+				Entity tileEntity = entityFactory.createTile(currentRoom, tempPos, groom.getTileTypes()[x][y]);
 				groom.getTileEntities()[x][y] = tileEntity;
+				tempPos.free();
 			}
 		}
 		
@@ -177,7 +184,7 @@ public class RoomGenerator {
 	public void generateRoomContent(Room room, GeneratedRoom generatedRoom) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 
-		List<Vector2> possibleSpawns = generatedRoom.getPossibleSpawns();
+		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
 
 		switch(room.type) {
 		case COMMON_ENEMY_ROOM :
@@ -185,7 +192,7 @@ public class RoomGenerator {
 			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 			
 			// Retrieve the spawn points and shuffle them
-			List<Vector2> enemyPositions = new ArrayList<>(possibleSpawns);
+			List<PoolableVector2> enemyPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(enemyPositions, random);
 			
 			// Place a loot
@@ -206,7 +213,7 @@ public class RoomGenerator {
 			}
 			
 			// Place enemies
-			Iterator<Vector2> iterator = enemyPositions.iterator();
+			Iterator<PoolableVector2> iterator = enemyPositions.iterator();
 			for (int i=0 ; i<enemyNb ; i++) {
 				if (!iterator.hasNext()) break;
 				
@@ -311,6 +318,10 @@ public class RoomGenerator {
 			default:
 			break;
 		}
+	
+	
+		// Release poolable vector2
+		generatedRoom.releasePossibleSpawns();
 	}
 	
 	private void fillLootable(Entity lootable, int nbMaxItems) {

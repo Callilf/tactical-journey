@@ -26,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
@@ -294,8 +295,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int x = (int) touchPoint.x;
 			int y = (int) touchPoint.y;
 			
-			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x, y));
-			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
+			PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
+			tempPos.free();
+			
 			if (attackableEntity != null) {
 				timer += Gdx.graphics.getDeltaTime();
 				
@@ -323,8 +326,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int x = (int) touchPoint.x;
 			int y = (int) touchPoint.y;
 
-			Vector2 gridPos = TileUtil.convertPixelPosIntoGridPos(new Vector2(x, y));
-			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(gridPos, room);
+			PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
+			tempPos.free();
+			
 			if (attackableEntity != null) {
 				displayEnemyTiles(player, attackableEntity);
 			}

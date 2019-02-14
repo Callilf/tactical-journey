@@ -4,8 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.NumberUtils;
+import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.Pools;
 
 /**
@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Pools;
  */
 public class PoolableVector2 extends Vector2 implements Poolable {
 
+	//*****************
+	// Static methods
 	public static PoolableVector2 create(int x, int y) {
 		PoolableVector2 vector2 = Pools.obtain(PoolableVector2.class);
 		vector2.x = (float) x;
@@ -34,6 +36,16 @@ public class PoolableVector2 extends Vector2 implements Poolable {
 		vector2.x = pos.x;
 		vector2.y = pos.y;
 		return vector2;
+	}
+	
+	
+	
+	
+	//********************
+	// Isntance method
+	
+	public void free() {
+		Pools.free(this);
 	}
 	
 	@Override

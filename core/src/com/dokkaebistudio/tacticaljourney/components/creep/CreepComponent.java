@@ -38,6 +38,9 @@ public class CreepComponent implements Component, Poolable {
 	
 	/** The image for the animation of removing the creep. */
 	private Image removeCreepImage;
+	
+	
+	
 
 	
 	
@@ -107,6 +110,7 @@ public class CreepComponent implements Component, Poolable {
 	@Override
 	public void reset() {
 		this.setCurrentDuration(0);
+		this.removeCreepImage = null;
 	}
 	
 	
@@ -117,11 +121,7 @@ public class CreepComponent implements Component, Poolable {
 		GridPositionComponent positionComponent = Mappers.gridPositionComponent.get(creep);
 		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
 
-		if (removeCreepImage == null) {
-			this.removeCreepImage = new Image(Assets.getTexture(creepComponent.getType().getImageName()));
-		} else {
-			this.removeCreepImage.clear();
-		}
+		this.removeCreepImage = new Image(Assets.getTexture(creepComponent.getType().getImageName()));
 		
 		Vector2 worldPos = positionComponent.getWorldPos();
 		this.removeCreepImage.setPosition(worldPos.x, worldPos.y);
@@ -129,7 +129,7 @@ public class CreepComponent implements Component, Poolable {
 		Action removeImageAction = new Action(){
 		  @Override
 		  public boolean act(float delta){
-			  removeCreepImage.remove();
+			  if (removeCreepImage != null) removeCreepImage.remove();
 			  return true;
 		  }
 		};

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -174,6 +175,13 @@ public final class ItemFactory {
 	public Entity createItemTutorialPage(int pageNumber, Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, this.tutorialPageTexture, ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
 		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
+		
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(true);
+		flammable.setDestroyedTexture(this.tutorialPageTexture);
+		item.add(flammable);
+
 		return item;
 	}
 	

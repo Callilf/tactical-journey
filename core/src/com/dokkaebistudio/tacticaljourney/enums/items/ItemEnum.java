@@ -149,11 +149,11 @@ public enum ItemEnum {
 				inventoryComponent.remove(item);
 			}
 			
-			room.entityFactory.creepFactory.createFire(room, thrownPosition);
+			room.entityFactory.creepFactory.createFire(room, thrownPosition, thrower);
 			List<Entity> adjacentTiles = TileUtil.getAdjacentEntitiesWithComponent(thrownPosition, TileComponent.class, room);
 			for (Entity tile : adjacentTiles) {
 				if (Mappers.tileComponent.get(tile).type.isWalkable()) {
-					room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord());
+					room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord(), thrower);
 				}
 			}
 		}

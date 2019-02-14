@@ -1,15 +1,20 @@
 package com.dokkaebistudio.tacticaljourney.enums.creep;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -84,27 +89,79 @@ public enum CreepEnum {
 		/** Propagate. */
 		@Override
 		public void onEndTurn(Entity creep, Room room) {
+			ParentEntityComponent parentEntityCompo = Mappers.parentEntityComponent.get(creep);
+
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(creep);
-			List<Entity> flammables = TileUtil.getAdjacentEntitiesWithComponent(gridPositionComponent.coord(), FlammableComponent.class, room);
+			Collection<Entity> flammables = TileUtil.getAdjacentEntitiesWithComponent(gridPositionComponent.coord(), FlammableComponent.class, room);
 			for (Entity flammable : flammables) {
-				if (Mappers.flammableComponent.get(flammable).isPropagate()) {
+				FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
+				if (flammableComponent.isPropagate() && !flammableComponent.isBurning()) {
+					flammableComponent.setBurning(true);
 					GridPositionComponent flammablePos = Mappers.gridPositionComponent.get(flammable);
-					Entity fire = room.entityFactory.creepFactory.createFire(	room, flammablePos.coord());
+					Entity fire = room.entityFactory.creepFactory.createFire(	room, flammablePos.coord(), parentEntityCompo.getParent());
 					
 					// This is called at the end of the turn, so increase duration by one
 					CreepComponent creepComponent = Mappers.creepComponent.get(fire);
 					creepComponent.setDuration(creepComponent.getDuration() + 1);
 				}
 			}
+			
+			// Set ablaze any flammable entity on the current tile
+			flammables = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), FlammableComponent.class, room);
+			for (Entity flammable : flammables) {
+				FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
+				flammableComponent.setBurning(true);
+				if (flammableComponent.isDestroyed()) {
+					
+					Image destroyedTexture = flammableComponent.getDestroyedTexture(gridPositionComponent.getWorldPos());
+					if (destroyedTexture != null) {
+						room.floor.getGameScreen().fxStage.addActor(destroyedTexture);
+					}
+					
+					room.removeEntity(flammable);
+				}
+			}
 		}
 		
 		@Override
 		public void onAppear(Entity creep, Room room) {
+			ParentEntityComponent parentEntityCompo = Mappers.parentEntityComponent.get(creep);
+
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(creep);
-			Set<Entity> flammables = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), FlammableComponent.class, room);
+			
+			// Damage entities on the current tile
+			Set<Entity> healthEntities = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), HealthComponent.class, room);
+			for (Entity healthEntity : healthEntities) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(healthEntity);
+				if (healthComponent != null) {
+					healthComponent.hit(3, creep);
+				}
+			}
+			
+			// Set ablaze any flammable entity on the current tile
+			Collection<Entity> flammables = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), FlammableComponent.class, room);
 			for (Entity flammable : flammables) {
-				if (Mappers.flammableComponent.get(flammable).isDestroyed()) {
+				FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
+				flammableComponent.setBurning(true);
+				if (flammableComponent.isDestroyed()) {
+					
+					Image destroyedTexture = flammableComponent.getDestroyedTexture(gridPositionComponent.getWorldPos());
+					if (destroyedTexture != null) {
+						room.floor.getGameScreen().fxStage.addActor(destroyedTexture);
+					}
+					
 					room.removeEntity(flammable);
+				}
+			}
+			
+			// Set ablaze any flammable entity on adjacent tile
+			flammables = TileUtil.getAdjacentEntitiesWithComponent(gridPositionComponent.coord(), FlammableComponent.class, room);
+			for (Entity flammable : flammables) {
+				FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
+				if (flammableComponent != null && flammableComponent.isPropagate() && !flammableComponent.isBurning()) {
+					flammableComponent.setBurning(true);
+					GridPositionComponent flammablePos = Mappers.gridPositionComponent.get(flammable);
+					Entity fire = room.entityFactory.creepFactory.createFire(	room, flammablePos.coord(), parentEntityCompo.getParent());
 				}
 			}
 		}

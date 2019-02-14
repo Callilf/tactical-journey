@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -97,6 +98,7 @@ public final class CreepFactory {
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
 		flammable.setDestroyed(true);
+		flammable.setDestroyedTexture(this.webTexture);
 		creepEntity.add(flammable);
 		
 		room.addEntity(creepEntity);		
@@ -125,7 +127,7 @@ public final class CreepFactory {
 	
 	
 	
-	public Entity createFire(Room room, Vector2 pos) {
+	public Entity createFire(Room room, Vector2 pos, Entity parentEntity) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_FIRE, null);
     			
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
@@ -140,6 +142,11 @@ public final class CreepFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.FIRE_LOOP.getState() );
 		creepEntity.add(stateCompo);
+		
+		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+		parentCompo.setParent(parentEntity);
+		creepEntity.add(parentCompo);
+
     	
 		engine.addEntity(creepEntity);
 		creepCompo.onAppear(creepEntity, room);

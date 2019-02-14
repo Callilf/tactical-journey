@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -44,6 +45,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public static Vector2 POS_TIMER = new Vector2(200f, 1030.0f);
 	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
+	public static Vector2 POS_MONEY = new Vector2(730f,1000f);
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
 
 
@@ -60,6 +62,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table timeAndTurnTable;
 	private Label timeLabel;
 	private Label turnLabel;
+	
+	// Money
+	private Table moneyTable;
+	private Label moneyLabel;
 	
 
 	// End turn, Health and Experience, profile
@@ -105,6 +111,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 		
 		displayTimeAndTurns();
+		displayMoney();
 		displayBottomLeftHud();
 		displaySkillButtons();
 		displayAmmos();
@@ -165,6 +172,27 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		turnLabel.setText("Turn " + room.turnManager.getTurn());
 	}
 	
+	
+	private void displayMoney() {
+		WalletComponent walletComponent = Mappers.walletComponent.get(player);
+		
+		if (moneyTable == null) {
+			moneyTable = new Table();
+			moneyTable.setPosition(POS_MONEY.x, POS_MONEY.y);
+			
+			Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
+			moneyTable.add(moneyImage).uniformX();
+			
+			// Turns
+			moneyLabel = new Label("", PopinService.hudStyle());
+			moneyTable.add(moneyLabel).left().uniformX();
+			
+			moneyTable.pack();
+			stage.addActor(moneyTable);
+		}
+		
+		moneyLabel.setText("[GOLD]" + String.valueOf(walletComponent.getAmount()));
+	}
 	
 	
 	//************************************
@@ -587,7 +615,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			arrowTable.add(arrowImage).uniformX();
 			
 			arrowLabel = new Label("", PopinService.hudStyle());
-			arrowTable.add(arrowLabel).uniformX().padLeft(-15);
+			arrowTable.add(arrowLabel).left().uniformX();
 			
 			ammoTable.add(arrowTable).uniformX();
 			
@@ -597,7 +625,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bombTable.add(bombImage).uniformX();
 			
 			bombLabel = new Label("", PopinService.hudStyle());
-			bombTable.add(bombLabel).uniformX().padLeft(-15);
+			bombTable.add(bombLabel).left().uniformX();
 			
 			ammoTable.add(bombTable).uniformX();
 			

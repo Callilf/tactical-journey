@@ -281,8 +281,8 @@ public class RoomGenerator {
 
 			
 			//entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));
-			//Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
-			//Mappers.itemComponent.get(money).setQuantity(10);
+			Entity money = entityFactory.itemFactory.createItemMoney(room, new Vector2(9, 10));
+			Mappers.itemComponent.get(money).setQuantity(10);
 			
 			entityFactory.itemFactory.createItemTutorialPage(1,room, new Vector2(8, 9));
 			entityFactory.itemFactory.createItemTutorialPage(2,room, new Vector2(8, 8));

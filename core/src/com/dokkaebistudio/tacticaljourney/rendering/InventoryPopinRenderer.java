@@ -73,7 +73,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     /** The inventory table. */
     private Table inventoryTable;
-    private Label money;
+//    private Label money;
     private Table[] slots = new Table[16];
     private Image[] slotImages = new Image[16];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
@@ -132,7 +132,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    		
     		if (needsRefresh || inventoryCompo.isNeedInventoryRefresh()) {
 	        	
-    			money.setText("[GOLD]" + walletCompo.getAmount());
+//    			money.setText("[GOLD]" + walletCompo.getAmount());
     			
     			for(int i=0 ; i<slots.length ; i++) {
     				final Table slot = slots[i];
@@ -210,25 +210,22 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		inventoryTable.align(Align.top);
 		
-		// 1 - Title and money
+		// 1 - Title
 		Table topTable = new Table();
-		topTable.add().width(Value.percentWidth(0.25f, inventoryTable));
-		
-		// 1.1 - Title
 		Label title = new Label("Inventory", PopinService.hudStyle());
 		title.setAlignment(Align.center);
-		topTable.add(title).width(Value.percentWidth(0.5f, inventoryTable));
+		topTable.add(title);
 		
-		// 1.2 - Money
-		Table moneyTable = new Table();
-		Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
-		moneyTable.add(moneyImage);
-		money = new Label("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
-		moneyTable.add(money);
-		money.setAlignment(Align.right);
-		topTable.add(moneyTable).width(Value.percentWidth(0.25f, inventoryTable));
+//		// 1.2 - Money
+//		Table moneyTable = new Table();
+//		Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
+//		moneyTable.add(moneyImage);
+//		money = new Label("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
+//		moneyTable.add(money);
+//		money.setAlignment(Align.right);
+//		topTable.add(moneyTable).width(Value.percentWidth(0.25f, inventoryTable));
 		
-		inventoryTable.add(topTable).uniformX().pad(20, 0, 20, 0);
+		inventoryTable.add(topTable).uniformX().pad(40, 0, 40, 0);
 		inventoryTable.row();
 		
 		

@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.room.generation;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 

@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Indicate that this entity can be looted by the player.
@@ -97,8 +99,13 @@ public class LootableComponent implements Component, Poolable {
 	}
 
 
-	public void setLootableState(LootableStateEnum lootableState) {
+	public void setLootableState(LootableStateEnum lootableState, Entity lootable) {
 		this.lootableState = lootableState;
+		
+		if (lootable != null) {
+			AtlasRegion newRegion = lootableState == LootableStateEnum.CLOSED ? type.getClosedTexture() : type.getOpenedTexture();
+			Mappers.spriteComponent.get(lootable).getSprite().setRegion(newRegion);
+		}
 	}
 
 	public List<Entity> getStandByItems() {

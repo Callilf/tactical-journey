@@ -138,7 +138,9 @@ public class Assets {
 	// Containers
 	
 	public static AtlasRegion remains_bones;
+	public static AtlasRegion remains_bones_opened;
 	public static AtlasRegion remains_satchel;
+	public static AtlasRegion remains_satchel_opened;
 
 	
 	//******
@@ -279,7 +281,9 @@ public class Assets {
 		// Containers
 		
 		remains_bones = Assets.getTexture("remains_bones");
+		remains_bones_opened = Assets.getTexture("remains_bones_opened");
 		remains_satchel = Assets.getTexture("remains_satchel");
+		remains_satchel_opened = Assets.getTexture("remains_satchel_opened");
 
 		
 		//******

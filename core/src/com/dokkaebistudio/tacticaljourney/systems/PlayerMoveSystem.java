@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
@@ -260,7 +261,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 			inventoryComponent.setTurnsToWaitBeforeLooting(null);
 			LootableComponent lootableComponent = Mappers.lootableComponent.get(inventoryComponent.getLootableEntity());
-			lootableComponent.setLootableState(LootableStateEnum.OPENED);
+			lootableComponent.setLootableState(LootableStateEnum.OPENED, inventoryComponent.getLootableEntity());
 		} else {
 			
 			//TODO

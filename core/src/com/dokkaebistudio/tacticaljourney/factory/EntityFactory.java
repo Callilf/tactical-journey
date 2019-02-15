@@ -699,7 +699,7 @@ public final class EntityFactory {
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
-    	lootComponent.setLootableState(LootableStateEnum.CLOSED);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -726,12 +726,13 @@ public final class EntityFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.remains_satchel);
+    	Sprite s = new Sprite(LootableEnum.SATCHEL.getClosedTexture());
     	spriteCompo.setSprite(s);
     	remainsEntity.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);

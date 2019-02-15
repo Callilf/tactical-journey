@@ -4,8 +4,9 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -17,7 +18,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class CreepEmitterComponent implements Component, Poolable {
 	
 	/** The type of creep to emit. */
-	private CreepEnum type;
+	private CreepType type;
 	
 		
 	
@@ -40,8 +41,9 @@ public class CreepEmitterComponent implements Component, Poolable {
 			default:		
 		}
 		
+		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
+		creepComponent.onEmit(emitter, creep,room);
 		
-		type.onEmit(emitter, creep,room);
 		return creep;
 	}
 
@@ -49,11 +51,11 @@ public class CreepEmitterComponent implements Component, Poolable {
 	//*************************
 	// Getters and Setters
 
-	public CreepEnum getType() {
+	public CreepType getType() {
 		return type;
 	}
 
-	public void setType(CreepEnum type) {
+	public void setType(CreepType type) {
 		this.type = type;
 	}
 	

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -22,7 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class CreepComponent implements Component, Poolable {
 	
 	/** The type of creep. */
-	private CreepEnum type;
+	private Creep type;
 
 	/** The number of turns this creep stays on the floor. 0 means infinite. */
 	private int duration;
@@ -81,6 +81,10 @@ public class CreepComponent implements Component, Poolable {
 	
 	public void onDisappear(Entity creep, Room room) {
 		type.onDisappear(creep, room);
+	}
+	
+	public void onEmit(Entity emitter, Entity emittedCreep, Room room) {
+		type.onEmit(emitter, emittedCreep, room);
 	}
 	
 	/**
@@ -144,11 +148,11 @@ public class CreepComponent implements Component, Poolable {
 	//*************************
 	// Getters and Setters
 
-	public CreepEnum getType() {
+	public Creep getType() {
 		return type;
 	}
 
-	public void setType(CreepEnum type) {
+	public void setType(Creep type) {
 		this.type = type;
 	}
 	

@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -19,9 +18,11 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
-import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -82,7 +83,7 @@ public final class CreepFactory {
 		creepEntity.add(destructible);
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
-		creepCompo.setType(CreepEnum.WEB);
+		creepCompo.setType(new CreepWeb());
 		creepCompo.setDuration(3);
 		creepEntity.add(creepCompo);
 		
@@ -107,7 +108,7 @@ public final class CreepFactory {
 		creepEntity.add(destructibleCompo);
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
-		creepCompo.setType(CreepEnum.MUD);
+		creepCompo.setType(new CreepMud());
 		creepCompo.setDuration(0);
 		creepEntity.add(creepCompo);
     	
@@ -122,7 +123,7 @@ public final class CreepFactory {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_FIRE, null);
     			
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
-		creepCompo.setType(CreepEnum.FIRE);
+		creepCompo.setType(new CreepFire());
 		creepCompo.setDuration(2);
 		creepEntity.add(creepCompo);
 		

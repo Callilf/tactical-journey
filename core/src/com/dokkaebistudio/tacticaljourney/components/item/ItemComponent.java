@@ -16,14 +16,14 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.enums.items.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class ItemComponent implements Component, Poolable {
 		
 	/** The king of item. */
-	private ItemEnum itemType;
+	private Item itemType;
 	
 	/** The random value used by some items. Null if not used. */
 	private Integer quantity;
@@ -220,11 +220,11 @@ public class ItemComponent implements Component, Poolable {
 	//*******************************
 	// Getters and Setters
 
-	public ItemEnum getItemType() {
+	public Item getItemType() {
 		return itemType;
 	}
 
-	public void setItemType(ItemEnum itemType) {
+	public void setItemType(Item itemType) {
 		this.itemType = itemType;
 	}
 

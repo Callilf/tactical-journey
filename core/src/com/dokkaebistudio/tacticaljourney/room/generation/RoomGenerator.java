@@ -273,7 +273,7 @@ public class RoomGenerator {
 			break;
 			
 		case START_FLOOR_ROOM:
-			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(6, 3));
+			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(11, 10));
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemLightArmor(room, new Vector2(5, 5));
@@ -302,11 +302,11 @@ public class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
-//			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
+			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
-			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
-			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
-			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
+//			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
+//			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
+//			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
 
 			
 			

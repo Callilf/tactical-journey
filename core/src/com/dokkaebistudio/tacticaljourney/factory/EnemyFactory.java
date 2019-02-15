@@ -20,7 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -175,7 +175,7 @@ public final class EnemyFactory {
 		enemyEntity.add(lootRewardCompo);
 		
 		CreepEmitterComponent creepEmitter = engine.createComponent(CreepEmitterComponent.class);
-		creepEmitter.setType(CreepEnum.WEB);
+		creepEmitter.setType(CreepType.WEB);
 		enemyEntity.add(creepEmitter);
 		
 		room.addEnemy(enemyEntity);

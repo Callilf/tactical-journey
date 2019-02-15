@@ -244,7 +244,7 @@ public class RoomGenerator {
 
 			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
 					ZIndexConstants.WALL, 
-					Assets.getTexture(Assets.shop_item_background), 
+					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 			Entity firstItem = entityFactory.itemFactory.createItemHealthUp(room, new Vector2(9, 5));
 			ItemComponent ic = Mappers.itemComponent.get(firstItem);
@@ -252,7 +252,7 @@ public class RoomGenerator {
 			
 			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
 					ZIndexConstants.WALL, 
-					Assets.getTexture(Assets.shop_item_background), 
+					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 			Entity secondItem = entityFactory.itemFactory.createItemArrows(room, new Vector2(11, 5));
 			ic = Mappers.itemComponent.get(secondItem);
@@ -261,7 +261,7 @@ public class RoomGenerator {
 
 			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
 					ZIndexConstants.WALL, 
-					Assets.getTexture(Assets.shop_item_background), 
+					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 			Entity thirdItem = entityFactory.itemFactory.createItemBombs(room, new Vector2(13, 5));
 			ic = Mappers.itemComponent.get(thirdItem);

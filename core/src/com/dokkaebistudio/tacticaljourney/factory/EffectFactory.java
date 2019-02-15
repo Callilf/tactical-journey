@@ -5,17 +5,15 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -62,8 +60,7 @@ public final class EffectFactory {
 		explosion.add(gridPosition);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		Animation<Sprite> explosionAnim = new Animation<Sprite>(0.1f, Assets.getAnimation(Assets.explosion_animation), PlayMode.NORMAL);
-		animationCompo.animations.put(0, explosionAnim);
+		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationsEnum.EXPLOSION.getAnimation());
 		explosion.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

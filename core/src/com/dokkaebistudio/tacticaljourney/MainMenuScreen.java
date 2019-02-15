@@ -45,7 +45,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.getTexture(Assets.menuBackground);
+		menuBackground = Assets.menuBackground;
 	}
 
 	public void update () {

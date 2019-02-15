@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -39,12 +38,6 @@ public final class EnemyFactory {
 	/** the entity factory. */
 	public EntityFactory entityFactory;
 	
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion spiderTexture;
-	private TextureAtlas.AtlasRegion spiderVenomTexture;
-	private TextureAtlas.AtlasRegion spiderWebTexture;
-	private TextureAtlas.AtlasRegion scorpionTexture;
-
 	/**
 	 * Constructor.
 	 * @param e the engine
@@ -52,11 +45,6 @@ public final class EnemyFactory {
 	public EnemyFactory(PooledEngine e, EntityFactory ef) {
 		this.engine = e;
 		this.entityFactory = ef;
-		
-		spiderTexture = Assets.getTexture(Assets.enemy_spider);
-		spiderVenomTexture = Assets.getTexture(Assets.enemy_spider_venom);
-		spiderWebTexture = Assets.getTexture(Assets.enemy_spider_web);
-		scorpionTexture = Assets.getTexture(Assets.enemy_scorpion);
 	}
 	
 
@@ -71,7 +59,7 @@ public final class EnemyFactory {
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.spiderTexture));
+		spriteCompo.setSprite(new Sprite(Assets.enemy_spider));
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -137,7 +125,7 @@ public final class EnemyFactory {
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_WEB.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.spiderWebTexture));
+		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_web));
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -207,7 +195,7 @@ public final class EnemyFactory {
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.scorpionTexture));
+		spriteCompo.setSprite(new Sprite(Assets.enemy_scorpion));
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

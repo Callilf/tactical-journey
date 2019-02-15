@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
@@ -185,7 +185,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		if (skillEntity != null) {
 	    		final AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
-	    		String projectileTexture = Assets.projectile_bomb;
+	    		AtlasRegion projectileTexture = Assets.projectile_bomb;
 	    		if (skillAttackCompo.getProjectileImage() == null) {
 		    		Entity targetedTile = skillAttackCompo.getTargetedTile();
 		    		final GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);

@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.enums.items;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -313,7 +314,7 @@ public enum ItemEnum {
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
-	private String imageName;
+	private AtlasRegion texture;
 	/** Whether this item is picked up automatically while walking on its tile. */
 	private boolean instantPickUp;
 	/** Whether this item can go into the inventory. */
@@ -328,9 +329,9 @@ public enum ItemEnum {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory) {
+	ItemEnum(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
-		this.setImageName(imageName);
+		this.setTexture(texture);
 		this.setInstantPickUp(instaPickUp);
 		this.setGoIntoInventory(goIntoInventory);
 	}
@@ -343,8 +344,8 @@ public enum ItemEnum {
 	 * @param valMin
 	 * @param valMax
 	 */
-	ItemEnum(String label, String imageName, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
-		this(label, imageName, instaPickUp, goIntoInventory);
+	ItemEnum(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
+		this(label, texture, instaPickUp, goIntoInventory);
 		this.setRandomValueMin(valMin);
 		this.setRandomValueMax(valMax);
 	}
@@ -436,13 +437,13 @@ public enum ItemEnum {
 	}
 
 
-	public String getImageName() {
-		return imageName;
+	public AtlasRegion getTexture() {
+		return texture;
 	}
 
 
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
+	public void setTexture(AtlasRegion texture) {
+		this.texture = texture;
 	}
 
 	

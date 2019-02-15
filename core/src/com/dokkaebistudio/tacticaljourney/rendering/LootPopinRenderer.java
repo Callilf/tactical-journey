@@ -200,7 +200,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		lootTable.setTouchable(Touchable.enabled);
 		lootTable.addListener(new ClickListener() {});
 		
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_background));
+		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_background);
 		lootTable.setBackground(lootBackground);
 		lootTable.align(Align.top);
 
@@ -248,7 +248,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		Table oneItem = new Table();
 //		oneItem.setDebug(true);
 
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_lootable_item_background));
+		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_lootable_item_background);
 		oneItem.setBackground(lootBackground);
 		
 		oneItem.left();
@@ -328,7 +328,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_background));
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.inventory_background);
 		inventoryTable.setBackground(topBackground);
 		
 		inventoryTable.align(Align.top);
@@ -344,7 +344,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		
 		// 1.2 - Money
 		Table moneyTable = new Table();
-		Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
+		Image moneyImage = new Image(Assets.inventory_money);
 		moneyTable.add(moneyImage);
 		money = new Label("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
 		moneyTable.add(money);
@@ -383,7 +383,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 //		slot.setDebug(true);
 
 		//Background
-		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot));
+		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
 		slot.setBackground(slotBackground);
 
 		Image img = new Image();
@@ -460,7 +460,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			} else {
 		        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
 		        if (!activeSlot) {
-					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot_disabled));
+					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled);
 					image.setDrawable(texture);
 		        } else {
 		        	image.setDrawable(null);

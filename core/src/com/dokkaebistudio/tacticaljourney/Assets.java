@@ -31,140 +31,133 @@ public class Assets {
 	
 	public static final String atlas = "tacticaljourney.atlas";
 
-	public static final String background = "background-test";
-	public static final String menuBackground = "background-test-menu";
+	public static AtlasRegion menuBackground;
 	
+	public static AtlasRegion player;
+	public static AtlasRegion shopkeeper;
 	
-	public static final String player = "player-test";
-	public static final String shopkeeper = "shopkeeper";
+	public static AtlasRegion tile_ground;
+	public static AtlasRegion wall;
+	public static AtlasRegion wall_destroyed;
+	public static AtlasRegion tile_pit;
+	public static AtlasRegion mud;
+	public static AtlasRegion mud_destroyed;
 	
-	
-	public static final String tile_ground = "tile-test";
-	public static final String wall = "tile-wall-test";
-	public static final String wall_destroyed = "tile-wall-destroyed";
+	public static AtlasRegion exit;
+	public static AtlasRegion entrance;
+	public static AtlasRegion door_closed;
+	public static AtlasRegion door_opened;
 
-	public static final String tile_pit = "tile-pit-test";
-	public static final String mud = "tile-mud-test";
-	public static final String mud_destroyed = "tile-mud-destroyed";
+	public static AtlasRegion tile_movable;
+	public static AtlasRegion tile_attackable;
 	
-	public static final String exit = "exit";
-	public static final String entrance = "entrance";
-
+	public static AtlasRegion tile_movable_waypoint;
+	public static AtlasRegion tile_movable_selected;
 	
-	public static final String door_closed = "door-closed";
-	public static final String door_opened = "door-opened";
-
-	
-	
-	public static final String tile_movable = "tile-movable";
-	public static final String tile_attackable = "tile-attackable";
-	
-	public static final String tile_movable_waypoint = "tile-movable-waypoint";
-	public static final String tile_movable_selected = "tile-movable-selected";
-	
-	public static final String btn_move_confirmation = "btn-move-confirmation";
-	public static final String btn_end_turn = "btn-end-turn";
-	public static final String btn_end_turn_pushed = "btn-end-turn-pushed";
+	public static AtlasRegion btn_move_confirmation;
+	public static AtlasRegion btn_end_turn;
+	public static AtlasRegion btn_end_turn_pushed;
 	
 	
 	//**********
 	// Popins
 	
-	public static final String popin_big_btn_up = "hud_inventory_item_popin_btn_up";
-	public static final String popin_big_btn_down = "hud_inventory_item_popin_btn_down";
-	public static final String popin_small_btn_up = "hud_lvl_up_choice_claim_btn";
-	public static final String popin_small_btn_down = "hud_lvl_up_choice_claim_btn_pushed";
+	public static AtlasRegion popin_big_btn_up;
+	public static AtlasRegion popin_big_btn_down;
+	public static AtlasRegion popin_small_btn_up;
+	public static AtlasRegion popin_small_btn_down;
+	
+	public static AtlasRegion lvl_up_background;
+	public static AtlasRegion lvl_up_choice_frame;
+	public static AtlasRegion lvl_up_choice_desc_panel;
+	public static AtlasRegion lvl_up_choice_reward_panel;
+	
+	public static AtlasRegion profile_background;
+	public static AtlasRegion btn_profile;
+	public static AtlasRegion btn_profile_pushed;
+	
+	public static AtlasRegion inventory_background;
+	public static AtlasRegion inventory_money;
+	public static AtlasRegion inventory_slot;
+	public static AtlasRegion inventory_slot_disabled;
+	public static AtlasRegion btn_inventory;
+	public static AtlasRegion btn_inventory_pushed;
+	
+	public static AtlasRegion inventory_item_popin_background;
+	public static AtlasRegion inventory_lootable_item_background;
 
+	public static AtlasRegion dialog_background;
+	public static AtlasRegion shop_item_background;	
 	
-	public static final String lvl_up_background = "hud_lvl_up_background";
-	public static final String lvl_up_choice_frame = "hud_lvl_up_choice_frame";
-	public static final String lvl_up_choice_desc_panel = "hud_lvl_up_choice_desc_panel";
-	public static final String lvl_up_choice_reward_panel = "hud_lvl_up_choice_reward_panel";
+	public static AtlasRegion btn_skill_attack;
+	public static AtlasRegion btn_skill_attack_pushed;
+	public static AtlasRegion btn_skill_attack_checked;
 	
-	public static final String profile_background = "hud_profile_background";
-	public static final String btn_profile = "btn-profile";
-	public static final String btn_profile_pushed = "btn-profile-pushed";
+	public static AtlasRegion btn_skill_bow;
+	public static AtlasRegion btn_skill_bow_pushed;
+	public static AtlasRegion btn_skill_bow_checked;
 	
-	public static final String inventory_background = "hud_inventory_background";
-	public static final String inventory_money = "hud_money";
-	public static final String inventory_slot = "hud_inventory_slot";
-	public static final String inventory_slot_disabled = "hud_inventory_slot_disabled";
-	public static final String btn_inventory = "btn-inventory";
-	public static final String btn_inventory_pushed = "btn-inventory-pushed";
+	public static AtlasRegion btn_skill_bomb;
+	public static AtlasRegion btn_skill_bomb_pushed;
+	public static AtlasRegion btn_skill_bomb_checked;
 	
-	public static final String inventory_item_popin_background = "hud_inventory_item_popin_background";
-	public static final String inventory_lootable_item_background = "hud_lootable_item_background";
-
-	public static final String dialog_background = "dialog_background";
-	public static final String shop_item_background = "shop-item-background";
-
+//	public static AtlasRegion wheel_arc;
+	public static AtlasRegion wheel_arrow;
 	
 	
-	public static final String btn_skill_attack = "btn-skill-slash";
-	public static final String btn_skill_attack_pushed = "btn-skill-slash-pushed";
-	public static final String btn_skill_attack_checked = "btn-skill-slash-checked";
-	
-	public static final String btn_skill_bow = "btn-skill-bow";
-	public static final String btn_skill_bow_pushed = "btn-skill-bow-pushed";
-	public static final String btn_skill_bow_checked = "btn-skill-bow-checked";
-	
-	public static final String btn_skill_bomb = "btn-skill-bomb";
-	public static final String btn_skill_bomb_pushed = "btn-skill-bomb-pushed";
-	public static final String btn_skill_bomb_checked = "btn-skill-bomb-checked";
-	
-//	public static final String wheel_arc = "wheel-arc";
-	public static final String wheel_arrow = "wheel-arrow";
-	
-	
-	//public static final String map_background = "map-background";
-	public static final String map_plus = "hud_map_plus";
-	public static final String map_minus = "hud_map_less";
-	public static final String map_background = "hud_map_background";
-	
-	
-	public static final String remains_bones = "remains_bones";
-	public static final String remains_satchel = "remains_satchel";
+	//public static AtlasRegion map_background;
+	public static AtlasRegion map_plus;
+	public static AtlasRegion map_minus;
+	public static AtlasRegion map_background;
 
 	
 	//**************
 	// Projectiles
 	
-	public static final String projectile_arrow = "arrow";
-	public static final String projectile_bomb = "bomb";
-	public static final String projectile_web = "projectile-web";
+	public static AtlasRegion projectile_arrow;
+	public static AtlasRegion projectile_bomb;
+	public static AtlasRegion projectile_web;
 
 	
 	//********
 	// Creep
-	public static final String creep_web = "creep-web";
-	public static final String creep_fire = "creep-fire";
+	public static AtlasRegion creep_web;
+	public static AtlasRegion creep_fire;
+	public static Array<Sprite> creep_fire_animation;
 
 
 	//********
 	// Enemies
 	
-	public static final String enemy_spider = "enemy-test";
-	public static final String enemy_spider_venom = "enemy-spider-venom";
-	public static final String enemy_spider_web = "enemy-spider-web";
-	public static final String enemy_scorpion = "enemy-scorpion-test";
+	public static AtlasRegion enemy_spider;
+	public static AtlasRegion enemy_spider_venom;
+	public static AtlasRegion enemy_spider_web;
+	public static AtlasRegion enemy_scorpion;
+	
+	//*************
+	// Containers
+	
+	public static AtlasRegion remains_bones;
+	public static AtlasRegion remains_satchel;
+
 	
 	//******
 	// Items
 	
-	public static final String tutorial_page_item = "item-tutorial-page";
+	public static AtlasRegion tutorial_page_item;
 
-	public static final String money_item = "item-money";
-	public static final String health_up_item = "item-consumable-health-up";
-	public static final String fire_potion_item = "item-consumable-fire-potion";
-	public static final String armor_up_item = "item-consumable-armor-up";
-	public static final String armor_piece_item = "item-consumable-armor-piece";
+	public static AtlasRegion money_item;
+	public static AtlasRegion health_up_item;
+	public static AtlasRegion fire_potion_item;
+	public static AtlasRegion armor_up_item;
+	public static AtlasRegion armor_piece_item;
 	
-	public static final String arrow_item = "item-consumable-arrow";
-	public static final String bomb_item = "item-consumable-bomb";
+	public static AtlasRegion arrow_item;
+	public static AtlasRegion bomb_item;
 	
-	public static final String arrow = "arrow";
-	public static final String bomb_animation = "bomb";
-	public static final String explosion_animation = "explosion";
+	public static AtlasRegion arrow;
+	public static Array<Sprite> bomb_animation;
+	public static Array<Sprite> explosion_animation;
 
 
 	
@@ -174,6 +167,142 @@ public class Assets {
 
 	private static Assets instance;
 	private AssetManager manager;
+	
+	
+	public void initTextures() {
+		menuBackground = Assets.getTexture("background-test-menu");
+
+		player = Assets.getTexture("player-test");
+		shopkeeper = Assets.getTexture("shopkeeper");
+
+		tile_ground = Assets.getTexture("tile-test");
+		wall = Assets.getTexture("tile-wall-test");
+		wall_destroyed = Assets.getTexture("tile-wall-destroyed");
+		tile_pit = Assets.getTexture("tile-pit-test");
+		mud = Assets.getTexture("tile-mud-test");
+		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
+		
+		exit = Assets.getTexture("exit");
+		entrance = Assets.getTexture("entrance");
+		door_closed = Assets.getTexture("door-closed");
+		door_opened = Assets.getTexture("door-opened");
+
+		tile_movable = Assets.getTexture("tile-movable");
+		tile_attackable = Assets.getTexture("tile-attackable");
+		
+		tile_movable_waypoint = Assets.getTexture("tile-movable-waypoint");
+		tile_movable_selected = Assets.getTexture("tile-movable-selected");
+		
+		btn_move_confirmation = Assets.getTexture("btn-move-confirmation");
+		btn_end_turn = Assets.getTexture("btn-end-turn");
+		btn_end_turn_pushed = Assets.getTexture("btn-end-turn-pushed");
+		
+		
+		//**********
+		// Popins
+		
+		popin_big_btn_up = Assets.getTexture("hud_inventory_item_popin_btn_up");
+		popin_big_btn_down = Assets.getTexture("hud_inventory_item_popin_btn_down");
+		popin_small_btn_up = Assets.getTexture("hud_lvl_up_choice_claim_btn");
+		popin_small_btn_down = Assets.getTexture("hud_lvl_up_choice_claim_btn_pushed");
+
+		
+		lvl_up_background = Assets.getTexture("hud_lvl_up_background");
+		lvl_up_choice_frame = Assets.getTexture("hud_lvl_up_choice_frame");
+		lvl_up_choice_desc_panel = Assets.getTexture("hud_lvl_up_choice_desc_panel");
+		lvl_up_choice_reward_panel = Assets.getTexture("hud_lvl_up_choice_reward_panel");
+		
+		profile_background = Assets.getTexture("hud_profile_background");
+		btn_profile = Assets.getTexture("btn-profile");
+		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
+		
+		inventory_background = Assets.getTexture("hud_inventory_background");
+		inventory_money = Assets.getTexture("hud_money");
+		inventory_slot = Assets.getTexture("hud_inventory_slot");
+		inventory_slot_disabled = Assets.getTexture("hud_inventory_slot_disabled");
+		btn_inventory = Assets.getTexture("btn-inventory");
+		btn_inventory_pushed = Assets.getTexture("btn-inventory-pushed");
+		
+		inventory_item_popin_background = Assets.getTexture("hud_inventory_item_popin_background");
+		inventory_lootable_item_background = Assets.getTexture("hud_lootable_item_background");
+
+		dialog_background = Assets.getTexture("dialog_background");
+		shop_item_background = Assets.getTexture("shop-item-background");
+		
+		btn_skill_attack = Assets.getTexture("btn-skill-slash");
+		btn_skill_attack_pushed = Assets.getTexture("btn-skill-slash-pushed");
+		btn_skill_attack_checked = Assets.getTexture("btn-skill-slash-checked");
+		
+		btn_skill_bow = Assets.getTexture("btn-skill-bow");
+		btn_skill_bow_pushed = Assets.getTexture("btn-skill-bow-pushed");
+		btn_skill_bow_checked = Assets.getTexture("btn-skill-bow-checked");
+		
+		btn_skill_bomb = Assets.getTexture("btn-skill-bomb");
+		btn_skill_bomb_pushed = Assets.getTexture("btn-skill-bomb-pushed");
+		btn_skill_bomb_checked = Assets.getTexture("btn-skill-bomb-checked");
+		
+//		wheel_arc = Assets.getTexture("wheel-arc");
+		wheel_arrow = Assets.getTexture("wheel-arrow");
+		
+		
+		//map_background = Assets.getTexture("map-background");
+		map_plus = Assets.getTexture("hud_map_plus");
+		map_minus = Assets.getTexture("hud_map_less");
+		map_background = Assets.getTexture("hud_map_background");
+		
+		
+		//**************
+		// Projectiles
+		
+		projectile_arrow = Assets.getTexture("arrow");
+		projectile_bomb = Assets.getTexture("bomb");
+		projectile_web = Assets.getTexture("projectile-web");
+
+		
+		//********
+		// Creep
+		creep_web = Assets.getTexture("creep-web");
+		creep_fire = Assets.getTexture("creep-fire");
+		creep_fire_animation = Assets.getAnimation("creep-fire");
+
+
+		//********
+		// Enemies
+		
+		enemy_spider = Assets.getTexture("enemy-test");
+		enemy_spider_venom = Assets.getTexture("enemy-spider-venom");
+		enemy_spider_web = Assets.getTexture("enemy-spider-web");
+		enemy_scorpion = Assets.getTexture("enemy-scorpion-test");
+		
+		
+		//*************
+		// Containers
+		
+		remains_bones = Assets.getTexture("remains_bones");
+		remains_satchel = Assets.getTexture("remains_satchel");
+
+		
+		//******
+		// Items
+
+		tutorial_page_item = Assets.getTexture("item-tutorial-page");
+
+		money_item = Assets.getTexture("item-money");
+		health_up_item = Assets.getTexture("item-consumable-health-up");
+		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
+		armor_up_item = Assets.getTexture("item-consumable-armor-up");
+		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
+		
+		arrow_item = Assets.getTexture("item-consumable-arrow");
+		bomb_item = Assets.getTexture("item-consumable-bomb");
+		
+		arrow = Assets.getTexture("arrow");
+		bomb_animation = Assets.getAnimation("bomb");
+		explosion_animation = Assets.getAnimation("explosion");
+
+	}
+	
+	
 
 	public static Assets getInstance() {
 		if (instance == null) {

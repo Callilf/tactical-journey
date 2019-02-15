@@ -5,12 +5,12 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -219,8 +219,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	 * @param orientedTowardDirection whether the projectile has to be oriented towards the target
 	 * @param finishAttackAction the action to call after the movement is over
 	 */
-	public void setProjectileImage(String texture, Vector2 startGridPos, Vector2 targetGridPos, boolean orientedTowardDirection, Action finishAttackAction) {
-		Image arrow = new Image(Assets.getTexture(texture));
+	public void setProjectileImage(AtlasRegion texture, Vector2 startGridPos, Vector2 targetGridPos, boolean orientedTowardDirection, Action finishAttackAction) {
+		Image arrow = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
 		arrow.setPosition(playerPixelPos.x, playerPixelPos.y);
 		

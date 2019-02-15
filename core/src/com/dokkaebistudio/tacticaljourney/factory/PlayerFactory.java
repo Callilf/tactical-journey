@@ -41,10 +41,6 @@ public final class PlayerFactory {
 	/** the entity factory. */
 	public EntityFactory entityFactory;
 	
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion playerTexture;
-	private TextureAtlas.AtlasRegion shopkeeperTexture;
-
 
 	/**
 	 * Constructor.
@@ -53,10 +49,6 @@ public final class PlayerFactory {
 	public PlayerFactory(PooledEngine e, EntityFactory ef) {
 		this.engine = e;
 		this.entityFactory = ef;
-		
-		playerTexture = Assets.getTexture(Assets.player);
-		shopkeeperTexture = Assets.getTexture(Assets.shopkeeper);
-
 	}
 	
 
@@ -72,7 +64,7 @@ public final class PlayerFactory {
 
 		// Player sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.playerTexture));
+		spriteCompo.setSprite(new Sprite(Assets.player));
 		playerEntity.add(spriteCompo);
 		
 		// Grid position
@@ -177,7 +169,7 @@ public final class PlayerFactory {
 
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(this.shopkeeperTexture));
+		spriteCompo.setSprite(new Sprite(Assets.shopkeeper));
 		shopKeeperEntity.add(spriteCompo);
 		
 		// Grid position

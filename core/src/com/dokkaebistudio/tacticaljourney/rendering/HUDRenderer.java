@@ -186,7 +186,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			moneyTable = new Table();
 			moneyTable.setPosition(POS_MONEY.x, POS_MONEY.y);
 			
-			Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
+			Image moneyImage = new Image(Assets.inventory_money);
 			moneyTable.add(moneyImage).uniformX();
 			
 			// Turns
@@ -217,8 +217,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
-			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_end_turn)));
-			Drawable endTurnButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_end_turn_pushed)));
+			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.btn_end_turn));
+			Drawable endTurnButtonDown = new SpriteDrawable(new Sprite(Assets.btn_end_turn_pushed));
 			ButtonStyle endTurnButtonStyle = new ButtonStyle(endTurnButtonUp, endTurnButtonDown,null);
 			endTurnBtn = new Button(endTurnButtonStyle);
 			
@@ -320,9 +320,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			profileTable.setPosition(700, 30);
 		
 			// Profile btn
-			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_profile)));
+			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.btn_profile));
 			Drawable profileButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_profile_pushed)));
+					new Sprite(Assets.btn_profile_pushed));
 			ButtonStyle profileButtonStyle = new ButtonStyle(profileButtonUp, profileButtonDown, null);
 			profileBtn = new Button(profileButtonStyle);
 			
@@ -337,9 +337,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 			
 			// Inventory btn
-			Drawable inventoryButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_inventory)));
+			Drawable inventoryButtonUp = new SpriteDrawable(new Sprite(Assets.btn_inventory));
 			Drawable inventoryButtonDown = new SpriteDrawable(
-					new Sprite(Assets.getTexture(Assets.btn_inventory_pushed)));
+					new Sprite(Assets.btn_inventory_pushed));
 			ButtonStyle inventoryButtonStyle = new ButtonStyle(inventoryButtonUp, inventoryButtonDown, null);
 			inventoryBtn = new Button(inventoryButtonStyle);
 			
@@ -381,11 +381,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			skillsTable.setTouchable(Touchable.enabled);
 	
 			if (meleeSkillButton == null) {
-				Drawable meleeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_attack)));
+				Drawable meleeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_attack));
 				Drawable meleeSkillButtonDown = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_attack_pushed)));
+						new Sprite(Assets.btn_skill_attack_pushed));
 				Drawable meleeSkillButtonChecked = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_attack_checked)));
+						new Sprite(Assets.btn_skill_attack_checked));
 				ButtonStyle meleeSkillButtonStyle = new ButtonStyle(meleeSkillButtonUp, meleeSkillButtonDown,
 						meleeSkillButtonChecked);
 				meleeSkillButton = new Button(meleeSkillButtonStyle);
@@ -434,11 +434,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			
 	
 			if (rangeSkillButton == null) {
-				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bow)));
+				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_bow));
 				Drawable rangeSkillButtonDown = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_bow_pushed)));
+						new Sprite(Assets.btn_skill_bow_pushed));
 				Drawable rangeSkillButtonChecked = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_bow_checked)));
+						new Sprite(Assets.btn_skill_bow_checked));
 				ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
 						rangeSkillButtonChecked);
 				rangeSkillButton = new Button(rangeSkillButtonStyle);
@@ -488,11 +488,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			}			
 			
 			if (bombSkillButton == null) {
-				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.btn_skill_bomb)));
+				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_bomb));
 				Drawable rangeSkillButtonDown = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_bomb_pushed)));
+						new Sprite(Assets.btn_skill_bomb_pushed));
 				Drawable rangeSkillButtonChecked = new SpriteDrawable(
-						new Sprite(Assets.getTexture(Assets.btn_skill_bomb_checked)));
+						new Sprite(Assets.btn_skill_bomb_checked));
 				ButtonStyle rangeSkillButtonStyle = new ButtonStyle(rangeSkillButtonUp, rangeSkillButtonDown,
 						rangeSkillButtonChecked);
 				bombSkillButton = new Button(rangeSkillButtonStyle);
@@ -615,7 +615,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			ammoArrowTable.setPosition(POS_ARROW_SPRITE.x, POS_ARROW_SPRITE.y);
 			
 			// Arrows
-			Image arrowImage = new Image(Assets.getTexture(Assets.arrow_item));
+			Image arrowImage = new Image(Assets.arrow_item);
 			ammoArrowTable.add(arrowImage).uniformX();
 			
 			arrowLabel = new Label("", PopinService.hudStyle());
@@ -630,7 +630,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			ammoBombTable.setPosition(POS_BOMB_SPRITE.x, POS_BOMB_SPRITE.y);
 
 			// Bombs
-			Image bombImage = new Image(Assets.getTexture(Assets.bomb_item));
+			Image bombImage = new Image(Assets.bomb_item);
 			ammoBombTable.add(bombImage).uniformX();
 			
 			bombLabel = new Label("", PopinService.hudStyle());

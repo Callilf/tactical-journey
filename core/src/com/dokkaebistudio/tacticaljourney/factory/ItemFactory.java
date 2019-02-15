@@ -31,17 +31,6 @@ public final class ItemFactory {
 	/** the entity factory. */
 	public EntityFactory entityFactory;
 	
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion moneyTexture;
-	private TextureAtlas.AtlasRegion arrowsTexture;
-	private TextureAtlas.AtlasRegion bombsTexture;
-
-	private TextureAtlas.AtlasRegion smallHealthPotionTexture;
-	private TextureAtlas.AtlasRegion firePotionTexture;
-	private TextureAtlas.AtlasRegion lightArmorTexture;
-	private TextureAtlas.AtlasRegion pieceOfArmorTexture;
-	private TextureAtlas.AtlasRegion tutorialPageTexture;
-
 	/**
 	 * Constructor.
 	 * @param e the engine
@@ -49,15 +38,6 @@ public final class ItemFactory {
 	public ItemFactory(PooledEngine e, EntityFactory ef) {
 		this.engine = e;
 		this.entityFactory = ef;
-		
-		moneyTexture = Assets.getTexture(Assets.money_item );
-		arrowsTexture = Assets.getTexture(Assets.arrow_item );
-		bombsTexture = Assets.getTexture(Assets.bomb_item );
-		smallHealthPotionTexture = Assets.getTexture(Assets.health_up_item);
-		firePotionTexture = Assets.getTexture(Assets.fire_potion_item);
-		lightArmorTexture = Assets.getTexture(Assets.armor_up_item);
-		pieceOfArmorTexture = Assets.getTexture(Assets.armor_piece_item);
-		tutorialPageTexture = Assets.getTexture(Assets.tutorial_page_item);
 	}
 	
 	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, ItemEnum itemType) {
@@ -96,7 +76,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemMoney(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.moneyTexture, ItemEnum.MONEY);
+		Entity item = createItemBase(room, tilePos, Assets.money_item, ItemEnum.MONEY);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;
 	}
@@ -107,7 +87,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemArrows(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.arrowsTexture, ItemEnum.ARROW);
+		Entity item = createItemBase(room, tilePos, Assets.arrow_item, ItemEnum.ARROW);
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
 		return item;
 	}
@@ -118,7 +98,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemBombs(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.bombsTexture, ItemEnum.BOMB);
+		Entity item = createItemBase(room, tilePos, Assets.bomb_item, ItemEnum.BOMB);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;
 	}
@@ -129,7 +109,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.smallHealthPotionTexture, ItemEnum.CONSUMABLE_HEALTH_UP);
+		Entity item = createItemBase(room, tilePos, Assets.health_up_item, ItemEnum.CONSUMABLE_HEALTH_UP);
 		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
 		return item;
 	}
@@ -140,7 +120,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemFirePotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.firePotionTexture, ItemEnum.FIRE_POTION);
+		Entity item = createItemBase(room, tilePos, Assets.fire_potion_item, ItemEnum.FIRE_POTION);
 		item.flags = EntityFlagEnum.ITEM_FIRE_POTION.getFlag();
 		return item;
 	}
@@ -151,7 +131,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemLightArmor(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.lightArmorTexture, ItemEnum.CONSUMABLE_ARMOR_UP);
+		Entity item = createItemBase(room, tilePos, Assets.armor_up_item, ItemEnum.CONSUMABLE_ARMOR_UP);
 		item.flags = EntityFlagEnum.ITEM_ARMOR_UP.getFlag();
 		return item;
 	}
@@ -162,7 +142,7 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemArmorPiece(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.pieceOfArmorTexture, ItemEnum.CONSUMABLE_ARMOR_PIECE);
+		Entity item = createItemBase(room, tilePos, Assets.armor_piece_item, ItemEnum.CONSUMABLE_ARMOR_PIECE);
 		item.flags = EntityFlagEnum.ITEM_ARMOR_PIECE.getFlag();
 		return item;
 	}
@@ -173,13 +153,13 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemTutorialPage(int pageNumber, Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, this.tutorialPageTexture, ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
+		Entity item = createItemBase(room, tilePos, Assets.tutorial_page_item, ItemEnum.valueOf("TUTORIAL_PAGE_" + pageNumber));
 		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
 		flammable.setDestroyed(true);
-		flammable.setDestroyedTexture(this.tutorialPageTexture);
+		flammable.setDestroyedTexture(Assets.tutorial_page_item);
 		item.add(flammable);
 
 		return item;

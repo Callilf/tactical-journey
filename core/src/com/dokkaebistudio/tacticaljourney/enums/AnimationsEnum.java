@@ -7,9 +7,11 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 
 public enum AnimationsEnum {
 
-	BOMB_SLOW(new Animation<Sprite>(0.2f, Assets.getAnimation(Assets.bomb_animation), PlayMode.LOOP)),
-	BOMB_FAST(new Animation<Sprite>(0.1f, Assets.getAnimation(Assets.bomb_animation), PlayMode.LOOP)),
-	FIRE(new Animation<Sprite>(0.17f, Assets.getAnimation(Assets.creep_fire), PlayMode.LOOP));
+	BOMB_SLOW(new Animation<Sprite>(0.2f, Assets.bomb_animation, PlayMode.LOOP)),
+	BOMB_FAST(new Animation<Sprite>(0.1f, Assets.bomb_animation, PlayMode.LOOP)),
+	EXPLOSION(new Animation<Sprite>(0.1f, Assets.explosion_animation, PlayMode.NORMAL)),
+	
+	FIRE(new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP));
 
 	
 	private Animation<Sprite> animation;

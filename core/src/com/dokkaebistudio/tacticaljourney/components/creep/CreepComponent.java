@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -121,7 +120,7 @@ public class CreepComponent implements Component, Poolable {
 		GridPositionComponent positionComponent = Mappers.gridPositionComponent.get(creep);
 		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
 
-		this.removeCreepImage = new Image(Assets.getTexture(creepComponent.getType().getImageName()));
+		this.removeCreepImage = new Image(creepComponent.getType().getTexture());
 		
 		Vector2 worldPos = positionComponent.getWorldPos();
 		this.removeCreepImage.setPosition(worldPos.x, worldPos.y);

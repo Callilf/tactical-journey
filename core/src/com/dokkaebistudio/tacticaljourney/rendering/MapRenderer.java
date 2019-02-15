@@ -87,9 +87,9 @@ public class MapRenderer implements Renderer {
 		mapTable.setPosition(1830f, 1047f);
 		mapTable.setTouchable(Touchable.childrenOnly);
 		
-		Drawable mapButtonUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_minus)));
-		Drawable mapButtonDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_minus)));
-		Drawable mapButtonChecked = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.map_plus)));
+		Drawable mapButtonUp = new SpriteDrawable(new Sprite(Assets.map_minus));
+		Drawable mapButtonDown = new SpriteDrawable(new Sprite(Assets.map_minus));
+		Drawable mapButtonChecked = new SpriteDrawable(new Sprite(Assets.map_plus));
 		ButtonStyle endTurnButtonStyle = new ButtonStyle(mapButtonUp, mapButtonDown,mapButtonChecked);
 		openMapBtn = new Button(endTurnButtonStyle);
 		
@@ -106,7 +106,7 @@ public class MapRenderer implements Renderer {
 		stage.addActor(mapTable);
 
 				
-		background = new Sprite(Assets.getTexture(Assets.map_background));
+		background = new Sprite(Assets.map_background);
 		background.setAlpha(0.5f);
 		background.setPosition(GameScreen.SCREEN_W - background.getWidth(), GameScreen.SCREEN_H - background.getHeight());
 	}

@@ -90,7 +90,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		table.setTouchable(Touchable.childrenOnly);
 	    		
-	    		TextureRegionDrawable background = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_background));
+	    		TextureRegionDrawable background = new TextureRegionDrawable(Assets.lvl_up_background);
 	    		table.setBackground(background);
 
 	    		
@@ -139,7 +139,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			Stack choiceGroup = new Stack();
 			
 			Stack rewardPanelGroup = new Stack();
-			Image rewardTextBackground = new Image(Assets.getTexture(Assets.lvl_up_choice_reward_panel));
+			Image rewardTextBackground = new Image(Assets.lvl_up_choice_reward_panel);
 			Table rewardTable = new Table();
 			Label rewardText = new Label(levelUpRewardEnum.getFinalDescription(), PopinService.smallTextStyle());
 			rewardText.setAlignment(Align.center);
@@ -150,7 +150,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			choiceGroup.addActor(rewardPanelGroup);
 
 			final Stack descPanelGroup = new Stack();
-			Image descTextBackground = new Image(Assets.getTexture(Assets.lvl_up_choice_desc_panel));
+			Image descTextBackground = new Image(Assets.lvl_up_choice_desc_panel);
 			Table descTable = new Table();
 			Label descText = new Label(levelUpRewardEnum.getDescription(), PopinService.smallTextStyle());
 			descText.setAlignment(Align.center);
@@ -164,7 +164,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			
 			Table frameTable = new Table();
 
-			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.getTexture(Assets.lvl_up_choice_frame));
+			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.lvl_up_choice_frame);
 			frameTable.setBackground(frame);
 			
 			final TextButton claimButton = new TextButton("Claim", PopinService.smallButtonStyle());

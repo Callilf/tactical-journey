@@ -1,12 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.enums.creep;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -180,16 +178,16 @@ public enum CreepEnum {
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
-	private String imageName;
+	private AtlasRegion texture;
 	
 	/**
 	 * Constructor for creep
 	 * @param label
-	 * @param imageName
+	 * @param texture
 	 */
-	CreepEnum(String label, String imageName) {
+	CreepEnum(String label, AtlasRegion texture) {
 		this.setLabel(label);
-		this.setImageName(imageName);
+		this.setTexture(texture);
 	}
 	
 	
@@ -248,13 +246,13 @@ public enum CreepEnum {
 	}
 
 
-	public String getImageName() {
-		return imageName;
+	public AtlasRegion getTexture() {
+		return texture;
 	}
 
 
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
+	public void setTexture(AtlasRegion texture) {
+		this.texture = texture;
 	}
 
 }

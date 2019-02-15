@@ -37,11 +37,6 @@ public final class CreepFactory {
 	/** the entity factory. */
 	public EntityFactory entityFactory;
 	
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion webTexture;
-	private TextureAtlas.AtlasRegion mudTexture;
-	private TextureAtlas.AtlasRegion fireTexture;
-
 	/**
 	 * Constructor.
 	 * @param e the engine
@@ -49,10 +44,6 @@ public final class CreepFactory {
 	public CreepFactory(PooledEngine e, EntityFactory ef) {
 		this.engine = e;
 		this.entityFactory = ef;
-		
-		webTexture = Assets.getTexture(Assets.creep_web);
-		mudTexture = Assets.getTexture(Assets.mud);
-		fireTexture = Assets.getTexture(Assets.creep_fire);
 	}
 	
 	
@@ -85,7 +76,7 @@ public final class CreepFactory {
 	 * @return the creep entity
 	 */
 	public Entity createWeb(Room room, Vector2 pos) {
-		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_WEB, this.webTexture);
+		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_WEB, Assets.creep_web);
 				
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
 		creepEntity.add(destructible);
@@ -98,7 +89,7 @@ public final class CreepFactory {
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
 		flammable.setDestroyed(true);
-		flammable.setDestroyedTexture(this.webTexture);
+		flammable.setDestroyedTexture(Assets.creep_web);
 		creepEntity.add(flammable);
 		
 		room.addEntity(creepEntity);		
@@ -109,10 +100,10 @@ public final class CreepFactory {
 	
 	
 	public Entity createMud(Room room, Vector2 pos) {
-		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_MUD, this.mudTexture);
+		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_MUD, Assets.mud);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.mud_destroyed));
+    	destructibleCompo.setDestroyedTexture(Assets.mud_destroyed);
 		creepEntity.add(destructibleCompo);
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);

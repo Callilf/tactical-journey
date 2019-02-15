@@ -63,7 +63,7 @@ public class DialogSystem extends IteratingSystem implements RoomSystem {
     	if (dialogComponent.getCurrentDuration() == 0) {
     		
     		Table t = PoolableTable.create();
-    		PoolableTextureRegionDrawable background = PoolableTextureRegionDrawable.create(Assets.getTexture(Assets.dialog_background));
+    		PoolableTextureRegionDrawable background = PoolableTextureRegionDrawable.create(Assets.dialog_background);
     		t.setBackground(background);
     		
     		Label label = PoolableLabel.create(dialogComponent.getText(), PopinService.hudStyle());

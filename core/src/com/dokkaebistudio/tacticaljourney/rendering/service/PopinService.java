@@ -26,17 +26,17 @@ public class PopinService {
 		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 		smallTextStyle = new LabelStyle(Assets.smallFont, Color.WHITE);
 
-		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.popin_big_btn_up)));
-		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.popin_big_btn_down)));
-		Sprite disableSprite = new Sprite(Assets.getTexture(Assets.popin_big_btn_up));
+		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up));
+		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down));
+		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up);
 		disableSprite.setAlpha(0.5f);
 		Drawable btnDisabled = new SpriteDrawable(disableSprite);
 		bigButtonStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
 		bigButtonStyle.disabled = btnDisabled;
 
-		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.popin_small_btn_up)));
-		Drawable sbtnDown = new SpriteDrawable(new Sprite(Assets.getTexture(Assets.popin_small_btn_down)));
-		Sprite sdisableSprite = new Sprite(Assets.getTexture(Assets.popin_small_btn_up));
+		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.popin_small_btn_up));
+		Drawable sbtnDown = new SpriteDrawable(new Sprite(Assets.popin_small_btn_down));
+		Sprite sdisableSprite = new Sprite(Assets.popin_small_btn_up);
 		sdisableSprite.setAlpha(0.5f);
 		Drawable sbtnDisabled = new SpriteDrawable(sdisableSprite);
 		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font);

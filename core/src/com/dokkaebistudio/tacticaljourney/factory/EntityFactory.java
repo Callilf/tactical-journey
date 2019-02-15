@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -73,11 +72,6 @@ public final class EntityFactory {
 	/** The factory for visual effects. */
 	public EffectFactory effectFactory;
 	
-	// textures are stored so we don't fetch them from the atlas each time (atlas.findRegion is SLOW)
-	private TextureAtlas.AtlasRegion pitTexture;
-	private TextureAtlas.AtlasRegion groundTexture;
-
-
 	/**
 	 * Constructor.
 	 * @param e the engine
@@ -89,9 +83,6 @@ public final class EntityFactory {
 		this.itemFactory = new ItemFactory(e, this);
 		this.creepFactory = new CreepFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
-		
-		groundTexture = Assets.getTexture(Assets.tile_ground);
-		pitTexture = Assets.getTexture(Assets.tile_pit);
 	}
 
 	
@@ -114,18 +105,18 @@ public final class EntityFactory {
 		switch (type) {
 			case WALL:
 				this.createWall(room, pos);
-				spriteCompo.setSprite(new Sprite(groundTexture));
+				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
 				tile.type = TileEnum.GROUND;
 				break;
 			case GROUND:
-				spriteCompo.setSprite(new Sprite(groundTexture));
+				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
 				break;
 			case PIT:
-				spriteCompo.setSprite(new Sprite(pitTexture));
+				spriteCompo.setSprite(new Sprite(Assets.tile_pit));
 				break;
 			case MUD:
 				this.creepFactory.createMud(room, pos);
-				spriteCompo.setSprite(new Sprite(groundTexture));
+				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
 				tile.type = TileEnum.GROUND;
 				break;
 		}
@@ -152,7 +143,7 @@ public final class EntityFactory {
     	wallEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.wall));
+    	Sprite s = new Sprite(Assets.wall);
     	spriteCompo.setSprite(s);
     	wallEntity.add(spriteCompo);
     	
@@ -163,7 +154,7 @@ public final class EntityFactory {
 		wallEntity.add(blockExplosionComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	destructibleCompo.setDestroyedTexture(Assets.getTexture(Assets.wall_destroyed));
+    	destructibleCompo.setDestroyedTexture(Assets.wall_destroyed);
     	wallEntity.add(destructibleCompo);
     	
 		engine.addEntity(wallEntity);
@@ -181,7 +172,7 @@ public final class EntityFactory {
     	doorEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = targetedRoom == null ? new Sprite(Assets.getTexture(Assets.door_closed)) : new Sprite(Assets.getTexture(Assets.door_opened));
+    	Sprite s = targetedRoom == null ? new Sprite(Assets.door_closed) : new Sprite(Assets.door_opened);
     	spriteCompo.setSprite(s);
     	doorEntity.add(spriteCompo);
     	
@@ -205,7 +196,7 @@ public final class EntityFactory {
     	exitEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.exit));
+    	Sprite s = new Sprite(Assets.exit);
     	spriteCompo.setSprite(s);
     	exitEntity.add(spriteCompo);
     	
@@ -228,7 +219,7 @@ public final class EntityFactory {
     	movableTileEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable)));
+    	spriteCompo.setSprite(new Sprite(Assets.tile_movable));
     	movableTileEntity.add(spriteCompo);
     	
 		try {
@@ -250,7 +241,7 @@ public final class EntityFactory {
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_attackable)));
+    	spriteCompo.setSprite(new Sprite(Assets.tile_attackable));
     	attackableTileEntity.add(spriteCompo);
     	
 		engine.addEntity(attackableTileEntity);
@@ -272,7 +263,7 @@ public final class EntityFactory {
     	selectedTilePos.zIndex = ZIndexConstants.DESTINATION_TILE;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_selected)));
+    	spriteCompo.setSprite(new Sprite(Assets.tile_movable_selected));
     	redCross.add(spriteCompo);
     	
 		engine.addEntity(redCross);
@@ -295,7 +286,7 @@ public final class EntityFactory {
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.getTexture(Assets.tile_movable_waypoint)));
+    	spriteCompo.setSprite(new Sprite(Assets.tile_movable_waypoint));
     	waypoint.add(spriteCompo);
     	
 		engine.addEntity(waypoint);
@@ -702,7 +693,7 @@ public final class EntityFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.remains_bones));
+    	Sprite s = new Sprite(Assets.remains_bones);
     	spriteCompo.setSprite(s);
     	remainsEntity.add(spriteCompo);
 
@@ -735,7 +726,7 @@ public final class EntityFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.getTexture(Assets.remains_satchel));
+    	Sprite s = new Sprite(Assets.remains_satchel);
     	spriteCompo.setSprite(s);
     	remainsEntity.add(spriteCompo);
     	

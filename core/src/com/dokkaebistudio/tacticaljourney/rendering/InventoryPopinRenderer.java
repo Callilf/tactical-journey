@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -158,7 +157,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
     			        if (!activeSlot) {
-	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot_disabled));
+	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled);
 	    					image.setDrawable(texture);
     			        } else {
     			        	image.setDrawable(null);
@@ -205,7 +204,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_background));
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.inventory_background);
 		inventoryTable.setBackground(topBackground);
 		
 		inventoryTable.align(Align.top);
@@ -260,7 +259,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 //		slot.setDebug(true);
 
 		//Background
-		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_slot));
+		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
 		slot.setBackground(slotBackground);
 
 		Image img = new Image();
@@ -297,7 +296,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.inventory_item_popin_background));
+			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
 			selectedItemPopin.setBackground(textureRegionDrawable);
 			
 			selectedItemPopin.align(Align.top);

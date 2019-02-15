@@ -69,7 +69,7 @@ public class MenuPopinRenderer implements Renderer {
 			
 			// Place the popin and add the background texture
 			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
+			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.profile_background);
 			table.setBackground(textureRegionDrawable);
 			
 			table.align(Align.top);

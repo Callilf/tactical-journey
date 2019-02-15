@@ -148,7 +148,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 		//table.setTouchable(Touchable.childrenOnly);
 		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.getTexture(Assets.profile_background));
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
 		table.setBackground(topBackground);
 		
 		table.align(Align.top);

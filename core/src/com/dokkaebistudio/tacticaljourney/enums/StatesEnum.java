@@ -5,6 +5,8 @@ public enum StatesEnum {
 	EXPLODING_IN_SEVERAL_TURNS(0),
 	EXPLODING_THIS_TURN(1),
 	
+	EXPLOSION(0),
+	
 	FIRE_LOOP(0);
 	
 	private int state;

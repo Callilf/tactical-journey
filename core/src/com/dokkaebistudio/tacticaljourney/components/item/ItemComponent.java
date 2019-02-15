@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
@@ -124,7 +124,7 @@ public class ItemComponent implements Component, Poolable {
 		
 		for (int i=0 ; i<numberOfImages ; i++) {
 		
-			final Image pickupImage = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
+			final Image pickupImage = new Image(itemComponent.getItemType().getTexture());
 			
 			Vector2 worldPos = itemPositionComponent.getWorldPos();
 			pickupImage.setPosition(worldPos.x, worldPos.y);
@@ -157,7 +157,7 @@ public class ItemComponent implements Component, Poolable {
 	public Image getDropAnimationImage(Entity dropper, Entity item, Action dropAction) {
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
-		final Image drop = new Image(Assets.getTexture(itemComponent.getItemType().getImageName()));
+		final Image drop = new Image(itemComponent.getItemType().getTexture());
 		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(dropper);
 		Vector2 worldPos = gridPositionComponent.getWorldPos();
@@ -211,8 +211,8 @@ public class ItemComponent implements Component, Poolable {
 		return itemType.getActionLabel();
 	}
 	
-	public String getItemImageName() {
-		return itemType.getImageName();
+	public AtlasRegion getItemImageName() {
+		return itemType.getTexture();
 	}
 	
 	

@@ -6,14 +6,17 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.enums.creep.CreepEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -169,7 +172,27 @@ public enum ItemEnum {
 			List<Entity> adjacentTiles = TileUtil.getAdjacentEntitiesWithComponent(thrownPosition, TileComponent.class, room);
 			for (Entity tile : adjacentTiles) {
 				if (Mappers.tileComponent.get(tile).type.isWalkable()) {
-					room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord(), thrower);
+					boolean canCatchFire = true;
+					GridPositionComponent tilePos = Mappers.gridPositionComponent.get(tile);
+					Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tilePos.coord(), CreepComponent.class, room);
+					if (creepAlreadyThere != null) {
+						CreepComponent creepComponent = Mappers.creepComponent.get(creepAlreadyThere);
+						if (creepComponent.getType() == CreepEnum.FIRE) {
+							//There is already fire on this tile, do nothing
+							canCatchFire = false;
+						}
+					}
+					
+					if (canCatchFire) {
+						Entity wall = TileUtil.getEntityWithComponentOnTile(tilePos.coord(), BlockExplosionComponent.class, room);
+						if (wall != null) {
+							canCatchFire = false;
+						}
+					}
+					
+					if (canCatchFire) {
+						room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord(), thrower);
+					}
 				}
 			}
 		}

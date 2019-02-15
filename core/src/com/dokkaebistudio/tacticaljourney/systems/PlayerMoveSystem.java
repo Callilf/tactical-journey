@@ -98,7 +98,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.moveRemaining = moveCompo.moveSpeed;
 				moveCompo.freeMove = false;
 			} else {
-				moveCompo.moveRemaining = 30;
 				moveCompo.freeMove = true;
 			}
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
@@ -413,15 +412,19 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 
 			if (spriteComponent.containsPoint(x, y)) {
-				// Clicked on this tile !!
+				// Check whether we can find a path to this tile
+				List<Entity> waypoints = tileSearchService.buildWaypointList(moverEntity, moveCompo, moverCurrentPos, 
+						destinationPos, room);
+
+				if (waypoints == null) {
+					// No path found
+					return false;
+				}
+				moveCompo.setWayPoints(waypoints);
+				
 				// Create an entity to show that this tile is selected as the destination
 				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
 				moveCompo.setSelectedTile(destinationTileEntity);
-
-				// Display the way to go to this point
-				List<Entity> waypoints = tileSearchService.buildWaypointList(moverEntity, moveCompo, moverCurrentPos, 
-						destinationPos, room);
-				moveCompo.setWayPoints(waypoints);
 
 				return true;
 			}

@@ -63,8 +63,26 @@ public class TileSearchService {
 		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
 		
 		//Find all walkable tiles
-		moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTileEntity, 1, moveCompo.moveRemaining,room);
-		moveCompo.allWalkableTiles.add(moverTileEntity);
+		
+		if (room.hasEnemies()) {
+			moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTileEntity, 1, moveCompo.moveRemaining,room);
+			moveCompo.allWalkableTiles.add(moverTileEntity);
+		} else {
+			moveCompo.allWalkableTiles = new HashSet<>();
+			moveCompo.allWalkableTiles.add(moverTileEntity);
+			// For rooms with no enemies, just say that all tiles are walkable
+			for (Entity[] column : room.grid) {
+				for (Entity tile : column) {
+					if (Mappers.tileComponent.get(tile).type.isWalkable()) {
+						Entity solid = TileUtil.getEntityWithComponentOnTile(Mappers.gridPositionComponent.get(tile).coord(), SolidComponent.class, room);
+						
+						if (solid == null) {
+							moveCompo.allWalkableTiles.add(tile);
+						}
+					}
+				}
+			}
+		}
 		
 		//Create entities for each movable tiles to display them
 		for (Entity tileCoord : moveCompo.allWalkableTiles) {
@@ -83,7 +101,8 @@ public class TileSearchService {
 	 * @param moverCurrentPos the position of the start tile
 	 * @param destinationPos the position of the destination
 	 * @param room the room
-	 * @return the list of waypoints entities
+	 * @return the list of waypoints entities. An empty list if the destination is already beside the startpoint. Null if
+	 * no path can be found.
 	 */
 	public List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
 			GridPositionComponent destinationPos, Room room) {
@@ -96,6 +115,8 @@ public class TileSearchService {
 		
 		int pathNb = -1;
 		List<Entity> waypoints = new ArrayList<>();
+		if (path.getCount() == 0) return null;
+		
 		Iterator<Entity> iterator = path.iterator();
 		while(iterator.hasNext()) {
 			pathNb ++;

@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -303,10 +304,12 @@ public class RoomGenerator {
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
-//			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(11, 8), 1);
-//			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
-//			lootRewardComponent.setDrop( generateEnemyLoot(100f));
+			
+			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
+			lootRewardComponent.setDrop( generateEnemyLoot(100f));
+			
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
@@ -373,20 +376,10 @@ public class RoomGenerator {
 		float randomValue = unit + decimal;
 		
 		if (randomValue <= dropRate) {
-			int nextInt = random.nextInt(6);
-			if (nextInt == 0) {
-				return entityFactory.itemFactory.createItemMoney(null, null);
-			} else if (nextInt == 1) {
-				return entityFactory.itemFactory.createItemHealthUp(null, null);
-			} else if (nextInt == 2) {
-				return entityFactory.itemFactory.createItemArrows(null, null);
-			} else if (nextInt == 3) {
-				return entityFactory.itemFactory.createItemBombs(null, null);
-			} else if (nextInt == 4) {
-				return entityFactory.itemFactory.createItemTutorialPage(1 + random.nextInt(4), null, null);
-			} else if (nextInt == 5) {
-				return entityFactory.itemFactory.createItemFirePotion(null, null);
-			}
+			List<PooledItemDescriptor> itemTypes = EnemyItemPool.getItemTypes(1);
+			PooledItemDescriptor itemType = itemTypes.get(0);
+			
+			return entityFactory.itemFactory.createItem(itemType.getType(), null, null);
 		}
 		
 		return null;

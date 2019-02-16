@@ -7,26 +7,26 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 
-public final class ShopItemPool {
+public final class EnemyItemPool {
 
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
-	private static final List<PooledItemDescriptor> shopItemPool = new ArrayList<>();
+	private static final List<PooledItemDescriptor> enemyItemPool = new ArrayList<>();
 	
 	private static int sumOfChances;
 	
 	static {
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 2));
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 4));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 2));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 4));
 		
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 8));
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 20));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 8));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 20));
 
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
-		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15, 10));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15, 10));
 		
-		for (PooledItemDescriptor pid : shopItemPool) {
+		for (PooledItemDescriptor pid : enemyItemPool) {
 			sumOfChances += pid.getChanceToDrop();
 		}
 	}
@@ -47,7 +47,7 @@ public final class ShopItemPool {
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
 			randomInt = seededRandom.nextInt(sumOfChances);
-			for (PooledItemDescriptor pid : shopItemPool) {
+			for (PooledItemDescriptor pid : enemyItemPool) {
 				if (randomInt >= chance && randomInt < chance + pid.getChanceToDrop()) {
 					//This item is chosen
 					result.add(pid);

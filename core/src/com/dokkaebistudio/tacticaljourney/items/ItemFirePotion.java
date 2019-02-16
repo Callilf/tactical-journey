@@ -41,6 +41,11 @@ public class ItemFirePotion extends Item {
 	}
 	
 	@Override
+	public boolean isStackable() {
+		return true;
+	}
+	
+	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		//Damage for 10 HP + set ablaze
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);

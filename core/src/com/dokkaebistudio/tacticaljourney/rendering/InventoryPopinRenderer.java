@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -75,6 +76,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 //    private Label money;
     private Table[] slots = new Table[16];
     private Image[] slotImages = new Image[16];
+    private Label[] slotQuantities = new Label[16];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
     
@@ -136,6 +138,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     			for(int i=0 ; i<slots.length ; i++) {
     				final Table slot = slots[i];
 					Image image = slotImages[i];
+					Label quantity = slotQuantities[i];
     				final Entity item = inventoryCompo.get(i);
     				
     				slot.clearListeners();
@@ -144,6 +147,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     					final ItemComponent itemComponent = Mappers.itemComponent.get(item);
     					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
     					image.setDrawable(texture);
+    					quantity.setText(inventoryCompo.getQuantity(i) > 1 ? String.valueOf(inventoryCompo.getQuantity(i)) : "");
 
     					slot.clearListeners();
     					slot.addListener(new ClickListener() {
@@ -262,9 +266,18 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
 		slot.setBackground(slotBackground);
 
+		Stack imageStack = new Stack();
+
 		Image img = new Image();
 		slotImages[index] = img;
-		slot.add(img);
+		imageStack.add(img);
+		
+		Label quantity = new Label("", PopinService.hudStyle());
+		quantity.setAlignment(Align.bottomLeft);
+		slotQuantities[index] = quantity;
+		imageStack.add(quantity);
+		
+		slot.add(imageStack).expand();
 		
 		slot.pack();
 		return slot;

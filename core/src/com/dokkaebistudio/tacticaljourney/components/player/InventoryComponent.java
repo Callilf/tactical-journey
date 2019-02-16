@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -30,6 +33,8 @@ public class InventoryComponent implements Component, Poolable {
 	
 	/** The slots of the inventory. */
 	private Entity[] slots = new Entity[16];
+	private List<List<Entity>> stackedItems = new ArrayList<>();
+
 	
 	private int firstEmptySlot = 0;
 	
@@ -51,12 +56,23 @@ public class InventoryComponent implements Component, Poolable {
 	}
 	
 	
+	public void init() {
+		for (int i=0 ; i<16 ; i++) {
+			ArrayList<Entity> arrayList = new ArrayList<>();
+			stackedItems.add(arrayList);
+		}
+
+	}
+	
 	@Override
 	public void reset() {
 		player = null;
 		slots = new Entity[16];
 		firstEmptySlot = 0;
 		displayMode = InventoryDisplayModeEnum.NONE;
+		for (List<Entity> l : stackedItems) {
+			l.clear();
+		}
 	}
 	
 	
@@ -78,9 +94,29 @@ public class InventoryComponent implements Component, Poolable {
 	 */
 	public boolean store(Entity item, ItemComponent itemCompo, Room room) {
 		if (itemCompo != null && itemCompo.getItemType().isGoIntoInventory()) {
-			//This item can be stored in the intentory
-			slots[firstEmptySlot] = item;
-			firstEmptySlot ++;
+			
+			boolean stacked = false;
+			if (itemCompo.getItemType().isStackable()) {
+				// Check if there is already an item of this type
+				for (int i=0 ; i<firstEmptySlot ; i++) {
+					Entity entity = slots[i];
+					ItemComponent itemComponent = Mappers.itemComponent.get(entity);
+					if (itemComponent != null 
+							&& itemComponent.getItemType().getClass().equals(itemCompo.getItemType().getClass())) {
+						// Already a similar item in inventory
+						stackedItems.get(i).add(item);
+						stacked = true;
+					}
+				}
+			}
+			
+			
+			if (!stacked) {
+				//This item can be stored in the intentory
+				slots[firstEmptySlot] = item;
+				stackedItems.get(firstEmptySlot).clear();
+				firstEmptySlot ++;
+			}
 			
 			if (room != null) {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
@@ -111,19 +147,34 @@ public class InventoryComponent implements Component, Poolable {
 	 * @return the entity
 	 */
 	public Entity getAndRemove(int slotIndex) {
-		Entity e = slots[slotIndex];
-		slots[slotIndex] = null;
+		Entity e = null;
 		
-		// Shift all elements
-		for (int i=slotIndex ; i<firstEmptySlot ; i++) {
-			if (i+1 >= numberOfSlots) {
-				slots[i] = null;
-			} else {
-				slots[i] = slots[i+1];
+		if (!stackedItems.get(slotIndex).isEmpty()) {
+			// Stacked item
+			
+			e = stackedItems.get(slotIndex).get(0);
+			stackedItems.get(slotIndex).remove(0);
+			
+		} else {
+			// Item not stacked
+			
+			e = slots[slotIndex];
+			slots[slotIndex] = null;
+			stackedItems.get(slotIndex).clear();
+			
+			// Shift all elements
+			for (int i=slotIndex ; i<firstEmptySlot ; i++) {
+				if (i+1 >= numberOfSlots) {
+					slots[i] = null;
+					stackedItems.get(i).clear();
+				} else {
+					slots[i] = slots[i+1];
+					stackedItems.get(i).addAll(stackedItems.get(i + 1));	
+				}
 			}
-		}
-		firstEmptySlot --;
+			firstEmptySlot --;
 		
+		}
 		return e;
 	}
 	
@@ -134,6 +185,18 @@ public class InventoryComponent implements Component, Poolable {
 	 */
 	public Entity get(int slotIndex) {
 		return slots[slotIndex];
+	}
+	
+	/**
+	 * Get the number of entities at the given index in the inventory.
+	 * @param slotIndex the index of the slot
+	 * @return the number of entities. 0 if no entities.
+	 */
+	public int getQuantity(int slotIndex) {
+		if (stackedItems.get(slotIndex).isEmpty()) {
+			return slots[slotIndex] != null ? 1 : 0;
+		}
+		return stackedItems.get(slotIndex).size() + 1;
 	}
 
 	

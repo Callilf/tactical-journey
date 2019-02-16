@@ -29,6 +29,7 @@ public abstract class Item {
 	/** Whether this item can go into the inventory. */
 	private boolean goIntoInventory;
 	
+	
 	private Integer randomValueMin;
 	private Integer randomValueMax;	
 	
@@ -120,6 +121,14 @@ public abstract class Item {
 	 */
 	public Vector2 getPickupImageMoveDestination() {
 		return HUDRenderer.POS_INVENTORY;
+	}
+	
+	/**
+	 * Whether this item can be stacked in the inventory.
+	 * @return true is stackable
+	 */
+	public boolean isStackable() {
+		return false;
 	}
 	
 	

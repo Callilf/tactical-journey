@@ -26,6 +26,11 @@ public class ItemWebSack extends Item {
 		return "A small sack of spider web. Nothing very interesting about it.";		
 	}
 	
+	@Override
+	public boolean isStackable() {
+		return true;
+	}
+	
 	/**
 	 * Cannot be used ! Only thrown.
 	 */

@@ -32,6 +32,11 @@ public class ItemSmallHealthPotion extends Item {
 	}
 	
 	@Override
+	public boolean isStackable() {
+		return true;
+	}
+	
+	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		//Heal the picker for 25 HP !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);

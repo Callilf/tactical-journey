@@ -105,6 +105,7 @@ public final class PlayerFactory {
 		playerEntity.add(attackComponent);
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
+		inventoryComponent.init();
 		inventoryComponent.player = playerEntity;
 		inventoryComponent.setNumberOfSlots(8);
 		inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);

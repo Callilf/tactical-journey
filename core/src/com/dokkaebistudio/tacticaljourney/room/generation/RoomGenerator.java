@@ -281,6 +281,9 @@ public class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 10));
+			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
+			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
+
 			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(11, 10));
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
@@ -307,9 +310,9 @@ public class RoomGenerator {
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(11, 8), 1);
 			
-			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
-			lootRewardComponent.setDrop( generateEnemyLoot(100f));
+//			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
+//			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
+//			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 			
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);

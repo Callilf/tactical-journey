@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.ItemTutorialPage;
+import com.dokkaebistudio.tacticaljourney.items.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -110,8 +111,15 @@ public final class ItemFactory {
 		case POTION_SMALL_HEALTH:
 			item = createItemHealthUp(room, tilePos);
 			break;
+			
+			
+		case WEB_SACK:
+			item = createItemWebSack(room, tilePos);
+			break;
+
 			default:
 				System.out.println("Item type " + type.name() + " not handled in ItemFactory.");
+				
 		}
 		
 		return item;
@@ -211,5 +219,24 @@ public final class ItemFactory {
 
 		return item;
 	}
+	
+	/**
+	 * Create a sack of web.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemWebSack(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.web_sack_item, new ItemWebSack());
+		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
+		
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(true);
+		flammable.setDestroyedTexture(Assets.web_sack_item);
+		item.add(flammable);
+		
+		return item;
+	}
+	
 	
 }

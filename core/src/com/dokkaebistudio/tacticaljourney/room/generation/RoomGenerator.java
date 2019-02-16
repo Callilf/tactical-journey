@@ -280,6 +280,7 @@ public class RoomGenerator {
 			break;
 			
 		case START_FLOOR_ROOM:
+			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 10));
 			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(11, 10));
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));

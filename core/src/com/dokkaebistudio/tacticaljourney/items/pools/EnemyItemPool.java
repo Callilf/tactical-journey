@@ -17,14 +17,16 @@ public final class EnemyItemPool {
 	private static int sumOfChances;
 	
 	static {
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 2));
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 4));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
 		
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 8));
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 20));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
 
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
-		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15, 10));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15));
+		
+		enemyItemPool.add(new PooledItemDescriptor(ItemEnum.WEB_SACK, 50));
 		
 		for (PooledItemDescriptor pid : enemyItemPool) {
 			sumOfChances += pid.getChanceToDrop();

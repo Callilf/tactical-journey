@@ -14,7 +14,10 @@ public enum ItemEnum {
 	
 	// Armors
 	ARMOR_PIECE(1),
-	ARMOR_LIGHT(2);
+	ARMOR_LIGHT(2),
+	
+	// Misc
+	WEB_SACK(1);
 	
 	
 	

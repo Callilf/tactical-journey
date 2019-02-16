@@ -28,6 +28,9 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
+import com.dokkaebistudio.tacticaljourney.items.pools.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -242,31 +245,34 @@ public class RoomGenerator {
 		case SHOP_ROOM:
 			entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
 
+			List<PooledItemDescriptor> itemTypes = ShopItemPool.getItemTypes(3);
+			PooledItemDescriptor itemType1 = itemTypes.get(0);
+			
 			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity firstItem = entityFactory.itemFactory.createItemHealthUp(room, new Vector2(9, 5));
+			Entity firstItem = entityFactory.itemFactory.createItem(itemType1.getType(), room, new Vector2(9, 5));
 			ItemComponent ic = Mappers.itemComponent.get(firstItem);
-			ic.setPrice(5);
+			ic.setPrice(itemType1.getPrice());
 			
+			PooledItemDescriptor itemType2 = itemTypes.get(1);
 			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity secondItem = entityFactory.itemFactory.createItemArrows(room, new Vector2(11, 5));
+			Entity secondItem = entityFactory.itemFactory.createItem(itemType2.getType(), room, new Vector2(11, 5));
 			ic = Mappers.itemComponent.get(secondItem);
-			ic.setQuantity(5);
-			ic.setPrice(10);
+			ic.setPrice(itemType2.getPrice());
 
+			PooledItemDescriptor itemType3 = itemTypes.get(2);
 			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity thirdItem = entityFactory.itemFactory.createItemBombs(room, new Vector2(13, 5));
+			Entity thirdItem = entityFactory.itemFactory.createItem(itemType3.getType(), room, new Vector2(13, 5));
 			ic = Mappers.itemComponent.get(thirdItem);
-			ic.setQuantity(2);
-			ic.setPrice(6);
+			ic.setPrice(itemType3.getPrice());
 
 			
 			
@@ -302,7 +308,7 @@ public class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
-			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
+//			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 //			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
 //			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));

@@ -264,6 +264,10 @@ public class ItemComponent implements Component, Poolable {
 	public void setPrice(Integer price) {
 		this.price = price;
 		
+		if (this.getQuantity() != null) {
+			this.price = this.price * this.getQuantity();
+		}
+		
 		if (priceDisplayer != null) {
 			if (price != null) {
 				TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);

@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.ItemTutorialPage;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -77,6 +78,44 @@ public final class ItemFactory {
 		return item;
 	}
 	
+	
+	/**
+	 * Create an item of the given type at the given position in the given room.
+	 * @param type the type of item
+	 * @param room the room
+	 * @param tilePos the position
+	 * @return the item created
+	 */
+	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos) {
+		Entity item = null;
+		
+		switch (type) {
+		case AMMO_ARROW:
+			item = createItemArrows(room, tilePos);
+			break;
+		case AMMO_BOMB:
+			item = createItemBombs(room, tilePos);
+			break;
+			
+		case ARMOR_LIGHT:
+			item = createItemLightArmor(room, tilePos);
+			break;
+		case ARMOR_PIECE:
+			item = createItemArmorPiece(room, tilePos);
+			break;
+			
+		case POTION_FIRE:
+			item = createItemFirePotion(room, tilePos);
+			break;
+		case POTION_SMALL_HEALTH:
+			item = createItemHealthUp(room, tilePos);
+			break;
+			default:
+				System.out.println("Item type " + type.name() + " not handled in ItemFactory.");
+		}
+		
+		return item;
+	}
 
 	/**
 	 * Create a money item that is consumed when picked up.

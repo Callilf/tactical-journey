@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
@@ -21,14 +22,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.ShopItemPool;
@@ -372,15 +374,25 @@ public class RoomGenerator {
 		}
 	}
 	
-	private Entity generateEnemyLoot(float dropRate) {
+	private Entity generateEnemyLoot(DropRate dropRate) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
 		float unit = (float) random.nextInt(100);
 		float decimal = random.nextFloat();
 		float randomValue = unit + decimal;
 		
-		if (randomValue <= dropRate) {
-			List<PooledItemDescriptor> itemTypes = EnemyItemPool.getItemTypes(1);
+		int chance = 0;
+		ItemPoolRarity rarity = null;
+		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
+			if (randomValue >= chance && randomValue < chance + entry.getValue().intValue()) {
+				rarity = entry.getKey();
+				break;
+			}
+			chance += entry.getValue().intValue();
+		}
+		
+		if (rarity != null) {
+			List<PooledItemDescriptor> itemTypes = EnemyItemPool.getItemTypes(1, rarity);
 			PooledItemDescriptor itemType = itemTypes.get(0);
 			
 			return entityFactory.itemFactory.createItem(itemType.getType(), null, null);

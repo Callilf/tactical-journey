@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.loot;
 
 import java.util.ArrayList;
 import java.util.List;

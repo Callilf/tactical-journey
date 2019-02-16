@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.loot;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -15,13 +15,14 @@ public class LootRewardComponent implements Component, Poolable {
 	private Entity drop;
 
 	/** The drop rate in percent for the given entity. */
-	private float dropRate;
+	private DropRate dropRate;
 
 	
 	
 	@Override
 	public void reset() {
-		drop = null;	
+		drop = null;
+		dropRate.reset();
 	}
 	
 	
@@ -36,12 +37,12 @@ public class LootRewardComponent implements Component, Poolable {
 	}
 
 
-	public float getDropRate() {
+	public DropRate getDropRate() {
 		return dropRate;
 	}
 
 
-	public void setDropRate(float dropRate) {
+	public void setDropRate(DropRate dropRate) {
 		this.dropRate = dropRate;
 	}
 	

@@ -13,12 +13,14 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
@@ -104,7 +106,10 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setDropRate(10);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 10);
+		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
 		room.addEnemy(enemyEntity);
@@ -171,7 +176,10 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setDropRate(15);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 70);
+		dropRate.add(ItemPoolRarity.RARE, 10);
+		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
 		CreepEmitterComponent creepEmitter = engine.createComponent(CreepEmitterComponent.class);
@@ -239,7 +247,10 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setDropRate(20);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 30);
+		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
 		room.addEnemy(enemyEntity);

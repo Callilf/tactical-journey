@@ -238,7 +238,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 
 							itemComponent.drop(player, currentItem, room);
 
-							playerIventoryCompo.remove(currentItem);
+//							playerIventoryCompo.remove(currentItem);
 							room.getAddedItems().add(currentItem);
 							room.turnManager.endPlayerTurn();
 							

@@ -91,6 +91,10 @@ public final class ItemFactory {
 		Entity item = null;
 		
 		switch (type) {
+		case MONEY:
+			item = createItemMoney(room, tilePos);
+			break;
+			
 		case AMMO_ARROW:
 			item = createItemArrows(room, tilePos);
 			break;

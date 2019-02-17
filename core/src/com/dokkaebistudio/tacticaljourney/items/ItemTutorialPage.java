@@ -17,7 +17,7 @@ public class ItemTutorialPage extends Item {
 	private int pageNumber;
 
 	public ItemTutorialPage(int pageNumber) {
-		super("Piece of armor", Assets.armor_piece_item, false, true);
+		super("Piece of armor", Assets.tutorial_page_item, false, true);
 		this.pageNumber = pageNumber;
 	}
 	

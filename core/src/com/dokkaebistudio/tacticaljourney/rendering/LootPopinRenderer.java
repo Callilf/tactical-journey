@@ -83,6 +83,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     private Label money;
     private Table[] slots = new Table[16];
     private Image[] slotImages = new Image[16];
+    private Label[] slotQuantities = new Label[16];
     private TextButton[] slotDropBtns = new TextButton[16];
 
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
@@ -386,14 +387,19 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
 		slot.setBackground(slotBackground);
 
+		final Stack slotStack = new Stack();
+
+		Table imageStackTable = new Table();
 		Image img = new Image();
 		slotImages[index] = img;
-		slot.add(img);
-		
-		final Stack slotStack = new Stack();
-		Table imageStackTable = new Table();
 		imageStackTable.add(img);
 		slotStack.add(imageStackTable);
+		
+		Label quantity = new Label("", PopinService.hudStyle());
+		quantity.setTouchable(Touchable.disabled);
+		quantity.setAlignment(Align.bottomLeft);
+		slotQuantities[index] = quantity;
+		slotStack.add(quantity);
 
 		//Add the drop button
 		final TextButton dropBtn = new TextButton("Drop", PopinService.smallButtonStyle());
@@ -402,6 +408,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		dropBtn.setVisible(false);
 		
 		Table slotStackTable = new Table();
+		slotStackTable.setTouchable(Touchable.childrenOnly);
 		slotStackTable.add(dropBtn);
 		slotStack.add(slotStackTable);
 		slot.add(slotStack);
@@ -416,6 +423,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		for(int i=0 ; i<slots.length ; i++) {
 			final Table slot = slots[i];
 			Image image = slotImages[i];
+			Label quantity = slotQuantities[i];
 			final TextButton dropBtn = slotDropBtns[i];
 			final Entity item = inventoryCompo.get(i);
 			
@@ -427,6 +435,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 				final ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
 				image.setDrawable(texture);
+				quantity.setText(inventoryCompo.getQuantity(i) > 1 ? String.valueOf(inventoryCompo.getQuantity(i)) : "");
 
 				if (!inventoryCompo.isInventoryActionInProgress()) {
 					// Listener to display the DROP button
@@ -465,7 +474,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		        } else {
 		        	image.setDrawable(null);
 		        }
-
+				quantity.setText("");
 		        dropBtn.setVisible(false);
 			}
 			

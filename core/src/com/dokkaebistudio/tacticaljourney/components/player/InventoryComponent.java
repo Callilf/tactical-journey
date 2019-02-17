@@ -31,9 +31,9 @@ public class InventoryComponent implements Component, Poolable {
 	/** The number of slots in the inventory. */
 	private int numberOfSlots;
 	
-	/** The slots of the inventory. */
-	private Entity[] slots = new Entity[16];
-	private List<List<Entity>> stackedItems = new ArrayList<>();
+	/** The slots of the inventory. Each slot contains a list of entities to
+	 * handle stacked items. */
+	private List<List<Entity>> slots = new ArrayList<>();
 
 	
 	private int firstEmptySlot = 0;
@@ -59,7 +59,7 @@ public class InventoryComponent implements Component, Poolable {
 	public void init() {
 		for (int i=0 ; i<16 ; i++) {
 			ArrayList<Entity> arrayList = new ArrayList<>();
-			stackedItems.add(arrayList);
+			slots.add(arrayList);
 		}
 
 	}
@@ -67,10 +67,10 @@ public class InventoryComponent implements Component, Poolable {
 	@Override
 	public void reset() {
 		player = null;
-		slots = new Entity[16];
+//		slots = new Entity[16];
 		firstEmptySlot = 0;
 		displayMode = InventoryDisplayModeEnum.NONE;
-		for (List<Entity> l : stackedItems) {
+		for (List<Entity> l : slots) {
 			l.clear();
 		}
 	}
@@ -99,12 +99,14 @@ public class InventoryComponent implements Component, Poolable {
 			if (itemCompo.getItemType().isStackable()) {
 				// Check if there is already an item of this type
 				for (int i=0 ; i<firstEmptySlot ; i++) {
-					Entity entity = slots[i];
+					if (slots.get(i).isEmpty()) continue;
+					
+					Entity entity = slots.get(i).get(0);
 					ItemComponent itemComponent = Mappers.itemComponent.get(entity);
 					if (itemComponent != null 
 							&& itemComponent.getItemType().getClass().equals(itemCompo.getItemType().getClass())) {
 						// Already a similar item in inventory
-						stackedItems.get(i).add(item);
+						slots.get(i).add(item);
 						stacked = true;
 					}
 				}
@@ -113,8 +115,8 @@ public class InventoryComponent implements Component, Poolable {
 			
 			if (!stacked) {
 				//This item can be stored in the intentory
-				slots[firstEmptySlot] = item;
-				stackedItems.get(firstEmptySlot).clear();
+				slots.get(firstEmptySlot).clear();
+				slots.get(firstEmptySlot).add(item);
 				firstEmptySlot ++;
 			}
 			
@@ -135,7 +137,9 @@ public class InventoryComponent implements Component, Poolable {
 	 */
 	public void remove(Entity e) {
 		for (int i=0 ; i<firstEmptySlot ; i++) {
-			if (slots[i] == e) {
+			if (slots.get(i).isEmpty()) continue;
+			
+			if (slots.get(i).get(0) == e) {
 				getAndRemove(i);
 			}
 		}
@@ -147,34 +151,23 @@ public class InventoryComponent implements Component, Poolable {
 	 * @return the entity
 	 */
 	public Entity getAndRemove(int slotIndex) {
-		Entity e = null;
+		if (slots.get(slotIndex).isEmpty()) return null;
 		
-		if (!stackedItems.get(slotIndex).isEmpty()) {
-			// Stacked item
+		Entity e =  slots.get(slotIndex).get(0);
+		slots.get(slotIndex).remove(0);
 			
-			e = stackedItems.get(slotIndex).get(0);
-			stackedItems.get(slotIndex).remove(0);
-			
-		} else {
-			// Item not stacked
-			
-			e = slots[slotIndex];
-			slots[slotIndex] = null;
-			stackedItems.get(slotIndex).clear();
+		if (slots.get(slotIndex).isEmpty()) {
 			
 			// Shift all elements
 			for (int i=slotIndex ; i<firstEmptySlot ; i++) {
-				if (i+1 >= numberOfSlots) {
-					slots[i] = null;
-					stackedItems.get(i).clear();
-				} else {
-					slots[i] = slots[i+1];
-					stackedItems.get(i).addAll(stackedItems.get(i + 1));	
+				slots.get(i).clear();
+				if (i + 1 < numberOfSlots) {
+					slots.get(i).addAll(slots.get(i + 1));
 				}
 			}
-			firstEmptySlot --;
-		
+			firstEmptySlot--;
 		}
+
 		return e;
 	}
 	
@@ -184,7 +177,8 @@ public class InventoryComponent implements Component, Poolable {
 	 * @return the entity
 	 */
 	public Entity get(int slotIndex) {
-		return slots[slotIndex];
+		if (slots.get(slotIndex).isEmpty()) return null;
+		return slots.get(slotIndex).get(0);
 	}
 	
 	/**
@@ -193,10 +187,7 @@ public class InventoryComponent implements Component, Poolable {
 	 * @return the number of entities. 0 if no entities.
 	 */
 	public int getQuantity(int slotIndex) {
-		if (stackedItems.get(slotIndex).isEmpty()) {
-			return slots[slotIndex] != null ? 1 : 0;
-		}
-		return stackedItems.get(slotIndex).size() + 1;
+		return slots.get(slotIndex).size();
 	}
 
 	

@@ -429,7 +429,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 				//Drop on the floor
 				inventoryCompo.requestAction(InventoryActionEnum.DROP, item);
 				slot.removeListener(this);
-				inventoryCompo.remove(item);
 				closePopin();
 			}
 		};

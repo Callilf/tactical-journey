@@ -208,11 +208,11 @@ public class RoomGenerator {
 				Vector2 lootPos = enemyPositions.get(0);
 				if (lootRandom <= 5) {
 					Entity bones = entityFactory.createRemainsBones(room, lootPos);
-					fillLootable(bones, 1);
+					fillLootable(bones);
 					
 				} else {
 					Entity satchel = entityFactory.createRemainsSatchel(room, lootPos);
-					fillLootable(satchel, 2);
+					fillLootable(satchel);
 
 				}
 				enemyPositions.remove(0);
@@ -305,8 +305,10 @@ public class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 
 //			Entity bones = entityFactory.createRemainsBones(room, new Vector2(12, 9));
-//			fillLootable(bones, 1);
-			
+//			fillLootable(bones);
+//			Entity satchel = entityFactory.createRemainsSatchel(room, new Vector2(13, 9));
+//			fillLootable(satchel);
+
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
@@ -341,36 +343,19 @@ public class RoomGenerator {
 		generatedRoom.releasePossibleSpawns();
 	}
 	
-	private void fillLootable(Entity lootable, int nbMaxItems) {
+	private void fillLootable(Entity lootable) {
 		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
 		
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
-		boolean isMoney = random.nextInt(2) == 0;
-		if (isMoney) {
-			Entity moneyItem = entityFactory.itemFactory.createItemMoney(null, null);
-			lootableComponent.getItems().add(moneyItem);
-		}
-		
-		int nbLoot = random.nextInt(nbMaxItems + 1);
+		int nbLoot = random.nextInt(lootableComponent.getMaxNumberOfItems() + 1);
 		if (nbLoot > 0) {
-			for (int i=0 ; i<nbLoot ; i++) {
-				int nextInt = random.nextInt(5);
-				Entity item = null;
-				
-				if (nextInt == 0) {
-					item = entityFactory.itemFactory.createItemHealthUp(null, null);
-				} else if (nextInt == 1) {
-					item = entityFactory.itemFactory.createItemArrows( null, null);
-				} else if (nextInt == 2) {
-					item = entityFactory.itemFactory.createItemBombs( null, null);
-				} else if (nextInt == 3) {
-					item = entityFactory.itemFactory.createItemTutorialPage( 1 +random.nextInt(4), null, null);
-				} else if (nextInt == 4) {
-					item = entityFactory.itemFactory.createItemFirePotion(null, null);
+				List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
+				for (PooledItemDescriptor pid : itemTypes) {
+					Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
+					lootableComponent.getItems().add(item);
 				}
-				lootableComponent.getItems().add(item);
-			}
+			
 		}
 	}
 	

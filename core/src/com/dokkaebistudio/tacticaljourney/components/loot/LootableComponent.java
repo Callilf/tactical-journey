@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -19,6 +20,12 @@ public class LootableComponent implements Component, Poolable {
 	
 	/** The type of lootable. */
 	private LootableEnum type;
+	
+	/** The item pool from where the random items are chosen. */
+	private LootableItemPool itemPool;
+	
+	/** The maximum number of items in this lootable. */
+	private int maxNumberOfItems;
 	
 	/** The loot. */
 	private List<Entity> items = new ArrayList<>();
@@ -114,6 +121,22 @@ public class LootableComponent implements Component, Poolable {
 
 	public void setStandByItems(List<Entity> standByItems) {
 		this.standByItems = standByItems;
+	}
+
+	public LootableItemPool getItemPool() {
+		return itemPool;
+	}
+
+	public void setItemPool(LootableItemPool itemPool) {
+		this.itemPool = itemPool;
+	}
+
+	public int getMaxNumberOfItems() {
+		return maxNumberOfItems;
+	}
+
+	public void setMaxNumberOfItems(int maxNumberOfItems) {
+		this.maxNumberOfItems = maxNumberOfItems;
 	}
 
 	

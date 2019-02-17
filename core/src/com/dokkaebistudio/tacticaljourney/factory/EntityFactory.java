@@ -39,6 +39,8 @@ import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -699,6 +701,8 @@ public final class EntityFactory {
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
+    	lootComponent.setItemPool(new OldBonesItemPool());
+    	lootComponent.setMaxNumberOfItems(2);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	remainsEntity.add(lootComponent);
     	
@@ -732,6 +736,8 @@ public final class EntityFactory {
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
+    	lootComponent.setItemPool(new AdventurersSatchelItemPool());
+    	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	remainsEntity.add(lootComponent);
     	

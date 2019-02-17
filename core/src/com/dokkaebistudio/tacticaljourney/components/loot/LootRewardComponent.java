@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.components.loot;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 
 /**
  * Marker to indicate that this entity that drop loot.
@@ -16,6 +17,9 @@ public class LootRewardComponent implements Component, Poolable {
 
 	/** The drop rate in percent for the given entity. */
 	private DropRate dropRate;
+	
+	/** The pool of items that can drop. */
+	private EnemyItemPool itemPool;
 
 	
 	
@@ -44,6 +48,16 @@ public class LootRewardComponent implements Component, Poolable {
 
 	public void setDropRate(DropRate dropRate) {
 		this.dropRate = dropRate;
+	}
+
+
+	public EnemyItemPool getItemPool() {
+		return itemPool;
+	}
+
+
+	public void setItemPool(EnemyItemPool itemPool) {
+		this.itemPool = itemPool;
 	}
 	
 }

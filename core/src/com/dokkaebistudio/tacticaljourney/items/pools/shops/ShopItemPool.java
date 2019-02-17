@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.items.pools;
+package com.dokkaebistudio.tacticaljourney.items.pools.shops;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public final class ShopItemPool {
 

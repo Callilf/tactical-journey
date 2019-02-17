@@ -25,6 +25,9 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -106,8 +109,9 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new SpiderItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.COMMON, 30);
 		dropRate.add(ItemPoolRarity.RARE, 10);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
@@ -176,6 +180,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new WebSpiderItemPool());
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 70);
 		dropRate.add(ItemPoolRarity.RARE, 10);
@@ -247,9 +252,10 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new ScorpionItemPool());
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 50);
-		dropRate.add(ItemPoolRarity.RARE, 30);
+		dropRate.add(ItemPoolRarity.RARE, 20);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		

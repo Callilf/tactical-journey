@@ -31,9 +31,9 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.ShopItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -240,7 +240,7 @@ public class RoomGenerator {
 				}
 				
 				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getDropRate()));
+				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 			}
 			
 			break;
@@ -282,11 +282,11 @@ public class RoomGenerator {
 			break;
 			
 		case START_FLOOR_ROOM:
-			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 10));
-			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
-			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
+//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 10));
+//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
+//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
 
-			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(11, 10));
+			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(5, 4));
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
 			entityFactory.itemFactory.createItemLightArmor(room, new Vector2(5, 5));
@@ -374,7 +374,7 @@ public class RoomGenerator {
 		}
 	}
 	
-	private Entity generateEnemyLoot(DropRate dropRate) {
+	private Entity generateEnemyLoot(EnemyItemPool itemPool, DropRate dropRate) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
 		float unit = (float) random.nextInt(100);
@@ -392,7 +392,7 @@ public class RoomGenerator {
 		}
 		
 		if (rarity != null) {
-			List<PooledItemDescriptor> itemTypes = EnemyItemPool.getItemTypes(1, rarity);
+			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity);
 			PooledItemDescriptor itemType = itemTypes.get(0);
 			
 			return entityFactory.itemFactory.createItem(itemType.getType(), null, null);

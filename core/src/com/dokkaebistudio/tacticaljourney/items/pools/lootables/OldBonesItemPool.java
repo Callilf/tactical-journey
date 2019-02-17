@@ -21,10 +21,10 @@ public class OldBonesItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
 		
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));				
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 5));				
 		
 		for (PooledItemDescriptor pid : itemPool) {
 			sumOfChances += pid.getChanceToDrop();

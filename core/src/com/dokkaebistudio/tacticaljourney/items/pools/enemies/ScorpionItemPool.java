@@ -22,7 +22,7 @@ public class ScorpionItemPool extends EnemyItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
 						
 		for (PooledItemDescriptor pid : commonItemPool) {
 			commonSumOfChances += pid.getChanceToDrop();
@@ -35,9 +35,9 @@ public class ScorpionItemPool extends EnemyItemPool {
 	private static int rareSumOfChances;
 	
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));
 		
 		for (PooledItemDescriptor pid : rareItemPool) {
 			rareSumOfChances += pid.getChanceToDrop();

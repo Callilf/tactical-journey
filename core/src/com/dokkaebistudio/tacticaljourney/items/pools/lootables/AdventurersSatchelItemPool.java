@@ -21,8 +21,8 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
 		
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 2));
 
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 20));				

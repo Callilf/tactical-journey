@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
@@ -38,7 +39,7 @@ public class FloorGenerator {
 	public static void generateFloor(Floor floor, GameScreen gameScreen) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		List<Room> rooms = new ArrayList<>();
-		Map<Room, Vector2> roomsPerPosition = new HashMap<>();
+		Map<Vector2, Room> roomsPerPosition = new HashMap<>();
 		
 		
 		// 1 - compute distance between start room and end room
@@ -51,7 +52,7 @@ public class FloorGenerator {
 		
 		// 3 - Build a path from startRoom to endRoom
 		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
-		roomsPerPosition.put(startRoom, new Vector2(0,0));
+		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		rooms.add(startRoom);
 		
 		int currX = 0;
@@ -81,7 +82,7 @@ public class FloorGenerator {
 			
 			// Create the room
 			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory,RoomType.COMMON_ENEMY_ROOM);
-			roomsPerPosition.put(currentRoom, new Vector2(currX, currY));
+			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
 			rooms.add(currentRoom);
 			
 			// Set the neighbors
@@ -119,7 +120,7 @@ public class FloorGenerator {
 	 * @param additionalRoomsNumber the number of rooms we want to add to the main path
 	 */
 	private static void addAdditionalRooms(Floor floor, GameScreen gameScreen,
-			RandomXS128 random, List<Room> rooms, Map<Room, Vector2> roomsPerPosition, int additionalRoomsNumber) {
+			RandomXS128 random, List<Room> rooms, Map<Vector2, Room> roomsPerPosition, int additionalRoomsNumber) {
 		int chanceToAddRoom = 100;
 		boolean shopPlaced = false;
 
@@ -146,7 +147,7 @@ public class FloorGenerator {
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction, roomsPerPosition);
-						roomsPerPosition.put(currentRoom, vector2);
+						roomsPerPosition.put(vector2, currentRoom);
 						
 						setNeighbors(direction, previousRoom, currentRoom);
 						
@@ -175,8 +176,15 @@ public class FloorGenerator {
 	 * @return the new position.
 	 */
 	private static Vector2 getNewRoomPosition(Room previousRoom, GenerationMoveEnum direction,
-			Map<Room, Vector2> roomsPerPosition) {
-		Vector2 vector2 = new Vector2(roomsPerPosition.get(previousRoom));
+			Map<Vector2, Room> roomsPerPosition) {
+		Vector2 vector2 = null;
+		for (Entry<Vector2, Room> entry : roomsPerPosition.entrySet()) {
+			if (entry.getValue() == previousRoom) {
+				vector2 = new Vector2(entry.getKey());
+				break;
+			}
+		}
+		
 		int xOffset = 0;
 		int yOffset = 0;
 		if (direction == GenerationMoveEnum.NORTH) yOffset = 1;
@@ -197,7 +205,7 @@ public class FloorGenerator {
 	 * @param allRooms the list of all rooms of this floor that we might complete
 	 */
 	private static void addAdditionalSubRooms(Floor floor, GameScreen gameScreen,
-			RandomXS128 random, Room parentRoom, int chanceToAddRoom, List<Room> allRooms, Map<Room, Vector2> roomsPerPosition) {
+			RandomXS128 random, Room parentRoom, int chanceToAddRoom, List<Room> allRooms, Map<Vector2, Room> roomsPerPosition) {
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
 		fillPossibleMoves(parentRoom, possibleMove, roomsPerPosition);
 		if (possibleMove.isEmpty()) {
@@ -217,7 +225,7 @@ public class FloorGenerator {
 				setNeighbors(direction, parentRoom, currentRoom);
 				
 				Vector2 vector2 = getNewRoomPosition(parentRoom, direction, roomsPerPosition);
-				roomsPerPosition.put(currentRoom, vector2);
+				roomsPerPosition.put(vector2, currentRoom);
 				
 				addAdditionalSubRooms(floor, gameScreen, random, currentRoom, chanceToAddRoom, allRooms, roomsPerPosition);
 				
@@ -232,35 +240,41 @@ public class FloorGenerator {
 	 * @param room the room to check
 	 * @param possibleMove the list of possible move to fill
 	 */
-	private static void fillPossibleMoves(Room room, List<GenerationMoveEnum> possibleMove, Map<Room, Vector2> roomsPerPosition) {
+	private static void fillPossibleMoves(Room room, List<GenerationMoveEnum> possibleMove, Map<Vector2, Room> roomsPerPosition) {
 		possibleMove.clear();
 		
-		Vector2 vector2 = new Vector2(roomsPerPosition.get(room));
+		Vector2 vector2 = null;
+		for (Entry<Vector2, Room> entry : roomsPerPosition.entrySet()) {
+			if (entry.getValue() == room) {
+				vector2 = new Vector2(entry.getKey());
+				break;
+			}
+		}
 		
 		if (room.getNorthNeighbor() == null) {
 			vector2.add(0, 1);
-			if (!roomsPerPosition.values().contains(vector2)) {
+			if (!roomsPerPosition.containsKey(vector2)) {
 				possibleMove.add(GenerationMoveEnum.NORTH);
 			}
 			vector2.add(0, -1);
 		}
 		if (room.getSouthNeighbor() == null) {
 			vector2.add(0, -1);
-			if (!roomsPerPosition.values().contains(vector2)) {
+			if (!roomsPerPosition.containsKey(vector2)) {
 				possibleMove.add(GenerationMoveEnum.SOUTH);
 			}
 			vector2.add(0, 1);
 		}
 		if (room.getWestNeighbor() == null) {
 			vector2.add(-1, 0);
-			if (!roomsPerPosition.values().contains(vector2)) {
+			if (!roomsPerPosition.containsKey(vector2)) {
 				possibleMove.add(GenerationMoveEnum.WEST);
 			}
 			vector2.add(1, 0);
 		}
 		if (room.getEastNeighbor() == null) {
 			vector2.add(1, 0);
-			if (!roomsPerPosition.values().contains(vector2)) {
+			if (!roomsPerPosition.containsKey(vector2)) {
 				possibleMove.add(GenerationMoveEnum.EAST);
 			}
 			vector2.add(-1, 0);

@@ -6,27 +6,29 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.GenerationMoveEnum;
 
 /**
  * This class allows rendering the map of the current floor.
@@ -34,11 +36,6 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator.Generat
  *
  */
 public class MapRenderer implements Renderer {
-	
-	// Constants
-	private static final float MAP_ROOM_WIDTH = 20;
-	private static final float MAP_ROOM_HEIGHT = 20;
-	private static final float MAP_CORRIDOR_LENGTH = 10;
 	
 	float offsetX = GameScreen.SCREEN_W - GameScreen.SCREEN_W/8;
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
@@ -51,21 +48,23 @@ public class MapRenderer implements Renderer {
 	
 	/** The game screen. */
 	private GameScreen gameScreen;
-	
-	/** The libGDX shape renderer. */
-	private ShapeRenderer shapeRenderer;
-	
-	/** The sprite renderer. */
-	private SpriteBatch batcher;
-	
+			
 	/** The floor to render. */
 	private Floor floor;
 	
 	/** The button to open the map. */
 	private Button openMapBtn;
 	
+	/** The main table. */
+	private ScrollPane scrollPane;
+	private Table mainGroup;
+	
 	/** The background of the map. */
-	private Sprite background;
+	private Image background;
+	
+	private Image player;
+	
+	private static boolean needRefresh = true;
 	
 	/**
 	 * Instanciate a Map Renderer.
@@ -73,15 +72,20 @@ public class MapRenderer implements Renderer {
 	 * @param sr the shaperenderer
 	 * @param f the floor which map we want to render
 	 */
-	public MapRenderer(GameScreen gs, Stage s, SpriteBatch sb, ShapeRenderer sr, Floor f) {
+	public MapRenderer(GameScreen gs, Stage s, Floor f) {
 		this.stage = s;
 		this.gameScreen = gs;
-		this.batcher = sb;
-		this.shapeRenderer = sr;
 		this.floor = f;
 		this.mapDisplayed = true;
 		
 		gameScreen.guiCam.update();
+		
+		
+		background = new Image(Assets.map_background);
+		background.setPosition(GameScreen.SCREEN_W - Assets.map_background.getRegionWidth(), GameScreen.SCREEN_H - Assets.map_background.getRegionHeight());
+		background.addAction(Actions.alpha(0.3f));
+		stage.addActor(background);
+
 		
 		Table mapTable = new Table();
 		mapTable.setPosition(1830f, 1047f);
@@ -97,6 +101,17 @@ public class MapRenderer implements Renderer {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				mapDisplayed = !openMapBtn.isChecked();
+				if (mapDisplayed) {
+					stage.addActor(background);
+					background.toBack();
+					stage.addActor(scrollPane);
+					
+					scrollToCurrentRoom();
+
+				} else {
+					background.remove();
+					scrollPane.remove();
+				}
 			}
 
 		});
@@ -104,11 +119,17 @@ public class MapRenderer implements Renderer {
 
 		mapTable.pack();
 		stage.addActor(mapTable);
+		
+		mainGroup = new Table();
+		mainGroup.pad(200, 200, 200, 200);
+//		mainGroup.setDebug(true);
 
-				
-		background = new Sprite(Assets.map_background);
-		background.setAlpha(0.5f);
-		background.setPosition(GameScreen.SCREEN_W - background.getWidth(), GameScreen.SCREEN_H - background.getHeight());
+		scrollPane = new ScrollPane(mainGroup);
+		scrollPane.setTouchable(Touchable.disabled);
+		scrollPane.setBounds(background.getX() + 5, background.getY() + 5, Assets.map_background.getRegionWidth() - 10, Assets.map_background.getRegionHeight() - 40);
+//		scrollPane.addAction(Actions.alpha(0.5f));
+
+		stage.addActor(scrollPane);
 	}
 	
 
@@ -118,120 +139,211 @@ public class MapRenderer implements Renderer {
 	 */
 	public void render(float deltaTime) {
 
-		// 1 - Background
-		if (mapDisplayed) {
-			gameScreen.guiCam.update();
-			batcher.setProjectionMatrix(gameScreen.guiCam.combined);
-			batcher.begin();
-	
-			// Render the background if the map is opened
-			background.draw(batcher);
-					
-			batcher.end();
+		if (needRefresh) {
+			buildRooms();
+			
+			scrollToCurrentRoom();
+
+			needRefresh = false;
 		}
 		
 		
 		// 2 - Button
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		
-		if (!mapDisplayed) return;
-		
 
-		// 3 - Map
-		gameScreen.guiCam.update();
-		shapeRenderer.setProjectionMatrix(gameScreen.guiCam.combined);
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+	}
 
+	private void buildRooms() {
+		mainGroup.clear();
 		
-		for(Entry<Room, Vector2> entry : floor.getRoomPositions().entrySet()) {
-			Room room = entry.getKey();
-			Vector2 pos = entry.getValue();
-			
-			if (!room.isVisited()) continue;
-			
-			
-			//draw room
-			switch(room.type) {
-			case START_FLOOR_ROOM:
-				shapeRenderer.setColor(Color.PINK);
-				break;
-			case END_FLOOR_ROOM:
-				shapeRenderer.setColor(Color.GOLD);
-				break;
-			case COMMON_ENEMY_ROOM:
-			case EMPTY_ROOM:
-				shapeRenderer.setColor(Color.CYAN);
-				break;
-			case SHOP_ROOM:
-				shapeRenderer.setColor(Color.FIREBRICK);
-				break;
+		Integer minX = null;
+		Integer maxX = null;
+		Integer minY = null;
+		Integer maxY = null;
+		for (Vector2 coord : floor.getRoomPositions().keySet()) {
+			if (minX == null || coord.x < minX.intValue()) {
+				minX = (int) coord.x;
 			}
-			
-			float rx = offsetX + (pos.x * (MAP_ROOM_WIDTH + MAP_CORRIDOR_LENGTH));
-			float ry = offsetY + (pos.y * (MAP_ROOM_HEIGHT + MAP_CORRIDOR_LENGTH));
-			shapeRenderer.rect(rx, ry, MAP_ROOM_WIDTH, MAP_ROOM_HEIGHT);
-			
-			//draw player pos
-			if (floor.getActiveRoom() == room) {
-				shapeRenderer.setColor(Color.BLACK);
-				shapeRenderer.circle(rx + 10, ry + 10, 5);
+			if (maxX == null || coord.x > maxX.intValue()) {
+				maxX = (int) coord.x;
 			}
-			
-			//draw corridors
-			renderCorridor(room, rx, ry, room.getNorthNeighbor(), GenerationMoveEnum.NORTH);
-			renderCorridor(room, rx, ry, room.getSouthNeighbor(), GenerationMoveEnum.SOUTH);
-			renderCorridor(room, rx, ry, room.getEastNeighbor(), GenerationMoveEnum.EAST);
-			renderCorridor(room, rx, ry, room.getWestNeighbor(), GenerationMoveEnum.WEST);
-
+			if (minY == null || coord.y < minY.intValue()) {
+				minY = (int) coord.y;
+			}
+			if (maxY == null || coord.y > maxY.intValue()) {
+				maxY = (int) coord.y;
+			}
 		}
 		
+		int xRange = maxX - minX + 1;
+		int yRange = maxY - minY + 1;
+		for (int y=0 ; y<yRange; y++) {
+			if (y != 0) {
+				// Add the room row
+				mainGroup.row();
+			}
+			
+			// Add the columns for the current row
+			for (int x=0 ; x<xRange ; x++) {
+				mainGroup.add().width(Assets.map_room.getRegionWidth()).height(Assets.map_room.getRegionHeight());
+				if (x != xRange - 1) {
+					mainGroup.add().width(Assets.map_corridor.getRegionWidth()).height(Assets.map_corridor.getRegionHeight());
+				}
+			}
+			
+			// Add the corridor row
+			if (y != yRange - 1) {
+				mainGroup.row();
+				
+				// Add the columns for the current row
+				for (int x=0 ; x<xRange ; x++) {
+					mainGroup.add().width(Assets.map_room.getRegionWidth()).height(Assets.map_corridor.getRegionHeight());
+					if (x != xRange - 1) {
+						mainGroup.add().width(Assets.map_corridor.getRegionWidth()).height(Assets.map_corridor.getRegionHeight());
+					}
+				}
 
-		shapeRenderer.end();
+			}
+		}
+		
+		
+		
+		for (Entry<Vector2, Room> entry : floor.getRoomPositions().entrySet()) {
+			Vector2 coord = entry.getKey();
+			int tableX = (int) ((coord.x + Math.abs(minX)) * 2);
+			int tableY = (int) (((yRange - (coord.y + Math.abs(minY))) * 2) - 2);
+			
+			Array<Cell> cells = mainGroup.getCells();
+			
+			boolean cellFound = false;
+			
+			Cell c = findCell(tableX, tableY, cells);
+					
+			if (c != null) {
+				Room room = entry.getValue();
+				Image roomImg = null;
+				
+				if (room.isVisited()) {
+					switch(room.type) {
+					case START_FLOOR_ROOM:
+						roomImg = new Image(Assets.map_room_start);
+						break;
+					case END_FLOOR_ROOM:
+						roomImg = new Image(Assets.map_room_exit);
+						break;
+					case COMMON_ENEMY_ROOM:
+					case EMPTY_ROOM:
+						if (room.hasEnemies()) {
+							roomImg = new Image(Assets.map_room_enemy);
+						} else {
+							roomImg = new Image(Assets.map_room);
+						}
+						break;
+					case SHOP_ROOM:
+						roomImg = new Image(Assets.map_room_shop);
+						break;
+					}
+					
+					
+					if (floor.getActiveRoom() == room) {
+						//Place the player icon
+						Stack s = new Stack();
+						s.add(roomImg);
+						
+						player = new Image(Assets.map_player);
+						s.add(player);
+						
+						c.setActor(s);
+					} else {
+						c.setActor(roomImg);
+
+					}
+		
+					
+					drawEastCorridor(tableX, tableY, cells, room);
+					
+					drawSouthCorridor(tableX, tableY, cells, room);
+
+					
+				} else {
+					if( (room.getSouthNeighbor() != null && room.getSouthNeighbor().isVisited())
+							|| (room.getNorthNeighbor() != null && room.getNorthNeighbor().isVisited())
+							|| (room.getWestNeighbor() != null && room.getWestNeighbor().isVisited())
+							|| (room.getEastNeighbor() != null && room.getEastNeighbor().isVisited())) {
+						// Draw unknown room
+						roomImg = new Image(Assets.map_room_unknown);
+						c.setActor(roomImg);
+						
+						if (room.getSouthNeighbor() != null && room.getSouthNeighbor().isVisited()) {
+							// Draw corridor
+							drawSouthCorridor(tableX, tableY, cells, room);
+						}
+						if (room.getEastNeighbor() != null && room.getEastNeighbor().isVisited()) {
+							// Draw corridor
+							drawEastCorridor(tableX, tableY, cells, room);
+						}
+					}
+				}
+				
+			} else {
+				System.out.println("no cell");
+			}
+
+		}
+
+		mainGroup.pack();
 	}
+
+
+
+	private void drawSouthCorridor(int tableX, int tableY, Array<Cell> cells, Room room) {
+		if (room.getSouthNeighbor() != null) {
+			Cell result = findCell(tableX, tableY + 1, cells);
+			Image corridorImg = new Image(Assets.map_corridor);
+			result.setActor(corridorImg);
+			result.width(Assets.map_corridor.getRegionWidth());
+		}
+	}
+
+
+
+	private void drawEastCorridor(int tableX, int tableY, Array<Cell> cells, Room room) {
+		if (room.getEastNeighbor() != null) {
+			Cell result = findCell(tableX + 1, tableY, cells);
+			Image corridorImg = new Image(Assets.map_corridor);
+			result.setActor(corridorImg);
+		}
+	}
+
+
 
 	/**
-	 * Render a corridor between two rooms, and also render a ghost room if the room on the other side
-	 * hasn't been visited yet.
-	 * @param room the current room
-	 * @param rx the x pos of the current room
-	 * @param ry the y pos of the current room
-	 * @param neighbor the neighbor to where the corridor must lead
-	 * @param corridorDirection the direction of the corrider
+	 * Find a cell in the table given a coordinate.
+	 * @param tableX the x
+	 * @param tableY the y
+	 * @param cells the array of cells to search from
+	 * @return the cell. Null if no cell at this coordinates.
 	 */
-	private void renderCorridor(Room room, float rx, float ry, Room neighbor, GenerationMoveEnum corridorDirection) {
-		if (neighbor != null) {
-			
-			//Draw the corridor
-			shapeRenderer.setColor(Color.OLIVE);
-			switch(corridorDirection) {
-			case NORTH:
-				shapeRenderer.rect(rx + 5, ry + MAP_ROOM_HEIGHT, 10, MAP_CORRIDOR_LENGTH);
-				break;
-			case SOUTH:
-				shapeRenderer.rect(rx + 5, ry - MAP_CORRIDOR_LENGTH, 10, MAP_CORRIDOR_LENGTH);
-				break;
-			case EAST:
-				shapeRenderer.rect(rx + MAP_ROOM_WIDTH, ry + 5, MAP_CORRIDOR_LENGTH, 10);
-				break;
-			case WEST:
-				shapeRenderer.rect(rx - MAP_CORRIDOR_LENGTH, ry + 5, MAP_CORRIDOR_LENGTH, 10);
-				break;
-			}
-			
-			if (!neighbor.isVisited()) {
-				//Draw ghost room
-				shapeRenderer.setColor(Color.LIGHT_GRAY);
-				Vector2 neighborPos = floor.getRoomPositions().get(neighbor);
-				float grx = offsetX + (neighborPos.x * (MAP_ROOM_WIDTH + MAP_CORRIDOR_LENGTH));
-				float gry = offsetY + (neighborPos.y * (MAP_ROOM_HEIGHT + MAP_CORRIDOR_LENGTH));
-				shapeRenderer.rect(grx, gry, MAP_ROOM_WIDTH, MAP_ROOM_HEIGHT);
+	private Cell findCell(int tableX, int tableY, Array<Cell> cells) {
+		Cell result = null;
+		for (Cell c : cells) {
+			if (c.getRow() == tableY && c.getColumn() == tableX) {
+				result = c;
 			}
 		}
+		return result;
+	}
+	
+	/**
+	 * Scroll to center on the current room.
+	 */
+	private void scrollToCurrentRoom() {
+		Group scrollPos = player.getParent();
+		scrollPane.layout();
+		scrollPane.scrollTo(scrollPos.getX(), scrollPos.getY(), player.getImageWidth(), player.getImageHeight(), true, true);
 	}
 
-
-	
 	
 	// getters and setters
 	
@@ -241,6 +353,18 @@ public class MapRenderer implements Renderer {
 
 	public void setMapDisplayed(boolean mapDisplayed) {
 		this.mapDisplayed = mapDisplayed;
+	}
+
+
+
+	public boolean isNeedRefresh() {
+		return needRefresh;
+	}
+
+
+
+	public static void requireRefresh() {
+		needRefresh = true;
 	}
 
 }

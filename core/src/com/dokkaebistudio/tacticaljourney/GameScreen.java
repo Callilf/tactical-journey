@@ -160,7 +160,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
-		renderers.add(new MapRenderer(this, hudStage,game.batcher, game.shapeRenderer, floor));
+		renderers.add(new MapRenderer(this, hudStage, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));

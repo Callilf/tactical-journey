@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
@@ -186,6 +187,12 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 				} else {
 					SpriteComponent spriteComponent = Mappers.spriteComponent.get(d);
 					spriteComponent.setSprite(new Sprite(destructibleComponent.getDestroyedTexture()));
+					
+					// If it's a statue, set its "destroyed" status so that the statues delivers a curse
+					StatueComponent statueComponent = Mappers.statueComponent.get(d);
+					if (statueComponent != null) {
+						statueComponent.setJustDestroyed(true);
+					}
 				}
 				
 				

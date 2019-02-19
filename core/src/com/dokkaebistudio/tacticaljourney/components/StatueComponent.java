@@ -13,11 +13,15 @@ public class StatueComponent implements Component, Poolable {
 	/** Whether this statue still has a blessing to offer. */
 	private boolean hasBlessing = true;
 	
+	/** Whether this statue still has a curse to deliver when destroyed. */
+	private boolean justDestroyed = false;
+	
 
 	
 	@Override
 	public void reset() {
-		this.setHasBlessing(true);	
+		this.setHasBlessing(true);
+		this.setJustDestroyed(false);
 	}
 	
 	//*********************************
@@ -29,6 +33,14 @@ public class StatueComponent implements Component, Poolable {
 
 	public void setHasBlessing(boolean hasBlessing) {
 		this.hasBlessing = hasBlessing;
+	}
+
+	public boolean wasJustDestroyed() {
+		return justDestroyed;
+	}
+
+	public void setJustDestroyed(boolean justDestroyed) {
+		this.justDestroyed = justDestroyed;
 	}
 
 	

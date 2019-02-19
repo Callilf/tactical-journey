@@ -4,6 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -14,6 +16,16 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  *
  */
 public class CurseFrailty extends Curse {
+
+	@Override
+	public String title() {
+		return "Curse of frailty";
+	}
+	
+	@Override
+	public AtlasRegion texture() {
+		return Assets.alteration_frailty;
+	}
 
 	@Override
 	public void onReceive(Entity entity) {

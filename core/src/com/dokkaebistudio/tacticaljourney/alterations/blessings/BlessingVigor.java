@@ -4,6 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.alterations.blessings;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -14,6 +16,16 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  *
  */
 public class BlessingVigor extends Blessing {
+	
+	@Override
+	public String title() {
+		return "Blessing of vigor";
+	}
+	
+	@Override
+	public AtlasRegion texture() {
+		return Assets.alteration_vigor;
+	}
 
 	@Override
 	public void onReceive(Entity entity) {

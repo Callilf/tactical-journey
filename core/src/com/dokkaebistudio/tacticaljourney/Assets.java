@@ -105,10 +105,23 @@ public class Assets {
 	public static AtlasRegion wheel_arrow;
 	
 	
+	//***********************
+	// Map
+	
 	//public static AtlasRegion map_background;
+	public static AtlasRegion map_panel;
 	public static AtlasRegion map_plus;
 	public static AtlasRegion map_minus;
 	public static AtlasRegion map_background;
+	
+	public static AtlasRegion map_player;
+	public static AtlasRegion map_corridor;
+	public static AtlasRegion map_room;
+	public static AtlasRegion map_room_enemy;
+	public static AtlasRegion map_room_exit;
+	public static AtlasRegion map_room_shop;
+	public static AtlasRegion map_room_start;
+	public static AtlasRegion map_room_unknown;
 
 	
 	//**************
@@ -249,11 +262,21 @@ public class Assets {
 //		wheel_arc = Assets.getTexture("wheel-arc");
 		wheel_arrow = Assets.getTexture("wheel-arrow");
 		
-		
-		//map_background = Assets.getTexture("map-background");
+		//****************
+		// Map
+		map_panel = Assets.getTexture("hud_map_panel");
 		map_plus = Assets.getTexture("hud_map_plus");
 		map_minus = Assets.getTexture("hud_map_less");
 		map_background = Assets.getTexture("hud_map_background");
+		
+		map_player = Assets.getTexture("map_player");
+		map_corridor = Assets.getTexture("map_corridor");
+		map_room = Assets.getTexture("map_room");
+		map_room_enemy = Assets.getTexture("map_room_enemy");
+		map_room_exit = Assets.getTexture("map_room_exit");
+		map_room_shop = Assets.getTexture("map_room_shop");
+		map_room_start = Assets.getTexture("map_room_start");
+		map_room_unknown = Assets.getTexture("map_room_unknown");
 		
 		
 		//**************

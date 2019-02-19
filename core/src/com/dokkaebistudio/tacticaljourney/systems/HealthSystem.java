@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -122,6 +123,12 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					
 						room.removeEnemy(entity);
 						//TODO: play death animation
+						
+						if (!room.hasEnemies()) {
+							//TODO move this
+							//TODO display "CLEARED"
+							MapRenderer.requireRefresh();
+						}
 					}
 				}
 			

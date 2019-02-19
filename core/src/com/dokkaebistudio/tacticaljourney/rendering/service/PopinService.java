@@ -20,6 +20,7 @@ public class PopinService {
 	private LabelStyle smallTextStyle;
     private TextButtonStyle bigButtonStyle;
     private TextButtonStyle smallButtonStyle;
+    private TextButtonStyle smallButtonCheckedStyle;
 	
     
     private PopinService() {
@@ -41,6 +42,9 @@ public class PopinService {
 		Drawable sbtnDisabled = new SpriteDrawable(sdisableSprite);
 		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font);
 		smallButtonStyle.disabled = sbtnDisabled;	
+		
+		smallButtonCheckedStyle = new TextButtonStyle(sbtnUp, sbtnDown, sbtnDown, Assets.font);
+		smallButtonCheckedStyle.disabled = sbtnDisabled;	
     }
     
     
@@ -62,6 +66,11 @@ public class PopinService {
     public static TextButtonStyle smallButtonStyle() {
     	if (instance == null) instance = new PopinService();
     	return instance.smallButtonStyle;
+    }
+    
+    public static TextButtonStyle smallButtonCheckedStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.smallButtonCheckedStyle;
     }
     
     public static void dispose() {

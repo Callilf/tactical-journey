@@ -9,6 +9,7 @@ import java.util.Map;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
@@ -27,7 +28,7 @@ public class Floor {
 	private List<Room> rooms;
 	
 	/** The positions of each rooms. */
-	private Map<Room, Vector2> roomPositions;
+	private Map<Vector2, Room> roomPositions;
 	
 	/** The currently active room. */
 	private Room activeRoom;
@@ -66,6 +67,8 @@ public class Floor {
 		} else if (newRoom.getEastNeighbor() == oldRoom) {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
 		}
+	
+		MapRenderer.requireRefresh();
 	}
 
 	
@@ -98,12 +101,12 @@ public class Floor {
 	}
 
 
-	public Map<Room, Vector2> getRoomPositions() {
+	public Map<Vector2, Room> getRoomPositions() {
 		return roomPositions;
 	}
 
 
-	public void setRoomPositions(Map<Room, Vector2> roomPositions) {
+	public void setRoomPositions(Map<Vector2, Room> roomPositions) {
 		this.roomPositions = roomPositions;
 	}
 

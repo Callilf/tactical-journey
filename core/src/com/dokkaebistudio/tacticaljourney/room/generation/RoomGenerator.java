@@ -284,6 +284,8 @@ public class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
+			
 			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
 			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));

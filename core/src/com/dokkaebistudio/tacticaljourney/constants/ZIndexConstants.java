@@ -34,6 +34,8 @@ public final class ZIndexConstants {
 	
 	// PLAYER
 	public static final int PLAYER = 15;
+	public static final int STATUE = 16;
+
 	
 	// VISUAL EFFECTS
 	public static final int EXPLOSION = 50;

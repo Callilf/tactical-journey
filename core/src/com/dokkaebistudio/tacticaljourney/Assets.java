@@ -35,6 +35,8 @@ public class Assets {
 	
 	public static AtlasRegion player;
 	public static AtlasRegion shopkeeper;
+	public static AtlasRegion godess_statue;
+	public static AtlasRegion godess_statue_broken;
 	
 	public static AtlasRegion tile_ground;
 	public static AtlasRegion wall;
@@ -208,6 +210,8 @@ public class Assets {
 
 		player = Assets.getTexture("player-test");
 		shopkeeper = Assets.getTexture("shopkeeper");
+		godess_statue = Assets.getTexture("godess_statue");
+		godess_statue_broken = Assets.getTexture("godess_statue_broken");
 
 		tile_ground = Assets.getTexture("tile-test");
 		wall = Assets.getTexture("tile-wall-test");

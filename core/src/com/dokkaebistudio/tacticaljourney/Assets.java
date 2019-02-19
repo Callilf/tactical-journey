@@ -109,6 +109,7 @@ public class Assets {
 	// Map
 	
 	//public static AtlasRegion map_background;
+	public static AtlasRegion map_panel;
 	public static AtlasRegion map_plus;
 	public static AtlasRegion map_minus;
 	public static AtlasRegion map_background;
@@ -263,6 +264,7 @@ public class Assets {
 		
 		//****************
 		// Map
+		map_panel = Assets.getTexture("hud_map_panel");
 		map_plus = Assets.getTexture("hud_map_plus");
 		map_minus = Assets.getTexture("hud_map_less");
 		map_background = Assets.getTexture("hud_map_background");

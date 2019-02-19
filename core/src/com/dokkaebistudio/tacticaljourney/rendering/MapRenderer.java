@@ -6,29 +6,27 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -47,19 +45,23 @@ public class MapRenderer implements Renderer {
 	
 	/** Whether the map is displayed on screen or not. */
 	private boolean mapDisplayed;
-			
+				
 	/** The floor to render. */
 	private Floor floor;
 	
 	/** The button to open the map. */
-	private Button openMapBtn;
+	private TextButton noMapBtn;
+	private TextButton smallMapBtn;
+	private TextButton fullMapBtn;
 	
 	/** The main table. */
 	private ScrollPane scrollPane;
 	private Table roomsTable;
 	
 	/** The background of the map. */
-	private Image background;
+	private Image smallBackground;
+	private Image fullBackground;
+
 	
 	private Image player;
 	
@@ -79,61 +81,122 @@ public class MapRenderer implements Renderer {
 	
 	/**
 	 * Instanciate a Map Renderer.
-	 * @param gs the gamescreen
 	 * @param sr the shaperenderer
 	 * @param f the floor which map we want to render
 	 */
 	public MapRenderer(Stage s, Floor f) {
 		this.stage = s;
 		this.mapDisplayed = true;
-			
 		
-		background = new Image(Assets.map_background);
-		background.setPosition(GameScreen.SCREEN_W - Assets.map_background.getRegionWidth(), GameScreen.SCREEN_H - Assets.map_background.getRegionHeight());
-		background.addAction(Actions.alpha(0.3f));
-		stage.addActor(background);
-
+		
+		smallBackground = new Image(Assets.map_background);
+		smallBackground.setPosition(GameScreen.SCREEN_W - Assets.map_background.getRegionWidth() - 5, GameScreen.SCREEN_H - Assets.map_background.getRegionHeight() - Assets.map_panel.getRegionHeight() - 5);
+		smallBackground.addAction(Actions.alpha(0.5f));
+		stage.addActor(smallBackground);
+		
+		fullBackground = new Image(Assets.menuBackground);
+		fullBackground.setPosition(0, 0);
+		fullBackground.addAction(Actions.alpha(0.5f));
 		
 		Table mapTable = new Table();
-		mapTable.setPosition(1830f, 1047f);
+		mapTable.setPosition(GameScreen.SCREEN_W - Assets.map_panel.getRegionWidth() - 5, GameScreen.SCREEN_H - Assets.map_panel.getRegionHeight() - 5);
 		mapTable.setTouchable(Touchable.childrenOnly);
+		TextureRegionDrawable panelBackground = new TextureRegionDrawable(Assets.map_panel);
+		mapTable.setBackground(panelBackground);
 		
-		Drawable mapButtonUp = new SpriteDrawable(new Sprite(Assets.map_minus));
-		Drawable mapButtonDown = new SpriteDrawable(new Sprite(Assets.map_minus));
-		Drawable mapButtonChecked = new SpriteDrawable(new Sprite(Assets.map_plus));
-		ButtonStyle endTurnButtonStyle = new ButtonStyle(mapButtonUp, mapButtonDown,mapButtonChecked);
-		openMapBtn = new Button(endTurnButtonStyle);
+		noMapBtn = new TextButton("None", PopinService.smallButtonCheckedStyle());
+		smallMapBtn = new TextButton("Small", PopinService.smallButtonCheckedStyle());
+		fullMapBtn = new TextButton("Full", PopinService.smallButtonCheckedStyle());
 		
-		openMapBtn.addListener(new ChangeListener() {
+		noMapBtn.setProgrammaticChangeEvents(false);
+		noMapBtn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				mapDisplayed = !openMapBtn.isChecked();
-				if (mapDisplayed) {
-					stage.addActor(background);
-					background.toBack();
-					stage.addActor(scrollPane);
-					
-					scrollToCurrentRoom();
-
-				} else {
-					background.remove();
+				if (noMapBtn.isChecked()) {
+					mapDisplayed = false;
+					smallBackground.remove();
+					fullBackground.remove();
 					scrollPane.remove();
+					
+					smallMapBtn.setChecked(false);
+					fullMapBtn.setChecked(false);
+				} else {
+					noMapBtn.setChecked(true);
 				}
 			}
-
 		});
-		mapTable.add(openMapBtn);
+		
+		smallMapBtn.setProgrammaticChangeEvents(false);
+		smallMapBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (smallMapBtn.isChecked()) {
+					mapDisplayed = true;
+					if (mapDisplayed) {
+						fullBackground.remove();
+						
+						stage.addActor(smallBackground);
+						smallBackground.toBack();
+						if (!scrollPane.hasParent()) {
+							stage.addActor(scrollPane);
+						}
+						scrollPane.setBounds(smallBackground.getX() + 5, smallBackground.getY() + 5, Assets.map_background.getRegionWidth() - 10, Assets.map_background.getRegionHeight() - 10);
+						scrollToCurrentRoom();
+						
+						noMapBtn.setChecked(false);
+						fullMapBtn.setChecked(false);
+					}
+				} else {
+					smallMapBtn.setChecked(true);
+				}
+			}
+		});
+		smallMapBtn.setChecked(true);
+		
+		fullMapBtn.setProgrammaticChangeEvents(false);
+		fullMapBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (fullMapBtn.isChecked()) {
+					mapDisplayed = true;
+					if (mapDisplayed) {
+						smallBackground.remove();
+						stage.addActor(fullBackground);
+						fullBackground.toBack();
+						if (!scrollPane.hasParent()) {
+							stage.addActor(scrollPane);
+						}
+						scrollPane.setBounds(0, 0, GameScreen.SCREEN_W, GameScreen.SCREEN_H);
+						
+						scrollToCurrentRoom();
+						
+						noMapBtn.setChecked(false);
+						smallMapBtn.setChecked(false);
+					}
+				} else {
+					fullMapBtn.setChecked(true);
+				}
+			}
+		});
+		
+		
+		
+		mapTable.add().width(65);
+		mapTable.add(noMapBtn).padRight(2);
+		mapTable.add(smallMapBtn).padRight(2);
+		mapTable.add(fullMapBtn);
 
 		mapTable.pack();
 		stage.addActor(mapTable);
 		
 		roomsTable = new Table();
-		roomsTable.pad(200, 200, 200, 200);
-//		mainGroup.setDebug(true);
+		roomsTable.pad(2000, 2000, 2000, 2000);
+//		roomsTable.setDebug(true);
 
 		scrollPane = new ScrollPane(roomsTable);
 		scrollPane.setTouchable(Touchable.disabled);
-		scrollPane.setBounds(background.getX() + 5, background.getY() + 5, Assets.map_background.getRegionWidth() - 10, Assets.map_background.getRegionHeight() - 40);
+		scrollPane.setSmoothScrolling(false);
+		scrollPane.setBounds(smallBackground.getX() + 5, smallBackground.getY() + 5, Assets.map_background.getRegionWidth() - 10, Assets.map_background.getRegionHeight() - 10);
 //		scrollPane.addAction(Actions.alpha(0.5f));
 
 		stage.addActor(scrollPane);

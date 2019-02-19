@@ -3,7 +3,6 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -14,8 +13,10 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
+import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingCelerity;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseFrailty;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -247,10 +248,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		blessingList.clear();
 		for (Alteration blessing : alterationReceiverCompo.getBlessings()) {
 			Table oneBlessingTable = createOneAlteration(blessing);
-			blessingList.add(oneBlessingTable);
+			blessingList.add(oneBlessingTable).fillX();
 			blessingList.row();
 		}
-		
+				
 		blessingList.pack();
 		blessingScroll.layout();
 	}
@@ -261,7 +262,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
      */
 	private void initBlessingTable() {
 		blessingTable = new Table();
-		
+
 		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
 		blessingTable.setBackground(topBackground);
 		
@@ -292,7 +293,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseList.clear();
 		for (Alteration curse : alterationReceiverCompo.getCurses()) {
 			Table oneCurseTable = createOneAlteration(curse);
-			curseList.add(oneCurseTable);
+			curseList.add(oneCurseTable).fillX();
 			curseList.row();
 		}
 		
@@ -305,7 +306,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void initCurseTable() {
 		curseTable = new Table();
-//		table.setDebug(true, true);
 
 		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
 		curseTable.setBackground(topBackground);
@@ -315,7 +315,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		// TITLE
 		curseTitle = new Label("Curses", PopinService.hudStyle());
 		curseTable.add(curseTitle).uniformX().pad(20, 0, 20, 0);
-		curseTable.row();
+		curseTable.row().top();
 
 		// Blessings table
 		curseList = new Table();
@@ -325,7 +325,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseScroll = new ScrollPane(curseList);
 		curseTable.add(curseScroll).fill().expand().maxHeight(590);
 
-		mainTable.add(curseTable);
+		mainTable.add(curseTable).pad(0, 5, 0, 5);
 	}
 	
 	
@@ -336,9 +336,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	private Table createOneAlteration(Alteration alteration) {
 		Table oneCurseTable = new Table();
+		oneCurseTable.align(Align.left);
 
 		Image curseImage = new Image(alteration.texture());
-		oneCurseTable.add(curseImage).pad(0, 20, 20, 20);
+		oneCurseTable.add(curseImage).left().pad(0, 20, 20, 20);
 		
 		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
 		oneCurseTable.add(curseTitle).pad(0, 20, 20, 20);

@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
@@ -70,7 +71,9 @@ public final class Mappers {
 	public final static ComponentMapper<SkillComponent> skillComponent = ComponentMapper.getFor(SkillComponent.class);
 	public final static ComponentMapper<WalletComponent> walletComponent = ComponentMapper.getFor(WalletComponent.class);
 	public final static ComponentMapper<AmmoCarrierComponent> ammoCarrierComponent = ComponentMapper.getFor(AmmoCarrierComponent.class);
-	public final static ComponentMapper<InventoryComponent>inventoryComponent = ComponentMapper.getFor(InventoryComponent.class);
+	public final static ComponentMapper<InventoryComponent> inventoryComponent = ComponentMapper.getFor(InventoryComponent.class);
+	public final static ComponentMapper<AlterationReceiverComponent> alterationReceiverComponent = ComponentMapper.getFor(AlterationReceiverComponent.class);
+
 	
 	public final static ComponentMapper<ExperienceComponent> experienceComponent = ComponentMapper.getFor(ExperienceComponent.class);
 

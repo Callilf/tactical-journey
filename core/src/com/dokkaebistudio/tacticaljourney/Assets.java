@@ -166,12 +166,21 @@ public class Assets {
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
 	
-	
 	public static AtlasRegion armor_up_item;
 	public static AtlasRegion armor_piece_item;
 	
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
+	
+	public static AtlasRegion alteration_vigor;
+	public static AtlasRegion alteration_frailty;
+	
+	
+	
+	
+	
+	
+	
 	
 	public static AtlasRegion arrow;
 	public static Array<Sprite> bomb_animation;
@@ -326,6 +335,9 @@ public class Assets {
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
+		
+		alteration_vigor = Assets.getTexture("item-alteration-vigor");
+		alteration_frailty = Assets.getTexture("item-alteration-frailty");
 		
 		arrow = Assets.getTexture("arrow");
 		bomb_animation = Assets.getAnimation("bomb");

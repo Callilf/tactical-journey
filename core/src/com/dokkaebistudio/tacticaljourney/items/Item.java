@@ -39,7 +39,7 @@ public abstract class Item {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
 		this.setTexture(texture);
 		this.setInstantPickUp(instaPickUp);
@@ -54,7 +54,7 @@ public abstract class Item {
 	 * @param valMin
 	 * @param valMax
 	 */
-	Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
+	protected Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, texture, instaPickUp, goIntoInventory);
 		this.setRandomValueMin(valMin);
 		this.setRandomValueMax(valMax);

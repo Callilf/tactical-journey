@@ -283,7 +283,9 @@ public class RoomGenerator {
 			break;
 			
 		case START_FLOOR_ROOM:
-//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 10));
+			
+			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
+			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
 

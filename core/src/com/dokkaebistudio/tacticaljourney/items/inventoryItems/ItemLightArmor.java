@@ -1,28 +1,29 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.items;
+package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * A consumable item that restore 10 Armor.
+ * A consumable item that restore 30 Armor.
  * @author Callil
  *
  */
-public class ItemArmorPiece extends Item {
+public class ItemLightArmor extends Item {
 
-	public ItemArmorPiece() {
-		super("Piece of armor", Assets.armor_piece_item, false, true);
+	public ItemLightArmor() {
+		super("Piece of armor", Assets.armor_up_item, false, true);
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Gives 10 armor upon use.\n"
+		return "Gives 30 armor upon use.\n"
 				+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
 	}
 	
@@ -33,9 +34,9 @@ public class ItemArmorPiece extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		//Restore 10 Armor !
+		//Restore 30 Armor !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
-		healthComponent.restoreArmor(10);
+		healthComponent.restoreArmor(30);
 		return true;
 	}
 }

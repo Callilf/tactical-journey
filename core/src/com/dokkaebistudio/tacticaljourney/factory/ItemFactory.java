@@ -245,19 +245,16 @@ public final class ItemFactory {
 	}
 	
 	
-	/**
-	 * Create a sack of web.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+	// TODO change
+	
 	public Entity createItemVigor(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.alteration_vigor, new ItemVigorBlessing());
+		Entity item = createItemBase(room, tilePos, Assets.blessing_vigor, new ItemVigorBlessing());
 		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
 		
 		return item;
 	}
 	public Entity createItemFrailty(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.alteration_frailty, new ItemFrailtyCurse());
+		Entity item = createItemBase(room, tilePos, Assets.curse_frailty, new ItemFrailtyCurse());
 		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
 		
 		return item;

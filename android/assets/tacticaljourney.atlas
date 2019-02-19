@@ -18,6 +18,13 @@ background-test-menu
   orig: 1920, 1080
   offset: 0, 0
   index: -1
+blessing-strength
+  rotate: false
+  xy: 1849, 88
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
 btn-end-turn
   rotate: false
   xy: 1773, 503
@@ -41,7 +48,7 @@ btn-move-confirmation
   index: -1
 creep-fire
   rotate: false
-  xy: 1849, 88
+  xy: 1744, 13
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -55,14 +62,14 @@ dialog_background
   index: -1
 exit
   rotate: false
-  xy: 1898, 170
+  xy: 1925, 711
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 1931, 88
+  xy: 1826, 6
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -186,16 +193,9 @@ hud_map_plus
   orig: 90, 33
   offset: 0, 0
   index: -1
-item-alteration-vigor
-  rotate: false
-  xy: 1925, 711
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
 item-consumable-armor-piece-full
   rotate: false
-  xy: 1924, 1926
+  xy: 1924, 950
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
@@ -209,7 +209,7 @@ item-consumable-armor-up-full
   index: -1
 item-consumable-arrow-full
   rotate: false
-  xy: 1924, 1804
+  xy: 1924, 1926
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
@@ -230,56 +230,49 @@ bomb
   index: 0
 item-consumable-bomb-full
   rotate: false
-  xy: 1924, 1438
+  xy: 1924, 1560
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 item-consumable-fire-potion-full
   rotate: false
-  xy: 1924, 950
+  xy: 1920, 828
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 item-consumable-health-up
   rotate: false
-  xy: 1767, 95
+  xy: 1662, 13
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-health-up-full
   rotate: false
-  xy: 1920, 828
+  xy: 1924, 1316
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 item-money-full
   rotate: false
-  xy: 1924, 1316
+  xy: 1924, 1438
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 item-tutorial-page-full
   rotate: false
-  xy: 1924, 1560
+  xy: 1924, 1682
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
-item-web-sack
-  rotate: false
-  xy: 1940, 465
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
 item-web-sack-full
   rotate: false
-  xy: 1924, 1682
+  xy: 1924, 1804
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
@@ -300,14 +293,14 @@ map_player
   index: -1
 remains_bones_opened
   rotate: false
-  xy: 1744, 13
+  xy: 1898, 170
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 remains_satchel_opened
   rotate: false
-  xy: 1908, 6
+  xy: 1931, 88
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -326,16 +319,23 @@ tile-attackable
   orig: 80, 80
   offset: 0, 0
   index: -1
+tile-movable
+  rotate: false
+  xy: 1908, 6
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
 tile-mud-test
   rotate: false
-  xy: 1826, 6
+  xy: 1767, 95
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-destroyed
   rotate: false
-  xy: 1662, 13
+  xy: 1940, 465
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -353,114 +353,128 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-bomb
-  rotate: false
-  xy: 832, 407
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: 1
-bomb
-  rotate: false
-  xy: 330, 2
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: 2
-btn-inventory
-  rotate: false
-  xy: 494, 169
-  size: 76, 76
-  orig: 76, 76
-  offset: 0, 0
-  index: -1
-btn-inventory-pushed
-  rotate: false
-  xy: 828, 329
-  size: 76, 76
-  orig: 76, 76
-  offset: 0, 0
-  index: -1
-btn-ok
+blessing-celerity
   rotate: false
   xy: 586, 325
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
+blessing-vigor
+  rotate: false
+  xy: 668, 407
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+bomb
+  rotate: false
+  xy: 412, 84
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 1
+bomb
+  rotate: false
+  xy: 412, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 2
+btn-inventory
+  rotate: false
+  xy: 654, 247
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-inventory-pushed
+  rotate: false
+  xy: 494, 83
+  size: 76, 76
+  orig: 76, 76
+  offset: 0, 0
+  index: -1
+btn-ok
+  rotate: false
+  xy: 494, 243
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
 btn-profile
   rotate: false
-  xy: 572, 247
+  xy: 494, 5
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-profile-pushed
   rotate: false
-  xy: 572, 169
+  xy: 732, 247
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb
   rotate: false
-  xy: 650, 169
+  xy: 914, 497
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb-checked
   rotate: false
-  xy: 494, 91
+  xy: 654, 169
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bomb-pushed
   rotate: false
-  xy: 650, 247
+  xy: 732, 169
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow
   rotate: false
-  xy: 494, 247
+  xy: 576, 169
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow-checked
   rotate: false
-  xy: 494, 13
+  xy: 810, 247
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-bow-pushed
   rotate: false
-  xy: 572, 13
+  xy: 914, 419
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash
   rotate: false
-  xy: 750, 329
+  xy: 576, 247
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-checked
   rotate: false
-  xy: 650, 91
+  xy: 810, 169
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
   index: -1
 btn-skill-slash-pushed
   rotate: false
-  xy: 572, 91
+  xy: 914, 575
   size: 76, 76
   orig: 76, 76
   offset: 0, 0
@@ -502,28 +516,49 @@ creep-fire
   index: 5
 creep-web
   rotate: false
-  xy: 166, 166
+  xy: 2, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+curse-frailty
+  rotate: false
+  xy: 330, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+curse-slowness
+  rotate: false
+  xy: 84, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+curse-weakness
+  rotate: false
+  xy: 330, 248
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-closed
   rotate: false
-  xy: 84, 166
+  xy: 2, 84
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 door-opened
   rotate: false
-  xy: 668, 407
+  xy: 248, 166
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-scorpion-test
   rotate: false
-  xy: 412, 2
+  xy: 504, 325
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -537,14 +572,14 @@ enemy-spider-venom
   index: -1
 enemy-spider-web
   rotate: false
-  xy: 412, 166
+  xy: 832, 407
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 enemy-test
   rotate: false
-  xy: 84, 2
+  xy: 586, 407
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -558,35 +593,28 @@ entrance
   index: -1
 explosion
   rotate: false
-  xy: 84, 84
+  xy: 668, 571
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 1
 explosion
   rotate: false
-  xy: 248, 248
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: 3
-explosion
-  rotate: false
-  xy: 586, 407
+  xy: 84, 84
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 4
 explosion
   rotate: false
-  xy: 668, 489
+  xy: 166, 166
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: 5
 explosion
   rotate: false
-  xy: 750, 571
+  xy: 248, 248
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -594,6 +622,13 @@ explosion
 explosion
   rotate: false
   xy: 668, 325
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 3
+explosion
+  rotate: false
+  xy: 494, 161
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -607,7 +642,7 @@ hud_map_background
   index: -1
 hud_money
   rotate: false
-  xy: 668, 571
+  xy: 504, 407
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -619,13 +654,6 @@ hud_profile_background
   orig: 500, 680
   offset: 0, 0
   index: -1
-item-alteration-frailty
-  rotate: false
-  xy: 412, 84
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
 item-consumable-armor-piece
   rotate: false
   xy: 330, 84
@@ -635,35 +663,42 @@ item-consumable-armor-piece
   index: -1
 item-consumable-armor-up
   rotate: false
-  xy: 84, 248
+  xy: 412, 166
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-arrow
   rotate: false
-  xy: 166, 84
+  xy: 668, 489
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-consumable-fire-potion
   rotate: false
-  xy: 248, 166
+  xy: 750, 571
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-money
   rotate: false
-  xy: 2, 2
+  xy: 586, 489
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 item-tutorial-page
   rotate: false
-  xy: 504, 489
+  xy: 84, 248
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+item-web-sack
+  rotate: false
+  xy: 750, 325
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -712,49 +747,42 @@ map_room_unknown
   index: -1
 player-test
   rotate: false
-  xy: 504, 325
+  xy: 832, 325
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 projectile-web
   rotate: false
-  xy: 166, 248
+  xy: 84, 166
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 remains_bones
   rotate: false
-  xy: 586, 489
+  xy: 166, 248
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 remains_satchel
   rotate: false
-  xy: 504, 571
+  xy: 2, 248
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 shopkeeper
   rotate: false
-  xy: 586, 571
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-tile-movable
-  rotate: false
-  xy: 2, 248
+  xy: 504, 489
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-movable-selected
   rotate: false
-  xy: 504, 407
+  xy: 2, 166
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -768,7 +796,7 @@ tile-movable-waypoint
   index: -1
 tile-mud-destroyed
   rotate: false
-  xy: 2, 84
+  xy: 586, 571
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -782,14 +810,14 @@ tile-pit-test
   index: -1
 tile-test
   rotate: false
-  xy: 330, 248
+  xy: 166, 84
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 tile-wall-test
   rotate: false
-  xy: 2, 166
+  xy: 504, 571
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemVigorBlessing extends Item {
 
 	public ItemVigorBlessing() {
-		super("Blessing of vigor", Assets.alteration_vigor, false, false);
+		super("Blessing of vigor", Assets.blessing_vigor, false, false);
 	}
 
 	@Override

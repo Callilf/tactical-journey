@@ -172,9 +172,6 @@ public class Assets {
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
 	
-	public static AtlasRegion alteration_vigor;
-	public static AtlasRegion alteration_frailty;
-	
 	
 	
 	
@@ -186,6 +183,16 @@ public class Assets {
 	public static Array<Sprite> bomb_animation;
 	public static Array<Sprite> explosion_animation;
 
+	
+	//**************************
+	// Alterations
+	
+	public static AtlasRegion blessing_vigor;
+	public static AtlasRegion blessing_strength;
+	public static AtlasRegion blessing_celerity;
+	public static AtlasRegion curse_frailty;
+	public static AtlasRegion curse_slowness;
+	public static AtlasRegion curse_weakness;
 
 	
 
@@ -336,12 +343,21 @@ public class Assets {
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
 		
-		alteration_vigor = Assets.getTexture("item-alteration-vigor");
-		alteration_frailty = Assets.getTexture("item-alteration-frailty");
 		
 		arrow = Assets.getTexture("arrow");
 		bomb_animation = Assets.getAnimation("bomb");
 		explosion_animation = Assets.getAnimation("explosion");
+
+		
+		//*****************
+		// Alterations
+		
+		blessing_vigor = Assets.getTexture("blessing-vigor");
+		blessing_strength = Assets.getTexture("blessing-strength");
+		blessing_celerity = Assets.getTexture("blessing-celerity");
+		curse_frailty = Assets.getTexture("curse-frailty");
+		curse_slowness = Assets.getTexture("curse-slowness");
+		curse_weakness = Assets.getTexture("curse-weakness");
 
 	}
 	

@@ -22,7 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemFrailtyCurse extends Item {
 
 	public ItemFrailtyCurse() {
-		super("Curse of frailty", Assets.alteration_vigor, false, false);
+		super("Curse of frailty", Assets.curse_frailty, false, false);
 	}
 
 	@Override

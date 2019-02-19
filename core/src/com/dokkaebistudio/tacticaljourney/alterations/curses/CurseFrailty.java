@@ -11,7 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Curse of frailty. Reduce the entity's max HP.
+ * Curse of frailty. Reduce the entity's max HP by 10.
  * @author Callil
  *
  */
@@ -24,7 +24,7 @@ public class CurseFrailty extends Curse {
 	
 	@Override
 	public AtlasRegion texture() {
-		return Assets.alteration_frailty;
+		return Assets.curse_frailty;
 	}
 
 	@Override

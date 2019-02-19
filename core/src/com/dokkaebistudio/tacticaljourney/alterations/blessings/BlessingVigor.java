@@ -11,7 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of vigor. Increase the entity's max HP.
+ * Blessing of vigor. Increase the entity's max HP by 10.
  * @author Callil
  *
  */
@@ -24,7 +24,7 @@ public class BlessingVigor extends Blessing {
 	
 	@Override
 	public AtlasRegion texture() {
-		return Assets.alteration_vigor;
+		return Assets.blessing_vigor;
 	}
 
 	@Override

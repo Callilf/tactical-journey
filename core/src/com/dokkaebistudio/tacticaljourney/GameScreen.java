@@ -97,6 +97,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	public FitViewport hudViewport;
 	public Stage hudStage;
+	public Stage miniMapStage;
 
 
 	Vector3 touchPoint;
@@ -137,6 +138,8 @@ public class GameScreen extends ScreenAdapter {
 		fxStage = new Stage(viewport);
 		inventoryStage = new Stage(hudViewport);
 		hudStage = new Stage(hudViewport);
+		miniMapStage = new Stage(hudViewport);
+
 		
 		//Instanciate the input processor
 		InputSingleton.createInstance(this,guiCam, viewport);
@@ -145,6 +148,7 @@ public class GameScreen extends ScreenAdapter {
 		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(inventoryStage);
 		inputMultiplexer.addProcessor(hudStage);
+		inputMultiplexer.addProcessor(miniMapStage);
 		inputMultiplexer.addProcessor(InputSingleton.getInstance());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -160,7 +164,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
-		renderers.add(new MapRenderer(this, hudStage, floor));
+		renderers.add(new MapRenderer(miniMapStage, floor));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));

@@ -47,9 +47,6 @@ public class MapRenderer implements Renderer {
 	
 	/** Whether the map is displayed on screen or not. */
 	private boolean mapDisplayed;
-	
-	/** The game screen. */
-	private GameScreen gameScreen;
 			
 	/** The floor to render. */
 	private Floor floor;
@@ -86,13 +83,10 @@ public class MapRenderer implements Renderer {
 	 * @param sr the shaperenderer
 	 * @param f the floor which map we want to render
 	 */
-	public MapRenderer(GameScreen gs, Stage s, Floor f) {
+	public MapRenderer(Stage s, Floor f) {
 		this.stage = s;
-		this.gameScreen = gs;
 		this.mapDisplayed = true;
-		
-		gameScreen.guiCam.update();
-		
+			
 		
 		background = new Image(Assets.map_background);
 		background.setPosition(GameScreen.SCREEN_W - Assets.map_background.getRegionWidth(), GameScreen.SCREEN_H - Assets.map_background.getRegionHeight());

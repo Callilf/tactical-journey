@@ -170,7 +170,7 @@ public class RoomGenerator {
 		case COMMON_ENEMY_ROOM:
 		case END_FLOOR_ROOM:
 			
-			int roomNb = 1 + random.nextInt(10);
+			int roomNb = 1 + random.nextInt(11);
 			roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
 
 			break;
@@ -194,6 +194,7 @@ public class RoomGenerator {
 
 		switch(room.type) {
 		case COMMON_ENEMY_ROOM :
+			if (possibleSpawns.size() == 0) return;
 			
 			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
 			
@@ -331,6 +332,7 @@ public class RoomGenerator {
 			
 			break;
 		case END_FLOOR_ROOM:
+			if (possibleSpawns.size() == 0) return;
 			int nextInt = random.nextInt(possibleSpawns.size());
 			Vector2 pos = possibleSpawns.get(nextInt);
 			entityFactory.createExit(room, pos);

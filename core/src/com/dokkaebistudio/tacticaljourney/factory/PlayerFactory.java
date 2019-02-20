@@ -6,17 +6,20 @@ package com.dokkaebistudio.tacticaljourney.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -119,7 +122,7 @@ public final class PlayerFactory {
 		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
 		ammoCarrierCompo.setArrows(0);
 		ammoCarrierCompo.setMaxArrows(10);
-		ammoCarrierCompo.setBombs(0);
+		ammoCarrierCompo.setBombs(1);
 		ammoCarrierCompo.setMaxBombs(5);
 		playerEntity.add(ammoCarrierCompo);
 		
@@ -135,8 +138,8 @@ public final class PlayerFactory {
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(100);
-		healthComponent.setHp(100);
+		healthComponent.setMaxHp(50);
+		healthComponent.setHp(50);
 		healthComponent.setMaxArmor(30);
 		healthComponent.setArmor(0);
 		playerEntity.add(healthComponent);
@@ -146,6 +149,8 @@ public final class PlayerFactory {
 		expCompo.reset();
 		playerEntity.add(expCompo);
 		
+		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
+		playerEntity.add(alterationReceiverCompo);
 		
 		//Skills
 		entityFactory.createSkill(room,playerEntity, SkillEnum.SLASH, 1 );
@@ -204,6 +209,44 @@ public final class PlayerFactory {
 		
 		room.addNeutral(shopKeeperEntity);
 		return shopKeeperEntity;
+	}
+	
+	/**
+	 * Create a godess statue.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the statue entity
+	 */
+	public Entity createGodessStatue(Vector2 pos, Room room) {
+		Entity godessStatueEntity = engine.createEntity();
+		godessStatueEntity.flags = EntityFlagEnum.GODESS_STATUE.getFlag();
+
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(Assets.godess_statue));
+		godessStatueEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(godessStatueEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.STATUE;
+		godessStatueEntity.add(gridPosition);
+		
+		StatueComponent statueComponent = engine.createComponent(StatueComponent.class);
+		statueComponent.setAlterationPool(new GodessStatueAlterationPool());
+		godessStatueEntity.add(statueComponent);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		godessStatueEntity.add(solidComponent);
+		
+		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
+		destructible.setDestroyedTexture(Assets.godess_statue_broken);
+		destructible.setRemove(false);
+		godessStatueEntity.add(destructible);		
+		
+		room.addNeutral(godessStatueEntity);
+		return godessStatueEntity;
 	}
 	
 

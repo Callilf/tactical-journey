@@ -16,16 +16,18 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.items.Item;
-import com.dokkaebistudio.tacticaljourney.items.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
-import com.dokkaebistudio.tacticaljourney.items.ItemFirePotion;
-import com.dokkaebistudio.tacticaljourney.items.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
-import com.dokkaebistudio.tacticaljourney.items.ItemSmallHealthPotion;
-import com.dokkaebistudio.tacticaljourney.items.ItemTutorialPage;
-import com.dokkaebistudio.tacticaljourney.items.ItemWebSack;
+import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
+import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -242,5 +244,20 @@ public final class ItemFactory {
 		return item;
 	}
 	
+	
+	// TODO change
+	
+	public Entity createItemVigor(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.blessing_vigor, new ItemVigorBlessing());
+		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
+		
+		return item;
+	}
+	public Entity createItemFrailty(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.curse_frailty, new ItemFrailtyCurse());
+		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
+		
+		return item;
+	}
 	
 }

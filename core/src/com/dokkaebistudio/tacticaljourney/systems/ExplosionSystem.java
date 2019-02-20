@@ -22,10 +22,13 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -170,14 +173,29 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			Set<Entity> destructibles = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(),
 					DestructibleComponent.class, room);
 			for (Entity d : destructibles) {
-				room.removeEntity(d);
-				
-				//Add debris
 				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
-				if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
-					GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
-					room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL_DESTROYED, room);
+				destructibleComponent.setDestroyed(true);
+
+				if (destructibleComponent.isRemove()) {
+					room.removeEntity(d);
+					
+					//Add debris
+					if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
+						GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
+						room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.WALL_DESTROYED, room);
+					}
+				} else {
+					SpriteComponent spriteComponent = Mappers.spriteComponent.get(d);
+					spriteComponent.setSprite(new Sprite(destructibleComponent.getDestroyedTexture()));
+					
+					// If it's a statue, set its "destroyed" status so that the statues delivers a curse
+					StatueComponent statueComponent = Mappers.statueComponent.get(d);
+					if (statueComponent != null) {
+						statueComponent.setJustDestroyed(true);
+					}
 				}
+				
+				
 			}
 				
 

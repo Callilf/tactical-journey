@@ -61,6 +61,20 @@ public class PlayerComponent implements Component {
 	}
 	
 	
+	// PRAY action
+	
+	private boolean prayRequested;
+	private Entity statueEntity;
+	
+	public void setPrayRequested(Entity statueEntity) {
+		this.prayRequested = true;
+		this.statueEntity = statueEntity;
+	}
+
+	public void clearPrayRequested() {
+		this.prayRequested = false;
+	}
+	
 	
 	//**************************
 	// Getter & Setters 
@@ -130,5 +144,21 @@ public class PlayerComponent implements Component {
 
 	public void setSkillThrow(Entity skillThrow) {
 		this.skillThrow = skillThrow;
+	}
+
+	public boolean isPrayRequested() {
+		return prayRequested;
+	}
+
+	public void setPrayRequested(boolean prayRequested) {
+		this.prayRequested = prayRequested;
+	}
+
+	public Entity getStatueEntity() {
+		return statueEntity;
+	}
+
+	public void setStatueEntity(Entity statueEntity) {
+		this.statueEntity = statueEntity;
 	}
 }

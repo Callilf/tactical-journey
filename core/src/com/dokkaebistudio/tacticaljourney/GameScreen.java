@@ -52,6 +52,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.CreepSystem;
@@ -187,6 +188,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new ItemSystem(	player, room, fxStage));
+		engine.addSystem(new AlterationSystem(player, room, fxStage));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new DialogSystem(room, fxStage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));

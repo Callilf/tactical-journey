@@ -1,11 +1,15 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.items;
+package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseFrailty;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * A tutorial page.
@@ -17,9 +21,32 @@ public class ItemTutorialPage extends Item {
 	private int pageNumber;
 
 	public ItemTutorialPage(int pageNumber) {
-		super("Piece of armor", Assets.tutorial_page_item, false, true);
+		super("Tutorial page", Assets.tutorial_page_item, false, true);
 		this.pageNumber = pageNumber;
 	}
+	
+	@Override
+	public String getLabel() {
+		String result = null;
+
+		switch (this.pageNumber) {
+		case 1:
+			result = "Tutorial page 1";
+			break;
+		case 2:
+			result = "Tutorial page 2";
+			break;
+		case 3:
+			result = "Tutorial page 3";
+			break;
+		case 4:
+			result = "Tutorial page 4";
+			break;
+		}
+		
+		return result;
+	}
+	
 	
 	@Override
 	public String getDescription() {
@@ -68,5 +95,11 @@ public class ItemTutorialPage extends Item {
 	}
 	
 	@Override
-	public boolean use(Entity user, Entity item, Room room) {return true;}
+	public boolean use(Entity user, Entity item, Room room) {
+		//TODO remove
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(user);
+		alterationReceiverComponent.removeCurseByClass(user, CurseFrailty.class);
+		
+		return true;
+	}
 }

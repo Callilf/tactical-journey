@@ -116,6 +116,8 @@ public class ItemComponent implements Component, Poolable {
 		GridPositionComponent itemPositionComponent = Mappers.gridPositionComponent.get(item);
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
+		Vector2 moveDest = itemComponent.getItemType().getPickupImageMoveDestination();
+		if (moveDest == null) return this.pickupAnimationImages;
 		
 		int numberOfImages = 1;
 		if (itemComponent.getQuantity() != null) {
@@ -138,7 +140,6 @@ public class ItemComponent implements Component, Poolable {
 			};
 	
 			float duration = 0.1f * i;
-			Vector2 moveDest = itemComponent.getItemType().getPickupImageMoveDestination();
 			pickupImage.addAction(Actions.sequence(Actions.moveBy(0, 0, duration), Actions.moveTo(moveDest.x, moveDest.y, 0.75f, Interpolation.circle),
 					removeImageAction));
 				

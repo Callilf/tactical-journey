@@ -35,6 +35,8 @@ public class Assets {
 	
 	public static AtlasRegion player;
 	public static AtlasRegion shopkeeper;
+	public static AtlasRegion godess_statue;
+	public static AtlasRegion godess_statue_broken;
 	
 	public static AtlasRegion tile_ground;
 	public static AtlasRegion wall;
@@ -120,6 +122,8 @@ public class Assets {
 	public static AtlasRegion map_room_enemy;
 	public static AtlasRegion map_room_exit;
 	public static AtlasRegion map_room_shop;
+	public static AtlasRegion map_room_statue;
+	public static AtlasRegion map_room_statue_enemy;
 	public static AtlasRegion map_room_start;
 	public static AtlasRegion map_room_unknown;
 
@@ -166,17 +170,33 @@ public class Assets {
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
 	
-	
 	public static AtlasRegion armor_up_item;
 	public static AtlasRegion armor_piece_item;
 	
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
 	
+	
+	
+	
+	
+	
+	
+	
 	public static AtlasRegion arrow;
 	public static Array<Sprite> bomb_animation;
 	public static Array<Sprite> explosion_animation;
 
+	
+	//**************************
+	// Alterations
+	
+	public static AtlasRegion blessing_vigor;
+	public static AtlasRegion blessing_strength;
+	public static AtlasRegion blessing_celerity;
+	public static AtlasRegion curse_frailty;
+	public static AtlasRegion curse_slowness;
+	public static AtlasRegion curse_weakness;
 
 	
 
@@ -192,6 +212,8 @@ public class Assets {
 
 		player = Assets.getTexture("player-test");
 		shopkeeper = Assets.getTexture("shopkeeper");
+		godess_statue = Assets.getTexture("godess_statue");
+		godess_statue_broken = Assets.getTexture("godess_statue_broken");
 
 		tile_ground = Assets.getTexture("tile-test");
 		wall = Assets.getTexture("tile-wall-test");
@@ -275,6 +297,8 @@ public class Assets {
 		map_room_enemy = Assets.getTexture("map_room_enemy");
 		map_room_exit = Assets.getTexture("map_room_exit");
 		map_room_shop = Assets.getTexture("map_room_shop");
+		map_room_statue = Assets.getTexture("map_room_statue");
+		map_room_statue_enemy = Assets.getTexture("map_room_statue_enemy");
 		map_room_start = Assets.getTexture("map_room_start");
 		map_room_unknown = Assets.getTexture("map_room_unknown");
 		
@@ -327,9 +351,21 @@ public class Assets {
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
 		
+		
 		arrow = Assets.getTexture("arrow");
 		bomb_animation = Assets.getAnimation("bomb");
 		explosion_animation = Assets.getAnimation("explosion");
+
+		
+		//*****************
+		// Alterations
+		
+		blessing_vigor = Assets.getTexture("blessing-vigor");
+		blessing_strength = Assets.getTexture("blessing-strength");
+		blessing_celerity = Assets.getTexture("blessing-celerity");
+		curse_frailty = Assets.getTexture("curse-frailty");
+		curse_slowness = Assets.getTexture("curse-slowness");
+		curse_weakness = Assets.getTexture("curse-weakness");
 
 	}
 	

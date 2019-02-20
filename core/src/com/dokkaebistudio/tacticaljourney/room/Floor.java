@@ -41,7 +41,7 @@ public class Floor {
 	public Floor(GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 		
-		FloorGenerator.generateFloor(this, gameScreen);
+		new FloorGenerator().generateFloor(this, gameScreen);
 	}
 	
 	

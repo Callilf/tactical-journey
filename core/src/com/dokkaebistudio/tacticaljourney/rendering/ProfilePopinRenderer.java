@@ -3,16 +3,24 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
+import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingCelerity;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -32,6 +40,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private PlayerComponent playerCompo;
 	/** The experience component of the player (kept in cache to prevent getting it at each frame). */
 	private ExperienceComponent expCompo;
+	/** The player's alteration receiver component in cache. */
+	private AlterationReceiverComponent alterationReceiverCompo;
 	
 	/** The current room. */
     private Room room;
@@ -40,9 +50,13 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     //*****************
     // Actors 
     
+    private Table mainTable;
+    
+    // Profile
+    
     /** The main table of the popin. */
-    private Table table;
-    private Label title;
+    private Table profileTable;
+    private Label profileTitle;
     private Label maxHpLbl;
     private Label maxArmorLbl;
     private Label strengthLbl;
@@ -53,6 +67,20 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private Label bombDmg;
 	private Label bombDuration;
 	private Label bombRadius;
+	
+	// Blessings
+    private Table blessingTable;
+    private ScrollPane blessingScroll;
+    private Table blessingList;
+    private Label blessingTitle;
+
+	
+	// Curses
+    private Table curseTable;
+    private ScrollPane curseScroll;
+    private Table curseList;
+    private Label curseTitle;
+
 
     
     
@@ -80,6 +108,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     	if (expCompo == null) {
     		expCompo = Mappers.experienceComponent.get(player);
     	}
+    	if (alterationReceiverCompo == null) {
+    		alterationReceiverCompo = Mappers.alterationReceiverComponent.get(player);
+    	}
     	
     	if (playerCompo.isProfilePopinDisplayed() && room.getState() != RoomState.PROFILE_POPIN) {
     		// Popin has just been opened
@@ -87,13 +118,20 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.PROFILE_POPIN);
     		
-    		if (table == null) {
-    			initTable();
+    		if (mainTable == null) {
+    			mainTable = new Table();
+    			initProfileTable();
+    			initBlessingTable();
+    			initCurseTable();
     		}
     		
-    		refreshTable();
+    		refreshProfileTable();
+    		refreshBlessingTable();
+    		refreshCurseTable();
+    		mainTable.pack();
+    		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
     		
-    		stage.addActor(table);
+    		stage.addActor(mainTable);
     
     	}
     	
@@ -112,13 +150,18 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		}
     	}
     }
+    
+    
+    
+    //************************
+    // PROFILE
 
-	private void refreshTable() {
+	private void refreshProfileTable() {
 		MoveComponent moveComponent = Mappers.moveComponent.get(player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(player);
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 
-		title.setText("Profile");
+		profileTitle.setText("Profile");
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
 		strengthLbl.setText("Strength: " + attackComponent.getStrength());
@@ -131,78 +174,191 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
 		bombDistLbl.setText("Bomb throw range: " + bombAttackCompo.getRangeMax());
 		bombDmg.setText("Bomb damage: " + bombAttackCompo.getStrength());
-		bombDuration.setText("Bomb dur.: " + bombAttackCompo.getBombTurnsToExplode() + " turns" );
+		bombDuration.setText("Bomb fuse duration: " + bombAttackCompo.getBombTurnsToExplode() + " turns" );
 		bombRadius.setText("Bomb radius: " + bombAttackCompo.getBombRadius());
 		
-		table.pack();
-		table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
+		profileTable.pack();
 	}
 
     
     /**
      * Initialize the table the first time the profile is opened.
      */
-	private void initTable() {
-		table = new Table();
-//	    		table.setDebug(true, true);
-		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		//table.setTouchable(Touchable.childrenOnly);
+	private void initProfileTable() {
+		profileTable = new Table();
 		
 		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
-		table.setBackground(topBackground);
+		profileTable.setBackground(topBackground);
 		
-		table.align(Align.top);
+		profileTable.align(Align.top);
 		
 		// TITLE
-		title = new Label("Profile", PopinService.hudStyle());
-		table.add(title).uniformX().pad(20, 0, 20, 0);
-		table.row();
+		profileTitle = new Label("Profile", PopinService.hudStyle());
+		profileTable.add(profileTitle).expandX().pad(20, 0, 20, 0);
+		profileTable.row();
 		
 		maxHpLbl = new Label("Max hp", PopinService.hudStyle());
-		table.add(maxHpLbl).uniformX().left();
-		table.row();
+		profileTable.add(maxHpLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		
 		maxArmorLbl = new Label("Max armor", PopinService.hudStyle());
-		table.add(maxArmorLbl).uniformX().left();
-		table.row();
+		profileTable.add(maxArmorLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		
 		strengthLbl = new Label("Strength", PopinService.hudStyle());
-		table.add(strengthLbl).uniformX().left();
-		table.row();
+		profileTable.add(strengthLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		
 		moveLbl = new Label("Move", PopinService.hudStyle());
-		table.add(moveLbl).uniformX().left().padBottom(20);
-		table.row();
+		profileTable.add(moveLbl).expandX().left().pad(0, 20, 20, 20);
+		profileTable.row();
 		
 		
 		rangeDistLbl = new Label("Bow range", PopinService.hudStyle());
-		table.add(rangeDistLbl).uniformX().left();
-		table.row();
+		profileTable.add(rangeDistLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		rangeStrengthLbl = new Label("Bow damage", PopinService.hudStyle());
-		table.add(rangeStrengthLbl).uniformX().left().padBottom(20);
-		table.row();
+		profileTable.add(rangeStrengthLbl).expandX().left().pad(0, 20, 20, 20);
+		profileTable.row();
 		
 		bombDistLbl = new Label("Bomb throw range", PopinService.hudStyle());
-		table.add(bombDistLbl).uniformX().left();
-		table.row();
+		profileTable.add(bombDistLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		bombDmg = new Label("Bomb damage", PopinService.hudStyle());
-		table.add(bombDmg).uniformX().left();
-		table.row();
+		profileTable.add(bombDmg).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		
-		bombDuration = new Label("Bomb dur.", PopinService.hudStyle());
-		table.add(bombDuration).uniformX().left();
-		table.row();
+		bombDuration = new Label("Bomb fuse duration", PopinService.hudStyle());
+		profileTable.add(bombDuration).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
 		bombRadius = new Label("Bomb radius", PopinService.hudStyle());
-		table.add(bombRadius).uniformX().left();
-		table.row();
+		profileTable.add(bombRadius).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
+		
+		mainTable.add(profileTable);
 	}
 
+	
+	
+	//*****************
+	// BLESSINGS
+	
+
+	private void refreshBlessingTable() {
+		blessingList.clear();
+		for (Alteration blessing : alterationReceiverCompo.getBlessings()) {
+			Table oneBlessingTable = createOneAlteration(blessing);
+			blessingList.add(oneBlessingTable).fillX();
+			blessingList.row();
+		}
+				
+		blessingList.pack();
+		blessingScroll.layout();
+	}
+
+    
+    /**
+     * Initialize the blessing table the first time the profile is opened.
+     */
+	private void initBlessingTable() {
+		blessingTable = new Table();
+
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
+		blessingTable.setBackground(topBackground);
+		
+		blessingTable.align(Align.top);
+		
+		// TITLE
+		blessingTitle = new Label("Blessings", PopinService.hudStyle());
+		blessingTable.add(blessingTitle).uniformX().pad(20, 0, 20, 0);
+		blessingTable.row().top();
+		
+		// Blessings table
+		blessingList = new Table();
+		blessingList.top().left();
+		
+		//Scrollpane
+		blessingScroll = new ScrollPane(blessingList);
+		blessingTable.add(blessingScroll).fill().expand().maxHeight(590);
+		
+		mainTable.add(blessingTable).pad(0, 5, 0, 5);
+	}
+	
+	
+	
+	// *****************
+	// BLESSINGS
+
+	private void refreshCurseTable() {
+		curseList.clear();
+		for (Alteration curse : alterationReceiverCompo.getCurses()) {
+			Table oneCurseTable = createOneAlteration(curse);
+			curseList.add(oneCurseTable).fillX();
+			curseList.row();
+		}
+		
+		curseList.pack();
+		curseScroll.layout();
+	}
+
+	/**
+	 * Initialize the blessing table the first time the profile is opened.
+	 */
+	private void initCurseTable() {
+		curseTable = new Table();
+
+		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
+		curseTable.setBackground(topBackground);
+
+		curseTable.align(Align.top);
+
+		// TITLE
+		curseTitle = new Label("Curses", PopinService.hudStyle());
+		curseTable.add(curseTitle).uniformX().pad(20, 0, 20, 0);
+		curseTable.row().top();
+
+		// Blessings table
+		curseList = new Table();
+		curseList.top().left();
+
+		// Scrollpane
+		curseScroll = new ScrollPane(curseList);
+		curseTable.add(curseScroll).fill().expand().maxHeight(590);
+
+		mainTable.add(curseTable).pad(0, 5, 0, 5);
+	}
+	
+	
+	
+	
+	
+	
+
+	private Table createOneAlteration(Alteration alteration) {
+		Table oneCurseTable = new Table();
+		oneCurseTable.align(Align.left);
+
+		Image curseImage = new Image(alteration.texture());
+		oneCurseTable.add(curseImage).left().pad(0, 20, 20, 20);
+		
+		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
+		oneCurseTable.add(curseTitle).pad(0, 20, 20, 20);
+		
+		oneCurseTable.pack();
+		return oneCurseTable;
+	}
+	
+	
+	
+	
+	//*************
+	// Close
 	/**
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
 		playerCompo.setProfilePopinDisplayed(false);
-		table.remove();
+		mainTable.remove();
 		room.setNextState(previousState);
 	}
 

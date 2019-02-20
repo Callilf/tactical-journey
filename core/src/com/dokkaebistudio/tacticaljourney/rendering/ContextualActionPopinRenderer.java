@@ -15,10 +15,14 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
+import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -71,7 +75,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(player);
     	}
     	
-    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested()) {
+    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested() || playerCompo.isPrayRequested()) {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
@@ -89,6 +93,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			
 			playerCompo.clearLootRequested();
 			playerCompo.clearExitRequested();
+			playerCompo.clearPrayRequested();
     	}
     	
     	if (room.getState() == RoomState.CONTEXTUAL_ACTION_POPIN) {
@@ -132,6 +137,17 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			if (yesBtnListener != null) {
 				yesBtn.removeListener(yesBtnListener);
 			}
+			
+		} else if (playerCompo.isPrayRequested()) {
+			Entity statueEntity = playerCompo.getStatueEntity();
+			StatueComponent statueComponent = Mappers.statueComponent.get(statueEntity);
+			
+			title.setText("Statue of the godess");
+			desc.setText("A statue of the godess of Telure. You can feel a benevolent energy enveloping you when you get close enough. You can probably channel this energy is you pray for a while.");
+			yesBtn.setText("Pray");
+			
+			updatePrayListener(statueEntity, statueComponent);
+
 		}
 	}
     
@@ -204,6 +220,21 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtn.addListener(yesBtnListener);
 	}
 
+	private void updatePrayListener(final Entity statue, final StatueComponent statueComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, statueComponent.getBlessingToGive());				
+				statueComponent.setHasBlessing(false);
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
 
 	/**
 	 * Close the popin and unpause the game.

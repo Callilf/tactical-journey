@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -39,6 +38,9 @@ public class MapRenderer implements Renderer {
 	
 	float offsetX = GameScreen.SCREEN_W - GameScreen.SCREEN_W/8;
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
+	
+	// TEST to debug floor layout
+	private boolean debug = false;
 	
 	private Stage stage;
 	
@@ -269,6 +271,10 @@ public class MapRenderer implements Renderer {
 				Image roomImage = (Image) children.get(0);
 				Image playerImage = (Image) children.get(1);
 				
+				if (debug) {
+					room.setVisited(true);
+				}
+				
 				if (room.isVisited()) {
 					switch(room.type) {
 					case START_FLOOR_ROOM:
@@ -287,6 +293,13 @@ public class MapRenderer implements Renderer {
 						break;
 					case SHOP_ROOM:
 						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_shop));
+						break;
+					case STATUE_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue_enemy));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue));
+						}
 						break;
 					}
 

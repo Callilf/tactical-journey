@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.room.generation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,9 @@ import com.dokkaebistudio.tacticaljourney.room.RoomType;
  */
 public class FloorGenerator {
 	
+	private RandomXS128 random;
+	
+	
 	public enum GenerationMoveEnum {
 		NORTH,
 		SOUTH,
@@ -36,8 +40,8 @@ public class FloorGenerator {
 	 * Generate all the layout of the given floor.
 	 * @param floor the floor to generate.
 	 */
-	public static void generateFloor(Floor floor, GameScreen gameScreen) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+	public void generateFloor(Floor floor, GameScreen gameScreen) {
+		random = RandomSingleton.getInstance().getSeededRandom();
 		List<Room> rooms = new ArrayList<>();
 		Map<Vector2, Room> roomsPerPosition = new HashMap<>();
 		
@@ -81,7 +85,7 @@ public class FloorGenerator {
 			}
 			
 			// Create the room
-			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory,RoomType.COMMON_ENEMY_ROOM);
+			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
 			rooms.add(currentRoom);
 			
@@ -95,9 +99,25 @@ public class FloorGenerator {
 		
 		// 4 - Add rooms to this path
 		
-		int additionnalRoomsNumber = 5 + random.nextInt(6);
+		int additionnalRoomsNumber = 6 + random.nextInt(2);
 		addAdditionalRooms(floor, gameScreen,random, rooms, roomsPerPosition, additionnalRoomsNumber);
 		
+		
+		// 5 - Place mandatory rooms
+		List<Room> values = new ArrayList<>(roomsPerPosition.values());
+		Collections.shuffle(values, random);
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.SHOP_ROOM;
+				break;
+			}
+		}
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.STATUE_ROOM;
+				break;
+			}
+		}
 		
 		// 5 - Generate the content of all rooms
 		for (Room r : rooms) {
@@ -107,6 +127,19 @@ public class FloorGenerator {
 		floor.setActiveRoom(rooms.get(0));
 		floor.setRoomPositions(roomsPerPosition);
 
+	}
+	
+	
+	/**
+	 * Choose the type of room to create.
+	 * @return the type of room
+	 */
+	private RoomType chooseRoomType() {
+		if (random.nextInt(100) < 10) {
+			return RoomType.EMPTY_ROOM;
+		} else {
+			return RoomType.COMMON_ENEMY_ROOM;
+		}
 	}
 
 
@@ -119,10 +152,9 @@ public class FloorGenerator {
 	 * @param rooms the list of rooms which are at the moment the path from the start to the end
 	 * @param additionalRoomsNumber the number of rooms we want to add to the main path
 	 */
-	private static void addAdditionalRooms(Floor floor, GameScreen gameScreen,
+	private void addAdditionalRooms(Floor floor, GameScreen gameScreen,
 			RandomXS128 random, List<Room> rooms, Map<Vector2, Room> roomsPerPosition, int additionalRoomsNumber) {
 		int chanceToAddRoom = 100;
-		boolean shopPlaced = false;
 
 		Room previousRoom;
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
@@ -143,7 +175,7 @@ public class FloorGenerator {
 						
 						int directionIndex = random.nextInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
-						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, shopPlaced ? RoomType.COMMON_ENEMY_ROOM : RoomType.SHOP_ROOM);
+						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction, roomsPerPosition);
@@ -158,7 +190,6 @@ public class FloorGenerator {
 							chanceToAddRoom = 100;
 						}
 						
-						shopPlaced = true;
 						break;
 					}
 				}
@@ -175,7 +206,7 @@ public class FloorGenerator {
 	 * @param roomsPerPosition the map containing the position of all rooms.
 	 * @return the new position.
 	 */
-	private static Vector2 getNewRoomPosition(Room previousRoom, GenerationMoveEnum direction,
+	private Vector2 getNewRoomPosition(Room previousRoom, GenerationMoveEnum direction,
 			Map<Vector2, Room> roomsPerPosition) {
 		Vector2 vector2 = null;
 		for (Entry<Vector2, Room> entry : roomsPerPosition.entrySet()) {
@@ -204,7 +235,7 @@ public class FloorGenerator {
 	 * @param chanceToAddRoom the chance to add a room (on 100)
 	 * @param allRooms the list of all rooms of this floor that we might complete
 	 */
-	private static void addAdditionalSubRooms(Floor floor, GameScreen gameScreen,
+	private void addAdditionalSubRooms(Floor floor, GameScreen gameScreen,
 			RandomXS128 random, Room parentRoom, int chanceToAddRoom, List<Room> allRooms, Map<Vector2, Room> roomsPerPosition) {
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
 		fillPossibleMoves(parentRoom, possibleMove, roomsPerPosition);
@@ -220,7 +251,7 @@ public class FloorGenerator {
 				//Add room here
 				chanceToAddRoom = chanceToAddRoom/2;
 							
-				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.COMMON_ENEMY_ROOM);
+				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 				allRooms.add(currentRoom);
 				setNeighbors(direction, parentRoom, currentRoom);
 				
@@ -240,7 +271,7 @@ public class FloorGenerator {
 	 * @param room the room to check
 	 * @param possibleMove the list of possible move to fill
 	 */
-	private static void fillPossibleMoves(Room room, List<GenerationMoveEnum> possibleMove, Map<Vector2, Room> roomsPerPosition) {
+	private void fillPossibleMoves(Room room, List<GenerationMoveEnum> possibleMove, Map<Vector2, Room> roomsPerPosition) {
 		possibleMove.clear();
 		
 		Vector2 vector2 = null;
@@ -287,7 +318,7 @@ public class FloorGenerator {
 	 * @param endRoomX the X of the end room
 	 * @return the new currX and the modified currentMove
 	 */
-	private static NewRoomPos moveHorizontally(int currX, int endRoomX) {
+	private NewRoomPos moveHorizontally(int currX, int endRoomX) {
 		GenerationMoveEnum currentMove = null;
 		if (endRoomX > currX) {
 			currX ++;
@@ -307,7 +338,7 @@ public class FloorGenerator {
 	 * @param currentMove the currentMove that will be updated by this method.
 	 * @return the new curry and the modified currentMove
 	 */
-	private static NewRoomPos moveVertically(int currY, int endRoomY) {
+	private NewRoomPos moveVertically(int currY, int endRoomY) {
 		GenerationMoveEnum currentMove = null;
 		if (endRoomY > currY) {
 			currY ++;
@@ -325,7 +356,7 @@ public class FloorGenerator {
 	 * @param previousRoom the previous room
 	 * @param currentRoom the current room
 	 */
-	private static void setNeighbors(GenerationMoveEnum currentMove, Room previousRoom, Room currentRoom) {
+	private void setNeighbors(GenerationMoveEnum currentMove, Room previousRoom, Room currentRoom) {
 		switch (currentMove) {
 			case NORTH:
 				previousRoom.setNorthNeighbor(currentRoom);

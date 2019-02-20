@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -36,7 +37,7 @@ public class ItemVigorBlessing extends Item {
 	public boolean use(Entity user, Entity item, Room room) {
 		AlterationReceiverComponent blessingAndCurseReceiverComponent = Mappers.alterationReceiverComponent.get(user);
 		if (blessingAndCurseReceiverComponent != null) {
-			blessingAndCurseReceiverComponent.addBlessing(user, new BlessingVigor());
+			blessingAndCurseReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, new BlessingVigor());
 		}
 		
 		return true;

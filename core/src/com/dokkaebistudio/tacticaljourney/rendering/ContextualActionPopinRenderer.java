@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.Loot
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -227,8 +228,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
-				alterationReceiverComponent.addBlessing(player, statueComponent.getBlessingToGive());
-				
+				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, statueComponent.getBlessingToGive());				
 				statueComponent.setHasBlessing(false);
 				closePopin();
 			}

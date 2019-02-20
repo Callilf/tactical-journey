@@ -21,9 +21,32 @@ public class ItemTutorialPage extends Item {
 	private int pageNumber;
 
 	public ItemTutorialPage(int pageNumber) {
-		super("Piece of armor", Assets.tutorial_page_item, false, true);
+		super("Tutorial page", Assets.tutorial_page_item, false, true);
 		this.pageNumber = pageNumber;
 	}
+	
+	@Override
+	public String getLabel() {
+		String result = null;
+
+		switch (this.pageNumber) {
+		case 1:
+			result = "Tutorial page 1";
+			break;
+		case 2:
+			result = "Tutorial page 2";
+			break;
+		case 3:
+			result = "Tutorial page 3";
+			break;
+		case 4:
+			result = "Tutorial page 4";
+			break;
+		}
+		
+		return result;
+	}
+	
 	
 	@Override
 	public String getDescription() {

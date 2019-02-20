@@ -177,6 +177,10 @@ public class RoomGenerator {
 		case SHOP_ROOM:
 			roomPattern = Gdx.files.internal("data/rooms/shopRoom.csv");
 
+		case STATUE_ROOM:
+			int statueRoomNb = 1 + random.nextInt(2);
+			roomPattern = Gdx.files.internal("data/rooms/statueRoom" + statueRoomNb + ".csv");
+
 			break;
 			default:
 				roomPattern = Gdx.files.internal("data/rooms/room1.csv");
@@ -191,22 +195,21 @@ public class RoomGenerator {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 
 		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
-
+		List<PoolableVector2> spawnPositions = null;
+		
 		switch(room.type) {
 		case COMMON_ENEMY_ROOM :
 			if (possibleSpawns.size() == 0) return;
 			
-			int enemyNb = random.nextInt(Math.min(possibleSpawns.size(), 5));
-			
 			// Retrieve the spawn points and shuffle them
-			List<PoolableVector2> enemyPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(enemyPositions, random);
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
 			
 			// Place a loot
 			int lootRandom = random.nextInt(10);
 			boolean isLoot = lootRandom != 0;
 			if (isLoot) {
-				Vector2 lootPos = enemyPositions.get(0);
+				Vector2 lootPos = spawnPositions.get(0);
 				if (lootRandom <= 5) {
 					Entity bones = entityFactory.createRemainsBones(room, lootPos);
 					fillLootable(bones);
@@ -216,33 +219,12 @@ public class RoomGenerator {
 					fillLootable(satchel);
 
 				}
-				enemyPositions.remove(0);
+				spawnPositions.remove(0);
 			}
 			
+
 			// Place enemies
-			Iterator<PoolableVector2> iterator = enemyPositions.iterator();
-			for (int i=0 ; i<enemyNb ; i++) {
-				if (!iterator.hasNext()) break;
-				
-				Entity enemy = null;
-				int enemyTypeRandom = random.nextInt(6);
-				if (enemyTypeRandom == 0) {
-					enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
-					iterator.remove();
-				} else if (enemyTypeRandom == 1) {
-					enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
-					iterator.remove();
-					if (iterator.hasNext()) {
-						enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
-					}
-				} else {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
-					iterator.remove();
-				}
-				
-				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-			}
+			placeEnemies(room, random, spawnPositions, false);
 			
 			break;
 			
@@ -282,12 +264,23 @@ public class RoomGenerator {
 			
 			break;
 			
+		case STATUE_ROOM:
+			entityFactory.playerFactory.createGodessStatue(new Vector2(11, 6), room);
+			
+			if (possibleSpawns.size() == 0) return;
+			// Retrieve the spawn points and shuffle them
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
+			placeEnemies(room, random, spawnPositions, true);
+			break;
+			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
+//			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			
-			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
-			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
+//			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
+//			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
+			
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
 
@@ -347,6 +340,43 @@ public class RoomGenerator {
 	
 		// Release poolable vector2
 		generatedRoom.releasePossibleSpawns();
+	}
+
+
+	/**
+	 * Generate a random number of enemies and place them in a room.
+	 * @param room the room
+	 * @param random the random
+	 * @param spawnPositions the possible spawn positions
+	 * @param canBeEmpty true if there can be no enemies
+	 */
+	private void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
+		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 5));
+		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
+		
+		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
+		for (int i=0 ; i<enemyNb ; i++) {
+			if (!iterator.hasNext()) break;
+			
+			Entity enemy = null;
+			int enemyTypeRandom = random.nextInt(6);
+			if (enemyTypeRandom == 0) {
+				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
+				iterator.remove();
+			} else if (enemyTypeRandom == 1) {
+				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
+				iterator.remove();
+				if (iterator.hasNext()) {
+					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+				}
+			} else {
+				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+				iterator.remove();
+			}
+			
+			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
+			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
+		}
 	}
 	
 	private void fillLootable(Entity lootable) {

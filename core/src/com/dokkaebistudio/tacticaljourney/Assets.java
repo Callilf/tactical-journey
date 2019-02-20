@@ -122,6 +122,8 @@ public class Assets {
 	public static AtlasRegion map_room_enemy;
 	public static AtlasRegion map_room_exit;
 	public static AtlasRegion map_room_shop;
+	public static AtlasRegion map_room_statue;
+	public static AtlasRegion map_room_statue_enemy;
 	public static AtlasRegion map_room_start;
 	public static AtlasRegion map_room_unknown;
 
@@ -295,6 +297,8 @@ public class Assets {
 		map_room_enemy = Assets.getTexture("map_room_enemy");
 		map_room_exit = Assets.getTexture("map_room_exit");
 		map_room_shop = Assets.getTexture("map_room_shop");
+		map_room_statue = Assets.getTexture("map_room_statue");
+		map_room_statue_enemy = Assets.getTexture("map_room_statue_enemy");
 		map_room_start = Assets.getTexture("map_room_start");
 		map_room_unknown = Assets.getTexture("map_room_unknown");
 		

@@ -15,6 +15,7 @@ public enum RoomType {
 	
 	COMMON_ENEMY_ROOM,
 	SHOP_ROOM,
+	STATUE_ROOM,
 	EMPTY_ROOM;
 	
 }

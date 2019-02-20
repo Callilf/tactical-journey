@@ -227,7 +227,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
-				alterationReceiverComponent.addBlessing(player, new BlessingStrength());
+				alterationReceiverComponent.addBlessing(player, statueComponent.getBlessingToGive());
 				
 				statueComponent.setHasBlessing(false);
 				closePopin();

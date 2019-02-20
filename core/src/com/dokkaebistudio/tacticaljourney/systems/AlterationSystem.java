@@ -114,7 +114,7 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 			if (statueComponent.wasJustDestroyed()) {
 				// Deliver the curse
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
-				alterationReceiverComponent.addCurse(player, new CurseWeakness());
+				alterationReceiverComponent.addCurse(player, statueComponent.getCurseToGive());
 				statueComponent.setJustDestroyed(false);
 			}
 		}

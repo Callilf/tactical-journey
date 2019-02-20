@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -232,6 +233,7 @@ public final class PlayerFactory {
 		godessStatueEntity.add(gridPosition);
 		
 		StatueComponent statueComponent = engine.createComponent(StatueComponent.class);
+		statueComponent.setAlterationPool(new GodessStatueAlterationPool());
 		godessStatueEntity.add(statueComponent);
 		
 		// Solid compo

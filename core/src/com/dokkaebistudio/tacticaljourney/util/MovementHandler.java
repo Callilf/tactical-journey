@@ -194,14 +194,18 @@ public class MovementHandler {
 	
 	public void finishRealMovement(Entity e, Room room) {
 		MoveComponent moveCompo = Mappers.moveComponent.get(e);
+		if (moveCompo == null) return;
+		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		
-		GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
-		gridPositionComponent.coord(e, selectedTilePos.coord(), room);
-		
-		for (Component c : e.getComponents()) {
-			if (c instanceof MovableInterface) {
-				((MovableInterface) c).endMovement(selectedTilePos.coord());
+		if (moveCompo.getSelectedTile() != null) {
+			GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
+			gridPositionComponent.coord(e, selectedTilePos.coord(), room);
+			
+			for (Component c : e.getComponents()) {
+				if (c instanceof MovableInterface) {
+					((MovableInterface) c).endMovement(selectedTilePos.coord());
+				}
 			}
 		}
 	}

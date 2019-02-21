@@ -79,8 +79,24 @@ public class InventoryComponent implements Component, Poolable {
 
 	/** Check whether there is space in the inventory for the given item component. */
 	public boolean canStore(ItemComponent itemCompo) {
-		//TODO : handle stackable items here later
 		if (itemCompo != null && itemCompo.getItemType().isGoIntoInventory()) {
+			
+			if (itemCompo.getItemType().isStackable()) {
+				// Check if there is already an item of this type
+				for (int i=0 ; i<firstEmptySlot ; i++) {
+					if (slots.get(i).isEmpty()) continue;
+					
+					Entity entity = slots.get(i).get(0);
+					ItemComponent itemComponent = Mappers.itemComponent.get(entity);
+					if (itemComponent != null 
+							&& itemComponent.getItemType().getClass().equals(itemCompo.getItemType().getClass())) {
+						// Already a similar item in inventory
+						return true;
+					}
+				}
+
+			}
+			
 			return firstEmptySlot < numberOfSlots;
 		} else {
 			return true;

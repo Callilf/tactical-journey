@@ -51,7 +51,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 	private Room room;
 	private Entity player;
 	private MoveComponent playerMoveCompo;
-	private InventoryComponent playerIventoryCompo;
+	private InventoryComponent playerInventoryCompo;
 	
 	public ItemSystem(Entity player, Room r, Stage stage) {
 		this.priority = 12;
@@ -73,8 +73,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		if (playerMoveCompo == null) {
 			playerMoveCompo = Mappers.moveComponent.get(player);
 		}
-		if (playerIventoryCompo == null) {
-			playerIventoryCompo = Mappers.inventoryComponent.get(player);
+		if (playerInventoryCompo == null) {
+			playerInventoryCompo = Mappers.inventoryComponent.get(player);
 		}
 		
 		// Item instant pickup
@@ -106,7 +106,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			// The player just arrived on a tile, check if there is an item
 			checkItemPresenceToDisplayPopin();
 			
-		} else if (playerIventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
+		} else if (playerInventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
 			
 			// If the user click on the player and there is an item on this tile, display the popin
 			if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -123,16 +123,16 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 			}
 			
-		} else if (playerIventoryCompo.getCurrentAction() != null && playerIventoryCompo.getCurrentAction() != InventoryActionEnum.DISPLAY_POPIN) {
+		} else if (playerInventoryCompo.getCurrentAction() != null && playerInventoryCompo.getCurrentAction() != InventoryActionEnum.DISPLAY_POPIN) {
 			
-			final Entity currentItem = playerIventoryCompo.getCurrentItem();
+			final Entity currentItem = playerInventoryCompo.getCurrentItem();
 			final ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
 			
 			
 			
 			
 			// An action has been done in the inventory
-			switch(playerIventoryCompo.getCurrentAction()) {
+			switch(playerInventoryCompo.getCurrentAction()) {
 			
 			case BUY:
 				WalletComponent walletComponent = Mappers.walletComponent.get(player);
@@ -152,7 +152,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
 					room.entityFactory.createDialogPopin("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), 3f);
 					
-					playerIventoryCompo.setCurrentAction(null);
+					playerInventoryCompo.setCurrentAction(null);
 					break;
 				}
 			
@@ -180,7 +180,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					//TODO warn message
 				}
 				
-				playerIventoryCompo.setCurrentAction(null);
+				playerInventoryCompo.setCurrentAction(null);
 				
 				
 				break;
@@ -202,7 +202,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					//TODO warn message
 				}
 				
-				playerIventoryCompo.setCurrentAction(null);
+				playerInventoryCompo.setCurrentAction(null);
 				
 				
 				break;
@@ -214,7 +214,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				if (used) {
 					System.out.println("Used " + itemComponent.getItemType().getLabel());
 
-					playerIventoryCompo.remove(currentItem);
+					playerInventoryCompo.remove(currentItem);
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
@@ -224,7 +224,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					//TODO warn message
 				}
 				
-				playerIventoryCompo.setCurrentAction(null);
+				playerInventoryCompo.setCurrentAction(null);
 				
 				
 				break;
@@ -250,7 +250,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				room.setNextState(RoomState.ITEM_DROP_ANIM);
 				
 								
-				playerIventoryCompo.setCurrentAction(null);
+				playerInventoryCompo.setCurrentAction(null);
 				
 				break;
 				
@@ -264,7 +264,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 				room.setNextState(RoomState.PLAYER_TARGETING_START);
 				
-				playerIventoryCompo.setCurrentAction(null);
+				playerInventoryCompo.setCurrentAction(null);
 				break;
 				
 				default :
@@ -308,7 +308,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		
 		
 		//TODO move into shop system
-		if (playerIventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
+		if (playerInventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
 			
 			// If the user click on the player and there is an item on this tile, display the popin
 			if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -373,12 +373,22 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		List<Entity> itemEntityOnTile = TileUtil.getItemEntityOnTile(gridPositionComponent.coord(), room);
 		if (!itemEntityOnTile.isEmpty()) {
 			for (Entity item : itemEntityOnTile) {
-				// Open the popin for the first item that is not a "instant pickup" item
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
-				if (!itemComponent.getItemType().isInstantPickUp()) {
-					playerIventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
-					break;
+
+				if (room.hasEnemies()) {
+					// Open the popin for the first item that is not a "instant pickup" item
+					if (!itemComponent.getItemType().isInstantPickUp()) {
+						playerInventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
+					}
+				} else {
+					// Auto pickup in cleared rooms
+					if (playerInventoryCompo.canStore(itemComponent)) {
+						playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, item);
+					} else {
+						playerInventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
+					}
 				}
+				break;
 			}
 		}
 	}

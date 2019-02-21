@@ -120,6 +120,12 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		if (itemComponent.getItemDescription() != null) {
 			itemDesc.setText(itemComponent.getItemDescription());
 		}
+		
+		// Add text if no space in inventory
+		if (!isShop && !playerInventoryCompo.canStore(itemComponent)) {
+			itemDesc.setText(itemDesc.getText() + "\n\n" 
+					+ "[ORANGE]Your inventory is full!");
+		}
 
 		if (isShop) {
 			pickupItemBtn.setText("Buy");
@@ -128,6 +134,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 
 			useItemBtn.setVisible(false);
 		} else {
+			
+			pickupItemBtn.setDisabled(!playerInventoryCompo.canStore(itemComponent));
 			pickupItemBtn.setText("Take");
 
 			if (itemComponent.getItemActionLabel() != null) {

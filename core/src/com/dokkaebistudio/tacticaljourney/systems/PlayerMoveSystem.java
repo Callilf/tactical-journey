@@ -112,7 +112,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			// Build the movable tiles list
 			tileSearchService.buildMoveTilesSet(moverEntity, room);
 			if (attackCompo != null)
-				attackTileSearchService.buildAttackTilesSet(moverEntity, room,true, false);
+				attackTileSearchService.buildAttackTilesSet(moverEntity, room,true, true);
 
 			if (!room.hasEnemies() || isLooting) {
 				moveCompo.hideMovableTiles();

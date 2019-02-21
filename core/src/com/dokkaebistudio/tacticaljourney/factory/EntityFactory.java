@@ -32,8 +32,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
@@ -41,11 +39,8 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
-import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -73,6 +68,9 @@ public final class EntityFactory {
 	
 	/** The creep factory. */
 	public CreepFactory creepFactory;
+	
+	/** The lootable factory. */
+	public LootableFactory lootableFactory;
 
 	
 	
@@ -89,6 +87,7 @@ public final class EntityFactory {
 		this.enemyFactory = new EnemyFactory(e, this);
 		this.itemFactory = new ItemFactory(e, this);
 		this.creepFactory = new CreepFactory(e, this);
+		this.lootableFactory = new LootableFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 	}
 
@@ -682,76 +681,6 @@ public final class EntityFactory {
 		}
 		
 		return skillEntity;
-	}
-	
-	/**
-	 * Create a lootable skeleton.
-	 * @param room the room
-	 * @param pos the tile position
-	 * @return the lootable bones
-	 */
-	public Entity createRemainsBones(Room room, Vector2 pos) {
-		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
-
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	remainsEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.remains_bones);
-    	spriteCompo.setSprite(s);
-    	remainsEntity.add(spriteCompo);
-
-    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
-    	lootComponent.setType(LootableEnum.BONES);
-    	lootComponent.setItemPool(new OldBonesItemPool());
-    	lootComponent.setMaxNumberOfItems(2);
-    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	remainsEntity.add(lootComponent);
-    	
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	remainsEntity.add(destructibleCompo);
-    	
-		engine.addEntity(remainsEntity);
-
-    	return remainsEntity;
-	}
-	
-	/**
-	 * Create a lootable satchel
-	 * @param room the room
-	 * @param pos the tile position
-	 * @return the lootable satchel
-	 */
-	public Entity createRemainsSatchel(Room room, Vector2 pos) {
-		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
-
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	remainsEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(LootableEnum.SATCHEL.getClosedTexture());
-    	spriteCompo.setSprite(s);
-    	remainsEntity.add(spriteCompo);
-    	
-    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
-    	lootComponent.setType(LootableEnum.SATCHEL);
-    	lootComponent.setItemPool(new AdventurersSatchelItemPool());
-    	lootComponent.setMaxNumberOfItems(3);
-    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	remainsEntity.add(lootComponent);
-    	
-    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-    	remainsEntity.add(destructibleCompo);
-
-		engine.addEntity(remainsEntity);
-
-    	return remainsEntity;
 	}
 	
 	

@@ -222,11 +222,11 @@ public class RoomGenerator {
 			if (isLoot) {
 				Vector2 lootPos = spawnPositions.get(0);
 				if (lootRandom <= 5) {
-					Entity bones = entityFactory.createRemainsBones(room, lootPos);
+					Entity bones = entityFactory.lootableFactory.createRemainsBones(room, lootPos);
 					fillLootable(bones);
 					
 				} else {
-					Entity satchel = entityFactory.createRemainsSatchel(room, lootPos);
+					Entity satchel = entityFactory.lootableFactory.createRemainsSatchel(room, lootPos);
 					fillLootable(satchel);
 
 				}

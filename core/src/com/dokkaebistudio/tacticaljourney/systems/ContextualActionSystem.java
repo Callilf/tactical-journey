@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -103,7 +104,15 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Entity lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
 		if (lootable != null) {
-			playerCompo.setLootRequested(lootable);
+			
+			if (room.hasEnemies()) {
+				playerCompo.setLootRequested(lootable);
+			} else {
+				LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
+				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
+			}
 		}
 	}
 

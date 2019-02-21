@@ -40,7 +40,7 @@ public class MapRenderer implements Renderer {
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
 	
 	// TEST to debug floor layout
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	private Stage stage;
 	

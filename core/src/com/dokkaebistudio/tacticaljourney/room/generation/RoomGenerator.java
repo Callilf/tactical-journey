@@ -69,7 +69,8 @@ public class RoomGenerator {
         groom.setTileEntities(new Entity[GRID_W][GameScreen.GRID_H]);
         groom.setTileTypes(new TileEnum[GRID_W][GRID_H]);
         groom.setPossibleSpawns(new ArrayList<PoolableVector2>());
-		
+        groom.setPossibleDestr(new ArrayList<PoolableVector2>());
+
 		//Choose the room pattern
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		FileHandle roomPattern = chooseRoomPattern(currentRoom);
@@ -91,7 +92,13 @@ public class RoomGenerator {
             String[] line = scanner.nextLine().split(";");
             for (int x=0 ; x < GameScreen.GRID_W ; x++) {
             	String tileValStr = line[x];
-            	RoomGenerationTileEnum tileVal = tileValStr.equals("") ? RoomGenerationTileEnum.GROUND : RoomGenerationTileEnum.valueOf(line[x]);
+            	RoomGenerationTileEnum tileVal = null;
+				try {
+					tileVal = tileValStr.equals("") ? RoomGenerationTileEnum.GROUND : RoomGenerationTileEnum.valueOf(line[x]);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	
 				PoolableVector2 tempPos = PoolableVector2.create(x,realY);
 
@@ -123,6 +130,11 @@ public class RoomGenerator {
             		
             	case SPAWN:
             		groom.getPossibleSpawns().add(PoolableVector2.create(tempPos));
+            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+            		break;
+            		
+            	case DESTR:
+            		groom.getPossibleDestr().add(PoolableVector2.create(tempPos));
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
             		break;
             		
@@ -161,32 +173,31 @@ public class RoomGenerator {
 	private FileHandle chooseRoomPattern(Room currentRoom) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
-		FileHandle roomPattern = null;
 		switch(currentRoom.type) {
 		case START_FLOOR_ROOM:
-			roomPattern = Gdx.files.internal("data/rooms/room1.csv");
+			currentRoom.roomPattern = "data/rooms/room1.csv";
 
 			break;
 		case COMMON_ENEMY_ROOM:
 		case END_FLOOR_ROOM:
 			
 			int roomNb = 1 + random.nextInt(11);
-			roomPattern = Gdx.files.internal("data/rooms/room" + roomNb + ".csv");
+			currentRoom.roomPattern = "data/rooms/room" + roomNb + ".csv";
 
 			break;
 		case SHOP_ROOM:
-			roomPattern = Gdx.files.internal("data/rooms/shopRoom.csv");
+			currentRoom.roomPattern = "data/rooms/shopRoom.csv";
 
 		case STATUE_ROOM:
 			int statueRoomNb = 1 + random.nextInt(2);
-			roomPattern = Gdx.files.internal("data/rooms/statueRoom" + statueRoomNb + ".csv");
+			currentRoom.roomPattern = "data/rooms/statueRoom" + statueRoomNb + ".csv";
 
 			break;
 			default:
-				roomPattern = Gdx.files.internal("data/rooms/room1.csv");
+				currentRoom.roomPattern = "data/rooms/room1.csv";
 		}
 
-		return roomPattern;
+		return Gdx.files.internal(currentRoom.roomPattern);
 	}
 	
 	
@@ -336,10 +347,12 @@ public class RoomGenerator {
 			default:
 			break;
 		}
+		
+		placeDestructibles(room, random, generatedRoom.getPossibleDestr());
 	
 	
 		// Release poolable vector2
-		generatedRoom.releasePossibleSpawns();
+		generatedRoom.releaseSpawns();
 	}
 
 
@@ -375,6 +388,36 @@ public class RoomGenerator {
 			}
 			
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
+			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
+		}
+	}
+	
+	/**
+	 * Scan all destructible possible locations and randomly place a destructible on it
+	 * @param room the room
+	 * @param random the random
+	 * @param destrPositions the possible spawn positions for destructibles
+	 */
+	private void placeDestructibles(Room room, RandomXS128 random, List<PoolableVector2> destrPositions) {
+		if (destrPositions == null || destrPositions.isEmpty()) return;
+
+		Iterator<PoolableVector2> iterator = destrPositions.iterator();
+		while (iterator.hasNext()) {
+			PoolableVector2 location = iterator.next();
+			
+			int nextInt = random.nextInt(10);
+			Entity destructible = null;
+			
+			if (nextInt <= 3) {
+				destructible = entityFactory.createVase(room, location);
+			} else if (nextInt <= 4) {
+				//TODO place big vase
+				continue;
+			} else {
+				continue;
+			}
+	
+			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(destructible);
 			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 		}
 	}

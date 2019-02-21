@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -114,11 +115,13 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
 						// Drop reward
 						dropItem(entity, lootRewardComponent);
-						
+
 						// Do not remove the entity from the room yet, remove it once the drop animation if over
+						//TODO change this
 						entity.remove(EnemyComponent.class);
 						entity.remove(HealthComponent.class);
 						entity.remove(SpriteComponent.class);
+						entity.remove(SolidComponent.class);
 					} else {
 					
 						room.removeEnemy(entity);

@@ -24,10 +24,17 @@ public class GeneratedRoom {
 	/** The list of possible enemy/item spawns. */
 	private List<PoolableVector2> possibleSpawns;
 	
+	/** The list of possible destructible spawns. */
+	private List<PoolableVector2> possibleDestr;
 	
-	public void releasePossibleSpawns() {
+	public void releaseSpawns() {
 		if (possibleSpawns != null) {
 			for (PoolableVector2 coord : possibleSpawns) {
+				coord.free();
+			}
+		}
+		if (possibleDestr != null) {
+			for (PoolableVector2 coord : possibleDestr) {
 				coord.free();
 			}
 		}
@@ -58,6 +65,16 @@ public class GeneratedRoom {
 
 	public void setPossibleSpawns(List<PoolableVector2> enemySpawns) {
 		this.possibleSpawns = enemySpawns;
+	}
+
+
+	public List<PoolableVector2> getPossibleDestr() {
+		return possibleDestr;
+	}
+
+
+	public void setPossibleDestr(List<PoolableVector2> possibleDestr) {
+		this.possibleDestr = possibleDestr;
 	}
 	
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -28,6 +29,9 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
@@ -39,6 +43,7 @@ import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -748,6 +753,47 @@ public final class EntityFactory {
 
     	return remainsEntity;
 	}
+	
+	
+	/**
+	 * Create a vase.
+	 * @param pos the position
+	 * @param moveSpeed the speed
+	 * @return the enemy entity
+	 */
+	public Entity createVase(Room room, Vector2 pos) {
+		Entity vaseEntity = engine.createEntity();
+		vaseEntity.flags = EntityFlagEnum.DESTRUCTIBLE_VASE.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);
+		spriteCompo.setSprite(new Sprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big));
+		vaseEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(vaseEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.DESTRUCTIBLE;
+		vaseEntity.add(gridPosition);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		vaseEntity.add(solidComponent);
+		
+		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
+		destructibleComponent.setDestroyedTexture(nextInt == 0 ? Assets.destructible_vase_destroyed : Assets.destructible_vase_big_destroyed);
+		vaseEntity.add(destructibleComponent);
+				
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new VaseItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 1);
+		lootRewardCompo.setDropRate(dropRate);
+		vaseEntity.add(lootRewardCompo);
+				
+		engine.addEntity(vaseEntity);
+		return vaseEntity;
+	}
+	
 	
 	/**
 	 * Create a dialog popin

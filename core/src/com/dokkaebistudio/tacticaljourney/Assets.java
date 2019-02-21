@@ -141,6 +141,16 @@ public class Assets {
 	public static AtlasRegion creep_web;
 	public static AtlasRegion creep_fire;
 	public static Array<Sprite> creep_fire_animation;
+	
+	
+	//***************
+	// Destructibles
+	
+	public static AtlasRegion destructible_vase;
+	public static AtlasRegion destructible_vase_destroyed;
+	public static AtlasRegion destructible_vase_big;
+	public static AtlasRegion destructible_vase_big_destroyed;
+
 
 
 	//********
@@ -316,6 +326,15 @@ public class Assets {
 		creep_web = Assets.getTexture("creep-web");
 		creep_fire = Assets.getTexture("creep-fire");
 		creep_fire_animation = Assets.getAnimation("creep-fire");
+
+		
+		//***************
+		// Destructibles
+		
+		destructible_vase = Assets.getTexture("vase");
+		destructible_vase_destroyed = Assets.getTexture("vase_destroyed");
+		destructible_vase_big = Assets.getTexture("vase_big");
+		destructible_vase_big_destroyed = Assets.getTexture("vase_big_destroyed");
 
 
 		//********

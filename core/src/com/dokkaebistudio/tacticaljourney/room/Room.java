@@ -43,6 +43,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class Room extends EntitySystem {
 	public Floor floor;
 	
+	public String roomPattern;
 	public RoomType type;
 	
 	private RoomState state;
@@ -310,8 +311,8 @@ public class Room extends EntitySystem {
 	 * @param enemy the enemy to remove
 	 */
 	public void removeEnemy(Entity enemy) {
-		this.removeEntity(enemy);
 		this.enemies.remove(enemy);
+		this.removeEntity(enemy);
 	}
 	
 	/**

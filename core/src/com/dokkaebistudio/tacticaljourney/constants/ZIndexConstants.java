@@ -35,6 +35,10 @@ public final class ZIndexConstants {
 	// PLAYER
 	public static final int PLAYER = 15;
 	public static final int STATUE = 16;
+	
+	// DESTRUCTIBLE
+	public static final int DESTRUCTIBLE = 17;
+
 
 	
 	// VISUAL EFFECTS

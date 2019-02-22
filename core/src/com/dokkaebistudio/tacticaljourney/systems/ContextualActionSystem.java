@@ -26,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -106,12 +107,12 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (lootable != null) {
 			
 			if (room.hasEnemies()) {
-				playerCompo.setLootRequested(lootable);
+				playerCompo.requestAction(PlayerActionEnum.LOOT, lootable);
 			} else {
 				LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
-				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
+				inventoryComponent.setLootableEntity(lootable);
 			}
 		}
 	}
@@ -124,7 +125,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Entity exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
 		if (exit != null) {
-			playerCompo.setExitRequested(exit);
+			playerCompo.requestAction(PlayerActionEnum.EXIT, exit);
 		}
 	}
 

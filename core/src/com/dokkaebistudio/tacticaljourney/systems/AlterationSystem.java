@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -86,7 +87,7 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 						if (distanceFromStatue == 1) {
 							//Close from statue, display popin
 							if (statueComponent.isHasBlessing()) {
-								Mappers.playerComponent.get(player).setPrayRequested(statue);
+								Mappers.playerComponent.get(player).requestAction(PlayerActionEnum.PRAY, statue);
 							} else {
 								room.entityFactory.createDialogPopin("The statue looks cold.", playerPosition.getWorldPos(), 2f);
 							}

@@ -27,68 +27,31 @@ public class PlayerComponent implements Component {
 	
 
 	
+	// Action
 	
-	
-	// LOOT action
+	public enum PlayerActionEnum {
+		NONE,
+		LOOT,
+		EXIT,
+		PRAY,
+		RESTOCK_SHOP;
+	}
 	
 	/** Whether the popin to ask for loot should open or not. */
-	private boolean lootRequested;
-	private Entity lootableEntity;
+	private PlayerActionEnum requestedAction = PlayerActionEnum.NONE;
+	private Entity actionEntity;
 
-	public void setLootRequested(Entity lootableEntity) {
-		this.lootRequested = true;
-		this.lootableEntity = lootableEntity;
-	}
-
-	public void clearLootRequested() {
-		this.lootRequested = false;
-	}
-	
-	
-	// EXIT action
-	
-	/** Whether the popin to ask for exit should open or not. */
-	private boolean exitRequested;
-	private Entity exitEntity;
-	
-	public void setExitRequested(Entity exitEntity) {
-		this.exitRequested = true;
-		this.exitEntity = exitEntity;
+	public void requestAction(PlayerActionEnum action, Entity actionEntity) {
+		this.requestedAction = action;
+		this.actionEntity = actionEntity;
 	}
 
-	public void clearExitRequested() {
-		this.exitRequested = false;
-	}
-	
-	
-	// PRAY action
-	
-	private boolean prayRequested;
-	private Entity statueEntity;
-	
-	public void setPrayRequested(Entity statueEntity) {
-		this.prayRequested = true;
-		this.statueEntity = statueEntity;
-	}
-
-	public void clearPrayRequested() {
-		this.prayRequested = false;
+	public void clearRequestedAction() {
+		this.requestedAction = PlayerActionEnum.NONE;
 	}
 
 	
-	// REFILL Shop action
 	
-	private boolean refillRequested;
-	private Entity shopKeeperEntity;
-	
-	public void setRefillRequested(Entity shopKeeperEntity) {
-		this.refillRequested = true;
-		this.shopKeeperEntity = shopKeeperEntity;
-	}
-
-	public void clearRefillRequested() {
-		this.refillRequested = false;
-	}
 	
 	
 	//**************************
@@ -136,22 +99,6 @@ public class PlayerComponent implements Component {
 		this.profilePopinDisplayed = profilePopinDisplayed;
 	}
 
-	public boolean isLootRequested() {
-		return lootRequested;
-	}
-
-	public Entity getLootableEntity() {
-		return lootableEntity;
-	}
-
-	public boolean isExitRequested() {
-		return exitRequested;
-	}
-
-
-	public Entity getExitEntity() {
-		return exitEntity;
-	}
 
 	public Entity getSkillThrow() {
 		return skillThrow;
@@ -161,35 +108,15 @@ public class PlayerComponent implements Component {
 		this.skillThrow = skillThrow;
 	}
 
-	public boolean isPrayRequested() {
-		return prayRequested;
+	public PlayerActionEnum getRequestedAction() {
+		return requestedAction;
 	}
 
-	public void setPrayRequested(boolean prayRequested) {
-		this.prayRequested = prayRequested;
+	public Entity getActionEntity() {
+		return actionEntity;
 	}
 
-	public Entity getStatueEntity() {
-		return statueEntity;
-	}
-
-	public void setStatueEntity(Entity statueEntity) {
-		this.statueEntity = statueEntity;
-	}
-
-	public boolean isRefillRequested() {
-		return refillRequested;
-	}
-
-	public void setRefillRequested(boolean refillRequested) {
-		this.refillRequested = refillRequested;
-	}
-
-	public Entity getShopKeeperEntity() {
-		return shopKeeperEntity;
-	}
-
-	public void setShopKeeperEntity(Entity shopKeeperEntity) {
-		this.shopKeeperEntity = shopKeeperEntity;
+	public void setActionEntity(Entity actionEntity) {
+		this.actionEntity = actionEntity;
 	}
 }

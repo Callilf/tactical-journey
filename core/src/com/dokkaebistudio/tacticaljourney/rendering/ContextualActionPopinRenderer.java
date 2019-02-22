@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
@@ -75,7 +76,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(player);
     	}
     	
-    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested() || playerCompo.isPrayRequested() || playerCompo.isRefillRequested()) {
+    	if (playerCompo.getRequestedAction() != PlayerActionEnum.NONE) {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
@@ -91,10 +92,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		
 			this.stage.addActor(mainPopin);
 			
-			playerCompo.clearLootRequested();
-			playerCompo.clearExitRequested();
-			playerCompo.clearPrayRequested();
-			playerCompo.clearRefillRequested();
+			playerCompo.clearRequestedAction();
     	}
     	
     	if (room.getState() == RoomState.CONTEXTUAL_ACTION_POPIN) {
@@ -110,10 +108,12 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	}
 
 	private void updateContentForAction() {
-		
-		if (playerCompo.isLootRequested()) {
-			Entity lootableEntity = playerCompo.getLootableEntity();
-			LootableComponent lootableComponent = Mappers.lootableComponent.get(lootableEntity);
+		Entity actionEntity = playerCompo.getActionEntity();
+
+		switch (playerCompo.getRequestedAction()) {
+			
+		case LOOT:
+			LootableComponent lootableComponent = Mappers.lootableComponent.get(actionEntity);
 			// Update the content
 			title.setText(lootableComponent.getType().getLabel());
 			desc.setText(lootableComponent.getType().getDescription());
@@ -126,40 +126,43 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			yesBtn.setText("Open");
 	
 			// Update the Use item listener
-			updateLootListener(lootableEntity, lootableComponent);
+			updateLootListener(actionEntity, lootableComponent);
+			break;
 			
-		} else if (playerCompo.isExitRequested()) {
-			Entity exitEntity = playerCompo.getExitEntity();
-			ExitComponent exitComponent = Mappers.exitComponent.get(exitEntity);
+			
+		case EXIT:
+			ExitComponent exitComponent = Mappers.exitComponent.get(actionEntity);
 			title.setText("Doorway to lower floor");
 			desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
 					+ "\nSadness galore.");
 			yesBtn.setText("Wait for months");
 			if (yesBtnListener != null) {
 				yesBtn.removeListener(yesBtnListener);
-			}
+			}			
+			break;
 			
-		} else if (playerCompo.isPrayRequested()) {
-			Entity statueEntity = playerCompo.getStatueEntity();
-			StatueComponent statueComponent = Mappers.statueComponent.get(statueEntity);
+		case PRAY:
+			StatueComponent statueComponent = Mappers.statueComponent.get(actionEntity);
 			
 			title.setText("Statue of the godess");
 			desc.setText("A statue of the godess of Telure. You can feel a benevolent energy enveloping you when you get close enough. You can probably channel this energy is you pray for a while.");
 			yesBtn.setText("Pray");
 			
-			updatePrayListener(statueEntity, statueComponent);
-
-		} else if (playerCompo.isRefillRequested()) {
-			Entity shopKeeper = playerCompo.getShopKeeperEntity();
-			ShopKeeperComponent shopKeeperCompo = Mappers.shopKeeperComponent.get(shopKeeper);
+			updatePrayListener(actionEntity, statueComponent);
+			break;
+			
+		case RESTOCK_SHOP:
+			ShopKeeperComponent shopKeeperCompo = Mappers.shopKeeperComponent.get(actionEntity);
 			
 			title.setText("Restock of the shop");
 			desc.setText("I have many things of interest in my stuff, I can restock the shop for [GOLD]" + shopKeeperCompo.getRestockPrice() + "gold coins [WHITE]if you want to.");
 			yesBtn.setText("Restock");
 			
 			updateRestockListener(shopKeeperCompo);
-		}
 
+			break;
+			default:
+		}
 	}
     
 
@@ -215,7 +218,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);
 	}
 
-	private void updateLootListener(final Entity item, final LootableComponent lootableComponent) {
+	private void updateLootListener(final Entity lootable, final LootableComponent lootableComponent) {
 		if (yesBtnListener != null) {
 			yesBtn.removeListener(yesBtnListener);
 		}
@@ -224,7 +227,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
-				inventoryComponent.setLootableEntity(playerCompo.getLootableEntity());
+				inventoryComponent.setLootableEntity(lootable);
 				closePopin();
 			}
 		};

@@ -1,7 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -35,7 +36,8 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private int numberOfItems = 3;
 	
 	/** The items the shop keeper is selling. */
-	private List<Entity> soldItems = new ArrayList<>();
+//	private List<Entity> soldItems = new ArrayList<>();
+	private Map<Entity, Vector2> soldItems = new HashMap<>();
 	
 	/** The number of times the shop was restocked. */
 	private int restockNumber = 0;
@@ -80,12 +82,21 @@ public class ShopKeeperComponent implements Component, Poolable {
 		List<PooledItemDescriptor> itemTypes = ShopItemPool.getItemTypes(numberOfItemsToGenerate);
 
 		for (int i=0 ; i<numberOfItemsToGenerate ; i++) {
+			Vector2 position = null;
+			for (Vector2 pos : itemPositions) {
+				if (!soldItems.containsValue(pos)) {
+					position = pos;
+					break;
+				}
+			}
+			
+			
 			PooledItemDescriptor itemType = itemTypes.get(i);
-			Entity item = room.entityFactory.itemFactory.createItem(itemType.getType(), room, itemPositions[i]);
+			Entity item = room.entityFactory.itemFactory.createItem(itemType.getType(), room, position);
 			ItemComponent ic = Mappers.itemComponent.get(item);
 			ic.setPrice(itemType.getPrice());
 
-			soldItems.add(item);
+			soldItems.put(item, position);
 		}
 	}
 	
@@ -98,6 +109,27 @@ public class ShopKeeperComponent implements Component, Poolable {
 		stock(room);
 		this.restockNumber ++;
 	}
+	
+	/**
+	 * Whether the shop contains the given item.
+	 * @param item the item to check
+	 * @return true if the shop has this item
+	 */
+	public boolean containItem(Entity item) {
+		return soldItems.containsKey(item);
+	}
+	
+	/**
+	 * Remove the given item from the shop's items for sale
+	 * @param item the item to remove
+	 */
+	public void removeItem(Entity item) {
+		soldItems.remove(item);
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -120,14 +152,6 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.talking = talking;
 	}
 
-	public List<Entity> getSoldItems() {
-		return soldItems;
-	}
-
-	public void setSoldItems(List<Entity> soldItems) {
-		this.soldItems = soldItems;
-	}
-
 	public int getRestockNumber() {
 		return restockNumber;
 	}
@@ -136,13 +160,9 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.restockNumber = restockNumber;
 	}
 
-
-
 	public int getNumberOfItems() {
 		return numberOfItems;
 	}
-
-
 
 	public void setNumberOfItems(int numberOfItems) {
 		this.numberOfItems = numberOfItems;

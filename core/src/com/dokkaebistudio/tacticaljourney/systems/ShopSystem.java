@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -85,7 +86,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 					if (distanceFromStatue == 1 && shopKeeperComponent.hasSoldItems()) {
 						// Refill popin
 						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-						playerComponent.setRefillRequested(shopKeeper);
+						playerComponent.requestAction(PlayerActionEnum.RESTOCK_SHOP, shopKeeper);
 						
 					} else {
 						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
@@ -132,7 +133,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 			ShopKeeperComponent shopKeeperComponent = null;
 			for (Entity sk : shopKeepers) {
 				ShopKeeperComponent currentShopKeeperComponent = Mappers.shopKeeperComponent.get(sk);
-				if (currentShopKeeperComponent.getSoldItems().contains(currentItem)) {
+				if (currentShopKeeperComponent.containItem(currentItem)) {
 					shopKeeper = sk;
 					shopKeeperComponent = currentShopKeeperComponent;
 					break;
@@ -146,7 +147,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				room.removeEntity(itemComponent.getPriceDisplayer());
 				itemComponent.setPrice(null);
 				// Remove the item from the shop keeper's inventory
-				shopKeeperComponent.getSoldItems().remove(currentItem);
+				shopKeeperComponent.removeItem(currentItem);
 				// Launch the pickup animation
 				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, currentItem);
 				

@@ -82,6 +82,17 @@ public final class ItemFactory {
 	}
 	
 	
+	
+	
+	/**
+	 * Create an item of the given type at the given position in the given room.
+	 * @param type the type of item
+	 * @return the item created
+	 */
+	public Entity createItem(ItemEnum type) {
+		return createItem(type, null, null);
+	}
+	
 	/**
 	 * Create an item of the given type at the given position in the given room.
 	 * @param type the type of item

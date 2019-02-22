@@ -128,7 +128,7 @@ public final class PlayerFactory {
 		
 		// Money carrier
 		WalletComponent walletCompo = engine.createComponent(WalletComponent.class);
-		walletCompo.setAmount(0);
+		walletCompo.setAmount(50);
 		playerEntity.add(walletCompo);
 		
 		// Solid compo
@@ -205,6 +205,7 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
+		shopKeeperCompo.stock(room, entityFactory);
 		shopKeeperEntity.add(shopKeeperCompo);
 		
 		room.addNeutral(shopKeeperEntity);

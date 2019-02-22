@@ -265,7 +265,7 @@ public class ItemComponent implements Component, Poolable {
 	public void setPrice(Integer price) {
 		this.price = price;
 		
-		if (this.getQuantity() != null) {
+		if (price != null && this.getQuantity() != null) {
 			this.price = this.price * this.getQuantity();
 		}
 		
@@ -277,6 +277,7 @@ public class ItemComponent implements Component, Poolable {
 				priceDisplayer = null;
 			}
 		}
+		
 	}
 
 	public Entity getPriceDisplayer() {

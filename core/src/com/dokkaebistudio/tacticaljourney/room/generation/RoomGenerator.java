@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
@@ -187,6 +188,7 @@ public class RoomGenerator {
 			break;
 		case SHOP_ROOM:
 			currentRoom.roomPattern = "data/rooms/shopRoom.csv";
+			break;
 
 		case STATUE_ROOM:
 			int statueRoomNb = 1 + random.nextInt(2);
@@ -240,38 +242,22 @@ public class RoomGenerator {
 			break;
 			
 		case SHOP_ROOM:
-			entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
-
-			List<PooledItemDescriptor> itemTypes = ShopItemPool.getItemTypes(3);
-			PooledItemDescriptor itemType1 = itemTypes.get(0);
+			Entity shopKeeper = entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
 			
 			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity firstItem = entityFactory.itemFactory.createItem(itemType1.getType(), room, new Vector2(9, 5));
-			ItemComponent ic = Mappers.itemComponent.get(firstItem);
-			ic.setPrice(itemType1.getPrice());
 			
-			PooledItemDescriptor itemType2 = itemTypes.get(1);
 			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity secondItem = entityFactory.itemFactory.createItem(itemType2.getType(), room, new Vector2(11, 5));
-			ic = Mappers.itemComponent.get(secondItem);
-			ic.setPrice(itemType2.getPrice());
 
-			PooledItemDescriptor itemType3 = itemTypes.get(2);
 			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
 					ZIndexConstants.WALL, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			Entity thirdItem = entityFactory.itemFactory.createItem(itemType3.getType(), room, new Vector2(13, 5));
-			ic = Mappers.itemComponent.get(thirdItem);
-			ic.setPrice(itemType3.getPrice());
-
-			
 			
 			break;
 			

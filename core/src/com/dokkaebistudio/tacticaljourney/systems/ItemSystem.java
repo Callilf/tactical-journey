@@ -28,7 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -37,12 +36,10 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ItemSystem extends EntitySystem implements RoomSystem {	
@@ -133,28 +130,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			
 			// An action has been done in the inventory
 			switch(playerInventoryCompo.getCurrentAction()) {
-			
-			case BUY:
-				WalletComponent walletComponent = Mappers.walletComponent.get(player);
-				Entity shopKeeper = getShopKeeper(room);
-				
-				if (walletComponent.hasEnoughMoney(itemComponent.getPrice())) {
-					walletComponent.use(itemComponent.getPrice());
-					room.removeEntity(itemComponent.getPriceDisplayer());
-					itemComponent.setPrice(null);
-					
-					// TEST
-					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.entityFactory.createDialogPopin("Good choice !", gridPositionComponent.getWorldPos(), 3f);
-				} else {
-					
-					// TEST
-					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.entityFactory.createDialogPopin("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), 3f);
-					
-					playerInventoryCompo.setCurrentAction(null);
-					break;
-				}
 			
 			case PICKUP:
 				
@@ -302,33 +277,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		}
 		room.getRemovedItems().clear();
 	
-	
-		
-		
-		
-		
-		//TODO move into shop system
-		if (playerInventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
-			
-			// If the user click on the player and there is an item on this tile, display the popin
-			if (InputSingleton.getInstance().leftClickJustReleased) {
-				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-				int x = (int) touchPoint.x;
-				int y = (int) touchPoint.y;
-				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity shopKeeper = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
-				tempPos.free();
-				
-			if (shopKeeper != null) {
-					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.entityFactory.createDialogPopin("Hey!\nI'm the shop keeper.", gridPositionComponent.getWorldPos(), 3f);
-				}
-				
-			}
-			
-		} 
-
-		
 	}
 
 
@@ -382,7 +330,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					}
 				} else {
 					// Auto pickup in cleared rooms
-					if (playerInventoryCompo.canStore(itemComponent)) {
+					if (itemComponent.getPrice() == null && playerInventoryCompo.canStore(itemComponent)) {
 						playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, item);
 					} else {
 						playerInventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
@@ -393,18 +341,5 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
-	/**
-	 * Returns the shop keeper in the given room. Null if no shop keeper.
-	 * @param room the room
-	 * @return the shop keeper entity
-	 */
-	private Entity getShopKeeper(Room room) {
-		for (Entity e : room.getNeutrals()) {
-			if (Mappers.shopKeeperComponent.has(e)) {
-				return e;
-			}
-		}
-		return null;
-	}
 
 }

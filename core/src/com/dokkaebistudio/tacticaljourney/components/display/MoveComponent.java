@@ -41,6 +41,13 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	private List<Entity> wayPoints = new ArrayList<>();
 	
 	
+	// Fast attack
+	/** The attack tile that was selected and created the selected tile.
+	 * If the user click on it again, the player will move to the selectedTile and attack. */
+	private Entity selectedAttackTile;
+	private Entity fastAttackTarget;
+	
+	
 	public boolean arrivedOnTile;
 	public Vector2 currentMoveDestinationTilePos;
 	public Vector2 currentMoveDestinationPos;
@@ -56,6 +63,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public void reset() {
 		clearMovableTiles();
 		this.room = null;
+		this.selectedAttackTile = null;
 	}
 	
 	
@@ -118,7 +126,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = null;
-
+		
 		for (Entity e : wayPoints) {
 			room.removeEntity(e);
 		}
@@ -177,6 +185,22 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(this.selectedTile);
 			spriteComponent.hide = true;
 		}
+	}
+
+	public Entity getSelectedAttackTile() {
+		return selectedAttackTile;
+	}
+
+	public void setSelectedAttackTile(Entity selectedAttackTile) {
+		this.selectedAttackTile = selectedAttackTile;
+	}
+
+	public Entity getFastAttackTarget() {
+		return fastAttackTarget;
+	}
+
+	public void setFastAttackTarget(Entity fastAttackTarget) {
+		this.fastAttackTarget = fastAttackTarget;
 	}
 	
 	

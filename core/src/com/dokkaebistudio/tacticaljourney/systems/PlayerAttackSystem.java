@@ -74,8 +74,25 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     	switch(room.getState()) {
 	        
     	case PLAYER_MOVE_TILES_DISPLAYED:
-    		//When clicking on an attack tile, display the wheel
-            selectAttackTile(attackCompo, attackerCurrentPos, false);
+    		
+    		if (moveCompo.getFastAttackTarget() != null) {
+    			// Handle fast attack ! (i.e. the user clicked on an attackable tile from a distance)
+				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(moveCompo.getFastAttackTarget());
+
+    			for (Entity attackTile : attackCompo.attackableTiles) {
+    				GridPositionComponent attackTilePos = Mappers.gridPositionComponent.get(attackTile);
+    				if (targetPos.coord().equals(attackTilePos.coord())) {
+    	    			selectAttackTile(attackCompo, false, attackTile, targetPos);
+    	    			break;
+    				}
+    			}
+    			
+    			moveCompo.setSelectedAttackTile(null);
+    			moveCompo.setFastAttackTarget(null);
+    		} else {
+	    		// Normal attack mode, check if the user clicked on an attackable tile at attackable range
+	            checkIfAttackTileSelected(attackCompo, attackerCurrentPos, false);
+    		}
             break;
 
     	case PLAYER_TARGETING_START:
@@ -123,7 +140,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	    		
 	    		//Display the wheel is a tile is clicked
 	    		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-	    		selectAttackTile(skillAttackCompo, attackerCurrentPos, skillComponent.getType().isThrowing());
+	    		checkIfAttackTileSelected(skillAttackCompo, attackerCurrentPos, skillComponent.getType().isThrowing());
 	    		
     		}
     		
@@ -341,7 +358,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	 * @param attackerCurrentPos the position of the attacker
 	 * @param isThrow whether it is a throw or an attack
 	 */
-	private void selectAttackTile(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos, boolean isThrow) {
+	private void checkIfAttackTileSelected(AttackComponent attackCompo, GridPositionComponent attackerCurrentPos, boolean isThrow) {
 		if (InputSingleton.getInstance().leftClickJustReleased) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 			int x = (int) touchPoint.x;
@@ -351,29 +368,32 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 				SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 				if (spriteComponent.containsPoint(x, y)) {
 					
-					//TODO : is this needed ? Distance was already checked when computing the attackable tiles
 					//Check the distance of this attackableTile
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
 					int distanceBetweenTiles = TileUtil.getDistanceBetweenTiles(attackerCurrentPos.coord(), gridPositionComponent.coord());
 					
 					if (distanceBetweenTiles >= attackCompo.getRangeMin() && distanceBetweenTiles <= attackCompo.getRangeMax()) {
-						attackCompo.setTargetedTile(tile);
-						
-						//Attack is possible !
-						if (isThrow) {
-							room.setNextState(RoomState.PLAYER_THROWING);
-						} else {
-			    			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord(), room);
-							attackCompo.setTarget(target);
-							wheel.setAttackComponent(attackCompo);
-							room.setNextState(RoomState.PLAYER_WHEEL_START);
-						}
-
+						selectAttackTile(attackCompo, isThrow, tile, gridPositionComponent);
 		    			break;
 					}
 				}
 			}
 			
+		}
+	}
+
+	private void selectAttackTile(AttackComponent attackCompo, boolean isThrow, Entity targetedTile,
+			GridPositionComponent targetedTileGridPositionComponent) {
+		attackCompo.setTargetedTile(targetedTile);
+		
+		//Attack is possible !
+		if (isThrow) {
+			room.setNextState(RoomState.PLAYER_THROWING);
+		} else {
+			Entity target = TileUtil.getAttackableEntityOnTile(targetedTileGridPositionComponent.coord(), room);
+			attackCompo.setTarget(target);
+			wheel.setAttackComponent(attackCompo);
+			room.setNextState(RoomState.PLAYER_WHEEL_START);
 		}
 	}
 	

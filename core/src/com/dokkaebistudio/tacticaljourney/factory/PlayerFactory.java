@@ -205,7 +205,7 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
-		shopKeeperCompo.stock(room, entityFactory);
+		shopKeeperCompo.stock(room);
 		shopKeeperEntity.add(shopKeeperCompo);
 		
 		room.addNeutral(shopKeeperEntity);

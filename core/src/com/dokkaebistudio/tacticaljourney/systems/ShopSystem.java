@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -64,8 +65,8 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 		if (playerInventoryCompo == null) {
 			playerInventoryCompo = Mappers.inventoryComponent.get(player);
 		}
-
-		fillShopKeepers();
+		
+		// Handle clicks on a shopkeeper
 		if (playerInventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
 			
 			// If the user click on the shop keeper, either display a dialog or display refill popin
@@ -75,17 +76,48 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				int y = (int) touchPoint.y;
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
 				Entity shopKeeper = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
-				tempPos.free();
 				
 				if (shopKeeper != null) {
-					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.entityFactory.createDialogPopin("Hey!\nI'm the shop keeper.", gridPositionComponent.getWorldPos(), 3f);
+					ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
+					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
+					
+					int distanceFromStatue = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), tempPos);
+					if (distanceFromStatue == 1 && shopKeeperComponent.hasSoldItems()) {
+						// Refill popin
+						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+						playerComponent.setRefillRequested(shopKeeper);
+						
+					} else {
+						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
+						room.entityFactory.createDialogPopin("Hey!\nI'm the shop keeper.", gridPositionComponent.getWorldPos(), 3f);
+					}
 				}
 				
+				tempPos.free();
 			}
 			
 		} 
 		
+
+		fillShopKeepers();
+
+		// Shop restock
+		for (Entity shopKeeper : shopKeepers) {
+			ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
+			if (shopKeeperComponent.isRequestRestock()) {
+				WalletComponent walletComponent = Mappers.walletComponent.get(player);
+				
+				if (walletComponent.hasEnoughMoney(shopKeeperComponent.getRestockPrice())) {
+					walletComponent.use(shopKeeperComponent.getRestockPrice());
+					shopKeeperComponent.restock(room);
+				} else {
+					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
+					room.entityFactory.createDialogPopin("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), 3f);
+				}
+				
+				shopKeeperComponent.setRequestRestock(false);
+			}
+		}
 		
 		
 		// Buy item
@@ -97,19 +129,25 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 			
 			// Find the correct shop keeper
 			Entity shopKeeper = null;
+			ShopKeeperComponent shopKeeperComponent = null;
 			for (Entity sk : shopKeepers) {
-				ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(sk);
-				if (shopKeeperComponent.getSoldItems().contains(currentItem)) {
+				ShopKeeperComponent currentShopKeeperComponent = Mappers.shopKeeperComponent.get(sk);
+				if (currentShopKeeperComponent.getSoldItems().contains(currentItem)) {
 					shopKeeper = sk;
+					shopKeeperComponent = currentShopKeeperComponent;
 					break;
 				}
 			}
 			
 			if (walletComponent.hasEnoughMoney(itemComponent.getPrice())) {
+				// Pay
 				walletComponent.use(itemComponent.getPrice());
+				// Hide the price displayer
 				room.removeEntity(itemComponent.getPriceDisplayer());
 				itemComponent.setPrice(null);
-				
+				// Remove the item from the shop keeper's inventory
+				shopKeeperComponent.getSoldItems().remove(currentItem);
+				// Launch the pickup animation
 				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, currentItem);
 				
 				// TEST

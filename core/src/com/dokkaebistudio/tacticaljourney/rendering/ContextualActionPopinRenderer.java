@@ -15,14 +15,14 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
+import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -75,7 +75,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(player);
     	}
     	
-    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested() || playerCompo.isPrayRequested()) {
+    	if (playerCompo.isLootRequested() || playerCompo.isExitRequested() || playerCompo.isPrayRequested() || playerCompo.isRefillRequested()) {
     		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
@@ -94,6 +94,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			playerCompo.clearLootRequested();
 			playerCompo.clearExitRequested();
 			playerCompo.clearPrayRequested();
+			playerCompo.clearRefillRequested();
     	}
     	
     	if (room.getState() == RoomState.CONTEXTUAL_ACTION_POPIN) {
@@ -148,7 +149,17 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			
 			updatePrayListener(statueEntity, statueComponent);
 
+		} else if (playerCompo.isRefillRequested()) {
+			Entity shopKeeper = playerCompo.getShopKeeperEntity();
+			ShopKeeperComponent shopKeeperCompo = Mappers.shopKeeperComponent.get(shopKeeper);
+			
+			title.setText("Restock of the shop");
+			desc.setText("I have many things of interest in my stuff, I can restock the shop for [GOLD]" + shopKeeperCompo.getRestockPrice() + "gold coins [WHITE]if you want to.");
+			yesBtn.setText("Restock");
+			
+			updateRestockListener(shopKeeperCompo);
 		}
+
 	}
     
 
@@ -230,6 +241,20 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, statueComponent.getBlessingToGive());				
 				statueComponent.setHasBlessing(false);
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
+	private void updateRestockListener(final ShopKeeperComponent shopKeeperCompo) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				shopKeeperCompo.setRequestRestock(true);
 				closePopin();
 			}
 		};

@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -41,29 +40,48 @@ public class ShopKeeperComponent implements Component, Poolable {
 	/** The number of times the shop was restocked. */
 	private int restockNumber = 0;
 	
+	/** Whether the shop has been requested for a restock. */
+	private boolean requestRestock = false;
+	
 	
 	@Override
 	public void reset() {
 		this.hostile = false;	
 		this.restockNumber = 0;
 		this.numberOfItems = 3;
+		this.requestRestock = false;
 	}
 	
+	/**
+	 * Whether the shop keeper has already sold at least one item.
+	 * @return true if at leasto ne item sold, false otherwise.
+	 */
+	public boolean hasSoldItems() {
+		return soldItems.size() < numberOfItems;
+	}
 	
+	/**
+	 * Get the price for restocking the shop.
+	 * The price increases after each restock.
+	 * @return the price for restocking
+	 */
+	public int getRestockPrice() {
+		return 10 * (restockNumber + 1);
+	}
 	
 	/**
 	 * Fill the shop's items.
 	 * @param numberOfItems the number of items
 	 * @param entityFactory the entity factory
 	 */
-	public void stock(Room room, EntityFactory entityFactory) {
+	public void stock(Room room) {
 		int numberOfItemsToGenerate = numberOfItems - soldItems.size();
 		
 		List<PooledItemDescriptor> itemTypes = ShopItemPool.getItemTypes(numberOfItemsToGenerate);
 
 		for (int i=0 ; i<numberOfItemsToGenerate ; i++) {
 			PooledItemDescriptor itemType = itemTypes.get(i);
-			Entity item = entityFactory.itemFactory.createItem(itemType.getType(), room, itemPositions[i]);
+			Entity item = room.entityFactory.itemFactory.createItem(itemType.getType(), room, itemPositions[i]);
 			ItemComponent ic = Mappers.itemComponent.get(item);
 			ic.setPrice(itemType.getPrice());
 
@@ -76,8 +94,8 @@ public class ShopKeeperComponent implements Component, Poolable {
 	 * @param numberOfItems the number of items the shop sells
 	 * @param entityFactory the entity factory
 	 */
-	public void restock(Room room, EntityFactory entityFactory) {
-		stock(room, entityFactory);
+	public void restock(Room room) {
+		stock(room);
 		this.restockNumber ++;
 	}
 	
@@ -128,6 +146,14 @@ public class ShopKeeperComponent implements Component, Poolable {
 
 	public void setNumberOfItems(int numberOfItems) {
 		this.numberOfItems = numberOfItems;
+	}
+
+	public boolean isRequestRestock() {
+		return requestRestock;
+	}
+
+	public void setRequestRestock(boolean requestRestock) {
+		this.requestRestock = requestRestock;
 	}
 
 	

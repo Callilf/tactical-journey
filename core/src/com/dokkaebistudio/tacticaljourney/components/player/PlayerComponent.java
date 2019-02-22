@@ -74,6 +74,21 @@ public class PlayerComponent implements Component {
 	public void clearPrayRequested() {
 		this.prayRequested = false;
 	}
+
+	
+	// REFILL Shop action
+	
+	private boolean refillRequested;
+	private Entity shopKeeperEntity;
+	
+	public void setRefillRequested(Entity shopKeeperEntity) {
+		this.refillRequested = true;
+		this.shopKeeperEntity = shopKeeperEntity;
+	}
+
+	public void clearRefillRequested() {
+		this.refillRequested = false;
+	}
 	
 	
 	//**************************
@@ -160,5 +175,21 @@ public class PlayerComponent implements Component {
 
 	public void setStatueEntity(Entity statueEntity) {
 		this.statueEntity = statueEntity;
+	}
+
+	public boolean isRefillRequested() {
+		return refillRequested;
+	}
+
+	public void setRefillRequested(boolean refillRequested) {
+		this.refillRequested = refillRequested;
+	}
+
+	public Entity getShopKeeperEntity() {
+		return shopKeeperEntity;
+	}
+
+	public void setShopKeeperEntity(Entity shopKeeperEntity) {
+		this.shopKeeperEntity = shopKeeperEntity;
 	}
 }

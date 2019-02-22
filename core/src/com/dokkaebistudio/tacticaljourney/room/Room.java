@@ -33,6 +33,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
@@ -73,6 +74,12 @@ public class Room extends EntitySystem {
 
 	/** The neutral entities of this room. */
 	private List<Entity> neutrals;
+	
+	/** The current dialog displayed. */
+	private Entity dialog;
+	private Dialog requestedDialog;
+	
+	
 	
 	/** The entities to remove during this frame. */
 	private List<Entity> entitiesToRemove;
@@ -434,7 +441,7 @@ public class Room extends EntitySystem {
 	
 	/**
 	 * Remove a neutral from the room.
-	 * @param neutral the neutral to add
+	 * @param neutral the neutral to remove
 	 */
 	public void removeNeutral(Entity neutral) {
 		this.removeEntity(neutral);
@@ -447,6 +454,37 @@ public class Room extends EntitySystem {
 
 	public void setNeutrals(List<Entity> neutrals) {
 		this.neutrals = neutrals;
+	}
+
+	public Entity getDialog() {
+		return dialog;
+	}
+
+	public void setDialog(Entity dialog) {
+		this.addEntity(dialog);
+		this.dialog = dialog;
+	}
+	
+	public void removeDialog() {
+		this.removeEntity(this.dialog);
+		this.dialog = null;
+	}
+
+	public Dialog getRequestedDialog() {
+		return requestedDialog;
+	}
+
+	public void setRequestedDialog(String text, Vector2 pos) {
+		Dialog d = new Dialog(text, pos, false);
+		this.requestedDialog = d;
+	}
+	public void setRequestedDialog(String text, Vector2 pos, boolean force) {
+		Dialog d = new Dialog(text, pos, force);
+		this.requestedDialog = d;
+	}
+
+	public void clearRequestedDialog() {
+		this.requestedDialog = null;
 	}
 	
 }

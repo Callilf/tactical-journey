@@ -17,8 +17,7 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,6 +26,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
+import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableLabel;
 import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTable;
 import com.dokkaebistudio.tacticaljourney.rendering.poolables.PoolableTextureRegionDrawable;
@@ -34,14 +34,14 @@ import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class DialogSystem extends IteratingSystem implements RoomSystem {	
+public class DialogSystem extends EntitySystem implements RoomSystem {	
 	
 	private Room room;
 	private Stage stage;
 	
+	private Entity currentDialog;
 	
 	public DialogSystem(Room r, Stage s) {
-        super(Family.all(DialogComponent.class).get());
 		this.priority = 13;
 
 		this.room = r;
@@ -56,10 +56,33 @@ public class DialogSystem extends IteratingSystem implements RoomSystem {
     
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
+	public void update(float deltaTime) {
+    	currentDialog = room.getDialog();
     	
-    	DialogComponent dialogComponent = Mappers.dialogComponent.get(entity);
+    	// Dialog creation
+    	if (room.getRequestedDialog() != null) {
+    		Dialog requestedDialog = room.getRequestedDialog();
+    		if (requestedDialog.isForceDisplay() || currentDialog == null) {
+    			
+    			if (currentDialog != null) {
+    				// Remove the existing dialog
+    		    	DialogComponent dialogComponent = Mappers.dialogComponent.get(currentDialog);
+        			dialogComponent.getTable().remove();
+        			room.removeDialog();
+    			}
+    			
+				currentDialog = room.entityFactory.createDialogPopin(requestedDialog.getText(),
+						requestedDialog.getPos(), requestedDialog.getDuration(), room);
+    		}
+    		room.clearRequestedDialog();
+    	}
     	
+    	if (currentDialog == null) return;
+    	
+    	
+    	
+    	// Dialog duration management
+    	DialogComponent dialogComponent = Mappers.dialogComponent.get(currentDialog);
     	if (dialogComponent.getCurrentDuration() == 0) {
     		
     		Table t = PoolableTable.create();
@@ -89,12 +112,11 @@ public class DialogSystem extends IteratingSystem implements RoomSystem {
     		
     		if (dialogComponent.getCurrentDuration() >= dialogComponent.getDuration()) {
     			dialogComponent.getTable().remove();
-    			room.engine.removeEntity(entity);
+    			room.removeDialog();
     			return;
     		}
     		
     	}
-    	
 		dialogComponent.setCurrentDuration(dialogComponent.getCurrentDuration() + deltaTime);
 
     }

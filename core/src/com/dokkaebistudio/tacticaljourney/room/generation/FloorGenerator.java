@@ -147,6 +147,7 @@ public class FloorGenerator {
 		} else {
 			return RoomType.COMMON_ENEMY_ROOM;
 		}
+//		return RoomType.SHOP_ROOM;
 	}
 
 

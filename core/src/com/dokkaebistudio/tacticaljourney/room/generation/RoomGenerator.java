@@ -350,6 +350,8 @@ public class RoomGenerator {
 	 * @param canBeEmpty true if there can be no enemies
 	 */
 	private void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
+		if (spawnPositions.size() == 0) return;
+
 		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 5));
 		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
 		

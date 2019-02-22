@@ -1,14 +1,18 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -46,12 +50,20 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private boolean requestRestock = false;
 	
 	
+	// Speeches 
+	private boolean firstSpeech = true;
+	
+	/** The different sentences the shop keeper can say when being talked to. */
+	private List<String> mainSpeeches = new ArrayList<>();
+	
+	
 	@Override
 	public void reset() {
 		this.hostile = false;	
 		this.restockNumber = 0;
 		this.numberOfItems = 3;
 		this.requestRestock = false;
+		this.firstSpeech = true;
 	}
 	
 	/**
@@ -131,6 +143,24 @@ public class ShopKeeperComponent implements Component, Poolable {
 	
 	
 	
+	
+	//**************************
+	// Speech related methods
+	
+	public void addSpeech(String s) {
+		mainSpeeches.add(s);
+	}
+	
+	public String getSpeech() {
+		if (firstSpeech) {
+			firstSpeech = false;
+			return mainSpeeches.get(0);
+		} else {
+			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
+			int nextInt = unseededRandom.nextInt(mainSpeeches.size());
+			return mainSpeeches.get(nextInt);
+		}
+	}
 	
 	
 	//*********************************

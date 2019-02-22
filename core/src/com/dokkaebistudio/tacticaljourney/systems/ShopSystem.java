@@ -90,7 +90,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 						
 					} else {
 						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-						room.entityFactory.createDialogPopin("Hey!\nI'm the shop keeper.", gridPositionComponent.getWorldPos(), 3f);
+						room.setRequestedDialog(shopKeeperComponent.getSpeech(), gridPositionComponent.getWorldPos());
 					}
 				}
 				
@@ -113,7 +113,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 					shopKeeperComponent.restock(room);
 				} else {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.entityFactory.createDialogPopin("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), 3f);
+					room.setRequestedDialog("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), true);
 				}
 				
 				shopKeeperComponent.setRequestRestock(false);
@@ -153,12 +153,12 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				
 				// TEST
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-				room.entityFactory.createDialogPopin("Good choice !", gridPositionComponent.getWorldPos(), 3f);
+				room.setRequestedDialog("Good choice !", gridPositionComponent.getWorldPos(), true);
 			} else {
 				
 				// TEST
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-				room.entityFactory.createDialogPopin("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), 3f);
+				room.setRequestedDialog("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), true);
 				playerInventoryCompo.setCurrentAction(null);
 			}
 			

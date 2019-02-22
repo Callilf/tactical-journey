@@ -729,7 +729,7 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the dialog
 	 */
-	public Entity createDialogPopin(String text, Vector2 pos, float duration) {
+	public Entity createDialogPopin(String text, Vector2 pos, float duration, Room room) {
 		Entity dialogEntity = engine.createEntity();
 		dialogEntity.flags = EntityFlagEnum.DIALOG_POPIN.getFlag();
 
@@ -739,7 +739,7 @@ public final class EntityFactory {
 		dialogCompo.setText(text);
 		dialogEntity.add(dialogCompo);
 		
-		engine.addEntity(dialogEntity);
+		room.setDialog(dialogEntity);
 
     	return dialogEntity;
 	}

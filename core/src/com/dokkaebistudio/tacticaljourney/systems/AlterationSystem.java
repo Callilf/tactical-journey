@@ -89,18 +89,19 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 							if (statueComponent.isHasBlessing()) {
 								Mappers.playerComponent.get(player).requestAction(PlayerActionEnum.PRAY, statue);
 							} else {
-								room.entityFactory.createDialogPopin("The statue looks cold.", playerPosition.getWorldPos(), 2f);
+								room.setRequestedDialog("The statue looks cold.", playerPosition.getWorldPos());
+//								room.entityFactory.createDialogPopin("The statue looks cold.", playerPosition.getWorldPos(), 2f, room);
 							}
 						} else {
 							if (statueComponent.isHasBlessing()) {
-								room.entityFactory.createDialogPopin("A benevolent aura emanates from this statue.", playerPosition.getWorldPos(), 2f);
+								room.setRequestedDialog("A benevolent aura emanates from this statue.", playerPosition.getWorldPos());
 							} else {
-								room.entityFactory.createDialogPopin("The statue looks cold.", playerPosition.getWorldPos(), 2f);
+								room.setRequestedDialog("The statue looks cold.", playerPosition.getWorldPos());
 							}
 						}
 						
 					} else {
-						room.entityFactory.createDialogPopin("That was probably a bad idea.", playerPosition.getWorldPos(), 2f);
+						room.setRequestedDialog("That was probably a bad idea.", playerPosition.getWorldPos());
 					}
 					
 				}

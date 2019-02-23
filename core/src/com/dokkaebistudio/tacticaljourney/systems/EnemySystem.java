@@ -46,6 +46,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	/** The attack tile search service. */
 	private AttackTileSearchService attackTileSearchService;
 	
+	public static Entity enemyCurrentyPlaying;
+	
 	
 	private int enemyFinishedCount = 0;
 
@@ -96,6 +98,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     			enemyFinishedCount ++;
     			continue;
     		}
+    		
+    		enemyCurrentyPlaying = enemyEntity;
     		
         	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
         	final AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
@@ -245,6 +249,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 		if (allEnemiesOfCurrentRoom.size() == 0 || enemyFinishedCount == allEnemiesOfCurrentRoom.size()) {
 			enemyFinishedCount = 0;
 			turnFinished.clear();
+			enemyCurrentyPlaying = null;
 			room.turnManager.endEnemyTurn();
 		}
     	

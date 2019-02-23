@@ -39,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
+import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
@@ -320,6 +321,11 @@ public class Room extends EntitySystem {
 	public void removeEnemy(Entity enemy) {
 		this.enemies.remove(enemy);
 		this.removeEntity(enemy);
+		
+		if (state.isEnemyTurn() && EnemySystem.enemyCurrentyPlaying == enemy) {
+			// Finish this enemy turn since it's dead
+			this.setNextState(RoomState.ENEMY_TURN_INIT);
+		}
 	}
 	
 	/**

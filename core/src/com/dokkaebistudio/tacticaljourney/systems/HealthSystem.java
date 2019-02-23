@@ -204,7 +204,9 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 			ParentEntityComponent parentEntityComponent = Mappers.parentEntityComponent.get(attacker);
 			if (parentEntityComponent != null) {
 				Entity parent = parentEntityComponent.getParent();
-				result = getExperienceComponent(parent);
+				if (parent != null) {
+					result = getExperienceComponent(parent);
+				}
 			}
 		}
 		

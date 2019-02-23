@@ -21,14 +21,23 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public class CreepComponent implements Component, Poolable {
 	
+	public enum CreepReleasedTurnEnum {
+		PLAYER,
+		ENEMY;
+	}
+	
 	/** The type of creep. */
 	private Creep type;
 
-	/** The number of turns this creep stays on the floor. 0 means infinite. */
+	/** The number of turns this creep stays on the floor. 0 means infinite. 
+	 * The turn where the creep is generated counts as the first turn ! */
 	private int duration;
 	
 	/** The current number of turns this creep has been here. */
 	private int currentDuration;
+	
+	/** Whether the creep was released during the player's turn or the enemy turn. */
+	private CreepReleasedTurnEnum releasedTurn;
 	
 	
 	
@@ -114,6 +123,7 @@ public class CreepComponent implements Component, Poolable {
 	public void reset() {
 		this.setCurrentDuration(0);
 		this.removeCreepImage = null;
+		this.releasedTurn = null;
 	}
 	
 	
@@ -170,6 +180,16 @@ public class CreepComponent implements Component, Poolable {
 
 	public void setCurrentDuration(int currentDuration) {
 		this.currentDuration = currentDuration;
+	}
+
+
+	public CreepReleasedTurnEnum getReleasedTurn() {
+		return releasedTurn;
+	}
+
+
+	public void setReleasedTurn(CreepReleasedTurnEnum releasedTurn) {
+		this.releasedTurn = releasedTurn;
 	}
 
 }

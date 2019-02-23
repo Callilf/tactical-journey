@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -85,6 +86,8 @@ public final class CreepFactory {
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepWeb());
 		creepCompo.setDuration(3);
+		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
+		creepCompo.setReleasedTurn(turnReleased);
 		creepEntity.add(creepCompo);
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
@@ -124,7 +127,9 @@ public final class CreepFactory {
     			
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepFire());
-		creepCompo.setDuration(2);
+		creepCompo.setDuration(3);
+		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
+		creepCompo.setReleasedTurn(turnReleased);
 		creepEntity.add(creepCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);

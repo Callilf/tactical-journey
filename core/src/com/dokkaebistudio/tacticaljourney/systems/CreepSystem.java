@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -56,24 +57,9 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
     		for (Entity creep : creeps) {
     			Mappers.creepComponent.get(creep).onStop(player, creep, room);
     		}
-    	}
-    	
-    	
-    	
-    	if (room.getState() == RoomState.ENEMY_END_TURN) {
     		
-    		// Handle enemy stop positions
-    		for (Entity enemy : room.getEnemies()) {
-	    		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemy);
-	    		Set<Entity> creeps = TileUtil.getEntitiesWithComponentOnTile(enemyPos.coord(), CreepComponent.class, room);
-	    		for (Entity creep : creeps) {
-	    			Mappers.creepComponent.get(creep).onStop(enemy, creep, room);
-	    		}
-    		}
-
-    		
-        	// Handle creep duration
-        	fillEntitiesOfCurrentRoom();
+        	// onEndTurn for enemy creep
+        	fillCreepsOfCurrentRoom(CreepReleasedTurnEnum.PLAYER);
         	for (Entity creep : allCreepsOfCurrentRoom) {
 		    	CreepComponent creepComponent = Mappers.creepComponent.get(creep);
 		    	
@@ -82,24 +68,59 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
         	
         	
         	// Handle creep duration
-        	fillEntitiesOfCurrentRoom();
+        	fillCreepsOfCurrentRoom(CreepReleasedTurnEnum.PLAYER);
+        	for (Entity creep : allCreepsOfCurrentRoom) {
+		    	handleDuration(creep);
+        	}
+    	}
+    	
+    	
+    	
+    	if (room.getState() == RoomState.ENEMY_END_TURN) {
+    		// Handle enemy stop positions
+    		for (Entity enemy : room.getEnemies()) {
+	    		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemy);
+	    		Set<Entity> creeps = TileUtil.getEntitiesWithComponentOnTile(enemyPos.coord(), CreepComponent.class, room);
+	    		for (Entity creep : creeps) {
+	    			Mappers.creepComponent.get(creep).onStop(enemy, creep, room);
+	    		}
+    		}
+    		
+        	// onEndTurn for enemy creep
+        	fillCreepsOfCurrentRoom(CreepReleasedTurnEnum.ENEMY);
         	for (Entity creep : allCreepsOfCurrentRoom) {
 		    	CreepComponent creepComponent = Mappers.creepComponent.get(creep);
-
-	    		creepComponent.setCurrentDuration(creepComponent.getCurrentDuration() + 1);
-		    	if (creepComponent.getDuration() > 0 && creepComponent.getCurrentDuration() >= creepComponent.getDuration()) {
-		    		// Duration reached, remove the creep
-		    		Image removeCreepImage = creepComponent.getRemoveCreepImage(creep);
-		    		fxStage.addActor(removeCreepImage);
-		    		
-		    		creepComponent.onDisappear(creep, room);
-		    		
-		    		room.removeEntity(creep);
-		    	}
+		    	
+		    	creepComponent.onEndTurn(creep, room);
         	}
         	
+        	// Handle creep duration
+        	fillCreepsOfCurrentRoom(CreepReleasedTurnEnum.ENEMY);
+        	for (Entity creep : allCreepsOfCurrentRoom) {
+		    	handleDuration(creep);
+        	}
     	}
     }
+
+    /**
+     * Handle creep duration. Add one to the number of turns the creep has been alive and make it
+     * disappear if it has reached its max turns.
+     * @param creep the creep
+     */
+	private void handleDuration(Entity creep) {
+		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
+
+		creepComponent.setCurrentDuration(creepComponent.getCurrentDuration() + 1);
+		if (creepComponent.getDuration() > 0 && creepComponent.getCurrentDuration() >= creepComponent.getDuration()) {
+			// Duration reached, remove the creep
+			Image removeCreepImage = creepComponent.getRemoveCreepImage(creep);
+			fxStage.addActor(removeCreepImage);
+			
+			creepComponent.onDisappear(creep, room);
+			
+			room.removeEntity(creep);
+		}
+	}
 
     
     
@@ -107,10 +128,15 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
     //*****************
     // Utils methods
 
-	private void fillEntitiesOfCurrentRoom() {
+	private void fillCreepsOfCurrentRoom(CreepReleasedTurnEnum releasedTurn) {
 		allCreepsOfCurrentRoom.clear();
 		for (Entity e : room.getAllEntities()) {
-			if (Mappers.creepComponent.has(e)) allCreepsOfCurrentRoom.add(e);
+			if (Mappers.creepComponent.has(e)) {
+				CreepComponent creepComponent = Mappers.creepComponent.get(e);
+				if (creepComponent.getReleasedTurn() == releasedTurn) {
+					allCreepsOfCurrentRoom.add(e);
+				}
+			}
 		}
 	}
 

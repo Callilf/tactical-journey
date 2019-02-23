@@ -48,5 +48,9 @@ public class GameTimeSingleton {
 		this.elapsedTime = elapsedTime;
 	}
 	
+	
+	public static void dispose() {
+		instance = null;
+	}
 
 }

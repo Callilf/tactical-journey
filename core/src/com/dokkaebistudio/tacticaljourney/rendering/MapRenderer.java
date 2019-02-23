@@ -67,7 +67,7 @@ public class MapRenderer implements Renderer {
 	
 	private Image player;
 	
-	private static boolean needRefresh = true;
+	private static boolean needRefresh;
 	
 	
 	
@@ -87,6 +87,7 @@ public class MapRenderer implements Renderer {
 	 * @param f the floor which map we want to render
 	 */
 	public MapRenderer(Stage s, Floor f) {
+		System.out.println("Init map renderer.");
 		this.stage = s;
 		this.mapDisplayed = true;
 		
@@ -202,8 +203,8 @@ public class MapRenderer implements Renderer {
 //		scrollPane.addAction(Actions.alpha(0.5f));
 
 		stage.addActor(scrollPane);
-		
-		
+
+		needRefresh = true;
 		enterFloor(f);
 	}
 	
@@ -213,6 +214,8 @@ public class MapRenderer implements Renderer {
 	 */
 	public void render(float deltaTime) {
 		if (needRefresh) {
+			System.out.println("Refresg");
+
 			buildRooms();
 			scrollToCurrentRoom();
 			needRefresh = false;
@@ -347,6 +350,7 @@ public class MapRenderer implements Renderer {
 
 
 	private void createTableLayout(int xRange, int yRange) {
+		System.out.println("Create table layout");
 		roomsTable.clear();
 		for (int y=0 ; y<yRange; y++) {
 			if (y != 0) {

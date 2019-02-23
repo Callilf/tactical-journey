@@ -54,14 +54,15 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
     public EnemySystem(Room r, Stage stage) {
 		this.priority = 9;
+		
+		EnemySystem.enemyCurrentyPlaying = null;
 
-        room = r;
-        fxStage = stage;
-        movementHandler = new MovementHandler(r.engine);
-        allEnemiesOfCurrentRoom = new ArrayList<>();
+		this.room = r;
+        this.fxStage = stage;
+        this.movementHandler = new MovementHandler(r.engine);
+        this.allEnemiesOfCurrentRoom = new ArrayList<>();
 		this.tileSearchService = new TileSearchService();
 		this.attackTileSearchService = new AttackTileSearchService();
-
     }
 
     @Override

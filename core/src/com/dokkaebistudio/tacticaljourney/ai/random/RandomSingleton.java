@@ -80,6 +80,9 @@ public class RandomSingleton {
 	}
 	
 	
+	public static void dispose() {
+		instance = null;
+	}
 	
 	
 	// Get and Set

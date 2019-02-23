@@ -26,6 +26,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.ai.btree.branch.RandomSequence;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
@@ -320,8 +321,12 @@ public class GameScreen extends ScreenAdapter {
 		Assets.getInstance().dispose();
 		stage.dispose();
 		hudStage.dispose();
+		fxStage.dispose();
+		miniMapStage.dispose();
 		game.dispose();
 		PopinService.dispose();
+		GameTimeSingleton.dispose();
+		RandomSingleton.dispose();
 		super.dispose();
 	}
 }

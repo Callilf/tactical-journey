@@ -34,6 +34,11 @@ public class InventoryComponent implements Component, Poolable {
 	/** The slots of the inventory. Each slot contains a list of entities to
 	 * handle stacked items. */
 	private List<List<Entity>> slots = new ArrayList<>();
+	
+	/** Whether the player has the key to the next floor. */
+	private boolean hasKey = false;
+	private boolean keyJustChanged = false;
+
 
 	
 	private int firstEmptySlot = 0;
@@ -69,6 +74,7 @@ public class InventoryComponent implements Component, Poolable {
 		player = null;
 //		slots = new Entity[16];
 		firstEmptySlot = 0;
+		hasKey = false;
 		displayMode = InventoryDisplayModeEnum.NONE;
 		for (List<Entity> l : slots) {
 			l.clear();
@@ -333,6 +339,20 @@ public class InventoryComponent implements Component, Poolable {
 		this.interrupted = interrupted;
 	}
 
+	public boolean hasKey() {
+		return hasKey;
+	}
 
+	public void getKey() {
+		this.hasKey = true;
+		this.keyJustChanged = true;
+	}
+	public void removeKey() {
+		this.hasKey = false;
+		this.keyJustChanged = true;
+	}
 
+	public boolean hasKeyChanged() {
+		return this.keyJustChanged;
+	}
 }

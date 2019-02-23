@@ -102,6 +102,11 @@ public class Assets {
 	public static AtlasRegion btn_skill_bomb;
 	public static AtlasRegion btn_skill_bomb_pushed;
 	public static AtlasRegion btn_skill_bomb_checked;
+
+	public static AtlasRegion key_slot;
+	public static AtlasRegion key;
+	
+	
 	
 //	public static AtlasRegion wheel_arc;
 	public static AtlasRegion wheel_arrow;
@@ -124,6 +129,8 @@ public class Assets {
 	public static AtlasRegion map_room_shop;
 	public static AtlasRegion map_room_statue;
 	public static AtlasRegion map_room_statue_enemy;
+	public static AtlasRegion map_room_key;
+	public static AtlasRegion map_room_key_enemy;
 	public static AtlasRegion map_room_start;
 	public static AtlasRegion map_room_unknown;
 
@@ -291,6 +298,9 @@ public class Assets {
 		btn_skill_bomb_pushed = Assets.getTexture("btn-skill-bomb-pushed");
 		btn_skill_bomb_checked = Assets.getTexture("btn-skill-bomb-checked");
 		
+		key_slot = Assets.getTexture("hud_key_slot");
+		key = Assets.getTexture("key");
+		
 //		wheel_arc = Assets.getTexture("wheel-arc");
 		wheel_arrow = Assets.getTexture("wheel-arrow");
 		
@@ -309,6 +319,8 @@ public class Assets {
 		map_room_shop = Assets.getTexture("map_room_shop");
 		map_room_statue = Assets.getTexture("map_room_statue");
 		map_room_statue_enemy = Assets.getTexture("map_room_statue_enemy");
+		map_room_key = Assets.getTexture("map_room_key");
+		map_room_key_enemy = Assets.getTexture("map_room_key_enemy");
 		map_room_start = Assets.getTexture("map_room_start");
 		map_room_unknown = Assets.getTexture("map_room_unknown");
 		

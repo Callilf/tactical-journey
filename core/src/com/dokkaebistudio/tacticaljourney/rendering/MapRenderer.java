@@ -87,7 +87,6 @@ public class MapRenderer implements Renderer {
 	 * @param f the floor which map we want to render
 	 */
 	public MapRenderer(Stage s, Floor f) {
-		System.out.println("Init map renderer.");
 		this.stage = s;
 		this.mapDisplayed = true;
 		
@@ -214,8 +213,6 @@ public class MapRenderer implements Renderer {
 	 */
 	public void render(float deltaTime) {
 		if (needRefresh) {
-			System.out.println("Refresg");
-
 			buildRooms();
 			scrollToCurrentRoom();
 			needRefresh = false;
@@ -304,6 +301,13 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue));
 						}
 						break;
+					case KEY_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key_enemy));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key));
+						}
+						break;
 					}
 
 					if (floor.getActiveRoom() == room) {
@@ -350,7 +354,6 @@ public class MapRenderer implements Renderer {
 
 
 	private void createTableLayout(int xRange, int yRange) {
-		System.out.println("Create table layout");
 		roomsTable.clear();
 		for (int y=0 ; y<yRange; y++) {
 			if (y != 0) {

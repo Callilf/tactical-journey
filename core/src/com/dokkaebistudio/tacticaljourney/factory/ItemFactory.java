@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
+import com.dokkaebistudio.tacticaljourney.items.ItemKey;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
@@ -150,6 +151,20 @@ public final class ItemFactory {
 	public Entity createItemMoney(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney());
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create the key to next floor.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemKey(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.key, new ItemKey());
+		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
+		
+		item.remove(DestructibleComponent.class);
+		
 		return item;
 	}
 	

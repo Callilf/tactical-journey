@@ -22,9 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent.TileEnum;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
@@ -34,7 +32,6 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -180,6 +177,7 @@ public class RoomGenerator {
 
 			break;
 		case COMMON_ENEMY_ROOM:
+		case KEY_ROOM:
 		case END_FLOOR_ROOM:
 			
 			int roomNb = 1 + random.nextInt(11);
@@ -241,6 +239,19 @@ public class RoomGenerator {
 			
 			break;
 			
+		case KEY_ROOM:
+			if (possibleSpawns.size() == 0) return;
+			
+			// Retrieve the spawn points and shuffle them
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
+			
+			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(0));
+			spawnPositions.remove(0);
+			
+			placeEnemies(room, random, spawnPositions, false);
+			break;
+			
 		case SHOP_ROOM:
 			Entity shopKeeper = entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
 			
@@ -273,6 +284,7 @@ public class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
 //			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));

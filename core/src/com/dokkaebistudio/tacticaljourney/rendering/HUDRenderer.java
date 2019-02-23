@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
@@ -45,6 +46,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public static Vector2 POS_TIMER = new Vector2(200f, 1030.0f);
 	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
+	public static Vector2 POS_KEY_SLOT = new Vector2(650f,1000f);
 	public static Vector2 POS_MONEY = new Vector2(730f,1000f);
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
 	public static Vector2 POS_BOMB_SPRITE = new Vector2(1230f,1000f);
@@ -67,6 +69,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table timeAndTurnTable;
 	private Label timeLabel;
 	private Label turnLabel;
+	
+	// Key
+	private Image key;
 	
 	// Money
 	private Table moneyTable;
@@ -100,6 +105,18 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table ammoBombTable;
 	private Label bombLabel;
 
+	
+	
+	// Components
+	private WalletComponent walletComponent;
+	private InventoryComponent inventoryComponent;	
+	private HealthComponent healthComponent;
+	private ExperienceComponent experienceComponent;
+	private MoveComponent moveComponent;
+	private AttackComponent attackComponent;
+	private AmmoCarrierComponent ammoCarrierComponent;
+	
+	
 	public HUDRenderer(Stage s, Entity player) {
 		this.stage = s;
 		this.player = player;
@@ -180,7 +197,18 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	
 	private void displayMoney() {
-		WalletComponent walletComponent = Mappers.walletComponent.get(player);
+		if (walletComponent == null) walletComponent = Mappers.walletComponent.get(player);
+		if (inventoryComponent == null) inventoryComponent = Mappers.inventoryComponent.get(player);
+		
+		if (key == null) {
+			key = new Image(Assets.key_slot);
+			key.setPosition(POS_KEY_SLOT.x, POS_KEY_SLOT.y);
+			stage.addActor(key);
+		}
+		if (inventoryComponent.hasKeyChanged()) {
+			if (inventoryComponent.hasKey()) key.setDrawable(new TextureRegionDrawable(Assets.key));
+			else key.setDrawable(new TextureRegionDrawable(Assets.key_slot));
+		}
 		
 		if (moneyTable == null) {
 			moneyTable = new Table();
@@ -206,10 +234,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	//
 
 	private void displayBottomLeftHud() {
-		HealthComponent healthComponent = Mappers.healthComponent.get(player);
-		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
-		final MoveComponent moveComponent = Mappers.moveComponent.get(player);
-		final AttackComponent attackComponent = Mappers.attackComponent.get(player);
+		if (healthComponent == null) healthComponent = Mappers.healthComponent.get(player);
+		if (experienceComponent == null) experienceComponent = Mappers.experienceComponent.get(player);
+		if (moveComponent == null) moveComponent = Mappers.moveComponent.get(player);
+		if (attackComponent == null) attackComponent = Mappers.attackComponent.get(player);
 		
 		if (bottomLeftTable == null) {
 			bottomLeftTable = new Table();
@@ -608,7 +636,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	
 	private void displayAmmos() {
-		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
+		if (ammoCarrierComponent == null) ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
 		
 		if (ammoArrowTable == null) {
 			ammoArrowTable = new Table();

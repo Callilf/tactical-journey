@@ -109,6 +109,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 
 	private void updateContentForAction() {
 		Entity actionEntity = playerCompo.getActionEntity();
+		yesBtn.setDisabled(false);
 
 		switch (playerCompo.getRequestedAction()) {
 			
@@ -133,12 +134,28 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		case EXIT:
 			ExitComponent exitComponent = Mappers.exitComponent.get(actionEntity);
 			title.setText("Doorway to lower floor");
-			desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
-					+ "\nSadness galore.");
-			yesBtn.setText("Wait for months");
-			if (yesBtnListener != null) {
-				yesBtn.removeListener(yesBtnListener);
-			}			
+			if (exitComponent.isOpened()) {
+				title.setText("Doorway to lower floor");
+				desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
+						+ "\nSadness galore.");
+				yesBtn.setText("Wait for months");
+				if (yesBtnListener != null) {
+					yesBtn.removeListener(yesBtnListener);
+				}			
+			} else {
+				desc.setText("The door is held close by a big ancient lock. You should probably look for the key.");
+				yesBtn.setText("Unlock");
+				if (yesBtnListener != null) {
+					yesBtn.removeListener(yesBtnListener);
+				}
+				
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				if (inventoryComponent.hasKey()) {
+					updateUnlockListener(actionEntity, exitComponent);
+				} else {
+					yesBtn.setDisabled(true);
+				}
+			}
 			break;
 			
 		case PRAY:
@@ -233,6 +250,24 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		};
 		yesBtn.addListener(yesBtnListener);
 	}
+	
+	private void updateUnlockListener(final Entity exit, final ExitComponent exitComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				inventoryComponent.removeKey();
+				
+				exitComponent.open(exit);
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
 
 	private void updatePrayListener(final Entity statue, final StatueComponent statueComponent) {
 		if (yesBtnListener != null) {

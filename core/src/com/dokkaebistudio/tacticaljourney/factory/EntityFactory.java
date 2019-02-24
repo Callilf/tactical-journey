@@ -192,7 +192,7 @@ public final class EntityFactory {
     	return doorEntity;
 	}
 	
-	public Entity createExit(Room room, Vector2 pos) {
+	public Entity createExit(Room room, Vector2 pos, boolean opened) {
 		Entity exitEntity = engine.createEntity();
 		exitEntity.flags = EntityFlagEnum.REMAINS_BONES.getFlag();
 
@@ -202,12 +202,12 @@ public final class EntityFactory {
     	exitEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.exit);
+    	Sprite s = new Sprite(opened ? Assets.exit_opened : Assets.exit_closed);
     	spriteCompo.setSprite(s);
     	exitEntity.add(spriteCompo);
     	
     	ExitComponent exitCompo = engine.createComponent(ExitComponent.class);
-    	exitCompo.setOpened(true);
+    	exitCompo.setOpened(opened);
     	exitEntity.add(exitCompo);
 
 		engine.addEntity(exitEntity);

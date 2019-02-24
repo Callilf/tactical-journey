@@ -45,7 +45,8 @@ public class Assets {
 	public static AtlasRegion mud;
 	public static AtlasRegion mud_destroyed;
 	
-	public static AtlasRegion exit;
+	public static AtlasRegion exit_opened;
+	public static AtlasRegion exit_closed;
 	public static AtlasRegion entrance;
 	public static AtlasRegion door_closed;
 	public static AtlasRegion door_opened;
@@ -239,7 +240,8 @@ public class Assets {
 		mud = Assets.getTexture("tile-mud-test");
 		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
 		
-		exit = Assets.getTexture("exit");
+		exit_opened = Assets.getTexture("exit_opened");
+		exit_closed = Assets.getTexture("exit_closed");
 		entrance = Assets.getTexture("entrance");
 		door_closed = Assets.getTexture("door-closed");
 		door_opened = Assets.getTexture("door-opened");

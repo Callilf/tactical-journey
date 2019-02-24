@@ -285,6 +285,8 @@ public class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 //			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
+//			entityFactory.createExit(room, new Vector2(12, 4), false);
+
 //			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
@@ -341,7 +343,7 @@ public class RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			int nextInt = random.nextInt(possibleSpawns.size());
 			Vector2 pos = possibleSpawns.get(nextInt);
-			entityFactory.createExit(room, pos);
+			entityFactory.createExit(room, pos, false);
 			default:
 			break;
 		}

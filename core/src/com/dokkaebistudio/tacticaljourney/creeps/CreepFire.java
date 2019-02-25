@@ -29,9 +29,19 @@ public class CreepFire extends Creep {
 		super("Fire", Assets.creep_fire);
 		type = CreepType.FIRE;
 	}
+	
+	
+	@Override
+	public boolean isImmune(Entity entity) {
+		return Mappers.flyComponent.has(entity);
+	}
+	
+	
 
 	@Override
 	public void onWalk(Entity walker, Entity creep, Room room) {
+		if (isImmune(walker)) return;
+
 		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
 		if (healthComponent != null) {
 			healthComponent.hit(3, creep);
@@ -40,6 +50,8 @@ public class CreepFire extends Creep {
 	
 	@Override
 	public void onStop(Entity walker, Entity creep, Room room) {
+		if (isImmune(walker)) return;
+		
 		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
 		if (healthComponent != null) {
 			healthComponent.hit(10, creep);
@@ -92,6 +104,8 @@ public class CreepFire extends Creep {
 		// Damage entities on the current tile
 		Set<Entity> healthEntities = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), HealthComponent.class, room);
 		for (Entity healthEntity : healthEntities) {
+			if (isImmune(healthEntity)) continue;
+			
 			HealthComponent healthComponent = Mappers.healthComponent.get(healthEntity);
 			if (healthComponent != null) {
 				healthComponent.hit(3, creep);
@@ -128,7 +142,11 @@ public class CreepFire extends Creep {
 	
 	@Override
 	public int getHeuristic(Entity mover) {
-		return 100;
+		if (isImmune(mover)) {
+			return 0;
+		} else {
+			return 100;
+		}
 	}
 
 }

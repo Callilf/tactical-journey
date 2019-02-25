@@ -73,7 +73,7 @@ public class TileSearchService {
 			// For rooms with no enemies, just say that all tiles are walkable
 			for (Entity[] column : room.grid) {
 				for (Entity tile : column) {
-					if (Mappers.tileComponent.get(tile).type.isWalkable()) {
+					if (Mappers.tileComponent.get(tile).type.isWalkable(moverEntity)) {
 						Entity solid = TileUtil.getEntityWithComponentOnTile(Mappers.gridPositionComponent.get(tile).coord(), SolidComponent.class, room);
 						
 						if (solid == null) {
@@ -334,7 +334,7 @@ public class TileSearchService {
 		
 		//TODO: this condition will have to change when we will have to handle items that allow
 		//moving past pits for example.
-		if (tileComponent.type.isWalkable()) {
+		if (tileComponent.type.isWalkable(currentEntity)) {
 			walkableTiles.add(tileEntity);
 		}
 		return true;

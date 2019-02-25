@@ -23,7 +23,14 @@ public class CreepWeb extends Creep {
 	}
 
 	@Override
+	public boolean isImmune(Entity entity) {
+		return Mappers.flyComponent.has(entity);
+	}
+	
+	@Override
 	public void onWalk(Entity walker, Entity creep, Room room) {
+		if (isImmune(walker)) return;
+		
 		// If the player walks on it, all spiders are alerted
 		if (Mappers.playerComponent.has(walker)) {
 			for(Entity e : room.getEnemies()) {
@@ -39,7 +46,10 @@ public class CreepWeb extends Creep {
 	public int getMovementConsumed(Entity mover) {
 		if (Mappers.enemyComponent.has(mover)) {
 			if (Mappers.enemyComponent.get(mover).getFaction() == EnemyFactionEnum.SPIDERS) return -1;
+		} else if (isImmune(mover)) {
+			return 0;
 		}
+		
 		return 100;
 	}
 

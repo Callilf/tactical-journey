@@ -66,7 +66,7 @@ public class ItemFirePotion extends Item {
 		room.entityFactory.creepFactory.createFire(room, thrownPosition, thrower);
 		List<Entity> adjacentTiles = TileUtil.getAdjacentEntitiesWithComponent(thrownPosition, TileComponent.class, room);
 		for (Entity tile : adjacentTiles) {
-			if (Mappers.tileComponent.get(tile).type.isWalkable()) {
+			if (Mappers.tileComponent.get(tile).type.isThrowable()) {
 				boolean canCatchFire = true;
 				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(tile);
 				Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tilePos.coord(), CreepComponent.class, room);

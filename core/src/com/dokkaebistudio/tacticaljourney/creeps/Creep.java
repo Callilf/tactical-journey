@@ -57,6 +57,22 @@ public abstract class Creep {
 	/** Called when the creep disappears from the game. */
 	public void onDisappear(Entity creep, Room room) {};
 	
+	
+	
+	/**
+	 * Whether the given entity is immune to creep.
+	 * @param entity
+	 * @return
+	 */
+	public boolean isImmune(Entity entity) {
+		return false;
+	}
+	
+	
+	
+	//********************
+	// Movement
+	
 	/**
 	 * Get the movement consumed when walking on this creep.
 	 * @param mover the moving entity
@@ -79,6 +95,10 @@ public abstract class Creep {
 	}
 	
 	
+	
+	
+	
+	//**************************
 	// Getters and Setters
 
 	public String getLabel() {

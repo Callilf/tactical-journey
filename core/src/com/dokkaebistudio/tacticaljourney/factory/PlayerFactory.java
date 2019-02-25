@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -30,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Factory used to create presets of entities.
@@ -113,8 +115,9 @@ public final class PlayerFactory {
 		inventoryComponent.setNumberOfSlots(8);
 		inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
-		//TODO remove
-//		inventoryComponent.store(this.entityFactory.createItemHealthUp(null, null), room);
+		//TEST
+//		Entity firePotion = this.entityFactory.itemFactory.createItemFirePotion(null, null);
+//		inventoryComponent.store(firePotion, Mappers.itemComponent.get(firePotion), room);
 		
 		playerEntity.add(inventoryComponent);
 		
@@ -149,8 +152,13 @@ public final class PlayerFactory {
 		expCompo.reset();
 		playerEntity.add(expCompo);
 		
+		// Alteration receiver compo
 		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
 		playerEntity.add(alterationReceiverCompo);
+		
+		// TEST
+//		FlyComponent flyCompo = engine.createComponent(FlyComponent.class);
+//		playerEntity.add(flyCompo);
 		
 		//Skills
 		entityFactory.createSkill(room,playerEntity, SkillEnum.SLASH, 1 );

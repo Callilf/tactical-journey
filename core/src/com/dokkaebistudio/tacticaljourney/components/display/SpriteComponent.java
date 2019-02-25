@@ -23,12 +23,14 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class SpriteComponent implements Component, Poolable {
 	public boolean hide;
+	public boolean flipX;
 	private Sprite sprite;
 	
 	
 	@Override
 	public void reset() {
 		hide = false;
+		flipX = false;
 		sprite = null;
 	}
 	

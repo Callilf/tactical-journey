@@ -284,6 +284,9 @@ public class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			
+//			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
+
 //			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
 //			entityFactory.createExit(room, new Vector2(12, 4), false);
 
@@ -374,7 +377,7 @@ public class RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(6);
+			int enemyTypeRandom = random.nextInt(7);
 			if (enemyTypeRandom == 0) {
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
 				iterator.remove();
@@ -384,6 +387,9 @@ public class RoomGenerator {
 				if (iterator.hasNext()) {
 					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
 				}
+			} else if (enemyTypeRandom == 2 || enemyTypeRandom == 3) {
+				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()), 3);
+				iterator.remove();
 			} else {
 				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
 				iterator.remove();

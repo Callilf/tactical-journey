@@ -11,7 +11,11 @@ public enum AnimationsEnum {
 	BOMB_FAST(new Animation<Sprite>(0.1f, Assets.bomb_animation, PlayMode.LOOP)),
 	EXPLOSION(new Animation<Sprite>(0.1f, Assets.explosion_animation, PlayMode.NORMAL)),
 	
-	FIRE(new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP));
+	FIRE(new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP)),
+	
+	STINGER_FLY(new Animation<Sprite>(0.15f, Assets.enemy_stinger, PlayMode.LOOP)),
+	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP));
+
 
 	
 	private Animation<Sprite> animation;

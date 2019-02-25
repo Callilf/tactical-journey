@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -101,6 +102,17 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		}
     		
     		enemyCurrentyPlaying = enemyEntity;
+    		
+    		// Check if this enemy uses a sub system
+    		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
+    		if (enemyComponent.getSubSystem() != null) {
+    			boolean enemyHandled = enemyComponent.getSubSystem().update(this, enemyEntity, room);
+    			if (enemyHandled) {
+    				checkAllEnemiesFinished();
+    				return;
+    			}
+    		}
+    		
     		
         	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
         	final AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
@@ -245,18 +257,21 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		break;
     	}
     	
-    	
 		//If all enemies have finished moving, end the turn
+		checkAllEnemiesFinished();
+    	
+    }
+
+	private void checkAllEnemiesFinished() {
 		if (allEnemiesOfCurrentRoom.size() == 0 || enemyFinishedCount == allEnemiesOfCurrentRoom.size()) {
 			enemyFinishedCount = 0;
 			turnFinished.clear();
 			enemyCurrentyPlaying = null;
 			room.turnManager.endEnemyTurn();
 		}
-    	
-    }
+	}
 
-	private void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo) {
+	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo) {
     	attackCompo.clearAttackableTiles();
 		if (attackCompo.getProjectileImage() != null) {
 			attackCompo.getProjectileImage().remove();
@@ -281,6 +296,12 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
      */
     private void computeMovableTilesToDisplayToPlayer() {
     	for (Entity enemyEntity : allEnemiesOfCurrentRoom) {
+    		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
+    		if (enemyComponent.getSubSystem() != null) {
+    			boolean handledInSubSystem = enemyComponent.getSubSystem().computeMovableTilesToDisplayToPlayer(this, enemyEntity, room);
+    			if (handledInSubSystem) continue;
+    		}
+    		
         	MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
         	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
         	
@@ -299,4 +320,46 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	
     	room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
     }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    //********************
+    // Getters and setters
+    
+	public Stage getFxStage() {
+		return fxStage;
+	}
+
+	public void setFxStage(Stage fxStage) {
+		this.fxStage = fxStage;
+	}
+
+	public TileSearchService getTileSearchService() {
+		return tileSearchService;
+	}
+
+	public void setTileSearchService(TileSearchService tileSearchService) {
+		this.tileSearchService = tileSearchService;
+	}
+
+	public AttackTileSearchService getAttackTileSearchService() {
+		return attackTileSearchService;
+	}
+
+	public void setAttackTileSearchService(AttackTileSearchService attackTileSearchService) {
+		this.attackTileSearchService = attackTileSearchService;
+	}
+
+	public MovementHandler getMovementHandler() {
+		return movementHandler;
+	}
+    
+    
+    
 }

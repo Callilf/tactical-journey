@@ -61,6 +61,7 @@ public class MovementHandler {
 	}
 	
 	
+	
 	/**
 	 * Do the real movement from a tile to another.
 	 * @param moveCompo the moveComponent
@@ -69,6 +70,17 @@ public class MovementHandler {
 	 * @return true if the movement has ended, false if still in progress.
 	 */
 	public Boolean performRealMovement(Entity mover, Room room) {
+		return performRealMovement(mover, room, null);
+	}
+	
+	/**
+	 * Do the real movement from a tile to another.
+	 * @param moveCompo the moveComponent
+	 * @param transfoCompo the transformComponent
+	 * @param room the Room
+	 * @return true if the movement has ended, false if still in progress.
+	 */
+	public Boolean performRealMovement(Entity mover, Room room, Integer moveSpeed) {
 		Boolean result = false;
 		float xOffset = 0;
 		float yOffset = 0;
@@ -77,51 +89,53 @@ public class MovementHandler {
 		
 		MoveComponent moveCompo = Mappers.moveComponent.get(mover);
 		
-		int moveSpeed = room.hasEnemies() ? MOVE_SPEED : MOVE_SPEED_IN_CLEARED_ROOMS;
+		if (moveSpeed == null) moveSpeed = room.hasEnemies() ? MOVE_SPEED : MOVE_SPEED_IN_CLEARED_ROOMS;
 		
-		if (moveCompo.currentMoveDestinationPos.x > absolutePos.x) { 
-			absolutePos.x = absolutePos.x + moveSpeed;
+		if (moveCompo.currentMoveDestinationPos.x > absolutePos.x) {
+			Mappers.spriteComponent.get(mover).flipX = false;
+			absolutePos.x = absolutePos.x + moveSpeed.intValue();
 			
 			if (absolutePos.x >= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = moveSpeed - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
+				xOffset = moveSpeed.intValue() - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
 				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);
 			} else {
 				moveCompo.arrivedOnTile = false;
-				xOffset = moveSpeed;
+				xOffset = moveSpeed.intValue();
 			}
 		} else if (moveCompo.currentMoveDestinationPos.x < absolutePos.x) {
-			absolutePos.x = absolutePos.x - moveSpeed;
+			Mappers.spriteComponent.get(mover).flipX = true;
+			absolutePos.x = absolutePos.x - moveSpeed.intValue();
 
 			if (absolutePos.x <= moveCompo.currentMoveDestinationPos.x) {
-				xOffset = -moveSpeed - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
+				xOffset = -moveSpeed.intValue() - (absolutePos.x - moveCompo.currentMoveDestinationPos.x);
 				absolutePos.x = moveCompo.currentMoveDestinationPos.x;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				moveCompo.arrivedOnTile = false;
-				xOffset = -moveSpeed;
+				xOffset = -moveSpeed.intValue();
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y > absolutePos.y) { 
-			absolutePos.y = absolutePos.y + moveSpeed;
+			absolutePos.y = absolutePos.y + moveSpeed.intValue();
 			
 			if (absolutePos.y >= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = moveSpeed - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
+				yOffset = moveSpeed.intValue() - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
 				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				moveCompo.arrivedOnTile = false;
-				yOffset = moveSpeed;
+				yOffset = moveSpeed.intValue();
 			}
 		} else if (moveCompo.currentMoveDestinationPos.y < absolutePos.y) {
-			absolutePos.y = absolutePos.y - moveSpeed;
+			absolutePos.y = absolutePos.y - moveSpeed.intValue();
 			
 			if (absolutePos.y <= moveCompo.currentMoveDestinationPos.y) {
-				yOffset = -moveSpeed - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
+				yOffset = -moveSpeed.intValue() - (absolutePos.y - moveCompo.currentMoveDestinationPos.y);
 				absolutePos.y = moveCompo.currentMoveDestinationPos.y;
 				result = performEndOfMovement(mover, moveCompo, room);    			
 			} else {
 				moveCompo.arrivedOnTile = false;
-				yOffset = -moveSpeed;
+				yOffset = -moveSpeed.intValue();
 			}
 		} else {
 			//No move to perform, target already reached

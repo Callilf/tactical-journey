@@ -37,6 +37,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
+	private int additionnalStrength;
 	
 	/** Whether the value of strength is a differential from the parentAttackCompo's strength or not. */
 	private boolean isStrengthDifferential = true;
@@ -111,6 +112,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.attackType = null;
 		this.room = null;
 		this.isStrengthDifferential = true;
+		this.additionnalStrength = 0;
 	}
 	
 	/**
@@ -280,6 +282,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		if (isStrengthDifferential && parentAttackCompo != null) {
 			result += parentAttackCompo.getStrength();
 		}
+		result += additionnalStrength;
 		return result;
 	}
 
@@ -395,6 +398,16 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public void setThrownEntity(Entity thrownEntity) {
 		this.thrownEntity = thrownEntity;
+	}
+
+
+	public int getAdditionnalStrength() {
+		return additionnalStrength;
+	}
+
+
+	public void setAdditionnalStrength(int additionnalStrength) {
+		this.additionnalStrength = additionnalStrength;
 	}
 	
 	

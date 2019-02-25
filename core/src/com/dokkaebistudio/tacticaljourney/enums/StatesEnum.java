@@ -7,7 +7,10 @@ public enum StatesEnum {
 	
 	EXPLOSION(0),
 	
-	FIRE_LOOP(0);
+	FIRE_LOOP(0),
+	
+	STINGER_FLY(0),
+	STINGER_ATTACK(1);
 	
 	private int state;
 	

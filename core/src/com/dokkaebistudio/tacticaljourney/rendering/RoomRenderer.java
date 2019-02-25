@@ -96,6 +96,8 @@ public class RoomRenderer implements Renderer, RoomSystem {
 					float y = gridPosComponent.getAbsolutePos().y;
 				
 					spriteCompo.getSprite().setPosition(x, y);
+					spriteCompo.getSprite().setFlip(spriteCompo.flipX, false); 
+					
 					if (!spriteCompo.hide) {
 						spriteCompo.getSprite().draw(batch);
 					}
@@ -109,6 +111,8 @@ public class RoomRenderer implements Renderer, RoomSystem {
 				Vector2 realPos = gridPosComponent.getWorldPos();
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
 					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
+					spriteCompo.getSprite().setFlip(spriteCompo.flipX, false); 
+
 					if (!spriteCompo.hide) {
 						spriteCompo.getSprite().draw(batch);
 					}

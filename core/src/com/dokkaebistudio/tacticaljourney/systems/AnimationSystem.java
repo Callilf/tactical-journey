@@ -48,10 +48,11 @@ public class AnimationSystem extends EntitySystem implements RoomSystem {
 		
 		for(Entity entity : room.getAllEntities()) {
 			if (!Mappers.animationComponent.has(entity))	continue;
-			
-			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			AnimationComponent anim = Mappers.animationComponent.get(entity);
+
+			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			StateComponent state = Mappers.stateComponent.get(entity);
+			if (spriteCompo == null || state == null) continue;
 			
 			Animation<Sprite> animation = anim.animations.get(state.get());
 			

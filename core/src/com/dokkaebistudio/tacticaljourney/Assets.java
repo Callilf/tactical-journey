@@ -192,6 +192,7 @@ public class Assets {
 
 	public static AtlasRegion money_item;
 	public static AtlasRegion health_up_item;
+	public static AtlasRegion regen_item;
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
 	
@@ -390,6 +391,7 @@ public class Assets {
 
 		money_item = Assets.getTexture("item-money");
 		health_up_item = Assets.getTexture("item-consumable-health-up");
+		regen_item = Assets.getTexture("item-consumable-regen-potion");
 		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
 		web_sack_item = Assets.getTexture("item-web-sack");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");

@@ -38,7 +38,7 @@ public class WebSpiderItemPool extends EnemyItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 2));
 
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10));
 		
 		for (PooledItemDescriptor pid : rareItemPool) {
 			rareSumOfChances += pid.getChanceToDrop();

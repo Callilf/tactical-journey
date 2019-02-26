@@ -43,7 +43,7 @@ public class StatusDebuffPoison extends Status {
 	@Override
 	public void onEndTurn(Entity entity) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.hit(2, parent);
+		healthComponent.hitThroughArmor(2, parent);
 	}
 
 	

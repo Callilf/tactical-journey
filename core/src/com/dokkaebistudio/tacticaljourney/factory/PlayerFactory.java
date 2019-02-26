@@ -161,7 +161,7 @@ public final class PlayerFactory {
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		playerEntity.add(statusReceiverCompo);
 		
-		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
+//		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
 
 		// TEST
 //		FlyComponent flyCompo = engine.createComponent(FlyComponent.class);

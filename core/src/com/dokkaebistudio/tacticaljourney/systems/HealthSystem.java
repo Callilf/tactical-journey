@@ -58,12 +58,14 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     			healthCompo.setReceivedDamageLastTurn(false);
     		}
     		
-	    	// Display experience gained
+    		// If a health modification has occurred during this frame
 	    	if (healthCompo.getHealthChange() != HealthChangeEnum.NONE) {
 	    		
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(entity);
 	
 	    		switch(healthCompo.getHealthChange()) {
+	    		case HIT_INTERRUPT:
+		    		healthCompo.setReceivedDamageLastTurn(true);
 	    		case HIT:	    			
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
 							gridPos, healthCompo.getHealthChange(), 0, room);
@@ -81,7 +83,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    		default:
 	    		}
 
-	    		healthCompo.setReceivedDamageLastTurn(true);
 	    		healthCompo.clearModified();
 	    	}
     	

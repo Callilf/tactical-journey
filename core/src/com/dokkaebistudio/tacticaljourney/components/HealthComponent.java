@@ -72,9 +72,29 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		
 		this.setHp(Math.max(0, this.getHp() - damageToHealth));
 		this.healthLostAtCurrentFrame += amountOfDamage;
-		this.healthChange = HealthChangeEnum.HIT;
 		
-		this.attacker = attacker;
+		if (attacker != null) {
+			this.attacker = attacker;
+			this.healthChange = HealthChangeEnum.HIT_INTERRUPT;
+		} else {
+			this.healthChange = HealthChangeEnum.HIT;
+		}
+	}
+	
+	/**
+	 * Receive damages that bypasses armor.
+	 * @param amountOfDamage the amount of damages
+	 */
+	public void hitThroughArmor(int amountOfDamage, Entity attacker) {		
+		this.setHp(Math.max(0, this.getHp() - amountOfDamage));
+		this.healthLostAtCurrentFrame += amountOfDamage;
+		
+		if (attacker != null) {
+			this.attacker = attacker;
+			this.healthChange = HealthChangeEnum.HIT_INTERRUPT;
+		} else {
+			this.healthChange = HealthChangeEnum.HIT;
+		}
 	}
 	
 	
@@ -84,9 +104,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreHealth(int amount) {
 		this.setHp(this.getHp() + amount);
-		if (this.getHp() > this.getMaxHp()) {
-			this.setHp(this.getMaxHp());
-		}
 		this.healthRecoveredAtCurrentFrame += amount;
 		this.healthChange = HealthChangeEnum.HEALED;
 	}
@@ -97,9 +114,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreArmor(int amount) {
 		this.setArmor(this.getArmor() + amount);
-		if (this.getArmor() > this.getMaxArmor()) {
-			this.setArmor(this.getMaxArmor());
-		}
 		this.healthRecoveredAtCurrentFrame += amount;
 		this.healthChange = HealthChangeEnum.ARMOR;
 	}
@@ -108,6 +122,14 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.healthChange = HealthChangeEnum.NONE;
 		this.healthLostAtCurrentFrame = 0;
 		this.healthRecoveredAtCurrentFrame = 0;
+		
+		if (this.getArmor() > this.getMaxArmor()) {
+			this.setArmor(this.getMaxArmor());
+		}
+
+		if (this.getHp() > this.getMaxHp()) {
+			this.setHp(this.getMaxHp());
+		}
 	}
 	
 	/**
@@ -162,6 +184,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			return "[WHITE]";
 		}
 	}
+	
+	
+	//********************
+	// Overridden methods
 	
 	@Override
 	public void enterRoom(Room newRoom) {

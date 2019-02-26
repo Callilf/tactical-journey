@@ -43,7 +43,7 @@ public class StatusBuffRegen extends Status {
 	@Override
 	public void onEndTurn(Entity entity) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.restoreHealth(2);
+		healthComponent.restoreHealth(1);
 	}
 
 	

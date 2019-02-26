@@ -150,11 +150,15 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
      * @param healthCompo the health component
      */
 	private void alertEnemy(final Entity entity, HealthComponent healthCompo) {
-		if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
-			Mappers.enemyComponent.get(entity).setAlerted(true);
-		}
-		if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
-			Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
+		if (healthCompo.getAttacker() != null) {
+			// Alert the enemy the player just attacked
+			if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
+				Mappers.enemyComponent.get(entity).setAlerted(true);
+			}
+			// Alert the enemy that attacked the player
+			if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
+				Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
+			}
 		}
 	}
 

@@ -15,6 +15,7 @@ public abstract class Creep {
 	
 	public enum CreepType {
 		WEB,
+		POISON,
 		MUD,
 		FIRE;
 	}

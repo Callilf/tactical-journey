@@ -146,6 +146,7 @@ public class Assets {
 	//********
 	// Creep
 	public static AtlasRegion creep_web;
+	public static AtlasRegion creep_poison;
 	public static AtlasRegion creep_fire;
 	public static Array<Sprite> creep_fire_animation;
 	
@@ -178,6 +179,10 @@ public class Assets {
 	public static AtlasRegion remains_satchel;
 	public static AtlasRegion remains_satchel_opened;
 
+	//*********
+	// Statuses
+	
+	public static AtlasRegion status_poison;
 	
 	//******
 	// Items
@@ -338,6 +343,7 @@ public class Assets {
 		//********
 		// Creep
 		creep_web = Assets.getTexture("creep-web");
+		creep_poison = Assets.getTexture("creep-poison");
 		creep_fire = Assets.getTexture("creep-fire");
 		creep_fire_animation = Assets.getAnimation("creep-fire");
 
@@ -370,7 +376,11 @@ public class Assets {
 		remains_satchel = Assets.getTexture("remains_satchel");
 		remains_satchel_opened = Assets.getTexture("remains_satchel_opened");
 
+		//*********
+		// Statuses
 		
+		status_poison = Assets.getTexture("poison");
+
 		//******
 		// Items
 

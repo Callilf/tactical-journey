@@ -24,6 +24,7 @@ public enum EntityFlagEnum {
 	CREEP_MUD(150),
 	CREEP_WEB(151),
 	CREEP_FIRE(152),
+	CREEP_POISON(153),
 
 	
 	END_TURN_BUTTON(500),

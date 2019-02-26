@@ -34,7 +34,8 @@ public class ScorpionItemPool extends EnemyItemPool {
 	static {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 5));
 		
 		for (PooledItemDescriptor pid : rareItemPool) {
 			rareSumOfChances += pid.getChanceToDrop();

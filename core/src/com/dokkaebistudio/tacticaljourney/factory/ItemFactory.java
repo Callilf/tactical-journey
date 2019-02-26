@@ -26,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
@@ -129,6 +130,9 @@ public final class ItemFactory {
 		case POTION_SMALL_HEALTH:
 			item = createItemHealthUp(room, tilePos);
 			break;
+		case POTION_REGEN:
+			item = createItemRegenPotion(room, tilePos);
+			break;
 			
 			
 		case WEB_SACK:
@@ -198,6 +202,17 @@ public final class ItemFactory {
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.health_up_item, new ItemSmallHealthPotion());
 		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create a regen potion.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemRegenPotion(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.regen_item, new ItemRegenPotion());
+		item.flags = EntityFlagEnum.ITEM_REGEN_POSTION.getFlag();
 		return item;
 	}
 	

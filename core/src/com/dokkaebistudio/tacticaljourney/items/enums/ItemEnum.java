@@ -10,6 +10,7 @@ public enum ItemEnum {
 	
 	// Potions
 	POTION_SMALL_HEALTH(1),
+	POTION_REGEN(1),
 	POTION_FIRE(1),
 	
 	// Armors

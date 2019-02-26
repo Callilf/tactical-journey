@@ -25,7 +25,8 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 2));
 
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 20));				
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));				
 		
 		for (PooledItemDescriptor pid : itemPool) {
 			sumOfChances += pid.getChanceToDrop();

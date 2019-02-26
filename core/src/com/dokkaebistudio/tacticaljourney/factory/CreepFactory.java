@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponen
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -148,6 +149,31 @@ public final class CreepFactory {
 		engine.addEntity(creepEntity);
 		creepCompo.onAppear(creepEntity, room);
     	return creepEntity;
+	}
+	
+	/**
+	 * Create a poison puddle.
+	 * @param room the room
+	 * @param pos the position
+	 * @param duration the duration of the creep
+	 * @return the creep entity
+	 */
+	public Entity createPoison(Room room, Vector2 pos, int duration) {
+		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_POISON, Assets.creep_poison);
+				
+		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
+		creepEntity.add(destructible);
+		
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(new CreepPoison());
+		creepCompo.setDuration(duration);
+		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
+		creepCompo.setReleasedTurn(turnReleased);
+		creepEntity.add(creepCompo);
+		
+		room.addEntity(creepEntity);		
+		creepCompo.onAppear(creepEntity, room);
+		return creepEntity;
 	}
 	
 }

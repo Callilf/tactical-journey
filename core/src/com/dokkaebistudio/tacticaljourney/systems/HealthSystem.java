@@ -58,12 +58,14 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     			healthCompo.setReceivedDamageLastTurn(false);
     		}
     		
-	    	// Display experience gained
+    		// If a health modification has occurred during this frame
 	    	if (healthCompo.getHealthChange() != HealthChangeEnum.NONE) {
 	    		
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(entity);
 	
 	    		switch(healthCompo.getHealthChange()) {
+	    		case HIT_INTERRUPT:
+		    		healthCompo.setReceivedDamageLastTurn(true);
 	    		case HIT:	    			
 					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
 							gridPos, healthCompo.getHealthChange(), 0, room);
@@ -81,7 +83,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    		default:
 	    		}
 
-	    		healthCompo.setReceivedDamageLastTurn(true);
 	    		healthCompo.clearModified();
 	    	}
     	
@@ -150,11 +151,15 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
      * @param healthCompo the health component
      */
 	private void alertEnemy(final Entity entity, HealthComponent healthCompo) {
-		if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
-			Mappers.enemyComponent.get(entity).setAlerted(true);
-		}
-		if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
-			Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
+		if (healthCompo.getAttacker() != null) {
+			// Alert the enemy the player just attacked
+			if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
+				Mappers.enemyComponent.get(entity).setAlerted(true);
+			}
+			// Alert the enemy that attacked the player
+			if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
+				Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
+			}
 		}
 	}
 

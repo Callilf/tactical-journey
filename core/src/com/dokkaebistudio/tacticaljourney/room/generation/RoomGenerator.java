@@ -284,7 +284,8 @@ public class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-			
+			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), 0);
+
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
@@ -318,8 +319,7 @@ public class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(3,room, new Vector2(8, 7));
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 
-//			Entity bones = entityFactory.createRemainsBones(room, new Vector2(12, 9));
-//			fillLootable(bones);
+//			Entity bones = entityFactory.lootableFactory.createRemainsBones(room, new Vector2(12, 9));
 //			Entity satchel = entityFactory.createRemainsSatchel(room, new Vector2(13, 9));
 //			fillLootable(satchel);
 

@@ -146,6 +146,7 @@ public class Assets {
 	//********
 	// Creep
 	public static AtlasRegion creep_web;
+	public static AtlasRegion creep_poison;
 	public static AtlasRegion creep_fire;
 	public static Array<Sprite> creep_fire_animation;
 	
@@ -178,6 +179,11 @@ public class Assets {
 	public static AtlasRegion remains_satchel;
 	public static AtlasRegion remains_satchel_opened;
 
+	//*********
+	// Statuses
+	
+	public static AtlasRegion status_poison;
+	public static AtlasRegion status_regen;
 	
 	//******
 	// Items
@@ -186,6 +192,7 @@ public class Assets {
 
 	public static AtlasRegion money_item;
 	public static AtlasRegion health_up_item;
+	public static AtlasRegion regen_item;
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
 	
@@ -338,6 +345,7 @@ public class Assets {
 		//********
 		// Creep
 		creep_web = Assets.getTexture("creep-web");
+		creep_poison = Assets.getTexture("creep-poison");
 		creep_fire = Assets.getTexture("creep-fire");
 		creep_fire_animation = Assets.getAnimation("creep-fire");
 
@@ -370,7 +378,12 @@ public class Assets {
 		remains_satchel = Assets.getTexture("remains_satchel");
 		remains_satchel_opened = Assets.getTexture("remains_satchel_opened");
 
+		//*********
+		// Statuses
 		
+		status_poison = Assets.getTexture("poison");
+		status_regen = Assets.getTexture("regen");
+
 		//******
 		// Items
 
@@ -378,6 +391,7 @@ public class Assets {
 
 		money_item = Assets.getTexture("item-money");
 		health_up_item = Assets.getTexture("item-consumable-health-up");
+		regen_item = Assets.getTexture("item-consumable-regen-potion");
 		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
 		web_sack_item = Assets.getTexture("item-web-sack");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");

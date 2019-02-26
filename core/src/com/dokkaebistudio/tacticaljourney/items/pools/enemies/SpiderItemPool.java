@@ -38,7 +38,7 @@ public class SpiderItemPool extends EnemyItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
 
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 15));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 15));
 		
 		for (PooledItemDescriptor pid : rareItemPool) {
 			rareSumOfChances += pid.getChanceToDrop();

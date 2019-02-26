@@ -12,11 +12,12 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
-import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -31,7 +32,8 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 
 /**
  * Factory used to create presets of entities.
@@ -156,6 +158,11 @@ public final class PlayerFactory {
 		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
 		playerEntity.add(alterationReceiverCompo);
 		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		playerEntity.add(statusReceiverCompo);
+		
+//		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
+
 		// TEST
 //		FlyComponent flyCompo = engine.createComponent(FlyComponent.class);
 //		playerEntity.add(flyCompo);

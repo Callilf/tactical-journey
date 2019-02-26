@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
@@ -76,6 +77,7 @@ public final class Mappers {
 	public final static ComponentMapper<AmmoCarrierComponent> ammoCarrierComponent = ComponentMapper.getFor(AmmoCarrierComponent.class);
 	public final static ComponentMapper<InventoryComponent> inventoryComponent = ComponentMapper.getFor(InventoryComponent.class);
 	public final static ComponentMapper<AlterationReceiverComponent> alterationReceiverComponent = ComponentMapper.getFor(AlterationReceiverComponent.class);
+	public final static ComponentMapper<StatusReceiverComponent> statusReceiverComponent = ComponentMapper.getFor(StatusReceiverComponent.class);
 
 	
 	public final static ComponentMapper<ExperienceComponent> experienceComponent = ComponentMapper.getFor(ExperienceComponent.class);

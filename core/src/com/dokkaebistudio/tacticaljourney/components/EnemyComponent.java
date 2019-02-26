@@ -8,10 +8,12 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
+import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -19,6 +21,10 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	
 	/** The room.*/
 	public Room room;
+	
+	/** The type of enemy. */
+	private EnemyTypeEnum type;
+	private EnemySubSystem subSystem;
 	
 	
 	
@@ -180,6 +186,22 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 
 	public void setAlertedDisplayer(Entity alertedDisplayer) {
 		this.alertedDisplayer = alertedDisplayer;
+	}
+
+	public EnemyTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(EnemyTypeEnum type) {
+		this.type = type;
+	}
+
+	public EnemySubSystem getSubSystem() {
+		return subSystem;
+	}
+
+	public void setSubSystem(EnemySubSystem subSystem) {
+		this.subSystem = subSystem;
 	}
 
 }

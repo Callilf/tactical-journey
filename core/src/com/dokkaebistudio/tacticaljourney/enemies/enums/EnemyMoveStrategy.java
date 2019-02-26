@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.enums.enemy;
+package com.dokkaebistudio.tacticaljourney.enemies.enums;
 
 public enum EnemyMoveStrategy {
 	STANDING_STILL,

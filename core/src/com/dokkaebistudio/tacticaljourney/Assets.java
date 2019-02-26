@@ -47,7 +47,6 @@ public class Assets {
 	
 	public static AtlasRegion exit_opened;
 	public static AtlasRegion exit_closed;
-	public static AtlasRegion entrance;
 	public static AtlasRegion door_closed;
 	public static AtlasRegion door_opened;
 
@@ -168,6 +167,8 @@ public class Assets {
 	public static AtlasRegion enemy_spider_venom;
 	public static AtlasRegion enemy_spider_web;
 	public static AtlasRegion enemy_scorpion;
+	public static Array<Sprite> enemy_stinger;
+	public static Array<Sprite> enemy_stinger_charge;
 	
 	//*************
 	// Containers
@@ -242,7 +243,6 @@ public class Assets {
 		
 		exit_opened = Assets.getTexture("exit_opened");
 		exit_closed = Assets.getTexture("exit_closed");
-		entrance = Assets.getTexture("entrance");
 		door_closed = Assets.getTexture("door-closed");
 		door_opened = Assets.getTexture("door-opened");
 
@@ -358,6 +358,8 @@ public class Assets {
 		enemy_spider_venom = Assets.getTexture("enemy-spider-venom");
 		enemy_spider_web = Assets.getTexture("enemy-spider-web");
 		enemy_scorpion = Assets.getTexture("enemy-scorpion-test");
+		enemy_stinger = Assets.getAnimation("stinger");
+		enemy_stinger_charge = Assets.getAnimation("stinger_charge");
 		
 		
 		//*************

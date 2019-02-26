@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 

@@ -90,12 +90,22 @@ public abstract class Item {
 			inventoryComponent.remove(item);
 		}
 		
-		GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(dropper);
+		GridPositionComponent dropperPosCompo = Mappers.gridPositionComponent.get(dropper);
 		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
-		itemPosCompo.coord().set(playerPosCompo.coord());
+		itemPosCompo.coord().set(dropperPosCompo.coord());
 		itemPosCompo.setActive(item, room);
 		return true;
 	}
+	
+	/** Called when the item is dropped from an dead entity. */
+	public boolean drop(Vector2 position, Entity item, Room room) {
+		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
+		itemPosCompo.coord().set(position);
+		itemPosCompo.setActive(item, room);
+		return true;
+	}
+	
+	
 	
 	/** Throw the item at the desired location. */
 	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {

@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.creeps;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
-import com.dokkaebistudio.tacticaljourney.enums.enemy.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

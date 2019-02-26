@@ -23,14 +23,13 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -43,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ExplosionSystem extends EntitySystem implements RoomSystem {	
@@ -194,13 +194,9 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
 						// Drop reward
 						dropItem(d, lootRewardComponent);
-
-						// Do not remove the entity from the room yet, remove it once the drop animation if over
-						d.remove(SolidComponent.class);
-						d.remove(SpriteComponent.class);
-					} else {
-						room.removeEntity(d);
 					}
+					
+					room.removeEntity(d);
 
 					
 					//Add debris
@@ -240,15 +236,17 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 	private void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent) {
 		final Entity dropItem = lootRewardComponent.getDrop();
 		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
 		
 		// Drop animation
 		Action finishDropAction = new Action(){
 		  @Override
 		  public boolean act(float delta){
-			itemComponent.drop(entity, dropItem, room);
+			itemComponent.drop(dropLocation, dropItem, room);
+			dropLocation.free();
 			
 			room.getAddedItems().add(dropItem);
-			room.removeEntity(entity);
 		    return true;
 		  }
 		};

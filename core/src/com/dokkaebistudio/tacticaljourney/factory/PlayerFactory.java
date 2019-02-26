@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 
 /**
@@ -160,8 +161,8 @@ public final class PlayerFactory {
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		playerEntity.add(statusReceiverCompo);
 		
-		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(2));
-		
+		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
+
 		// TEST
 //		FlyComponent flyCompo = engine.createComponent(FlyComponent.class);
 //		playerEntity.add(flyCompo);

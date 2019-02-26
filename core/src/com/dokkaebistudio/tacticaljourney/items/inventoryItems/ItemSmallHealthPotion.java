@@ -6,8 +6,10 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -23,7 +25,7 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Heal 25 HP upon use.\n"
+		return "Upon use, heal 25 HP and cure poison.\n"
 				+ "Remember that drinking this potion will take a turn, so don't stay too close from the enemy while doing it.";		
 	}
 	
@@ -42,6 +44,9 @@ public class ItemSmallHealthPotion extends Item {
 		//Heal the picker for 25 HP !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
 		healthComponent.restoreHealth(25);
+		
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
+		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class);
 		return true;
 	}
 }

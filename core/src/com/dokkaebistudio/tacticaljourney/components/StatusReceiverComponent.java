@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -110,8 +109,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 			addOneStatusTable(status);
 			if (statusTable.getParent() == null) {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-				Vector2 worldPos = gridPositionComponent.getWorldPos();
-				statusTable.setPosition(worldPos.x, worldPos.y + GameScreen.GRID_SIZE - 20);
+				Vector2 pos = gridPositionComponent.hasAbsolutePos() ?gridPositionComponent.getAbsolutePos() :  gridPositionComponent.getWorldPos();
+				statusTable.setPosition(pos.x, pos.y + GameScreen.GRID_SIZE - 20);
 	
 				fxStage.addActor(statusTable);
 			}
@@ -128,7 +127,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		oneStatusTable.add(label);
 		oneStatusTable.pack();
 		
-		statusTable.add(oneStatusTable).padRight(5);
+		statusTable.add(oneStatusTable);
 		statusTable.pack();
 		
 		iconsMap.put(status, oneStatusTable);
@@ -150,6 +149,20 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		
 		if (statuses.isEmpty()) {
 			statusTable.remove();
+		}
+	}
+	
+	public void removeStatus(Entity entity, Class statusClass) {
+		Status statusToRemove = null;
+		for(Status status : statuses) {
+			if (status.getClass().equals(statusClass)) {
+				statusToRemove = status;
+				break;
+			}
+		}
+		
+		if (statusToRemove != null) {
+			removeStatus(entity, statusToRemove);
 		}
 	}
 	

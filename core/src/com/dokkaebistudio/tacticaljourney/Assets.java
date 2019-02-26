@@ -183,6 +183,7 @@ public class Assets {
 	// Statuses
 	
 	public static AtlasRegion status_poison;
+	public static AtlasRegion status_regen;
 	
 	//******
 	// Items
@@ -380,6 +381,7 @@ public class Assets {
 		// Statuses
 		
 		status_poison = Assets.getTexture("poison");
+		status_regen = Assets.getTexture("regen");
 
 		//******
 		// Items

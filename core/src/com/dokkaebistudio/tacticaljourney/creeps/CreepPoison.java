@@ -37,6 +37,14 @@ public class CreepPoison extends Creep {
 	}
 	
 	@Override
+	public void onStop(Entity walker, Entity creep, Room room) {
+		if (isImmune(walker)) return;
+
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
+		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(3));
+	}
+	
+	@Override
 	public int getHeuristic(Entity mover) {
 		if (isImmune(mover)) {
 			return 0;

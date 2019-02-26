@@ -16,7 +16,7 @@ public final class ZIndexConstants {
 	public static final int DOOR = 2;
 	public static final int EXIT = 2;
 	public static final int CREEP = 3;
-	public static final int LOOTABLE = 4;
+	public static final int LOOTABLE = 3;
 
 	// INDICATORS
 	public static final int MOVABLE_TILE = 5;

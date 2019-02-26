@@ -286,6 +286,8 @@ public class RoomGenerator {
 			
 			
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
+//			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
+//			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
 //			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
 //			entityFactory.createExit(room, new Vector2(12, 4), false);

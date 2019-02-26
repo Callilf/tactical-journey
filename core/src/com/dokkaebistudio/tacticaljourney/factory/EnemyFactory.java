@@ -345,7 +345,7 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new ScorpionItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.COMMON, 100 );
 		dropRate.add(ItemPoolRarity.RARE, 20);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);

@@ -3,17 +3,15 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -24,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -110,29 +109,19 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					
 				} else {
 					// Death of any other entity than the player
-
 					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
 					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
 						// Drop reward
 						dropItem(entity, lootRewardComponent);
-
-						// Do not remove the entity from the room yet, remove it once the drop animation if over
-						//TODO change this
-						entity.remove(EnemyComponent.class);
-						entity.remove(HealthComponent.class);
-						entity.remove(SpriteComponent.class);
-						entity.remove(SolidComponent.class);
-					} else {
-					
-						room.removeEnemy(entity);
-						//TODO: play death animation
-						
-						if (!room.hasEnemies()) {
-							//TODO move this
-							//TODO display "CLEARED"
-							MapRenderer.requireRefresh();
-						}
 					}
+					
+					room.removeEnemy(entity);					
+					if (!room.hasEnemies()) {
+						//TODO move this
+						//TODO display "CLEARED"
+						MapRenderer.requireRefresh();
+					}
+					
 				}
 			
 	    	}
@@ -177,15 +166,17 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	private void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent) {
 		final Entity dropItem = lootRewardComponent.getDrop();
 		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
-		
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
+
 		// Drop animation
 		Action finishDropAction = new Action(){
 		  @Override
 		  public boolean act(float delta){
-			itemComponent.drop(entity, dropItem, room);
+			itemComponent.drop(dropLocation, dropItem, room);
+			dropLocation.free();
 			
 			room.getAddedItems().add(dropItem);
-			room.removeEnemy(entity);
 		    return true;
 		  }
 		};

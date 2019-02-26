@@ -91,6 +91,17 @@ public class ItemComponent implements Component, Poolable {
 		return itemType.drop(dropper, item, room);
 	}
 	
+	/**
+	 * Drop the given item.
+	 * @param position the position where the item is dropped.
+	 * @param item the item to drop
+	 * @param room the room in which the item is dropped
+	 * @return true if the item was dropped
+	 */
+	public boolean drop(Vector2 position, Entity item, Room room) {
+		return itemType.drop(position, item, room);
+	}
+	
 	
 	/**
 	 * Throw the item at the desired location.

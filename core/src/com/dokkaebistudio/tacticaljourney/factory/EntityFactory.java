@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
@@ -98,45 +99,20 @@ public final class EntityFactory {
 	 * @param type the type
 	 * @return the tile entity
 	 */
-	public Entity createTile(Room room, Vector2 pos, TileEnum type) {
-		Entity tileEntity = engine.createEntity();
-		tileEntity.flags = EntityFlagEnum.TILE.getFlag();
-		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		TileComponent tile = engine.createComponent(TileComponent.class);
-		tile.setRoom(room);
-
-		tile.type = type;
+	public void createTerrain(Room room, Vector2 pos, TileEnum type) {
 		switch (type) {
 			case WALL:
 				this.createWall(room, pos);
-				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
-				tile.type = TileEnum.GROUND;
 				break;
 			case GROUND:
-				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
 				break;
 			case PIT:
-				spriteCompo.setSprite(new Sprite(Assets.tile_pit));
+				this.createChasm(room, pos);
 				break;
 			case MUD:
 				this.creepFactory.createMud(room, pos);
-				spriteCompo.setSprite(new Sprite(Assets.tile_ground));
-				tile.type = TileEnum.GROUND;
 				break;
 		}
-
-		gridPosition.coord(tileEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.TILE;
-
-		tileEntity.add(spriteCompo);
-		tileEntity.add(gridPosition);
-		tileEntity.add(tile);
-
-		engine.addEntity(tileEntity);
-
-		return tileEntity;
 	}
 	
 	public Entity createWall(Room room, Vector2 pos) {
@@ -166,6 +142,28 @@ public final class EntityFactory {
 		engine.addEntity(wallEntity);
 
     	return wallEntity;
+	}	
+	
+	public Entity createChasm(Room room, Vector2 pos) {
+		Entity chasmEntity = engine.createEntity();
+		chasmEntity.flags = EntityFlagEnum.CHASM.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(chasmEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.WALL;
+    	chasmEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.tile_pit);
+    	spriteCompo.setSprite(s);
+    	chasmEntity.add(spriteCompo);
+    	
+    	ChasmComponent chasmCompo = engine.createComponent(ChasmComponent.class);
+    	chasmEntity.add(chasmCompo);   
+    	
+		engine.addEntity(chasmEntity);
+
+    	return chasmEntity;
 	}	
 	
 	public Entity createDoor(Room room, Vector2 pos, Room targetedRoom) {

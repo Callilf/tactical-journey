@@ -18,12 +18,13 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -37,10 +38,10 @@ public class TileSearchService {
 	protected Entity currentEntity;
 	
 	/** The list of tiles already visited, and the remaining move when they were visited. */
-	protected Map<Entity, Integer> visitedTilesWithRemainingMove;
+	protected Map<Tile, Integer> visitedTilesWithRemainingMove;
 
 	/** Attackable tiles per distance from the attacker.	 */
-	protected Map<Integer, List<Entity>> attackableTilesPerDistance;
+	protected Map<Integer, List<Tile>> attackableTilesPerDistance;
 	/** The list of positions where an obstacle prevents attacks. */
 	protected Set<Vector2> obstacles; 
 
@@ -60,33 +61,29 @@ public class TileSearchService {
 		MoveComponent moveCompo = Mappers.moveComponent.get(moverEntity);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(moverEntity);
-		Entity moverTileEntity = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
+		Tile moverTile = room.grid[(int)gridPositionComponent.coord().x][(int)gridPositionComponent.coord().y];
 		
 		//Find all walkable tiles
 		
 		if (!moveCompo.freeMove) {
-			moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTileEntity, 1, moveCompo.moveRemaining,room);
-			moveCompo.allWalkableTiles.add(moverTileEntity);
+			moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTile, 1, moveCompo.moveRemaining,room);
+			moveCompo.allWalkableTiles.add(moverTile);
 		} else {
 			moveCompo.allWalkableTiles = new HashSet<>();
-			moveCompo.allWalkableTiles.add(moverTileEntity);
+			moveCompo.allWalkableTiles.add(moverTile);
 			// For rooms with no enemies, just say that all tiles are walkable
-			for (Entity[] column : room.grid) {
-				for (Entity tile : column) {
-					if (Mappers.tileComponent.get(tile).type.isWalkable(moverEntity)) {
-						Entity solid = TileUtil.getEntityWithComponentOnTile(Mappers.gridPositionComponent.get(tile).coord(), SolidComponent.class, room);
-						
-						if (solid == null) {
-							moveCompo.allWalkableTiles.add(tile);
-						}
+			for (Tile[] column : room.grid) {
+				for (Tile tile : column) {
+					if (tile.isWalkable(moverEntity)) {
+						moveCompo.allWalkableTiles.add(tile);
 					}
 				}
 			}
 		}
 		
 		//Create entities for each movable tiles to display them
-		for (Entity tileCoord : moveCompo.allWalkableTiles) {
-			Entity movableTileEntity = room.entityFactory.createMovableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
+		for (Tile tileCoord : moveCompo.allWalkableTiles) {
+			Entity movableTileEntity = room.entityFactory.createMovableTile(tileCoord.getGridPos(), room);
 			moveCompo.movableTiles.add(movableTileEntity);
 		}
 //		System.out.println("Search movable tiles : " + (System.currentTimeMillis() - time));
@@ -106,24 +103,23 @@ public class TileSearchService {
 	 */
 	public List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
 			GridPositionComponent destinationPos, Room room) {
-		Entity startTileEntity = room.getTileAtGridPosition(moverCurrentPos.coord());
-		List<Entity> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
+		Tile startTile = room.getTileAtGridPosition(moverCurrentPos.coord());
+		List<Tile> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
 		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
-		IndexedAStarPathFinder<Entity> indexedAStarPathFinder = new IndexedAStarPathFinder<Entity>(roomGraph);
-		GraphPath<Entity> path = new DefaultGraphPath<Entity>();
-		indexedAStarPathFinder.searchNodePath(startTileEntity, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
+		IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);
+		GraphPath<Tile> path = new DefaultGraphPath<Tile>();
+		indexedAStarPathFinder.searchNodePath(startTile, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
 		
 		int pathNb = -1;
 		List<Entity> waypoints = new ArrayList<>();
 		if (path.getCount() == 0) return null;
 		
-		Iterator<Entity> iterator = path.iterator();
+		Iterator<Tile> iterator = path.iterator();
 		while(iterator.hasNext()) {
 			pathNb ++;
-			Entity next = iterator.next();
+			Tile next = iterator.next();
 			if (pathNb == 0 || !iterator.hasNext()) continue;
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Entity waypoint = room.entityFactory.createWaypoint(gridPositionComponent.coord(), room);
+			Entity waypoint = room.entityFactory.createWaypoint(next.getGridPos(), room);
 			waypoints.add(waypoint);
 			
 		}
@@ -138,56 +134,54 @@ public class TileSearchService {
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
      * @param mover the moving entity
-     * @param currentTileEntity the starting tile
+     * @param currentTile the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @return the set of tiles where the entity can move
      */
-	public Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, Room room) {
-    	Map<Integer, Set<Entity>> allTilesByDepth = new HashMap<>();
-    	return findAllWalkableTiles(mover, currentTileEntity, currentDepth, maxDepth, allTilesByDepth, room);
+	public Set<Tile> findAllWalkableTiles(Entity mover, Tile currentTile, int currentDepth, int maxDepth, Room room) {
+    	Map<Integer, Set<Tile>> allTilesByDepth = new HashMap<>();
+    	return findAllWalkableTiles(mover, currentTile, currentDepth, maxDepth, allTilesByDepth, room);
 	}
 	
     /**
      * Find all tiles where the entity can move.
      * Recursive method that stops when currentDepth becomes higher than maxDepth
      * @param the moving entity
-     * @param currentTileEntity the starting tile
+     * @param currentTile the starting tile
      * @param currentDepth the current depth of the search
      * @param maxDepth the max depth of the search
      * @param allTilesByDepth the map containing for each depth all the tiles the entity can move onto
      * @return the set of tiles where the entity can move
      */
-	private Set<Entity> findAllWalkableTiles(Entity mover, Entity currentTileEntity, int currentDepth, int maxDepth, 
-			Map<Integer, Set<Entity>> allTilesByDepth, Room room) {		
-		Set<Entity> walkableTiles = new LinkedHashSet<>();
+	private Set<Tile> findAllWalkableTiles(Entity mover, Tile currentTile, int currentDepth, int maxDepth, 
+			Map<Integer, Set<Tile>> allTilesByDepth, Room room) {		
+		Set<Tile> walkableTiles = new LinkedHashSet<>();
 		
 		//Check whether we reached the maxDepth or not
 		if (currentDepth <= maxDepth) {
-			GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(currentTileEntity);
-	        Vector2 currentPosition = gridPosCompo.coord();
+	        Vector2 currentPosition = currentTile.getGridPos();
 	        int currentX = (int)currentPosition.x;
 	        int currentY = (int)currentPosition.y;
 			
 	        //Check the 4 contiguous tiles and retrieve the ones we can move onto
-	        Set<Entity> tilesToIgnore = null;
+	        Set<Tile> tilesToIgnore = null;
 	        if (allTilesByDepth.containsKey(currentDepth)) {
 	        	tilesToIgnore = allTilesByDepth.get(currentDepth);
 	        }
-			Set<Entity> previouslyReturnedTiles = check4ContiguousTiles(CheckTypeEnum.MOVEMENT, currentX, currentY, tilesToIgnore, room);
+			Set<Tile> previouslyReturnedTiles = check4ContiguousTiles(CheckTypeEnum.MOVEMENT, currentX, currentY, tilesToIgnore, room);
 			walkableTiles.addAll(previouslyReturnedTiles);
 			
 			//Fill the map
-			Set<Entity> set = allTilesByDepth.get(currentDepth);
+			Set<Tile> set = allTilesByDepth.get(currentDepth);
 			if (set == null) set = new LinkedHashSet<>();
 			set.addAll(previouslyReturnedTiles);
 			allTilesByDepth.put(currentDepth, set);
 			
 			//For each retrieved tile, redo a search until we reach max depth
-			for (Entity tile : previouslyReturnedTiles) {
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);
-				int moveConsumed = TileUtil.getCostOfMovementForTilePos(gridPositionComponent.coord(), mover, room);
-	        	Set<Entity> returnedTiles = findAllWalkableTiles(mover, tile, currentDepth + moveConsumed, 
+			for (Tile tile : previouslyReturnedTiles) {
+				int moveConsumed = TileUtil.getCostOfMovementForTilePos(tile.getGridPos(), mover, room);
+	        	Set<Tile> returnedTiles = findAllWalkableTiles(mover, tile, currentDepth + moveConsumed, 
 	        			maxDepth, allTilesByDepth, room);
 	        	walkableTiles.addAll(returnedTiles);
 	        }
@@ -209,9 +203,9 @@ public class TileSearchService {
 	 * @param type the type of search
 	 * @param currentX the current tile X
 	 * @param currentY the current tile Y
-	 * @return the set of tile entities where it's possible to move
+	 * @return the set of tiles where it's possible to move
 	 */
-	private Set<Entity> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room) {
+	private Set<Tile> check4ContiguousTiles(CheckTypeEnum type, int currentX, int currentY, Set<Tile> tilesToIgnore, Room room) {
 		return check4ContiguousTiles(null,type, currentX, currentY, tilesToIgnore, room, 1, 1);
 	}
 		
@@ -221,10 +215,10 @@ public class TileSearchService {
 	 * @param type the type of search
 	 * @param currentX the current tile X
 	 * @param currentY the current tile Y
-	 * @return the set of tile entities where it's possible to move
+	 * @return the set of tiles where it's possible to move
 	 */
-	public Set<Entity> check4ContiguousTiles(AttackTypeEnum attackType, CheckTypeEnum type, int currentX, int currentY, Set<Entity> tilesToIgnore, Room room, int maxDepth, int currentDepth) {
-		Set<Entity> foundTiles = new LinkedHashSet<>();
+	public Set<Tile> check4ContiguousTiles(AttackTypeEnum attackType, CheckTypeEnum type, int currentX, int currentY, Set<Tile> tilesToIgnore, Room room, int maxDepth, int currentDepth) {
+		Set<Tile> foundTiles = new LinkedHashSet<>();
 		boolean continueSearching = false;
 		//Left
 		if (currentX > 0) {
@@ -242,7 +236,7 @@ public class TileSearchService {
 			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
-				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				Set<Tile> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
 				foundTiles.addAll(subDepthTiles);
 			}
 			
@@ -263,7 +257,7 @@ public class TileSearchService {
 			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
-				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				Set<Tile> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
 				foundTiles.addAll(subDepthTiles);
 			}
 		}
@@ -283,7 +277,7 @@ public class TileSearchService {
 			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
-				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				Set<Tile> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
 				foundTiles.addAll(subDepthTiles);
 			}
 		}
@@ -303,7 +297,7 @@ public class TileSearchService {
 			tempPos.free();
 			
 			if (continueSearching && maxDepth > currentDepth) {
-				Set<Entity> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
+				Set<Tile> subDepthTiles = check4ContiguousTiles(attackType,type, newX, newY, tilesToIgnore, room, maxDepth, currentDepth + 1);
 				foundTiles.addAll(subDepthTiles);
 			}
 		}
@@ -317,25 +311,21 @@ public class TileSearchService {
 	 * @param tileEntity the tile to check
 	 * @param walkableTiles the set of movable entities
 	 */
-	private boolean checkOneTileForMovement(Vector2 pos, Room room, int currentDepth, Set<Entity> walkableTiles, Set<Entity> tilesToIgnore) {
-		Entity tileEntity = room.getTileAtGridPosition(pos);
+	private boolean checkOneTileForMovement(Vector2 pos, Room room, int currentDepth, Set<Tile> walkableTiles, Set<Tile> tilesToIgnore) {
+		Tile tile = room.getTileAtGridPosition(pos);
 
-		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
+		if (tilesToIgnore != null && tilesToIgnore.contains(tile)) {
 			return true;
 		}
-		
-		TileComponent tileComponent = Mappers.tileComponent.get(tileEntity);
-		
+				
 		Entity entityOnTile = TileUtil.getSolidEntityOnTile(pos, room);
 		if (entityOnTile != null) {
 			//There's already something on this tile.
 			return true;
 		}
 		
-		//TODO: this condition will have to change when we will have to handle items that allow
-		//moving past pits for example.
-		if (tileComponent.type.isWalkable(currentEntity)) {
-			walkableTiles.add(tileEntity);
+		if (tile.isWalkable(currentEntity)) {
+			walkableTiles.add(tile);
 		}
 		return true;
 	}
@@ -345,25 +335,24 @@ public class TileSearchService {
 	 * @param tileEntity the tile to check
 	 * @param attackableTiles the set of attackable tile entities
 	 */
-	private boolean checkOneTileForAttack(AttackTypeEnum attackType, Vector2 pos, Room room, int currentDepth, Set<Entity> attackableTiles, Set<Entity> tilesToIgnore, boolean checkEntityToAttack) {
-		Entity tileEntity = room.getTileAtGridPosition(pos);
+	private boolean checkOneTileForAttack(AttackTypeEnum attackType, Vector2 pos, Room room, int currentDepth, Set<Tile> attackableTiles, Set<Tile> tilesToIgnore, boolean checkEntityToAttack) {
+		Tile tile = room.getTileAtGridPosition(pos);
 		
 		//First, check whether this tiles hasn't already been visited.
-		if (visitedTilesWithRemainingMove.containsKey(tileEntity)) {
-			if (visitedTilesWithRemainingMove.get(tileEntity) <= currentDepth) {
+		if (visitedTilesWithRemainingMove.containsKey(tile)) {
+			if (visitedTilesWithRemainingMove.get(tile) <= currentDepth) {
 				//Already visited with more move remaining, so skip this tile
 				return false;
 			}
 		}
-		visitedTilesWithRemainingMove.put(tileEntity, currentDepth);
+		visitedTilesWithRemainingMove.put(tile, currentDepth);
 
 		
-		if (tilesToIgnore != null && tilesToIgnore.contains(tileEntity)) {
+		if (tilesToIgnore != null && tilesToIgnore.contains(tile)) {
 			return true;
 		}
 		
 		// Obstacles		
-		GridPositionComponent currentTilePos = Mappers.gridPositionComponent.get(tileEntity);
 		Set<Entity> blockingEntity = null; 
 		if (attackType == AttackTypeEnum.EXPLOSION) {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockExplosionComponent.class, room);
@@ -371,7 +360,7 @@ public class TileSearchService {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
-			obstacles.add(currentTilePos.coord());
+			obstacles.add(tile.getGridPos());
 		}
 		
 		
@@ -397,13 +386,13 @@ public class TileSearchService {
 		
 		//TODO: this condition will probably have to change, when fighting a flying enemy over a pit
 		//for example.
-		if (attackType.canAttack(tileEntity, room)) {
+		if (attackType.canAttack(tile, currentEntity,room)) {
 			
-			List<Entity> list = attackableTilesPerDistance.get(currentDepth);
+			List<Tile> list = attackableTilesPerDistance.get(currentDepth);
 			if (list == null) list = new ArrayList<>();
-			list.add(tileEntity);
+			list.add(tile);
 			
-			attackableTiles.add(tileEntity);
+			attackableTiles.add(tile);
 		}
 		return true;
 	}

@@ -51,7 +51,7 @@ public class Room extends EntitySystem {
 	private RoomState state;
 	private RoomState nextState;
 	
-	public Entity[][] grid;
+	public Tile[][] grid;
 	
 	public PooledEngine engine;
 	public EntityFactory entityFactory;
@@ -253,7 +253,7 @@ public class Room extends EntitySystem {
 		// Layout
 		RoomGenerator generator = new RoomGenerator(this.entityFactory);
 		GeneratedRoom generatedRoom = generator.generateRoomLayout(this, this.northNeighbor, this.eastNeighbor, this.southNeighbor, this.westNeighbor);
-		grid = generatedRoom.getTileEntities();
+		grid = generatedRoom.getTiles();
 
 		// Content
 		generator.generateRoomContent(this, generatedRoom);
@@ -282,21 +282,21 @@ public class Room extends EntitySystem {
 
 	
 	/**
-	 * Return the entity for the tile at the given position.
+	 * Return the tile at the given position.
 	 * @param x the abscissa
 	 * @param y the ordinate
 	 * @return the tile at the given position
 	 */
-	public Entity getTileAtGridPosition(int x, int y) {
+	public Tile getTileAtGridPosition(int x, int y) {
 		return grid[x][y];
 	}
 	
 	/**
-	 * Return the entity for the tile at the given position.
+	 * Return the tile at the given position.
 	 * @param pos the position
 	 * @return the tile at the given position
 	 */
-	public Entity getTileAtGridPosition(Vector2 pos) {
+	public Tile getTileAtGridPosition(Vector2 pos) {
 		return grid[(int) pos.x][(int) pos.y];
 	}
 

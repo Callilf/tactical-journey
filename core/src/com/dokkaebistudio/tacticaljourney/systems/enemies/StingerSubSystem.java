@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -254,7 +255,7 @@ public class StingerSubSystem extends EnemySubSystem {
 
 	private boolean checkTile(PoolableVector2 position, Set<Entity> additionnalAttackableTiles, MoveComponent moveCompo,
 			AttackComponent attackCompo, Room room) {
-		Entity tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
+		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
 		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
 		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
 			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room));

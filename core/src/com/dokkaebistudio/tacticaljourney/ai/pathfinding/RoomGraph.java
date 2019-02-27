@@ -6,43 +6,37 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class RoomGraph implements IndexedGraph<Entity> {
+public class RoomGraph implements IndexedGraph<Tile> {
 	
 	/** The moving entity. */
 	private Entity mover;
 	
 	/** the list of tiles where movement is possible. */
-	private List<Entity> movableTiles;
+	private List<Tile> movableTiles;
 	
-	public RoomGraph(Entity mover, List<Entity> movableTiles) {
+	public RoomGraph(Entity mover, List<Tile> movableTiles) {
         this.movableTiles = movableTiles;
         this.mover = mover;
 	}
 
 	@Override
-	public Array<Connection<Entity>> getConnections(Entity fromNode) {
-		Array<Connection<Entity>> connections = new Array<Connection<Entity>>();
-		GridPositionComponent firstPos = Mappers.gridPositionComponent.get(fromNode);
+	public Array<Connection<Tile>> getConnections(Tile fromTile) {
+		Array<Connection<Tile>> connections = new Array<Connection<Tile>>();
 
-		for (Entity nodeToTest :  movableTiles) {
-			GridPositionComponent secondPos = Mappers.gridPositionComponent.get(nodeToTest);
-			if (firstPos.coord().x == secondPos.coord().x && firstPos.coord().y == secondPos.coord().y) continue;
+		for (Tile tileToTest :  movableTiles) {
+			if (fromTile.getGridPos().x == tileToTest.getGridPos().x && fromTile.getGridPos().y == tileToTest.getGridPos().y) continue;
 
-			boolean aboveOrUnder = firstPos.coord().x == secondPos.coord().x 
-					&& (firstPos.coord().y == secondPos.coord().y + 1 || firstPos.coord().y == secondPos.coord().y -1);
-			boolean beside = firstPos.coord().y == secondPos.coord().y 
-					&& (firstPos.coord().x == secondPos.coord().x + 1 || firstPos.coord().x == secondPos.coord().x -1);
+			boolean aboveOrUnder = fromTile.getGridPos().x == tileToTest.getGridPos().x 
+					&& (fromTile.getGridPos().y == tileToTest.getGridPos().y + 1 || fromTile.getGridPos().y == tileToTest.getGridPos().y -1);
+			boolean beside = fromTile.getGridPos().y == tileToTest.getGridPos().y 
+					&& (fromTile.getGridPos().x == tileToTest.getGridPos().x + 1 || fromTile.getGridPos().x == tileToTest.getGridPos().x -1);
 			
 			if (beside || aboveOrUnder) {
-				GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(nodeToTest);
-				TileComponent tileComponent = Mappers.tileComponent.get(nodeToTest);
-				int cost = TileUtil.getHeuristicCostForTilePos(gridPosCompo.coord(), mover, tileComponent.getRoom());
-				connections.add(new RoomConnection(fromNode, nodeToTest, cost));
+				int cost = TileUtil.getHeuristicCostForTilePos(tileToTest.getGridPos(), mover, tileToTest.getRoom());
+				connections.add(new RoomConnection(fromTile, tileToTest, cost));
 			}
 		}
 		
@@ -50,7 +44,7 @@ public class RoomGraph implements IndexedGraph<Entity> {
 	}
 
 	@Override
-	public int getIndex(Entity node) {
+	public int getIndex(Tile node) {
 		return movableTiles.indexOf(node);
 	}
 
@@ -64,13 +58,13 @@ public class RoomGraph implements IndexedGraph<Entity> {
 	 * RoomConnection internal class.
 	 * Specific implementation of Connection to handle movements that cost more than others.
 	 */
-    public class RoomConnection implements Connection<Entity> {
+    public class RoomConnection implements Connection<Tile> {
 
-        private Entity from;
-        private Entity to;
+        private Tile from;
+        private Tile to;
         private float cost;
 
-        public RoomConnection(Entity from, Entity to, float cost) {
+        public RoomConnection(Tile from, Tile to, float cost) {
             this.from = from;
             this.to = to;
             this.cost = cost;
@@ -82,23 +76,23 @@ public class RoomGraph implements IndexedGraph<Entity> {
         }
 
         @Override
-        public Entity getFromNode() {
+        public Tile getFromNode() {
             return from;
         }
 
         @Override
-        public Entity getToNode() {
+        public Tile getToNode() {
             return to;
         }
     }
 
 
 
-	public List<Entity> getMovableTiles() {
+	public List<Tile> getMovableTiles() {
 		return movableTiles;
 	}
 
-	public void setMovableTiles(List<Entity> movableTiles) {
+	public void setMovableTiles(List<Tile> movableTiles) {
 		this.movableTiles = movableTiles;
 	}
     

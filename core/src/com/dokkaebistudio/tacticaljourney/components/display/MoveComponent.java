@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -29,7 +30,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public boolean freeMove;
 	
 	/** The tiles where the player can move. */
-	public Set<Entity> allWalkableTiles;
+	public Set<Tile> allWalkableTiles;
 	
 	/** The entities used to display the blue tiles where the player can move. */
 	public Set<Entity> movableTiles = new HashSet<>();

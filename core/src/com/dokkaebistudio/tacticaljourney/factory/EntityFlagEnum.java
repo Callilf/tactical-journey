@@ -16,6 +16,7 @@ public enum EntityFlagEnum {
 	
 	TILE(100),
 	WALL(101),
+	CHASM(102),
 	DOOR(103),
 	EXIT(104),
 	DESTROYED_SPRITE(105),

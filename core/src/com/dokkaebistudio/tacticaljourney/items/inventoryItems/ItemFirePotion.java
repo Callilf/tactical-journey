@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -64,12 +65,12 @@ public class ItemFirePotion extends Item {
 		}
 		
 		room.entityFactory.creepFactory.createFire(room, thrownPosition, thrower);
-		List<Entity> adjacentTiles = TileUtil.getAdjacentEntitiesWithComponent(thrownPosition, TileComponent.class, room);
-		for (Entity tile : adjacentTiles) {
-			if (Mappers.tileComponent.get(tile).type.isThrowable()) {
+		
+		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
+		for (Tile tile : adjacentTiles) {
+			if (tile.isThrowable(thrower)) {
 				boolean canCatchFire = true;
-				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(tile);
-				Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tilePos.coord(), CreepComponent.class, room);
+				Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), CreepComponent.class, room);
 				if (creepAlreadyThere != null) {
 					CreepComponent creepComponent = Mappers.creepComponent.get(creepAlreadyThere);
 					if (creepComponent.getType().getType() == CreepType.FIRE) {
@@ -79,14 +80,14 @@ public class ItemFirePotion extends Item {
 				}
 				
 				if (canCatchFire) {
-					Entity wall = TileUtil.getEntityWithComponentOnTile(tilePos.coord(), BlockExplosionComponent.class, room);
+					Entity wall = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), BlockExplosionComponent.class, room);
 					if (wall != null) {
 						canCatchFire = false;
 					}
 				}
 				
 				if (canCatchFire) {
-					room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(tile).coord(), thrower);
+					room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), thrower);
 				}
 			}
 		}

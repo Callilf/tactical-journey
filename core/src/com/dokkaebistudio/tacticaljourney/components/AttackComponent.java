@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.ActionsUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -86,7 +87,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	// Attack tiles selection and display
 	
 	/** The tiles where the player can attack. */
-	public Set<Entity> allAttackableTiles;
+	public Set<Tile> allAttackableTiles;
 	
 	/** The entities used to display the red tiles where the entity can attack. */
 	public Set<Entity> attackableTiles = new HashSet<>();

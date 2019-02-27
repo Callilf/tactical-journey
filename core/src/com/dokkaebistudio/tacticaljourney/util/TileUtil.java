@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 
 /**
  * Helpers for everything related to tiles, like finding something on a give tile.
@@ -71,7 +72,7 @@ public final class TileUtil {
 	 * @param r the room
 	 * @return the tile on which the entity is standing.
 	 */
-	public static Entity getTileFromEntity(Entity e, Room r) {
+	public static Tile getTileFromEntity(Entity e, Room r) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		return getTileAtGridPos(gridPositionComponent.coord(), r);
 	}
@@ -115,21 +116,21 @@ public final class TileUtil {
 	 * @param room the room
 	 * @return the tile at the given position
 	 */
-	public static Entity getTileAtGridPos(Vector2 gridPos, Room room) {
+	public static Tile getTileAtGridPos(Vector2 gridPos, Room room) {
 		
-		//TODO test
-		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(gridPos);
-		if (entitiesAtPosition != null) {
-			for (Entity e : entitiesAtPosition) {
-				if (Mappers.tileComponent.get(e) != null) {
-					return e;
-				}
-			}
-		}
+//		//TODO test
+//		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(gridPos);
+//		if (entitiesAtPosition != null) {
+//			for (Entity e : entitiesAtPosition) {
+//				if (Mappers.tileComponent.get(e) != null) {
+//					return e;
+//				}
+//			}
+//		}
+//		
+//		return null;
 		
-		return null;
-		
-//		return room.grid[(int) gridPos.x][(int) gridPos.y];
+		return room.grid[(int) gridPos.x][(int) gridPos.y];
 	}
 	
 	/**
@@ -138,9 +139,9 @@ public final class TileUtil {
 	 * @param room the room
 	 * @return the tile at the given position
 	 */
-	public static Entity getTileAtPixelPos(Vector2 pixelPos, Room room) {
+	public static Tile getTileAtPixelPos(Vector2 pixelPos, Room room) {
 		PoolableVector2 gridPos = convertPixelPosIntoGridPos(pixelPos);
-		Entity e = getTileAtGridPos(gridPos, room);
+		Tile e = getTileAtGridPos(gridPos, room);
 		gridPos.free();
 		
 		return e;
@@ -285,6 +286,40 @@ public final class TileUtil {
 		return (int) xDistance + (int) yDistance;
 	}
 	
+	
+	/**
+	 * Get adjacent tiles.
+	 * @param pos the position
+	 * @param room the room
+	 * @return a list with 4 tiles max
+	 */
+	public static List<Tile> getAdjacentTiles(Vector2 pos, Room room) {
+		List<Tile> tiles = new ArrayList<>();
+		
+		PoolableVector2 temp = PoolableVector2.create(pos);
+		if (temp.x > 0) {
+			temp.x -= 1;
+			tiles.add(room.getTileAtGridPosition(temp));
+			temp.x += 1;
+		}
+		if (temp.x < GameScreen.GRID_W - 1) {
+			temp.x += 1;
+			tiles.add(room.getTileAtGridPosition(temp));
+			temp.x -= 1;
+		}
+		if (temp.y > 0) {
+			temp.y -= 1;
+			tiles.add(room.getTileAtGridPosition(temp));
+			temp.y += 1;
+		}
+		if (temp.y < GameScreen.GRID_H - 1) {
+			temp.y += 1;
+			tiles.add(room.getTileAtGridPosition(temp));
+			temp.y -= 1;
+		}
+		
+		return tiles;
+	}
 	
 	/**
 	 * Get adjacent entities with the given component. Adjacent means on adjacent tiles.

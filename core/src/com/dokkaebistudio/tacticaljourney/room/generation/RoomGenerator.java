@@ -34,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
@@ -64,7 +65,7 @@ public class RoomGenerator {
 	 */
 	public GeneratedRoom generateRoomLayout(Room currentRoom, Room nn, Room en, Room sn, Room wn) {
 		GeneratedRoom groom = new GeneratedRoom();
-        groom.setTileEntities(new Entity[GRID_W][GameScreen.GRID_H]);
+        groom.setTiles(new Tile[GRID_W][GameScreen.GRID_H]);
         groom.setTileTypes(new TileEnum[GRID_W][GRID_H]);
         groom.setPossibleSpawns(new ArrayList<PoolableVector2>());
         groom.setPossibleDestr(new ArrayList<PoolableVector2>());
@@ -156,10 +157,9 @@ public class RoomGenerator {
         //Create the tile entities
 		for (int x = 0; x < GRID_W; x++) {
 			for (y = 0; y < GameScreen.GRID_H; y++) {
-				PoolableVector2 tempPos = PoolableVector2.create(x, y);
-				Entity tileEntity = entityFactory.createTile(currentRoom, tempPos, groom.getTileTypes()[x][y]);
-				groom.getTileEntities()[x][y] = tileEntity;
-				tempPos.free();
+				Vector2 pos = new Vector2(x, y);
+				groom.getTiles()[x][y] = new Tile(currentRoom, pos);
+				entityFactory.createTerrain(currentRoom, pos, groom.getTileTypes()[x][y]);
 			}
 		}
 		

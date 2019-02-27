@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -39,24 +40,22 @@ public class AttackTileSearchService extends TileSearchService {
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
 
 		//Search all attackable tiles for each movable tile
-		Set<Entity> attackableTiles = new HashSet<>();
+		Set<Tile> attackableTiles = new HashSet<>();
 		
 		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
-			Entity tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
+			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
 			attackableTiles.add(tileAtGridPos);
 		}
 		
-		Set<Entity> moveTiles = moveCompo.allWalkableTiles;
+		Set<Tile> moveTiles = moveCompo.allWalkableTiles;
 		if (moveTiles.isEmpty()) {
 			moveTiles.add(TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room));
 		}
-		for (Entity t : moveTiles) {
-			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-			
+		for (Tile t : moveTiles) {			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
 			visitedTilesWithRemainingMove.put(t, 0);
-			Set<Entity> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)tilePos.coord().x, (int)tilePos.coord().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
+			Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
 
@@ -68,12 +67,11 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		//Range Postprocess : remove tiles that cannot be attacked
 		if (attackCompo.getRangeMin() > 1) {
-			Iterator<Entity> it = attackableTiles.iterator();
+			Iterator<Tile> it = attackableTiles.iterator();
 			while (it.hasNext()) {
-				Entity currentAttackableTile = it.next();
-				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
+				Tile currentAttackableTile = it.next();
 				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), tilePos.coord()) < attackCompo.getRangeMin()) {
+				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
 					it.remove();
 				}
 			}
@@ -83,8 +81,8 @@ public class AttackTileSearchService extends TileSearchService {
 
 		
 		//Create entities for each attackable tiles to display them
-		for (Entity tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(Mappers.gridPositionComponent.get(tileCoord).coord(), room);
+		for (Tile tileCoord : attackCompo.allAttackableTiles) {
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
 	}
@@ -95,7 +93,7 @@ public class AttackTileSearchService extends TileSearchService {
 	//*************************************
 	// Obstacles management
 
-	private void obstaclesPostProcess(GridPositionComponent attackerPosCompo, Set<Entity> attackableTiles) {
+	private void obstaclesPostProcess(GridPositionComponent attackerPosCompo, Set<Tile> attackableTiles) {
 		Iterator<Vector2> obstaclesIt = obstacles.iterator();
 		while (obstaclesIt.hasNext()) {
 			Vector2 obstacle = obstaclesIt.next();
@@ -152,12 +150,11 @@ public class AttackTileSearchService extends TileSearchService {
 	}
 
 
-	private void filterHiddenTiles(DirectionEnum direction, float xDist, float yDist, GridPositionComponent attackerPosCompo, Set<Entity> attackableTiles, Vector2 obstacle) {
-		Iterator<Entity> it = attackableTiles.iterator();
+	private void filterHiddenTiles(DirectionEnum direction, float xDist, float yDist, GridPositionComponent attackerPosCompo, Set<Tile> attackableTiles, Vector2 obstacle) {
+		Iterator<Tile> it = attackableTiles.iterator();
 		while (it.hasNext()) {
-			Entity next = it.next();
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(next);
-			Vector2 currentTilePos = gridPositionComponent.coord();
+			Tile next = it.next();
+			Vector2 currentTilePos = next.getGridPos();
 			float currxDist = direction == DirectionEnum.UP || direction == DirectionEnum.DOWN ? Math.abs(currentTilePos.x - attackerPosCompo.coord().x) : currentTilePos.x - attackerPosCompo.coord().x;
 			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord().y) : currentTilePos.y - attackerPosCompo.coord().y;
 			float obstxDist = Math.abs(currentTilePos.x - obstacle.x); 

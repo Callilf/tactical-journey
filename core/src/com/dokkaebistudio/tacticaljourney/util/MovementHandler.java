@@ -163,12 +163,6 @@ public class MovementHandler {
 	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
 		moveCompo.arrivedOnTile = true;
 		
-		//Perform any action related to the current tile such as picking up consumables,
-		//receiving damages from spikes or fire...
-		//TODO
-		Entity tileAtGridPosition = room.getTileAtGridPosition(moveCompo.currentMoveDestinationTilePos);
-		
-		
 		// Creep
 		Entity creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
 		if (creep != null) {

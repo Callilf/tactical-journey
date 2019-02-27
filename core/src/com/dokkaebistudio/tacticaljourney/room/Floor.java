@@ -6,7 +6,9 @@ package com.dokkaebistudio.tacticaljourney.room;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -30,6 +32,9 @@ public class Floor {
 	/** The positions of each rooms. */
 	private Map<Vector2, Room> roomPositions;
 	
+	/** The room grid for this floor. */
+	private Sprite grid;
+	
 	/** The currently active room. */
 	private Room activeRoom;
 	
@@ -40,6 +45,10 @@ public class Floor {
 	 */
 	public Floor(GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
+		
+		this.grid = new Sprite(Assets.grid);
+		this.grid.setPosition(GameScreen.LEFT_RIGHT_PADDING, GameScreen.BOTTOM_MENU_HEIGHT);
+
 		
 		new FloorGenerator().generateFloor(this, gameScreen);
 	}
@@ -100,14 +109,19 @@ public class Floor {
 		this.activeRoom.setVisited(true);
 	}
 
-
 	public Map<Vector2, Room> getRoomPositions() {
 		return roomPositions;
 	}
-
-
 	public void setRoomPositions(Map<Vector2, Room> roomPositions) {
 		this.roomPositions = roomPositions;
+	}
+
+	public Sprite getGrid() {
+		return grid;
+	}
+
+	public void setGrid(Sprite grid) {
+		this.grid = grid;
 	}
 
 	

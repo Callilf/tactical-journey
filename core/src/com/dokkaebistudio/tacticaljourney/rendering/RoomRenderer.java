@@ -80,6 +80,9 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 		
+		// draw the grid in the background
+		this.room.floor.getGrid().draw(batch);
+		
 		for (Entity entity : renderQueue) {
 			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
 			TextComponent textCompo = Mappers.textComponent.get(entity);

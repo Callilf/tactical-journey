@@ -17,7 +17,8 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -26,12 +27,13 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class AnimationSystem extends EntitySystem implements RoomSystem {
+public class AnimationSystem extends IteratingSystem implements RoomSystem {
 
 	private Room room;
 
 	
 	public AnimationSystem(Room room) {
+		super(Family.one(AnimationComponent.class).get());
 		this.priority = 3;
 
 		this.room = room;
@@ -44,24 +46,21 @@ public class AnimationSystem extends EntitySystem implements RoomSystem {
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public void processEntity(Entity entity, float deltaTime) {
 		
-		for(Entity entity : room.getAllEntities()) {
-			if (!Mappers.animationComponent.has(entity))	continue;
-			AnimationComponent anim = Mappers.animationComponent.get(entity);
+		AnimationComponent anim = Mappers.animationComponent.get(entity);
 
-			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
-			StateComponent state = Mappers.stateComponent.get(entity);
-			if (spriteCompo == null || state == null) continue;
-			
-			Animation<Sprite> animation = anim.animations.get(state.get());
-			
-			if (animation != null) {
-				spriteCompo.setSprite(new Sprite(animation.getKeyFrame(state.time))); 
-			}
-			
-			state.time += deltaTime;
+		SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
+		StateComponent state = Mappers.stateComponent.get(entity);
+		if (spriteCompo == null || state == null) return;
+		
+		Animation<Sprite> animation = anim.animations.get(state.get());
+		
+		if (animation != null) {
+			spriteCompo.setSprite(new Sprite(animation.getKeyFrame(state.time))); 
 		}
-
+		
+		state.time += deltaTime;
+		
 	}
 }

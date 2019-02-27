@@ -94,10 +94,12 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	public void addStatus(Entity entity, Status status, Stage fxStage) {
 		status.onReceive(entity);
 		
-		// If the same status has already been received, inscrease its duration
+		// If the same status has already been received, increase its duration
 		for (Status alreadyReceivedStatus : statuses) {
 			if (alreadyReceivedStatus.getClass().equals( status.getClass())) {
-				this.updateDuration(alreadyReceivedStatus, status.getDuration());
+				alreadyReceivedStatus.addUp(status);
+				// update the duration label
+				this.updateDuration(alreadyReceivedStatus, 0);
 				return;
 			}
 		}
@@ -123,7 +125,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		Image img = new Image(status.texture());
 		oneStatusTable.add(img);
 		oneStatusTable.row();
-		Label label = new Label(String.valueOf(status.getDuration()), PopinService.smallTextStyle());
+		Label label = new Label(status.getDurationString(), PopinService.smallTextStyle());
 		oneStatusTable.add(label);
 		oneStatusTable.pack();
 		
@@ -167,19 +169,21 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 	
 	public void updateDuration(Status status, int value) {
-		status.setDuration(status.getDuration() + value);
-		
-		// Check if the status is over
-		if (status.getDuration() == 0) {
-			this.requestAction(StatusActionEnum.REMOVE_STATUS, status);
-			return;
-		}
-		
-		// Update the duration label
-		if (statusTable != null) {
-			Table oneStatusTable = iconsMap.get(status);
-			Label durationLabel = (Label) oneStatusTable.getCells().get(1).getActor();
-			durationLabel.setText(String.valueOf(status.getDuration()));
+		if (status.getDuration() != null) {
+			status.setDuration(status.getDuration() + value);
+			
+			// Check if the status is over
+			if (status.getDuration().intValue() == 0) {
+				this.requestAction(StatusActionEnum.REMOVE_STATUS, status);
+				return;
+			}
+			
+			// Update the duration label
+			if (statusTable != null) {
+				Table oneStatusTable = iconsMap.get(status);
+				Label durationLabel = (Label) oneStatusTable.getCells().get(1).getActor();
+				durationLabel.setText(status.getDurationString());
+			}
 		}
 	}
 	

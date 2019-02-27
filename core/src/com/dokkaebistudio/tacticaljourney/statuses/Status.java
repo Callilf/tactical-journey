@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 public abstract class Status {
 	
 	/** The number of turns this status will last. */
-	private int duration;
+	private Integer duration;
 	
 	public abstract String title();
 	public abstract AtlasRegion texture();
@@ -32,14 +32,36 @@ public abstract class Status {
 	public void onEndTurn(Entity entity) {}
 	
 	
+	
+	public String getDurationString() {
+		if (duration != null) {
+			return String.valueOf(duration);
+		} else {
+			return "?";
+		}
+	}
+	
+	
+	/**
+	 * Called when an entity already has a status of this type and receive
+	 * the same type again.
+	 * @param addedStatus the status the was just received
+	 */
+	public void addUp(Status addedStatus) {
+		if (this.duration != null && addedStatus.getDuration() != null) {
+			this.setDuration(this.duration + addedStatus.getDuration());
+		}
+	}
+	
+	
 	//************************
 	// getters and setters
 	
-	public int getDuration() {
+	public Integer getDuration() {
 		return duration;
 	}
 	
-	public void setDuration(int duration) {
+	public void setDuration(Integer duration) {
 		this.duration = duration;
 	};
 

@@ -7,14 +7,19 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -46,6 +51,16 @@ public class CreepFire extends Creep {
 		if (healthComponent != null) {
 			healthComponent.hit(3, creep);
 		}
+		
+		// 50% chances to get the burning status
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
+		if (statusReceiverComponent != null) {
+			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
+			int nextInt = unseededRandom.nextInt(100);
+			if (nextInt < 50) {
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());
+			}
+		}
 	}
 	
 	@Override
@@ -55,6 +70,12 @@ public class CreepFire extends Creep {
 		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
 		if (healthComponent != null) {
 			healthComponent.hit(10, creep);
+		}
+		
+		// 100% chance to receive burning status
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
+		if (statusReceiverComponent != null) {
+			statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());
 		}
 	}
 	

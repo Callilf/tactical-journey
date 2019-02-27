@@ -57,7 +57,8 @@ public class AnimationSystem extends IteratingSystem implements RoomSystem {
 		Animation<Sprite> animation = anim.animations.get(state.get());
 		
 		if (animation != null) {
-			spriteCompo.setSprite(new Sprite(animation.getKeyFrame(state.time))); 
+			Sprite keyFrame = animation.getKeyFrame(state.time);
+			spriteCompo.getSprite().set(keyFrame);
 		}
 		
 		state.time += deltaTime;

@@ -58,7 +58,9 @@ public class CreepFire extends Creep {
 			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 			int nextInt = unseededRandom.nextInt(100);
 			if (nextInt < 50) {
-				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());
+				ParentEntityComponent parentEntityCompo = Mappers.parentEntityComponent.get(creep);
+				Entity parent = parentEntityCompo != null ? parentEntityCompo.getParent() : null;
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(parent));
 			}
 		}
 	}
@@ -75,7 +77,9 @@ public class CreepFire extends Creep {
 		// 100% chance to receive burning status
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
 		if (statusReceiverComponent != null) {
-			statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());
+			ParentEntityComponent parentEntityCompo = Mappers.parentEntityComponent.get(creep);
+			Entity parent = parentEntityCompo != null ? parentEntityCompo.getParent() : null;
+			statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(parent));
 		}
 	}
 	

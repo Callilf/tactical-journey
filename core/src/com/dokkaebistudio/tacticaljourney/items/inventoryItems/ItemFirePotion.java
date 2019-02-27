@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -18,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -49,11 +52,10 @@ public class ItemFirePotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		//Damage for 10 HP + set ablaze
-		HealthComponent healthComponent = Mappers.healthComponent.get(user);
-		healthComponent.hit(10, item);
+		//set ablaze	
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
+		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());
 		
-		//TODO set ablaze
 		return true;
 	}
 	

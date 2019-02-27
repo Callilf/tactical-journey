@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -125,6 +126,9 @@ public final class EnemyFactory {
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
 		room.addEnemy(enemyEntity);
 		
 		return enemyEntity;
@@ -201,6 +205,9 @@ public final class EnemyFactory {
 		creepEmitter.setType(CreepType.WEB);
 		enemyEntity.add(creepEmitter);
 		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
 		room.addEnemy(enemyEntity);
 		
 		return enemyEntity;
@@ -269,6 +276,9 @@ public final class EnemyFactory {
 		dropRate.add(ItemPoolRarity.RARE, 20);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
 		
 		room.addEnemy(enemyEntity);
 		
@@ -350,6 +360,9 @@ public final class EnemyFactory {
 		dropRate.add(ItemPoolRarity.RARE, 20);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
 		
 		room.addEnemy(enemyEntity);
 		

@@ -88,6 +88,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	public void reset() {
 		statuses.clear();
 		iconsMap.clear();
+		statusTable.clear();
+		statusTable.remove();
 	}
 
 	

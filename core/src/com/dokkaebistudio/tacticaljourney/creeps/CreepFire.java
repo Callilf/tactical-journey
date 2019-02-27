@@ -47,10 +47,10 @@ public class CreepFire extends Creep {
 	public void onWalk(Entity walker, Entity creep, Room room) {
 		if (isImmune(walker)) return;
 
-		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
-		if (healthComponent != null) {
-			healthComponent.hit(3, creep);
-		}
+//		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
+//		if (healthComponent != null) {
+//			healthComponent.hit(3, creep);
+//		}
 		
 		// 50% chances to get the burning status
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
@@ -67,10 +67,10 @@ public class CreepFire extends Creep {
 	public void onStop(Entity walker, Entity creep, Room room) {
 		if (isImmune(walker)) return;
 		
-		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
-		if (healthComponent != null) {
-			healthComponent.hit(10, creep);
-		}
+//		HealthComponent healthComponent = Mappers.healthComponent.get(walker);
+//		if (healthComponent != null) {
+//			healthComponent.hit(5, creep);
+//		}
 		
 		// 100% chance to receive burning status
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
@@ -166,7 +166,7 @@ public class CreepFire extends Creep {
 		if (isImmune(mover)) {
 			return 0;
 		} else {
-			return 100;
+			return 10;
 		}
 	}
 

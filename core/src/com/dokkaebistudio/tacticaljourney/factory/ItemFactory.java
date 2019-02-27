@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -133,6 +134,9 @@ public final class ItemFactory {
 		case POTION_REGEN:
 			item = createItemRegenPotion(room, tilePos);
 			break;
+		case POTION_WING:
+			item = createItemWingPotion(room, tilePos);
+			break;
 			
 			
 		case WEB_SACK:
@@ -211,8 +215,19 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemRegenPotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.regen_item, new ItemRegenPotion());
-		item.flags = EntityFlagEnum.ITEM_REGEN_POSTION.getFlag();
+		Entity item = createItemBase(room, tilePos, Assets.regen_potion_item, new ItemRegenPotion());
+		item.flags = EntityFlagEnum.ITEM_REGEN_POTION.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create a wing potion.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemWingPotion(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.wing_potion_item, new ItemWingPotion());
+		item.flags = EntityFlagEnum.ITEM_WING_POTION.getFlag();
 		return item;
 	}
 	

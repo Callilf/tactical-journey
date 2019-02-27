@@ -33,7 +33,8 @@ public class Assets {
 
 	public static AtlasRegion menuBackground;
 	
-	public static AtlasRegion player;
+	public static Array<Sprite> player_standing;
+	public static Array<Sprite> player_flying;
 	public static AtlasRegion shopkeeper;
 	public static AtlasRegion godess_statue;
 	public static AtlasRegion godess_statue_broken;
@@ -186,6 +187,7 @@ public class Assets {
 	
 	public static AtlasRegion status_poison;
 	public static AtlasRegion status_regen;
+	public static AtlasRegion status_flight;
 	
 	//******
 	// Items
@@ -194,7 +196,8 @@ public class Assets {
 
 	public static AtlasRegion money_item;
 	public static AtlasRegion health_up_item;
-	public static AtlasRegion regen_item;
+	public static AtlasRegion regen_potion_item;
+	public static AtlasRegion wing_potion_item;
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
 	
@@ -238,7 +241,9 @@ public class Assets {
 	public void initTextures() {
 		menuBackground = Assets.getTexture("background-test-menu");
 
-		player = Assets.getTexture("player-test");
+		player_standing = Assets.getAnimation("player_stand");
+		player_flying = Assets.getAnimation("player_flight");
+		
 		shopkeeper = Assets.getTexture("shopkeeper");
 		godess_statue = Assets.getTexture("godess_statue");
 		godess_statue_broken = Assets.getTexture("godess_statue_broken");
@@ -386,6 +391,7 @@ public class Assets {
 		
 		status_poison = Assets.getTexture("poison");
 		status_regen = Assets.getTexture("regen");
+		status_flight = Assets.getTexture("flight");
 
 		//******
 		// Items
@@ -394,7 +400,8 @@ public class Assets {
 
 		money_item = Assets.getTexture("item-money");
 		health_up_item = Assets.getTexture("item-consumable-health-up");
-		regen_item = Assets.getTexture("item-consumable-regen-potion");
+		regen_potion_item = Assets.getTexture("item-consumable-regen-potion");
+		wing_potion_item = Assets.getTexture("item-consumable-wing-potion");
 		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
 		web_sack_item = Assets.getTexture("item-web-sack");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");

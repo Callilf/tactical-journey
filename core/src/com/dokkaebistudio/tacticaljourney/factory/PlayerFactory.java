@@ -12,15 +12,16 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
-import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -29,7 +30,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 
@@ -67,10 +70,18 @@ public final class PlayerFactory {
 		Entity playerEntity = engine.createEntity();
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 
-		// Player sprite
+		// Player anim
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.player));
 		playerEntity.add(spriteCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.PLAYER_STANDING.getState() );
+		playerEntity.add(stateCompo);
+		
+		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
+		animCompo.animations.put(StatesEnum.PLAYER_STANDING.getState(), AnimationsEnum.PLAYER_STANDING.getAnimation());
+		animCompo.animations.put(StatesEnum.PLAYER_FLYING.getState(), AnimationsEnum.PLAYER_FLYING.getAnimation());
+		playerEntity.add(animCompo);
 		
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

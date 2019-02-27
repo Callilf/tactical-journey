@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
@@ -343,9 +344,9 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new ScorpionItemPool());
+		lootRewardCompo.setItemPool(new StingerItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 100 );
+		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		dropRate.add(ItemPoolRarity.RARE, 20);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);

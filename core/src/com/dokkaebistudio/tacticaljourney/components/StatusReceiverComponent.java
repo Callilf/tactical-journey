@@ -121,7 +121,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	private void addOneStatusTable(Status status) {
 		Table oneStatusTable = new Table();
 		Image img = new Image(status.texture());
-		oneStatusTable.add(img).width(30).height(30);
+		oneStatusTable.add(img);
 		oneStatusTable.row();
 		Label label = new Label(String.valueOf(status.getDuration()), PopinService.smallTextStyle());
 		oneStatusTable.add(label);

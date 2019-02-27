@@ -4,14 +4,12 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
+import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffFlight;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -19,16 +17,16 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemRegenPotion extends Item {
+public class ItemWingPotion extends Item {
 
-	public ItemRegenPotion() {
-		super("Regeneration potion", Assets.regen_potion_item, false, true);
+	public ItemWingPotion() {
+		super("Wing potion", Assets.wing_potion_item, false, true);
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Upon drink, grants a regeneration that lasts 20 to 40 turns.\n"
-				+ "This weird concoction will slowly close your wounds but it won't be strong enough to cure any afflictions.";		
+		return "Upon drink, grants flight for 30 turns.\n"
+				+ "Add lore.....";		
 	}
 	
 	@Override
@@ -43,10 +41,8 @@ public class ItemRegenPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-		int duration = 20 + unseededRandom.nextInt(21);
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
-		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(duration));
+		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffFlight(30, room.engine));
 		
 		return true;
 	}

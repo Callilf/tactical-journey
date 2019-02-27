@@ -27,6 +27,7 @@ public final class ShopItemPool {
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10, 8));
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10, 10));
+		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10, 8));
 		
 		for (PooledItemDescriptor pid : shopItemPool) {
 			sumOfChances += pid.getChanceToDrop();

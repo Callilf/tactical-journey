@@ -20,10 +20,12 @@ import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
@@ -98,12 +100,14 @@ public class RoomRenderer implements Renderer, RoomSystem {
 					float x = gridPosComponent.getAbsolutePos().x;
 					float y = gridPosComponent.getAbsolutePos().y;
 				
-					spriteCompo.getSprite().setPosition(x, y);
+					Sprite sprite = spriteCompo.getSprite();
 					if (spriteCompo.flipX && !spriteCompo.getSprite().isFlipX()) {
 						spriteCompo.getSprite().setFlip(true, false); 
 					} else if (!spriteCompo.flipX && spriteCompo.getSprite().isFlipX()) {
 						spriteCompo.getSprite().setFlip(false, false); 
 					}	
+
+					sprite.setPosition(x + GameScreen.GRID_SIZE/2 - sprite.getWidth()/2, y);
 					
 					if (!spriteCompo.hide) {
 						spriteCompo.getSprite().draw(batch);
@@ -117,15 +121,17 @@ public class RoomRenderer implements Renderer, RoomSystem {
 				
 				Vector2 realPos = gridPosComponent.getWorldPos();
 				if (spriteCompo != null && spriteCompo.getSprite() != null) {
-					spriteCompo.getSprite().setPosition(realPos.x, realPos.y);
+					Sprite sprite = spriteCompo.getSprite();
 					if (spriteCompo.flipX && !spriteCompo.getSprite().isFlipX()) {
-						spriteCompo.getSprite().setFlip(true, false); 
+						sprite.setFlip(true, false); 
 					} else if (!spriteCompo.flipX && spriteCompo.getSprite().isFlipX()) {
-						spriteCompo.getSprite().setFlip(false, false); 
+						sprite.setFlip(false, false); 
 					}
+					sprite.setPosition(realPos.x + GameScreen.GRID_SIZE/2 - sprite.getWidth()/2, realPos.y);
+
 
 					if (!spriteCompo.hide) {
-						spriteCompo.getSprite().draw(batch);
+						sprite.draw(batch);
 					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {

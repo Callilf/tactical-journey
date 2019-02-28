@@ -40,7 +40,8 @@ public class Assets {
 	public static AtlasRegion godess_statue_broken;
 	
 	
-	public static AtlasRegion grid;
+	public static AtlasRegion grid1;
+	public static AtlasRegion grid2;
 	public static AtlasRegion tile_ground;
 	public static AtlasRegion wall;
 	public static AtlasRegion wall_destroyed;
@@ -249,7 +250,8 @@ public class Assets {
 		godess_statue = Assets.getTexture("godess_statue");
 		godess_statue_broken = Assets.getTexture("godess_statue_broken");
 
-		grid = Assets.getTexture("grid_world1");
+		grid1 = Assets.getTexture("grid_world1");
+		grid2 = Assets.getTexture("grid_world2");
 		tile_ground = Assets.getTexture("tile-test");
 		wall = Assets.getTexture("tile-wall-test");
 		wall_destroyed = Assets.getTexture("tile-wall-destroyed");

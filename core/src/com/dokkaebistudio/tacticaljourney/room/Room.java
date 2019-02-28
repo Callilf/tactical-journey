@@ -195,9 +195,7 @@ public class Room extends EntitySystem {
 	 * @param e the entity to add
 	 */
 	public void addEntity(Entity e) {
-		if (Mappers.gridPositionComponent.has(e)) {
-			this.addToAllEntities(e);
-		}
+		this.addToAllEntities(e);
 		engine.addEntity(e);
 	}
 	

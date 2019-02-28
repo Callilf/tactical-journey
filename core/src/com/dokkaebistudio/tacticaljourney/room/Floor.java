@@ -26,6 +26,9 @@ public class Floor {
 	/** The game screen. */
 	private GameScreen gameScreen;
 	
+	/** The level. */
+	private int level;
+	
 	/** The rooms of this floor. */
 	private List<Room> rooms;
 	
@@ -43,13 +46,22 @@ public class Floor {
 	 * @param gameScreen the game screen.
 	 * @param timeDisplayer the timedisplayer that the current room will update
 	 */
-	public Floor(GameScreen gameScreen) {
+	public Floor(GameScreen gameScreen, int level) {
 		this.gameScreen = gameScreen;
+		this.setLevel(level);
 		
-		this.grid = new Sprite(Assets.grid);
+		if (level == 1) this.grid = new Sprite(Assets.grid1);
+		if (level > 1) this.grid = new Sprite(Assets.grid2);
+
 		this.grid.setPosition(GameScreen.LEFT_RIGHT_PADDING, GameScreen.BOTTOM_MENU_HEIGHT);
 
 		
+	}
+	
+	/**
+	 * Generate the floor's layout, rooms layouts and contents.
+	 */
+	public void generate() {
 		new FloorGenerator().generateFloor(this, gameScreen);
 	}
 	
@@ -122,6 +134,14 @@ public class Floor {
 
 	public void setGrid(Sprite grid) {
 		this.grid = grid;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	

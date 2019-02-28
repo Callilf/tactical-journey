@@ -410,6 +410,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * @param moverCurrentPos the current position of the mover
 	 */
 	private boolean selectDestinationTile(Entity moverEntity, int x, int y) {
+		int i=0;
 		for (Entity tile : moveCompo.movableTiles) {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
@@ -419,10 +420,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				continue;
 			}
 
+			
 			if (spriteComponent.containsPoint(x, y)) {
 				moveCompo.setSelectedAttackTile(null);
 				return selectTileAndBuildWaypoints(moverEntity, destinationPos);
 			}
+			i++;
 		}
 		
 		

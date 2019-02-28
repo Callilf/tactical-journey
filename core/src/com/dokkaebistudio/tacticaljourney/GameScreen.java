@@ -34,6 +34,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
@@ -72,6 +73,7 @@ import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class GameScreen extends ScreenAdapter {
 	public static final int GAME_RUNNING = 1;
@@ -105,7 +107,10 @@ public class GameScreen extends ScreenAdapter {
 
 	Vector3 touchPoint;
 	
-	Floor floor;
+	List<Floor> floors;
+	Floor activeFloor;
+	Floor requestedFloor;
+	
 	public EntityFactory entityFactory;
 	Rectangle pauseBounds;
 	Rectangle resumeBounds;
@@ -118,6 +123,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	/** The list of renderers. */
 	private List<Renderer> renderers = new ArrayList<>();
+	private MapRenderer mapRenderer;
 	
 	public Entity player;
 
@@ -160,14 +166,22 @@ public class GameScreen extends ScreenAdapter {
 		engine = new PooledEngine();
 		this.entityFactory = new EntityFactory(this.engine);
 		
-		floor = new Floor(this);
-		Room room = floor.getActiveRoom();
+		floors = new ArrayList<>();
+		Floor floor1 = new Floor(this, 1);
+		floor1.generate();
+		Room room = floor1.getActiveRoom();
+		floors.add(floor1);
+		activeFloor = floor1;
+		
+		Floor floor2 = new Floor(this, 2);
+		floors.add(floor2);
+		
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
 
-		
+		mapRenderer = new MapRenderer(miniMapStage, activeFloor);
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
-		renderers.add(new MapRenderer(miniMapStage, floor));
+		renderers.add(mapRenderer);
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
@@ -241,6 +255,40 @@ public class GameScreen extends ScreenAdapter {
 		updateRoomForComponents(playerComponent.getSkillBomb(), newRoom);
 		updateRoomForComponents(playerComponent.getSkillThrow(), newRoom);
 	}
+	
+	
+	public void enterNextFloor() {
+		int indexOfCurrentFloor = this.floors.indexOf(this.activeFloor);
+		Floor nextFloor = this.floors.get(indexOfCurrentFloor + 1);
+		this.requestedFloor = nextFloor;
+	}
+	
+	private void enterFloor(Floor newFloor) {
+		// Generate the new floor
+		newFloor.generate();
+		
+		// Leave the room of the current floor
+		Room oldRoom = this.activeFloor.getActiveRoom();
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.player);
+		oldRoom.removeEntityAtPosition(this.player, playerPos.coord());
+
+		// Enter the room of the new floor
+		Room newActiveRoom = newFloor.getActiveRoom();
+		MovementHandler.placeEntity(this.player, playerPos.coord(), newActiveRoom);
+		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
+		
+		// Update the map
+		this.mapRenderer.enterFloor(newFloor);
+		
+		// Remove all entities from the previous floor
+		for(Room r : this.activeFloor.getRooms()) {
+			for (Entity e : r.getAllEntities()) {
+				engine.removeEntity(e);
+			}
+		}
+		
+		this.activeFloor = newFloor;
+	}
 
 	private void updateRoomForComponents(Entity e, Room newRoom) {
 		for (Component compo : e.getComponents()) {
@@ -310,6 +358,11 @@ public class GameScreen extends ScreenAdapter {
 		
 		InputSingleton.getInstance().resetEvents();
 
+		// Switch floor
+		if (this.requestedFloor != null) {
+			this.enterFloor(this.requestedFloor);
+			this.requestedFloor = null;
+		}
 	}
 
 	@Override

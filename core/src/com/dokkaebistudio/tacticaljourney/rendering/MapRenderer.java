@@ -203,7 +203,6 @@ public class MapRenderer implements Renderer {
 
 		stage.addActor(scrollPane);
 
-		needRefresh = true;
 		enterFloor(f);
 	}
 	
@@ -248,6 +247,7 @@ public class MapRenderer implements Renderer {
 		xRange = maxX - minX + 1;
 		yRange = maxY - minY + 1;
 		createTableLayout(xRange, yRange);
+		needRefresh = true;
 	}
 
 	/**

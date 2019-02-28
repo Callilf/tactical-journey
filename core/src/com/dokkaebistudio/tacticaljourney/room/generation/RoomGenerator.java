@@ -295,8 +295,8 @@ public class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-//			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
-//			entityFactory.createExit(room, new Vector2(12, 4), false);
+			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
+			entityFactory.createExit(room, new Vector2(12, 4), false);
 
 //			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			
@@ -340,7 +340,7 @@ public class RoomGenerator {
 //			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
-//			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
+			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
 //			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
 //			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
 

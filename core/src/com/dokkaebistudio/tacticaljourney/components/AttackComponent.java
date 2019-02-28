@@ -103,6 +103,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	@Override
 	public void enterRoom(Room newRoom) {
 		this.room = newRoom;
+		clearAttackableTiles();
 	}
 	
 	

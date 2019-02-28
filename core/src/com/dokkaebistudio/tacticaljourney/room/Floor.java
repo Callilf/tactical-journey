@@ -13,6 +13,8 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
+import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
+import com.dokkaebistudio.tacticaljourney.room.generation.floor2.Floor2Generator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
@@ -26,6 +28,9 @@ public class Floor {
 	/** The game screen. */
 	private GameScreen gameScreen;
 	
+	/** The level. */
+	private int level;
+	
 	/** The rooms of this floor. */
 	private List<Room> rooms;
 	
@@ -38,19 +43,35 @@ public class Floor {
 	/** The currently active room. */
 	private Room activeRoom;
 	
+	private FloorGenerator floorGenerator;
+	
 	/**
 	 * Constructor.
 	 * @param gameScreen the game screen.
-	 * @param timeDisplayer the timedisplayer that the current room will update
+	 * @param timeDisplayer the time displayer that the current room will update
 	 */
-	public Floor(GameScreen gameScreen) {
+	public Floor(GameScreen gameScreen, int level) {
 		this.gameScreen = gameScreen;
+		this.setLevel(level);
 		
-		this.grid = new Sprite(Assets.grid);
+		if (level == 1) {
+			this.grid = new Sprite(Assets.grid1);
+			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);
+		} else {
+			this.grid = new Sprite(Assets.grid2);
+			floorGenerator = new Floor2Generator(this.gameScreen.entityFactory);
+		}
+		
 		this.grid.setPosition(GameScreen.LEFT_RIGHT_PADDING, GameScreen.BOTTOM_MENU_HEIGHT);
 
 		
-		new FloorGenerator().generateFloor(this, gameScreen);
+	}
+	
+	/**
+	 * Generate the floor's layout, rooms layouts and contents.
+	 */
+	public void generate() {
+		this.floorGenerator.generateFloor(this, gameScreen);
 	}
 	
 	
@@ -124,5 +145,16 @@ public class Floor {
 		this.grid = grid;
 	}
 
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public FloorGenerator getFloorGenerator() {
+		return this.floorGenerator;
+	}
 	
 }

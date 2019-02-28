@@ -173,6 +173,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 	 * @param room the room
 	 */
 	private void fillShopKeepers() {
+		shopKeepers.clear();
 		for (Entity e : room.getNeutrals()) {
 			if (Mappers.shopKeeperComponent.has(e)) {
 				shopKeepers.add(e);

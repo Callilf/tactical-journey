@@ -35,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
@@ -98,7 +99,6 @@ public class Room extends EntitySystem {
 	private Room southNeighbor;
 	private Room westNeighbor;
 	private Room eastNeighbor;
-	
 
 	public Room (Floor f, PooledEngine engine, EntityFactory ef, RoomType type) {
 		this.priority = 1;
@@ -195,9 +195,7 @@ public class Room extends EntitySystem {
 	 * @param e the entity to add
 	 */
 	public void addEntity(Entity e) {
-		if (Mappers.gridPositionComponent.has(e)) {
-			this.addToAllEntities(e);
-		}
+		this.addToAllEntities(e);
 		engine.addEntity(e);
 	}
 	
@@ -249,9 +247,10 @@ public class Room extends EntitySystem {
 		enemies = new ArrayList<>();
 		neutrals = new ArrayList<>();
 		attackManager = new AttackManager(this);
+	 
+		RoomGenerator generator = this.floor.getFloorGenerator().getRoomGenerator();
 		
 		// Layout
-		RoomGenerator generator = new RoomGenerator(this.entityFactory);
 		GeneratedRoom generatedRoom = generator.generateRoomLayout(this, this.northNeighbor, this.eastNeighbor, this.southNeighbor, this.westNeighbor);
 		grid = generatedRoom.getTiles();
 

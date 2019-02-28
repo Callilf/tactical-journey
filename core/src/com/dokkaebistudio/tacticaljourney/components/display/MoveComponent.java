@@ -58,6 +58,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	@Override
 	public void enterRoom(Room newRoom) {
 		this.room = newRoom;
+		clearMovableTiles();
+		clearSelectedTile();
 	}
 	
 	@Override

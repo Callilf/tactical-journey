@@ -21,9 +21,9 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -136,12 +136,10 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			title.setText("Doorway to lower floor");
 			if (exitComponent.isOpened()) {
 				title.setText("Doorway to lower floor");
-				desc.setText("Congratulations, you reached the exit of the first floor. There will be many floors to explore later, unfortunately at the moment the doorway is stuck. Please come back after a few months."
-						+ "\nSadness galore.");
-				yesBtn.setText("Wait for months");
-				if (yesBtnListener != null) {
-					yesBtn.removeListener(yesBtnListener);
-				}			
+				desc.setText("Congratulations, you reached the exit of the first floor. You may go to the next floor but keep in mind that you won't be able to come back.");
+				yesBtn.setText("Descend");
+				updateExitListener(actionEntity, exitComponent);
+			
 			} else {
 				desc.setText("The door is held close by a big ancient lock. You should probably look for the key.");
 				yesBtn.setText("Unlock");
@@ -245,6 +243,20 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
 				inventoryComponent.setLootableEntity(lootable);
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
+	private void updateExitListener(final Entity exit, final ExitComponent exitComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				room.floor.getGameScreen().enterNextFloor();
 				closePopin();
 			}
 		};

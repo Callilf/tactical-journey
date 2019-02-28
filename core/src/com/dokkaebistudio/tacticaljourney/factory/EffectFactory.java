@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -51,21 +52,21 @@ public final class EffectFactory {
 		Entity explosion = engine.createEntity();
 		explosion.flags = EntityFlagEnum.EXPLOSION_EFFECT.getFlag();
 
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		explosion.add(spriteCompo);
-
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(explosion, tilePos, room);
 		gridPosition.zIndex = ZIndexConstants.EXPLOSION;
 		explosion.add(gridPosition);
 		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		explosion.add(spriteCompo);
+
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationsEnum.EXPLOSION.getAnimation());
 		explosion.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(0);
-		explosion.add(stateCompo);
+		explosion.add(stateCompo);		
 		
 		VisualEffectComponent veCompo = engine.createComponent(VisualEffectComponent.class);
 		explosion.add(veCompo);

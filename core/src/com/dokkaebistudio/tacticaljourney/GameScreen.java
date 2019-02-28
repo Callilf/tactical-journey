@@ -74,6 +74,7 @@ import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 public class GameScreen extends ScreenAdapter {
 	public static final int GAME_RUNNING = 1;
@@ -274,7 +275,9 @@ public class GameScreen extends ScreenAdapter {
 
 		// Enter the room of the new floor
 		Room newActiveRoom = newFloor.getActiveRoom();
-		MovementHandler.placeEntity(this.player, playerPos.coord(), newActiveRoom);
+		PoolableVector2 tempPos = PoolableVector2.create(11,6);
+		MovementHandler.placeEntity(this.player, tempPos, newActiveRoom);
+		tempPos.free();
 		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
 		
 		// Update the map

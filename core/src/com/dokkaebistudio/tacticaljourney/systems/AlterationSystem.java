@@ -168,6 +168,7 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 	 * @param room the room
 	 */
 	private void fillStatues() {
+		statues.clear();
 		for (Entity e : room.getNeutrals()) {
 			if (Mappers.statueComponent.has(e)) {
 				statues.add(e);

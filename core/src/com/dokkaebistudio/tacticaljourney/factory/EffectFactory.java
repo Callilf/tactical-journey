@@ -57,18 +57,16 @@ public final class EffectFactory {
 		gridPosition.zIndex = ZIndexConstants.EXPLOSION;
 		explosion.add(gridPosition);
 		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		explosion.add(spriteCompo);
+
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationsEnum.EXPLOSION.getAnimation());
 		explosion.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(0);
-		explosion.add(stateCompo);
-		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		Sprite keyFrame = AnimationsEnum.EXPLOSION.getAnimation().getKeyFrame(stateCompo.time);
-		spriteCompo.getSprite().set(keyFrame);
-		explosion.add(spriteCompo);
+		explosion.add(stateCompo);		
 		
 		VisualEffectComponent veCompo = engine.createComponent(VisualEffectComponent.class);
 		explosion.add(veCompo);

@@ -26,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Factory used to create presets of entities.

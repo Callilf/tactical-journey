@@ -43,7 +43,7 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
  * @author Callil
  *
  */
-public class RoomGenerator {
+public abstract class RoomGenerator {
 
 	/** the entity factory. */
 	protected EntityFactory entityFactory;
@@ -295,8 +295,8 @@ public class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
-			entityFactory.createExit(room, new Vector2(12, 4), false);
+//			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
+//			entityFactory.createExit(room, new Vector2(12, 4), false);
 
 //			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			
@@ -373,39 +373,7 @@ public class RoomGenerator {
 	 * @param spawnPositions the possible spawn positions
 	 * @param canBeEmpty true if there can be no enemies
 	 */
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
-		if (spawnPositions.size() == 0) return;
-
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 5));
-		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
-		
-		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
-		for (int i=0 ; i<enemyNb ; i++) {
-			if (!iterator.hasNext()) break;
-			
-			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(7);
-			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
-				iterator.remove();
-			} else if (enemyTypeRandom == 1) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
-				iterator.remove();
-				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
-				}
-			} else if (enemyTypeRandom == 2 || enemyTypeRandom == 3) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()), 3);
-				iterator.remove();
-			} else {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
-				iterator.remove();
-			}
-			
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-		}
-	}
+	protected abstract void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty);
 	
 	/**
 	 * Scan all destructible possible locations and randomly place a destructible on it
@@ -453,7 +421,7 @@ public class RoomGenerator {
 		}
 	}
 	
-	private Entity generateEnemyLoot(EnemyItemPool itemPool, DropRate dropRate) {
+	protected Entity generateEnemyLoot(EnemyItemPool itemPool, DropRate dropRate) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
 		float unit = (float) random.nextInt(100);

@@ -46,7 +46,7 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 public class RoomGenerator {
 
 	/** the entity factory. */
-	private EntityFactory entityFactory;
+	protected EntityFactory entityFactory;
 	
 	/** Private constructor.*/
 	public RoomGenerator(EntityFactory ef) {
@@ -373,7 +373,7 @@ public class RoomGenerator {
 	 * @param spawnPositions the possible spawn positions
 	 * @param canBeEmpty true if there can be no enemies
 	 */
-	private void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
+	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
 		if (spawnPositions.size() == 0) return;
 
 		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 5));
@@ -413,7 +413,7 @@ public class RoomGenerator {
 	 * @param random the random
 	 * @param destrPositions the possible spawn positions for destructibles
 	 */
-	private void placeDestructibles(Room room, RandomXS128 random, List<PoolableVector2> destrPositions) {
+	protected void placeDestructibles(Room room, RandomXS128 random, List<PoolableVector2> destrPositions) {
 		if (destrPositions == null || destrPositions.isEmpty()) return;
 
 		Iterator<PoolableVector2> iterator = destrPositions.iterator();
@@ -437,7 +437,7 @@ public class RoomGenerator {
 		}
 	}
 	
-	private void fillLootable(Entity lootable) {
+	protected void fillLootable(Entity lootable) {
 		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
 		
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();

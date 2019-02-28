@@ -23,9 +23,10 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
  * @author Callil
  *
  */
-public class FloorGenerator {
+public abstract class FloorGenerator {
 	
 	private RandomXS128 random;
+	private RoomGenerator roomGenerator;
 	
 	private Map<Room, Vector2> positionsPerRoom = new HashMap<>();
 	private Map<Vector2, Room> roomsPerPosition = new HashMap<>();
@@ -147,7 +148,7 @@ public class FloorGenerator {
 	 * Choose the type of room to create.
 	 * @return the type of room
 	 */
-	private RoomType chooseRoomType() {
+	protected RoomType chooseRoomType() {
 		if (random.nextInt(100) < 10) {
 			return RoomType.EMPTY_ROOM;
 		} else {
@@ -440,6 +441,18 @@ public class FloorGenerator {
 				currentRoom.setWestNeighbor(previousRoom);
 				break;
 		}
+	}
+
+
+
+	public RoomGenerator getRoomGenerator() {
+		return roomGenerator;
+	}
+
+
+
+	public void setRoomGenerator(RoomGenerator roomGenerator) {
+		this.roomGenerator = roomGenerator;
 	}
 
 }

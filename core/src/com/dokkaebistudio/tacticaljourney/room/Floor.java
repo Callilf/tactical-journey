@@ -13,6 +13,8 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
+import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
+import com.dokkaebistudio.tacticaljourney.room.generation.floor2.Floor2Generator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
@@ -41,18 +43,25 @@ public class Floor {
 	/** The currently active room. */
 	private Room activeRoom;
 	
+	private FloorGenerator floorGenerator;
+	
 	/**
 	 * Constructor.
 	 * @param gameScreen the game screen.
-	 * @param timeDisplayer the timedisplayer that the current room will update
+	 * @param timeDisplayer the time displayer that the current room will update
 	 */
 	public Floor(GameScreen gameScreen, int level) {
 		this.gameScreen = gameScreen;
 		this.setLevel(level);
 		
-		if (level == 1) this.grid = new Sprite(Assets.grid1);
-		if (level > 1) this.grid = new Sprite(Assets.grid2);
-
+		if (level == 1) {
+			this.grid = new Sprite(Assets.grid1);
+			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);
+		} else {
+			this.grid = new Sprite(Assets.grid2);
+			floorGenerator = new Floor2Generator(this.gameScreen.entityFactory);
+		}
+		
 		this.grid.setPosition(GameScreen.LEFT_RIGHT_PADDING, GameScreen.BOTTOM_MENU_HEIGHT);
 
 		
@@ -62,7 +71,7 @@ public class Floor {
 	 * Generate the floor's layout, rooms layouts and contents.
 	 */
 	public void generate() {
-		new FloorGenerator().generateFloor(this, gameScreen);
+		this.floorGenerator.generateFloor(this, gameScreen);
 	}
 	
 	
@@ -144,5 +153,8 @@ public class Floor {
 		this.level = level;
 	}
 
+	public FloorGenerator getFloorGenerator() {
+		return this.floorGenerator;
+	}
 	
 }

@@ -35,7 +35,6 @@ import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
-import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
@@ -63,6 +62,9 @@ public class Room extends EntitySystem {
 		
 	/** Whether the player has already entered this room or not. */
 	private boolean visited;
+	
+	/** Whether this room has been cleared. */
+	private RoomClearedState cleared;
 	
 
 	/** All the entities of this room. */
@@ -256,6 +258,9 @@ public class Room extends EntitySystem {
 
 		// Content
 		generator.generateRoomContent(this, generatedRoom);
+		
+
+		this.cleared = enemies.isEmpty() ? RoomClearedState.CLEARED : RoomClearedState.UNCLEARED;
 	}
 
 
@@ -490,6 +495,18 @@ public class Room extends EntitySystem {
 
 	public void clearRequestedDialog() {
 		this.requestedDialog = null;
+	}
+
+	public boolean isCleared() {
+		return cleared == RoomClearedState.CLEARED || cleared == RoomClearedState.JUST_CLEARED;
+	}
+	
+	public RoomClearedState getCleared() {
+		return cleared;
+	}
+
+	public void setCleared(RoomClearedState cleared) {
+		this.cleared = cleared;
 	}
 	
 }

@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -119,14 +120,18 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					
 					room.removeEnemy(entity);					
 					if (!room.hasEnemies()) {
-						//TODO move this
-						//TODO display "CLEARED"
-						Entity attacker = healthCompo.getAttacker();
-						AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
-						if (alterationReceiverComponent != null) {
-							alterationReceiverComponent.onRoomCleared(attacker, room);
+						
+						if (!room.isCleared()) {
+							room.setCleared(RoomClearedState.JUST_CLEARED);
+
+							Entity attacker = healthCompo.getAttacker();
+							AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
+							if (alterationReceiverComponent != null) {
+								alterationReceiverComponent.onRoomCleared(attacker, room);
+							}
 						}
 						
+						//TODO move this
 						MapRenderer.requireRefresh();
 					}
 					

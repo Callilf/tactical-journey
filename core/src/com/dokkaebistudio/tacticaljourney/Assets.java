@@ -64,6 +64,7 @@ public class Assets {
 	public static AtlasRegion btn_end_turn;
 	public static AtlasRegion btn_end_turn_pushed;
 	
+	public static AtlasRegion hud_room_cleared;
 	
 	//**********
 	// Popins
@@ -275,6 +276,8 @@ public class Assets {
 		btn_move_confirmation = Assets.getTexture("btn-move-confirmation");
 		btn_end_turn = Assets.getTexture("btn-end-turn");
 		btn_end_turn_pushed = Assets.getTexture("btn-end-turn-pushed");
+		
+		hud_room_cleared = Assets.getTexture("hud_room_cleared");
 		
 		
 		//**********

@@ -7,12 +7,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -38,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -104,6 +108,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Label arrowLabel;
 	private Table ammoBombTable;
 	private Label bombLabel;
+	
+	
+	// Room cleared image
+	private Image roomClearedImage;
 
 	
 	
@@ -120,6 +128,13 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public HUDRenderer(Stage s, Entity player) {
 		this.stage = s;
 		this.player = player;
+		
+		this.roomClearedImage = new Image(Assets.hud_room_cleared);
+		this.roomClearedImage.setPosition(GameScreen.SCREEN_W/2 - this.roomClearedImage.getWidth()/2, GameScreen.SCREEN_H/2 -  this.roomClearedImage.getHeight()/2 + 20);
+		this.roomClearedImage.setOrigin(Align.center);
+		this.roomClearedImage.setVisible(false);
+		
+		stage.addActor(this.roomClearedImage);
 	}
 	
 	@Override
@@ -138,6 +153,12 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		displayBottomLeftHud();
 		displaySkillButtons();
 		displayAmmos();
+		
+		
+		if (room.getCleared() == RoomClearedState.JUST_CLEARED) {
+			displayRoomCleared();
+		}
+
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -173,17 +194,18 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		if (timeAndTurnTable == null) {
 			timeAndTurnTable = new Table();
+			timeAndTurnTable.left();
 			timeAndTurnTable.setPosition(POS_TIMER.x, POS_TIMER.y - 20);
 			
 			// Turns
 			turnLabel = new Label("", PopinService.hudStyle());
-			timeAndTurnTable.add(turnLabel).uniformX();
+			timeAndTurnTable.add(turnLabel).uniformX().left();
 
 			timeAndTurnTable.row();
 
 			// Time
 			timeLabel = new Label("", PopinService.hudStyle());
-			timeAndTurnTable.add(timeLabel).uniformX();
+			timeAndTurnTable.add(timeLabel).uniformX().left();
 
 			timeAndTurnTable.pack();
 			stage.addActor(timeAndTurnTable);
@@ -193,6 +215,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		timeLabel.setText("Time: " + String.format("%.1f", gtSingleton.getElapsedTime()));
 		//timeLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 		turnLabel.setText("Turn " + room.turnManager.getTurn());
+		if (room.isCleared()) {
+			turnLabel.setText(turnLabel.getText() +  " (CLEARED)");
+		}
 	}
 	
 	
@@ -670,6 +695,24 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		arrowLabel.setText(ammoCarrierComponent.getArrows() + "/" + ammoCarrierComponent.getMaxArrows());
 		bombLabel.setText(ammoCarrierComponent.getBombs() + "/" + ammoCarrierComponent.getMaxBombs());
+	}
+	
+	
+	
+	//***********************
+	// Animations
+	
+	/**
+	 * Display the animation when a room was just cleared.
+	 */
+	private void displayRoomCleared() {
+		roomClearedImage.setVisible(true);
+		roomClearedImage.addAction(Actions.sequence(Actions.alpha(1),
+				Actions.scaleBy(20, 20),
+				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
+				Actions.fadeOut(2, Interpolation.pow5In)));
+		
+		room.setCleared(RoomClearedState.CLEARED);
 	}
 	
 }

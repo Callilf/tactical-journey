@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayCompon
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -120,6 +121,12 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					if (!room.hasEnemies()) {
 						//TODO move this
 						//TODO display "CLEARED"
+						Entity attacker = healthCompo.getAttacker();
+						AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
+						if (alterationReceiverComponent != null) {
+							alterationReceiverComponent.onRoomCleared(attacker, room);
+						}
+						
 						MapRenderer.requireRefresh();
 					}
 					

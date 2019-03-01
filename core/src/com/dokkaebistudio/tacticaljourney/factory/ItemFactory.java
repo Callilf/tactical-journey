@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
@@ -141,6 +142,10 @@ public final class ItemFactory {
 			
 		case WEB_SACK:
 			item = createItemWebSack(room, tilePos);
+			break;
+			
+		case TOTEM_OF_KALAMAZOO:
+			item = createItemTotemOfKalamazoo(room, tilePos);
 			break;
 
 			default:
@@ -299,6 +304,25 @@ public final class ItemFactory {
 		
 		return item;
 	}
+	
+	
+	/**
+	 * Create a totem of kalamazoo.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemTotemOfKalamazoo(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.totem_of_kalamazoo, new ItemTotemOfKalamazoo());
+		item.flags = EntityFlagEnum.ITEM_TOTEM_OF_KALAMAZOO.getFlag();
+		
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(false);
+		item.add(flammable);
+		
+		return item;
+	}
+	
 	
 	
 	// TODO change

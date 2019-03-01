@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -45,7 +46,19 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		RECEIVE_CURSE,
 		REMOVE_CURSE;
 	}
+	
+	
+	//*************
+	// Events
     
+	public void onRoomCleared(Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onRoomCleared(entity, room);
+		}
+		for (Curse c : curses) {
+			c.onRoomCleared(entity, room);
+		}
+	}
 	
 	
 	
@@ -121,9 +134,33 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	
 	
 	
+	
+	//*****************
+	// Requests
+	
 	public void requestAction(AlterationActionEnum action, Alteration alteration) {
 		this.currentAction = action;
 		this.currentAlteration = alteration;
+	}
+	
+	public void requestRemoveBlessingByClass(Class alterationClass) {
+		for (Blessing blessing : blessings) {
+			if (blessing.getClass().equals(alterationClass)) {
+				this.currentAlteration = blessing;
+				this.currentAction = AlterationActionEnum.REMOVE_BLESSING;
+				return;
+			}
+		}
+	}
+	
+	public void requestRemoveCurseByClass(Class alterationClass) {
+		for (Curse curse : curses) {
+			if (curse.getClass().equals(alterationClass)) {
+				this.currentAlteration = curse;
+				this.currentAction = AlterationActionEnum.RECEIVE_CURSE;
+				return;
+			}
+		}
 	}
 	
 	public void clearCurrentAction() {

@@ -19,7 +19,16 @@ public enum ItemEnum {
 	ARMOR_LIGHT(2),
 	
 	// Misc
-	WEB_SACK(1);
+	WEB_SACK(1),
+	
+	
+	
+	
+	
+	
+	
+	// Infusables
+	TOTEM_OF_KALAMAZOO(2);
 	
 	
 	

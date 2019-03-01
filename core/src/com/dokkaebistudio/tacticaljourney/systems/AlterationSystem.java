@@ -139,7 +139,9 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 				
 				break;
 			case REMOVE_BLESSING:
-				
+				blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
+				playerAlterationReceiverCompo.removeBlessing(player, blessing);
+
 				break;
 			case RECEIVE_CURSE:
 				Curse curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
@@ -150,7 +152,9 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 
 				break;
 			case REMOVE_CURSE:
-				
+				curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
+				playerAlterationReceiverCompo.removeCurse(player, curse);
+
 				break;
 			
 			}

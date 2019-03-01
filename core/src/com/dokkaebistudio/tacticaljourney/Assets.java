@@ -209,7 +209,8 @@ public class Assets {
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
 	
-	
+	public static AtlasRegion totem_of_kalamazoo;
+
 	
 	
 	
@@ -227,6 +228,7 @@ public class Assets {
 	public static AtlasRegion blessing_vigor;
 	public static AtlasRegion blessing_strength;
 	public static AtlasRegion blessing_celerity;
+	public static AtlasRegion blessing_of_kalamazoo;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -414,6 +416,8 @@ public class Assets {
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
 		
+		totem_of_kalamazoo = Assets.getTexture("item-infusable-totem-of-kalamazoo");
+		
 		
 		arrow = Assets.getTexture("arrow");
 		bomb_animation = Assets.getAnimation("bomb");
@@ -426,6 +430,7 @@ public class Assets {
 		blessing_vigor = Assets.getTexture("blessing-vigor");
 		blessing_strength = Assets.getTexture("blessing-strength");
 		blessing_celerity = Assets.getTexture("blessing-celerity");
+		blessing_of_kalamazoo = Assets.getTexture("blessing-kalamazoo");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

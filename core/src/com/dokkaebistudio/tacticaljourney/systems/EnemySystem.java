@@ -202,10 +202,13 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 						if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
     	    				//Attack possible
 							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord(), room);
-            				attackCompo.setTarget(target);
-            				
-            				attacked = true;
-            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
+							if (target != null) {
+	            				attackCompo.setTarget(target);
+	            				
+	            				attacked = true;
+	            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
+	            				break;
+							}
     	    			}
     	    		}
     	    	}

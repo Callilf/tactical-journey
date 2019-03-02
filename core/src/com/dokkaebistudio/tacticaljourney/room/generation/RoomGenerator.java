@@ -293,7 +293,7 @@ public abstract class RoomGenerator {
 			
 			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
 			
-			entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(6,7), 4);
+//			entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(6,7), 4);
 			
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);

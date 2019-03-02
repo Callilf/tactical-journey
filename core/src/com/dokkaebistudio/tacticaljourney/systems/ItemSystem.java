@@ -30,7 +30,6 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -202,15 +201,13 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 				break;
 			case DROP:
-				
+				System.out.println("Dropped " + itemComponent.getItemType().getLabel());
+				itemComponent.drop(player, currentItem, room);
+
 				// Drop animation
 				Action finishDropAction = new Action(){
 					  @Override
 					  public boolean act(float delta){
-							System.out.println("Dropped " + itemComponent.getItemType().getLabel());
-
-							itemComponent.drop(player, currentItem, room);
-
 //							playerIventoryCompo.remove(currentItem);
 							room.getAddedItems().add(currentItem);
 							room.turnManager.endPlayerTurn();

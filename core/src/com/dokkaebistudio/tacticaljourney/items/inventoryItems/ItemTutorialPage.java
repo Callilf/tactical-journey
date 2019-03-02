@@ -95,11 +95,5 @@ public class ItemTutorialPage extends Item {
 	}
 	
 	@Override
-	public boolean use(Entity user, Entity item, Room room) {
-		//TODO remove
-		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(user);
-		alterationReceiverComponent.removeCurseByClass(user, CurseFrailty.class);
-		
-		return true;
-	}
+	public boolean use(Entity user, Entity item, Room room) {return true;}
 }

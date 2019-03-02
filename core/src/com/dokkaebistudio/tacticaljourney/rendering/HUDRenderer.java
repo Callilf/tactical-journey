@@ -55,7 +55,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
 	public static Vector2 POS_BOMB_SPRITE = new Vector2(1230f,1000f);
 
-	
+	public static Vector2 POS_PROFILE = new Vector2(700f, 30f);
 	public static Vector2 POS_INVENTORY = new Vector2(780f, 30f);
 
 
@@ -370,7 +370,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 		if (profileTable == null) {
 			profileTable = new Table();
-			profileTable.setPosition(700, 30);
+			profileTable.setPosition(POS_PROFILE.x, POS_PROFILE.y);
 		
 			// Profile btn
 			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.btn_profile));

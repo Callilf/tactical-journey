@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
@@ -20,7 +22,10 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -64,34 +69,61 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	
 	//*************
 	// Animations
-	private Image blessingImage;
 	
-	public Image setBlessingImage(AtlasRegion texture, Vector2 startGridPos) {
-		final Image arrow = new Image(texture);
+	private void setReceiveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage) {
+		final Image alterationImg = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
-		arrow.setPosition(playerPixelPos.x, playerPixelPos.y + 60);
+		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y + 60);
 				
 		Action removeImageAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
-				  arrow.remove();
+				  alterationImg.remove();
 				  return true;
 			  }
 		};
 	
-		arrow.setOrigin(Align.center);
+		alterationImg.setOrigin(Align.center);
 		
 		ScaleToAction init = Actions.scaleTo(0, 0);
-		ScaleToAction appear = Actions.scaleTo(1, 1, 1f);
-		RotateByAction rotate = Actions.rotateBy(3600, 2f, Interpolation.exp5Out);
-		AlphaAction disappear = Actions.alpha(0, 2f);
+		ScaleToAction appear = Actions.scaleTo(1, 1, 0.5f);
+		RotateByAction rotate = Actions.rotateBy(3600, 1.5f, Interpolation.exp5Out);
+		MoveToAction moveTo = Actions.moveTo(HUDRenderer.POS_PROFILE.x, HUDRenderer.POS_PROFILE.y, 1f, Interpolation.circle);
+		ScaleToAction disappearByScaling = Actions.scaleTo(0, 0, 2f);
 		
 		ParallelAction appearance = Actions.parallel(appear, rotate);
-		ParallelAction disappearance = Actions.parallel(disappear, rotate);
-		arrow.addAction(Actions.sequence(init, appearance, disappearance, removeImageAction));
-			
-		this.blessingImage = arrow;
-		return this.blessingImage;
+		ParallelAction disappearance = Actions.parallel(moveTo, disappearByScaling);
+		alterationImg.addAction(Actions.sequence(init, appearance, disappearance, removeImageAction));
+		
+		fxStage.addActor(alterationImg);
+	}
+	
+	
+	private void setRemoveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage) {
+		final Image alterationImg = new Image(texture);
+		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
+		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y);
+				
+		Action removeImageAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				  alterationImg.remove();
+				  return true;
+			  }
+		};
+	
+		alterationImg.setOrigin(Align.center);
+		
+		ScaleToAction init = Actions.scaleTo(0, 0);
+
+		MoveToAction moveFromPlayer = Actions.moveTo(playerPixelPos.x, playerPixelPos.y + 60, 0.5f);
+		ScaleToAction appear = Actions.scaleTo(1, 1, 0.5f);
+		AlphaAction disappear = Actions.alpha(0, 1f);
+		
+		ParallelAction appearance = Actions.parallel(appear, moveFromPlayer);
+		alterationImg.addAction(Actions.sequence(init, appearance, disappear, removeImageAction));
+		
+		fxStage.addActor(alterationImg);
 	}
 	
 	
@@ -103,30 +135,51 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 
 	
-	public void addBlessing(Entity entity, Blessing blessing) {
+	public void addBlessing(Entity entity, Blessing blessing, Stage fxStage) {
 		blessing.onReceive(entity);
 		blessings.add(blessing);
+		
+		if (fxStage != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+			this.setReceiveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage);
+		}
 	}
 	
-	public void addCurse(Entity entity, Curse curse) {
+	public void addCurse(Entity entity, Curse curse, Stage fxStage) {
 		curse.onReceive(entity);
 		curses.add(curse);
+		
+		
+		if (fxStage != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+			this.setReceiveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage);
+		}
 	}
 	
-	public void removeBlessing(Entity entity, Blessing blessing) {
+	public void removeBlessing(Entity entity, Blessing blessing, Stage fxStage) {
 		blessing.onRemove(entity);
 		blessings.remove(blessing);
+		
+		if (fxStage != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+			this.setRemoveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage);
+		}
 	}
 	
-	public void removeCurse(Entity entity, Curse curse) {
+	public void removeCurse(Entity entity, Curse curse, Stage fxStage) {
 		curse.onRemove(entity);
 		curses.remove(curse);
+		
+		if (fxStage != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+			this.setRemoveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage);
+		}
 	}
 	
-	public void removeCurseByClass(Entity entity, Class curseClass) {
+	public void removeCurseByClass(Entity entity, Class curseClass, Stage fxStage) {
 		for (Curse curse : curses) {
 			if (curse.getClass() == curseClass) {
-				removeCurse(entity, curse);
+				removeCurse(entity, curse, fxStage);
 				break;
 			}
 		}

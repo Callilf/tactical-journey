@@ -132,28 +132,20 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 			switch (playerAlterationReceiverCompo.getCurrentAction()) {
 			case RECEIVE_BLESSING:
 				Blessing blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.addBlessing(player, blessing);
-				
-				setBlessingImage = playerAlterationReceiverCompo.setBlessingImage(blessing.texture(), playerPos.coord());
-				fxStage.addActor(setBlessingImage);
-				
+				playerAlterationReceiverCompo.addBlessing(player, blessing, fxStage);
 				break;
 			case REMOVE_BLESSING:
 				blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.removeBlessing(player, blessing);
+				playerAlterationReceiverCompo.removeBlessing(player, blessing, fxStage);
 
 				break;
 			case RECEIVE_CURSE:
 				Curse curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.addCurse(player, curse);
-				
-				setBlessingImage = playerAlterationReceiverCompo.setBlessingImage(curse.texture(), playerPos.coord());
-				fxStage.addActor(setBlessingImage);
-
+				playerAlterationReceiverCompo.addCurse(player, curse, fxStage);
 				break;
 			case REMOVE_CURSE:
 				curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.removeCurse(player, curse);
+				playerAlterationReceiverCompo.removeCurse(player, curse, fxStage);
 
 				break;
 			

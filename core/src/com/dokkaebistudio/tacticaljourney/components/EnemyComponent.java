@@ -65,6 +65,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		}
 		alertedDisplayer = null;
 		setAlerted(false);
+		subSystem = null;
 	}
 	
 	

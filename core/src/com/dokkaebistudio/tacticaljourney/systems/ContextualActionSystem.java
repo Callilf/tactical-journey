@@ -30,7 +30,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.Play
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
@@ -83,9 +85,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(player);
-				if (spriteComponent.containsPoint(x, y)) {
-					
+				if (TileUtil.isPixelPosOnEntity(x, y, player)) {
 					// Touched the player, if there is a contextual action entity on this tile, display a popin
 					checkForLootablesToDisplayPopin();
 					checkForExitToDisplayPopin();

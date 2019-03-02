@@ -65,6 +65,24 @@ public final class TileUtil {
 		return PoolableVector2.create(newX, newY);
 	}
 	
+	/**
+	 * Check whether the given x,y coordinates in pixel are on the given entity.
+	 * @param x the x pixel coordinate
+	 * @param y the y pixel coordinate
+	 * @param e the entity
+	 * @return true if the x,y pixel coordinates are on the tile where the entity e is standing.
+	 */
+	public static boolean isPixelPosOnEntity(int x, int y, Entity e) {
+		boolean result = false;
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+		if (gridPositionComponent == null) return result;
+		
+		PoolableVector2 pixelPosIntoGridPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+		result = pixelPosIntoGridPos.equals(gridPositionComponent.coord());
+		pixelPosIntoGridPos.free();
+		return result;
+	}
+	
 	
 	/**
 	 * Get the tile on which the given entity is standing.

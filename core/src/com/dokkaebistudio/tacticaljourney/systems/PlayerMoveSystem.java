@@ -153,16 +153,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 
-				SpriteComponent selectedTileSprite = Mappers.spriteComponent.get(moveCompo.getSelectedTile());
-				SpriteComponent playerSprite = Mappers.spriteComponent.get(player);
-
-				if (selectedTileSprite.containsPoint(x, y)) {
+				if (TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedTile())) {
 					// Confirm movement is we click on the selected tile again
 
 					// Initiate movement
 					movementHandler.initiateMovement(player);
 					room.setNextState(RoomState.PLAYER_MOVING);
-				} else if (moveCompo.getSelectedAttackTile() != null && Mappers.spriteComponent.get(moveCompo.getSelectedAttackTile()).containsPoint(x, y)) {
+				} else if (moveCompo.getSelectedAttackTile() != null && TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedAttackTile())) {
 					// Confirm movement by clicking on an attack tile
 //					moveCompo.setFastAttack(true);
 					GridPositionComponent attackTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedAttackTile());
@@ -171,7 +168,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 					// Initiate movement
 					movementHandler.initiateMovement(player);
 					room.setNextState(RoomState.PLAYER_MOVING);
-				} else if (playerSprite.containsPoint(x, y)) {
+				} else if (TileUtil.isPixelPosOnEntity(x, y, player)) {
 					// Cancel movement is we click on the character
 					moveCompo.clearSelectedTile();
 					room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);
@@ -410,9 +407,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * @param moverCurrentPos the current position of the mover
 	 */
 	private boolean selectDestinationTile(Entity moverEntity, int x, int y) {
-		int i=0;
 		for (Entity tile : moveCompo.movableTiles) {
-			SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
 			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
 
 			if (destinationPos.coord().equals(moverCurrentPos.coord())) {
@@ -421,11 +416,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			}
 
 			
-			if (spriteComponent.containsPoint(x, y)) {
+			if (TileUtil.isPixelPosOnEntity(x, y, tile)) {
 				moveCompo.setSelectedAttackTile(null);
 				return selectTileAndBuildWaypoints(moverEntity, destinationPos);
 			}
-			i++;
 		}
 		
 		

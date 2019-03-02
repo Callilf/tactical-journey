@@ -365,8 +365,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
         	int y = (int) touchPoint.y;
 			
 			for (Entity tile : attackCompo.attackableTiles) {
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(tile);
-				if (spriteComponent.containsPoint(x, y)) {
+				if (TileUtil.isPixelPosOnEntity(x, y, tile)) {
 					
 					//Check the distance of this attackableTile
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(tile);

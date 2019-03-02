@@ -111,9 +111,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				
-				SpriteComponent spriteComponent = Mappers.spriteComponent.get(player);
-				if (spriteComponent.containsPoint(x, y)) {
-					
+				if (TileUtil.isPixelPosOnEntity(x, y, player)) {
 					// Touched the player, if there is an item on this tile, display the popin
 					checkItemPresenceToDisplayPopin();
 				}

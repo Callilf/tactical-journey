@@ -30,7 +30,7 @@ public final class ZIndexConstants {
 	
 	// ENEMIES
 	public static final int ENEMY = 10;
-	public static final int HEALTH_DISPLAYER = 10;
+	public static final int HEALTH_DISPLAYER = 20;
 	
 	// PLAYER
 	public static final int PLAYER = 15;

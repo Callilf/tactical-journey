@@ -122,6 +122,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         	case ENEMY_TURN_INIT :
             	
             	moveCompo.moveRemaining = moveCompo.moveSpeed;
+            	enemyComponent.onStartTurn(enemyEntity, room);
             	room.setNextState(RoomState.ENEMY_COMPUTE_MOVABLE_TILES);
         		
         	case ENEMY_COMPUTE_MOVABLE_TILES :

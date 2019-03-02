@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -61,29 +62,32 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     		}
     		
     		// If a health modification has occurred during this frame
-	    	if (healthCompo.getHealthChange() != HealthChangeEnum.NONE) {
+	    	if (!healthCompo.getHealthChange().isEmpty()) {
 	    		
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(entity);
 	
-	    		switch(healthCompo.getHealthChange()) {
-	    		case HIT_INTERRUPT:
-		    		healthCompo.setReceivedDamageLastTurn(true);
-	    		case HIT:	    			
-					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame()), 
-							gridPos, healthCompo.getHealthChange(), 0, room);
+				for (int i=0 ; i<healthCompo.getHealthChange().size() ; i++) {
+					HealthChangeEnum healthChange = healthCompo.getHealthChange().get(i);
+		    		switch(healthChange) {
+		    		case HIT_INTERRUPT:
+			    		healthCompo.setReceivedDamageLastTurn(true);
+		    		case HIT:	    			
+						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame().get(i)), 
+								gridPos, healthChange, 0, room);
+		
+	    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
+		    			alertEnemy(entity, healthCompo);
 	
-    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
-	    			alertEnemy(entity, healthCompo);
-
-	    			break;
-	    		case HEALED:
-	    		case ARMOR:
-					room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame()), 
-							gridPos, healthCompo.getHealthChange(), 0, room);
-	
-	    			break;
-	    		default:
-	    		}
+		    			break;
+		    		case HEALED:
+		    		case ARMOR:
+						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame().get(i)), 
+								gridPos, healthChange, 0, room);
+		
+		    			break;
+		    		default:
+		    		}
+				}
 
 	    		healthCompo.clearModified();
 	    	}
@@ -93,9 +97,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	if (healthCompo.getHp() <= 0) {
 				//Entity is dead
 				
-	    		//TODO : try to handle experience here, but for now it's in AttackManager since
-	    		// when a bomb explodes, it is removed from the game before this code is executed...
-				//earn xp
+	    		// Get XP
 	    		if (healthCompo.getAttacker() != null) {
 					ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
 					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
@@ -118,16 +120,26 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						dropItem(entity, lootRewardComponent);
 					}
 					
-					room.removeEnemy(entity);					
+					EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
+					if (enemyComponent != null) {
+						// An enemy died
+						enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
+					}
+					
+					room.removeEnemy(entity);		
+					
+					// Check if there are still enemies remaining. If not, display ROOM CLEARED
 					if (!room.hasEnemies()) {
 						
 						if (!room.isCleared()) {
 							room.setCleared(RoomClearedState.JUST_CLEARED);
 
 							Entity attacker = healthCompo.getAttacker();
-							AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
-							if (alterationReceiverComponent != null) {
-								alterationReceiverComponent.onRoomCleared(attacker, room);
+							if (attacker != null) {
+								AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
+								if (alterationReceiverComponent != null) {
+									alterationReceiverComponent.onRoomCleared(attacker, room);
+								}
 							}
 						}
 						

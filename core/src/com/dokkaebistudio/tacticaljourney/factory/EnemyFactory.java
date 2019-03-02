@@ -27,9 +27,13 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarit
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
+import com.dokkaebistudio.tacticaljourney.enemies.EnemyScorpion;
+import com.dokkaebistudio.tacticaljourney.enemies.EnemyStinger;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyTypeEnum;
+import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinBaby;
+import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemySpider;
+import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
@@ -37,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.enemies.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
 
 /**
@@ -83,7 +88,7 @@ public final class EnemyFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
-		enemyComponent.setType(EnemyTypeEnum.SPIDER);
+		enemyComponent.setType(new EnemySpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
@@ -157,7 +162,7 @@ public final class EnemyFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
-		enemyComponent.setType(EnemyTypeEnum.WEB_SPIDER);
+		enemyComponent.setType(new EnemyWebSpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
@@ -235,7 +240,7 @@ public final class EnemyFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
-		enemyComponent.setType(EnemyTypeEnum.SCORPION);
+		enemyComponent.setType(new EnemyScorpion());
 		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
@@ -315,7 +320,7 @@ public final class EnemyFactory {
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
-		enemyComponent.setType(EnemyTypeEnum.STINGER);
+		enemyComponent.setType(new EnemyStinger());
 		enemyComponent.setSubSystem(new StingerSubSystem());
 		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
@@ -351,6 +356,89 @@ public final class EnemyFactory {
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
 		expRewardCompo.setExpGain(4);
+		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new StingerItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 30 );
+		dropRate.add(ItemPoolRarity.RARE, 20);
+		lootRewardCompo.setDropRate(dropRate);
+		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
+	
+	
+	/**
+	 * Create a baby pangolin.
+	 * @param pos the position
+	 * @param moveSpeed the speed
+	 * @return the enemy entity
+	 */
+	public Entity createPangolinBaby(Room room, Vector2 pos, int speed) {
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_BABY.getFlag();
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		enemyEntity.add(spriteCompo);
+
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationsEnum.PANGOLIN_BABY_STAND.getAnimation());
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationsEnum.PANGOLIN_BABY_ROLLED.getAnimation());
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationsEnum.PANGOLIN_BABY_ROLLING.getAnimation());
+		enemyEntity.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.PANGOLIN_BABY_STAND.getState() );
+		enemyEntity.add(stateCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.room = room;
+		enemyComponent.setType(new EnemyPangolinBaby());
+		enemyComponent.setSubSystem(new PangolinBabySubSystem());
+		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
+		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		enemyComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.moveSpeed = speed;
+		enemyEntity.add(moveComponent);
+				
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(9);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setMaxHp(8);
+		healthComponent.setHp(12);
+		healthComponent.setMaxArmor(20);
+		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
+		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(5);
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);

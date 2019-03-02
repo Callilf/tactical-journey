@@ -13,7 +13,12 @@ public enum StatesEnum {
 	FIRE_LOOP(0),
 	
 	STINGER_FLY(0),
-	STINGER_ATTACK(1);
+	STINGER_ATTACK(1),
+	
+	PANGOLIN_BABY_STAND(0),
+	PANGOLIN_BABY_ROLLED(1),
+	PANGOLIN_BABY_ROLLING(2);
+
 	
 	private int state;
 	

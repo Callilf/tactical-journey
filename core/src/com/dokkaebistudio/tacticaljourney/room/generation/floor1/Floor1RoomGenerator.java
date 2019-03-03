@@ -47,22 +47,22 @@ public class Floor1RoomGenerator extends RoomGenerator {
 			Entity enemy = null;
 			int enemyTypeRandom = random.nextInt(8);
 			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
+				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 1) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), 3);
+				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 2) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
+				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				}
 			} else if (enemyTypeRandom == 4 || enemyTypeRandom == 3) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()), 3);
+				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				iterator.remove();
 			}
 			

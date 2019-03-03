@@ -52,13 +52,13 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 
-			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 3), 3);		
-			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 9), 3);
-			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 3), 3);		
-			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 9), 3);
+			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 3));		
+			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 9));
+			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 3));		
+			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 9));
 			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 1), 4);		
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 11), 4);
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 1));		
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 11));
 
 			break;
 		case END_FLOOR_ROOM:
@@ -96,21 +96,24 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(7);
+			int enemyTypeRandom = random.nextInt(9);
 			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 1 || enemyTypeRandom == 2) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()), 4);
+				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()), 3);
+					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				}
 			} else if (enemyTypeRandom == 3 || enemyTypeRandom == 4) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()), 3);
+				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
+				iterator.remove();
+			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
+				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else {
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()), 4);
+				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
 			}
 			

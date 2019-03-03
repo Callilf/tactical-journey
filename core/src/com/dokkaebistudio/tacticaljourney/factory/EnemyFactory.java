@@ -70,10 +70,9 @@ public final class EnemyFactory {
 	/**
 	 * Create an enemy.
 	 * @param pos the position
-	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createSpider(Room room, Vector2 pos, int speed) {
+	public Entity createSpider(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
 
@@ -98,7 +97,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = speed;
+		moveComponent.moveSpeed = 3;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
@@ -147,7 +146,7 @@ public final class EnemyFactory {
 	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createSpiderWeb(Room room, Vector2 pos, int speed) {
+	public Entity createSpiderWeb(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_WEB.getFlag();
 
@@ -172,7 +171,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = speed;
+		moveComponent.moveSpeed = 4;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
@@ -222,10 +221,9 @@ public final class EnemyFactory {
 	/**
 	 * Create a scorpion.
 	 * @param pos the position
-	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createScorpion(Room room, Vector2 pos, int speed) {
+	public Entity createScorpion(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
 
@@ -250,7 +248,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = speed;
+		moveComponent.moveSpeed = 4;
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
@@ -293,10 +291,9 @@ public final class EnemyFactory {
 	/**
 	 * Create a stinger.
 	 * @param pos the position
-	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createStinger(Room room, Vector2 pos, int speed) {
+	public Entity createStinger(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_STINGER.getFlag();
 		
@@ -331,7 +328,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = speed;
+		moveComponent.moveSpeed = 3;
 		enemyEntity.add(moveComponent);
 		
 		FlyComponent flyComponent = engine.createComponent(FlyComponent.class);
@@ -378,10 +375,9 @@ public final class EnemyFactory {
 	/**
 	 * Create a baby pangolin.
 	 * @param pos the position
-	 * @param moveSpeed the speed
 	 * @return the enemy entity
 	 */
-	public Entity createPangolinBaby(Room room, Vector2 pos, int speed) {
+	public Entity createPangolinBaby(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_BABY.getFlag();
 		
@@ -416,7 +412,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = speed;
+		moveComponent.moveSpeed = 2;
 		enemyEntity.add(moveComponent);
 				
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);

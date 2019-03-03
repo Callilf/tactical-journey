@@ -31,9 +31,10 @@ public class EnemyPangolinBaby extends Enemy {
 		}
 	}
 	
+
 	
 	@Override
-	public void onStartTurn(Entity enemy, Room room) {
+	public void onEndTurn(Entity enemy, Room room) {
 		if (rolled) {
 			if (turnsRolled >= 3) {
 				rolled = false;

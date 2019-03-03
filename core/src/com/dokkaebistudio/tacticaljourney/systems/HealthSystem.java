@@ -1,13 +1,17 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -33,7 +37,9 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	public Stage fxStage;
 	
 	/** The current room. */
-    private Room room;    
+    private Room room;
+    
+    private List<Float> offsetTimes = new ArrayList<>();
 
     public HealthSystem(GameScreen gameScreen, Room r, Stage s) {
         super(Family.one(HealthComponent.class, DamageDisplayComponent.class).get());
@@ -51,6 +57,14 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 
     @Override
     protected void processEntity(final Entity entity, float deltaTime) {
+    	float elapsedTime = GameTimeSingleton.getInstance().getElapsedTime();
+    	
+    	Iterator<Float> iterator = offsetTimes.iterator();
+    	while(iterator.hasNext()) {
+    		if (iterator.next() >= elapsedTime) {
+    			iterator.remove();
+    		}
+    	}
     	
     	
     	// 1 - Handle entities with healthComponent
@@ -73,7 +87,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 			    		healthCompo.setReceivedDamageLastTurn(true);
 		    		case HIT:	    			
 						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame().get(i)), 
-								gridPos, healthChange, 0, room);
+								gridPos, healthChange, offsetTimes.size() * 15, room);
 		
 	    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
 		    			alertEnemy(entity, healthCompo);
@@ -82,11 +96,13 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    		case HEALED:
 		    		case ARMOR:
 						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame().get(i)), 
-								gridPos, healthChange, 0, room);
+								gridPos, healthChange, offsetTimes.size() * 15, room);
 		
 		    			break;
 		    		default:
 		    		}
+		    		
+		    		offsetTimes.add(elapsedTime + 0.5f);
 				}
 
 	    		healthCompo.clearModified();

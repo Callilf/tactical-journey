@@ -78,6 +78,10 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		this.type.onStartTurn(enemy, room);
 	}
 	
+	public void onEndTurn(Entity enemy, Room room) {
+		this.type.onEndTurn(enemy, room);
+	}
+	
 	
 	
 	public void onAttack(Entity enemy, Entity target, Room room) {

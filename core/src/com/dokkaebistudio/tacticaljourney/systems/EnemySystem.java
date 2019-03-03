@@ -104,7 +104,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		enemyCurrentyPlaying = enemyEntity;
     		
     		// Check if this enemy uses a sub system
-    		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
+    		final EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
     		if (enemyComponent.getSubSystem() != null) {
     			boolean enemyHandled = enemyComponent.getSubSystem().update(this, enemyEntity, room);
     			if (enemyHandled) {
@@ -216,7 +216,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	    	attackCompo.hideAttackableTiles();
     	    	
     	    	if (!attacked) {
-    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
     	    	}
     	    	
         		break;
@@ -232,7 +232,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 						  @Override
 						  public boolean act(float delta){
 							room.attackManager.performAttack(enemyEntity, attackCompo);
-		    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+		    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
 						    return true;
 						  }
 						};
@@ -249,7 +249,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	    			
 	    		} else {
 					room.attackManager.performAttack(enemyEntity, attackCompo);
-    	    		finishOneEnemyTurn(enemyEntity, attackCompo);
+    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
 	    		}
 
         		
@@ -275,12 +275,15 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
-	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo) {
+	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo, EnemyComponent enemyComponent) {
     	attackCompo.clearAttackableTiles();
 		if (attackCompo.getProjectileImage() != null) {
 			attackCompo.getProjectileImage().remove();
 			attackCompo.setProjectileImage(null);
 		}
+		
+    	enemyComponent.onEndTurn(enemyEntity, room);
+
     	
 		enemyFinishedCount ++;
 		turnFinished.put(enemyEntity, new Boolean(true));

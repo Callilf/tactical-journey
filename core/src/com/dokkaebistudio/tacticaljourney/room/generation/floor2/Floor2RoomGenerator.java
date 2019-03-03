@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.generation.floor2;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,14 +54,22 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 
-			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 3));		
-			entityFactory.enemyFactory.createStinger(room, new Vector2(3, 9));
-			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 3));		
-			entityFactory.enemyFactory.createStinger(room, new Vector2(19, 9));
-			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 1));		
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(11, 11));
+			// BOSS FIGHT : Pangolin mother
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
 
+			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
+			Entity mother = null;
+			for (int i=0 ; i<3 ; i++) {
+				if (!iterator.hasNext()) break;
+				
+				if (i == 0) {
+					mother = entityFactory.enemyFactory.createPangolinMother(room, iterator.next());
+				} else {
+					entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
+				}
+			}
+			
 			break;
 		case END_FLOOR_ROOM:
 			if (possibleSpawns.size() == 0) return;
@@ -110,7 +120,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
 				iterator.remove();
 			} else {
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));

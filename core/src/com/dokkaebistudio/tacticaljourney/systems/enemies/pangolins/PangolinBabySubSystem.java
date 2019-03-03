@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies;
+package com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -7,6 +7,7 @@ import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinBaby;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
+import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class PangolinBabySubSystem extends EnemySubSystem {

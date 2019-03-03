@@ -473,7 +473,7 @@ public final class EntityFactory {
 		gridPositionComponent.zIndex = zIndex;
 		textTest.add(gridPositionComponent);
 		
-		TextComponent tc = new TextComponent(Assets.font);
+		TextComponent tc = new TextComponent(Assets.smallFont);
 		tc.setText(text);
 		textTest.add(tc);
 		

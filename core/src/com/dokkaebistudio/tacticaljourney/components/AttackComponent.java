@@ -27,6 +27,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The room.*/
 	public Room room;
 	
+	/** Whether this component is active or not. */
+	public boolean active = true;
+	
 	/** The type of attack (MELEE, RANGE, THROW...). */
 	private AttackTypeEnum attackType;
 	
@@ -115,6 +118,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.room = null;
 		this.isStrengthDifferential = true;
 		this.additionnalStrength = 0;
+		this.active = true;
 	}
 	
 	/**
@@ -410,6 +414,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public void setAdditionnalStrength(int additionnalStrength) {
 		this.additionnalStrength = additionnalStrength;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	

@@ -196,7 +196,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         		//Check if attack possible
         		boolean attacked = false;
-    	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
+    	    	if (attackCompo.isActive() && attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
     	    			GridPositionComponent attTilePos = Mappers.gridPositionComponent.get(attTile);
     	    			int range = TileUtil.getDistanceBetweenTiles(enemyCurrentPos.coord(), attTilePos.coord());

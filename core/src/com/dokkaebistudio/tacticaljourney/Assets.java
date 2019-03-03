@@ -184,7 +184,9 @@ public class Assets {
 	//************
 	// Bosses
 	
-	public static AtlasRegion boss_pangolin;
+	public static Array<Sprite> boss_pangolin_mother;
+	public static Array<Sprite> boss_pangolin_mother_enraged;
+	public static Array<Sprite> boss_pangolin_mother_crying;
 
 	
 	//*************
@@ -404,7 +406,9 @@ public class Assets {
 		//************
 		// Bosses
 		
-		boss_pangolin = Assets.getTexture("pangolin");
+		boss_pangolin_mother = Assets.getAnimation("pangolin");
+		boss_pangolin_mother_enraged = Assets.getAnimation("pangolin_enraged");
+		boss_pangolin_mother_crying = Assets.getAnimation("pangolin_crying");
 		
 		
 		//*************
@@ -551,6 +555,7 @@ public class Assets {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		font.getData().markupEnabled = true;
 		smallFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		smallFont.getData().markupEnabled = true;
 		smallFont.getData().setScale(0.8f);
 
 	}

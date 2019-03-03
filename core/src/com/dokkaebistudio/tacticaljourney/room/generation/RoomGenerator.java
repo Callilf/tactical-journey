@@ -293,14 +293,13 @@ public abstract class RoomGenerator {
 			
 			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
 			
-//			entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(6,7), 4);
-			
+
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-//			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
-//			entityFactory.createExit(room, new Vector2(12, 4), false);
+			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
+			entityFactory.createExit(room, new Vector2(12, 4), false);
 
 //			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
 			

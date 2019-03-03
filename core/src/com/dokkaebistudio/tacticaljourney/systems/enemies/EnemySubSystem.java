@@ -12,5 +12,7 @@ public abstract class EnemySubSystem {
 	 */
 	public abstract boolean update(EnemySystem enemySystem, Entity enemy, Room room);
 	
-	public abstract boolean computeMovableTilesToDisplayToPlayer(EnemySystem system, Entity enemyEntity, Room room);
+	public boolean computeMovableTilesToDisplayToPlayer(EnemySystem system, Entity enemyEntity, Room room) {
+		return false;
+	}
 }

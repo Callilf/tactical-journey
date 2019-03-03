@@ -519,6 +519,7 @@ public final class EntityFactory {
 			color = "[GREEN]";
 			break;
 		case HIT:
+		case HIT_INTERRUPT:
 			color = "[RED]";
 			break;
 		case ARMOR:

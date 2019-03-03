@@ -192,8 +192,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					room.turnManager.endPlayerTurn();
 				} else {
 					System.out.println("Impossible to use the " + itemComponent.getItemType().getLabel());
-
-					//TODO warn message
 				}
 				
 				playerInventoryCompo.setCurrentAction(null);

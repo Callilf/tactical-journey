@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -55,9 +58,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private Entity attacker;
 	
 	/** Whether the entity has been hit or healed at this frame. */
-	private HealthChangeEnum healthChange = HealthChangeEnum.NONE;
-	private int healthLostAtCurrentFrame;
-	private int healthRecoveredAtCurrentFrame;
+	private List<HealthChangeEnum> healthChange = new ArrayList<>();
+	private List<Integer> healthLostAtCurrentFrame = new ArrayList<>();
+	private List<Integer> healthRecoveredAtCurrentFrame = new ArrayList<>();
 	
 	
 	/**
@@ -67,17 +70,19 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void hit(int amountOfDamage, Entity attacker) {
 		int damageToHealth = Math.max(amountOfDamage - this.armor, 0);
 		if (this.armor > 0) {
-			this.armor = Math.max(this.armor - amountOfDamage, 0);
+			this.setArmor(Math.max(this.armor - amountOfDamage, 0));
 		}
 		
 		this.setHp(Math.max(0, this.getHp() - damageToHealth));
-		this.healthLostAtCurrentFrame += amountOfDamage;
+		this.healthLostAtCurrentFrame.add(amountOfDamage);
+		this.healthRecoveredAtCurrentFrame.add(0);
+
 		
 		if (attacker != null) {
 			this.attacker = attacker;
-			this.healthChange = HealthChangeEnum.HIT_INTERRUPT;
+			this.healthChange.add(HealthChangeEnum.HIT_INTERRUPT);
 		} else {
-			this.healthChange = HealthChangeEnum.HIT;
+			this.healthChange.add(HealthChangeEnum.HIT);
 		}
 	}
 	
@@ -87,13 +92,14 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void hitThroughArmor(int amountOfDamage, Entity attacker) {		
 		this.setHp(Math.max(0, this.getHp() - amountOfDamage));
-		this.healthLostAtCurrentFrame += amountOfDamage;
-		
+		this.healthLostAtCurrentFrame.add(amountOfDamage);
+		this.healthRecoveredAtCurrentFrame.add(0);
+
 		if (attacker != null) {
 			this.attacker = attacker;
-			this.healthChange = HealthChangeEnum.HIT_INTERRUPT;
+			this.healthChange.add(HealthChangeEnum.HIT_INTERRUPT);
 		} else {
-			this.healthChange = HealthChangeEnum.HIT;
+			this.healthChange.add(HealthChangeEnum.HIT);
 		}
 	}
 	
@@ -104,8 +110,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreHealth(int amount) {
 		this.setHp(this.getHp() + amount);
-		this.healthRecoveredAtCurrentFrame += amount;
-		this.healthChange = HealthChangeEnum.HEALED;
+		this.healthRecoveredAtCurrentFrame.add(amount);
+		this.healthLostAtCurrentFrame.add(0);
+		this.healthChange.add(HealthChangeEnum.HEALED);
 	}
 	
 	/**
@@ -114,14 +121,15 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreArmor(int amount) {
 		this.setArmor(this.getArmor() + amount);
-		this.healthRecoveredAtCurrentFrame += amount;
-		this.healthChange = HealthChangeEnum.ARMOR;
+		this.healthRecoveredAtCurrentFrame.add(amount);
+		this.healthLostAtCurrentFrame.add(0);
+		this.healthChange.add(HealthChangeEnum.ARMOR);
 	}
 	
 	public void clearModified() {
-		this.healthChange = HealthChangeEnum.NONE;
-		this.healthLostAtCurrentFrame = 0;
-		this.healthRecoveredAtCurrentFrame = 0;
+		this.healthChange.clear();
+		this.healthLostAtCurrentFrame.clear();
+		this.healthRecoveredAtCurrentFrame.clear();
 		
 		if (this.getArmor() > this.getMaxArmor()) {
 			this.setArmor(this.getMaxArmor());
@@ -179,7 +187,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public String getArmorColor() {
 		if (armor > 0) {
-			return "[BLUE]";
+			return "[CYAN]";
 		} else {
 			return "[WHITE]";
 		}
@@ -265,6 +273,28 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		if (hpDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
 			textComponent.setText(String.valueOf(this.hp));
+			
+			if (this.armor > 0) {
+				textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+			}
+		}
+	}
+	
+
+	public int getArmor() {
+		return armor;
+	}
+
+
+	public void setArmor(int armor) {
+		this.armor = armor;
+		if (hpDisplayer != null) {
+			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
+			textComponent.setText(String.valueOf(this.hp));
+			
+			if (this.armor > 0) {
+				textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+			}
 		}
 	}
 
@@ -285,33 +315,33 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	}
 
 
-	public int getHealthLostAtCurrentFrame() {
+	public List<Integer> getHealthLostAtCurrentFrame() {
 		return healthLostAtCurrentFrame;
 	}
 
 
-	public void setHealthLostAtCurrentFrame(int healthLostAtCurrentFrame) {
-		this.healthLostAtCurrentFrame = healthLostAtCurrentFrame;
+	public void addHealthLostAtCurrentFrame(int healthLostAtCurrentFrame) {
+		this.healthLostAtCurrentFrame.add(healthLostAtCurrentFrame);
 	}
 
 
-	public int getHealthRecoveredAtCurrentFrame() {
+	public List<Integer> getHealthRecoveredAtCurrentFrame() {
 		return healthRecoveredAtCurrentFrame;
 	}
 
 
-	public void setHealthRecoveredAtCurrentFrame(int healthRecoveredAtCurrentFrame) {
-		this.healthRecoveredAtCurrentFrame = healthRecoveredAtCurrentFrame;
+	public void addHealthRecoveredAtCurrentFrame(int healthRecoveredAtCurrentFrame) {
+		this.healthRecoveredAtCurrentFrame.add(healthRecoveredAtCurrentFrame);
 	}
 
 
-	public HealthChangeEnum getHealthChange() {
+	public List<HealthChangeEnum> getHealthChange() {
 		return healthChange;
 	}
 
 
-	public void setHealthChange(HealthChangeEnum healthChange) {
-		this.healthChange = healthChange;
+	public void addHealthChange(HealthChangeEnum healthChange) {
+		this.healthChange.add(healthChange);
 	}
 
 
@@ -345,14 +375,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	}
 
 
-	public int getArmor() {
-		return armor;
-	}
-
-
-	public void setArmor(int armor) {
-		this.armor = armor;
-	}
 
 
 	

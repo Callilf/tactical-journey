@@ -17,7 +17,13 @@ public enum AnimationsEnum {
 	FIRE(new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP)),
 	
 	STINGER_FLY(new Animation<Sprite>(0.15f, Assets.enemy_stinger, PlayMode.LOOP)),
-	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP));
+	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP)),
+	
+	
+	PANGOLIN_BABY_STAND(new Animation<Sprite>(0.15f, Assets.enemy_pangolin_baby, PlayMode.LOOP)),
+	PANGOLIN_BABY_ROLLED(new Animation<Sprite>(0.1f, Assets.enemy_pangolin_baby_rolled, PlayMode.LOOP)),
+	PANGOLIN_BABY_ROLLING(new Animation<Sprite>(0.1f, Assets.enemy_pangolin_baby_rolling, PlayMode.LOOP));
+
 
 
 	

@@ -176,6 +176,17 @@ public class Assets {
 	public static Array<Sprite> enemy_stinger;
 	public static Array<Sprite> enemy_stinger_charge;
 	
+	public static Array<Sprite> enemy_pangolin_baby;
+	public static Array<Sprite> enemy_pangolin_baby_rolled;
+	public static Array<Sprite> enemy_pangolin_baby_rolling;
+
+	
+	//************
+	// Bosses
+	
+	public static AtlasRegion boss_pangolin;
+
+	
 	//*************
 	// Containers
 	
@@ -384,6 +395,16 @@ public class Assets {
 		enemy_scorpion = Assets.getTexture("enemy-scorpion-test");
 		enemy_stinger = Assets.getAnimation("stinger");
 		enemy_stinger_charge = Assets.getAnimation("stinger_charge");
+		
+		enemy_pangolin_baby = Assets.getAnimation("pangolin_baby");
+		enemy_pangolin_baby_rolled = Assets.getAnimation("pangolin_baby_rolled");
+		enemy_pangolin_baby_rolling = Assets.getAnimation("pangolin_baby_rolling");
+
+		
+		//************
+		// Bosses
+		
+		boss_pangolin = Assets.getTexture("pangolin");
 		
 		
 		//*************

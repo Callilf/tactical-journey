@@ -4,5 +4,6 @@ public enum EnemyTypeEnum {
 	SPIDER,
 	WEB_SPIDER,
 	SCORPION,
-	STINGER;
+	STINGER,
+	PANGOLIN_BABY;
 }

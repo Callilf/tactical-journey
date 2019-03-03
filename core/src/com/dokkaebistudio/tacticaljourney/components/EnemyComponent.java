@@ -8,9 +8,9 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
@@ -23,7 +23,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	public Room room;
 	
 	/** The type of enemy. */
-	private EnemyTypeEnum type;
+	private Enemy type;
 	private EnemySubSystem subSystem;
 	
 	
@@ -70,6 +70,31 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	
 	
 	
+	
+	//************************
+	// Events
+	
+	public void onStartTurn(Entity enemy, Room room) {
+		this.type.onStartTurn(enemy, room);
+	}
+	
+	public void onEndTurn(Entity enemy, Room room) {
+		this.type.onEndTurn(enemy, room);
+	}
+	
+	
+	
+	public void onAttack(Entity enemy, Entity target, Room room) {
+		this.type.onAttack(enemy, target, room);
+	}
+	
+	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
+		this.type.onReceiveDamage(enemy, attacker, room);
+	}
+	
+	public void onDeath(Entity enemy, Entity attacker, Room room) {
+		this.type.onDeath(enemy, attacker, room);
+	}
 	
 	
 	
@@ -189,11 +214,11 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		this.alertedDisplayer = alertedDisplayer;
 	}
 
-	public EnemyTypeEnum getType() {
+	public Enemy getType() {
 		return type;
 	}
 
-	public void setType(EnemyTypeEnum type) {
+	public void setType(Enemy type) {
 		this.type = type;
 	}
 

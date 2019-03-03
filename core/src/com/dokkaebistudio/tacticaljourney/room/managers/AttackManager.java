@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
@@ -97,6 +98,17 @@ public class AttackManager {
 		if (healthComponent != null) {
 			healthComponent.hit(damage, attacker);
 		}
+		
+		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
+		if (enemyComponent != null) {
+			enemyComponent.onReceiveDamage(target, attacker, room);
+		}
+		
+		enemyComponent = Mappers.enemyComponent.get(attacker);
+		if (enemyComponent != null) {
+			enemyComponent.onAttack(target, attacker, room);
+		}
+		
 	}
 	
 	

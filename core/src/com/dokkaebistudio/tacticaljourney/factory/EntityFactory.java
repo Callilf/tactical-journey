@@ -150,7 +150,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(chasmEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.WALL;
+    	movableTilePos.zIndex = ZIndexConstants.TILE;
     	chasmEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -235,7 +235,7 @@ public final class EntityFactory {
     	return movableTileEntity;
 	}
 	
-	public Entity createAttackableTile(Vector2 pos, Room room) {
+	public Entity createAttackableTile(Vector2 pos, Room room, boolean explosion) {
 		Entity attackableTileEntity = engine.createEntity();
 		attackableTileEntity.flags = EntityFlagEnum.ATTACK_TILE.getFlag();
 
@@ -245,7 +245,7 @@ public final class EntityFactory {
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.tile_attackable));
+    	spriteCompo.setSprite(new Sprite(explosion ? Assets.tile_explosion : Assets.tile_attackable));
     	attackableTileEntity.add(spriteCompo);
     	
 		engine.addEntity(attackableTileEntity);

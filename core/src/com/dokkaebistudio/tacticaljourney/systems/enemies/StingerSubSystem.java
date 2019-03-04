@@ -258,7 +258,7 @@ public class StingerSubSystem extends EnemySubSystem {
 		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
 		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
 		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
-			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room));
+			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room, false));
 		}
 		return solid == null;
 	}

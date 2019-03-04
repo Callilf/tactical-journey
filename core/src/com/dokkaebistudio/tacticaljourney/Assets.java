@@ -56,6 +56,7 @@ public class Assets {
 
 	public static AtlasRegion tile_movable;
 	public static AtlasRegion tile_attackable;
+	public static AtlasRegion tile_explosion;
 	
 	public static AtlasRegion tile_movable_waypoint;
 	public static AtlasRegion tile_movable_selected;
@@ -283,6 +284,7 @@ public class Assets {
 
 		tile_movable = Assets.getTexture("tile-movable");
 		tile_attackable = Assets.getTexture("tile-attackable");
+		tile_explosion = Assets.getTexture("tile-explosion");
 		
 		tile_movable_waypoint = Assets.getTexture("tile-movable-waypoint");
 		tile_movable_selected = Assets.getTexture("tile-movable-selected");

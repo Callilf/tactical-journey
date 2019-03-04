@@ -62,7 +62,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     	
     	Iterator<Float> iterator = offsetTimes.iterator();
     	while(iterator.hasNext()) {
-    		if (iterator.next() >= elapsedTime) {
+    		if (iterator.next() < elapsedTime) {
     			iterator.remove();
     		}
     	}
@@ -89,7 +89,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 			    		healthCompo.setReceivedDamageLastTurn(true);
 		    		case HIT:	    			
 						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
-								offsetTimes.size() * 15, room);
+								offsetTimes.size() * 20, room);
 		
 	    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
 		    			alertEnemy(entity, healthCompo);
@@ -99,7 +99,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    		case HEALED:
 		    		case ARMOR:
 						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
-								offsetTimes.size() * 15, room);
+								offsetTimes.size() * 20, room);
 		
 		    			break;
 		    		default:

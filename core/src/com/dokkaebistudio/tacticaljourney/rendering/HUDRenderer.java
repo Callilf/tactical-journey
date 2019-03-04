@@ -48,6 +48,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class HUDRenderer implements Renderer, RoomSystem {
 	
+	
+	public static Vector2 POS_FLOOR = new Vector2(0, 1030.0f);
 	public static Vector2 POS_TIMER = new Vector2(200f, 1030.0f);
 	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
 	public static Vector2 POS_KEY_SLOT = new Vector2(650f,1000f);
@@ -57,6 +59,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	public static Vector2 POS_PROFILE = new Vector2(700f, 30f);
 	public static Vector2 POS_INVENTORY = new Vector2(780f, 30f);
+
+	public static Vector2 POS_FPS = new Vector2(1800f, 0f);
 
 
 
@@ -68,6 +72,13 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private boolean debug = true;
 	private Table fps;
 	private Label fpsLabel;
+	
+	
+	// Floor
+	private Table floor;
+	private Label floorLabel;
+	private Label roomLabel;
+
 	
 	// Time and turns
 	private Table timeAndTurnTable;
@@ -148,6 +159,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			displayFPS();
 		}
 		
+		displayFloor();
 		displayTimeAndTurns();
 		displayMoney();
 		displayBottomLeftHud();
@@ -171,7 +183,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private void displayFPS() {
 		if (fps == null) {
 			fps = new Table();
-			fps.setPosition(0, 1050);
+			fps.setPosition(POS_FPS.x, POS_FPS.y);
 			fps.align(Align.left);
 			// Turns
 			fpsLabel = new Label("", PopinService.hudStyle());
@@ -182,7 +194,32 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 		fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 	}
+
 	
+	
+	//***************
+	// Floor
+	
+	private void displayFloor() {
+		if (floor == null) {
+			floor = new Table();
+			floor.setPosition(POS_FLOOR.x, POS_FLOOR.y - 20);
+			floor.align(Align.left);
+			// Turns
+			floorLabel = new Label("", PopinService.hudStyle());
+			floor.add(floorLabel).left().uniformX();
+
+			floor.row();
+			
+			roomLabel = new Label("", PopinService.hudStyle());
+			floor.add(roomLabel).uniformX().left();
+
+			floor.pack();
+			stage.addActor(floor);
+		}
+		floorLabel.setText("Floor " + room.floor.getLevel());
+		roomLabel.setText(room.type.getLabel());
+	}
 	
 	
 	//************************************
@@ -711,8 +748,6 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				Actions.scaleBy(20, 20),
 				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
 				Actions.fadeOut(2, Interpolation.pow5In)));
-		
-		room.setCleared(RoomClearedState.CLEARED);
 	}
 	
 }

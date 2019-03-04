@@ -25,11 +25,11 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
  */
 public abstract class FloorGenerator {
 	
-	private RandomXS128 random;
+	protected RandomXS128 random;
 	private RoomGenerator roomGenerator;
 	
-	private Map<Room, Vector2> positionsPerRoom = new HashMap<>();
-	private Map<Vector2, Room> roomsPerPosition = new HashMap<>();
+	protected Map<Room, Vector2> positionsPerRoom = new HashMap<>();
+	protected Map<Vector2, Room> roomsPerPosition = new HashMap<>();
 
 	
 	public enum GenerationMoveEnum {
@@ -422,7 +422,7 @@ public abstract class FloorGenerator {
 	 * @param previousRoom the previous room
 	 * @param currentRoom the current room
 	 */
-	private void setNeighbors(GenerationMoveEnum currentMove, Room previousRoom, Room currentRoom) {
+	protected void setNeighbors(GenerationMoveEnum currentMove, Room previousRoom, Room currentRoom) {
 		switch (currentMove) {
 			case NORTH:
 				previousRoom.setNorthNeighbor(currentRoom);

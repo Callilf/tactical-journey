@@ -56,6 +56,7 @@ public class Assets {
 
 	public static AtlasRegion tile_movable;
 	public static AtlasRegion tile_attackable;
+	public static AtlasRegion tile_explosion;
 	
 	public static AtlasRegion tile_movable_waypoint;
 	public static AtlasRegion tile_movable_selected;
@@ -80,6 +81,7 @@ public class Assets {
 	public static AtlasRegion lvl_up_choice_reward_panel;
 	
 	public static AtlasRegion profile_background;
+	public static AtlasRegion profile_alteration_background;
 	public static AtlasRegion btn_profile;
 	public static AtlasRegion btn_profile_pushed;
 	
@@ -184,7 +186,9 @@ public class Assets {
 	//************
 	// Bosses
 	
-	public static AtlasRegion boss_pangolin;
+	public static Array<Sprite> boss_pangolin_mother;
+	public static Array<Sprite> boss_pangolin_mother_enraged;
+	public static Array<Sprite> boss_pangolin_mother_crying;
 
 	
 	//*************
@@ -280,6 +284,7 @@ public class Assets {
 
 		tile_movable = Assets.getTexture("tile-movable");
 		tile_attackable = Assets.getTexture("tile-attackable");
+		tile_explosion = Assets.getTexture("tile-explosion");
 		
 		tile_movable_waypoint = Assets.getTexture("tile-movable-waypoint");
 		tile_movable_selected = Assets.getTexture("tile-movable-selected");
@@ -306,6 +311,7 @@ public class Assets {
 		lvl_up_choice_reward_panel = Assets.getTexture("hud_lvl_up_choice_reward_panel");
 		
 		profile_background = Assets.getTexture("hud_profile_background");
+		profile_alteration_background = Assets.getTexture("hud_profile_alteration_background");
 		btn_profile = Assets.getTexture("btn-profile");
 		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
 		
@@ -404,7 +410,9 @@ public class Assets {
 		//************
 		// Bosses
 		
-		boss_pangolin = Assets.getTexture("pangolin");
+		boss_pangolin_mother = Assets.getAnimation("pangolin");
+		boss_pangolin_mother_enraged = Assets.getAnimation("pangolin_enraged");
+		boss_pangolin_mother_crying = Assets.getAnimation("pangolin_crying");
 		
 		
 		//*************
@@ -551,6 +559,7 @@ public class Assets {
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
 		font.getData().markupEnabled = true;
 		smallFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		smallFont.getData().markupEnabled = true;
 		smallFont.getData().setScale(0.8f);
 
 	}

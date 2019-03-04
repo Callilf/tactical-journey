@@ -83,7 +83,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	 * Select the correct target given the currentMoveDestinationIndex
 	 * @param gridPositionM the gridPositionMapper
 	 */
-	public void selectCurrentMoveDestinationTile() {
+	public void selectCurrentMoveDestinationTile(Entity mover) {
 		Entity target = null;
 		if (this.getWayPoints().size() > this.currentMoveDestinationIndex) {
 			target = this.getWayPoints().get(this.currentMoveDestinationIndex);
@@ -93,6 +93,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(target);
 		this.currentMoveDestinationTilePos = gridPositionComponent.coord();
 		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
+		
+		Mappers.gridPositionComponent.get(mover).coord(mover, this.currentMoveDestinationTilePos, room);
 	}
 	
 	public void incrementCurrentMoveDestinationIndex() {

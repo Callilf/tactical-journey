@@ -1,7 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Represents a door to another room.
@@ -17,6 +20,16 @@ public class DoorComponent implements Component {
 	private Room targetedRoom;
 
 	
+	
+	public void open(Entity door) {
+		this.opened = true;
+		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_opened);
+	}
+	
+	public void close(Entity door) {
+		this.opened = false;
+		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_closed);
+	}
 	
 	// Getters and Setters
 	

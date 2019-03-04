@@ -23,6 +23,11 @@ public class CurseWeakness extends Curse {
 	}
 	
 	@Override
+	public String description() {
+		return "Reduce strength by 1";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.curse_weakness;
 	}

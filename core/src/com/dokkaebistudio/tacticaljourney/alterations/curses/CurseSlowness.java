@@ -23,6 +23,11 @@ public class CurseSlowness extends Curse {
 	}
 	
 	@Override
+	public String description() {
+		return "Reduce movement by 1";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.curse_slowness;
 	}

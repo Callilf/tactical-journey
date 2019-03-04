@@ -23,6 +23,11 @@ public class BlessingCelerity extends Blessing {
 	}
 	
 	@Override
+	public String description() {
+		return "Increase movement by 1";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.blessing_celerity;
 	}

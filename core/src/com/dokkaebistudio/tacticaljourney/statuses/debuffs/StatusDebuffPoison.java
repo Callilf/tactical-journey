@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -43,7 +44,7 @@ public class StatusDebuffPoison extends Status {
 	@Override
 	public void onEndTurn(Entity entity) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.hitThroughArmor(2, parent);
+		healthComponent.hitThroughArmor(2, parent, DamageType.POISON);
 	}
 
 	

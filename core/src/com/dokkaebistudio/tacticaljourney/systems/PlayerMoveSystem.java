@@ -183,7 +183,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_MOVING:
-			moveCompo.selectCurrentMoveDestinationTile();
+			moveCompo.selectCurrentMoveDestinationTile(player);
 
 			// Do the movement on screen
 			Boolean movementFinished = movementHandler.performRealMovement(player, room);

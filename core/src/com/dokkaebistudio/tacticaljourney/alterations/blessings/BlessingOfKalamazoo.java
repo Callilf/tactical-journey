@@ -25,6 +25,11 @@ public class BlessingOfKalamazoo extends Blessing {
 	}
 	
 	@Override
+	public String description() {
+		return "Restore between 0 and 10 hp after clearing a room";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.blessing_of_kalamazoo;
 	}

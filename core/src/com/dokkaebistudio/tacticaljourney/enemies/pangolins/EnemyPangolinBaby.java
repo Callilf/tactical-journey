@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
@@ -12,13 +13,21 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class EnemyPangolinBaby extends Enemy {
 
 	private boolean rolled = false;
-	private int turnsRolled = 0;
+	private int turnRolledEnd = 0;
+	private Entity mother;
+	
+	
+	public EnemyPangolinBaby() {}
+	
+	public EnemyPangolinBaby(Entity mother) {
+		this.mother = mother;
+	}
 	
 	@Override
 	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
 		if (!rolled) {
 			rolled = true;
-			turnsRolled = 0;
+			turnRolledEnd = room.turnManager.getTurn() + 2;
 			
 			StateComponent stateComponent = Mappers.stateComponent.get(enemy);
 			stateComponent.set(StatesEnum.PANGOLIN_BABY_ROLLED.getState());
@@ -29,6 +38,23 @@ public class EnemyPangolinBaby extends Enemy {
 			MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
 			moveComponent.moveSpeed ++;
 		}
+		
+		
+		if (mother != null) {
+			EnemyComponent motherEnemyCompo = Mappers.enemyComponent.get(mother);
+			EnemyPangolinMother motherType = (EnemyPangolinMother)motherEnemyCompo.getType();
+			motherType.enrage(mother);
+		}
+	}
+	
+	
+	@Override
+	public void onDeath(Entity enemy, Entity attacker, Room room) {
+		if (mother != null) {
+			EnemyComponent motherEnemyCompo = Mappers.enemyComponent.get(mother);
+			EnemyPangolinMother motherType = (EnemyPangolinMother)motherEnemyCompo.getType();
+			motherType.cry(mother, room);
+		}
 	}
 	
 
@@ -36,7 +62,7 @@ public class EnemyPangolinBaby extends Enemy {
 	@Override
 	public void onEndTurn(Entity enemy, Room room) {
 		if (rolled) {
-			if (turnsRolled >= 3) {
+			if (room.turnManager.getTurn() == this.turnRolledEnd) {
 				rolled = false;
 				StateComponent stateComponent = Mappers.stateComponent.get(enemy);
 				stateComponent.set(StatesEnum.PANGOLIN_BABY_STAND.getState());
@@ -48,8 +74,6 @@ public class EnemyPangolinBaby extends Enemy {
 				
 				MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
 				moveComponent.moveSpeed --;
-			} else {
-				turnsRolled ++;
 			}
 		}
 	}
@@ -57,5 +81,9 @@ public class EnemyPangolinBaby extends Enemy {
 	
 	public boolean isRolled() {
 		return rolled;
+	}
+	
+	public void setMother(Entity e) {
+		this.mother = e;
 	}
 }

@@ -38,6 +38,8 @@ public class AttackTileSearchService extends TileSearchService {
 		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
+		 
+		 if (!attackCompo.isActive()) return;
 
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
@@ -82,7 +84,7 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		//Create entities for each attackable tiles to display them
 		for (Tile tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room);
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room, false);
 			attackCompo.attackableTiles.add(attackableTileEntity);
 		}
 	}

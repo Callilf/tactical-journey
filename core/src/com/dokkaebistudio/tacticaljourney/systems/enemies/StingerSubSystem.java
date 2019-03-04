@@ -149,7 +149,7 @@ public class StingerSubSystem extends EnemySubSystem {
     			
     			break;
     		case CHARGE:
-    	    	moveCompo.selectCurrentMoveDestinationTile();
+    	    	moveCompo.selectCurrentMoveDestinationTile(enemy);
 	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);
@@ -258,7 +258,7 @@ public class StingerSubSystem extends EnemySubSystem {
 		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
 		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
 		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
-			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room));
+			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room, false));
 		}
 		return solid == null;
 	}

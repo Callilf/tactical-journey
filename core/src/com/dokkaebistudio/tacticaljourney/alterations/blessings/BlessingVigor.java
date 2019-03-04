@@ -23,6 +23,11 @@ public class BlessingVigor extends Blessing {
 	}
 	
 	@Override
+	public String description() {
+		return "Increase max HP by 10";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.blessing_vigor;
 	}

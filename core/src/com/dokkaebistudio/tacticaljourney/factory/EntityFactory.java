@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.factory;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -150,7 +153,7 @@ public final class EntityFactory {
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(chasmEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.WALL;
+    	movableTilePos.zIndex = ZIndexConstants.TILE;
     	chasmEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
@@ -176,13 +179,13 @@ public final class EntityFactory {
     	doorEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = targetedRoom == null ? new Sprite(Assets.door_closed) : new Sprite(Assets.door_opened);
+    	Sprite s = new Sprite(Assets.door_opened);
     	spriteCompo.setSprite(s);
     	doorEntity.add(spriteCompo);
     	
     	DoorComponent doorCompo = engine.createComponent(DoorComponent.class);
     	doorCompo.setTargetedRoom(targetedRoom);
-    	doorCompo.setOpened(targetedRoom == null ? false : true);
+    	doorCompo.setOpened( true);
     	doorEntity.add(doorCompo);
     	
 		engine.addEntity(doorEntity);
@@ -198,6 +201,12 @@ public final class EntityFactory {
     	movableTilePos.coord(exitEntity, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.EXIT;
     	exitEntity.add(movableTilePos);
+    	
+    	// Remove creeps on this tile
+    	Set<Entity> creeps = room.getEntitiesAtPositionWithComponent(pos, CreepComponent.class);
+    	for (Entity e : creeps) {
+    		room.removeEntity(e);
+    	}
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	Sprite s = new Sprite(opened ? Assets.exit_opened : Assets.exit_closed);
@@ -235,7 +244,7 @@ public final class EntityFactory {
     	return movableTileEntity;
 	}
 	
-	public Entity createAttackableTile(Vector2 pos, Room room) {
+	public Entity createAttackableTile(Vector2 pos, Room room, boolean explosion) {
 		Entity attackableTileEntity = engine.createEntity();
 		attackableTileEntity.flags = EntityFlagEnum.ATTACK_TILE.getFlag();
 
@@ -245,7 +254,7 @@ public final class EntityFactory {
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.tile_attackable));
+    	spriteCompo.setSprite(new Sprite(explosion ? Assets.tile_explosion : Assets.tile_attackable));
     	attackableTileEntity.add(spriteCompo);
     	
 		engine.addEntity(attackableTileEntity);
@@ -473,7 +482,7 @@ public final class EntityFactory {
 		gridPositionComponent.zIndex = zIndex;
 		textTest.add(gridPositionComponent);
 		
-		TextComponent tc = new TextComponent(Assets.font);
+		TextComponent tc = new TextComponent(Assets.smallFont);
 		tc.setText(text);
 		textTest.add(tc);
 		
@@ -524,6 +533,9 @@ public final class EntityFactory {
 			break;
 		case ARMOR:
 			color = "[BLUE]";
+			break;
+		case RESISTANT:
+			color = "[BLACK]";
 			break;
 			default:
 				color = "[WHITE]";

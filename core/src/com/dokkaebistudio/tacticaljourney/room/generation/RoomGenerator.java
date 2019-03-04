@@ -85,6 +85,7 @@ public abstract class RoomGenerator {
 			groom.getTileTypes()[x][GameScreen.GRID_H - 1] = TileEnum.WALL;
 		}
 		
+		Entity createdDoor = null;
 		int y = 0;
 		while (scanner.hasNext() && y < GameScreen.GRID_H) {
 			int realY = GameScreen.GRID_H - 1 - y;
@@ -101,24 +102,43 @@ public abstract class RoomGenerator {
             	
 				PoolableVector2 tempPos = PoolableVector2.create(x,realY);
 
+				
             	switch(tileVal) {
             	case N_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, nn);
+            		if (nn != null) {
+            			groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+            			createdDoor = entityFactory.createDoor(currentRoom, tempPos, nn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
             	case E_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, en);
+            		if (en != null) {
+                		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+                		createdDoor = entityFactory.createDoor(currentRoom, tempPos, en);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
+
             	case S_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, sn);
+            		if (sn != null) {
+            			groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+            			createdDoor = entityFactory.createDoor(currentRoom, tempPos, sn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
+
             	case W_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, wn);
+            		if (wn != null) {
+                		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+                		createdDoor = entityFactory.createDoor(currentRoom, tempPos, wn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
-            		
+
             	case WALL :
             		groom.getTileTypes()[x][realY] = TileEnum.WALL;
             		break;
@@ -147,6 +167,11 @@ public abstract class RoomGenerator {
             	
             	}
             	tempPos.free();
+            	
+            	if (createdDoor != null) {
+            		currentRoom.addDoor(createdDoor);
+            		createdDoor = null;
+            	}
             }
             y ++;
 		}
@@ -256,17 +281,17 @@ public abstract class RoomGenerator {
 			Entity shopKeeper = entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
 			
 			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
-					ZIndexConstants.WALL, 
+					ZIndexConstants.TILE, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 			
 			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
-					ZIndexConstants.WALL, 
+					ZIndexConstants.TILE, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 
 			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
-					ZIndexConstants.WALL, 
+					ZIndexConstants.TILE, 
 					Assets.shop_item_background, 
 					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
 			
@@ -293,8 +318,7 @@ public abstract class RoomGenerator {
 			
 			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
 			
-//			entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(6,7), 4);
-			
+
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));

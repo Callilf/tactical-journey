@@ -67,7 +67,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 
 		//Create entities for each attackable tiles to display them
 		for (Tile tileCoord : explosiveComponent.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room);
+			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room, true);
 			explosiveComponent.attackableTiles.add(attackableTileEntity);
 		}
 	}

@@ -50,7 +50,7 @@ public class Floor1RoomGenerator extends RoomGenerator {
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 1) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
 				iterator.remove();
 			} else if (enemyTypeRandom == 2) {
 				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));

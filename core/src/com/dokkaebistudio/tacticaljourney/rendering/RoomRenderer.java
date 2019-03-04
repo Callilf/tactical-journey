@@ -56,7 +56,9 @@ public class RoomRenderer implements Renderer, RoomSystem {
 				else if (gridPositionComponentA == null) return -1;
 				else if (gridPositionComponentB == null) return 1;
 				
-				return (int) Math.signum(gridPositionComponentA.zIndex - gridPositionComponentB.zIndex);
+				return (int) Math.signum(
+						(gridPositionComponentA.zIndex + (GameScreen.SCREEN_H - gridPositionComponentA.coord().y)*5) - (gridPositionComponentB.zIndex + (GameScreen.SCREEN_H - gridPositionComponentB.coord().y)*5)
+						);
 			}
 		};
 		

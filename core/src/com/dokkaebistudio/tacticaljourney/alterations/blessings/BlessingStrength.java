@@ -23,6 +23,11 @@ public class BlessingStrength extends Blessing {
 	}
 	
 	@Override
+	public String description() {
+		return "Increase strength by 1";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.blessing_strength;
 	}

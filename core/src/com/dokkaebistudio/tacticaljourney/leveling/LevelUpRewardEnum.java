@@ -12,7 +12,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public enum LevelUpRewardEnum {
 
-	HEALTH_UP(10, 30, "Increase max health \nby 10 to 30 hp", "Max health increased \nby # hp") {
+	HEALTH_UP(10, 15, "Increase max health \nby 10 to 15 hp", "Max health increased \nby # hp") {
 		@Override
 		public void select(Entity player) {
 			HealthComponent healthComponent = Mappers.healthComponent.get(player);
@@ -22,7 +22,7 @@ public enum LevelUpRewardEnum {
 	},
 	
 	
-	STRENGTH_UP(1, 2, "Increase strength \nby 1 or 2", "Strength increased \nby #") {
+	STRENGTH_UP(1, 1, "Increase strength \nby 1", "Strength increased \nby #") {
 		@Override
 		public void select(Entity player) {
     		AttackComponent attackComponent = Mappers.attackComponent.get(player);
@@ -52,7 +52,7 @@ public enum LevelUpRewardEnum {
 		}
 	},
 	
-	ARROW_MAX_UP(5, 10, "Increase max arrow \namount by 5 to 10", "Max amount of arrows \nincreased by #"){
+	ARROW_MAX_UP(2, 3, "Increase max arrow \namount by 2 to 3", "Max amount of arrows \nincreased by #"){
 		@Override
 		public void select(Entity player) {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
@@ -75,7 +75,7 @@ public enum LevelUpRewardEnum {
 	},
 	
 	
-	BOMB_MAX_UP(2, 5, "Increase max bomb \namount by 2 to 5", "Max amount of bombs \nincreased by #"){
+	BOMB_MAX_UP(1, 2, "Increase max bomb \namount by 1 to 2", "Max amount of bombs \nincreased by #"){
 		@Override
 		public void select(Entity player) {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
@@ -85,7 +85,7 @@ public enum LevelUpRewardEnum {
 		}
 	},
 	
-	BOMB_AND_ARROW_MAX_UP(1, 3, "Increase max bomb and \nmax arrow amount by 1 to 3", "Max bombs and max arrows \namount increased by #"){
+	BOMB_AND_ARROW_MAX_UP(1, 1, "Increase max bomb and \nmax arrow amount by 1", "Max bombs and max arrows \namount increased by #"){
 		@Override
 		public void select(Entity player) {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
@@ -96,7 +96,7 @@ public enum LevelUpRewardEnum {
 	},
 	
 	
-	RESTORE_HEALTH(50, 100, "Restore 50 to 100 hp", "# hp restored"){
+	RESTORE_HEALTH(30, 50, "Restore 30 to 50 hp", "# hp restored"){
 		@Override
 		public void select(Entity player) {
 			HealthComponent healthComponent = Mappers.healthComponent.get(player);
@@ -106,7 +106,7 @@ public enum LevelUpRewardEnum {
 	},
 	
 	
-	RESTORE_ARROWS(10, 20, "Restore 10 to 20 arrows", "# arrows received"){
+	RESTORE_ARROWS(10, 15, "Restore 10 to 15 arrows", "# arrows received"){
 		@Override
 		public void select(Entity player) {
 			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);

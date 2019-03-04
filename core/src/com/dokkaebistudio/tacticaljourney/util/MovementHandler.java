@@ -142,7 +142,10 @@ public class MovementHandler {
 			result = performEndOfMovement(mover, moveCompo, room);
 		}
 		
+		
 		if (result != null) {
+			gridPositionComponent.absolutePos(absolutePos.x, absolutePos.y);
+
 			for (Component c : mover.getComponents()) {
 				if (c instanceof MovableInterface) {
 					((MovableInterface) c).performMovement(xOffset, yOffset);

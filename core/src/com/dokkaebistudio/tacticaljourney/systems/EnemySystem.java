@@ -172,7 +172,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         	case ENEMY_MOVING:
         		
-    	    	moveCompo.selectCurrentMoveDestinationTile();
+    	    	moveCompo.selectCurrentMoveDestinationTile(enemyEntity);
     	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
@@ -196,7 +196,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         		//Check if attack possible
         		boolean attacked = false;
-    	    	if (attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
+    	    	if (attackCompo.isActive() && attackCompo.attackableTiles != null && !attackCompo.attackableTiles.isEmpty()) {
     	    		for (Entity attTile : attackCompo.attackableTiles) {
     	    			GridPositionComponent attTilePos = Mappers.gridPositionComponent.get(attTile);
     	    			int range = TileUtil.getDistanceBetweenTiles(enemyCurrentPos.coord(), attTilePos.coord());

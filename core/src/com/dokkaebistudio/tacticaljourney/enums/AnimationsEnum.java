@@ -22,8 +22,11 @@ public enum AnimationsEnum {
 	
 	PANGOLIN_BABY_STAND(new Animation<Sprite>(0.15f, Assets.enemy_pangolin_baby, PlayMode.LOOP)),
 	PANGOLIN_BABY_ROLLED(new Animation<Sprite>(0.1f, Assets.enemy_pangolin_baby_rolled, PlayMode.LOOP)),
-	PANGOLIN_BABY_ROLLING(new Animation<Sprite>(0.1f, Assets.enemy_pangolin_baby_rolling, PlayMode.LOOP));
+	PANGOLIN_BABY_ROLLING(new Animation<Sprite>(0.1f, Assets.enemy_pangolin_baby_rolling, PlayMode.LOOP)),
 
+	PANGOLIN_MOTHER_STAND(new Animation<Sprite>(0.15f, Assets.boss_pangolin_mother, PlayMode.LOOP)),
+	PANGOLIN_MOTHER_ENRAGED_STAND(new Animation<Sprite>(0.15f, Assets.boss_pangolin_mother_enraged, PlayMode.LOOP)),
+	PANGOLIN_MOTHER_CRYING(new Animation<Sprite>(0.3f, Assets.boss_pangolin_mother_crying, PlayMode.LOOP));
 
 
 	

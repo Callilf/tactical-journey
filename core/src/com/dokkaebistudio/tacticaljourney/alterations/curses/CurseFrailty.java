@@ -23,6 +23,11 @@ public class CurseFrailty extends Curse {
 	}
 	
 	@Override
+	public String description() {
+		return "Reduce max HP by 10";
+	}
+	
+	@Override
 	public AtlasRegion texture() {
 		return Assets.curse_frailty;
 	}

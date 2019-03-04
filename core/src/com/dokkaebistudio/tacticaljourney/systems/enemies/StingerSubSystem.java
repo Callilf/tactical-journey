@@ -149,7 +149,7 @@ public class StingerSubSystem extends EnemySubSystem {
     			
     			break;
     		case CHARGE:
-    	    	moveCompo.selectCurrentMoveDestinationTile();
+    	    	moveCompo.selectCurrentMoveDestinationTile(enemy);
 	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);

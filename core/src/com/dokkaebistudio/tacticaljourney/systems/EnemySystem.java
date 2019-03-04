@@ -172,7 +172,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         	case ENEMY_MOVING:
         		
-    	    	moveCompo.selectCurrentMoveDestinationTile();
+    	    	moveCompo.selectCurrentMoveDestinationTile(enemyEntity);
     	    		
     	    	//Do the movement on screen
     	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);

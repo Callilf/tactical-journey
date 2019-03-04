@@ -103,22 +103,40 @@ public abstract class RoomGenerator {
 
             	switch(tileVal) {
             	case N_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, nn);
+            		if (nn != null) {
+            			groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+						entityFactory.createDoor(currentRoom, tempPos, nn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
             	case E_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, en);
+            		if (en != null) {
+                		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+    					entityFactory.createDoor(currentRoom, tempPos, en);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
+
             	case S_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, sn);
+            		if (sn != null) {
+            			groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+						entityFactory.createDoor(currentRoom, tempPos, sn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
+
             	case W_DOOR :
-            		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-					entityFactory.createDoor(currentRoom, tempPos, wn);
+            		if (wn != null) {
+                		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+    					entityFactory.createDoor(currentRoom, tempPos, wn);
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.WALL;
+            		}
             		break;
-            		
+
             	case WALL :
             		groom.getTileTypes()[x][realY] = TileEnum.WALL;
             		break;

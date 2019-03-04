@@ -3,7 +3,15 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.generation.floor2;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 
@@ -16,14 +24,38 @@ public class Floor2Generator extends FloorGenerator {
 	public Floor2Generator(EntityFactory ef) {
 		this.setRoomGenerator(new Floor2RoomGenerator(ef));
 	}
+	
 
 	/**
-	 * Choose the type of room to create.
-	 * @return the type of room
+	 * Generate all the layout of the given floor.
+	 * @param floor the floor to generate.
 	 */
-	@Override
-	protected RoomType chooseRoomType() {
-		return RoomType.COMMON_ENEMY_ROOM;
+	public void generateFloor(Floor floor, GameScreen gameScreen) {
+		random = RandomSingleton.getInstance().getSeededRandom();
+		List<Room> rooms = new ArrayList<>();
+
+		// Create the boss room
+		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.BOSS_ROOM);
+		roomsPerPosition.put(new Vector2(0,0), startRoom);
+		positionsPerRoom.put(startRoom, new Vector2(0,0));
+		rooms.add(startRoom);
+		
+
+		// Create the exit room
+		Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.END_FLOOR_ROOM);
+		roomsPerPosition.put(new Vector2(0, 1), currentRoom);
+		positionsPerRoom.put(currentRoom, new Vector2(0, 1));
+		rooms.add(currentRoom);
+			
+		// Set the neighbors
+		setNeighbors(GenerationMoveEnum.NORTH, startRoom, currentRoom);		
+				
+		// Generate the content of all rooms
+		for (Room r : rooms) {
+			r.create();
+		}
+		floor.setRooms(rooms);
+		floor.setActiveRoom(startRoom);
+		floor.setRoomPositions(roomsPerPosition);
 	}
-	
 }

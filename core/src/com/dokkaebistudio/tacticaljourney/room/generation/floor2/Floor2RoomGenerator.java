@@ -12,7 +12,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -39,20 +38,8 @@ public class Floor2RoomGenerator extends RoomGenerator {
 		List<PoolableVector2> spawnPositions = null;
 		
 		switch(room.type) {
-		case COMMON_ENEMY_ROOM :
-		case SHOP_ROOM:
-		case STATUE_ROOM:
-			super.generateRoomContent(room, generatedRoom);
-			return;
 			
-		case KEY_ROOM:
-			
-			// TODO change this
-			// No key atm, so that its impossible to go deeper
-			
-			break;
-			
-		case START_FLOOR_ROOM:
+		case BOSS_ROOM:
 
 			// BOSS FIGHT : Pangolin mother
 			spawnPositions = new ArrayList<>(possibleSpawns);
@@ -82,7 +69,8 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			int nextInt = random.nextInt(possibleSpawns.size());
 			Vector2 pos = possibleSpawns.get(nextInt);
-			entityFactory.createExit(room, pos, false);
+			entityFactory.createExit(room, pos, true);
+			
 			default:
 			break;
 		}
@@ -94,48 +82,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 		generatedRoom.releaseSpawns();
 	}
 
-	
-	/**
-	 * Generate a random number of enemies and place them in a room.
-	 * @param room the room
-	 * @param random the random
-	 * @param spawnPositions the possible spawn positions
-	 * @param canBeEmpty true if there can be no enemies
-	 */
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
-		if (spawnPositions.size() == 0) return;
 
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 8));
-		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
-		
-		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
-		for (int i=0 ; i<enemyNb ; i++) {
-			if (!iterator.hasNext()) break;
-			
-			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(9);
-			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
-				iterator.remove();
-			} else if (enemyTypeRandom == 1 || enemyTypeRandom == 2) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
-				iterator.remove();
-				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
-				}
-			} else if (enemyTypeRandom == 3 || enemyTypeRandom == 4) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
-				iterator.remove();
-			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
-				iterator.remove();
-			} else {
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
-				iterator.remove();
-			}
-			
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-		}
-	}
+	@Override
+	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {}
 }

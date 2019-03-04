@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.factory;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -198,6 +201,12 @@ public final class EntityFactory {
     	movableTilePos.coord(exitEntity, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.EXIT;
     	exitEntity.add(movableTilePos);
+    	
+    	// Remove creeps on this tile
+    	Set<Entity> creeps = room.getEntitiesAtPositionWithComponent(pos, CreepComponent.class);
+    	for (Entity e : creeps) {
+    		room.removeEntity(e);
+    	}
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	Sprite s = new Sprite(opened ? Assets.exit_opened : Assets.exit_closed);

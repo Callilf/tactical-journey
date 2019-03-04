@@ -56,6 +56,20 @@ public class EnemyPangolinMother extends Enemy {
 		
 	}
 	
+	
+	@Override
+	public void onDeath(Entity enemy, Entity attacker, Room room) {
+		// Remove the mother for all babies
+		for(Entity e : room.getEnemies()) {
+			EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
+			Enemy type = enemyComponent.getType();
+			if (type != null && type.getClass().equals(EnemyPangolinBaby.class)) {
+				EnemyPangolinBaby baby = (EnemyPangolinBaby)enemyComponent.getType();
+				baby.setMother(null);
+			}
+		}
+	}
+	
 	@Override
 	public void onEndTurn(Entity enemy, Room room) {
 		if (crying) {

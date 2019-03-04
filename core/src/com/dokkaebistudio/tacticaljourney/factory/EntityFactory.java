@@ -176,13 +176,13 @@ public final class EntityFactory {
     	doorEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = targetedRoom == null ? new Sprite(Assets.door_closed) : new Sprite(Assets.door_opened);
+    	Sprite s = new Sprite(Assets.door_opened);
     	spriteCompo.setSprite(s);
     	doorEntity.add(spriteCompo);
     	
     	DoorComponent doorCompo = engine.createComponent(DoorComponent.class);
     	doorCompo.setTargetedRoom(targetedRoom);
-    	doorCompo.setOpened(targetedRoom == null ? false : true);
+    	doorCompo.setOpened( true);
     	doorEntity.add(doorCompo);
     	
 		engine.addEntity(doorEntity);

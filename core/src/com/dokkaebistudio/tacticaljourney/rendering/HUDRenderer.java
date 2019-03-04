@@ -711,8 +711,6 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				Actions.scaleBy(20, 20),
 				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
 				Actions.fadeOut(2, Interpolation.pow5In)));
-		
-		room.setCleared(RoomClearedState.CLEARED);
 	}
 	
 }

@@ -96,6 +96,8 @@ public class Room extends EntitySystem {
 	private List<Entity> removedItems;
 
 	
+	/** The doors entities of this room. */
+	private List<Entity> doors;
 	
 	private Room northNeighbor;
 	private Room southNeighbor;
@@ -226,16 +228,27 @@ public class Room extends EntitySystem {
 	
 	@Override
 	public void update(float deltaTime) {
+		// Update the elapsed time
 		if (!state.isPaused()) {
 			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
 			gtSingleton.updateElapsedTime(deltaTime);
 		}
 		
+		// Remove entities that are no longer in the gmae
 		for (Entity e : this.entitiesToRemove) {
 			engine.removeEntity(e);
 		}
 		this.entitiesToRemove.clear();
 		
+		// Open doors on room clear
+		if (this.getCleared() == RoomClearedState.JUST_CLEARED) {
+			for (Entity door : doors) {
+				Mappers.doorComponent.get(door).open(door);
+			}
+			this.cleared = RoomClearedState.CLEARED;
+		}		
+		
+		// Update the room state
 		updateState();
 	}
 	
@@ -248,6 +261,7 @@ public class Room extends EntitySystem {
 
 		enemies = new ArrayList<>();
 		neutrals = new ArrayList<>();
+		doors = new ArrayList<>();
 		attackManager = new AttackManager(this);
 	 
 		RoomGenerator generator = this.floor.getFloorGenerator().getRoomGenerator();
@@ -343,6 +357,14 @@ public class Room extends EntitySystem {
 		return this.enemies;
 	}
 	
+	
+	public void addDoor(Entity d) {
+		this.doors.add(d);
+	}
+	
+	public List<Entity> getDoors() {
+		return this.doors;
+	}
 	
 	
 	// Neighbors

@@ -60,7 +60,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 
 			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
 			Entity mother = null;
-			for (int i=0 ; i<3 ; i++) {
+			for (int i=0 ; i<4 ; i++) {
 				if (!iterator.hasNext()) break;
 				
 				if (i == 0) {
@@ -68,6 +68,13 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				} else {
 					entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
 				}
+			}
+			
+			
+			// Close doors
+			List<Entity> doors = room.getDoors();
+			for (Entity door : doors) {
+				Mappers.doorComponent.get(door).close(door);
 			}
 			
 			break;

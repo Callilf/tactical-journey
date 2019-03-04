@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public abstract class Alteration {
 	
 	public abstract String title();
+	public abstract String description();
 	public abstract AtlasRegion texture();
 
 	/** Called when this alteration is received by an entity. */

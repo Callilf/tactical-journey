@@ -248,7 +248,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		blessingList.clear();
 		for (Alteration blessing : alterationReceiverCompo.getBlessings()) {
 			Table oneBlessingTable = createOneAlteration(blessing);
-			blessingList.add(oneBlessingTable).fillX();
+			blessingList.add(oneBlessingTable).fillX().pad(0, 15, 15, 15);
 			blessingList.row();
 		}
 				
@@ -293,7 +293,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseList.clear();
 		for (Alteration curse : alterationReceiverCompo.getCurses()) {
 			Table oneCurseTable = createOneAlteration(curse);
-			curseList.add(oneCurseTable).fillX();
+			curseList.add(oneCurseTable).fillX().pad(0, 15, 15, 15);
 			curseList.row();
 		}
 		
@@ -336,13 +336,28 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	private Table createOneAlteration(Alteration alteration) {
 		Table oneCurseTable = new Table();
+
+		TextureRegionDrawable background = new TextureRegionDrawable(Assets.profile_alteration_background);
+		oneCurseTable.setBackground(background);
+		
 		oneCurseTable.align(Align.left);
 
+		Table upTable = new Table();
+		upTable.align(Align.left);
 		Image curseImage = new Image(alteration.texture());
-		oneCurseTable.add(curseImage).left().pad(0, 20, 20, 20);
+		upTable.add(curseImage).left().pad(5, 5, 0, 10);
 		
 		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
-		oneCurseTable.add(curseTitle).pad(0, 20, 20, 20);
+		upTable.add(curseTitle).pad(5, 10, 0, 5);
+		upTable.pack();
+		oneCurseTable.add(upTable).left();
+		
+		oneCurseTable.row();
+		Label desc = new Label(alteration.description(), PopinService.smallTextStyle());
+		desc.setAlignment(Align.left);
+		desc.setWidth(Assets.profile_alteration_background.getRegionWidth() - 20);
+		desc.setWrap(true);
+		oneCurseTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 20).pad(0, 5, 5, 5);
 		
 		oneCurseTable.pack();
 		return oneCurseTable;

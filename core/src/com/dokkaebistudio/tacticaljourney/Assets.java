@@ -80,6 +80,7 @@ public class Assets {
 	public static AtlasRegion lvl_up_choice_reward_panel;
 	
 	public static AtlasRegion profile_background;
+	public static AtlasRegion profile_alteration_background;
 	public static AtlasRegion btn_profile;
 	public static AtlasRegion btn_profile_pushed;
 	
@@ -308,6 +309,7 @@ public class Assets {
 		lvl_up_choice_reward_panel = Assets.getTexture("hud_lvl_up_choice_reward_panel");
 		
 		profile_background = Assets.getTexture("hud_profile_background");
+		profile_alteration_background = Assets.getTexture("hud_profile_alteration_background");
 		btn_profile = Assets.getTexture("btn-profile");
 		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
 		

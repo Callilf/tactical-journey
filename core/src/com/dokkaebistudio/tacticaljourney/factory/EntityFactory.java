@@ -525,6 +525,9 @@ public final class EntityFactory {
 		case ARMOR:
 			color = "[BLUE]";
 			break;
+		case RESISTANT:
+			color = "[BLACK]";
+			break;
 			default:
 				color = "[WHITE]";
 

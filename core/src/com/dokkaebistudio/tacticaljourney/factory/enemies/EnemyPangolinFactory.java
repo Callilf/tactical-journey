@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinBaby;
 import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -114,6 +115,7 @@ public final class EnemyPangolinFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
+		healthComponent.addResistance(DamageType.EXPLOSION, 75);
 		healthComponent.setMaxHp(12);
 		healthComponent.setHp(12);
 		healthComponent.setMaxArmor(20);
@@ -196,6 +198,7 @@ public final class EnemyPangolinFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
+		healthComponent.addResistance(DamageType.EXPLOSION, 75);
 		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(20);
 		healthComponent.setHp(20);

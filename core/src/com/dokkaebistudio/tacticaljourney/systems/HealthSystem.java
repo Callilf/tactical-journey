@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -76,27 +77,29 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     		}
     		
     		// If a health modification has occurred during this frame
-	    	if (!healthCompo.getHealthChange().isEmpty()) {
+	    	if (!healthCompo.getHealthChangeMap().isEmpty()) {
 	    		
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(entity);
 	
-				for (int i=0 ; i<healthCompo.getHealthChange().size() ; i++) {
-					HealthChangeEnum healthChange = healthCompo.getHealthChange().get(i);
+				for (Entry<HealthChangeEnum, String> entry : healthCompo.getHealthChangeMap().entrySet()) {
+					HealthChangeEnum healthChange = entry.getKey();
+					String displayValue = entry.getValue();
 		    		switch(healthChange) {
 		    		case HIT_INTERRUPT:
 			    		healthCompo.setReceivedDamageLastTurn(true);
 		    		case HIT:	    			
-						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthLostAtCurrentFrame().get(i)), 
-								gridPos, healthChange, offsetTimes.size() * 15, room);
+						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
+								offsetTimes.size() * 15, room);
 		
 	    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
 		    			alertEnemy(entity, healthCompo);
 	
 		    			break;
+		    		case RESISTANT:
 		    		case HEALED:
 		    		case ARMOR:
-						room.entityFactory.createDamageDisplayer(String.valueOf(healthCompo.getHealthRecoveredAtCurrentFrame().get(i)), 
-								gridPos, healthChange, offsetTimes.size() * 15, room);
+						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
+								offsetTimes.size() * 15, room);
 		
 		    			break;
 		    		default:

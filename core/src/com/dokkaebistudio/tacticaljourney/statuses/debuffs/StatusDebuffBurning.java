@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -59,7 +60,7 @@ public class StatusDebuffBurning extends Status {
 	@Override
 	public void onEndTurn(Entity entity) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.hit(3, parent);
+		healthComponent.hit(3, parent, DamageType.FIRE);
 	}
 	
 	

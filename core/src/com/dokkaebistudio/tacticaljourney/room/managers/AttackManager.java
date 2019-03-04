@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -83,9 +84,18 @@ public class AttackManager {
 			damage = attackCompo.getStrength();
 		}
 		
-		applyDamage(attacker, target, damage);
+		applyDamage(attacker, target, damage, DamageType.NORMAL);
 	}
 	
+	
+	/**
+	 * Deal 'damage' damages to 'target'.
+	 * @param target the target entity
+	 * @param damage the amount of damage
+	 */
+	public void applyDamageWithoutAttacker(Entity target, int damage, DamageType damageType) {
+		this.applyDamage(null, target, damage, damageType);
+	}
 	
 	/**
 	 * 'attacker' deals 'damage' damages to 'target'
@@ -93,10 +103,10 @@ public class AttackManager {
 	 * @param target the target entity
 	 * @param damage the amount of damage
 	 */
-	public void applyDamage(Entity attacker, Entity target, int damage) {
+	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
 		if (healthComponent != null) {
-			healthComponent.hit(damage, attacker);
+			healthComponent.hit(damage, attacker, damageType);
 		}
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
@@ -104,9 +114,11 @@ public class AttackManager {
 			enemyComponent.onReceiveDamage(target, attacker, room);
 		}
 		
-		enemyComponent = Mappers.enemyComponent.get(attacker);
-		if (enemyComponent != null) {
-			enemyComponent.onAttack(target, attacker, room);
+		if (attacker != null) {
+			enemyComponent = Mappers.enemyComponent.get(attacker);
+			if (enemyComponent != null) {
+				enemyComponent.onAttack(target, attacker, room);
+			}
 		}
 		
 	}

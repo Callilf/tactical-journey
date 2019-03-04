@@ -1,7 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -50,6 +51,12 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private int armor;
 	
 	
+	//***********
+	// Resistance
+	
+	private Map<DamageType, Integer> resitanceMap = new HashMap<>();
+	
+	
 	
 	/** Whether the entity received damages during the previous turn. */
 	private boolean receivedDamageLastTurn;
@@ -58,51 +65,73 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private Entity attacker;
 	
 	/** Whether the entity has been hit or healed at this frame. */
-	private List<HealthChangeEnum> healthChange = new ArrayList<>();
-	private List<Integer> healthLostAtCurrentFrame = new ArrayList<>();
-	private List<Integer> healthRecoveredAtCurrentFrame = new ArrayList<>();
+	private Map<HealthChangeEnum, String> healthChangeMap = new HashMap<>();
 	
+	
+	//****************
+	// Hit methods
 	
 	/**
 	 * Receive damages.
 	 * @param amountOfDamage the amount of damages
 	 */
 	public void hit(int amountOfDamage, Entity attacker) {
-		int damageToHealth = Math.max(amountOfDamage - this.armor, 0);
+		this.hit(amountOfDamage, attacker, DamageType.NORMAL);
+	}
+	
+	/**
+	 * Receive damages.
+	 * @param amountOfDamage the amount of damages
+	 */
+	public void hit(int amountOfDamage, Entity attacker, DamageType damageType) {
+		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
+		
+		int damageToHealth = Math.max(realAmountOfDamage - this.armor, 0);
 		if (this.armor > 0) {
-			this.setArmor(Math.max(this.armor - amountOfDamage, 0));
+			this.setArmor(Math.max(this.armor - realAmountOfDamage, 0));
 		}
 		
 		this.setHp(Math.max(0, this.getHp() - damageToHealth));
-		this.healthLostAtCurrentFrame.add(amountOfDamage);
-		this.healthRecoveredAtCurrentFrame.add(0);
 
 		
 		if (attacker != null) {
 			this.attacker = attacker;
-			this.healthChange.add(HealthChangeEnum.HIT_INTERRUPT);
+			this.healthChangeMap.put(HealthChangeEnum.HIT_INTERRUPT, String.valueOf(realAmountOfDamage));
 		} else {
-			this.healthChange.add(HealthChangeEnum.HIT);
+			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(realAmountOfDamage));
 		}
+	}
+
+	
+	
+	/**
+	 * Receive damages that bypasses armor.
+	 * @param amountOfDamage the amount of damages
+	 */
+	public void hitThroughArmor(int amountOfDamage, Entity attacker) {
+		this.hitThroughArmor(amountOfDamage, attacker, DamageType.NORMAL);
 	}
 	
 	/**
 	 * Receive damages that bypasses armor.
 	 * @param amountOfDamage the amount of damages
 	 */
-	public void hitThroughArmor(int amountOfDamage, Entity attacker) {		
-		this.setHp(Math.max(0, this.getHp() - amountOfDamage));
-		this.healthLostAtCurrentFrame.add(amountOfDamage);
-		this.healthRecoveredAtCurrentFrame.add(0);
+	public void hitThroughArmor(int amountOfDamage, Entity attacker, DamageType damageType) {
+		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
+
+		this.setHp(Math.max(0, this.getHp() - realAmountOfDamage));
 
 		if (attacker != null) {
 			this.attacker = attacker;
-			this.healthChange.add(HealthChangeEnum.HIT_INTERRUPT);
+			this.healthChangeMap.put(HealthChangeEnum.HIT_INTERRUPT, String.valueOf(realAmountOfDamage));
 		} else {
-			this.healthChange.add(HealthChangeEnum.HIT);
+			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(realAmountOfDamage));
 		}
 	}
 	
+	
+	//**************************
+	// Restore methods
 	
 	/**
 	 * Restore the given amount of health.
@@ -110,9 +139,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreHealth(int amount) {
 		this.setHp(this.getHp() + amount);
-		this.healthRecoveredAtCurrentFrame.add(amount);
-		this.healthLostAtCurrentFrame.add(0);
-		this.healthChange.add(HealthChangeEnum.HEALED);
+		this.healthChangeMap.put(HealthChangeEnum.HEALED, String.valueOf(amount));
 	}
 	
 	/**
@@ -121,15 +148,11 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void restoreArmor(int amount) {
 		this.setArmor(this.getArmor() + amount);
-		this.healthRecoveredAtCurrentFrame.add(amount);
-		this.healthLostAtCurrentFrame.add(0);
-		this.healthChange.add(HealthChangeEnum.ARMOR);
+		this.healthChangeMap.put(HealthChangeEnum.ARMOR, String.valueOf(amount));
 	}
 	
 	public void clearModified() {
-		this.healthChange.clear();
-		this.healthLostAtCurrentFrame.clear();
-		this.healthRecoveredAtCurrentFrame.clear();
+		this.healthChangeMap.clear();
 		
 		if (this.getArmor() > this.getMaxArmor()) {
 			this.setArmor(this.getMaxArmor());
@@ -194,6 +217,36 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	}
 	
 	
+	
+	//****************************
+	// Resistance related methods
+	
+	public void addResistance(DamageType dt, int percentage) {
+		this.resitanceMap.put(dt, percentage);
+	}
+	
+	public void removeResistance(DamageType dt) {
+		this.resitanceMap.remove(dt);
+	}
+	
+	/**
+	 * Compute the new amount of damage given an amount and a type of damage.
+	 * @param damageType the type of damage
+	 * @param amountOfDamage the input amount of damage prior to resistance damage reduction
+	 * @return the damage reduced given the resistance.
+	 */
+	private int checkResistance(DamageType damageType, int amountOfDamage) {
+		int realAmountOfDamage = amountOfDamage;
+		Integer resistancePercentage = this.resitanceMap.get(damageType);
+		if (resistancePercentage != null && resistancePercentage.intValue() > 0) {
+			realAmountOfDamage = (realAmountOfDamage * (100 - resistancePercentage.intValue())) / 100;
+			
+			this.healthChangeMap.put(HealthChangeEnum.RESISTANT, damageType.name() + " RESISTANT");
+		}
+		return realAmountOfDamage;
+	}
+	
+	
 	//********************
 	// Overridden methods
 	
@@ -204,6 +257,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	@Override
 	public void reset() {
+		resitanceMap.clear();
 		if (hpDisplayer != null) {
 			room.removeEntity(hpDisplayer);		
 		}
@@ -262,6 +316,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	}
 	
 	
+	
+	
+	//*************************
 	// Getters and Setters
 	
 	public int getHp() {
@@ -315,35 +372,13 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	}
 
 
-	public List<Integer> getHealthLostAtCurrentFrame() {
-		return healthLostAtCurrentFrame;
+	public Map<HealthChangeEnum, String> getHealthChangeMap() {
+		return healthChangeMap;
 	}
 
-
-	public void addHealthLostAtCurrentFrame(int healthLostAtCurrentFrame) {
-		this.healthLostAtCurrentFrame.add(healthLostAtCurrentFrame);
+	public void setHealthChangeMap(Map<HealthChangeEnum, String> healthChangeMap) {
+		this.healthChangeMap = healthChangeMap;
 	}
-
-
-	public List<Integer> getHealthRecoveredAtCurrentFrame() {
-		return healthRecoveredAtCurrentFrame;
-	}
-
-
-	public void addHealthRecoveredAtCurrentFrame(int healthRecoveredAtCurrentFrame) {
-		this.healthRecoveredAtCurrentFrame.add(healthRecoveredAtCurrentFrame);
-	}
-
-
-	public List<HealthChangeEnum> getHealthChange() {
-		return healthChange;
-	}
-
-
-	public void addHealthChange(HealthChangeEnum healthChange) {
-		this.healthChange.add(healthChange);
-	}
-
 
 	public boolean isReceivedDamageLastTurn() {
 		return receivedDamageLastTurn;

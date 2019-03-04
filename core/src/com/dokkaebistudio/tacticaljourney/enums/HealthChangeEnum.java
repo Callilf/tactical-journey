@@ -5,5 +5,6 @@ public enum HealthChangeEnum {
 	HIT,
 	HIT_INTERRUPT,
 	HEALED,
-	ARMOR;
+	ARMOR,
+	RESISTANT;
 }

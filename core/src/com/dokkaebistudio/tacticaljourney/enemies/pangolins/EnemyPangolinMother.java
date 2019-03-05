@@ -25,6 +25,9 @@ public class EnemyPangolinMother extends Enemy {
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 		enemyComponent.setAlerted(true);
+		
+		MoveComponent moveCompo = Mappers.moveComponent.get(entity);
+		moveCompo.moveSpeed = 4;
 	}
 	
 	public void cry(Entity entity, Room room) {

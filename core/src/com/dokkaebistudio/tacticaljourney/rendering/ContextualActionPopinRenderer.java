@@ -274,6 +274,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 				inventoryComponent.removeKey();
 				
 				exitComponent.open(exit);
+				room.turnManager.endPlayerTurn();
 				closePopin();
 			}
 		};
@@ -291,6 +292,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, statueComponent.getBlessingToGive());				
 				statueComponent.setHasBlessing(false);
+				room.turnManager.endPlayerTurn();
 				closePopin();
 			}
 		};

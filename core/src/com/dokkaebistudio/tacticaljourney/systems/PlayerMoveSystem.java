@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
@@ -293,40 +294,44 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * Holding right click on an enemy displays it's possible movements and attacks.
 	 */
 	private void handleRightClickOnEnemies(Entity player) {
-		if (Gdx.input.isTouched()) {
-		  //Finger touching the screen
-		  // You can actually start calling onClick here, if those variables and logic you are using there are correct.
-			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-			int x = (int) touchPoint.x;
-			int y = (int) touchPoint.y;
-			
-			PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
-			tempPos.free();
-			
-			if (attackableEntity != null) {
-				timer += Gdx.graphics.getDeltaTime();
+		if (Gdx.app.getType() == ApplicationType.Android) {
+			if (Gdx.input.isTouched()) {
+			  //Finger touching the screen
+			  // You can actually start calling onClick here, if those variables and logic you are using there are correct.
+				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+				int x = (int) touchPoint.x;
+				int y = (int) touchPoint.y;
 				
-				if (enemyHighlighted != null && attackableEntity != enemyHighlighted) {
-					hideEnemyTiles(player);
-				} else if (timer >= 0.5f) {
-					displayEnemyTiles(player, attackableEntity);
+				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+				Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
+				tempPos.free();
+				
+				if (attackableEntity != null) {
+					timer += Gdx.graphics.getDeltaTime();
+					
+					if (enemyHighlighted != null && attackableEntity != enemyHighlighted) {
+						hideEnemyTiles(player);
+					} else if (timer >= 0.5f) {
+						displayEnemyTiles(player, attackableEntity);
+					}
+				} else {
+					if (enemyHighlighted != null) {
+						hideEnemyTiles(player);
+					}
 				}
 			} else {
+				timer = 0;
 				if (enemyHighlighted != null) {
 					hideEnemyTiles(player);
 				}
 			}
-		} else {
-			timer = 0;
-			if (enemyHighlighted != null) {
-				hideEnemyTiles(player);
-			}
-
 		}
 
 		
-		if (InputSingleton.getInstance().rightClickJustPressed) {
+		if (InputSingleton.getInstance().rightClickJustReleased && enemyHighlighted != null) {
+			// Released right click
+			hideEnemyTiles(player);
+		} else if (InputSingleton.getInstance().rightClickJustPressed || enemyHighlighted != null) {
 			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 			int x = (int) touchPoint.x;
 			int y = (int) touchPoint.y;
@@ -337,10 +342,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			
 			if (attackableEntity != null) {
 				displayEnemyTiles(player, attackableEntity);
+			} else if (enemyHighlighted != null) {
+				hideEnemyTiles(player);
 			}
-		} else if (InputSingleton.getInstance().rightClickJustReleased && enemyHighlighted != null) {
-			// Released right click
-			hideEnemyTiles(player);
 		}
 	}
 

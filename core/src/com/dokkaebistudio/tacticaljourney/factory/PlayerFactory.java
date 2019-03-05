@@ -89,19 +89,6 @@ public final class PlayerFactory {
 		gridPosition.zIndex = ZIndexConstants.PLAYER;
 		playerEntity.add(gridPosition);
 		
-		// Wheel
-		WheelComponent baseWheelComponent = engine.createComponent(WheelComponent.class);
-		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.CRITICAL);
-		baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
-		baseWheelComponent.addSector(140, WheelComponent.Hit.MISS);
-		baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
-		playerEntity.add(baseWheelComponent);
-		
-		
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerEntity.add(playerComponent);

@@ -43,7 +43,11 @@ public class ItemArrow extends Item {
 		itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
 		itemComponent.setQuantity(remainingArrows);
 
-		Journal.addEntry("Picked up " + itemComponent.getQuantityPickedUp() + " arrow(s).");
+		if (itemComponent.getQuantityPickedUp() >0) {
+			Journal.addEntry("Picked up " + itemComponent.getQuantityPickedUp() + " arrow(s).");
+		} else {
+			Journal.addEntry("[SCARLET]Your quiver is already full");
+		}
 
 		return remainingArrows == 0;
 	}

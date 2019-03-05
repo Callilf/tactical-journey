@@ -120,7 +120,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			desc.setText(lootableComponent.getType().getDescription());
 			
 			if (lootableComponent.getLootableState() == LootableStateEnum.CLOSED) {
-				desc.setText(desc.getText() + "\n" + "It will take you [RED]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
+				desc.setText(desc.getText() + "\n" + "It will take you [SCARLET]" + lootableComponent.getType().getNbTurnsToOpen() + "[WHITE] turns to open it.");
 			} else {
 				desc.setText(desc.getText() + "\n" + "It is already [GREEN]opened[WHITE]. It won't take any turn.");
 			}

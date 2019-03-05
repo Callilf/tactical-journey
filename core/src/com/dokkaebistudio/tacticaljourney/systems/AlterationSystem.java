@@ -139,7 +139,7 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 				blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
 				playerAlterationReceiverCompo.removeBlessing(player, blessing, fxStage);
 
-				Journal.addEntry("[RED]Lost blessing: " + blessing.title());
+				Journal.addEntry("[SCARLET]Lost blessing: " + blessing.title());
 				break;
 			case RECEIVE_CURSE:
 				Curse curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();

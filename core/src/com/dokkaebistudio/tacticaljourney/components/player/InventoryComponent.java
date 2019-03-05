@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -146,6 +147,8 @@ public class InventoryComponent implements Component, Poolable {
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
 				gridPositionComponent.setInactive(item, room);
 			}
+			
+			Journal.addEntry("Picked up a " + itemCompo.getItemLabel());
 			return true;
 		} else {
 			//This item does not go into inventory, it's used right away

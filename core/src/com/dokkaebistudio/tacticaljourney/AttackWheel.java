@@ -1,6 +1,5 @@
 package com.dokkaebistudio.tacticaljourney;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,8 +16,8 @@ public class AttackWheel {
 	/** The offset of the wheel. Changes anytime the wheel is displayed. */
 	private int rotationOffset;
 	
-	/** The list of sectors that compose the wheel. */
-	private List<WheelComponent.Sector> sectors;
+//	/** The list of sectors that compose the wheel. */
+//	private List<WheelComponent.Sector> sectors;
 	
 //	/** The 360 arcs that compose the wheel. */
 //	private List<Sprite> arcs;
@@ -29,13 +28,15 @@ public class AttackWheel {
 	/** The sector pointed by the arrow. */
 	private Sector pointedSector;
 	
-	
+	/** The wheel component used to call the wheel. */
+	private WheelComponent wheelComponent;
 	/** The attack component used to call the wheel. */
 	private AttackComponent attackComponent;
 	
 	public AttackWheel() {
 		this.displayed = false;
-		this.sectors = new LinkedList<WheelComponent.Sector>();
+		
+//		this.sectors = new LinkedList<WheelComponent.Sector>();
 		this.arrow = new Sprite(Assets.wheel_arrow);
 		
 //		this.arcs = new ArrayList<>();
@@ -64,7 +65,7 @@ public class AttackWheel {
 		
     	Sector pointedSector = null;
     	int totalRange = 0;
-    	for (Sector s : this.sectors) {
+    	for (Sector s : this.wheelComponent.sectors) {
     		if (totalRange <= rotation && totalRange + s.range > rotation) {
     			pointedSector = s;
     			break;
@@ -92,13 +93,9 @@ public class AttackWheel {
 
 
 	public List<WheelComponent.Sector> getSectors() {
-		return sectors;
+		return this.wheelComponent.sectors;
 	}
 
-
-	public void setSectors(List<WheelComponent.Sector> sectors) {
-		this.sectors = sectors;
-	}
 
 	public Sprite getArrow() {
 		return arrow;
@@ -126,6 +123,14 @@ public class AttackWheel {
 
 	public void setRotationOffset(int rotationOffset) {
 		this.rotationOffset = rotationOffset;
+	}
+
+	public WheelComponent getWheelComponent() {
+		return wheelComponent;
+	}
+
+	public void setWheelComponent(WheelComponent wheelComponent) {
+		this.wheelComponent = wheelComponent;
 	}
 
 //	public List<Sprite> getArcs() {

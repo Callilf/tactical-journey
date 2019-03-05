@@ -51,13 +51,6 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			int nextInt = r.nextInt(360);
     			wheel.getArrow().setRotation(nextInt);
     			
-		        // get the entity that defines the wheel
-		        Entity wheelEntity = getEngine().getEntitiesFor(Family.all(WheelComponent.class).get()).first();
-		        WheelComponent wheelComponent = Mappers.wheelComponentMapper.get(wheelEntity);
-	
-		        // init the real wheel
-		        wheel.getSectors().clear();
-		        wheel.getSectors().addAll(wheelComponent.sectors);
 		
 		        // get all entities that affect the wheel
 		        ImmutableArray<Entity> modifiers = getEngine().getEntitiesFor(Family.all(WheelModifierComponent.class).get());

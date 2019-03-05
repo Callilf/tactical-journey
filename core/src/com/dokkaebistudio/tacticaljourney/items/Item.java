@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -68,7 +69,10 @@ public abstract class Item {
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(picker);
 		if (inventoryComponent != null) {
-			if (!inventoryComponent.canStore(itemComponent)) return false;
+			if (!inventoryComponent.canStore(itemComponent)) {
+				Journal.addEntry("[SCARLET]Impossible to pick up the " + itemComponent.getItemLabel());
+				return false;
+			}
 			
 			boolean stored = inventoryComponent.store(item, itemComponent, room);
 			if (stored && !this.goIntoInventory) {

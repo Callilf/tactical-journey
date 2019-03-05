@@ -82,8 +82,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			for (Entity item : items) {
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
-					Journal.addEntry("Picked up " + itemComponent.getItemLabel());
-
 					//Pick up this consumable
 					itemComponent.pickUp(player, item, room);
 					
@@ -135,7 +133,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean pickedUp = itemComponent.pickUp(player, currentItem, room);
 				
 				if (pickedUp || (itemComponent.getQuantityPickedUp() != null && itemComponent.getQuantityPickedUp() > 0)) {
-					Journal.addEntry("Picked up " + itemComponent.getItemLabel());
 
 					// Pickup animation
 					List<Image> pickupAnimationImages = itemComponent.getPickupAnimationImage(currentItem);
@@ -147,10 +144,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 						room.getRemovedItems().add(currentItem);
 					}
 					room.turnManager.endPlayerTurn();
-				} else {
-					Journal.addEntry("[RED]Impossible to pick up the " + itemComponent.getItemLabel());
-				}
-				
+				}				
 				playerInventoryCompo.setCurrentAction(null);
 				
 				
@@ -162,17 +156,10 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean instaUsed = itemComponent.use(player, currentItem, room);
 				
 				if (instaUsed) {
-					Journal.addEntry("Used a " + itemComponent.getItemLabel());
-
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
-				} else {
-					Journal.addEntry("[RED]Impossible to use the " + itemComponent.getItemLabel());
-
-					//TODO warn message
-				}
-				
+				}				
 				playerInventoryCompo.setCurrentAction(null);
 				
 				

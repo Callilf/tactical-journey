@@ -38,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
@@ -672,13 +673,45 @@ public final class EntityFactory {
 			attackComponent.setBombTurnsToExplode(2);
 		}
 		
+		// Wheel
+		WheelComponent baseWheelComponent = null;
 
 		switch(skillNumber) {
 		case 1:
 			playerComponent.setSkillMelee(skillEntity);
+			
+			baseWheelComponent = engine.createComponent(WheelComponent.class);
+			baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
+			baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(10, WheelComponent.Hit.CRITICAL);
+			baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
+			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			baseWheelComponent.addSector(140, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			skillEntity.add(baseWheelComponent);
+
 			break;
 		case 2:
 			playerComponent.setSkillRange(skillEntity);
+			
+			baseWheelComponent = engine.createComponent(WheelComponent.class);
+			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
+			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
+			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			
+			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
+			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
+			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			
+			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
+			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
+			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
+			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			skillEntity.add(baseWheelComponent);
+
 			break;
 		case 3:
 			playerComponent.setSkillBomb(skillEntity);

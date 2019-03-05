@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -41,6 +42,8 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Drank the small health potion.");
+
 		//Heal the picker for 25 HP !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
 		healthComponent.restoreHealth(25);

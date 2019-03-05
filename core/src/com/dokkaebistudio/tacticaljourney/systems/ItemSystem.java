@@ -36,6 +36,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -81,7 +82,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			for (Entity item : items) {
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 				if (itemComponent != null && itemComponent.getItemType().isInstantPickUp()) {
-					System.out.println("Picked up " + itemComponent.getItemLabel());
+					Journal.addEntry("Picked up " + itemComponent.getItemLabel());
 
 					//Pick up this consumable
 					itemComponent.pickUp(player, item, room);
@@ -134,8 +135,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean pickedUp = itemComponent.pickUp(player, currentItem, room);
 				
 				if (pickedUp || (itemComponent.getQuantityPickedUp() != null && itemComponent.getQuantityPickedUp() > 0)) {
-					System.out.println("Picked up " + itemComponent.getItemLabel());
-					
+					Journal.addEntry("Picked up " + itemComponent.getItemLabel());
+
 					// Pickup animation
 					List<Image> pickupAnimationImages = itemComponent.getPickupAnimationImage(currentItem);
 					for (Image i : pickupAnimationImages) {
@@ -147,9 +148,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					}
 					room.turnManager.endPlayerTurn();
 				} else {
-					System.out.println("Impossible to pick up the " + itemComponent.getItemLabel());
-
-					//TODO warn message
+					Journal.addEntry("[RED]Impossible to pick up the " + itemComponent.getItemLabel());
 				}
 				
 				playerInventoryCompo.setCurrentAction(null);
@@ -163,13 +162,13 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean instaUsed = itemComponent.use(player, currentItem, room);
 				
 				if (instaUsed) {
-					System.out.println("Insta used " + itemComponent.getItemLabel());
+					Journal.addEntry("Used a " + itemComponent.getItemLabel());
 
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
-					System.out.println("Impossible to insta use the " + itemComponent.getItemType().getLabel());
+					Journal.addEntry("[RED]Impossible to use the " + itemComponent.getItemLabel());
 
 					//TODO warn message
 				}
@@ -184,14 +183,13 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean used = itemComponent.use(player, currentItem, room);
 				
 				if (used) {
-					System.out.println("Used " + itemComponent.getItemType().getLabel());
-
 					playerInventoryCompo.remove(currentItem);
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				} else {
-					System.out.println("Impossible to use the " + itemComponent.getItemType().getLabel());
+					Journal.addEntry("[RED]Impossible to use the " + itemComponent.getItemLabel());
+
 				}
 				
 				playerInventoryCompo.setCurrentAction(null);
@@ -199,7 +197,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 				break;
 			case DROP:
-				System.out.println("Dropped " + itemComponent.getItemType().getLabel());
+				Journal.addEntry("Dropped a " + itemComponent.getItemLabel());
+
 				itemComponent.drop(player, currentItem, room);
 
 				// Drop animation

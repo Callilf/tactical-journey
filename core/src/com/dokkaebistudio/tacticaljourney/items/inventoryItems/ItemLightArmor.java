@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -34,6 +35,8 @@ public class ItemLightArmor extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Equiped the light armor.");
+
 		//Restore 30 Armor !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
 		healthComponent.restoreArmor(30);

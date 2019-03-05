@@ -59,8 +59,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	public static Vector2 POS_PROFILE = new Vector2(700f, 30f);
 	public static Vector2 POS_INVENTORY = new Vector2(780f, 30f);
+	
+	public static Vector2 POS_SKILLS = new Vector2(1050f, 30f);
 
-	public static Vector2 POS_FPS = new Vector2(1800f, 0f);
+	public static Vector2 POS_FPS = new Vector2(5f, 130f);
 
 
 
@@ -467,7 +469,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			allSkillButtons.clear();
 			
 			skillsTable = new Table();
-			skillsTable.setPosition(1500, 30);
+			skillsTable.setPosition(POS_SKILLS.x, POS_SKILLS.y);
 			skillsTable.setTouchable(Touchable.enabled);
 	
 			if (meleeSkillButton == null) {

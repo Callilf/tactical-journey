@@ -140,6 +140,12 @@ public class Assets {
 	public static AtlasRegion map_room_key_enemy;
 	public static AtlasRegion map_room_start;
 	public static AtlasRegion map_room_unknown;
+	
+	
+	//********
+	// Journal
+	
+	public static AtlasRegion journal_background;
 
 	
 	//**************
@@ -366,6 +372,11 @@ public class Assets {
 		map_room_start = Assets.getTexture("map_room_start");
 		map_room_unknown = Assets.getTexture("map_room_unknown");
 		
+		//********
+		// Journal
+		
+		journal_background = Assets.getTexture("hud_journal_background");
+
 		
 		//**************
 		// Projectiles

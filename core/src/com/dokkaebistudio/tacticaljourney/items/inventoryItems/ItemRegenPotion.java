@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -43,6 +44,8 @@ public class ItemRegenPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Drank the regeneration potion.");
+
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		int duration = 20 + unseededRandom.nextInt(21);
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);

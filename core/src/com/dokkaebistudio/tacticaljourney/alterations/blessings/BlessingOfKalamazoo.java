@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -42,7 +43,7 @@ public class BlessingOfKalamazoo extends Blessing {
 			int healAmount = RandomSingleton.getInstance().getUnseededRandom().nextInt(10);
 			healthComponent.restoreHealth(healAmount);
 			
-			System.out.println("Blessing of Kalamazoo granted " + healAmount + " hp.");
+			Journal.addEntry("[GREEN]Blessing of Kalamazoo granted " + healAmount + " hp.");
 		}
 	}
 

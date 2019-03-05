@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseFrailty;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -95,5 +96,9 @@ public class ItemTutorialPage extends Item {
 	}
 	
 	@Override
-	public boolean use(Entity user, Entity item, Room room) {return true;}
+	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Tore down the tutorial page " + pageNumber + ".");
+
+		return true;
+	}
 }

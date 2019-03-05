@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffFlight;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -41,6 +42,8 @@ public class ItemWingPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Drank the wing potion.");
+
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
 		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffFlight(30, room.engine));
 		

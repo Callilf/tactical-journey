@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
@@ -52,6 +53,8 @@ public class ItemFirePotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
+		Journal.addEntry("Drank the fire potion.");
+
 		//set ablaze	
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
 		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning());

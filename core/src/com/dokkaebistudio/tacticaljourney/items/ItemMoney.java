@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -36,6 +37,9 @@ public class ItemMoney extends Item {
 		itemComponent.setQuantityPickedUp(itemComponent.getQuantity());
 		WalletComponent walletComponent = Mappers.walletComponent.get(user);
 		walletComponent.receive(itemComponent.getQuantity());
+		
+		Journal.addEntry("Picked up " + itemComponent.getQuantity() + " gold coins.");
+
 		return true;
 	}
 	

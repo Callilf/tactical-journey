@@ -37,11 +37,13 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.GameOverPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.JournalRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LevelUpPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.LootPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -104,6 +106,7 @@ public class GameScreen extends ScreenAdapter {
 	public FitViewport hudViewport;
 	public Stage hudStage;
 	public Stage miniMapStage;
+	public Stage journalStage;
 
 
 	Vector3 touchPoint;
@@ -149,6 +152,7 @@ public class GameScreen extends ScreenAdapter {
 		inventoryStage = new Stage(hudViewport);
 		hudStage = new Stage(hudViewport);
 		miniMapStage = new Stage(hudViewport);
+		journalStage = new Stage(hudViewport);
 
 		
 		//Instanciate the input processor
@@ -159,6 +163,7 @@ public class GameScreen extends ScreenAdapter {
 		inputMultiplexer.addProcessor(inventoryStage);
 		inputMultiplexer.addProcessor(hudStage);
 		inputMultiplexer.addProcessor(miniMapStage);
+		inputMultiplexer.addProcessor(journalStage);
 		inputMultiplexer.addProcessor(InputSingleton.getInstance());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -184,6 +189,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(mapRenderer);
+		renderers.add(new JournalRenderer(journalStage));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
@@ -224,6 +230,8 @@ public class GameScreen extends ScreenAdapter {
 				
 		//Enter the first room
 		enterRoom(room, null);
+		
+		Journal.addEntry("Welcome to Tactical Journey!");
 	}
 	
 	/**
@@ -385,6 +393,7 @@ public class GameScreen extends ScreenAdapter {
 		PopinService.dispose();
 		GameTimeSingleton.dispose();
 		RandomSingleton.dispose();
+		Journal.dispose();
 		super.dispose();
 	}
 }

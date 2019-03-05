@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -126,27 +127,31 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		
 		
 		if (playerAlterationReceiverCompo.getCurrentAction() != null) {
-			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(player);
-			Image setBlessingImage = null;
 
 			switch (playerAlterationReceiverCompo.getCurrentAction()) {
 			case RECEIVE_BLESSING:
 				Blessing blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
 				playerAlterationReceiverCompo.addBlessing(player, blessing, fxStage);
+				
+				Journal.addEntry("[GREEN]Received blessing: " + blessing.title());
 				break;
 			case REMOVE_BLESSING:
 				blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
 				playerAlterationReceiverCompo.removeBlessing(player, blessing, fxStage);
 
+				Journal.addEntry("[RED]Lost blessing: " + blessing.title());
 				break;
 			case RECEIVE_CURSE:
 				Curse curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
 				playerAlterationReceiverCompo.addCurse(player, curse, fxStage);
+				
+				Journal.addEntry("[PURPLE]Received curse: " + curse.title());
 				break;
 			case REMOVE_CURSE:
 				curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
 				playerAlterationReceiverCompo.removeCurse(player, curse, fxStage);
 
+				Journal.addEntry("[GREEN]Lifted curse: " + curse.title());
 				break;
 			
 			}

@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -41,6 +42,8 @@ public class ItemArrow extends Item {
 		
 		itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingArrows);
 		itemComponent.setQuantity(remainingArrows);
+
+		Journal.addEntry("Picked up " + itemComponent.getQuantityPickedUp() + " arrow(s).");
 
 		return remainingArrows == 0;
 	}

@@ -275,7 +275,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		
 		// Blessings table
 		blessingList = new Table();
-		blessingList.top().left();
+		blessingList.top();
 		
 		//Scrollpane
 		blessingScroll = new ScrollPane(blessingList);
@@ -287,7 +287,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	
 	
 	// *****************
-	// BLESSINGS
+	// CURSES
 
 	private void refreshCurseTable() {
 		curseList.clear();
@@ -319,7 +319,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 		// Blessings table
 		curseList = new Table();
-		curseList.top().left();
+		curseList.top();
 
 		// Scrollpane
 		curseScroll = new ScrollPane(curseList);
@@ -335,12 +335,12 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	
 
 	private Table createOneAlteration(Alteration alteration) {
-		Table oneCurseTable = new Table();
+		Table oneAlterationTable = new Table();
 
 		TextureRegionDrawable background = new TextureRegionDrawable(Assets.profile_alteration_background);
-		oneCurseTable.setBackground(background);
+		oneAlterationTable.setBackground(background);
 		
-		oneCurseTable.align(Align.left);
+		oneAlterationTable.align(Align.left);
 
 		Table upTable = new Table();
 		upTable.align(Align.left);
@@ -350,17 +350,17 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
 		upTable.add(curseTitle).pad(5, 10, 0, 5);
 		upTable.pack();
-		oneCurseTable.add(upTable).left();
+		oneAlterationTable.add(upTable).left();
 		
-		oneCurseTable.row();
+		oneAlterationTable.row();
 		Label desc = new Label(alteration.description(), PopinService.smallTextStyle());
 		desc.setAlignment(Align.left);
-		desc.setWidth(Assets.profile_alteration_background.getRegionWidth() - 20);
+		desc.setWidth(Assets.profile_alteration_background.getRegionWidth() - 10);
 		desc.setWrap(true);
-		oneCurseTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 20).pad(0, 5, 5, 5);
+		oneAlterationTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
 		
-		oneCurseTable.pack();
-		return oneCurseTable;
+		oneAlterationTable.pack();
+		return oneAlterationTable;
 	}
 	
 	

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
@@ -113,14 +114,21 @@ public class AttackManager {
 		if (enemyComponent != null) {
 			enemyComponent.onReceiveDamage(target, attacker, room);
 		}
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
+		if (alterationReceiverComponent != null) {
+			alterationReceiverComponent.onReceiveDamage(target, attacker, room);
+		}
 		
 		if (attacker != null) {
 			enemyComponent = Mappers.enemyComponent.get(attacker);
 			if (enemyComponent != null) {
 				enemyComponent.onAttack(attacker, target, room);
 			}
+			alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
+			if (alterationReceiverComponent != null) {
+				alterationReceiverComponent.onAttack(attacker, target, room);
+			}
 		}
-		
 	}
 	
 	

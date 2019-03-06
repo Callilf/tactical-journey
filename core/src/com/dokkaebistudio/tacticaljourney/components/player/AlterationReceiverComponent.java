@@ -55,6 +55,42 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	
 	//*************
 	// Events
+	
+	public void onAttack(Entity attacker, Entity target, Room room) {
+		for (Blessing b : blessings) {
+			b.onAttack(attacker, target, room);
+		}
+		for (Curse c : curses) {
+			c.onAttack(attacker, target, room);
+		}
+	}
+	
+	public void onKill(Entity attacker, Entity target, Room room) {
+		for (Blessing b : blessings) {
+			b.onKill(attacker, target, room);
+		}
+		for (Curse c : curses) {
+			c.onKill(attacker, target, room);
+		}
+	}
+	
+	public void onReceiveDamage(Entity user, Entity attacker, Room room) {
+		for (Blessing b : blessings) {
+			b.onReceiveDamage(user, attacker, room);
+		}
+		for (Curse c : curses) {
+			c.onReceiveDamage(user, attacker, room);
+		}
+	}
+	
+	public void onDeath(Entity user, Entity attacker, Room room) {
+		for (Blessing b : blessings) {
+			b.onDeath(user, attacker, room);
+		}
+		for (Curse c : curses) {
+			c.onDeath(user, attacker, room);
+		}
+	}
     
 	public void onRoomCleared(Entity entity, Room room) {
 		for (Blessing b : blessings) {

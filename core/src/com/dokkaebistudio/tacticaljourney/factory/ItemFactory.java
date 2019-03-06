@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
@@ -146,6 +147,10 @@ public final class ItemFactory {
 			
 		case TOTEM_OF_KALAMAZOO:
 			item = createItemTotemOfKalamazoo(room, tilePos);
+			break;
+			
+		case FATA_MORGANA:
+			item = createItemFataMorgana(room, tilePos);
 			break;
 
 			default:
@@ -320,6 +325,17 @@ public final class ItemFactory {
 		flammable.setDestroyed(false);
 		item.add(flammable);
 		
+		return item;
+	}
+	
+	/**
+	 * Create the fata morgana.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemFataMorgana(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.fata_morgana, new ItemFataMorgana());
+		item.flags = EntityFlagEnum.ITEM_FATA_MORGANA.getFlag();
 		return item;
 	}
 	

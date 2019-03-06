@@ -36,7 +36,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	/** The current number of hp. */
 	private int hp;
-	
+		
 	/** The displayer that shows the amount of HP beside the entity (for enemies). */
 	private Entity hpDisplayer;
 
@@ -56,6 +56,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	private Map<DamageType, Integer> resitanceMap = new HashMap<>();
 	
+	
+	/** Keep track of the latest attack's damage. */
+	private int latestAttackDamage;
+
 	
 	
 	/** Whether the entity received damages during the previous turn. */
@@ -85,6 +89,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void hit(int amountOfDamage, Entity attacker, DamageType damageType) {
 		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
+		this.latestAttackDamage = realAmountOfDamage;
 		
 		int damageToHealth = Math.max(realAmountOfDamage - this.armor, 0);
 		if (this.armor > 0) {
@@ -118,6 +123,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 */
 	public void hitThroughArmor(int amountOfDamage, Entity attacker, DamageType damageType) {
 		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
+		this.latestAttackDamage = realAmountOfDamage;
 
 		this.setHp(Math.max(0, this.getHp() - realAmountOfDamage));
 
@@ -264,6 +270,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		hpDisplayer = null;
 		this.clearModified();
 		this.receivedDamageLastTurn = false;
+		this.latestAttackDamage = 0;
 	}
 	
 	
@@ -409,7 +416,11 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.maxArmor = maxArmor;
 	}
 
+	public int getLatestAttackDamage() {
+		return latestAttackDamage;
+	}
 
+    
 
 
 	

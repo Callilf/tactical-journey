@@ -121,17 +121,11 @@ public class InventoryComponent implements Component, Poolable {
 			boolean stacked = false;
 			if (itemCompo.getItemType().isStackable()) {
 				// Check if there is already an item of this type
-				for (int i=0 ; i<firstEmptySlot ; i++) {
-					if (slots.get(i).isEmpty()) continue;
-					
-					Entity entity = slots.get(i).get(0);
-					ItemComponent itemComponent = Mappers.itemComponent.get(entity);
-					if (itemComponent != null 
-							&& itemComponent.getItemType().getClass().equals(itemCompo.getItemType().getClass())) {
-						// Already a similar item in inventory
-						slots.get(i).add(item);
-						stacked = true;
-					}
+				int index = this.indexOf(itemCompo.getItemType().getClass());
+				if (index != -1) {
+					// Already a similar item in inventory
+					slots.get(index).add(item);
+					stacked = true;
 				}
 			}
 			
@@ -236,6 +230,38 @@ public class InventoryComponent implements Component, Poolable {
 		this.inventoryActionInProgress = false;
 		this.needInventoryRefresh = true;
 	}
+	
+	
+	/**
+	 * Check whether an item of the given class is in the inventory.
+	 * @param itemClass the item class
+	 * @return true of an item of this class is in the inventory
+	 */
+	public boolean contains(Class itemClass) {
+		return indexOf(itemClass) >= 0;
+	}
+	
+	/**
+	 * Return the slot containing an item of the given class, or -1 if no
+	 * item of this class.
+	 * @param itemClass the item class
+	 * @return the slot index or -1.
+	 */
+	public int indexOf(Class itemClass) {
+		for (int i=0 ; i<firstEmptySlot ; i++) {
+			if (slots.get(i).isEmpty()) continue;
+			
+			Entity entity = slots.get(i).get(0);
+			ItemComponent itemComponent = Mappers.itemComponent.get(entity);
+			if (itemComponent != null 
+					&& itemComponent.getItemType().getClass().equals(itemClass)) {
+				// Already a similar item in inventory
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	
 	//*************************************
 	// Getters and Setters !

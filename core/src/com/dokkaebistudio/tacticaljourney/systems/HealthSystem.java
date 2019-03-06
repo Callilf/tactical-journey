@@ -128,11 +128,20 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 				
 				PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 				if (playerComponent != null) {
-					// Death of the player!
-					gameScreen.state = GameScreen.GAME_OVER;
+					
+					AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(entity);
+					if (alterationReceiverComponent != null) {
+						alterationReceiverComponent.onDeath(entity, healthCompo.getAttacker(), room);
+					}
+					
+					if (healthCompo.getHp() <= 0) {
+						// Death of the player!
+						gameScreen.state = GameScreen.GAME_OVER;
+					}
 					
 				} else {
 					// Death of any other entity than the player
+					
 					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
 					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
 						// Drop reward
@@ -144,26 +153,26 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						// An enemy died
 						enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
 					}
-					
-					room.removeEnemy(entity);		
-					
-					// Check if there are still enemies remaining. If not, display ROOM CLEARED
-					if (!room.hasEnemies()) {
-						
-						if (!room.isCleared()) {
-							room.setCleared(RoomClearedState.JUST_CLEARED);
-
-							Entity attacker = healthCompo.getAttacker();
-							if (attacker != null) {
-								AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
-								if (alterationReceiverComponent != null) {
-									alterationReceiverComponent.onRoomCleared(attacker, room);
-								}
-							}
+					// Alteration events
+					AlterationReceiverComponent deadEntityAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(entity);
+					if (deadEntityAlterationReceiverCompo != null) {
+						deadEntityAlterationReceiverCompo.onDeath(entity, healthCompo.getAttacker(), room);
+					}
+					AlterationReceiverComponent attackerAlterationReceiverCompo = null;
+					if (healthCompo.getAttacker() != null) {
+						attackerAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(healthCompo.getAttacker());
+						if (attackerAlterationReceiverCompo != null) {
+							attackerAlterationReceiverCompo.onKill(healthCompo.getAttacker(), entity, room);
 						}
-						
-						//TODO move this
-						MapRenderer.requireRefresh();
+					}
+					
+					room.removeEnemy(entity);
+					
+					
+					
+					// Check if there are still enemies remaining. If not, the room has just been cleared !
+					if (!room.hasEnemies()) {
+						clearRoom(healthCompo.getAttacker(), attackerAlterationReceiverCompo);
 					}
 					
 				}
@@ -186,6 +195,19 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	}
     	}
     }
+
+	private void clearRoom(Entity attacker, AlterationReceiverComponent attackerAlterationReceiverCompo) {
+		if (!room.isCleared()) {
+			room.setCleared(RoomClearedState.JUST_CLEARED);
+
+			if (attackerAlterationReceiverCompo != null) {
+				attackerAlterationReceiverCompo.onRoomCleared(attacker, room);
+			}
+		}
+		
+		//TODO move this
+		MapRenderer.requireRefresh();
+	}
 
     /**
      * Switch the alert state of an enemy if the player attacked it or it the enemy came close enough to

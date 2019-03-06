@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
@@ -48,5 +49,14 @@ public class ItemWingPotion extends Item {
 		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffFlight(30, room.engine));
 		
 		return true;
+	}
+	
+	
+	@Override
+	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+		super.onThrow(thrownPosition, thrower, item, room);
+		Journal.addEntry("The wing potion broke and the potion is wasted");
+
+		room.removeEntity(item);
 	}
 }

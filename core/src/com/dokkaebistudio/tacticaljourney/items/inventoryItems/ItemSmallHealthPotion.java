@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -42,7 +43,7 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Drank the small health potion.");
+		Journal.addEntry("Drank the small health potion");
 
 		//Heal the picker for 25 HP !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
@@ -51,5 +52,13 @@ public class ItemSmallHealthPotion extends Item {
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
 		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class);
 		return true;
+	}
+	
+	@Override
+	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+		super.onThrow(thrownPosition, thrower, item, room);
+		Journal.addEntry("The small health potion broke and the potion is wasted");
+
+		room.removeEntity(item);
 	}
 }

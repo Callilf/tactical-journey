@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -52,5 +53,14 @@ public class ItemRegenPotion extends Item {
 		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(duration));
 		
 		return true;
+	}
+	
+	
+	@Override
+	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
+		super.onThrow(thrownPosition, thrower, item, room);
+		Journal.addEntry("The regeneration potion broke and the potion is wasted");
+
+		room.removeEntity(item);
 	}
 }

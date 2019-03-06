@@ -166,7 +166,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     			        } else {
     			        	image.setDrawable(null);
     			        }
-
+    			        quantity.setText("");
     				}
     			}
     			

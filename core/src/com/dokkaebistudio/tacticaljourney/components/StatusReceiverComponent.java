@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -172,10 +173,14 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	
 	public void updateDuration(Status status, int value) {
 		if (status.getDuration() != null) {
+			if (status.getDuration() == 0) {
+				//TODO remove
+				Journal.addEntry("[RED]DEBUG: status duration = 0");
+			}
 			status.setDuration(status.getDuration() + value);
 			
 			// Check if the status is over
-			if (status.getDuration().intValue() == 0) {
+			if (status.getDuration().intValue() <= 0) {
 				this.requestAction(StatusActionEnum.REMOVE_STATUS, status);
 				return;
 			}

@@ -38,7 +38,7 @@ public class ItemMoney extends Item {
 		WalletComponent walletComponent = Mappers.walletComponent.get(user);
 		walletComponent.receive(itemComponent.getQuantity());
 		
-		Journal.addEntry("Picked up " + itemComponent.getQuantity() + " gold coins.");
+		Journal.addEntry("Picked up [GOLDENROD]" + itemComponent.getQuantity() + " gold coins.");
 
 		return true;
 	}

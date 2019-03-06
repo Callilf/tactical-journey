@@ -309,17 +309,13 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
 			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), 0);
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 5));
-			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 6));
-
 			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
-			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 6));
 			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
-			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 6));
 			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 5));
-			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 6));
 			
 			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
 			

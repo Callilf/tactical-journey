@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 
 /**
@@ -70,6 +71,12 @@ public class ExperienceComponent implements Component,Poolable {
 
 		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
+		
+		Journal.addEntry("[GREEN]LEVEL UP: You reached level " + level);
+		
+		if (currentXp > nextLevelXp) {
+			levelUp(currentXp - nextLevelXp);
+		}
 	}
 	
 	/**

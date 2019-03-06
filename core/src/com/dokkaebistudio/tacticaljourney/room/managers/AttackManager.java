@@ -117,7 +117,7 @@ public class AttackManager {
 		if (attacker != null) {
 			enemyComponent = Mappers.enemyComponent.get(attacker);
 			if (enemyComponent != null) {
-				enemyComponent.onAttack(target, attacker, room);
+				enemyComponent.onAttack(attacker, target, room);
 			}
 		}
 		

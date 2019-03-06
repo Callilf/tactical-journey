@@ -45,7 +45,7 @@ public class Floor1RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(8);
+			int enemyTypeRandom = random.nextInt(9);
 			if (enemyTypeRandom == 0) {
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
@@ -57,8 +57,12 @@ public class Floor1RoomGenerator extends RoomGenerator {
 				iterator.remove();
 				if (iterator.hasNext()) {
 					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+					iterator.remove();
 				}
-			} else if (enemyTypeRandom == 4 || enemyTypeRandom == 3) {
+			} else if (enemyTypeRandom == 3) {
+				enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+				iterator.remove();
+			} else if (enemyTypeRandom == 4 || enemyTypeRandom == 5) {
 				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else {

@@ -92,13 +92,24 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			Entity enemy = null;
 			int enemyTypeRandom = random.nextInt(9);
 			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+				int spiderType = random.nextInt(2);
+				if (spiderType == 0) {
+					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+				} else {
+					enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+				}
 				iterator.remove();
 			} else if (enemyTypeRandom == 1 || enemyTypeRandom == 2) {
 				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+					int spiderType = random.nextInt(2);
+					if (spiderType == 0) {
+						enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+					} else {
+						enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+					}
+					iterator.remove();
 				}
 			} else if (enemyTypeRandom == 3 || enemyTypeRandom == 4) {
 				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));

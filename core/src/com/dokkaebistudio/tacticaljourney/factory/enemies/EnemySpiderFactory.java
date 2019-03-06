@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemySpider;
+import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyVenomSpider;
 import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -115,8 +116,8 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new SpiderItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 30);
-		dropRate.add(ItemPoolRarity.RARE, 10);
+		dropRate.add(ItemPoolRarity.COMMON, 20);
+		dropRate.add(ItemPoolRarity.RARE, 5);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
@@ -190,7 +191,7 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new WebSpiderItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 70);
+		dropRate.add(ItemPoolRarity.COMMON, 60);
 		dropRate.add(ItemPoolRarity.RARE, 10);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
@@ -200,6 +201,80 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(creepEmitter);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
+	
+	
+
+	/**
+	 * Create a venom spider that can poison on hit.
+	 * @param pos the position
+	 * @return the enemy entity
+	 */
+	public Entity createVenomSpider(Room room, Vector2 pos) {
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_VENOM.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_venom));
+		enemyEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.room = room;
+		enemyComponent.setType(new EnemyVenomSpider());
+		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
+		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		enemyComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.moveSpeed = 3;
+		enemyEntity.add(moveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		attackComponent.setRangeMax(1);
+		attackComponent.setStrength(5);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setMaxHp(10);
+		healthComponent.setHp(10);
+		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
+		healthComponent.setHpDisplayer(hpEntity);
+		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(4);
+		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new SpiderItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 30);
+		dropRate.add(ItemPoolRarity.RARE, 10);
+		lootRewardCompo.setDropRate(dropRate);
+		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		// TODO make it immune to poison
 		enemyEntity.add(statusReceiverCompo);
 		
 		room.addEnemy(enemyEntity);

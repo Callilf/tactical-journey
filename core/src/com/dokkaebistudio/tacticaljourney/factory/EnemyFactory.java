@@ -87,6 +87,16 @@ public final class EnemyFactory {
 		return spiderFactory.createSpiderWeb(room, pos);
 	}
 	
+	/**
+	 * Create a venom spider
+	 * and leaves web creep on the floor when moving.
+	 * @param pos the position
+	 * @return the enemy entity
+	 */
+	public Entity createVenomSpider(Room room, Vector2 pos) {
+		return spiderFactory.createVenomSpider(room, pos);
+	}
+	
 	
 	/**
 	 * Create a scorpion.

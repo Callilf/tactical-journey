@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.room;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -56,8 +57,8 @@ public class Tile {
 	 * @return true if possible to throw on this tile.
 	 */
 	public boolean isThrowable(Entity thrower) {
-		Entity solid = TileUtil.getEntityWithComponentOnTile(this.gridPos, SolidComponent.class, room);
-		if (solid != null) return false;
+		Entity wall = TileUtil.getEntityWithComponentOnTile(this.gridPos, BlockExplosionComponent.class, room);
+		if (wall != null) return false;
 		
 		Entity chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
 		if (chasm != null) return false;

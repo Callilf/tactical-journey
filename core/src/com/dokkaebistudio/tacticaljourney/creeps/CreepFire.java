@@ -126,14 +126,14 @@ public class CreepFire extends Creep {
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(creep);
 		
-		// Damage entities on the current tile
-		Set<Entity> healthEntities = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), HealthComponent.class, room);
-		for (Entity healthEntity : healthEntities) {
-			if (isImmune(healthEntity)) continue;
-			
-			HealthComponent healthComponent = Mappers.healthComponent.get(healthEntity);
-			if (healthComponent != null) {
-				healthComponent.hit(3, creep);
+		// Give the burning status
+		Set<Entity> entities = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), StatusReceiverComponent.class, room);
+		for (Entity e : entities) {
+			if (isImmune(e)) continue;
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+			if (statusReceiverComponent != null) {
+				Entity parent = parentEntityCompo != null ? parentEntityCompo.getParent() : null;
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(parent));
 			}
 		}
 		

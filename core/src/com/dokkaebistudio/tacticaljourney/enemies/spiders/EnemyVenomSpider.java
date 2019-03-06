@@ -38,7 +38,7 @@ public class EnemyVenomSpider extends Enemy {
 	public void onDeath(Entity enemy, Entity attacker, Room room) {
 		// Release poison creep
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(enemy);
-		room.entityFactory.creepFactory.createPoison(room, gridPositionComponent.coord(), 5);
+		room.entityFactory.creepFactory.createPoison(room, gridPositionComponent.coord(), null);
 	}
 
 }

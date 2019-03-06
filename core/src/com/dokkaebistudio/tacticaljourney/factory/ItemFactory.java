@@ -31,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -142,6 +143,9 @@ public final class ItemFactory {
 			
 			
 		case WEB_SACK:
+			item = createItemWebSack(room, tilePos);
+			break;
+		case VENOM_GLAND:
 			item = createItemWebSack(room, tilePos);
 			break;
 			
@@ -307,6 +311,17 @@ public final class ItemFactory {
 		flammable.setDestroyedTexture(Assets.web_sack_item);
 		item.add(flammable);
 		
+		return item;
+	}
+	
+	/**
+	 * Create a sack of web.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemVenomGland(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.venom_gland_item, new ItemVenomGland());
+		item.flags = EntityFlagEnum.ITEM_VENOM_GLAND.getFlag();
 		return item;
 	}
 	

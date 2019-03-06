@@ -142,10 +142,11 @@ public final class CreepFactory {
 		stateCompo.set(StatesEnum.FIRE_LOOP.getState() );
 		creepEntity.add(stateCompo);
 		
-		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
-		parentCompo.setParent(parentEntity);
-		creepEntity.add(parentCompo);
-
+		if (parentEntity != null) {
+			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+			parentCompo.setParent(parentEntity);
+			creepEntity.add(parentCompo);
+		}
     	
 		engine.addEntity(creepEntity);
 		creepCompo.onAppear(creepEntity, room);
@@ -159,7 +160,7 @@ public final class CreepFactory {
 	 * @param duration the duration of the creep
 	 * @return the creep entity
 	 */
-	public Entity createPoison(Room room, Vector2 pos, int duration) {
+	public Entity createPoison(Room room, Vector2 pos, Entity parentEntity) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_POISON, Assets.creep_poison);
 				
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
@@ -167,10 +168,16 @@ public final class CreepFactory {
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepPoison());
-		creepCompo.setDuration(duration);
+		creepCompo.setDuration(5);
 		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
 		creepCompo.setReleasedTurn(turnReleased);
 		creepEntity.add(creepCompo);
+		
+		if (parentEntity != null) {
+			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+			parentCompo.setParent(parentEntity);
+			creepEntity.add(parentCompo);
+		}
 		
 		room.addEntity(creepEntity);		
 		creepCompo.onAppear(creepEntity, room);

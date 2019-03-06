@@ -224,6 +224,7 @@ public class Assets {
 	public static AtlasRegion wing_potion_item;
 	public static AtlasRegion fire_potion_item;
 	public static AtlasRegion web_sack_item;
+	public static AtlasRegion venom_gland_item;
 	
 	public static AtlasRegion armor_up_item;
 	public static AtlasRegion armor_piece_item;
@@ -455,6 +456,7 @@ public class Assets {
 		wing_potion_item = Assets.getTexture("item-consumable-wing-potion");
 		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
 		web_sack_item = Assets.getTexture("item-web-sack");
+		venom_gland_item = Assets.getTexture("item-consumable-venom-gland");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
 		

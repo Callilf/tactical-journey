@@ -23,9 +23,7 @@ public class OldBonesItemPool extends LootableItemPool {
 		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 3));				
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 2));				
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 5));				
 		
 		for (PooledItemDescriptor pid : itemPool) {

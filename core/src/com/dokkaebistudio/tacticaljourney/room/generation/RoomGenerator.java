@@ -310,7 +310,7 @@ public abstract class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
-			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), 0);
+			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
 			
 			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 5));
 			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
@@ -333,7 +333,7 @@ public abstract class RoomGenerator {
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
 //			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
 			
-//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 9));
+//			entityFactory.itemFactory.createItemVenomGland(room, new Vector2(11, 9));
 //			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
 
 //			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(5, 4));

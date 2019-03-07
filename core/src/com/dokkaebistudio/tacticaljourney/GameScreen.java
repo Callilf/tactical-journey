@@ -101,6 +101,7 @@ public class GameScreen extends ScreenAdapter {
 	public Stage stage;
 	public Stage inventoryStage;
 	public Stage fxStage;
+	public Stage foregroundFxStage;
 
 	
 	public FitViewport hudViewport;
@@ -153,6 +154,7 @@ public class GameScreen extends ScreenAdapter {
 		hudStage = new Stage(hudViewport);
 		miniMapStage = new Stage(hudViewport);
 		journalStage = new Stage(hudViewport);
+		foregroundFxStage = new Stage(viewport);
 
 		
 		//Instanciate the input processor
@@ -211,8 +213,8 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new EnemySystem(room, fxStage));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));
-		engine.addSystem(new ItemSystem(	player, room, fxStage));
-		engine.addSystem(new AlterationSystem(player, room, fxStage));
+		engine.addSystem(new ItemSystem(	player, room, foregroundFxStage));
+		engine.addSystem(new AlterationSystem(player, room, foregroundFxStage));
 		engine.addSystem(new StatusSystem(player, room, fxStage));
 		engine.addSystem(new ShopSystem(	player, room, fxStage));
 		engine.addSystem(new ContextualActionSystem(	player, room));
@@ -347,6 +349,9 @@ public class GameScreen extends ScreenAdapter {
 		for (Renderer r : renderers) {
 			r.render(delta);
 		}
+		
+		foregroundFxStage.act(Gdx.graphics.getDeltaTime());
+		foregroundFxStage.draw();
 	}
 	
 	@Override

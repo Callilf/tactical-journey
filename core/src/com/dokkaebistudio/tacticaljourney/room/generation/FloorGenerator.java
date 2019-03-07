@@ -118,6 +118,12 @@ public abstract class FloorGenerator {
 		}
 		for (Room r : values) {
 			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.ITEM_ROOM;
+				break;
+			}
+		}
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
 				r.type = RoomType.SHOP_ROOM;
 				break;
 			}

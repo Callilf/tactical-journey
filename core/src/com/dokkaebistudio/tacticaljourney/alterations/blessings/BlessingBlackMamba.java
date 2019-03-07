@@ -53,7 +53,7 @@ public class BlessingBlackMamba extends Blessing {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 			if (statusReceiverComponent != null) {
 				Journal.addEntry("Blessing of the black mamba inflicted [PURPLE]poison[]");
-				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5));
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, attacker));
 			}
 		}
 	}

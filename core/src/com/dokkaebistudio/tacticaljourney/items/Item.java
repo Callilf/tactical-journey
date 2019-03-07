@@ -94,10 +94,12 @@ public abstract class Item {
 			inventoryComponent.remove(item);
 		}
 		
-		GridPositionComponent dropperPosCompo = Mappers.gridPositionComponent.get(dropper);
-		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
-		itemPosCompo.coord().set(dropperPosCompo.coord());
-		itemPosCompo.setActive(item, room);
+		if (room != null) {
+			GridPositionComponent dropperPosCompo = Mappers.gridPositionComponent.get(dropper);
+			GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
+			itemPosCompo.coord().set(dropperPosCompo.coord());
+			itemPosCompo.setActive(item, room);
+		}
 		return true;
 	}
 	

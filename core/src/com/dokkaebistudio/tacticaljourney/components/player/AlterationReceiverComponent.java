@@ -110,7 +110,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	private void setReceiveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage, int offset) {
 		final Image alterationImg = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
-		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y + 60 + (60*offset));
+		alterationImg.setPosition(HUDRenderer.POS_PROFILE.x, HUDRenderer.POS_PROFILE.y + 60 + (60*offset));
 				
 		Action removeImageAction = new Action(){
 			  @Override
@@ -126,7 +126,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		ScaleToAction appear = Actions.scaleTo(1, 1, 0.5f);
 		RotateByAction rotate = Actions.rotateBy(3600, 1.5f, Interpolation.exp5Out);
 		MoveToAction moveTo = Actions.moveTo(HUDRenderer.POS_PROFILE.x, HUDRenderer.POS_PROFILE.y, 1f, Interpolation.circle);
-		ScaleToAction disappearByScaling = Actions.scaleTo(0, 0, 2f);
+		ScaleToAction disappearByScaling = Actions.scaleTo(0, 0, 1f);
 		
 		ParallelAction appearance = Actions.parallel(appear, rotate);
 		ParallelAction disappearance = Actions.parallel(moveTo, disappearByScaling);
@@ -139,7 +139,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	private void setRemoveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage, int offset) {
 		final Image alterationImg = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
-		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y);
+		alterationImg.setPosition(HUDRenderer.POS_PROFILE.x, HUDRenderer.POS_PROFILE.y);
 				
 		Action removeImageAction = new Action(){
 			  @Override
@@ -153,7 +153,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		ScaleToAction init = Actions.scaleTo(0, 0);
 
-		MoveToAction moveFromPlayer = Actions.moveTo(playerPixelPos.x, playerPixelPos.y + 60 + (60*offset), 0.5f);
+		MoveToAction moveFromPlayer = Actions.moveTo(HUDRenderer.POS_PROFILE.x, HUDRenderer.POS_PROFILE.y + 60 + (60*offset), 0.5f);
 		ScaleToAction appear = Actions.scaleTo(1, 1, 0.5f);
 		AlphaAction disappear = Actions.alpha(0, 1f);
 		

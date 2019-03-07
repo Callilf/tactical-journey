@@ -24,6 +24,9 @@ public class LootableComponent implements Component, Poolable {
 	/** The item pool from where the random items are chosen. */
 	private LootableItemPool itemPool;
 	
+	/** The minimum number of items in this lootable. */
+	private int minNumberOfItems;
+	
 	/** The maximum number of items in this lootable. */
 	private int maxNumberOfItems;
 	
@@ -137,6 +140,14 @@ public class LootableComponent implements Component, Poolable {
 
 	public void setMaxNumberOfItems(int maxNumberOfItems) {
 		this.maxNumberOfItems = maxNumberOfItems;
+	}
+
+	public int getMinNumberOfItems() {
+		return minNumberOfItems;
+	}
+
+	public void setMinNumberOfItems(int minNumberOfItems) {
+		this.minNumberOfItems = minNumberOfItems;
 	}
 
 	

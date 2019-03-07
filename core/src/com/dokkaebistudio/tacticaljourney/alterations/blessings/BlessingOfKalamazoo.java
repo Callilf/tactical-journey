@@ -27,7 +27,7 @@ public class BlessingOfKalamazoo extends Blessing {
 	
 	@Override
 	public String description() {
-		return "Restore between 0 and 10 hp after clearing a room";
+		return "On room clear, [GREEN]restore between 0 and 10 hp";
 	}
 	
 	@Override

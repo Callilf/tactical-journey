@@ -40,7 +40,7 @@ public class MapRenderer implements Renderer {
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
 	
 	// TEST to debug floor layout
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	private Stage stage;
 	
@@ -306,6 +306,13 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key_enemy));
 						} else {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key));
+						}
+						break;
+					case ITEM_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item_enemy));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item));
 						}
 						break;
 					}

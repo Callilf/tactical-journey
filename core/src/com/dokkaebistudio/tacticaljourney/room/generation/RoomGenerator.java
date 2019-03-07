@@ -242,26 +242,25 @@ public abstract class RoomGenerator {
 			Collections.shuffle(spawnPositions, random);
 			
 			// Place a loot
-			int lootRandom = random.nextInt(10);
-			boolean isLoot = lootRandom != 0;
-			if (isLoot) {
-				Vector2 lootPos = spawnPositions.get(0);
-				if (lootRandom <= 5) {
-					Entity bones = entityFactory.lootableFactory.createRemainsBones(room, lootPos);
-					fillLootable(bones);
-					
-				} else {
-					Entity satchel = entityFactory.lootableFactory.createRemainsSatchel(room, lootPos);
-					fillLootable(satchel);
-
-				}
-				spawnPositions.remove(0);
-			}
-			
+			placeLootable(90, room, random, spawnPositions);
 
 			// Place enemies
 			placeEnemies(room, random, spawnPositions, false);
 			
+			break;
+			
+		case ITEM_ROOM:
+			// Retrieve the spawn points and shuffle them
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
+
+			Vector2 lootPos = spawnPositions.get(0);
+			Entity belongings = entityFactory.lootableFactory.createPersonalBelongings(room, lootPos);
+			fillLootable(belongings);
+			spawnPositions.remove(0);
+			
+			// Place enemies
+			placeEnemies(room, random, spawnPositions, false);
 			break;
 			
 		case KEY_ROOM:
@@ -310,17 +309,17 @@ public abstract class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
-			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
+//			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
 			
-			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 5));
-			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
-			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
-			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 5));
+//			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 5));
+//			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
+//			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
+//			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 5));
 			
-			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
-			entityFactory.itemFactory.createItemFataMorgana(room, new Vector2(10,9));
-			entityFactory.itemFactory.createItemMithridatium(room, new Vector2(10,8));
-			entityFactory.itemFactory.createItemNurseEyePatch(room, new Vector2(10,7));
+//			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
+//			entityFactory.itemFactory.createItemFataMorgana(room, new Vector2(10,9));
+//			entityFactory.itemFactory.createItemMithridatium(room, new Vector2(10,8));
+//			entityFactory.itemFactory.createItemNurseEyePatch(room, new Vector2(10,7));
 
 
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
@@ -357,7 +356,7 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 
 //			Entity bones = entityFactory.lootableFactory.createRemainsBones(room, new Vector2(12, 9));
-//			Entity satchel = entityFactory.createRemainsSatchel(room, new Vector2(13, 9));
+//			Entity satchel = entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
 //			fillLootable(satchel);
 
 			
@@ -395,6 +394,26 @@ public abstract class RoomGenerator {
 	
 		// Release poolable vector2
 		generatedRoom.releaseSpawns();
+	}
+
+
+	protected void placeLootable(int lootableChancePercentage, Room room, RandomXS128 random, List<PoolableVector2> spawnPositions) {
+		int lootRandom = random.nextInt(10);
+		boolean isLoot = lootRandom < lootableChancePercentage;
+		if (isLoot) {
+			lootRandom = random.nextInt(10);
+			Vector2 lootPos = spawnPositions.get(0);
+			if (lootRandom <= 5) {
+				Entity bones = entityFactory.lootableFactory.createBones(room, lootPos);
+				fillLootable(bones);
+				
+			} else {
+				Entity satchel = entityFactory.lootableFactory.createSatchel(room, lootPos);
+				fillLootable(satchel);
+
+			}
+			spawnPositions.remove(0);
+		}
 	}
 
 
@@ -442,14 +461,13 @@ public abstract class RoomGenerator {
 		
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
-		int nbLoot = random.nextInt(lootableComponent.getMaxNumberOfItems() + 1);
+		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMaxNumberOfItems() + 1);
 		if (nbLoot > 0) {
-				List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
-				for (PooledItemDescriptor pid : itemTypes) {
-					Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
-					lootableComponent.getItems().add(item);
-				}
-			
+			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
+			for (PooledItemDescriptor pid : itemTypes) {
+				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
+				lootableComponent.getItems().add(item);
+			}
 		}
 	}
 	

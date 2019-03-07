@@ -32,7 +32,7 @@ public class BlessingOfVilma extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On kill, chance to restore hp based on the damages of the final blow";
+		return "On kill, chance to [GREEN]restore hp[] based on the damages of the final blow";
 	}
 	
 	@Override

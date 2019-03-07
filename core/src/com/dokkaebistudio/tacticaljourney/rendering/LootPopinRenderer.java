@@ -265,11 +265,9 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//add item in inventory and remove it from lootable entity
-				if (inventoryCompo.canStore(itemComponent)) {
-					boolean stored = inventoryCompo.store(item, itemComponent, null);
-					if (stored) {
-						lootableCompo.getItems().remove(item);
-					}
+				boolean pickedUp = itemComponent.pickUp(player, item, room);
+				if (pickedUp) {
+					lootableCompo.getItems().remove(item);
 					inventoryCompo.setInventoryActionInProgress(true);
 					room.turnManager.endPlayerTurn();
 					refreshPopin();
@@ -457,8 +455,8 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						//Loot mode, drop into the lootable
+						itemComponent.drop(player, item, null);
 						lootableCompo.getItems().add(item);
-						inventoryCompo.remove(item);
 						inventoryCompo.setInventoryActionInProgress(true);
 						room.turnManager.endPlayerTurn();
 						refreshPopin();					

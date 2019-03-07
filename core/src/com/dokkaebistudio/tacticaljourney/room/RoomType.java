@@ -15,6 +15,7 @@ public enum RoomType {
 	EMPTY_ROOM("Room"),
 	COMMON_ENEMY_ROOM("Room"),
 	
+	ITEM_ROOM("Item room"),
 	KEY_ROOM("Key room"),
 	SHOP_ROOM("Shop"),
 	STATUE_ROOM("Statue"),

@@ -138,6 +138,8 @@ public class Assets {
 	public static AtlasRegion map_room_statue_enemy;
 	public static AtlasRegion map_room_key;
 	public static AtlasRegion map_room_key_enemy;
+	public static AtlasRegion map_room_item;
+	public static AtlasRegion map_room_item_enemy;
 	public static AtlasRegion map_room_start;
 	public static AtlasRegion map_room_unknown;
 	
@@ -200,10 +202,12 @@ public class Assets {
 	//*************
 	// Containers
 	
-	public static AtlasRegion remains_bones;
-	public static AtlasRegion remains_bones_opened;
-	public static AtlasRegion remains_satchel;
-	public static AtlasRegion remains_satchel_opened;
+	public static AtlasRegion lootable_bones;
+	public static AtlasRegion lootable_bones_opened;
+	public static AtlasRegion lootable_satchel;
+	public static AtlasRegion lootable_satchel_opened;
+	public static AtlasRegion lootable_belongings;
+	public static AtlasRegion lootable_belongings_opened;
 
 	//*********
 	// Statuses
@@ -377,6 +381,8 @@ public class Assets {
 		map_room_statue_enemy = Assets.getTexture("map_room_statue_enemy");
 		map_room_key = Assets.getTexture("map_room_key");
 		map_room_key_enemy = Assets.getTexture("map_room_key_enemy");
+		map_room_item = Assets.getTexture("map_room_item");
+		map_room_item_enemy = Assets.getTexture("map_room_item_enemy");
 		map_room_start = Assets.getTexture("map_room_start");
 		map_room_unknown = Assets.getTexture("map_room_unknown");
 		
@@ -437,10 +443,12 @@ public class Assets {
 		//*************
 		// Containers
 		
-		remains_bones = Assets.getTexture("remains_bones");
-		remains_bones_opened = Assets.getTexture("remains_bones_opened");
-		remains_satchel = Assets.getTexture("remains_satchel");
-		remains_satchel_opened = Assets.getTexture("remains_satchel_opened");
+		lootable_bones = Assets.getTexture("remains_bones");
+		lootable_bones_opened = Assets.getTexture("remains_bones_opened");
+		lootable_satchel = Assets.getTexture("remains_satchel");
+		lootable_satchel_opened = Assets.getTexture("remains_satchel_opened");
+		lootable_belongings = Assets.getTexture("remains_belongings");
+		lootable_belongings_opened = Assets.getTexture("remains_belongings_opened");
 
 		//*********
 		// Statuses

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
@@ -17,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -48,9 +50,9 @@ public final class LootableFactory {
 	 * @param pos the tile position
 	 * @return the lootable bones
 	 */
-	public Entity createRemainsBones(Room room, Vector2 pos) {
+	public Entity createBones(Room room, Vector2 pos) {
 		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		remainsEntity.flags = EntityFlagEnum.LOOTABLE_BONES.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
@@ -58,7 +60,7 @@ public final class LootableFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.remains_bones);
+    	Sprite s = new Sprite(Assets.lootable_bones);
     	spriteCompo.setSprite(s);
     	remainsEntity.add(spriteCompo);
 
@@ -83,9 +85,9 @@ public final class LootableFactory {
 	 * @param pos the tile position
 	 * @return the lootable satchel
 	 */
-	public Entity createRemainsSatchel(Room room, Vector2 pos) {
+	public Entity createSatchel(Room room, Vector2 pos) {
 		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		remainsEntity.flags = EntityFlagEnum.LOOTABLE_SATCHEL.getFlag();
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
@@ -112,5 +114,44 @@ public final class LootableFactory {
     	return remainsEntity;
 	}
 
-	
+	/**
+	 * Create personal belongings
+	 * @param room the room
+	 * @param pos the tile position
+	 * @return the lootable
+	 */
+	public Entity createPersonalBelongings(Room room, Vector2 pos) {
+		Entity lootable = engine.createEntity();
+		lootable.flags = EntityFlagEnum.LOOTABLE_BELONGINGS.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(lootable, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
+    	lootable.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(LootableEnum.PERSONAL_BELONGINGS.getClosedTexture());
+    	spriteCompo.setSprite(s);
+    	lootable.add(spriteCompo);
+    	
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.PERSONAL_BELONGINGS);
+    	lootComponent.setItemPool(new PersonalBelongingsItemPool());
+    	lootComponent.setMinNumberOfItems(1);
+    	lootComponent.setMaxNumberOfItems(1);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	lootable.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	lootable.add(destructibleCompo);
+    	
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(false);
+		lootable.add(flammable);
+
+		engine.addEntity(lootable);
+
+    	return lootable;
+	}
 }

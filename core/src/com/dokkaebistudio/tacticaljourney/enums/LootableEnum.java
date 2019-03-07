@@ -12,17 +12,24 @@ import com.dokkaebistudio.tacticaljourney.Assets;
  */
 public enum LootableEnum {
 	
-	BONES("Old bones", 2, Assets.remains_bones, Assets.remains_bones_opened) {
+	BONES("Old bones", 2, Assets.lootable_bones, Assets.lootable_bones_opened) {
 		@Override
 		public String getDescription() {
 			return "The remaining bones of a humanoid being. This could be you in like a hundred years.";
 		}
 	},
 	
-	SATCHEL("Adventurer's lost satchel", 3, Assets.remains_satchel, Assets.remains_satchel_opened) {
+	SATCHEL("Adventurer's lost satchel", 3, Assets.lootable_satchel, Assets.lootable_satchel_opened) {
 		@Override
 		public String getDescription() {
 			return "A satchel in an advanced state of decay. It looks like it has been lost here for quite a long time, but it could still contain something useful.";
+		}
+	},
+	
+	PERSONAL_BELONGINGS("Personal belongings", 3, Assets.lootable_belongings, Assets.lootable_belongings_opened) {
+		@Override
+		public String getDescription() {
+			return "A box of personal belongings that a past adventurer probably lost. It feels a bit like violating privacy but there could be something useful inside.";
 		}
 	};
 	

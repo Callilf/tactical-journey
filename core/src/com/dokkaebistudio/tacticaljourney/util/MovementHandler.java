@@ -11,8 +11,10 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -57,6 +59,13 @@ public class MovementHandler {
 			if (c instanceof MovableInterface) {
 				((MovableInterface) c).initiateMovement(moverGridPosCompo.coord());
 			}
+		}
+		
+		
+		//TODO improve
+		if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
+			StateComponent stateComponent = Mappers.stateComponent.get(e);
+			stateComponent.set(StatesEnum.PLAYER_RUNNING.getState());
 		}
 	}
 	
@@ -218,6 +227,12 @@ public class MovementHandler {
 					((MovableInterface) c).endMovement(selectedTilePos.coord());
 				}
 			}
+		}
+		
+		//TODO improve
+		if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
+			StateComponent stateComponent = Mappers.stateComponent.get(e);
+			stateComponent.set(StatesEnum.PLAYER_STANDING.getState());
 		}
 	}
 	

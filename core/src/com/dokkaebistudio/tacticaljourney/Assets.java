@@ -34,6 +34,7 @@ public class Assets {
 	public static AtlasRegion menuBackground;
 	
 	public static Array<Sprite> player_standing;
+	public static Array<Sprite> player_running;
 	public static Array<Sprite> player_flying;
 	public static AtlasRegion shopkeeper;
 	public static AtlasRegion godess_statue;
@@ -280,6 +281,7 @@ public class Assets {
 		menuBackground = Assets.getTexture("background-test-menu");
 
 		player_standing = Assets.getAnimation("player_stand");
+		player_running = Assets.getAnimation("player_run");
 		player_flying = Assets.getAnimation("player_flight");
 		
 		shopkeeper = Assets.getTexture("shopkeeper");

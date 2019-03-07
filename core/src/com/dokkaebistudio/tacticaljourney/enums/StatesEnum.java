@@ -3,7 +3,8 @@ package com.dokkaebistudio.tacticaljourney.enums;
 public enum StatesEnum {
 	
 	PLAYER_STANDING(0),
-	PLAYER_FLYING(1),
+	PLAYER_RUNNING(1),
+	PLAYER_FLYING(2),
 
 	EXPLODING_IN_SEVERAL_TURNS(0),
 	EXPLODING_THIS_TURN(1),

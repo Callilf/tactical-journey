@@ -81,6 +81,7 @@ public final class PlayerFactory {
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.animations.put(StatesEnum.PLAYER_STANDING.getState(), AnimationsEnum.PLAYER_STANDING.getAnimation());
+		animCompo.animations.put(StatesEnum.PLAYER_RUNNING.getState(), AnimationsEnum.PLAYER_RUNNING.getAnimation());
 		animCompo.animations.put(StatesEnum.PLAYER_FLYING.getState(), AnimationsEnum.PLAYER_FLYING.getAnimation());
 		playerEntity.add(animCompo);
 		

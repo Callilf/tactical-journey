@@ -8,7 +8,8 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 public enum AnimationsEnum {
 
 	PLAYER_STANDING(new Animation<Sprite>(0.2f, Assets.player_standing, PlayMode.LOOP)),
-	PLAYER_FLYING(new Animation<Sprite>(0.2f, Assets.player_flying, PlayMode.LOOP)),
+	PLAYER_RUNNING(new Animation<Sprite>(0.2f, Assets.player_running, PlayMode.LOOP)),
+	PLAYER_FLYING(new Animation<Sprite>(0.2f, Assets.player_flying, PlayMode.LOOP_PINGPONG)),
 
 	BOMB_SLOW(new Animation<Sprite>(0.2f, Assets.bomb_animation, PlayMode.LOOP)),
 	BOMB_FAST(new Animation<Sprite>(0.1f, Assets.bomb_animation, PlayMode.LOOP)),

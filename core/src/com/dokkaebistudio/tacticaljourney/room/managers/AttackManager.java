@@ -26,6 +26,9 @@ public class AttackManager {
 	/** The current room. */
 	private Room room;
 	
+	/** The last pointed sector on the wheel. */
+	private Sector lastPointedSector;
+	
 	/**
 	 * Constructor.
 	 * @param room the room
@@ -51,6 +54,8 @@ public class AttackManager {
 	 * @param pointedSector the sector pointed by the arrow (if the player attacks)
 	 */
 	public void performAttack(Entity attacker, AttackComponent attackCompo, Sector pointedSector) {
+		this.lastPointedSector = pointedSector;
+
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(attacker);
 		if (ammoCarrierComponent != null) {
 			ammoCarrierComponent.useAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
@@ -126,7 +131,7 @@ public class AttackManager {
 			}
 			alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
 			if (alterationReceiverComponent != null) {
-				alterationReceiverComponent.onAttack(attacker, target, room);
+				alterationReceiverComponent.onAttack(attacker, target, this.lastPointedSector, room);
 			}
 		}
 	}

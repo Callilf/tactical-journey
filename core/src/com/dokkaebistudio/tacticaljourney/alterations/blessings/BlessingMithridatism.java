@@ -25,7 +25,7 @@ public class BlessingMithridatism extends Blessing {
 	
 	@Override
 	public String description() {
-		return "Grants a 50% resistance to poison";
+		return "Grants a 50% resistance to [PURPLE]poison[]";
 	}
 	
 	@Override

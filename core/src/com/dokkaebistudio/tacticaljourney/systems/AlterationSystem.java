@@ -23,8 +23,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -126,34 +126,44 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		
 		
 		
-		if (playerAlterationReceiverCompo.getCurrentAction() != null) {
-
-			switch (playerAlterationReceiverCompo.getCurrentAction()) {
-			case RECEIVE_BLESSING:
-				Blessing blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.addBlessing(player, blessing, fxStage);
-				
-				Journal.addEntry("[GREEN]Received blessing: " + blessing.title());
-				break;
-			case REMOVE_BLESSING:
-				blessing = (Blessing) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.removeBlessing(player, blessing, fxStage);
-
-				Journal.addEntry("[SCARLET]Lost blessing: " + blessing.title());
-				break;
-			case RECEIVE_CURSE:
-				Curse curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.addCurse(player, curse, fxStage);
-				
-				Journal.addEntry("[PURPLE]Received curse: " + curse.title());
-				break;
-			case REMOVE_CURSE:
-				curse = (Curse) playerAlterationReceiverCompo.getCurrentAlteration();
-				playerAlterationReceiverCompo.removeCurse(player, curse, fxStage);
-
-				Journal.addEntry("[GREEN]Lifted curse: " + curse.title());
-				break;
+		if (!playerAlterationReceiverCompo.getCurrentActions().isEmpty()) {
+			int addCount = 0;
+			int removeCount = 0;
 			
+			for (int i = 0 ; i < playerAlterationReceiverCompo.getCurrentActions().size() ; i++) {
+				AlterationActionEnum currentAction = playerAlterationReceiverCompo.getCurrentActions().get(i);
+				Alteration currentAlteration = playerAlterationReceiverCompo.getCurrentAlterations().get(i);
+				switch (currentAction) {
+				case RECEIVE_BLESSING:
+					Blessing blessing = (Blessing) currentAlteration;
+					playerAlterationReceiverCompo.addBlessing(player, blessing, fxStage, addCount);
+					addCount ++;
+					
+					Journal.addEntry("[GREEN]Received blessing: " + blessing.title());
+					break;
+				case REMOVE_BLESSING:
+					blessing = (Blessing) currentAlteration;
+					playerAlterationReceiverCompo.removeBlessing(player, blessing, fxStage, removeCount);
+					removeCount ++;
+					
+					Journal.addEntry("[SCARLET]Lost blessing: " + blessing.title());
+					break;
+				case RECEIVE_CURSE:
+					Curse curse = (Curse) currentAlteration;
+					playerAlterationReceiverCompo.addCurse(player, curse, fxStage, addCount);
+					addCount ++;
+
+					Journal.addEntry("[PURPLE]Received curse: " + curse.title());
+					break;
+				case REMOVE_CURSE:
+					curse = (Curse) currentAlteration;
+					playerAlterationReceiverCompo.removeCurse(player, curse, fxStage, removeCount);
+					removeCount ++;
+					
+					Journal.addEntry("[GREEN]Lifted curse: " + curse.title());
+					break;
+				
+				}
 			}
 			
 			playerAlterationReceiverCompo.clearCurrentAction();

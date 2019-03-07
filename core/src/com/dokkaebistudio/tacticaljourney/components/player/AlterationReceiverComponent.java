@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -42,8 +43,8 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	private List<Curse> curses = new ArrayList<>();
 	
 	
-	private AlterationActionEnum currentAction;
-	private Alteration currentAlteration;
+	private List<AlterationActionEnum> currentActions = new ArrayList<>();
+	private List<Alteration> currentAlterations = new ArrayList<>();
 
 	public enum AlterationActionEnum {
 		RECEIVE_BLESSING,
@@ -56,12 +57,12 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	//*************
 	// Events
 	
-	public void onAttack(Entity attacker, Entity target, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
 		for (Blessing b : blessings) {
-			b.onAttack(attacker, target, room);
+			b.onAttack(attacker, target, sector, room);
 		}
 		for (Curse c : curses) {
-			c.onAttack(attacker, target, room);
+			c.onAttack(attacker, target, sector, room);
 		}
 	}
 	
@@ -106,10 +107,10 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	//*************
 	// Animations
 	
-	private void setReceiveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage) {
+	private void setReceiveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage, int offset) {
 		final Image alterationImg = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
-		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y + 60);
+		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y + 60 + (60*offset));
 				
 		Action removeImageAction = new Action(){
 			  @Override
@@ -135,7 +136,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 	
 	
-	private void setRemoveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage) {
+	private void setRemoveAnimation(AtlasRegion texture, Vector2 startGridPos, Stage fxStage, int offset) {
 		final Image alterationImg = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
 		alterationImg.setPosition(playerPixelPos.x, playerPixelPos.y);
@@ -152,7 +153,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		ScaleToAction init = Actions.scaleTo(0, 0);
 
-		MoveToAction moveFromPlayer = Actions.moveTo(playerPixelPos.x, playerPixelPos.y + 60, 0.5f);
+		MoveToAction moveFromPlayer = Actions.moveTo(playerPixelPos.x, playerPixelPos.y + 60 + (60*offset), 0.5f);
 		ScaleToAction appear = Actions.scaleTo(1, 1, 0.5f);
 		AlphaAction disappear = Actions.alpha(0, 1f);
 		
@@ -171,51 +172,51 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 
 	
-	public void addBlessing(Entity entity, Blessing blessing, Stage fxStage) {
+	public void addBlessing(Entity entity, Blessing blessing, Stage fxStage, int offset) {
 		blessing.onReceive(entity);
 		blessings.add(blessing);
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage);
+			this.setReceiveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
-	public void addCurse(Entity entity, Curse curse, Stage fxStage) {
+	public void addCurse(Entity entity, Curse curse, Stage fxStage, int offset) {
 		curse.onReceive(entity);
 		curses.add(curse);
 		
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage);
+			this.setReceiveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
-	public void removeBlessing(Entity entity, Blessing blessing, Stage fxStage) {
+	public void removeBlessing(Entity entity, Blessing blessing, Stage fxStage, int offset) {
 		blessing.onRemove(entity);
 		blessings.remove(blessing);
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage);
+			this.setRemoveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
-	public void removeCurse(Entity entity, Curse curse, Stage fxStage) {
+	public void removeCurse(Entity entity, Curse curse, Stage fxStage, int offset) {
 		curse.onRemove(entity);
 		curses.remove(curse);
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage);
+			this.setRemoveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
-	public void removeCurseByClass(Entity entity, Class curseClass, Stage fxStage) {
+	public void removeCurseByClass(Entity entity, Class curseClass, Stage fxStage, int offset) {
 		for (Curse curse : curses) {
 			if (curse.getClass() == curseClass) {
-				removeCurse(entity, curse, fxStage);
+				removeCurse(entity, curse, fxStage, offset);
 				break;
 			}
 		}
@@ -228,15 +229,15 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	// Requests
 	
 	public void requestAction(AlterationActionEnum action, Alteration alteration) {
-		this.currentAction = action;
-		this.currentAlteration = alteration;
+		this.currentActions.add(action);
+		this.currentAlterations.add(alteration);
 	}
 	
 	public void requestRemoveBlessingByClass(Class alterationClass) {
 		for (Blessing blessing : blessings) {
 			if (blessing.getClass().equals(alterationClass)) {
-				this.currentAlteration = blessing;
-				this.currentAction = AlterationActionEnum.REMOVE_BLESSING;
+				this.currentActions.add(AlterationActionEnum.REMOVE_BLESSING);
+				this.currentAlterations.add(blessing);
 				return;
 			}
 		}
@@ -245,16 +246,16 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	public void requestRemoveCurseByClass(Class alterationClass) {
 		for (Curse curse : curses) {
 			if (curse.getClass().equals(alterationClass)) {
-				this.currentAlteration = curse;
-				this.currentAction = AlterationActionEnum.RECEIVE_CURSE;
+				this.currentActions.add(AlterationActionEnum.REMOVE_CURSE);
+				this.currentAlterations.add(curse);
 				return;
 			}
 		}
 	}
 	
 	public void clearCurrentAction() {
-		this.currentAction = null;
-		this.currentAlteration = null;
+		this.currentActions.clear();
+		this.currentAlterations.clear();
 	}
 	
 	
@@ -279,29 +280,12 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 
 
-
-	public AlterationActionEnum getCurrentAction() {
-		return currentAction;
+	public List<AlterationActionEnum> getCurrentActions() {
+		return this.currentActions;
 	}
-
-
-
-	public void setCurrentAction(AlterationActionEnum currentAction) {
-		this.currentAction = currentAction;
+	public List<Alteration> getCurrentAlterations() {
+		return this.currentAlterations;
 	}
-
-
-
-	public Alteration getCurrentAlteration() {
-		return currentAlteration;
-	}
-
-
-
-	public void setCurrentAlteration(Alteration currentAlteration) {
-		this.currentAlteration = currentAlteration;
-	}
-
 	
 	
 }

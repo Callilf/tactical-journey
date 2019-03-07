@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -31,7 +32,7 @@ public abstract class Alteration {
 	 * @param target the target
 	 * @param room the room
 	 */
-	public void onAttack(Entity attacker, Entity target, Room room) {};
+	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {};
 	
 	/**
 	 * Called when the blessed entity kills a target.

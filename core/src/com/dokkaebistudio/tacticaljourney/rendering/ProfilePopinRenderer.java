@@ -336,7 +336,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	private Table createOneAlteration(Alteration alteration) {
 		Table oneAlterationTable = new Table();
-
 		TextureRegionDrawable background = new TextureRegionDrawable(Assets.profile_alteration_background);
 		oneAlterationTable.setBackground(background);
 		
@@ -348,7 +347,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		upTable.add(curseImage).left().pad(5, 5, 0, 10);
 		
 		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
-		upTable.add(curseTitle).pad(5, 10, 0, 5);
+		curseTitle.setWrap(true);
+		curseTitle.setWidth(350);
+		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
 		upTable.pack();
 		oneAlterationTable.add(upTable).left();
 		

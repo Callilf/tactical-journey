@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessin
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
@@ -162,6 +163,10 @@ public final class ItemFactory {
 			item = createItemMithridatium(room, tilePos);
 			break;
 
+		case NURSE_EYE_PATCH:
+			item = createItemNurseEyePatch(room, tilePos);
+			break;
+			
 			default:
 				System.out.println("Item type " + type.name() + " not handled in ItemFactory.");
 				
@@ -367,6 +372,18 @@ public final class ItemFactory {
 	public Entity createItemMithridatium(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.mithridatium, new ItemMithridatium());
 		item.flags = EntityFlagEnum.ITEM_MITHRIDATIUM.getFlag();
+		return item;
+	}
+	
+	
+	/**
+	 * Create the nurse eye patch.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemNurseEyePatch(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.nurse_eye_patch, new ItemNurseEyePatch());
+		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
 		return item;
 	}
 	

@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -291,6 +292,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			ammoCarrierComponent.useAmmo(skillAttackCompo.getAmmoType(), skillAttackCompo.getAmmosUsedPerAttack());
 		}
 		
+		Journal.addEntry("You threw a bomb");
+
 		room.turnManager.endPlayerTurn();
 	}
 	
@@ -311,6 +314,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		Entity thrownEntity = skillAttackCompo.getThrownEntity();
 		ItemComponent itemComponent = Mappers.itemComponent.get(thrownEntity);
 		itemComponent.onThrow(targetedPosition.coord(), player, thrownEntity, room);		
+		
+		Journal.addEntry("You threw " + itemComponent.getItemLabel());
 		
 		room.turnManager.endPlayerTurn();
 	}

@@ -43,7 +43,7 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Drank the small health potion");
+		Journal.addEntry("You drank the small health potion");
 
 		//Heal the picker for 25 HP !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);

@@ -43,7 +43,7 @@ public class ItemWingPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Drank the wing potion.");
+		Journal.addEntry("You drank the wing potion.");
 
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
 		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffFlight(30, room.engine));

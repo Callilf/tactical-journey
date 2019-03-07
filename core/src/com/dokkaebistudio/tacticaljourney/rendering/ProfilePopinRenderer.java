@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -67,6 +68,11 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private Label bombDmg;
 	private Label bombDuration;
 	private Label bombRadius;
+	
+	// Resistances
+	private Label poisonResist;
+	private Label fireResist;
+	private Label explosionResist;
 	
 	// Blessings
     private Table blessingTable;
@@ -177,6 +183,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		bombDuration.setText("Bomb fuse duration: " + bombAttackCompo.getBombTurnsToExplode() + " turns" );
 		bombRadius.setText("Bomb radius: " + bombAttackCompo.getBombRadius());
 		
+		poisonResist.setText("[PURPLE]Poison[] resistance: " + healthComponent.getResistance(DamageType.POISON) + "%");
+		fireResist.setText("[ORANGE]Fire[] resistance: " + healthComponent.getResistance(DamageType.FIRE) + "%");
+		explosionResist.setText("[RED]Explosion[] resistance: " + healthComponent.getResistance(DamageType.EXPLOSION) + "%");
+		
 		profileTable.pack();
 	}
 
@@ -232,9 +242,19 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.add(bombDuration).expandX().left().pad(0, 20, 0, 20);
 		profileTable.row();
 		bombRadius = new Label("Bomb radius", PopinService.hudStyle());
-		profileTable.add(bombRadius).expandX().left().pad(0, 20, 0, 20);
+		profileTable.add(bombRadius).expandX().left().pad(0, 20, 20, 20);
 		profileTable.row();
 		
+		poisonResist = new Label("Poison resistance", PopinService.hudStyle());
+		profileTable.add(poisonResist).expandX().left().pad(0,20,0,20);
+		profileTable.row();
+		fireResist = new Label("Fire resistance", PopinService.hudStyle());
+		profileTable.add(fireResist).expandX().left().pad(0,20,0,20);
+		profileTable.row();
+		explosionResist = new Label("Explosion resistance", PopinService.hudStyle());
+		profileTable.add(explosionResist).expandX().left().pad(0,20,0,20);
+		profileTable.row();
+
 		mainTable.add(profileTable);
 	}
 

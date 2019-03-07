@@ -36,7 +36,7 @@ public class ItemKey extends Item {
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
 		inventoryComponent.getKey();
 		
-		Journal.addEntry("[GREEN]Picked up the staircase key.");
+		Journal.addEntry("[GREEN]You picked up the staircase key.");
 
 		return true;
 	}

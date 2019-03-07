@@ -43,8 +43,12 @@ public class ItemBomb extends Item {
 		itemComponent.setQuantityPickedUp(itemComponent.getQuantity() - remainingBombs);
 		itemComponent.setQuantity(remainingBombs);
 		
-		Journal.addEntry("Picked up " + itemComponent.getQuantityPickedUp() + " bomb(s).");
-
+		if (itemComponent.getQuantityPickedUp() >0) {
+			Journal.addEntry("You picked up " + itemComponent.getQuantityPickedUp() + " bomb(s).");
+		} else {
+			Journal.addEntry("[SCARLET]Your bomb bag is already full");
+		}
+		
 		return remainingBombs == 0;
 	}
 	

@@ -45,7 +45,7 @@ public class ItemRegenPotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Drank the regeneration potion.");
+		Journal.addEntry("You drank the regeneration potion.");
 
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		int duration = 20 + unseededRandom.nextInt(21);

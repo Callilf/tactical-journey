@@ -97,7 +97,7 @@ public class ItemTutorialPage extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Tore down the tutorial page " + pageNumber + ".");
+		Journal.addEntry("You tore down the tutorial page " + pageNumber + ".");
 
 		return true;
 	}

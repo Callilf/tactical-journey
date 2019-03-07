@@ -50,7 +50,7 @@ public class ItemFirePotion extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Drank the fire potion.");
+		Journal.addEntry("You drank the fire potion.");
 
 		//set ablaze	
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);

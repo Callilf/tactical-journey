@@ -142,7 +142,7 @@ public class InventoryComponent implements Component, Poolable {
 				gridPositionComponent.setInactive(item, room);
 			}
 			
-			Journal.addEntry("Picked up a " + itemCompo.getItemLabel());
+			Journal.addEntry("You picked up a " + itemCompo.getItemLabel());
 			return true;
 		} else {
 			//This item does not go into inventory, it's used right away

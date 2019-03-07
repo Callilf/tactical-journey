@@ -35,7 +35,7 @@ public class ItemArmorPiece extends Item {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("Equiped the armor piece.");
+		Journal.addEntry("You equiped the armor piece.");
 
 		//Restore 10 Armor !
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);

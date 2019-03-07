@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -48,6 +47,9 @@ public class ShopKeeperComponent implements Component, Poolable {
 	
 	/** Whether the shop has been requested for a restock. */
 	private boolean requestRestock = false;
+	
+	/** The item pool. */
+	private ShopItemPool itemPool;
 	
 	
 	// Speeches 
@@ -91,7 +93,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	public void stock(Room room) {
 		int numberOfItemsToGenerate = numberOfItems - soldItems.size();
 		
-		List<PooledItemDescriptor> itemTypes = ShopItemPool.getItemTypes(numberOfItemsToGenerate);
+		List<PooledItemDescriptor> itemTypes = this.itemPool.getItemTypes(numberOfItemsToGenerate);
 
 		for (int i=0 ; i<numberOfItemsToGenerate ; i++) {
 			Vector2 position = null;
@@ -204,6 +206,14 @@ public class ShopKeeperComponent implements Component, Poolable {
 
 	public void setRequestRestock(boolean requestRestock) {
 		this.requestRestock = requestRestock;
+	}
+
+	public ShopItemPool getItemPool() {
+		return itemPool;
+	}
+
+	public void setItemPool(ShopItemPool itemPool) {
+		this.itemPool = itemPool;
 	}
 
 	

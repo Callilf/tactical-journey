@@ -12,9 +12,7 @@ public class OldBonesItemPool extends LootableItemPool {
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
-	
-	private static int sumOfChances;
-	
+		
 	static {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
 
@@ -23,12 +21,9 @@ public class OldBonesItemPool extends LootableItemPool {
 		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 3));				
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 5));				
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 3));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 5));
 		
-		for (PooledItemDescriptor pid : itemPool) {
-			sumOfChances += pid.getChanceToDrop();
-		}
 	}
 	
 	
@@ -37,9 +32,12 @@ public class OldBonesItemPool extends LootableItemPool {
 		return itemPool;
 	}
 
-	
 	@Override
 	public int getSumOfChances() {
+		int sumOfChances = 0;
+		for (PooledItemDescriptor pid : itemPool) {
+			sumOfChances += pid.getChanceToDrop();
+		}
 		return sumOfChances;
 	}
 

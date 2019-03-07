@@ -256,7 +256,6 @@ public abstract class RoomGenerator {
 
 			Vector2 lootPos = spawnPositions.get(0);
 			Entity belongings = entityFactory.lootableFactory.createPersonalBelongings(room, lootPos);
-			fillLootable(belongings);
 			spawnPositions.remove(0);
 			
 			// Place enemies
@@ -356,8 +355,7 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 
 //			Entity bones = entityFactory.lootableFactory.createRemainsBones(room, new Vector2(12, 9));
-//			Entity satchel = entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
-//			fillLootable(satchel);
+//			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
 
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
@@ -404,13 +402,9 @@ public abstract class RoomGenerator {
 			lootRandom = random.nextInt(10);
 			Vector2 lootPos = spawnPositions.get(0);
 			if (lootRandom <= 5) {
-				Entity bones = entityFactory.lootableFactory.createBones(room, lootPos);
-				fillLootable(bones);
-				
+				Entity bones = entityFactory.lootableFactory.createBones(room, lootPos);				
 			} else {
 				Entity satchel = entityFactory.lootableFactory.createSatchel(room, lootPos);
-				fillLootable(satchel);
-
 			}
 			spawnPositions.remove(0);
 		}
@@ -453,21 +447,6 @@ public abstract class RoomGenerator {
 	
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(destructible);
 			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-		}
-	}
-	
-	protected void fillLootable(Entity lootable) {
-		LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
-		
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		
-		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMaxNumberOfItems() + 1);
-		if (nbLoot > 0) {
-			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
-			for (PooledItemDescriptor pid : itemTypes) {
-				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
-				lootableComponent.getItems().add(item);
-			}
 		}
 	}
 	

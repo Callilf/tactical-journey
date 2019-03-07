@@ -85,7 +85,6 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			
 			pos = possibleSpawns.get(1);
 			Entity personalBelongings = entityFactory.lootableFactory.createPersonalBelongings(room, pos);
-			fillLootable(personalBelongings);
 
 			default:
 			break;

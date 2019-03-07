@@ -13,17 +13,11 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 	 */
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 	
-	private static int sumOfChances;
-	
 	static {
-		itemPool.add(new PooledItemDescriptor(ItemEnum.TOTEM_OF_KALAMAZOO, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MITHRIDATIUM, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.NURSE_EYE_PATCH, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.FATA_MORGANA, 10));
-		
-		for (PooledItemDescriptor pid : itemPool) {
-			sumOfChances += pid.getChanceToDrop();
-		}
+		itemPool.add(new PooledItemDescriptor(ItemEnum.TOTEM_OF_KALAMAZOO, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.MITHRIDATIUM, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.NURSE_EYE_PATCH, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.FATA_MORGANA, 10, true));
 	}
 	
 	
@@ -35,6 +29,10 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 	
 	@Override
 	public int getSumOfChances() {
+		int sumOfChances = 0;
+		for (PooledItemDescriptor pid : itemPool) {
+			sumOfChances += pid.getChanceToDrop();
+		}
 		return sumOfChances;
 	}
 

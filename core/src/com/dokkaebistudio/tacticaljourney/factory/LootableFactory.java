@@ -3,11 +3,15 @@
  */
 package com.dokkaebistudio.tacticaljourney.factory;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -16,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
@@ -69,6 +74,7 @@ public final class LootableFactory {
     	lootComponent.setItemPool(new OldBonesItemPool());
     	lootComponent.setMaxNumberOfItems(2);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	this.fillLootable(lootComponent);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -104,6 +110,7 @@ public final class LootableFactory {
     	lootComponent.setItemPool(new AdventurersSatchelItemPool());
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	this.fillLootable(lootComponent);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -140,6 +147,7 @@ public final class LootableFactory {
     	lootComponent.setMinNumberOfItems(1);
     	lootComponent.setMaxNumberOfItems(1);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	this.fillLootable(lootComponent);
     	lootable.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -153,5 +161,23 @@ public final class LootableFactory {
 		engine.addEntity(lootable);
 
     	return lootable;
+	}
+	
+	
+	
+	//******************
+	// Fill lootable
+	
+	private void fillLootable(LootableComponent lootableComponent) {		
+		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		
+		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMinNumberOfItems() + 1);
+		if (nbLoot > 0) {
+			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
+			for (PooledItemDescriptor pid : itemTypes) {
+				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
+				lootableComponent.getItems().add(item);
+			}
+		}
 	}
 }

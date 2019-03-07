@@ -12,9 +12,7 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
-	
-	private static int sumOfChances;
-	
+		
 	static {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
 
@@ -28,10 +26,6 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));				
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10));		
-		
-		for (PooledItemDescriptor pid : itemPool) {
-			sumOfChances += pid.getChanceToDrop();
-		}
 	}
 	
 	
@@ -40,9 +34,12 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		return itemPool;
 	}
 
-	
 	@Override
 	public int getSumOfChances() {
+		int sumOfChances = 0;
+		for (PooledItemDescriptor pid : itemPool) {
+			sumOfChances += pid.getChanceToDrop();
+		}
 		return sumOfChances;
 	}
 

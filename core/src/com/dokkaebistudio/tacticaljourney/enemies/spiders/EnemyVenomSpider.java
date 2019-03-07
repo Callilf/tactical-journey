@@ -17,6 +17,11 @@ public class EnemyVenomSpider extends Enemy {
 	private int poisonChance = 33;
 	
 	@Override
+	public String title() {
+		return "Venom spider";
+	}
+	
+	@Override
 	public void onAttack(Entity enemy, Entity target, Room room) {
 		// 33% chance to poison
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();

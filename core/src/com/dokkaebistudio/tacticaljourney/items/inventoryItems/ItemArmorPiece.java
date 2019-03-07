@@ -30,7 +30,7 @@ public class ItemArmorPiece extends Item {
 	
 	@Override
 	public String getActionLabel() {
-		return "Equip";
+		return "[CYAN]Equip";
 	}
 	
 	@Override

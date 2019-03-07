@@ -15,6 +15,12 @@ public class EnemyPangolinMother extends Enemy {
 	private boolean crying;
 	private int cryingEndTurn;
 	
+	
+	@Override
+	public String title() {
+		return "Giant pangolin";
+	}
+	
 	/**
 	 * Becomes alerted and the textures changes to the enraged texture.
 	 * @param entity

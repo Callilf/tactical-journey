@@ -60,7 +60,7 @@ public class StatusDebuffBurning extends Status {
 	@Override
 	public void onEndTurn(Entity entity) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.hit(3, parent, DamageType.FIRE);
+		healthComponent.hit(3, entity, parent, DamageType.FIRE);
 	}
 	
 	

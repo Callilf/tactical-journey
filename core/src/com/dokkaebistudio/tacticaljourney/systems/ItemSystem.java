@@ -174,9 +174,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
-				} else {
-					Journal.addEntry("[RED]Impossible to use the " + itemComponent.getItemLabel());
-
 				}
 				
 				playerInventoryCompo.setCurrentAction(null);

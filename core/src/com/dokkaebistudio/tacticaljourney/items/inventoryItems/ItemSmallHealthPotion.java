@@ -33,7 +33,7 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public String getActionLabel() {
-		return "Drink";
+		return "[GREEN]Drink";
 	}
 	
 	@Override

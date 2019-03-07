@@ -30,7 +30,8 @@ public enum ItemEnum {
 	
 	// Infusables
 	TOTEM_OF_KALAMAZOO(2),
-	FATA_MORGANA(2);
+	FATA_MORGANA(2),
+	MITHRIDATIUM(2);
 	
 	
 	

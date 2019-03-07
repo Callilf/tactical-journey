@@ -50,6 +50,7 @@ public class ExperienceComponent implements Component,Poolable {
 	 * @param amountToEarn the amount to earn.
 	 */
 	public void earnXp(int amountToEarn) {
+		Journal.addEntry("You gained [YELLOW]" + amountToEarn + " xp");
 		this.xpGainedAtCurrentFrame.add(amountToEarn);
 		
 		if (nextLevelXp > currentXp + amountToEarn) {

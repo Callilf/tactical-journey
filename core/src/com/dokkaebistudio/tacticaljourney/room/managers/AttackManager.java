@@ -107,7 +107,7 @@ public class AttackManager {
 	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
 		if (healthComponent != null) {
-			healthComponent.hit(damage, attacker, damageType);
+			healthComponent.hit(damage, target, attacker, damageType);
 		}
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);

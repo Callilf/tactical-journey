@@ -20,13 +20,15 @@ public abstract class Status {
 	public abstract AtlasRegion texture();
 
 	/** Called when this status is received by an entity. */
-	public void onReceive(Entity entity) {};
+	public boolean onReceive(Entity entity) {
+		return true;
+	}
 	
 	/** Called when this status is removed from an entity. */
-	public void onRemove(Entity entity) {};
+	public void onRemove(Entity entity) {}
 
 	/** Called when the entity starts its turn. */
-	public void onStartTurn(Entity entity) {};
+	public void onStartTurn(Entity entity) {}
 	
 	/** Called when the entity ends its turn. */
 	public void onEndTurn(Entity entity) {}

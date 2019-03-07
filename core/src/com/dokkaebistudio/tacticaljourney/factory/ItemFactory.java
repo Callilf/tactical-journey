@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
@@ -155,6 +156,10 @@ public final class ItemFactory {
 			
 		case FATA_MORGANA:
 			item = createItemFataMorgana(room, tilePos);
+			break;
+			
+		case MITHRIDATIUM:
+			item = createItemMithridatium(room, tilePos);
 			break;
 
 			default:
@@ -351,6 +356,17 @@ public final class ItemFactory {
 	public Entity createItemFataMorgana(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.fata_morgana, new ItemFataMorgana());
 		item.flags = EntityFlagEnum.ITEM_FATA_MORGANA.getFlag();
+		return item;
+	}
+	
+	/**
+	 * Create the mithridatium.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemMithridatium(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.mithridatium, new ItemMithridatium());
+		item.flags = EntityFlagEnum.ITEM_MITHRIDATIUM.getFlag();
 		return item;
 	}
 	

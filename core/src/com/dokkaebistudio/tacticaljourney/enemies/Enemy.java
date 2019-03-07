@@ -11,6 +11,8 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
  *
  */
 public abstract class Enemy {
+	
+	public abstract String title();
 
 	public void onStartTurn(Entity enemy, Room room) {};
 	public void onEndTurn(Entity enemy, Room room) {};

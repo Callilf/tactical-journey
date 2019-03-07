@@ -41,7 +41,7 @@ public class StatusBuffFlight extends Status {
 
 
 	@Override
-	public void onReceive(Entity entity) {
+	public boolean onReceive(Entity entity) {
 		FlyComponent flyCompo = this.engine.createComponent(FlyComponent.class);
 		entity.add(flyCompo);
 		
@@ -49,6 +49,7 @@ public class StatusBuffFlight extends Status {
 			StateComponent stateComponent = Mappers.stateComponent.get(entity);
 			stateComponent.set(StatesEnum.PLAYER_FLYING.getState());
 		}
+		return true;
 	}
 
 	

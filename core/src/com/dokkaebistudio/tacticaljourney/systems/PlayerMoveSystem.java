@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -239,6 +240,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				// INTERRUPTED
 				inventoryComponent.interrupt();
 				if (inventoryComponent != null && inventoryComponent.isInterrupted()) {
+					Journal.addEntry("[SCARLET]Interrupted while looting");
 					GridPositionComponent gridPos = Mappers.gridPositionComponent.get(moverEntity);
 					room.entityFactory.createDamageDisplayer("INTERRUPTED", gridPos, HealthChangeEnum.HIT, 15, room);
 				}
@@ -262,16 +264,16 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	 * Update the number of turns to wait for opening a lootable.
 	 */
 	private void handleWaitForLooting(Entity player) {
+		LootableComponent lootableComponent = Mappers.lootableComponent.get(inventoryComponent.getLootableEntity());
 		if (inventoryComponent.getTurnsToWaitBeforeLooting().intValue() <= 0) {
 			inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.LOOT);
 			inventoryComponent.setTurnsToWaitBeforeLooting(null);
-			LootableComponent lootableComponent = Mappers.lootableComponent.get(inventoryComponent.getLootableEntity());
 			lootableComponent.setLootableState(LootableStateEnum.OPENED, inventoryComponent.getLootableEntity());
+			Journal.addEntry("You opened " + lootableComponent.getType().getLabel());
 		} else {
-			
-			//TODO
 			if (healthComponent.isReceivedDamageLastTurn()) {
 				//INTERRUPTED
+				Journal.addEntry("[SCARLET]Interrupted while opening " + lootableComponent.getType().getLabel());
 				inventoryComponent.setTurnsToWaitBeforeLooting(null);
 				
 				GridPositionComponent gridPos = Mappers.gridPositionComponent.get(player);

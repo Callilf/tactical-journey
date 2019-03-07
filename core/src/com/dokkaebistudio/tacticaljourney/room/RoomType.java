@@ -25,17 +25,13 @@ public enum RoomType {
 	private String label;
 	
 	private RoomType(String label) {
-		this.setLabel(label);
-	}
-	
-	
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	
+
+	public String title() {
+		return label;
 	}
 	
 }

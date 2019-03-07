@@ -4,4 +4,9 @@ import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 
 public class EnemyWebSpider extends Enemy {
 
+	@Override
+	public String title() {
+		return "Web spider";
+	}
+	
 }

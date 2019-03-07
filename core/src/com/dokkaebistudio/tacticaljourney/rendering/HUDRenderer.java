@@ -220,7 +220,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			stage.addActor(floor);
 		}
 		floorLabel.setText("Floor " + room.floor.getLevel());
-		roomLabel.setText(room.type.getLabel());
+		roomLabel.setText(room.type.title());
 	}
 	
 	

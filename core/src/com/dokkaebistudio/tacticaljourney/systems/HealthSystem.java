@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
@@ -116,16 +117,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	if (healthCompo.getHp() <= 0) {
 				//Entity is dead
 				
-	    		// Get XP
-	    		if (healthCompo.getAttacker() != null) {
-					ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
-					ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
-					if (expCompo != null && expRewardCompo != null) {
-						expCompo.earnXp(expRewardCompo.getExpGain());
-					}
-	    		}
-				
-				
 				PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 				if (playerComponent != null) {
 					
@@ -150,9 +141,21 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					
 					EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 					if (enemyComponent != null) {
+						Journal.addEntry(enemyComponent.getType().title() + " died");
 						// An enemy died
 						enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
 					}
+					
+		    		// Get XP
+		    		if (healthCompo.getAttacker() != null) {
+						ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
+						ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
+						if (expCompo != null && expRewardCompo != null) {
+							expCompo.earnXp(expRewardCompo.getExpGain());
+						}
+		    		}
+					
+					
 					// Alteration events
 					AlterationReceiverComponent deadEntityAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(entity);
 					if (deadEntityAlterationReceiverCompo != null) {
@@ -198,6 +201,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 
 	private void clearRoom(Entity attacker, AlterationReceiverComponent attackerAlterationReceiverCompo) {
 		if (!room.isCleared()) {
+			Journal.addEntry("The " + room.type.title() + " has been cleared");
 			room.setCleared(RoomClearedState.JUST_CLEARED);
 
 			if (attackerAlterationReceiverCompo != null) {

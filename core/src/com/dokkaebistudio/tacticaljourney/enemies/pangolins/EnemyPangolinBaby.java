@@ -23,6 +23,12 @@ public class EnemyPangolinBaby extends Enemy {
 		this.mother = mother;
 	}
 	
+	
+	@Override
+	public String title() {
+		return "Baby pangolin";
+	}
+	
 	@Override
 	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
 		if (!rolled) {
@@ -69,7 +75,7 @@ public class EnemyPangolinBaby extends Enemy {
 				
 				HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
 				if (healthComponent.getArmor() > 0) {
-					healthComponent.hit(healthComponent.getArmor(), null);
+					healthComponent.hit(healthComponent.getArmor(), enemy,null);
 				}
 				
 				MoveComponent moveComponent = Mappers.moveComponent.get(enemy);

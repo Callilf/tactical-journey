@@ -7,9 +7,19 @@ package com.dokkaebistudio.tacticaljourney.enums;
  */
 public enum DamageType {
 
-	NORMAL,
-	EXPLOSION,
-	FIRE,
-	POISON;
+	NORMAL(""),
+	EXPLOSION("[RED]explosion"),
+	FIRE("[ORANGE]fire"),
+	POISON("[PURPLE]poison");
+	
+	private String title;
+	
+	private DamageType(String title) {
+		this.title = title;
+	}
+
+	public String title() {
+		return title;
+	}	
 	
 }

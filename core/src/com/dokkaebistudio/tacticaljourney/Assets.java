@@ -234,6 +234,7 @@ public class Assets {
 	
 	public static AtlasRegion totem_of_kalamazoo;
 	public static AtlasRegion fata_morgana;
+	public static AtlasRegion mithridatium;
 
 	
 	
@@ -254,6 +255,7 @@ public class Assets {
 	public static AtlasRegion blessing_celerity;
 	public static AtlasRegion blessing_of_kalamazoo;
 	public static AtlasRegion blessing_of_vilma;
+	public static AtlasRegion blessing_mithridatism;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -465,6 +467,7 @@ public class Assets {
 		
 		totem_of_kalamazoo = Assets.getTexture("item-infusable-totem-of-kalamazoo");
 		fata_morgana = Assets.getTexture("item-infusable-fata-morgana");
+		mithridatium = Assets.getTexture("item-infusable-mithridatium");
 		
 		
 		arrow = Assets.getTexture("arrow");
@@ -480,6 +483,7 @@ public class Assets {
 		blessing_celerity = Assets.getTexture("blessing-celerity");
 		blessing_of_kalamazoo = Assets.getTexture("blessing-kalamazoo");
 		blessing_of_vilma = Assets.getTexture("blessing-vilma");
+		blessing_mithridatism = Assets.getTexture("blessing-mithridatism");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

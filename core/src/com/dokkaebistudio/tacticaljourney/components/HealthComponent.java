@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -69,7 +70,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private Entity attacker;
 	
 	/** Whether the entity has been hit or healed at this frame. */
-	private Map<HealthChangeEnum, String> healthChangeMap = new HashMap<>();
+	public Map<HealthChangeEnum, String> healthChangeMap = new HashMap<>();
 	
 	
 	//****************
@@ -79,15 +80,15 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * Receive damages.
 	 * @param amountOfDamage the amount of damages
 	 */
-	public void hit(int amountOfDamage, Entity attacker) {
-		this.hit(amountOfDamage, attacker, DamageType.NORMAL);
+	public void hit(int amountOfDamage, Entity target, Entity attacker) {
+		this.hit(amountOfDamage, target, attacker, DamageType.NORMAL);
 	}
 	
 	/**
 	 * Receive damages.
 	 * @param amountOfDamage the amount of damages
 	 */
-	public void hit(int amountOfDamage, Entity attacker, DamageType damageType) {
+	public void hit(int amountOfDamage, Entity target, Entity attacker, DamageType damageType) {
 		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
 		this.latestAttackDamage = realAmountOfDamage;
 		
@@ -105,6 +106,37 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		} else {
 			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(realAmountOfDamage));
 		}
+		
+		addJournalEntry(target, attacker, realAmountOfDamage, damageType);
+	}
+
+	private void addJournalEntry(Entity target, Entity attacker, int realAmountOfDamage, DamageType damageType) {
+		String damageTypeStr = " " + damageType.title() + "[GRAY]";
+		if (damageType == DamageType.NORMAL) damageTypeStr = "";
+		
+		if (attacker != null) {
+			if (Mappers.playerComponent.has(attacker)) {
+				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
+				if (targetEnemyCompo != null) {
+					Journal.addEntry("[GRAY]You attacked " + targetEnemyCompo.getType().title() + " for " + realAmountOfDamage + damageTypeStr + " damages");
+				}
+			} else if (Mappers.enemyComponent.has(attacker)) {
+				EnemyComponent attackerEnemyCompo = Mappers.enemyComponent.get(attacker);
+				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
+				if (targetEnemyCompo != null) {
+					Journal.addEntry("[GRAY]" + attackerEnemyCompo.getType().title() + " attacked " + targetEnemyCompo.getType().title() + " for " + realAmountOfDamage + damageTypeStr + " damages");
+				} else if (Mappers.playerComponent.has(target)) {
+					Journal.addEntry("[GRAY]" + attackerEnemyCompo.getType().title() + " attacked you for " + realAmountOfDamage + damageTypeStr + " damages");
+				}
+			}
+		} else {
+			if (Mappers.playerComponent.has(target)) {
+				Journal.addEntry("[GRAY]You took " + realAmountOfDamage + damageTypeStr + " damages");
+			} else if (Mappers.enemyComponent.has(target)) {
+				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
+				Journal.addEntry("[GRAY]" + targetEnemyCompo.getType().title() + " took " + realAmountOfDamage + damageTypeStr + " damages");
+			}
+		}
 	}
 
 	
@@ -113,15 +145,15 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * Receive damages that bypasses armor.
 	 * @param amountOfDamage the amount of damages
 	 */
-	public void hitThroughArmor(int amountOfDamage, Entity attacker) {
-		this.hitThroughArmor(amountOfDamage, attacker, DamageType.NORMAL);
+	public void hitThroughArmor(int amountOfDamage, Entity target, Entity attacker) {
+		this.hitThroughArmor(amountOfDamage, target, attacker, DamageType.NORMAL);
 	}
 	
 	/**
 	 * Receive damages that bypasses armor.
 	 * @param amountOfDamage the amount of damages
 	 */
-	public void hitThroughArmor(int amountOfDamage, Entity attacker, DamageType damageType) {
+	public void hitThroughArmor(int amountOfDamage, Entity target, Entity attacker, DamageType damageType) {
 		int realAmountOfDamage = checkResistance(damageType, amountOfDamage);
 		this.latestAttackDamage = realAmountOfDamage;
 
@@ -133,6 +165,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		} else {
 			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(realAmountOfDamage));
 		}
+		
+		addJournalEntry(target, attacker, realAmountOfDamage, damageType);
 	}
 	
 	
@@ -231,8 +265,23 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.resitanceMap.put(dt, percentage);
 	}
 	
+	public void reduceResistance(DamageType dt, int percentage) {
+		Integer currentPercentage = this.resitanceMap.get(dt);
+		if (currentPercentage != null) {
+			currentPercentage = currentPercentage.intValue() - percentage;
+		}
+	}
+	
 	public void removeResistance(DamageType dt) {
 		this.resitanceMap.remove(dt);
+	}
+	
+	public int getResistance(DamageType dt) {
+		if (this.resitanceMap.containsKey(dt)) {
+			return this.resitanceMap.get(dt);
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -242,14 +291,16 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * @return the damage reduced given the resistance.
 	 */
 	private int checkResistance(DamageType damageType, int amountOfDamage) {
-		int realAmountOfDamage = amountOfDamage;
-		Integer resistancePercentage = this.resitanceMap.get(damageType);
-		if (resistancePercentage != null && resistancePercentage.intValue() > 0) {
-			realAmountOfDamage = (realAmountOfDamage * (100 - resistancePercentage.intValue())) / 100;
+		float realAmountOfDamage = amountOfDamage;
+		Integer resistancePercentageFromMap = this.resitanceMap.get(damageType);
+		if (resistancePercentageFromMap != null && resistancePercentageFromMap.intValue() > 0) {
+			int resistancePercentage = resistancePercentageFromMap.intValue() > 100 ? 100 : resistancePercentageFromMap.intValue();
+
+			realAmountOfDamage = (realAmountOfDamage * (100 - resistancePercentage)) / 100;
 			
 			this.healthChangeMap.put(HealthChangeEnum.RESISTANT, damageType.name() + " RESISTANT");
 		}
-		return realAmountOfDamage;
+		return (int) Math.ceil(realAmountOfDamage);
 	}
 	
 	

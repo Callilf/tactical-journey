@@ -95,29 +95,31 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 
 	
 	public void addStatus(Entity entity, Status status, Stage fxStage) {
-		status.onReceive(entity);
+		boolean canBeAdded = status.onReceive(entity);
 		
-		// If the same status has already been received, increase its duration
-		for (Status alreadyReceivedStatus : statuses) {
-			if (alreadyReceivedStatus.getClass().equals( status.getClass())) {
-				alreadyReceivedStatus.addUp(status);
-				// update the duration label
-				this.updateDuration(alreadyReceivedStatus, 0);
-				return;
+		if (canBeAdded) {
+			// If the same status has already been received, increase its duration
+			for (Status alreadyReceivedStatus : statuses) {
+				if (alreadyReceivedStatus.getClass().equals( status.getClass())) {
+					alreadyReceivedStatus.addUp(status);
+					// update the duration label
+					this.updateDuration(alreadyReceivedStatus, 0);
+					return;
+				}
 			}
-		}
+			
+			statuses.add(status);
+			
+			// Update the statuses display
+			if (statusTable != null) {
+				addOneStatusTable(status);
+				if (statusTable.getParent() == null) {
+					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+					Vector2 pos = gridPositionComponent.hasAbsolutePos() ?gridPositionComponent.getAbsolutePos() :  gridPositionComponent.getWorldPos();
+					statusTable.setPosition(pos.x, pos.y + GameScreen.GRID_SIZE - 20);
 		
-		statuses.add(status);
-		
-		// Update the statuses display
-		if (statusTable != null) {
-			addOneStatusTable(status);
-			if (statusTable.getParent() == null) {
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-				Vector2 pos = gridPositionComponent.hasAbsolutePos() ?gridPositionComponent.getAbsolutePos() :  gridPositionComponent.getWorldPos();
-				statusTable.setPosition(pos.x, pos.y + GameScreen.GRID_SIZE - 20);
-	
-				fxStage.addActor(statusTable);
+					fxStage.addActor(statusTable);
+				}
 			}
 		}
 	}
@@ -139,6 +141,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 	
 	public void removeStatus(Entity entity, Status status) {
+		Journal.addEntry("You no longer have the " + status.title() + " status effect");
+
 		status.onRemove(entity);
 		
 		if (statusTable != null) {

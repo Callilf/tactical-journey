@@ -193,7 +193,7 @@ public abstract class RoomGenerator {
 	}
 
 
-	private FileHandle chooseRoomPattern(Room currentRoom) {
+	protected FileHandle chooseRoomPattern(Room currentRoom) {
 		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 		
 		switch(currentRoom.type) {

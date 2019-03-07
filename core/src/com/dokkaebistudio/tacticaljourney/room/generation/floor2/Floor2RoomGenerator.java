@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -27,6 +29,17 @@ public class Floor2RoomGenerator extends RoomGenerator {
 
 	public Floor2RoomGenerator(EntityFactory ef) {
 		super(ef);
+	}
+	
+	
+	@Override
+	protected FileHandle chooseRoomPattern(Room currentRoom) {		
+		switch(currentRoom.type) {
+			default:
+				currentRoom.roomPattern = "data/rooms/room1.csv";
+		}
+
+		return Gdx.files.internal(currentRoom.roomPattern);
 	}
 	
 	
@@ -67,10 +80,13 @@ public class Floor2RoomGenerator extends RoomGenerator {
 			break;
 		case END_FLOOR_ROOM:
 			if (possibleSpawns.size() == 0) return;
-			int nextInt = random.nextInt(possibleSpawns.size());
-			Vector2 pos = possibleSpawns.get(nextInt);
+			Vector2 pos = possibleSpawns.get(0);
 			entityFactory.createExit(room, pos, true);
 			
+			pos = possibleSpawns.get(1);
+			Entity personalBelongings = entityFactory.lootableFactory.createPersonalBelongings(room, pos);
+			fillLootable(personalBelongings);
+
 			default:
 			break;
 		}

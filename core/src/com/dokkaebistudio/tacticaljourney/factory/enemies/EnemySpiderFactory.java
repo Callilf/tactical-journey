@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemySpider;
 import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyVenomSpider;
 import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
@@ -257,6 +258,7 @@ public final class EnemySpiderFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
+		healthComponent.addResistance(DamageType.POISON, 100);
 		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
 		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
@@ -274,7 +276,6 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
-		// TODO make it immune to poison
 		enemyEntity.add(statusReceiverCompo);
 		
 		room.addEnemy(enemyEntity);

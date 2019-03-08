@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.Sta
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -92,6 +93,10 @@ public class AttackManager {
 				// Inflict poison
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 				if (statusReceiverComponent != null) {
+					EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
+					if (enemyComponent != null) {
+						Journal.addEntry("[GRAY]You inflicted [PURPLE]poison[GRAY] to " + enemyComponent.getType().title());
+					}
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, attacker));
 				}
 				return;

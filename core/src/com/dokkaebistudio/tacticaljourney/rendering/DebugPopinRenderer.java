@@ -123,6 +123,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		        	mainTable.pack();
 		        	mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
 	    		}
+		    	
+				stage.addActor(mainTable);
     		}
 	    	
     	} else if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.NONE && room.getState() == RoomState.DEBUG_POPIN) {
@@ -208,7 +210,6 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsScroll.setWidget(lootableItemsTable);
 		lootableItemsScroll.pack();	
 		
-		stage.addActor(mainTable);
 	}
 
 	private Table createOneLootItem(final Entity item) {
@@ -245,7 +246,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				//add item in inventory and remove it from lootable entity
 				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type);
-				boolean pickedUp = itemComponent.pickUp(player, clonedItem, room);
+				ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);
+				boolean pickedUp = clonedItemCompo.pickUp(player, clonedItem, room);
 				if (pickedUp) {
 					//TODO
 				} else {

@@ -492,21 +492,17 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
 			Entity firstItem = lootableCompo.getItems().get(0);
 			ItemComponent itemComponent = Mappers.itemComponent.get(firstItem);
-			if (inventoryCompo.canStore(itemComponent)) {
-				boolean stored = inventoryCompo.store(firstItem, itemComponent, null);
-				if (!stored) {
-					lootableCompo.getStandByItems().add(firstItem);
-				}
+			
+			boolean pickedUp = itemComponent.pickUp(player, firstItem, room);
+			if (pickedUp) {
 				lootableCompo.getItems().remove(firstItem);
 				inventoryCompo.setInventoryActionInProgress(true);
 				room.turnManager.endPlayerTurn();
-				lootableCompo.getItems().remove(firstItem);
 				refreshPopin();
 			} else {
-				takeAllInProgess = false;
-				lootableCompo.finishTakeAll();
-				refreshPopin();
+				lootableCompo.getStandByItems().add(firstItem);
 			}
+
 		} else {
 			takeAllInProgess = false;
 			lootableCompo.finishTakeAll();

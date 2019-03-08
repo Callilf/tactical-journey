@@ -19,7 +19,7 @@ public class VenomSpiderItemPool extends EnemyItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
 				
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.WEB_SACK, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.WEB_SACK, 5));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.VENOM_GLAND, 30));
 	}
 	

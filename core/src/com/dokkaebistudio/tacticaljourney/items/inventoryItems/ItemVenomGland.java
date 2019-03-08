@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -26,6 +27,7 @@ public class ItemVenomGland extends Item {
 
 	public ItemVenomGland() {
 		super("Venom gland", Assets.venom_gland_item, false, true);
+		this.type = ItemEnum.VENOM_GLAND;
 	}
 	
 	@Override

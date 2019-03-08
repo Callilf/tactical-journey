@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -20,6 +21,7 @@ public class ItemWebSack extends Item {
 
 	public ItemWebSack() {
 		super("Small sack of web", Assets.web_sack_item, false, true);
+		this.type = ItemEnum.WEB_SACK;
 	}
 	
 	@Override

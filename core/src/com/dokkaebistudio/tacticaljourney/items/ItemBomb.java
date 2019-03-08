@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -23,6 +24,7 @@ public class ItemBomb extends Item {
 
 	public ItemBomb() {
 		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2);
+		this.type = ItemEnum.AMMO_BOMB;
 	}
 
 	@Override

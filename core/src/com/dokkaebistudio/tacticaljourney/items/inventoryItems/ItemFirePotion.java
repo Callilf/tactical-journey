@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -31,6 +32,7 @@ public class ItemFirePotion extends Item {
 
 	public ItemFirePotion() {
 		super("Fire potion", Assets.fire_potion_item, false, true);
+		this.type = ItemEnum.POTION_FIRE;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ public enum InventoryDisplayModeEnum {
 
 	NONE,
 	INVENTORY,
-	LOOT;
+	LOOT,
+	DEBUG;
 	
 }

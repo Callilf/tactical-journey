@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -20,7 +21,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public abstract class Item {
 	
-	
+	/** The type of item. */
+	public ItemEnum type;
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
@@ -124,7 +126,7 @@ public abstract class Item {
 		itemPosCompo.coord().set(thrownPosition);
 		itemPosCompo.setActive(item, room);
 	}
-
+	
 	/** Return the description of the item. */
 	public abstract String getDescription();
 	

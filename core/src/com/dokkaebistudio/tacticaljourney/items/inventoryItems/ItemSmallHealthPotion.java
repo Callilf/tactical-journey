@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
@@ -23,6 +24,7 @@ public class ItemSmallHealthPotion extends Item {
 
 	public ItemSmallHealthPotion() {
 		super("Small health potion", Assets.health_up_item, false, true);
+		this.type = ItemEnum.POTION_SMALL_HEALTH;
 	}
 	
 	@Override

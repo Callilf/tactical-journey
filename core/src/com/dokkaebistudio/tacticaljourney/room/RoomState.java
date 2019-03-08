@@ -54,7 +54,9 @@ public enum RoomState {
 	INVENTORY_POPIN,
 	LOOT_POPIN,
 	ITEM_POPIN,
-	CONTEXTUAL_ACTION_POPIN;
+	CONTEXTUAL_ACTION_POPIN,
+	
+	DEBUG_POPIN;
 	
 	
 	
@@ -135,7 +137,9 @@ public enum RoomState {
 				|| this == RoomState.INVENTORY_POPIN
 				|| this == RoomState.LOOT_POPIN
 				|| this == RoomState.ITEM_POPIN
-				|| this == RoomState.CONTEXTUAL_ACTION_POPIN;
+				|| this == RoomState.CONTEXTUAL_ACTION_POPIN
+				
+				|| this == RoomState.DEBUG_POPIN;
 	}
 	
 	public boolean isSkillChangeAllowed() {

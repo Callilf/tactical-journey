@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
@@ -27,6 +28,7 @@ public class ItemMithridatium extends Item {
 
 	public ItemMithridatium() {
 		super("Mithridatium", Assets.mithridatium, false, true);
+		this.type = ItemEnum.MITHRIDATIUM;
 	}
 	
 	@Override

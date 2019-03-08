@@ -39,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.GameOverPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
@@ -93,6 +94,8 @@ public class GameScreen extends ScreenAdapter {
 
 	public static final int BOTTOM_MENU_HEIGHT = 40;
 	public static final int LEFT_RIGHT_PADDING = 40;
+	
+	public static final boolean debugMode = true;
 	
 
 	TacticalJourney game;
@@ -202,6 +205,10 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
 		renderers.add(new MenuPopinRenderer(this, hudStage));
 		renderers.add(new GameOverPopinRenderer(this, hudStage));
+		
+		if (debugMode) {
+			renderers.add(new DebugPopinRenderer(room, inventoryStage, player));
+		}
 		
 		engine.addSystem(room);
 		engine.addSystem(new StateSystem());

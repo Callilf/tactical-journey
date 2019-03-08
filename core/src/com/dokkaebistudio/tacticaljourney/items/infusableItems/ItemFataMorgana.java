@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfVilma;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -24,6 +25,7 @@ public class ItemFataMorgana extends Item {
 
 	public ItemFataMorgana() {
 		super("Fata Morgana", Assets.fata_morgana, false, true);
+		this.type = ItemEnum.FATA_MORGANA;
 	}
 	
 	@Override

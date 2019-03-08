@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -20,6 +21,7 @@ public class ItemLightArmor extends Item {
 
 	public ItemLightArmor() {
 		super("Piece of armor", Assets.armor_up_item, false, true);
+		this.type = ItemEnum.ARMOR_LIGHT;
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPoisoner
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -24,6 +25,7 @@ public class ItemLeafyGarment extends Item {
 
 	public ItemLeafyGarment() {
 		super("Daring leafy garment", Assets.leafy_garment, false, true);
+		this.type = ItemEnum.LEAFY_GARMENT;
 	}
 	
 	@Override

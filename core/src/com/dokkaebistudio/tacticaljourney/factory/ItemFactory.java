@@ -149,7 +149,7 @@ public final class ItemFactory {
 			item = createItemWebSack(room, tilePos);
 			break;
 		case VENOM_GLAND:
-			item = createItemWebSack(room, tilePos);
+			item = createItemVenomGland(room, tilePos);
 			break;
 			
 		case TOTEM_OF_KALAMAZOO:

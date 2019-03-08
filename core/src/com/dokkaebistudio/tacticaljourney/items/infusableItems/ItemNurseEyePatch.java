@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseBlackMamba;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -27,6 +28,7 @@ public class ItemNurseEyePatch extends Item {
 
 	public ItemNurseEyePatch() {
 		super("Nurse eye patch", Assets.nurse_eye_patch, false, true);
+		this.type = ItemEnum.NURSE_EYE_PATCH;
 	}
 	
 	@Override

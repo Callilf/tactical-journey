@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
@@ -25,6 +26,7 @@ public class ItemRegenPotion extends Item {
 
 	public ItemRegenPotion() {
 		super("Regeneration potion", Assets.regen_potion_item, false, true);
+		this.type = ItemEnum.POTION_REGEN;
 	}
 	
 	@Override

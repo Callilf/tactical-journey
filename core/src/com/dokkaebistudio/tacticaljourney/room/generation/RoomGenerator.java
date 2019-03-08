@@ -310,7 +310,7 @@ public abstract class RoomGenerator {
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
 //			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
 			
-//			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 5));
+//			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 9));
 //			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
 //			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
 //			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 5));
@@ -354,9 +354,9 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(3,room, new Vector2(8, 7));
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 
-//			Entity bones = entityFactory.lootableFactory.createRemainsBones(room, new Vector2(12, 9));
+//			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
 //			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
-
+//
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
 //			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			

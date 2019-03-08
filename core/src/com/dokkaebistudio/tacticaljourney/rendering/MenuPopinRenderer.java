@@ -13,8 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class MenuPopinRenderer implements Renderer {
 	    
@@ -91,6 +94,20 @@ public class MenuPopinRenderer implements Renderer {
 			});
 			table.add(resumeBtn).padBottom(20);
 			table.row();
+			
+			if (GameScreen.debugMode) {
+				final TextButton debugBtn = new TextButton("Debug", PopinService.bigButtonStyle());			
+				debugBtn.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gamescreen.player);
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.DEBUG);
+						closePopin();
+					}
+				});
+				table.add(debugBtn).padBottom(20);
+				table.row();
+			}
 			
 			// 3 - Return to menu
 			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.bigButtonStyle());			

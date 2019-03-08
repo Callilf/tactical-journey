@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfKalama
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -24,6 +25,7 @@ public class ItemTotemOfKalamazoo extends Item {
 
 	public ItemTotemOfKalamazoo() {
 		super("Totem of Kalamazoo", Assets.totem_of_kalamazoo, false, true);
+		this.type = ItemEnum.TOTEM_OF_KALAMAZOO;
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -23,6 +24,7 @@ public class ItemMoney extends Item {
 
 	public ItemMoney() {
 		super("# gold coin[s]", Assets.money_item, true, false, 1, 5);
+		this.type = ItemEnum.MONEY;
 	}
 
 	@Override

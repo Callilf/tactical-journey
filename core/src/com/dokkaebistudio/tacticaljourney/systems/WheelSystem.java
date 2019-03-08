@@ -5,14 +5,13 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 
 /**
  * This system's role is to upadte the attack wheel, considering
@@ -25,11 +24,13 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     
     /** The current room. */
     private Room room;
+    private Entity player;
 
-    public WheelSystem(AttackWheel attackWheel, Room room) {
+    public WheelSystem(AttackWheel attackWheel, Entity player, Room room) {
 		this.priority = 6;
 
         this.wheel = attackWheel;
+        this.player = player;
         this.room = room;
     }
     
@@ -50,6 +51,9 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			RandomXS128 r = RandomSingleton.getInstance().getSeededRandom();
     			int nextInt = r.nextInt(360);
     			wheel.getArrow().setRotation(nextInt);
+    			
+    			
+    			wheel.modifySectors(player, room);
     			
 		
 		        // get all entities that affect the wheel

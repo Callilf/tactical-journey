@@ -7,12 +7,15 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 /**
  * Manage the attacks between entities, checks whether the attack lands or fails,
@@ -84,6 +87,15 @@ public class AttackManager {
 			case CRITICAL:
 				damage = attackCompo.getStrength() * 2;
 				break;
+			case POISON:
+				
+				// Inflict poison
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
+				if (statusReceiverComponent != null) {
+					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, attacker));
+				}
+				return;
+				
 			default:
 			}
 		} else {

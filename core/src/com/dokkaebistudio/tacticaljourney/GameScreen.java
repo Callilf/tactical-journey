@@ -77,6 +77,7 @@ import com.dokkaebistudio.tacticaljourney.systems.display.VisualEffectSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 
 public class GameScreen extends ScreenAdapter {
 	public static final int GAME_RUNNING = 1;
@@ -207,7 +208,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new VisualEffectSystem(room));
 		engine.addSystem(new TurnSystem(room));
-		engine.addSystem(new WheelSystem(attackWheel, room));
+		engine.addSystem(new WheelSystem(attackWheel, player, room));
 		engine.addSystem(new ExplosionSystem(room, fxStage));
 		engine.addSystem(new CreepSystem(this, room, fxStage, player));
 		engine.addSystem(new EnemySystem(room, fxStage));

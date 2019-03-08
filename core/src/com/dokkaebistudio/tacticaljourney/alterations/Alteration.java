@@ -5,8 +5,9 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 /**
  * A state alteration which can be positive or negative.
@@ -47,6 +48,9 @@ public abstract class Alteration {
 	
 	/** Called when a room has been cleared. */
 	public void onRoomCleared(Entity entity, Room room) {};
+	
+	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {};
+
 	
 	
 }

@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.dokkaebistudio.tacticaljourney.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 public class WheelRenderer implements Renderer {
 	
@@ -21,6 +21,8 @@ public class WheelRenderer implements Renderer {
 	private static final Color MISS_COLOR = Color.BLACK;
 	private static final Color CRITICAL_COLOR = Color.RED;
 	private static final Color GRAZE_COLOR = Color.GRAY;
+	private static final Color POISON_COLOR = Color.PURPLE;
+	
 	private static final int WHEEL_RADIUS = 256;
 	
 	/** The wheel. */
@@ -47,11 +49,11 @@ public class WheelRenderer implements Renderer {
 			// first normalize sector values
 			int total = 0;
 			List<Float> normalizeRanges = new LinkedList<Float>();
-			for(WheelComponent.Sector s: wheel.getSectors()){
+			for(Sector s: wheel.getSectors()){
 				total += s.range;
 	
 			}
-			for(WheelComponent.Sector s: wheel.getSectors()){
+			for(Sector s: wheel.getSectors()){
 				normalizeRanges.add(s.range * 360f / (float)total); // the sum of all ranges is 360 now
 			}
 			
@@ -78,6 +80,9 @@ public class WheelRenderer implements Renderer {
 						break;
 					case MISS:
 						shapeRenderer.setColor(MISS_COLOR);
+						break;
+					case POISON:
+						shapeRenderer.setColor(POISON_COLOR);
 						break;
 				}
 				// draw arc

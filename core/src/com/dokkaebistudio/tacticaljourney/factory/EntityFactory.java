@@ -23,7 +23,6 @@ import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -51,6 +50,7 @@ import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
 /**
  * Factory used to create presets of entities.
@@ -681,14 +681,14 @@ public final class EntityFactory {
 			playerComponent.setSkillMelee(skillEntity);
 			
 			baseWheelComponent = engine.createComponent(WheelComponent.class);
-			baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-			baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(10, WheelComponent.Hit.CRITICAL);
-			baseWheelComponent.addSector(10, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(75, WheelComponent.Hit.HIT);
-			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
-			baseWheelComponent.addSector(140, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			baseWheelComponent.addSector(75, Hit.HIT);
+			baseWheelComponent.addSector(10, Hit.MISS);
+			baseWheelComponent.addSector(10, Hit.CRITICAL);
+			baseWheelComponent.addSector(10, Hit.MISS);
+			baseWheelComponent.addSector(75, Hit.HIT);
+			baseWheelComponent.addSector(20, Hit.GRAZE);
+			baseWheelComponent.addSector(140, Hit.MISS);
+			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 
 			break;
@@ -696,20 +696,20 @@ public final class EntityFactory {
 			playerComponent.setSkillRange(skillEntity);
 			
 			baseWheelComponent = engine.createComponent(WheelComponent.class);
-			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
-			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
-			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			baseWheelComponent.addSector(45, Hit.HIT);
+			baseWheelComponent.addSector(5, Hit.CRITICAL);
+			baseWheelComponent.addSector(50, Hit.MISS);
+			baseWheelComponent.addSector(20, Hit.GRAZE);
 			
-			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
-			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
-			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			baseWheelComponent.addSector(45, Hit.HIT);
+			baseWheelComponent.addSector(5, Hit.CRITICAL);
+			baseWheelComponent.addSector(50, Hit.MISS);
+			baseWheelComponent.addSector(20, Hit.GRAZE);
 			
-			baseWheelComponent.addSector(45, WheelComponent.Hit.HIT);
-			baseWheelComponent.addSector(5, WheelComponent.Hit.CRITICAL);
-			baseWheelComponent.addSector(50, WheelComponent.Hit.MISS);
-			baseWheelComponent.addSector(20, WheelComponent.Hit.GRAZE);
+			baseWheelComponent.addSector(45, Hit.HIT);
+			baseWheelComponent.addSector(5, Hit.CRITICAL);
+			baseWheelComponent.addSector(50, Hit.MISS);
+			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 
 			break;

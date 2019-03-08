@@ -1,12 +1,17 @@
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.wheel;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class AttackWheel {
 
@@ -16,8 +21,8 @@ public class AttackWheel {
 	/** The offset of the wheel. Changes anytime the wheel is displayed. */
 	private int rotationOffset;
 	
-//	/** The list of sectors that compose the wheel. */
-//	private List<WheelComponent.Sector> sectors;
+	/** The list of sectors that compose the wheel. */
+	private List<Sector> sectors = new ArrayList<>();
 	
 //	/** The 360 arcs that compose the wheel. */
 //	private List<Sprite> arcs;
@@ -48,6 +53,18 @@ public class AttackWheel {
 //		}
 	}
 	
+	
+	public void modifySectors(Entity player, Room room) {
+		this.sectors.clear();
+		this.sectors.addAll(wheelComponent.sectors);
+
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+		if (alterationReceiverComponent != null) {
+			alterationReceiverComponent.onModifyWheelSectors(this, player, room);
+		}
+	}
+	
+	
 	/**
 	 * Retrieve the sector targeted by the needle.
 	 * @return the sector targeted by the needle.
@@ -65,7 +82,7 @@ public class AttackWheel {
 		
     	Sector pointedSector = null;
     	int totalRange = 0;
-    	for (Sector s : this.wheelComponent.sectors) {
+    	for (Sector s : this.sectors) {
     		if (totalRange <= rotation && totalRange + s.range > rotation) {
     			pointedSector = s;
     			break;
@@ -92,8 +109,8 @@ public class AttackWheel {
 	}
 
 
-	public List<WheelComponent.Sector> getSectors() {
-		return this.wheelComponent.sectors;
+	public List<Sector> getSectors() {
+		return this.sectors;
 	}
 
 

@@ -23,11 +23,12 @@ import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent.Sector;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 /**
  * Marker to indicate that this entity can receive blessings and curses.
@@ -99,6 +100,16 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		}
 		for (Curse c : curses) {
 			c.onRoomCleared(entity, room);
+		}
+	}
+	
+	
+	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onModifyWheelSectors(wheel, entity, room);
+		}
+		for (Curse c : curses) {
+			c.onModifyWheelSectors(wheel, entity, room);
 		}
 	}
 	

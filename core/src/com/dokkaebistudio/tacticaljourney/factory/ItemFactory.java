@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemLeafyGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
@@ -165,6 +166,10 @@ public final class ItemFactory {
 
 		case NURSE_EYE_PATCH:
 			item = createItemNurseEyePatch(room, tilePos);
+			break;
+
+		case LEAFY_GARMENT:
+			item = createItemLeafyGarment(room, tilePos);
 			break;
 			
 			default:
@@ -387,7 +392,16 @@ public final class ItemFactory {
 		return item;
 	}
 	
-	
+	/**
+	 * Create the nurse eye patch.
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createItemLeafyGarment(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.leafy_garment, new ItemLeafyGarment());
+		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
+		return item;
+	}
 	
 	// TODO change
 	

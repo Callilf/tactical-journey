@@ -42,6 +42,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 		case COMMON_ENEMY_ROOM :
 		case SHOP_ROOM:
 		case STATUE_ROOM:
+		case ITEM_ROOM:
 			super.generateRoomContent(room, generatedRoom);
 			return;
 			

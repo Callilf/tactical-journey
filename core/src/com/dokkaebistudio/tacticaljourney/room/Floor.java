@@ -3,6 +3,7 @@
  */
 package com.dokkaebistudio.tacticaljourney.room;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -101,12 +102,29 @@ public class Floor {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
 		} else if (newRoom.getEastNeighbor() == oldRoom) {
 			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
+		} else {
+			// TP case
+			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
 		}
 	
 		MapRenderer.requireRefresh();
 	}
 
 	
+	/**
+	 * Return all the rooms of the given type.
+	 * @param type the type
+	 * @return a list of room with the given type
+	 */
+	public List<Room> getRooms(RoomType type) {
+		List<Room> result = new ArrayList<>();
+		for (Room r : rooms) {
+			if (r.type == type) {
+				result.add(r);
+			}
+		}
+		return result;
+	}
 	
 	// Getters & setters 
 	

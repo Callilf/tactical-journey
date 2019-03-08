@@ -40,7 +40,7 @@ public class MapRenderer implements Renderer {
 	float offsetY = GameScreen.SCREEN_H - GameScreen.SCREEN_H/5;
 	
 	// TEST to debug floor layout
-	private boolean debug = false;
+	public static boolean FULL_MAP = false;
 	
 	private Stage stage;
 	
@@ -271,7 +271,7 @@ public class MapRenderer implements Renderer {
 				Image roomImage = (Image) children.get(0);
 				Image playerImage = (Image) children.get(1);
 				
-				if (debug) {
+				if (FULL_MAP) {
 					room.setVisited(true);
 				}
 				

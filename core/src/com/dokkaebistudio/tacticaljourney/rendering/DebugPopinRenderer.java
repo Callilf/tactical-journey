@@ -1,5 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -378,6 +381,18 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		//################################
 		// Add all options here
+		
+		// Mapping
+		TextButton fullMap = new TextButton("Show full map", PopinService.bigButtonStyle());
+		fullMap.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				MapRenderer.FULL_MAP = true;
+				MapRenderer.requireRefresh();
+			}
+		});
+		optionsTable.add(fullMap).padBottom(20);
+		optionsTable.row();
 		
 		// HP
 		Label hpLabel = new Label("Health", PopinService.hudStyle());
@@ -776,6 +791,88 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		explosionResistTable.add(explosionResistUp);
 		optionsTable.add(explosionResistTable).padBottom(20);
 		optionsTable.row();
+		
+		
+		// TP
+		Label tpLabel  = new Label("Teleport", PopinService.hudStyle());
+		optionsTable.add(tpLabel).padBottom(20);
+		optionsTable.row();
+		
+		TextButton nextFloor = new TextButton("Go to next floor", PopinService.bigButtonStyle());
+		nextFloor.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				room.floor.getGameScreen().enterNextFloor();
+			}
+		});
+		optionsTable.add(nextFloor).padBottom(20);
+		optionsTable.row();
+
+		TextButton itemRoom = new TextButton("Go to item room", PopinService.bigButtonStyle());
+		itemRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.ITEM_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(itemRoom).padBottom(20);
+		optionsTable.row();
+
+		TextButton shopRoom = new TextButton("Go to shop", PopinService.bigButtonStyle());
+		shopRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.SHOP_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(shopRoom).padBottom(20);
+		optionsTable.row();
+
+		TextButton statueRoom = new TextButton("Go to statue", PopinService.bigButtonStyle());
+		statueRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.STATUE_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(statueRoom).padBottom(20);
+		optionsTable.row();
+
+		TextButton keyRoom = new TextButton("Go to key", PopinService.bigButtonStyle());
+		keyRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.KEY_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(keyRoom).padBottom(20);
+		optionsTable.row();
+
+		TextButton exitRoom = new TextButton("Go to exit", PopinService.bigButtonStyle());
+		exitRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.END_FLOOR_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(exitRoom).padBottom(20);
+		optionsTable.row();
+
 		
 		
 		optionsTable.pack();

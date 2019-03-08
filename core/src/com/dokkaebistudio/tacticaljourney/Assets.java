@@ -237,11 +237,16 @@ public class Assets {
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
 	
+	// Personal items
 	public static AtlasRegion totem_of_kalamazoo;
 	public static AtlasRegion fata_morgana;
 	public static AtlasRegion mithridatium;
 	public static AtlasRegion nurse_eye_patch;
 	public static AtlasRegion leafy_garment;
+	
+	
+	// Boss items
+	public static AtlasRegion pangolin_scale;
 
 	
 	
@@ -265,10 +270,12 @@ public class Assets {
 	public static AtlasRegion blessing_mithridatism;
 	public static AtlasRegion blessing_black_mamba;
 	public static AtlasRegion blessing_poisoner;
+	public static AtlasRegion blessing_pangolin;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
 	public static AtlasRegion curse_black_mamba;
+	public static AtlasRegion curse_pangolin_mother;
 
 	
 
@@ -480,11 +487,15 @@ public class Assets {
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
 		
+		// Personal items
 		totem_of_kalamazoo = Assets.getTexture("item-infusable-totem-of-kalamazoo");
 		fata_morgana = Assets.getTexture("item-infusable-fata-morgana");
 		mithridatium = Assets.getTexture("item-infusable-mithridatium");
 		nurse_eye_patch = Assets.getTexture("item-infusable-eye-patch");
 		leafy_garment = Assets.getTexture("item-infusable-leafy-bra");
+		
+		// Boss items
+		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
 		
 		
 		arrow = Assets.getTexture("arrow");
@@ -503,10 +514,12 @@ public class Assets {
 		blessing_mithridatism = Assets.getTexture("blessing-mithridatism");
 		blessing_black_mamba = Assets.getTexture("blessing-black-mamba");
 		blessing_poisoner = Assets.getTexture("blessing-poisoner");
+		blessing_pangolin = Assets.getTexture("blessing-pangolin");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
 		curse_black_mamba = Assets.getTexture("curse-black-mamba");
+		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 
 	}
 	

@@ -37,7 +37,7 @@ public class Floor1RoomGenerator extends RoomGenerator {
 	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
 		if (spawnPositions.size() == 0) return;
 
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 7));
+		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 6));
 		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
 		
 		Iterator<PoolableVector2> iterator = spawnPositions.iterator();

@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemLeafyGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
@@ -170,6 +171,10 @@ public final class ItemFactory {
 
 		case LEAFY_GARMENT:
 			item = createItemLeafyGarment(room, tilePos);
+			break;
+			
+		case PANGOLIN_SCALE:
+			item = createItemPangolinScale(room, tilePos);
 			break;
 			
 			default:
@@ -341,11 +346,10 @@ public final class ItemFactory {
 	}
 	
 	
-	/**
-	 * Create a totem of kalamazoo.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+
+	//*********************
+	// Infusables 
+	
 	public Entity createItemTotemOfKalamazoo(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.totem_of_kalamazoo, new ItemTotemOfKalamazoo());
 		item.flags = EntityFlagEnum.ITEM_TOTEM_OF_KALAMAZOO.getFlag();
@@ -358,22 +362,14 @@ public final class ItemFactory {
 		return item;
 	}
 	
-	/**
-	 * Create the fata morgana.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+
 	public Entity createItemFataMorgana(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.fata_morgana, new ItemFataMorgana());
 		item.flags = EntityFlagEnum.ITEM_FATA_MORGANA.getFlag();
 		return item;
 	}
 	
-	/**
-	 * Create the mithridatium.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+
 	public Entity createItemMithridatium(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.mithridatium, new ItemMithridatium());
 		item.flags = EntityFlagEnum.ITEM_MITHRIDATIUM.getFlag();
@@ -381,27 +377,31 @@ public final class ItemFactory {
 	}
 	
 	
-	/**
-	 * Create the nurse eye patch.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+
 	public Entity createItemNurseEyePatch(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.nurse_eye_patch, new ItemNurseEyePatch());
 		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
 		return item;
 	}
 	
-	/**
-	 * Create the nurse eye patch.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
+
 	public Entity createItemLeafyGarment(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.leafy_garment, new ItemLeafyGarment());
-		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
+		item.flags = EntityFlagEnum.ITEM_LEAFY_GARMENT.getFlag();
 		return item;
 	}
+	
+
+	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale());
+		item.flags = EntityFlagEnum.ITEM_PANGOLIN_SCALE.getFlag();
+		return item;
+	}
+	
+	
+	
+	
+	
 	
 	// TODO change
 	

@@ -33,7 +33,12 @@ public enum ItemEnum {
 	FATA_MORGANA(2),
 	MITHRIDATIUM(2),
 	NURSE_EYE_PATCH(2),
-	LEAFY_GARMENT(2);
+	LEAFY_GARMENT(2),
+	
+	
+	
+	// Boss items
+	PANGOLIN_SCALE(2);
 	
 	
 	

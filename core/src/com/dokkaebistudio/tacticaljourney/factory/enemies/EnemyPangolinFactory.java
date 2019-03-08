@@ -31,7 +31,8 @@ import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
@@ -127,10 +128,10 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new StingerItemPool());
+		lootRewardCompo.setItemPool(new PangolinItemPool());
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 30 );
-		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.RARE, 10);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		
@@ -211,10 +212,10 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new StingerItemPool());
+		lootRewardCompo.setItemPool(new PangolinMotherItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
-		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.COMMON, 100 );
+		dropRate.add(ItemPoolRarity.RARE, 0);
 		lootRewardCompo.setDropRate(dropRate);
 		enemyEntity.add(lootRewardCompo);
 		

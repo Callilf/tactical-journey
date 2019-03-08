@@ -217,7 +217,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	 * @param amount the amount to add.
 	 */
 	public void increaseMaxArmor(int amount) {
-		this.setMaxArmor(this.maxHp + amount);
+		this.setMaxArmor(this.maxArmor + amount);
 	}
 	
 	/**
@@ -262,13 +262,18 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	// Resistance related methods
 	
 	public void addResistance(DamageType dt, int percentage) {
-		this.resitanceMap.put(dt, percentage);
+		Integer currentPercentage = this.resitanceMap.get(dt);
+		if (currentPercentage != null) {
+			this.resitanceMap.put(dt, currentPercentage.intValue() + percentage);
+		} else {
+			this.resitanceMap.put(dt, percentage);
+		}
 	}
 	
 	public void reduceResistance(DamageType dt, int percentage) {
 		Integer currentPercentage = this.resitanceMap.get(dt);
 		if (currentPercentage != null) {
-			currentPercentage = currentPercentage.intValue() - percentage;
+			this.resitanceMap.put(dt, currentPercentage.intValue() - percentage);
 		}
 	}
 	

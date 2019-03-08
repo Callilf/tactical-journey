@@ -19,8 +19,13 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -73,6 +78,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
     private Label itemTitle;
     private Label itemDesc;
     
+    private Table debugTable;
+    
 
     
     /**
@@ -119,6 +126,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 	//	    		mainTable.setDebug(true);
 	
 		    		createLootTable();
+		    		createDebugTable();
 		    		
 		        	mainTable.pack();
 		        	mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
@@ -163,7 +171,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootTable.align(Align.top);
 
 		// 1 - Title
-		lootTableTitle = new Label("DEBUG MODE", PopinService.hudStyle());
+		lootTableTitle = new Label("Get item", PopinService.hudStyle());
 		lootTable.add(lootTableTitle).uniformX().pad(40, 0, 40, 0);
 		lootTable.row();
 		
@@ -334,6 +342,446 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 	
 	private void hideSelectedItemPopin() {
 		selectedItemPopin.remove();
+	}
+	
+	
+	//***************************
+	// Debug menu
+	
+	private void createDebugTable() {		
+		debugTable = new Table();
+//		    		table.setDebug(true, true);
+		debugTable.setTouchable(Touchable.enabled);
+		debugTable.addListener(new ClickListener() {});
+		
+		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_background);
+		debugTable.setBackground(lootBackground);
+		debugTable.align(Align.top);
+
+		// 1 - Title
+		Label debugTableTitle = new Label("Debug Menu", PopinService.hudStyle());
+		debugTable.add(debugTableTitle).uniformX().pad(40, 0, 40, 0);
+		debugTable.row();
+		
+		// The table that will contain all loot items
+		Table optionsTable = new Table();
+		optionsTable.top();
+		optionsTable.pack();
+		
+		//The scroll pane for the loot items
+		ScrollPane optionsScroll = new ScrollPane(optionsTable);
+		debugTable.add(optionsScroll).fill().expand().maxHeight(650);
+		debugTable.row();
+
+		debugTable.pack();
+		mainTable.add(debugTable);
+		
+		//################################
+		// Add all options here
+		
+		// HP
+		Label hpLabel = new Label("Health", PopinService.hudStyle());
+		optionsTable.add(hpLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table healthTable = new Table();
+		TextButton healthDown = new TextButton("HP -5", PopinService.bigButtonStyle());
+		healthDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.setHp(healthComponent.getHp() - 5);
+			}
+		});
+		healthTable.add(healthDown).padRight(20);
+		TextButton healthUp = new TextButton("HP +5", PopinService.bigButtonStyle());
+		healthUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.setHp(healthComponent.getHp() + 5);
+			}
+		});
+		healthTable.add(healthUp);
+		optionsTable.add(healthTable).padBottom(20);
+		optionsTable.row();
+		
+		// HP MAX
+		Table maxHealthTable = new Table();
+		TextButton maxHealthDown = new TextButton("HP Max -5", PopinService.bigButtonStyle());
+		maxHealthDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.increaseMaxHealth(-5);
+			}
+		});
+		maxHealthTable.add(maxHealthDown).padRight(20);
+		TextButton maxHealthUp = new TextButton("HP Max +5", PopinService.bigButtonStyle());
+		maxHealthUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.increaseMaxHealth(5);
+			}
+		});
+		maxHealthTable.add(maxHealthUp);
+		optionsTable.add(maxHealthTable).padBottom(20);
+		optionsTable.row();
+
+		// ARMOR
+		Label armorLabel = new Label("Armor", PopinService.hudStyle());
+		optionsTable.add(armorLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table armorTable = new Table();
+		TextButton armorDown = new TextButton("Armor -5", PopinService.bigButtonStyle());
+		armorDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.setArmor(healthComponent.getArmor() - 5);
+			}
+		});
+		armorTable.add(armorDown).padRight(20);
+		TextButton armorUp = new TextButton("Armor +5", PopinService.bigButtonStyle());
+		armorUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.setArmor(healthComponent.getArmor() + 5);
+			}
+		});
+		armorTable.add(armorUp);
+		optionsTable.add(armorTable).padBottom(20);
+		optionsTable.row();
+		
+		// ARMOR MAX
+		Table maxArmorTable = new Table();
+		TextButton maxArmorDown = new TextButton("Armor Max -5", PopinService.bigButtonStyle());
+		maxArmorDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.increaseMaxArmor(-5);
+			}
+		});
+		maxArmorTable.add(maxArmorDown).padRight(20);
+		TextButton maxArmorUp = new TextButton("Armor Max +5", PopinService.bigButtonStyle());
+		maxArmorUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.increaseMaxArmor(5);
+			}
+		});
+		maxArmorTable.add(maxArmorUp);
+		optionsTable.add(maxArmorTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		// EXPERIENCE
+		Label xpLabel = new Label("Xp", PopinService.hudStyle());
+		optionsTable.add(xpLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table xpTable = new Table();
+		TextButton xpUp = new TextButton("XP +10", PopinService.bigButtonStyle());
+		xpUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				ExperienceComponent xpCompo = Mappers.experienceComponent.get(player);
+				xpCompo.earnXp(10);
+			}
+		});
+		xpTable.add(xpUp).padRight(20);
+		TextButton xpUpUp = new TextButton("XP +50", PopinService.bigButtonStyle());
+		xpUpUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				ExperienceComponent xpCompo = Mappers.experienceComponent.get(player);
+				xpCompo.earnXp(50);
+			}
+		});
+		xpTable.add(xpUpUp);
+		optionsTable.add(xpTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		// STATS
+		Label statsLabel = new Label("Stats", PopinService.hudStyle());
+		optionsTable.add(statsLabel).padBottom(20);
+		optionsTable.row();
+
+		Table strengthTable = new Table();
+		TextButton strengthDown = new TextButton("Strength -1", PopinService.bigButtonStyle());
+		strengthDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				attackComponent.setStrength(attackComponent.getStrength() - 1);
+			}
+		});
+		strengthTable.add(strengthDown).padRight(20);
+		TextButton strengthUp = new TextButton("Strength +1", PopinService.bigButtonStyle());
+		strengthUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				attackComponent.setStrength(attackComponent.getStrength() + 1);
+			}
+		});
+		strengthTable.add(strengthUp);
+		optionsTable.add(strengthTable).padBottom(20);
+		optionsTable.row();
+		
+		Table moveTable = new Table();
+		TextButton moveDown = new TextButton("Move -1", PopinService.bigButtonStyle());
+		moveDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				MoveComponent moveComponent = Mappers.moveComponent.get(player);
+				moveComponent.moveSpeed --;
+			}
+		});
+		moveTable.add(moveDown).padRight(20);
+		TextButton moveUp = new TextButton("Move +1", PopinService.bigButtonStyle());
+		moveUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				MoveComponent moveComponent = Mappers.moveComponent.get(player);
+				moveComponent.moveSpeed ++;
+			}
+		});
+		moveTable.add(moveUp);
+		optionsTable.add(moveTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		// BOW
+		Label bowLabel = new Label("Bow", PopinService.hudStyle());
+		optionsTable.add(bowLabel).padBottom(20);
+		optionsTable.row();
+
+		Table bowRangeTable = new Table();
+		TextButton bowRangeDown = new TextButton("Bow range -1", PopinService.bigButtonStyle());
+		bowRangeDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
+			}
+		});
+		bowRangeTable.add(bowRangeDown).padRight(20);
+		TextButton bowRangeUp = new TextButton("Bow range +1", PopinService.bigButtonStyle());
+		bowRangeUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
+			}
+		});
+		bowRangeTable.add(bowRangeUp);
+		optionsTable.add(bowRangeTable).padBottom(20);
+		optionsTable.row();
+		
+		Table bowDamageTable = new Table();
+		TextButton bowDamageDown = new TextButton("Bow damage -1", PopinService.bigButtonStyle());
+		bowDamageDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.increaseStrength(- 1);
+			}
+		});
+		bowDamageTable.add(bowDamageDown).padRight(20);
+		TextButton bowDamageUp = new TextButton("Bow damage +1", PopinService.bigButtonStyle());
+		bowDamageUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.increaseStrength(1);
+			}
+		});
+		bowDamageTable.add(bowDamageUp);
+		optionsTable.add(bowDamageTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		
+		// BOMBS
+		Label bombLabel = new Label("Bombs", PopinService.hudStyle());
+		optionsTable.add(bombLabel).padBottom(20);
+		optionsTable.row();
+
+		Table bombThrowRangeTable = new Table();
+		TextButton bombThrowRangeDown = new TextButton("Bomb throw rg -1", PopinService.bigButtonStyle());
+		bombThrowRangeDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
+			}
+		});
+		bombThrowRangeTable.add(bombThrowRangeDown).padRight(20);
+		TextButton bombThrowRangeUp = new TextButton("Bomb throw rg +1", PopinService.bigButtonStyle());
+		bombThrowRangeUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
+			}
+		});
+		bombThrowRangeTable.add(bombThrowRangeUp);
+		optionsTable.add(bombThrowRangeTable).padBottom(20);
+		optionsTable.row();
+		
+		Table bombDamageTable = new Table();
+		TextButton bombDamageDown = new TextButton("Bomb damage -1", PopinService.bigButtonStyle());
+		bombDamageDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.increaseStrength(- 1);
+			}
+		});
+		bombDamageTable.add(bombDamageDown).padRight(20);
+		TextButton bombDamageUp = new TextButton("Bomb damage +1", PopinService.bigButtonStyle());
+		bombDamageUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.increaseStrength(1);
+			}
+		});
+		bombDamageTable.add(bombDamageUp);
+		optionsTable.add(bombDamageTable).padBottom(20);
+		optionsTable.row();
+		
+		Table bombFuseTable = new Table();
+		TextButton bombFuseDown = new TextButton("Bomb fuse -1", PopinService.bigButtonStyle());
+		bombFuseDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setBombTurnsToExplode(attackComponent.getBombTurnsToExplode() - 1);
+			}
+		});
+		bombFuseTable.add(bombFuseDown).padRight(20);
+		TextButton bombFuseUp = new TextButton("Bomb fuse +1", PopinService.bigButtonStyle());
+		bombFuseUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setBombTurnsToExplode(attackComponent.getBombTurnsToExplode() + 1);
+			}
+		});
+		bombFuseTable.add(bombFuseUp);
+		optionsTable.add(bombFuseTable).padBottom(20);
+		optionsTable.row();
+		
+		Table bombRadiusTable = new Table();
+		TextButton bombRadiusDown = new TextButton("Bomb radius -1", PopinService.bigButtonStyle());
+		bombRadiusDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setBombRadius(attackComponent.getBombRadius() - 1);
+			}
+		});
+		bombRadiusTable.add(bombRadiusDown).padRight(20);
+		TextButton bombRadiusUp = new TextButton("Bomb radius +1", PopinService.bigButtonStyle());
+		bombRadiusUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				attackComponent.setBombRadius(attackComponent.getBombRadius() + 1);
+			}
+		});
+		bombRadiusTable.add(bombRadiusUp);
+		optionsTable.add(bombRadiusTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		// RESISTANCES
+		Label resistancesLabel = new Label("Resistances", PopinService.hudStyle());
+		optionsTable.add(resistancesLabel).padBottom(20);
+		optionsTable.row();
+		
+		// Poison
+		Table poisonResistTable = new Table();
+		TextButton poisonResistDown = new TextButton("Poison resist -50", PopinService.bigButtonStyle());
+		poisonResistDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.reduceResistance(DamageType.POISON, 50);
+			}
+		});
+		poisonResistTable.add(poisonResistDown).padRight(20);
+		TextButton poisonResistUp = new TextButton("Poison resist +50", PopinService.bigButtonStyle());
+		poisonResistUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.addResistance(DamageType.POISON, 50);
+			}
+		});
+		poisonResistTable.add(poisonResistUp);
+		optionsTable.add(poisonResistTable).padBottom(20);
+		optionsTable.row();
+		
+		// Fire
+		Table fireResistTable = new Table();
+		TextButton fireResistDown = new TextButton("Fire resist -10", PopinService.bigButtonStyle());
+		fireResistDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.reduceResistance(DamageType.FIRE, 10);
+			}
+		});
+		fireResistTable.add(fireResistDown).padRight(20);
+		TextButton fireResistUp = new TextButton("Fire resist +10", PopinService.bigButtonStyle());
+		fireResistUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.addResistance(DamageType.FIRE, 10);
+			}
+		});
+		fireResistTable.add(fireResistUp);
+		optionsTable.add(fireResistTable).padBottom(20);
+		optionsTable.row();
+		
+		// Explosion
+		Table explosionResistTable = new Table();
+		TextButton explosionResistDown = new TextButton("Expl. resist -10", PopinService.bigButtonStyle());
+		explosionResistDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.reduceResistance(DamageType.EXPLOSION, 10);
+			}
+		});
+		explosionResistTable.add(explosionResistDown).padRight(20);
+		TextButton explosionResistUp = new TextButton("Expl. resist +10", PopinService.bigButtonStyle());
+		explosionResistUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				healthComponent.addResistance(DamageType.EXPLOSION, 10);
+			}
+		});
+		explosionResistTable.add(explosionResistUp);
+		optionsTable.add(explosionResistTable).padBottom(20);
+		optionsTable.row();
+		
+		
+		optionsTable.pack();
+		optionsScroll.setWidget(optionsTable);
+		optionsScroll.pack();	
+		
 	}
 
 	

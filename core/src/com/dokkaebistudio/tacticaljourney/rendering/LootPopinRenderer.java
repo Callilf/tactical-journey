@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -29,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -71,6 +73,10 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     /** Whether we are in the process of "take all" items. */
     private boolean takeAllInProgess = false;
     
+    /** Whether the item popin is displayed. */
+    private boolean itemPopinDisplayed = false;
+
+    
     
     //*****************************
     // ACTORS
@@ -96,6 +102,11 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     private List<TextButton> lootTakeBtns = new ArrayList<>();
     private TextButton takeAllBtn;
     private ChangeListener takeAllListener;
+    
+    /** The selected item popin. */
+    private Table selectedItemPopin;
+    private Label itemTitle;
+    private Label itemDesc;
     
 
     
@@ -255,10 +266,22 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		oneItem.left();
 		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
 		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(0, 20, 0, 20);
+		image.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				displaySelectedItemPopin( item);
+			}
+		});
 		
 		Label itemName = new Label(itemComponent.getItemLabel(), PopinService.hudStyle());
 		itemName.setWrap(true);
-		oneItem.add(itemName).width(Value.percentWidth(0.50f, oneItem)).padRight(20);
+		oneItem.add(itemName).fillY().width(Value.percentWidth(0.50f, oneItem)).padRight(20);
+		itemName.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				displaySelectedItemPopin( item);
+			}
+		});
 		
 		TextButton takeBtn = new TextButton("Take", PopinService.smallButtonStyle());
 		takeBtn.addListener(new ChangeListener() {
@@ -479,6 +502,82 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		}
 	}
 	
+	
+	
+	//*****************************
+	// Item popin
+	
+	/**
+	 * Display the popin of the selected item with it's title, description and possible actions.
+	 * @param item the item selected
+	 * @param slot the slot on which the item was
+	 */
+	private void displaySelectedItemPopin(final Entity item) {
+		if (selectedItemPopin == null) {
+			selectedItemPopin = new Table();
+//			selectedItemPopin.setDebug(true);
+
+			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
+			selectedItemPopin.setTouchable(Touchable.enabled);
+			selectedItemPopin.addListener(new ClickListener() {});
+			
+			// Place the popin and add the background texture
+			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
+			selectedItemPopin.setBackground(textureRegionDrawable);
+			
+			selectedItemPopin.align(Align.top);
+			
+			// 1 - Title
+			itemTitle = new Label("Title", PopinService.hudStyle());
+			selectedItemPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
+			selectedItemPopin.row().align(Align.center);
+			
+			// 2 - Description
+			itemDesc = new Label("Description", PopinService.hudStyle());
+			itemDesc.setWrap(true);
+			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.row();
+			
+			// 3 - Action buttons
+			Table buttonTable = new Table();
+			
+			// 3.1 - Close button
+			final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+			// continueButton listener
+			closeBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					hideSelectedItemPopin();
+				}
+			});
+			buttonTable.add(closeBtn).pad(0, 20,0,20);
+			
+			selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);
+			
+		}
+		
+		
+		final ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		// Update the content
+		itemTitle.setText(itemComponent.getItemLabel());
+		itemDesc.setText(itemComponent.getItemDescription());
+		
+		// Place the popin properly
+		selectedItemPopin.pack();
+		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2 - selectedItemPopin.getWidth()/2, GameScreen.SCREEN_H/2 - selectedItemPopin.getHeight()/2);
+	
+		itemPopinDisplayed = true;
+		this.stage.addActor(selectedItemPopin);
+	}
+	
+	
+	
+	private void hideSelectedItemPopin() {
+		selectedItemPopin.remove();
+		itemPopinDisplayed = false;
+	}
 
 	
 	//*****************************

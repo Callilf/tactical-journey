@@ -183,12 +183,12 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			case DROP:
 				Journal.addEntry("Dropped a " + itemComponent.getItemLabel());
 
-				itemComponent.drop(player, currentItem, room);
-
 				// Drop animation
 				Action finishDropAction = new Action(){
 					  @Override
 					  public boolean act(float delta){
+							itemComponent.drop(player, currentItem, room);
+
 //							playerIventoryCompo.remove(currentItem);
 							room.getAddedItems().add(currentItem);
 							room.turnManager.endPlayerTurn();
@@ -292,11 +292,15 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 	 * Check whether there is an item at the location of the player to display the item popin.
 	 */
 	private void checkItemPresenceToDisplayPopin() {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		if (playerComponent.isActionDoneAtThisFrame()) return;
+		
 		// Item popin
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		List<Entity> itemEntityOnTile = TileUtil.getItemEntityOnTile(gridPositionComponent.coord(), room);
 		if (!itemEntityOnTile.isEmpty()) {
 			for (Entity item : itemEntityOnTile) {
+				playerComponent.setActionDoneAtThisFrame(true);
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 
 				if (room.hasEnemies()) {

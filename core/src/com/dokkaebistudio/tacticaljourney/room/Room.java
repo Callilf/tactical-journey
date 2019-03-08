@@ -250,6 +250,8 @@ public class Room extends EntitySystem {
 		
 		// Update the room state
 		updateState();
+		
+		Mappers.playerComponent.get(this.floor.getGameScreen().player).setActionDoneAtThisFrame(false);
 	}
 	
 	

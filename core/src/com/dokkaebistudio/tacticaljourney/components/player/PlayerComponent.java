@@ -23,7 +23,7 @@ public class PlayerComponent implements Component {
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
-
+	private boolean actionDoneAtThisFrame = false;
 	
 
 	
@@ -118,5 +118,13 @@ public class PlayerComponent implements Component {
 
 	public void setActionEntity(Entity actionEntity) {
 		this.actionEntity = actionEntity;
+	}
+
+	public boolean isActionDoneAtThisFrame() {
+		return actionDoneAtThisFrame;
+	}
+
+	public void setActionDoneAtThisFrame(boolean actionDoneAtThisFrame) {
+		this.actionDoneAtThisFrame = actionDoneAtThisFrame;
 	}
 }

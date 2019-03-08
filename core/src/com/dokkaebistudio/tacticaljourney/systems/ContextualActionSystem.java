@@ -102,10 +102,14 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * display the "Would you like to loot?" popin.
 	 */
 	private void checkForLootablesToDisplayPopin() {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		if (playerComponent.isActionDoneAtThisFrame()) return;
+		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Entity lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
 		if (lootable != null) {
-			
+			playerComponent.setActionDoneAtThisFrame(true);
+
 			if (room.hasEnemies()) {
 				playerCompo.requestAction(PlayerActionEnum.LOOT, lootable);
 			} else {
@@ -122,9 +126,13 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * display the "Would you like to leave?" popin.
 	 */
 	private void checkForExitToDisplayPopin() {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		if (playerComponent.isActionDoneAtThisFrame()) return;
+
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Entity exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
 		if (exit != null) {
+			playerComponent.setActionDoneAtThisFrame(true);
 			playerCompo.requestAction(PlayerActionEnum.EXIT, exit);
 		}
 	}

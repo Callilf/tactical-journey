@@ -30,7 +30,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public boolean freeMove;
 	
 	/** Temporary modifier. */
-	private int moveModifier;
+	private boolean frozen;
 	
 	
 	
@@ -214,7 +214,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	}
 
 	public int getMoveSpeed() {
-		return Math.max(0, moveSpeed + moveModifier);
+		if (frozen) return 0;
+		return moveSpeed;
 	}
 
 	public void setMoveSpeed(int moveSpeed) {
@@ -222,6 +223,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	}
 
 	public int getMoveRemaining() {
+		if (frozen) return 0;
 		return moveRemaining;
 	}
 
@@ -229,13 +231,15 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		this.moveRemaining = moveRemaining;
 	}
 
-	public int getMoveModifier() {
-		return moveModifier;
+	public boolean isFrozen() {
+		return frozen;
 	}
 
-	public void setMoveModifier(int moveModifier) {
-		this.moveModifier = moveModifier;
+	public void setFrozen(boolean frozen) {
+		this.frozen = frozen;
 	}
+
+	
 	
 	
 }

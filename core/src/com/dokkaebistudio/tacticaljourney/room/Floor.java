@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
@@ -89,6 +91,16 @@ public class Floor {
 		Room oldRoom = this.getActiveRoom();
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
+		
+		//TODO maybe move this
+		for (Entity e : oldRoom.getEnemies()) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+			statusReceiverComponent.hideStatusTable();
+		}
+		for (Entity e : newRoom.getEnemies()) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+			statusReceiverComponent.displayStatusTable(gameScreen.fxStage);
+		}
 		
 		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.gameScreen.player);
 		oldRoom.removeEntityAtPosition(this.gameScreen.player, playerPos.coord());

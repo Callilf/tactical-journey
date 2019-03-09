@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -30,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
@@ -166,6 +168,13 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						attackerAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(healthCompo.getAttacker());
 						if (attackerAlterationReceiverCompo != null) {
 							attackerAlterationReceiverCompo.onKill(healthCompo.getAttacker(), entity, room);
+						}
+					}
+					
+					StatusReceiverComponent deadEntityStatusReceiverCompo = Mappers.statusReceiverComponent.get(entity);
+					if (deadEntityStatusReceiverCompo != null) {
+						for (Status status : deadEntityStatusReceiverCompo.getStatuses()) {
+							status.onDeath(entity, room);
 						}
 					}
 					

@@ -55,7 +55,7 @@ public class StingerSubSystem extends EnemySubSystem {
     	case ENEMY_MOVE_TILES_DISPLAYED :
     		
     		// First check whether the stinger in aligned with the player horizontally or vertically    		
-    		if (canSeePlayer(enemy, moveCompo, attackCompo, room)) {
+    		if (canChargePlayer(enemy, moveCompo, attackCompo, room)) {
     			// Aligned
     			canCharge = true;
     			chargeDistance = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), enemyCurrentPos.coord());
@@ -197,54 +197,55 @@ public class StingerSubSystem extends EnemySubSystem {
 		system.getTileSearchService().buildMoveTilesSet(enemyEntity, room);
 		if (attackCompo != null) system.getAttackTileSearchService().buildAttackTilesSet(enemyEntity, room, false, true);
 		
-		
-		// Add the horizontal and vertical lines
-		Set<Entity> additionnalAttackableTiles = new HashSet<>();
-		PoolableVector2 temp = PoolableVector2.create(0, 0);
-		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
-		int i = (int) enemyPos.coord().x - 1;
-		while (i >= 0) {
-			// left
-			temp.set(i, enemyPos.coord().y);
-			if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-				break;
+		if (!moveCompo.isFrozen()) {
+			// Add the horizontal and vertical lines
+			Set<Entity> additionnalAttackableTiles = new HashSet<>();
+			PoolableVector2 temp = PoolableVector2.create(0, 0);
+			GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
+			int i = (int) enemyPos.coord().x - 1;
+			while (i >= 0) {
+				// left
+				temp.set(i, enemyPos.coord().y);
+				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
+					break;
+				}
+				i--;
 			}
-			i--;
-		}
-		
-		i = (int) enemyPos.coord().x + 1;
-		while (i < GameScreen.GRID_W) {
-			// right
-			temp.set(i, enemyPos.coord().y);
-			if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-				break;
+			
+			i = (int) enemyPos.coord().x + 1;
+			while (i < GameScreen.GRID_W) {
+				// right
+				temp.set(i, enemyPos.coord().y);
+				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
+					break;
+				}
+				i++;
 			}
-			i++;
-		}
-		
-		i = (int) enemyPos.coord().y - 1;
-		while (i >= 0) {
-			// down
-			temp.set(enemyPos.coord().x, i);
-			if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-				break;
+			
+			i = (int) enemyPos.coord().y - 1;
+			while (i >= 0) {
+				// down
+				temp.set(enemyPos.coord().x, i);
+				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
+					break;
+				}
+				i--;
 			}
-			i--;
-		}
-		
-		i = (int) enemyPos.coord().y + 1;
-		while (i < GameScreen.GRID_H) {
-			// up
-			temp.set(enemyPos.coord().x, i);
-			if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-				break;
+			
+			i = (int) enemyPos.coord().y + 1;
+			while (i < GameScreen.GRID_H) {
+				// up
+				temp.set(enemyPos.coord().x, i);
+				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
+					break;
+				}
+				i++;
 			}
-			i++;
+			temp.free();	
+		
+			attackCompo.attackableTiles.addAll(additionnalAttackableTiles);
 		}
-		temp.free();	
-		
-		attackCompo.attackableTiles.addAll(additionnalAttackableTiles);
-		
+
 		moveCompo.hideMovableTiles();
 		attackCompo.hideAttackableTiles();		
 		return true;
@@ -264,7 +265,9 @@ public class StingerSubSystem extends EnemySubSystem {
 	}
 	
 	
-	private boolean canSeePlayer(Entity enemyEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+	private boolean canChargePlayer(Entity enemyEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+		if (moveCompo.getMoveSpeed() == 0) return false;
+		
 		// Add the horizontal and vertical lines
 		PoolableVector2 temp = PoolableVector2.create(0, 0);
 		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);

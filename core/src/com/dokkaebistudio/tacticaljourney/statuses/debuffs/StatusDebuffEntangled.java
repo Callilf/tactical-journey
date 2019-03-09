@@ -41,7 +41,7 @@ public class StatusDebuffEntangled extends Status {
 	@Override
 	public boolean onReceive(Entity entity, Room room) {
 		MoveComponent moveComponent = Mappers.moveComponent.get(entity);
-		moveComponent.setMoveModifier(-100);
+		moveComponent.setFrozen(true);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
 		this.vines = room.entityFactory.createSpriteOnTile(
@@ -53,15 +53,14 @@ public class StatusDebuffEntangled extends Status {
 	@Override
 	public void onRemove(Entity entity, Room room) {
 		MoveComponent moveComponent = Mappers.moveComponent.get(entity);
-		moveComponent.setMoveModifier(0);
+		moveComponent.setFrozen(false);
 
 		room.removeEntity(vines);
 	}
 	
 	@Override
-	public void onStartTurn(Entity entity, Room room) {
-		MoveComponent moveComponent = Mappers.moveComponent.get(entity);
-		moveComponent.setMoveRemaining(0);
+	public void onDeath(Entity entity, Room room) {
+		room.removeEntity(vines);
 	}
 	
 }

@@ -141,6 +141,18 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		iconsMap.put(status, oneStatusTable);
 	}
 	
+	public void displayStatusTable(Stage fxStage) {
+		if (statusTable != null && statuses.size() > 0) {
+			fxStage.addActor(statusTable);
+		}
+	}
+	
+	public void hideStatusTable() {
+		if (statusTable != null && statuses.size() > 0) {
+			statusTable.remove();
+		}
+	}
+	
 	public void removeStatus(Entity entity, Status status, Room room) {
 		if (Mappers.playerComponent.has(entity)) {
 			Journal.addEntry("You no longer have the " + status.title() + " status effect");

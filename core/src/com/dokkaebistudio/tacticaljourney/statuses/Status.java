@@ -35,6 +35,8 @@ public abstract class Status {
 	public void onEndTurn(Entity entity, Room room) {}
 	
 	
+	public void onDeath(Entity entity, Room room) {};
+	
 	
 	public String getDurationString() {
 		if (duration != null) {

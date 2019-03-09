@@ -274,6 +274,7 @@ public class Assets {
 	public static AtlasRegion blessing_black_mamba;
 	public static AtlasRegion blessing_poisoner;
 	public static AtlasRegion blessing_pangolin;
+	public static AtlasRegion blessing_photosynthesis;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -521,6 +522,7 @@ public class Assets {
 		blessing_black_mamba = Assets.getTexture("blessing-black-mamba");
 		blessing_poisoner = Assets.getTexture("blessing-poisoner");
 		blessing_pangolin = Assets.getTexture("blessing-pangolin");
+		blessing_photosynthesis = Assets.getTexture("blessing-photosynthesis");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

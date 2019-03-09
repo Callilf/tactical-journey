@@ -38,7 +38,7 @@ public class BlessingPhotosynthesis extends Blessing {
 	
 	@Override
 	public AtlasRegion texture() {
-		return Assets.blessing_poisoner;
+		return Assets.blessing_photosynthesis;
 	}
 
 	@Override

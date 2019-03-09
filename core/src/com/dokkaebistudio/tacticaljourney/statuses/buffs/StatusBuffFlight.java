@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -41,7 +42,7 @@ public class StatusBuffFlight extends Status {
 
 
 	@Override
-	public boolean onReceive(Entity entity) {
+	public boolean onReceive(Entity entity, Room room) {
 		FlyComponent flyCompo = this.engine.createComponent(FlyComponent.class);
 		entity.add(flyCompo);
 		
@@ -54,7 +55,7 @@ public class StatusBuffFlight extends Status {
 
 	
 	@Override
-	public void onRemove(Entity entity) {
+	public void onRemove(Entity entity, Room room) {
 		entity.remove(FlyComponent.class);
 		
 		if (Mappers.playerComponent.has(entity)) {

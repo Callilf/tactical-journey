@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -34,7 +35,7 @@ public class StatusDebuffPoison extends Status {
 	
 	@Override
 	public String title() {
-		return "Poison";
+		return "Poisoned";
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class StatusDebuffPoison extends Status {
 	
 	
 	@Override
-	public boolean onReceive(Entity entity) {
+	public boolean onReceive(Entity entity, Room room) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		int resistance = healthComponent.getResistance(DamageType.POISON);
 		if (resistance == 100) {
@@ -56,7 +57,7 @@ public class StatusDebuffPoison extends Status {
 	}
 	
 	@Override
-	public void onEndTurn(Entity entity) {
+	public void onEndTurn(Entity entity, Room room) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		healthComponent.hitThroughArmor(2, entity, parent, DamageType.POISON);
 	}

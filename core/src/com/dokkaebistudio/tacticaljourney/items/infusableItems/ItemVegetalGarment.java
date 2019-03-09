@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPhotosynthesis;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPoisoner;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
@@ -19,18 +20,18 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemLeafyGarment extends Item {
+public class ItemVegetalGarment extends Item {
 	
-	private BlessingPoisoner blessing;
+	private BlessingPhotosynthesis blessing;
 
-	public ItemLeafyGarment() {
-		super("Daring leafy garment", Assets.leafy_garment, false, true);
-		this.type = ItemEnum.LEAFY_GARMENT;
+	public ItemVegetalGarment() {
+		super("Vegetal garment", Assets.vegetal_garment, false, true);
+		this.type = ItemEnum.VEGETAL_GARMENT;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "A woman garment made of leaves that seems to stick together with entangled roots. Grants the blessing of the poisoner while held in the inventory.";	
+		return "A woman garment made of leaves and entangled roots. Grants the photosynthesis blessing while held in the inventory.";	
 	}
 	
 	@Override
@@ -48,7 +49,7 @@ public class ItemLeafyGarment extends Item {
 		if (pickedUp) {
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(picker);
 			if (alterationReceiverComponent != null) {
-				blessing = new BlessingPoisoner();
+				blessing = new BlessingPhotosynthesis();
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, blessing);
 			}
 		}

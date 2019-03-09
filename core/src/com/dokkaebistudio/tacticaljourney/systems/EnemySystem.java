@@ -121,7 +121,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		switch(room.getState()) {
         	case ENEMY_TURN_INIT :
             	
-            	moveCompo.moveRemaining = moveCompo.moveSpeed;
+            	moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
             	enemyComponent.onStartTurn(enemyEntity, room);
             	room.setNextState(RoomState.ENEMY_COMPUTE_MOVABLE_TILES);
         		
@@ -316,7 +316,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		moveCompo.clearMovableTiles();
     		if (attackCompo != null) attackCompo.clearAttackableTiles();
     		
-    		moveCompo.moveRemaining = moveCompo.moveSpeed;
+    		moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
         		
         	//Build the movable tiles list
     		tileSearchService.buildMoveTilesSet(enemyEntity, room);

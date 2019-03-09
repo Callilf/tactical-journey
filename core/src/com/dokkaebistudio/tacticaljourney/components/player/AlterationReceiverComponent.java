@@ -94,6 +94,15 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		}
 	}
     
+	public void onRoomVisited(Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onRoomVisited(entity, room);
+		}
+		for (Curse c : curses) {
+			c.onRoomVisited(entity, room);
+		}
+	}
+	
 	public void onRoomCleared(Entity entity, Room room) {
 		for (Blessing b : blessings) {
 			b.onRoomCleared(entity, room);

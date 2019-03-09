@@ -171,7 +171,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
 		strengthLbl.setText("Strength: " + attackComponent.getStrength());
-		moveLbl.setText("Move: " + moveComponent.moveSpeed);
+		moveLbl.setText("Move: " + moveComponent.getMoveSpeed());
 
 		AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillRange());
 		rangeDistLbl.setText("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax());

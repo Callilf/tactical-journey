@@ -57,10 +57,10 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
 
 			switch (statusReceiverComponent.getCurrentAction()) {
 			case RECEIVE_STATUS:
-				statusReceiverComponent.addStatus(entity, currentStatus, fxStage);				
+				statusReceiverComponent.addStatus(entity, currentStatus, room,fxStage);				
 				break;
 			case REMOVE_STATUS:
-				statusReceiverComponent.removeStatus(entity, currentStatus);						
+				statusReceiverComponent.removeStatus(entity, currentStatus, room);						
 				break;
 			
 			}
@@ -73,13 +73,13 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
 		if (Mappers.playerComponent.has(entity)) {
 			if (room.getState() == RoomState.PLAYER_TURN_INIT) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onStartTurn(entity);
+					status.onStartTurn(entity, room);
 				}
 			}
 			
 			if (room.getState() == RoomState.PLAYER_END_TURN) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onEndTurn(entity);
+					status.onEndTurn(entity, room);
 					
 					statusReceiverComponent.updateDuration(status, -1);
 				}
@@ -92,13 +92,13 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
 		if (Mappers.enemyComponent.has(entity)) {
 			if (room.getState() == RoomState.PLAYER_END_TURN) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onStartTurn(entity);
+					status.onStartTurn(entity, room);
 				}
 			}
 			
 			if (room.getState() == RoomState.ENEMY_END_TURN) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onEndTurn(entity);
+					status.onEndTurn(entity, room);
 					
 					statusReceiverComponent.updateDuration(status, -1);
 				}

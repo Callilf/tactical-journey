@@ -21,13 +21,18 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public Room room;
 	
 	/** The number of tiles the player can move. */
-	public int moveSpeed;
+	private int moveSpeed;
 	
 	/** The number of tiles the player can move during this turn. */
-	public int moveRemaining;
+	private int moveRemaining;
 	
 	/** Whether we are in free move mode, which mean there are no enemies in the room. */
 	public boolean freeMove;
+	
+	/** Temporary modifier. */
+	private int moveModifier;
+	
+	
 	
 	/** The tiles where the player can move. */
 	public Set<Tile> allWalkableTiles;
@@ -75,7 +80,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	 * @param amount the amount to add
 	 */
 	public void increaseMoveSpeed(int amount) {
-		this.moveSpeed += amount;
+		this.setMoveSpeed(this.getMoveSpeed() + amount);
 	}
 	
 	
@@ -206,6 +211,30 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 
 	public void setFastAttackTarget(Entity fastAttackTarget) {
 		this.fastAttackTarget = fastAttackTarget;
+	}
+
+	public int getMoveSpeed() {
+		return Math.max(0, moveSpeed + moveModifier);
+	}
+
+	public void setMoveSpeed(int moveSpeed) {
+		this.moveSpeed = moveSpeed;
+	}
+
+	public int getMoveRemaining() {
+		return moveRemaining;
+	}
+
+	public void setMoveRemaining(int moveRemaining) {
+		this.moveRemaining = moveRemaining;
+	}
+
+	public int getMoveModifier() {
+		return moveModifier;
+	}
+
+	public void setMoveModifier(int moveModifier) {
+		this.moveModifier = moveModifier;
 	}
 	
 	

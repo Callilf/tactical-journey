@@ -556,7 +556,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				MoveComponent moveComponent = Mappers.moveComponent.get(player);
-				moveComponent.moveSpeed --;
+				moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() - 1);
 			}
 		});
 		moveTable.add(moveDown).padRight(20);
@@ -565,7 +565,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				MoveComponent moveComponent = Mappers.moveComponent.get(player);
-				moveComponent.moveSpeed ++;
+				moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() + 1);
 			}
 		});
 		moveTable.add(moveUp);

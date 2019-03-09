@@ -150,7 +150,6 @@ public class Floor {
 
 	public void setActiveRoom(Room activeRoom) {
 		this.activeRoom = activeRoom;
-		this.activeRoom.setVisited(true);
 	}
 
 	public Map<Vector2, Room> getRoomPositions() {

@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -94,8 +95,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 
 	
-	public void addStatus(Entity entity, Status status, Stage fxStage) {
-		boolean canBeAdded = status.onReceive(entity);
+	public void addStatus(Entity entity, Status status, Room room, Stage fxStage) {
+		boolean canBeAdded = status.onReceive(entity, room);
 		
 		if (canBeAdded) {
 			// If the same status has already been received, increase its duration
@@ -140,10 +141,12 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		iconsMap.put(status, oneStatusTable);
 	}
 	
-	public void removeStatus(Entity entity, Status status) {
-		Journal.addEntry("You no longer have the " + status.title() + " status effect");
+	public void removeStatus(Entity entity, Status status, Room room) {
+		if (Mappers.playerComponent.has(entity)) {
+			Journal.addEntry("You no longer have the " + status.title() + " status effect");
+		}
 
-		status.onRemove(entity);
+		status.onRemove(entity, room);
 		
 		if (statusTable != null) {
 			Table table = iconsMap.get(status);
@@ -161,7 +164,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		}
 	}
 	
-	public void removeStatus(Entity entity, Class statusClass) {
+	public void removeStatus(Entity entity, Class statusClass, Room room) {
 		Status statusToRemove = null;
 		for(Status status : statuses) {
 			if (status.getClass().equals(statusClass)) {
@@ -171,7 +174,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		}
 		
 		if (statusToRemove != null) {
-			removeStatus(entity, statusToRemove);
+			removeStatus(entity, statusToRemove, room);
 		}
 	}
 	

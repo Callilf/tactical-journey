@@ -24,9 +24,10 @@ import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
-import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemLeafyGarment;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
@@ -169,8 +170,12 @@ public final class ItemFactory {
 			item = createItemNurseEyePatch(room, tilePos);
 			break;
 
-		case LEAFY_GARMENT:
-			item = createItemLeafyGarment(room, tilePos);
+		case VEGETAL_GARMENT:
+			item = createItemVegetalGarment(room, tilePos);
+			break;
+			
+		case RAM_SKULL:
+			item = createItemRamSkull(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -385,12 +390,17 @@ public final class ItemFactory {
 	}
 	
 
-	public Entity createItemLeafyGarment(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.leafy_garment, new ItemLeafyGarment());
-		item.flags = EntityFlagEnum.ITEM_LEAFY_GARMENT.getFlag();
+	public Entity createItemVegetalGarment(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.vegetal_garment, new ItemVegetalGarment());
+		item.flags = EntityFlagEnum.ITEM_VEGETAL_GARMENT.getFlag();
 		return item;
 	}
 	
+	public Entity createItemRamSkull(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.ram_skull, new ItemRamSkull());
+		item.flags = EntityFlagEnum.ITEM_RAM_SKULL.getFlag();
+		return item;
+	}
 
 	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale());

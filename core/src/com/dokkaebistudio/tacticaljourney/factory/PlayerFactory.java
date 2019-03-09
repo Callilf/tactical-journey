@@ -99,7 +99,7 @@ public final class PlayerFactory {
 		// Move compo
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = moveSpeed;
+		moveComponent.setMoveSpeed(moveSpeed);
 		playerEntity.add(moveComponent);
 		
 		// Attack compo

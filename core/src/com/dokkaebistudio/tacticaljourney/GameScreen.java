@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -263,6 +264,13 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.removeSystem(oldRoom);
 		engine.addSystem(newRoom);
+		
+		
+		if (!newRoom.isVisited()) {
+			newRoom.setVisited(true);
+			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+			alterationReceiverComponent.onRoomVisited(player, newRoom);
+		}
 		
 		
 		//TODO : probably improve this code, especially if any other entity than the player can travel between rooms

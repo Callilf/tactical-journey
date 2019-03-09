@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -48,7 +49,7 @@ public class StatusDebuffBurning extends Status {
 	}
 	
 	@Override
-	public void onStartTurn(Entity entity) {
+	public void onStartTurn(Entity entity, Room room) {
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		if (unseededRandom.nextInt(100) < stopChance) {
 			Mappers.statusReceiverComponent.get(entity).requestAction(StatusActionEnum.REMOVE_STATUS, this);
@@ -58,7 +59,7 @@ public class StatusDebuffBurning extends Status {
 	}
 
 	@Override
-	public void onEndTurn(Entity entity) {
+	public void onEndTurn(Entity entity, Room room) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		healthComponent.hit(3, entity, parent, DamageType.FIRE);
 	}

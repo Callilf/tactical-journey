@@ -49,6 +49,7 @@ public class Assets {
 	public static AtlasRegion tile_pit;
 	public static AtlasRegion mud;
 	public static AtlasRegion mud_destroyed;
+	public static AtlasRegion entangled_vines;
 	
 	public static AtlasRegion exit_opened;
 	public static AtlasRegion exit_closed;
@@ -217,6 +218,7 @@ public class Assets {
 	public static AtlasRegion status_regen;
 	public static AtlasRegion status_flight;
 	public static AtlasRegion status_burning;
+	public static AtlasRegion status_entangled;
 	
 	//******
 	// Items
@@ -242,7 +244,8 @@ public class Assets {
 	public static AtlasRegion fata_morgana;
 	public static AtlasRegion mithridatium;
 	public static AtlasRegion nurse_eye_patch;
-	public static AtlasRegion leafy_garment;
+	public static AtlasRegion vegetal_garment;
+	public static AtlasRegion ram_skull;
 	
 	
 	// Boss items
@@ -305,6 +308,7 @@ public class Assets {
 		tile_pit = Assets.getTexture("tile-pit-test");
 		mud = Assets.getTexture("tile-mud-test");
 		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
+		entangled_vines = Assets.getTexture("entangled_vines");
 		
 		exit_opened = Assets.getTexture("exit_opened");
 		exit_closed = Assets.getTexture("exit_closed");
@@ -468,6 +472,7 @@ public class Assets {
 		status_regen = Assets.getTexture("regen");
 		status_flight = Assets.getTexture("flight");
 		status_burning = Assets.getTexture("burning");
+		status_entangled = Assets.getTexture("entangled");
 
 		//******
 		// Items
@@ -492,7 +497,8 @@ public class Assets {
 		fata_morgana = Assets.getTexture("item-infusable-fata-morgana");
 		mithridatium = Assets.getTexture("item-infusable-mithridatium");
 		nurse_eye_patch = Assets.getTexture("item-infusable-eye-patch");
-		leafy_garment = Assets.getTexture("item-infusable-leafy-bra");
+		vegetal_garment = Assets.getTexture("item-infusable-leafy-bra");
+		ram_skull = Assets.getTexture("item-infusable-ram-skull");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");

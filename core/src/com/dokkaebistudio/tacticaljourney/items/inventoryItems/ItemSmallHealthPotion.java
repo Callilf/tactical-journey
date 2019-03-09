@@ -52,7 +52,7 @@ public class ItemSmallHealthPotion extends Item {
 		healthComponent.restoreHealth(25);
 		
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
-		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class);
+		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class, room);
 		return true;
 	}
 	

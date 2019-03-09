@@ -648,8 +648,8 @@ public final class EntityFactory {
 		
 		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);
 		skillMoveComponent.room = room;
-		skillMoveComponent.moveSpeed = 0;
-		skillMoveComponent.moveRemaining = 0;
+		skillMoveComponent.setMoveSpeed(0);
+		skillMoveComponent.setMoveRemaining(0);
 		skillEntity.add(skillMoveComponent);
 		
 		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);

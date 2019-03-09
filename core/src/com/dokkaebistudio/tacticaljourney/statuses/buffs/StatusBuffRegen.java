@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -41,7 +42,7 @@ public class StatusBuffRegen extends Status {
 	}
 
 	@Override
-	public void onEndTurn(Entity entity) {
+	public void onEndTurn(Entity entity, Room room) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		healthComponent.restoreHealth(1);
 	}

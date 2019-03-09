@@ -128,7 +128,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = 4;
+		moveComponent.setMoveSpeed(4);
 		enemyEntity.add(moveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
@@ -208,7 +208,7 @@ public final class EnemyFactory {
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.moveSpeed = 3;
+		moveComponent.setMoveSpeed(3);
 		enemyEntity.add(moveComponent);
 		
 		FlyComponent flyComponent = engine.createComponent(FlyComponent.class);

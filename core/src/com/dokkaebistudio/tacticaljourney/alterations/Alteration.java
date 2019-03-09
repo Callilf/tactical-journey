@@ -46,6 +46,9 @@ public abstract class Alteration {
 	public void onReceiveDamage(Entity user, Entity attacker, Room room) {};
 	public void onDeath(Entity user, Entity attacker, Room room) {};
 	
+	/** Called when the player enters a room for the first time. */
+	public void onRoomVisited(Entity entity, Room room) {};
+	
 	/** Called when a room has been cleared. */
 	public void onRoomCleared(Entity entity, Room room) {};
 	

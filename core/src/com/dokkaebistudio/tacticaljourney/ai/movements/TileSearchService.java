@@ -66,7 +66,7 @@ public class TileSearchService {
 		//Find all walkable tiles
 		
 		if (!moveCompo.freeMove) {
-			moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTile, 1, moveCompo.moveRemaining,room);
+			moveCompo.allWalkableTiles = findAllWalkableTiles(moverEntity, moverTile, 1, moveCompo.getMoveRemaining(),room);
 			moveCompo.allWalkableTiles.add(moverTile);
 		} else {
 			moveCompo.allWalkableTiles = new HashSet<>();

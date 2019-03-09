@@ -5,9 +5,13 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * A tutorial page.
@@ -95,6 +99,9 @@ public class ItemTutorialPage extends Item {
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		Journal.addEntry("You tore down the tutorial page " + pageNumber + ".");
+		
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
+		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(5));
 
 		return true;
 	}

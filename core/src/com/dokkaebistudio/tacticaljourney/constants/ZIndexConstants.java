@@ -42,6 +42,7 @@ public final class ZIndexConstants {
 
 	
 	// VISUAL EFFECTS
+	public static final int VINES = 32;
 	public static final int EXPLOSION = 100;
 
 	// Damage & xp displayers

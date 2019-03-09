@@ -153,7 +153,7 @@ public class EnemyActionSelector {
 		if (target != null) {
 			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 
-			boolean playerAttackable = shortestDistance <= moveComponent.moveSpeed;			
+			boolean playerAttackable = shortestDistance <= moveComponent.getMoveSpeed();			
 			
 			if (!playerAttackable) {
 				for (Entity t : attackCompo.attackableTiles) {

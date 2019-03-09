@@ -191,7 +191,7 @@ public class StingerSubSystem extends EnemySubSystem {
 		moveCompo.clearMovableTiles();
 		if (attackCompo != null) attackCompo.clearAttackableTiles();
 		
-		moveCompo.moveRemaining = moveCompo.moveSpeed;
+		moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
     		
     	//Build the movable tiles list
 		system.getTileSearchService().buildMoveTilesSet(enemyEntity, room);

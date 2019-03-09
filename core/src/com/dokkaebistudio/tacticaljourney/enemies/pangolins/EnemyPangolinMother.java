@@ -33,7 +33,7 @@ public class EnemyPangolinMother extends Enemy {
 		enemyComponent.setAlerted(true);
 		
 		MoveComponent moveCompo = Mappers.moveComponent.get(entity);
-		moveCompo.moveSpeed = 4;
+		moveCompo.setMoveSpeed(4);
 	}
 	
 	public void cry(Entity entity, Room room) {
@@ -44,7 +44,7 @@ public class EnemyPangolinMother extends Enemy {
 		attackComponent.setActive(false);
 
 		MoveComponent moveCompo = Mappers.moveComponent.get(entity);
-		moveCompo.moveSpeed = 0;
+		moveCompo.setMoveSpeed(0);
 
 		this.crying = true;
 		this.cryingEndTurn = room.turnManager.getTurn() + 1;
@@ -91,7 +91,7 @@ public class EnemyPangolinMother extends Enemy {
 				attackComponent.setActive(true);
 
 				MoveComponent moveCompo = Mappers.moveComponent.get(enemy);
-				moveCompo.moveSpeed = 3;
+				moveCompo.setMoveSpeed(3);
 			}
 		}
 	}

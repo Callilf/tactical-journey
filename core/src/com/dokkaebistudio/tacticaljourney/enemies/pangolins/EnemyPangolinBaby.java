@@ -42,7 +42,7 @@ public class EnemyPangolinBaby extends Enemy {
 			healthComponent.restoreArmor(20);
 			
 			MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
-			moveComponent.moveSpeed ++;
+			moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() + 1);
 		}
 		
 		
@@ -79,7 +79,7 @@ public class EnemyPangolinBaby extends Enemy {
 				}
 				
 				MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
-				moveComponent.moveSpeed --;
+				moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() - 1);
 			}
 		}
 	}

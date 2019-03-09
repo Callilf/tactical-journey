@@ -97,7 +97,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_TURN_INIT:	
 			if (room.hasEnemies()) {
-				moveCompo.moveRemaining = moveCompo.moveSpeed;
+				moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
 				moveCompo.freeMove = false;
 			} else {
 				moveCompo.freeMove = true;
@@ -202,7 +202,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			// Compute the cost of this move
 			if (room.hasEnemies()) {
 				int cost = computeCostOfMovement(player);
-				moveCompo.moveRemaining = moveCompo.moveRemaining - cost;
+				moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - cost);
 			}
 
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);

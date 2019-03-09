@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.statuses;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
  * A status on an entity that provides a temporary buff or a debuff.
@@ -20,18 +21,18 @@ public abstract class Status {
 	public abstract AtlasRegion texture();
 
 	/** Called when this status is received by an entity. */
-	public boolean onReceive(Entity entity) {
+	public boolean onReceive(Entity entity, Room room) {
 		return true;
 	}
 	
 	/** Called when this status is removed from an entity. */
-	public void onRemove(Entity entity) {}
+	public void onRemove(Entity entity, Room room) {}
 
 	/** Called when the entity starts its turn. */
-	public void onStartTurn(Entity entity) {}
+	public void onStartTurn(Entity entity, Room room) {}
 	
 	/** Called when the entity ends its turn. */
-	public void onEndTurn(Entity entity) {}
+	public void onEndTurn(Entity entity, Room room) {}
 	
 	
 	

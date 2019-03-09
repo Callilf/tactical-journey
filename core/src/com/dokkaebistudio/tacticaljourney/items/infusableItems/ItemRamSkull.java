@@ -6,53 +6,40 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingMithridatism;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPoisoner;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
-import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * An infusable item that grants the Mithridatism blessing + can be used to cure poison.
+ * An infusable item that grants the blessing of the poisoner, ie poison sector on the wheel.
  * @author Callil
  *
  */
-public class ItemMithridatium extends Item {
+public class ItemRamSkull extends Item {
 	
-	private BlessingMithridatism blessing;
+	private BlessingPoisoner blessing;
 
-	public ItemMithridatium() {
-		super("Mithridatium", Assets.mithridatium, false, true);
-		this.type = ItemEnum.MITHRIDATIUM;
+	public ItemRamSkull() {
+		super("Ram skull", Assets.ram_skull, false, true);
+		this.type = ItemEnum.RAM_SKULL;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "A semi-mythical remedy with as many as 65 ingredients, used as an antidote for poisoning. Grants the blessing of Mithridatism.\n"
-				+ "Also, taking a sip from the remedy will instantly cure any kind of poison.";	
+		return "A ram skull that looks like it has been turned into some kind of helmet. Grants the blessing of the poisoner while held in the inventory.";	
 	}
 	
 	@Override
 	public String getActionLabel() {
-		return "[GREEN]Drink";
+		return null;
 	}
 	
 	@Override
-	public boolean use(Entity user, Entity item, Room room) {
-		Journal.addEntry("You take a sip from the Mithridatium");
-		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
-		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class, room);
-		
-		room.turnManager.endPlayerTurn();
-		
-		// Return false to prevent the item from being consumed
-		return false;
-	}
+	public boolean use(Entity user, Entity item, Room room) {return true;}
 	
 	@Override
 	public boolean pickUp(Entity picker, Entity item, Room room) {
@@ -61,7 +48,7 @@ public class ItemMithridatium extends Item {
 		if (pickedUp) {
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(picker);
 			if (alterationReceiverComponent != null) {
-				blessing = new BlessingMithridatism();
+				blessing = new BlessingPoisoner();
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, blessing);
 			}
 		}

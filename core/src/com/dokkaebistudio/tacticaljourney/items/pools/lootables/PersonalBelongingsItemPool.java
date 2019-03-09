@@ -18,6 +18,8 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.MITHRIDATIUM, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.NURSE_EYE_PATCH, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.FATA_MORGANA, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.RAM_SKULL, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 10, true));
 	}
 	
 	

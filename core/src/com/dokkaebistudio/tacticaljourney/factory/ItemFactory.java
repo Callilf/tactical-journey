@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolin
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
@@ -153,7 +154,9 @@ public final class ItemFactory {
 		case VENOM_GLAND:
 			item = createItemVenomGland(room, tilePos);
 			break;
-			
+		case PEBBLE:
+			item = createItemPebble(room, tilePos);
+			break;
 		case TOTEM_OF_KALAMAZOO:
 			item = createItemTotemOfKalamazoo(room, tilePos);
 			break;
@@ -347,6 +350,12 @@ public final class ItemFactory {
 	public Entity createItemVenomGland(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.venom_gland_item, new ItemVenomGland());
 		item.flags = EntityFlagEnum.ITEM_VENOM_GLAND.getFlag();
+		return item;
+	}
+	
+	public Entity createItemPebble(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.pebble_item, new ItemPebble());
+		item.flags = EntityFlagEnum.ITEM_PEBBLE.getFlag();
 		return item;
 	}
 	

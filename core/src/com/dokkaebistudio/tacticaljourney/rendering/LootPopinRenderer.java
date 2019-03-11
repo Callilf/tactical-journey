@@ -588,24 +588,39 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
      * Take items one at a time and spend a turn for each item.
      */
 	private void handleTakeAllAction() {
-		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && lootableCompo.getItems() != null && !lootableCompo.getItems().isEmpty()) {
-			Entity firstItem = lootableCompo.getItems().get(0);
-			ItemComponent itemComponent = Mappers.itemComponent.get(firstItem);
-			
-			boolean pickedUp = itemComponent.pickUp(player, firstItem, room);
-			if (pickedUp) {
-				lootableCompo.getItems().remove(firstItem);
-				inventoryCompo.setInventoryActionInProgress(true);
-				room.turnManager.endPlayerTurn();
-				refreshPopin();
-			} else {
-				lootableCompo.getStandByItems().add(firstItem);
-			}
-
+		boolean takeAllFinished = false;
+		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && !lootableCompo.getItems().isEmpty()) {
+			pickUpItem(0);
 		} else {
+			takeAllFinished = true;
+		}
+		
+		lootableCompo.getItems().removeAll(lootableCompo.getStandByItems());
+		
+		if (takeAllFinished) {
 			takeAllInProgess = false;
 			lootableCompo.finishTakeAll();
 			refreshPopin();
+
+		}
+	}
+
+
+	private void pickUpItem(int index) {
+		Entity item = lootableCompo.getItems().get(index);
+		ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		boolean pickedUp = itemComponent.pickUp(player, item, room);
+		if (pickedUp) {
+			lootableCompo.getItems().remove(item);
+			inventoryCompo.setInventoryActionInProgress(true);
+			room.turnManager.endPlayerTurn();
+			refreshPopin();
+		} else {
+			lootableCompo.getStandByItems().add(item);
+			if (lootableCompo.getItems().size() > index + 1) {
+				pickUpItem(index + 1);
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -28,15 +29,14 @@ import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
-import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.BasicShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
  * Factory used to create presets of entities.
@@ -108,8 +108,12 @@ public final class PlayerFactory {
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
-		attackComponent.setCriticalAttackAnimationAsset(Assets.slash_critical_animation);
+		
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation), 
+				new Animation<>(0.03f, Assets.slash_critical_animation), true);
+		attackComponent.setAttackAnimation(attackAnimation);
+		
 		playerEntity.add(attackComponent);
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);

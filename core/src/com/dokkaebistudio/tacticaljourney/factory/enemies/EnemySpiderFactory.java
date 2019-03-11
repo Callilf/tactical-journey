@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory.enemies;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -36,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
  * Factory used to create presets of entities.
@@ -98,7 +100,9 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation), true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -174,6 +178,10 @@ public final class EnemySpiderFactory {
 		attackComponent.setRangeMin(2);
 		attackComponent.setRangeMax(3);
 		attackComponent.setStrength(3);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.projectile_web), true);
+		attackComponent.setAttackAnimation(attackAnimation);
+
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -251,7 +259,9 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation),  true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

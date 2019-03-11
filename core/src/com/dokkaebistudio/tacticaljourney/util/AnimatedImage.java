@@ -29,7 +29,9 @@ public class AnimatedImage extends Image {
     	} else {
     		if (animation.isAnimationFinished(stateTime)) {
     			this.remove();
-    			finishAction.act(delta);
+    			if (finishAction != null) {
+    				finishAction.act(delta);
+    			}
     		} else {
 	    		((TextureRegionDrawable)getDrawable()).setRegion(animation.getKeyFrame(stateTime, false));
 	        	super.act(delta);

@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -37,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
  * Factory used to create presets of entities.
@@ -136,7 +138,9 @@ public final class EnemyFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(10);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation),  true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -220,7 +224,9 @@ public final class EnemyFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(6);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation),  true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

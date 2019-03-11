@@ -166,7 +166,7 @@ public class Assets {
 	
 	public static AtlasRegion projectile_arrow;
 	public static AtlasRegion projectile_bomb;
-	public static AtlasRegion projectile_web;
+	public static Array<Sprite> projectile_web;
 
 	
 	//********
@@ -270,7 +270,7 @@ public class Assets {
 	
 	
 	
-	public static AtlasRegion arrow;
+	public static Array<Sprite> arrow;
 	public static Array<Sprite> bomb_animation;
 
 	
@@ -431,7 +431,7 @@ public class Assets {
 		
 		projectile_arrow = Assets.getTexture("arrow");
 		projectile_bomb = Assets.getTexture("bomb");
-		projectile_web = Assets.getTexture("projectile-web");
+		projectile_web = Assets.getAnimation("projectile-web");
 
 		
 		//********
@@ -527,7 +527,7 @@ public class Assets {
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
 		
 		
-		arrow = Assets.getTexture("arrow");
+		arrow = Assets.getAnimation("arrow");
 		bomb_animation = Assets.getAnimation("bomb");
 
 		

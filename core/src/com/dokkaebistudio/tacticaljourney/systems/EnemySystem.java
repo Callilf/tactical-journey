@@ -9,10 +9,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
-import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -232,38 +230,20 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 				  }
 				};
         		
-        		// Play attack animation
-				if (attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
-	    			
-	    			if (attackCompo.getProjectileImage() == null) {
-	    				attackCompo.setProjectileImage(Assets.projectile_web,
-	    						enemyCurrentPos.coord(), 
-	    						attackCompo.getTargetedTile(), 
-	    						true,
-	    						finishAttackAction);
-	    				
-	    				fxStage.addActor(attackCompo.getProjectileImage());
-	    			}
-	    			
-	    		} else {
-	    			
-	    			if (attackCompo.getAttackImage() == null) {
-		    			if (attackCompo.getAttackAnimationAsset() != null) {
-							attackCompo.setAttackImage(enemyCurrentPos.coord(), 
-									attackCompo.getTargetedTile(), 
-									null,
-									finishAttackAction);
-							
-							fxStage.addActor(attackCompo.getAttackImage());
-		    			} else {
-							room.attackManager.performAttack(enemyEntity, attackCompo);
-		    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
-		    			}
-	    			}
-	    		
-	    		}
+				
+				if (!attackCompo.getAttackAnimation().isPlaying()) {
+					boolean hasAnim = attackCompo.setAttackImage(enemyCurrentPos.coord(), 
+							attackCompo.getTargetedTile(), 
+							null,
+							fxStage,
+							finishAttackAction);
+					
+					if (!hasAnim) {
+						room.attackManager.performAttack(enemyEntity, attackCompo);
+	    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+					}
+				}
 
-        		
         		break;
         		
         	default:
@@ -288,14 +268,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo, EnemyComponent enemyComponent) {
     	attackCompo.clearAttackableTiles();
-		if (attackCompo.getProjectileImage() != null) {
-			attackCompo.getProjectileImage().remove();
-			attackCompo.setProjectileImage(null);
-		}
-		if (attackCompo.getAttackImage() != null) {
-			attackCompo.getAttackImage().remove();
-			attackCompo.setAttackImage(null);
-		}
+		attackCompo.clearAttackImage();
 		
     	enemyComponent.onEndTurn(enemyEntity, room);
 

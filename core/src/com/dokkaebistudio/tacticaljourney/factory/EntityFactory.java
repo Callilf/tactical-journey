@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -52,6 +53,7 @@ import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
 /**
@@ -678,8 +680,6 @@ public final class EntityFactory {
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
 		attackComponent.setParentAttackCompo(parentAttackCompo);
-		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
-		attackComponent.setCriticalAttackAnimationAsset(Assets.slash_critical_animation);
 		skillEntity.add(attackComponent);
 		
 		if (type == SkillEnum.BOMB) {
@@ -705,7 +705,11 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(140, Hit.MISS);
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
-
+			
+			AttackAnimation attackAnimation = new AttackAnimation(
+					new Animation<>(0.03f, Assets.slash_animation), 
+					new Animation<>(0.03f, Assets.slash_critical_animation), true);
+			attackComponent.setAttackAnimation(attackAnimation);
 			break;
 		case 2:
 			playerComponent.setSkillRange(skillEntity);
@@ -727,12 +731,27 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 
+			attackAnimation = new AttackAnimation(
+					new Animation<>(0.1f, Assets.arrow), 
+					new Animation<>(0.1f, Assets.arrow), true);
+			attackComponent.setAttackAnimation(attackAnimation);
+
 			break;
 		case 3:
 			playerComponent.setSkillBomb(skillEntity);
+			
+			attackAnimation = new AttackAnimation(
+					new Animation<>(0.2f, Assets.bomb_animation), 
+					new Animation<>(0.2f, Assets.bomb_animation), false);
+			attackComponent.setAttackAnimation(attackAnimation);
+
 			break;
 		case 4:
 			playerComponent.setSkillThrow(skillEntity);
+			
+			attackComponent.setAttackAnimation(
+					new AttackAnimation(null, null, false));
+
 			break;
 			
 			default:

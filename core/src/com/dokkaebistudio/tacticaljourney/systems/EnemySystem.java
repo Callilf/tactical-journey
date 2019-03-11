@@ -205,7 +205,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord(), room);
 							if (target != null) {
 	            				attackCompo.setTarget(target);
-	            				
+	            				attackCompo.setTargetedTile(room.getTileAtGridPosition(attTilePos.coord()));
 	            				attacked = true;
 	            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
 	            				break;
@@ -223,24 +223,22 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         	case ENEMY_ATTACK_ANIMATION:
         		
+				Action finishAttackAction = new Action(){
+				  @Override
+				  public boolean act(float delta){
+					room.attackManager.performAttack(enemyEntity, attackCompo);
+    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+				    return true;
+				  }
+				};
+        		
         		// Play attack animation
 				if (attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
 	    			
 	    			if (attackCompo.getProjectileImage() == null) {
-	    				
-	    				Action finishAttackAction = new Action(){
-						  @Override
-						  public boolean act(float delta){
-							room.attackManager.performAttack(enemyEntity, attackCompo);
-		    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
-						    return true;
-						  }
-						};
-	    				
-	    				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(attackCompo.getTarget());
 	    				attackCompo.setProjectileImage(Assets.projectile_web,
 	    						enemyCurrentPos.coord(), 
-	    						targetPos.coord(), 
+	    						attackCompo.getTargetedTile(), 
 	    						true,
 	    						finishAttackAction);
 	    				
@@ -248,8 +246,21 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	    			}
 	    			
 	    		} else {
-					room.attackManager.performAttack(enemyEntity, attackCompo);
-    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+	    			
+	    			if (attackCompo.getAttackImage() == null) {
+		    			if (attackCompo.getAttackAnimationAsset() != null) {
+							attackCompo.setAttackImage(enemyCurrentPos.coord(), 
+									attackCompo.getTargetedTile(), 
+									null,
+									finishAttackAction);
+							
+							fxStage.addActor(attackCompo.getAttackImage());
+		    			} else {
+							room.attackManager.performAttack(enemyEntity, attackCompo);
+		    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+		    			}
+	    			}
+	    		
 	    		}
 
         		
@@ -280,6 +291,10 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 		if (attackCompo.getProjectileImage() != null) {
 			attackCompo.getProjectileImage().remove();
 			attackCompo.setProjectileImage(null);
+		}
+		if (attackCompo.getAttackImage() != null) {
+			attackCompo.getAttackImage().remove();
+			attackCompo.setAttackImage(null);
 		}
 		
     	enemyComponent.onEndTurn(enemyEntity, room);

@@ -678,6 +678,8 @@ public final class EntityFactory {
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
 		attackComponent.setParentAttackCompo(parentAttackCompo);
+		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		attackComponent.setCriticalAttackAnimationAsset(Assets.slash_critical_animation);
 		skillEntity.add(attackComponent);
 		
 		if (type == SkillEnum.BOMB) {

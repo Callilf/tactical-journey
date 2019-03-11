@@ -165,6 +165,8 @@ public class StingerSubSystem extends EnemySubSystem {
     			stateComponent.set(StatesEnum.STINGER_FLY.getState());
     			
 				attackCompo.setTarget(playerEntity);
+				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(playerPosition.coord(), room));
+				
 				attackCompo.setAdditionnalStrength(chargeDistance);
 				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
     			

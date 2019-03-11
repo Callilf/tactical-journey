@@ -98,6 +98,7 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
+		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -250,6 +251,7 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
+		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

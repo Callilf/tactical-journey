@@ -5,12 +5,16 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -19,8 +23,11 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.ActionsUtil;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
 public class AttackComponent implements Component, Poolable, RoomSystem {
 		
@@ -69,6 +76,11 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	
 	
+	//*********
+	// Animations
+	private Array<Sprite> attackAnimationAsset;
+	private Array<Sprite> criticalAttackAnimationAsset;
+	private AnimatedImage attackImage;
 	private Image projectileImage;
 
 	
@@ -219,6 +231,41 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	
 	
+	
+	
+	
+	
+	//***************************
+	// Attack Animations
+	
+	/**
+	 * Set the attack animation to use.
+	 * @param texture the texture to use
+	 * @param startGridPos the start pos (the attacker pos)
+	 * @param finishAttackAction the action to call after the movement is over
+	 */
+	public void setAttackImage(Vector2 startGridPos, Tile targetedTile, Sector pointedSector, Action finishAttackAction) {		
+		Array<Sprite> sprites = this.attackAnimationAsset;
+		if (pointedSector != null && pointedSector.hit == Hit.CRITICAL) {
+			sprites = this.criticalAttackAnimationAsset;
+		}
+		
+		Animation<Sprite> anim = new Animation<>(0.03f, sprites);
+		AnimatedImage slash = new AnimatedImage(anim, false, finishAttackAction);
+		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
+		Vector2 targetPosInPixel = targetedTile.getAbsolutePos();
+		slash.setPosition(targetPosInPixel.x, targetPosInPixel.y);
+		
+		double degrees = Math.atan2(
+				targetPosInPixel.y - playerPixelPos.y,
+			    targetPosInPixel.x - playerPixelPos.x
+			) * 180.0d / Math.PI;
+		slash.setOrigin(Align.center);
+		slash.setRotation((float) degrees);
+		
+		this.setAttackImage(slash);
+	}
+	
 	/**
 	 * Set the projectile image to use.
 	 * @param texture the texture to use
@@ -227,12 +274,12 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	 * @param orientedTowardDirection whether the projectile has to be oriented towards the target
 	 * @param finishAttackAction the action to call after the movement is over
 	 */
-	public void setProjectileImage(AtlasRegion texture, Vector2 startGridPos, Vector2 targetGridPos, boolean orientedTowardDirection, Action finishAttackAction) {
+	public void setProjectileImage(AtlasRegion texture, Vector2 startGridPos, Tile targetedTile, boolean orientedTowardDirection, Action finishAttackAction) {
 		Image arrow = new Image(texture);
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
 		arrow.setPosition(playerPixelPos.x, playerPixelPos.y);
 		
-		Vector2 targetPosInPixel = TileUtil.convertGridPosIntoPixelPos(targetGridPos);
+		Vector2 targetPosInPixel = targetedTile.getAbsolutePos();
 
 		if (orientedTowardDirection) {
 			double degrees = Math.atan2(
@@ -373,6 +420,15 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	}
 	
 	
+	public AnimatedImage getAttackImage() {
+		return attackImage;
+	}
+
+	public void setAttackImage(AnimatedImage attackImage) {
+		this.attackImage = attackImage;
+	}
+
+
 	public int getBombRadius() {
 		return bombRadius;
 	}
@@ -422,6 +478,26 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+
+	public Array<Sprite> getAttackAnimationAsset() {
+		return attackAnimationAsset;
+	}
+
+
+	public void setAttackAnimationAsset(Array<Sprite> attackAnimationAsset) {
+		this.attackAnimationAsset = attackAnimationAsset;
+	}
+
+
+	public Array<Sprite> getCriticalAttackAnimationAsset() {
+		return criticalAttackAnimationAsset;
+	}
+
+
+	public void setCriticalAttackAnimationAsset(Array<Sprite> criticalAttackAnimationAsset) {
+		this.criticalAttackAnimationAsset = criticalAttackAnimationAsset;
 	}
 	
 	

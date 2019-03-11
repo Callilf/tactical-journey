@@ -3,15 +3,11 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
@@ -29,12 +25,10 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
-import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
 public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	
@@ -183,8 +177,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		break;
     		
     	case PLAYER_ATTACK_ANIMATION:
-			AttackComponent attackComponent = wheel.getAttackComponent();
-			
+			AttackComponent wheelAttackComponent = wheel.getAttackComponent();
+			Tile targetedTile = wheelAttackComponent.getTargetedTile();
+
 			Action finishAttackAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
@@ -196,11 +191,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		if (wheel.getAttackComponent().getAttackType() == AttackTypeEnum.RANGE) {
     			
     			if (attackCompo.getProjectileImage() == null) {
-
-    				Vector2 targetPos = attackComponent.getTargetedTile().getGridPos();
+    				
     				attackCompo.setProjectileImage(Assets.projectile_arrow,
     						attackerCurrentPos.coord(), 
-    						targetPos, 
+    						targetedTile, 
     						true,
     						finishAttackAction);
     				
@@ -209,30 +203,19 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     			
     		} else {
     			
-    			if (attackCompo.getProjectileImage() == null) {
-    				Array<Sprite> sprites = Assets.slash_animation;
-    				Sector pointedSector = wheel.getPointedSector();
-    				if (pointedSector != null && pointedSector.hit == Hit.CRITICAL) {
-    					sprites = Assets.slash_critical_animation;
-    				}    				
-	    			Animation<Sprite> anim = new Animation<>(0.03f, sprites);
-	    			AnimatedImage slash = new AnimatedImage(anim, false, finishAttackAction);
-	    			Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(attackerCurrentPos.coord());
-	    			Vector2 targetPosInPixel = attackComponent.getTargetedTile().getAbsolutePos();
-	    			slash.setPosition(targetPosInPixel.x, targetPosInPixel.y);
-	    			
-	    			double degrees = Math.atan2(
-	    					targetPosInPixel.y - playerPixelPos.y,
-	    				    targetPosInPixel.x - playerPixelPos.x
-	    				) * 180.0d / Math.PI;
-	    			slash.setOrigin(Align.center);
-	    			slash.setRotation((float) degrees);
-	    			
-	    			attackCompo.setProjectileImage(slash);
-	    			stage.addActor(slash);
+    			if (attackCompo.getAttackImage() == null) {
+    				if (attackCompo.getAttackAnimationAsset() != null) {
+						attackCompo.setAttackImage(attackerCurrentPos.coord(), 
+								targetedTile, 
+								wheel.getPointedSector(),
+								finishAttackAction);
+						
+		    			stage.addActor(attackCompo.getAttackImage());
+    				} else {
+        				finishAttack(player, attackCompo, skillEntity);
+    				}
     			}
     			
-//				finishAttack(player, attackCompo, skillEntity);
     		}
     		
     		
@@ -246,7 +229,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 	    		AtlasRegion projectileTexture = Assets.projectile_bomb;
 	    		if (skillAttackCompo.getProjectileImage() == null) {
-		    		Tile targetedTile = skillAttackCompo.getTargetedTile();
+		    		targetedTile = skillAttackCompo.getTargetedTile();
 		    		final Vector2 targetedPosition = targetedTile.getGridPos();
 		    		
 		    		Action finishThrowAction = null;
@@ -274,7 +257,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					
 					skillAttackCompo.setProjectileImage(projectileTexture,
 							attackerCurrentPos.coord(), 
-							targetedPosition, 
+							targetedTile, 
 							false,
 							finishThrowAction);
 	
@@ -363,6 +346,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		if (wheelAttackCompo.getProjectileImage() != null) {
 			wheelAttackCompo.getProjectileImage().remove();
 			wheelAttackCompo.setProjectileImage(null);
+		}
+		if (wheelAttackCompo.getAttackImage() != null) {
+			wheelAttackCompo.getAttackImage().remove();
+			wheelAttackCompo.setAttackImage(null);
 		}
 		
 		Sector pointedSector = wheel.getPointedSector();

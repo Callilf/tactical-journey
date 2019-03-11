@@ -108,6 +108,8 @@ public final class PlayerFactory {
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		attackComponent.setAttackAnimationAsset(Assets.slash_animation);
+		attackComponent.setCriticalAttackAnimationAsset(Assets.slash_critical_animation);
 		playerEntity.add(attackComponent);
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);

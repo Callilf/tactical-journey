@@ -232,6 +232,13 @@ public class Assets {
 	public static AtlasRegion status_burning;
 	public static AtlasRegion status_entangled;
 	
+	
+	//*********
+	// Orbs
+	
+	public static Array<Sprite> energy_orb;
+
+	
 	//******
 	// Items
 	
@@ -495,6 +502,12 @@ public class Assets {
 		status_flight = Assets.getTexture("flight");
 		status_burning = Assets.getTexture("burning");
 		status_entangled = Assets.getTexture("entangled");
+		
+		//*************
+		// Orbs
+		
+		energy_orb = Assets.getAnimation("energy_orb");
+		
 
 		//******
 		// Items

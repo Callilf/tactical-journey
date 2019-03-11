@@ -312,6 +312,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.orbFactory.createEnergyOrb(new Vector2(6, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);

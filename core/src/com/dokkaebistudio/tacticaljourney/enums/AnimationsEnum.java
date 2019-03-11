@@ -17,6 +17,9 @@ public enum AnimationsEnum {
 	
 	FIRE(new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP)),
 	
+	
+	ENERGY_ORB(new Animation<Sprite>(0.2f, Assets.energy_orb, PlayMode.LOOP)),
+	
 	STINGER_FLY(new Animation<Sprite>(0.15f, Assets.enemy_stinger, PlayMode.LOOP)),
 	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP)),
 	

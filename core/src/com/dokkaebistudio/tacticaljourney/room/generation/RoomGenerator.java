@@ -183,7 +183,13 @@ public abstract class RoomGenerator {
 			for (y = 0; y < GameScreen.GRID_H; y++) {
 				Vector2 pos = new Vector2(x, y);
 				groom.getTiles()[x][y] = new Tile(currentRoom, pos);
-				entityFactory.createTerrain(currentRoom, pos, groom.getTileTypes()[x][y]);
+				Entity terrain = entityFactory.createTerrain(currentRoom, pos, groom.getTileTypes()[x][y]);
+			
+				if (terrain != null && Mappers.lootRewardComponent.has(terrain)) {
+					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(terrain);
+					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
+
+				}
 			}
 		}
 		

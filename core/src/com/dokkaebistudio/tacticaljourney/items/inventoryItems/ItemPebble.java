@@ -23,7 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class ItemPebble extends Item {
 
 	public ItemPebble() {
-		super("Pebble", Assets.pebble_item, false, true, 1, 4);
+		super("Pebble", Assets.pebble_item, false, true);
 		this.type = ItemEnum.PEBBLE;
 	}
 	
@@ -45,25 +45,6 @@ public class ItemPebble extends Item {
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		return true;
-	}
-	
-	@Override
-	public boolean pickUp(Entity picker, Entity item, Room room) {
-		Integer quantity = Mappers.itemComponent.get(item).getQuantity();
-		boolean pickedUp = false;
-		for (int i=0 ; i < quantity ; i++) {
-			Entity pebble = null;
-			if (i == quantity - 1) {
-				pebble = item;
-			} else {
-				pebble = room.entityFactory.itemFactory.createItemPebble(room, null);
-				ItemComponent itemComponent = Mappers.itemComponent.get(pebble);
-				itemComponent.setQuantity(1);
-			}
-			pickedUp = super.pickUp(picker, pebble, room);
-			if (!pickedUp) break;
-		}
-		return pickedUp;
 	}
 	
 	@Override

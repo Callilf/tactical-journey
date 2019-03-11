@@ -46,6 +46,7 @@ import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -104,20 +105,22 @@ public final class EntityFactory {
 	 * @param type the type
 	 * @return the tile entity
 	 */
-	public void createTerrain(Room room, Vector2 pos, TileEnum type) {
+	public Entity createTerrain(Room room, Vector2 pos, TileEnum type) {
+		Entity result = null;
 		switch (type) {
 			case WALL:
-				this.createWall(room, pos);
+				result = this.createWall(room, pos);
 				break;
 			case GROUND:
 				break;
 			case PIT:
-				this.createChasm(room, pos);
+				result = this.createChasm(room, pos);
 				break;
 			case MUD:
-				this.creepFactory.createMud(room, pos);
+				result = this.creepFactory.createMud(room, pos);
 				break;
 		}
+		return result;
 	}
 	
 	public Entity createWall(Room room, Vector2 pos) {
@@ -143,6 +146,15 @@ public final class EntityFactory {
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	destructibleCompo.setDestroyedTexture(Assets.wall_destroyed);
     	wallEntity.add(destructibleCompo);
+    	
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new WallItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 100);
+		dropRate.add(ItemPoolRarity.RARE, 0);
+		lootRewardCompo.setDropRate(dropRate);
+		wallEntity.add(lootRewardCompo);
+				
     	
 		engine.addEntity(wallEntity);
 
@@ -799,7 +811,7 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.COMMON, 80);
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		lootRewardCompo.setDropRate(dropRate);
 		crateEntity.add(lootRewardCompo);

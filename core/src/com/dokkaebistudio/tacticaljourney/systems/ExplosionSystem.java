@@ -22,26 +22,18 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.util.DropUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ExplosionSystem extends EntitySystem implements RoomSystem {	
@@ -183,73 +175,13 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			Set<Entity> destructibles = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(),
 					DestructibleComponent.class, room);
 			for (Entity d : destructibles) {
-				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
-				destructibleComponent.setDestroyed(true);
-
-				if (destructibleComponent.isRemove()) {
-					
-					// Drop loot
-					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(d);
-					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
-						// Drop reward
-						dropItem(d, lootRewardComponent);
-					}
-					
-					room.removeEntity(d);
-
-					
-					//Add debris
-					if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
-						GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
-						room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.DESTROYED_SPRITE, room);
-					}
-				} else {
-					SpriteComponent spriteComponent = Mappers.spriteComponent.get(d);
-					spriteComponent.setSprite(new Sprite(destructibleComponent.getDestroyedTexture()));
-					
-					// If it's a statue, set its "destroyed" status so that the statues delivers a curse
-					StatueComponent statueComponent = Mappers.statueComponent.get(d);
-					if (statueComponent != null) {
-						statueComponent.setJustDestroyed(true);
-					}
-				}
-				
-				
+				DropUtil.destroy(d, room);
 			}
-				
-
 			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
 		}
 		room.removeEntity(explosive);
 
 
 	}
-	
-	
-	
-    /**
-     * Drop an item after explosion.
-     * @param entity the entity that exploded and will drop the item
-     * @param lootRewardComponent the lootRewardComponent of the entity
-     */
-	private void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent) {
-		final Entity dropItem = lootRewardComponent.getDrop();
-		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
-		
-		// Drop animation
-		Action finishDropAction = new Action(){
-		  @Override
-		  public boolean act(float delta){
-			itemComponent.drop(dropLocation, dropItem, room);
-			dropLocation.free();
-			
-			room.getAddedItems().add(dropItem);
-		    return true;
-		  }
-		};
-		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
-		fxStage.addActor(dropAnimationImage);
-	}
+
 }

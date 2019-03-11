@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -14,8 +15,11 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
+import com.dokkaebistudio.tacticaljourney.util.DropUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 /**
@@ -68,6 +72,12 @@ public class AttackManager {
 		Entity target = attackCompo.getTarget();
 		if (target == null) {
 			//Attacked an empty tiled... XD
+			Tile targetedTile = attackCompo.getTargetedTile();
+			Entity destructible = TileUtil.getEntityWithComponentOnTile(targetedTile.getGridPos(), DestructibleComponent.class, room);
+			if (destructible != null && Mappers.destructibleComponent.get(destructible).isDestroyableWithWeapon()) {
+				DropUtil.destroy(destructible, room);
+			}
+			
 			return;
 		}
 		

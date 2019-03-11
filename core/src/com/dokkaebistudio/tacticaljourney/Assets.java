@@ -69,6 +69,15 @@ public class Assets {
 	
 	public static AtlasRegion hud_room_cleared;
 	
+	
+	//*****************
+	// VFX animations
+	public static Array<Sprite> slash_animation;
+	public static Array<Sprite> slash_critical_animation;
+
+	public static Array<Sprite> explosion_animation;
+
+	
 	//**********
 	// Popins
 	
@@ -175,6 +184,9 @@ public class Assets {
 	public static AtlasRegion destructible_vase_destroyed;
 	public static AtlasRegion destructible_vase_big;
 	public static AtlasRegion destructible_vase_big_destroyed;
+	public static AtlasRegion destructible_ammo_crate;
+	public static AtlasRegion destructible_ammo_crate_destroyed;
+	public static AtlasRegion destructible_ammo_crate_reinforced;
 
 
 
@@ -259,7 +271,6 @@ public class Assets {
 	
 	public static AtlasRegion arrow;
 	public static Array<Sprite> bomb_animation;
-	public static Array<Sprite> explosion_animation;
 
 	
 	//**************************
@@ -329,6 +340,12 @@ public class Assets {
 		
 		hud_room_cleared = Assets.getTexture("hud_room_cleared");
 		
+		
+		//***********************
+		// VFX animations
+		slash_animation = Assets.getAnimation("anim_slash");
+		slash_critical_animation = Assets.getAnimation("anim_slash_crit");
+		explosion_animation = Assets.getAnimation("explosion");
 		
 		//**********
 		// Popins
@@ -431,6 +448,9 @@ public class Assets {
 		destructible_vase_destroyed = Assets.getTexture("vase_destroyed");
 		destructible_vase_big = Assets.getTexture("vase_big");
 		destructible_vase_big_destroyed = Assets.getTexture("vase_big_destroyed");
+		destructible_ammo_crate = Assets.getTexture("ammo_crate");
+		destructible_ammo_crate_destroyed = Assets.getTexture("ammo_crate_destroyed");
+		destructible_ammo_crate_reinforced = Assets.getTexture("ammo_crate_reinforced");
 
 
 		//********
@@ -507,7 +527,6 @@ public class Assets {
 		
 		arrow = Assets.getTexture("arrow");
 		bomb_animation = Assets.getAnimation("bomb");
-		explosion_animation = Assets.getAnimation("explosion");
 
 		
 		//*****************

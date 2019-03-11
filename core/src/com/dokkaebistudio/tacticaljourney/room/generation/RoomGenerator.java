@@ -25,7 +25,6 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -307,6 +306,12 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			
+//			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
+//			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
+//			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
+
+			
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
 //			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
 			
@@ -433,14 +438,13 @@ public abstract class RoomGenerator {
 		while (iterator.hasNext()) {
 			PoolableVector2 location = iterator.next();
 			
-			int nextInt = random.nextInt(10);
+			int nextInt = random.nextInt(15);
 			Entity destructible = null;
 			
-			if (nextInt <= 3) {
+			if (nextInt <= 2) {
 				destructible = entityFactory.createVase(room, location);
 			} else if (nextInt <= 4) {
-				//TODO place big vase
-				continue;
+				destructible = entityFactory.createAmmoCrate(room, location);
 			} else {
 				continue;
 			}

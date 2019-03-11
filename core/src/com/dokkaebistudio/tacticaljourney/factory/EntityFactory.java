@@ -44,6 +44,7 @@ import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -765,6 +766,46 @@ public final class EntityFactory {
 				
 		engine.addEntity(vaseEntity);
 		return vaseEntity;
+	}
+	
+	/**
+	 * Create an ammo crate.
+	 * @param pos the position
+	 * @param moveSpeed the speed
+	 * @return the enemy entity
+	 */
+	public Entity createAmmoCrate(Room room, Vector2 pos) {
+		Entity crateEntity = engine.createEntity();
+		crateEntity.flags = EntityFlagEnum.DESTRUCTIBLE_AMMO_CRATE.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);
+		spriteCompo.setSprite(new Sprite(Assets.destructible_ammo_crate));
+		crateEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(crateEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.DESTRUCTIBLE;
+		crateEntity.add(gridPosition);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		crateEntity.add(solidComponent);
+		
+		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
+		destructibleComponent.setDestroyedTexture(Assets.destructible_ammo_crate_destroyed);
+		destructibleComponent.setDestroyableWithWeapon(true);
+		crateEntity.add(destructibleComponent);
+				
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 5);
+		lootRewardCompo.setDropRate(dropRate);
+		crateEntity.add(lootRewardCompo);
+				
+		engine.addEntity(crateEntity);
+		return crateEntity;
 	}
 	
 	

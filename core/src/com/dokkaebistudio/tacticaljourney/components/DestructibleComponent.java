@@ -19,6 +19,9 @@ public class DestructibleComponent implements Component, Poolable {
 	 */
 	private AtlasRegion destroyedTexture;
 	
+	/** Whether this can be destroyed with a simple attack. */
+	private boolean destroyableWithWeapon;
+	
 	/** Whether the destroyed entity must be removed. */
 	private boolean remove = true;;
 	
@@ -28,6 +31,7 @@ public class DestructibleComponent implements Component, Poolable {
 		this.setDestroyedTexture(null);
 		this.setRemove(true);
 		this.setDestroyed(false);
+		this.setDestroyableWithWeapon(false);
 	}
 
 
@@ -71,6 +75,20 @@ public class DestructibleComponent implements Component, Poolable {
 
 	public void setDestroyed(boolean destroyed) {
 		this.destroyed = destroyed;
+	}
+
+
+
+
+	public boolean isDestroyableWithWeapon() {
+		return destroyableWithWeapon;
+	}
+
+
+
+
+	public void setDestroyableWithWeapon(boolean destroyableWithWeapon) {
+		this.destroyableWithWeapon = destroyableWithWeapon;
 	}
 	
 }

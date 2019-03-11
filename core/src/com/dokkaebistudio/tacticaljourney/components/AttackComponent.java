@@ -54,7 +54,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The target entity. */
 	private Entity target;
 	/** The targeted tile entity. */
-	private Entity targetedTile;
+	private Tile targetedTile;
 	
 	//************
 	// Bombs
@@ -346,11 +346,11 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.parentAttackCompo = parentAttackCompo;
 	}
 
-	public Entity getTargetedTile() {
+	public Tile getTargetedTile() {
 		return targetedTile;
 	}
 
-	public void setTargetedTile(Entity targetedTile) {
+	public void setTargetedTile(Tile targetedTile) {
 		this.targetedTile = targetedTile;
 	}
 

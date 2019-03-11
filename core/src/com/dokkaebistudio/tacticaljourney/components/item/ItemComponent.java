@@ -245,7 +245,7 @@ public class ItemComponent implements Component, Poolable {
 			RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
 			int value = this.itemType.getRandomValueMin();
 			if (this.itemType.getRandomValueMax() > this.itemType.getRandomValueMin()) {
-				value += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin());
+				value += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin() + 1);
 			}
 			setQuantity(value);
 		}

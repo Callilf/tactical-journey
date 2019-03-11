@@ -3,10 +3,15 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
@@ -23,10 +28,13 @@ import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
 public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 	
@@ -175,24 +183,24 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		break;
     		
     	case PLAYER_ATTACK_ANIMATION:
-    		
+			AttackComponent attackComponent = wheel.getAttackComponent();
+			
+			Action finishAttackAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				finishAttack(player, attackCompo, skillEntity);
+			    return true;
+			  }
+			};
+			
     		if (wheel.getAttackComponent().getAttackType() == AttackTypeEnum.RANGE) {
     			
-    			AttackComponent attackComponent = wheel.getAttackComponent();
     			if (attackCompo.getProjectileImage() == null) {
-    				
-    				Action finishAttackAction = new Action(){
-					  @Override
-					  public boolean act(float delta){
-						finishAttack(player, attackCompo, skillEntity);
-					    return true;
-					  }
-					};
-    				
-    				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(attackComponent.getTargetedTile());
+
+    				Vector2 targetPos = attackComponent.getTargetedTile().getGridPos();
     				attackCompo.setProjectileImage(Assets.projectile_arrow,
     						attackerCurrentPos.coord(), 
-    						targetPos.coord(), 
+    						targetPos, 
     						true,
     						finishAttackAction);
     				
@@ -200,7 +208,31 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     			}
     			
     		} else {
-				finishAttack(player, attackCompo, skillEntity);
+    			
+    			if (attackCompo.getProjectileImage() == null) {
+    				Array<Sprite> sprites = Assets.slash_animation;
+    				Sector pointedSector = wheel.getPointedSector();
+    				if (pointedSector != null && pointedSector.hit == Hit.CRITICAL) {
+    					sprites = Assets.slash_critical_animation;
+    				}    				
+	    			Animation<Sprite> anim = new Animation<>(0.03f, sprites);
+	    			AnimatedImage slash = new AnimatedImage(anim, false, finishAttackAction);
+	    			Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(attackerCurrentPos.coord());
+	    			Vector2 targetPosInPixel = attackComponent.getTargetedTile().getAbsolutePos();
+	    			slash.setPosition(targetPosInPixel.x, targetPosInPixel.y);
+	    			
+	    			double degrees = Math.atan2(
+	    					targetPosInPixel.y - playerPixelPos.y,
+	    				    targetPosInPixel.x - playerPixelPos.x
+	    				) * 180.0d / Math.PI;
+	    			slash.setOrigin(Align.center);
+	    			slash.setRotation((float) degrees);
+	    			
+	    			attackCompo.setProjectileImage(slash);
+	    			stage.addActor(slash);
+    			}
+    			
+//				finishAttack(player, attackCompo, skillEntity);
     		}
     		
     		
@@ -214,8 +246,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 	    		AtlasRegion projectileTexture = Assets.projectile_bomb;
 	    		if (skillAttackCompo.getProjectileImage() == null) {
-		    		Entity targetedTile = skillAttackCompo.getTargetedTile();
-		    		final GridPositionComponent targetedPosition = Mappers.gridPositionComponent.get(targetedTile);
+		    		Tile targetedTile = skillAttackCompo.getTargetedTile();
+		    		final Vector2 targetedPosition = targetedTile.getGridPos();
 		    		
 		    		Action finishThrowAction = null;
 		    		if (skillAttackCompo.getThrownEntity() != null) {
@@ -242,7 +274,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 					
 					skillAttackCompo.setProjectileImage(projectileTexture,
 							attackerCurrentPos.coord(), 
-							targetedPosition.coord(), 
+							targetedPosition, 
 							false,
 							finishThrowAction);
 	
@@ -276,7 +308,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
      * @param skillEntity the skill used
      * @param targetedPosition the targeted position
      */
-	private void finishBombThrow(final Entity player, final Entity skillEntity, GridPositionComponent targetedPosition) {		
+	private void finishBombThrow(final Entity player, final Entity skillEntity, Vector2 targetedGridPosition) {		
 		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
 		if (skillAttackCompo.getProjectileImage() != null) {
@@ -284,7 +316,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			skillAttackCompo.setProjectileImage(null);
 		}
 		
-		Entity bomb = room.entityFactory.createBomb(room, targetedPosition.coord(), player,
+		Entity bomb = room.entityFactory.createBomb(room, targetedGridPosition, player,
 				skillAttackCompo.getBombRadius(), skillAttackCompo.getBombTurnsToExplode(), skillAttackCompo.getStrength());
 		
 		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
@@ -303,7 +335,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
      * @param skillEntity the skill used
      * @param targetedPosition the targeted position
      */
-	private void finishItemThrow(final Entity player, final Entity skillEntity, GridPositionComponent targetedPosition) {		
+	private void finishItemThrow(final Entity player, final Entity skillEntity, Vector2 targetedGridPosition) {		
 		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
 		if (skillAttackCompo.getProjectileImage() != null) {
@@ -313,7 +345,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		
 		Entity thrownEntity = skillAttackCompo.getThrownEntity();
 		ItemComponent itemComponent = Mappers.itemComponent.get(thrownEntity);
-		itemComponent.onThrow(targetedPosition.coord(), player, thrownEntity, room);		
+		itemComponent.onThrow(targetedGridPosition, player, thrownEntity, room);		
 		
 		Journal.addEntry("You threw " + itemComponent.getItemLabel());
 		
@@ -397,7 +429,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 	private void selectAttackTile(AttackComponent attackCompo, WheelComponent wheelCompo, boolean isThrow, Entity targetedTile,
 			GridPositionComponent targetedTileGridPositionComponent) {
-		attackCompo.setTargetedTile(targetedTile);
+		attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(Mappers.gridPositionComponent.get(targetedTile).coord(), room));
 		
 		//Attack is possible !
 		if (isThrow) {
@@ -407,7 +439,14 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			attackCompo.setTarget(target);
 			wheel.setAttackComponent(attackCompo);
 			wheel.setWheelComponent(wheelCompo);
-			room.setNextState(RoomState.PLAYER_WHEEL_START);
+
+			if (target == null) {
+				//TODO For now, the attack wheel is not displayed if we attack a tile with no attackable entity on it
+				// This might need to change later.
+				room.setNextState(RoomState.PLAYER_ATTACK_ANIMATION);
+			} else {
+				room.setNextState(RoomState.PLAYER_WHEEL_START);
+			}
 		}
 	}
 	

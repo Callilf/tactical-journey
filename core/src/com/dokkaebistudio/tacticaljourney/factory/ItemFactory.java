@@ -42,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbEnergy;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbPoison;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbVegetal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -203,6 +204,9 @@ public final class ItemFactory {
 			break;
 		case VEGETAL_ORB:
 			item = createItemVegetalOrb(room, tilePos);
+			break;
+		case POISON_ORB:
+			item = createItemPoisonOrb(room, tilePos);
 			break;
 			
 			default:
@@ -463,6 +467,11 @@ public final class ItemFactory {
 		return item;
 	}
 	
+	public Entity createItemPoisonOrb(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.poison_orb_item, new ItemOrbPoison());
+		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
+		return item;
+	}
 	
 	// TODO change
 	

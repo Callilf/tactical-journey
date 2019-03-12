@@ -29,6 +29,7 @@ public enum ItemEnum {
 	// Orbs
 	ENERGY_ORB(1),
 	VEGETAL_ORB(1),
+	POISON_ORB(1),
 	
 	
 	

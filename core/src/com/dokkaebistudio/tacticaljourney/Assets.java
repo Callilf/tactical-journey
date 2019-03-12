@@ -242,6 +242,8 @@ public class Assets {
 	public static AtlasRegion energy_orb_item;
 	public static Array<Sprite> vegetal_orb;
 	public static AtlasRegion vegetal_orb_item;
+	public static Array<Sprite> poison_orb;
+	public static AtlasRegion poison_orb_item;
 
 	
 	//******
@@ -520,6 +522,8 @@ public class Assets {
 		energy_orb_item = Assets.getTexture("item-orb-energy");
 		vegetal_orb = Assets.getAnimation("vegetal_orb");
 		vegetal_orb_item = Assets.getTexture("item-orb-vegetal");
+		poison_orb = Assets.getAnimation("poison_orb");
+		poison_orb_item = Assets.getTexture("item-orb-poison");
 
 
 		//******

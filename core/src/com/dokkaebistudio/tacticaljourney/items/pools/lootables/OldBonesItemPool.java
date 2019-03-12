@@ -25,8 +25,9 @@ public class OldBonesItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 5));
 		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 3));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 3));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 3));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 2));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 2));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 2));
 		
 	}
 	

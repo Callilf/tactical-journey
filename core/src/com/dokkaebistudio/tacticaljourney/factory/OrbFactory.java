@@ -8,8 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -18,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbEnergy;
+import com.dokkaebistudio.tacticaljourney.orbs.OrbPoison;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbVegetal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -104,4 +103,15 @@ public final class OrbFactory {
 		return orb;
 	}
 
+	public Entity createPoisonOrb(Vector2 pos, Room room) {
+		Entity orb = createOrbBase(room, pos, EntityFlagEnum.POISON_ORB, AnimationsEnum.POISON_ORB.getAnimation());
+		
+		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
+		orbCompo.setType(new OrbPoison());
+		orb.add(orbCompo);
+		
+		room.addEntity(orb);
+		
+		return orb;
+	}
 }

@@ -11,9 +11,11 @@ public class OrbBagItemPool extends LootableItemPool {
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 	
 	static {
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 5, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 5, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 1, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 10, true));
+		
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 3, true));
 	}
 	
 	

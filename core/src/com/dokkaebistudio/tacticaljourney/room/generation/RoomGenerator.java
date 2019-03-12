@@ -312,6 +312,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.orbFactory.createEnergyOrb(new Vector2(6, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
@@ -319,8 +320,7 @@ public abstract class RoomGenerator {
 
 			
 //			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
-//			entityFactory.creepFactory.createPoison(room, new Vector2(13, 8), null);
-			
+//			entityFactory.creepFactory.createPoison(room, new Vector2(12, 8), null);
 //			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 9));
 //			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
 //			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
@@ -364,8 +364,10 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(2,room, new Vector2(8, 8));
 			entityFactory.itemFactory.createItemTutorialPage(3,room, new Vector2(8, 7));
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
+			entityFactory.itemFactory.createItemTutorialPage(5,room, new Vector2(11, 10));
 
 //			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
+//			entityFactory.lootableFactory.createOrbBag(room, new Vector2(12, 9));
 //			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
 //
 			
@@ -377,10 +379,10 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 			
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 8), 1);
+//			Entity enemy3 = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(12, 10));
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
-			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
+//			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
 //			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
 //			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
 
@@ -410,12 +412,14 @@ public abstract class RoomGenerator {
 		int lootRandom = random.nextInt(10);
 		boolean isLoot = lootRandom < lootableChancePercentage;
 		if (isLoot) {
-			lootRandom = random.nextInt(10);
+			lootRandom = random.nextInt(12);
 			Vector2 lootPos = spawnPositions.get(0);
 			if (lootRandom <= 5) {
-				Entity bones = entityFactory.lootableFactory.createBones(room, lootPos);				
+				entityFactory.lootableFactory.createBones(room, lootPos);				
+			} else if (lootRandom <= 9) {
+				entityFactory.lootableFactory.createSatchel(room, lootPos);
 			} else {
-				Entity satchel = entityFactory.lootableFactory.createSatchel(room, lootPos);
+				entityFactory.lootableFactory.createOrbBag(room, lootPos);
 			}
 			spawnPositions.remove(0);
 		}

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -43,6 +44,9 @@ public class ItemTutorialPage extends Item {
 			break;
 		case 4:
 			result = "Tutorial page 4";
+			break;
+		case 5:
+			result = "Tutorial page 5";
 			break;
 		}
 		
@@ -83,6 +87,14 @@ public class ItemTutorialPage extends Item {
 					+ " - [RED]Red[WHITE]: critical, the amount you deal is 2 times your strength.";	
 			break;
 			
+		case 5:
+			result = "Orbs:\n"
+					+ "Orbs are volatile entities that can be found in the dungeon. Upon discovering an orb, it will automatically take an empty orb"
+					+ "spot around you. You only have 4 orbs spots which are the 4 tiles around you (up, down, left and right). If all spots are taken and you discover"
+					+ "a new orb, it will just vanish.\n"
+					+ "Orbs have special properties that will automatically be activated upon entering on contact with another living creature.\n"
+					+ "[GOLDENROD]Activating an orb doesn't consume you turn.";	
+			break;
 			
 			default:
 				
@@ -100,9 +112,6 @@ public class ItemTutorialPage extends Item {
 	public boolean use(Entity user, Entity item, Room room) {
 		Journal.addEntry("You tore down the tutorial page " + pageNumber + ".");
 		
-		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
-		statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(5));
-
 		return true;
 	}
 }

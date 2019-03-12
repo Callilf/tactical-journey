@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of Kalamazoo. Restore between 0 and 10 health after clearing a room.
+ * Blessing of Kalamazoo. Restore between 0 and 5 health after clearing a room.
  * @author Callil
  *
  */
@@ -27,7 +27,7 @@ public class BlessingOfKalamazoo extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On room clear, [GREEN]restore between 0 and 10 hp";
+		return "On room clear, [GREEN]restore between 1 and 5 hp";
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class BlessingOfKalamazoo extends Blessing {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		
 		if (healthComponent != null) {
-			int healAmount = RandomSingleton.getInstance().getUnseededRandom().nextInt(10);
+			int healAmount = 1 + RandomSingleton.getInstance().getUnseededRandom().nextInt(5);
 			healthComponent.restoreHealth(healAmount);
 			
 			Journal.addEntry("[GREEN]Blessing of Kalamazoo granted " + healAmount + " hp.");

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -23,7 +24,9 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -161,10 +164,16 @@ public final class PlayerFactory {
 		
 		// Alteration receiver compo
 		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
+		alterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_BLESSING, new BlessingOfCalishka());
 		playerEntity.add(alterationReceiverCompo);
 		
+		// Statuses
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		playerEntity.add(statusReceiverCompo);
+		
+		// Orb carrier
+		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
+		playerEntity.add(orbCarrierCompo);
 		
 //		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
 

@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OrbBagItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -108,6 +109,7 @@ public final class LootableFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
     	lootComponent.setItemPool(new AdventurersSatchelItemPool());
+    	lootComponent.setMinNumberOfItems(1);
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -163,6 +165,43 @@ public final class LootableFactory {
     	return lootable;
 	}
 	
+	
+	/**
+	 * Create an orb bag
+	 * @param room the room
+	 * @param pos the tile position
+	 * @return the lootable
+	 */
+	public Entity createOrbBag(Room room, Vector2 pos) {
+		Entity lootable = engine.createEntity();
+		lootable.flags = EntityFlagEnum.LOOTABLE_ORB_BAG.getFlag();
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(lootable, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
+    	lootable.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(LootableEnum.ORB_BAG.getClosedTexture());
+    	spriteCompo.setSprite(s);
+    	lootable.add(spriteCompo);
+    	
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.ORB_BAG);
+    	lootComponent.setItemPool(new OrbBagItemPool());
+    	lootComponent.setMinNumberOfItems(0);
+    	lootComponent.setMaxNumberOfItems(3);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	this.fillLootable(lootComponent);
+    	lootable.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	lootable.add(destructibleCompo);
+
+		engine.addEntity(lootable);
+
+    	return lootable;
+	}
 	
 	
 	//******************

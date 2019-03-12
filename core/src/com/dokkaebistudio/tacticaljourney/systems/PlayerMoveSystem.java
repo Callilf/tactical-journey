@@ -130,6 +130,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			boolean stillLooting = handleLoot(player);
 			if (stillLooting) return;
 			
+			if (!room.hasEnemies() && !moveCompo.freeMove) {
+				room.turnManager.endPlayerTurn();
+				break;
+			}
+			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();

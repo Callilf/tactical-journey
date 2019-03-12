@@ -34,7 +34,7 @@ public abstract class LootableItemPool {
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
-			randomInt = seededRandom.nextInt(sumOfChances);
+			randomInt = seededRandom.nextInt(sumOfChances + 1);
 			Iterator<PooledItemDescriptor> poolIterator = getItemPool().iterator();
 			while(poolIterator.hasNext()) {
 				PooledItemDescriptor pid = poolIterator.next();

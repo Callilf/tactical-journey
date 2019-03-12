@@ -5,7 +5,9 @@ package com.dokkaebistudio.tacticaljourney.factory.enemies;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -36,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItem
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
  * Factory used to create presets of entities.
@@ -109,6 +112,9 @@ public final class EnemyPangolinFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(9);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation),  true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -192,6 +198,9 @@ public final class EnemyPangolinFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(12);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.slash_animation),  true);
+		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

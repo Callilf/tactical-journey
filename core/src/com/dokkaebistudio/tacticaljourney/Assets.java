@@ -222,6 +222,8 @@ public class Assets {
 	public static AtlasRegion lootable_satchel_opened;
 	public static AtlasRegion lootable_belongings;
 	public static AtlasRegion lootable_belongings_opened;
+	public static AtlasRegion lootable_orb_bag;
+	public static AtlasRegion lootable_orb_bag_opened;
 
 	//*********
 	// Statuses
@@ -231,6 +233,16 @@ public class Assets {
 	public static AtlasRegion status_flight;
 	public static AtlasRegion status_burning;
 	public static AtlasRegion status_entangled;
+	
+	
+	//*********
+	// Orbs
+	
+	public static Array<Sprite> energy_orb;
+	public static AtlasRegion energy_orb_item;
+	public static Array<Sprite> vegetal_orb;
+	public static AtlasRegion vegetal_orb_item;
+
 	
 	//******
 	// Items
@@ -248,6 +260,8 @@ public class Assets {
 	
 	public static AtlasRegion armor_up_item;
 	public static AtlasRegion armor_piece_item;
+	
+	public static AtlasRegion orb_container_item;
 	
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
@@ -287,6 +301,7 @@ public class Assets {
 	public static AtlasRegion blessing_poisoner;
 	public static AtlasRegion blessing_pangolin;
 	public static AtlasRegion blessing_photosynthesis;
+	public static AtlasRegion blessing_calishka;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -486,6 +501,8 @@ public class Assets {
 		lootable_satchel_opened = Assets.getTexture("remains_satchel_opened");
 		lootable_belongings = Assets.getTexture("remains_belongings");
 		lootable_belongings_opened = Assets.getTexture("remains_belongings_opened");
+		lootable_orb_bag = Assets.getTexture("remains_orb_bag");
+		lootable_orb_bag_opened = Assets.getTexture("remains_orb_bag_opened");
 
 		//*********
 		// Statuses
@@ -495,6 +512,15 @@ public class Assets {
 		status_flight = Assets.getTexture("flight");
 		status_burning = Assets.getTexture("burning");
 		status_entangled = Assets.getTexture("entangled");
+		
+		//*************
+		// Orbs
+		
+		energy_orb = Assets.getAnimation("energy_orb");
+		energy_orb_item = Assets.getTexture("item-orb-energy");
+		vegetal_orb = Assets.getAnimation("vegetal_orb");
+		vegetal_orb_item = Assets.getTexture("item-orb-vegetal");
+
 
 		//******
 		// Items
@@ -511,6 +537,7 @@ public class Assets {
 		pebble_item = Assets.getTexture("item-consumable-pebble");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
+		orb_container_item = Assets.getTexture("item-consumable-orb-container");
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
@@ -544,6 +571,7 @@ public class Assets {
 		blessing_poisoner = Assets.getTexture("blessing-poisoner");
 		blessing_pangolin = Assets.getTexture("blessing-pangolin");
 		blessing_photosynthesis = Assets.getTexture("blessing-photosynthesis");
+		blessing_calishka = Assets.getTexture("blessing-calishka");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

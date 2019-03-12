@@ -154,7 +154,9 @@ public class Room extends EntitySystem {
 	 * @param e the entity
 	 * @param pos the position
 	 */
-	public void removeEntityAtPosition(Entity e, Vector2 pos) {		
+	public void removeEntityAtPosition(Entity e, Vector2 pos) {	
+		if (e == null) return;
+		
 		Set<Entity> set = entitiesAtPositions.get(pos);
 		
 		if (set != null) {

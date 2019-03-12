@@ -1,5 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components.orbs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
@@ -34,7 +37,6 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 	private int freeOrbSlotsNumber = 4;
 	
 	
-	
 	@Override
 	public void reset() {
 		clearOrb(DirectionEnum.UP);
@@ -43,6 +45,17 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 		clearOrb(DirectionEnum.RIGHT);
 		freeOrbSlotsNumber = 4;
 	}
+	
+	
+	public List<Entity> getOrbs() {
+		List<Entity> result = new ArrayList<>();
+		if (northOrb != null) result.add(northOrb);
+		if (southOrb != null) result.add(southOrb);
+		if (westOrb != null) result.add(westOrb);
+		if (eastOrb != null) result.add(eastOrb);
+		return result;
+	}
+	
 	
 	public void clearOrb(Entity orb) {
 		if (orb == northOrb) {
@@ -262,16 +275,16 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 		if (orb != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(orb);
 			if (orb == northOrb) {
-				gridPositionComponent.coord(northOrb, (int)finalPos.x, (int)finalPos.y + 1, room);
+				gridPositionComponent.coord(northOrb, (int)finalPos.x, (int)finalPos.y + 1, this.room);
 			} else if (orb == southOrb) {
-				gridPositionComponent.coord(southOrb, (int)finalPos.x, (int)finalPos.y - 1, room);
+				gridPositionComponent.coord(southOrb, (int)finalPos.x, (int)finalPos.y - 1, this.room);
 			} else if (orb == westOrb) {
-				gridPositionComponent.coord(westOrb, (int)finalPos.x - 1, (int)finalPos.y, room);
+				gridPositionComponent.coord(westOrb, (int)finalPos.x - 1, (int)finalPos.y, this.room);
 			} else if (orb == eastOrb) {
-				gridPositionComponent.coord(eastOrb, (int)finalPos.x + 1, (int)finalPos.y, room);
+				gridPositionComponent.coord(eastOrb, (int)finalPos.x + 1, (int)finalPos.y, this.room);
 			}
 			
-			OrbUtil.checkContact(orb, room);
+			OrbUtil.checkContact(orb, this.room);
 		}
 	}
 	

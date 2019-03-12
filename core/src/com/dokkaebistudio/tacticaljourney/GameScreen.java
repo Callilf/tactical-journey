@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -299,15 +300,15 @@ public class GameScreen extends ScreenAdapter {
 		
 		// Leave the room of the current floor
 		Room oldRoom = this.activeFloor.getActiveRoom();
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.player);
-		oldRoom.removeEntityAtPosition(this.player, playerPos.coord());
+		this.activeFloor.removePlayerFromRoom(oldRoom);
 
 		// Enter the room of the new floor
 		Room newActiveRoom = newFloor.getActiveRoom();
+		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
+
 		PoolableVector2 tempPos = PoolableVector2.create(11,6);
 		MovementHandler.placeEntity(this.player, tempPos, newActiveRoom);
 		tempPos.free();
-		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
 		
 		// Update the map
 		this.mapRenderer.enterFloor(newFloor);

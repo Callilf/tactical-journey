@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
@@ -102,8 +103,7 @@ public class Floor {
 			statusReceiverComponent.displayStatusTable(gameScreen.fxStage);
 		}
 		
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.gameScreen.player);
-		oldRoom.removeEntityAtPosition(this.gameScreen.player, playerPos.coord());
+		this.removePlayerFromRoom(oldRoom);
 		
 		//Place the player
 		if (newRoom.getNorthNeighbor() == oldRoom) {
@@ -120,6 +120,17 @@ public class Floor {
 		}
 	
 		MapRenderer.requireRefresh();
+	}
+	
+	public void removePlayerFromRoom(Room room) {
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.gameScreen.player);
+		room.removeEntityAtPosition(this.gameScreen.player, playerPos.coord());
+		
+		OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(this.gameScreen.player);
+		for (Entity orb : orbCarrierComponent.getOrbs()) {
+			GridPositionComponent orbPos = Mappers.gridPositionComponent.get(orb);
+			room.removeEntityAtPosition(orb, orbPos.coord());
+		}
 	}
 
 	

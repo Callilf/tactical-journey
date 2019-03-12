@@ -301,6 +301,7 @@ public class Assets {
 	public static AtlasRegion blessing_poisoner;
 	public static AtlasRegion blessing_pangolin;
 	public static AtlasRegion blessing_photosynthesis;
+	public static AtlasRegion blessing_calishka;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -570,6 +571,7 @@ public class Assets {
 		blessing_poisoner = Assets.getTexture("blessing-poisoner");
 		blessing_pangolin = Assets.getTexture("blessing-pangolin");
 		blessing_photosynthesis = Assets.getTexture("blessing-photosynthesis");
+		blessing_calishka = Assets.getTexture("blessing-calishka");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

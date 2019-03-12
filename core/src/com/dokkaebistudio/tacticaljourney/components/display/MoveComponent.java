@@ -99,7 +99,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		this.currentMoveDestinationTilePos = gridPositionComponent.coord();
 		this.currentMoveDestinationPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 		
-		Mappers.gridPositionComponent.get(mover).coord(mover, this.currentMoveDestinationTilePos, room);
+//		Mappers.gridPositionComponent.get(mover).coord(mover, this.currentMoveDestinationTilePos, room);
 	}
 	
 	public void incrementCurrentMoveDestinationIndex() {

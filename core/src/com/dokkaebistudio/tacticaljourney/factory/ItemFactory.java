@@ -24,15 +24,16 @@ import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
-import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
@@ -40,6 +41,8 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbEnergy;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbVegetal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -147,6 +150,10 @@ public final class ItemFactory {
 			item = createItemWingPotion(room, tilePos);
 			break;
 			
+		case ORB_CONTAINER:
+			item = createItemOrbContainer(room, tilePos);
+			break;
+
 			
 		case WEB_SACK:
 			item = createItemWebSack(room, tilePos);
@@ -183,6 +190,19 @@ public final class ItemFactory {
 			
 		case PANGOLIN_SCALE:
 			item = createItemPangolinScale(room, tilePos);
+			break;
+			
+			
+			
+			
+			
+			
+			
+		case ENERGY_ORB:
+			item = createItemEnergyOrb(room, tilePos);
+			break;
+		case VEGETAL_ORB:
+			item = createItemVegetalOrb(room, tilePos);
 			break;
 			
 			default:
@@ -270,6 +290,12 @@ public final class ItemFactory {
 	public Entity createItemWingPotion(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.wing_potion_item, new ItemWingPotion());
 		item.flags = EntityFlagEnum.ITEM_WING_POTION.getFlag();
+		return item;
+	}
+	
+	public Entity createItemOrbContainer(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.orb_container_item, new ItemOrbContainer());
+		item.flags = EntityFlagEnum.ITEM_ORB_CONTAINER.getFlag();
 		return item;
 	}
 	
@@ -420,6 +446,22 @@ public final class ItemFactory {
 	
 	
 	
+	
+	
+	//************
+	// Orbs
+	
+	public Entity createItemEnergyOrb(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.energy_orb_item, new ItemOrbEnergy());
+		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
+		return item;
+	}
+	
+	public Entity createItemVegetalOrb(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.vegetal_orb_item, new ItemOrbVegetal());
+		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
+		return item;
+	}
 	
 	
 	// TODO change

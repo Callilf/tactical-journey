@@ -48,16 +48,16 @@ public class GridPositionComponent implements Component, Poolable {
     
     public void coord(Entity e, Vector2 coord, Room r) {
     	this.hasAbsolutePos = false;
-    	r.removeEntityAtPosition(e, this.coord);    	
+    	if (r != null) r.removeEntityAtPosition(e, this.coord);    	
     	this.coord.set(coord.x,coord.y);
-    	r.addEntityAtPosition(e, this.coord);
+    	if (r != null) r.addEntityAtPosition(e, this.coord);
     }
     
     public void coord(Entity e, int x, int y, Room r) {
     	this.hasAbsolutePos = false;
-    	r.removeEntityAtPosition(e, this.coord);    	
+    	if (r != null) r.removeEntityAtPosition(e, this.coord);    	
     	this.coord.set(x,y);
-    	r.addEntityAtPosition(e, this.coord);
+    	if (r != null) r.addEntityAtPosition(e, this.coord);
     }
     
     public Vector2 coord() {

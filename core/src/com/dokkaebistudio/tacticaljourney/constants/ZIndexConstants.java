@@ -34,6 +34,7 @@ public final class ZIndexConstants {
 	
 	// PLAYER
 	public static final int PLAYER = 31;
+	public static final int ORB = 32;
 	public static final int STATUE = 50;
 	
 	// DESTRUCTIBLE

@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
@@ -20,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -30,7 +30,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
-import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrb;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -283,24 +283,26 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		
-		TextButton takeBtn = new TextButton("Take", PopinService.smallButtonStyle());
-		takeBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//add item in inventory and remove it from lootable entity
-				boolean pickedUp = itemComponent.pickUp(player, item, room);
-				if (pickedUp) {
-					lootableCompo.getItems().remove(item);
-					inventoryCompo.setInventoryActionInProgress(true);
-					room.turnManager.endPlayerTurn();
-					refreshPopin();
+		if (!(itemComponent.getItemType() instanceof ItemOrb)) {
+			TextButton takeBtn = new TextButton("Take", PopinService.smallButtonStyle());
+			takeBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					//add item in inventory and remove it from lootable entity
+					boolean pickedUp = itemComponent.pickUp(player, item, room);
+					if (pickedUp) {
+						lootableCompo.getItems().remove(item);
+						inventoryCompo.setInventoryActionInProgress(true);
+						room.turnManager.endPlayerTurn();
+						refreshPopin();
+					}
 				}
-			}
-		});
-		if (inventoryCompo.isInventoryActionInProgress()) takeBtn.setDisabled(true);
-		lootTakeBtns.add(takeBtn);
+			});
+			if (inventoryCompo.isInventoryActionInProgress()) takeBtn.setDisabled(true);
+			lootTakeBtns.add(takeBtn);
 		
-		oneItem.add(takeBtn).padRight(20);
+			oneItem.add(takeBtn).padRight(20);
+		}
 		
 		oneItem.pack();
 		return oneItem;
@@ -591,11 +593,13 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		boolean takeAllFinished = false;
 		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && !lootableCompo.getItems().isEmpty()) {
 			pickUpItem(0);
+			
+			lootableCompo.getItems().removeAll(lootableCompo.getStandByItems());
+			takeAllFinished = lootableCompo.getItems().isEmpty();
 		} else {
 			takeAllFinished = true;
 		}
 		
-		lootableCompo.getItems().removeAll(lootableCompo.getStandByItems());
 		
 		if (takeAllFinished) {
 			takeAllInProgess = false;
@@ -610,13 +614,19 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		Entity item = lootableCompo.getItems().get(index);
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
-		boolean pickedUp = itemComponent.pickUp(player, item, room);
-		if (pickedUp) {
-			lootableCompo.getItems().remove(item);
-			inventoryCompo.setInventoryActionInProgress(true);
-			room.turnManager.endPlayerTurn();
-			refreshPopin();
-		} else {
+		boolean onStandBy = itemComponent.getItemType() instanceof ItemOrb;
+		
+		if (!onStandBy) {
+			onStandBy = !itemComponent.pickUp(player, item, room);
+			if (!onStandBy) {
+				lootableCompo.getItems().remove(item);
+				inventoryCompo.setInventoryActionInProgress(true);
+				room.turnManager.endPlayerTurn();
+				refreshPopin();
+			}
+		}
+		
+		if (onStandBy) {
 			lootableCompo.getStandByItems().add(item);
 			if (lootableCompo.getItems().size() > index + 1) {
 				pickUpItem(index + 1);
@@ -682,6 +692,18 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
+		
+		// Take orbs if there are any
+		Iterator<Entity> it = lootableCompo.getItems().iterator();
+		while(it.hasNext()) {
+			Entity item = it.next();
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			if (itemComponent.getItemType() instanceof ItemOrb) {
+				itemComponent.pickUp(player, item, room);
+				it.remove();
+			}
+		}
+		
 		lootDisplayed = false;
 		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 

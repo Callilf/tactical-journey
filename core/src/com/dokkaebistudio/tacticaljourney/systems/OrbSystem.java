@@ -6,11 +6,13 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.components.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.OrbUtil;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class OrbSystem extends EntitySystem implements RoomSystem {
@@ -46,12 +48,9 @@ public class OrbSystem extends EntitySystem implements RoomSystem {
 		for(Entity orb : allOrbsOfCurrentRoom) {
 			
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(orb);
-			Entity player = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), PlayerComponent.class, room);
-			if (player != null) {
-				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
-				orbComponent.onContact(orb, player, room);
-			}
+			if (gridPositionComponent.hasAbsolutePos()) continue;
 			
+			OrbUtil.checkContact(orb, room);
 		}
 
 	}
@@ -60,7 +59,7 @@ public class OrbSystem extends EntitySystem implements RoomSystem {
 	private void fillEntitiesOfCurrentRoom() {
 		allOrbsOfCurrentRoom.clear();
 		for (Entity e : room.getAllEntities()) {
-			if (Mappers.orbComponent.has(e)) allOrbsOfCurrentRoom.add(e);
+			if (e != null && Mappers.orbComponent.has(e)) allOrbsOfCurrentRoom.add(e);
 		}
 	}
 

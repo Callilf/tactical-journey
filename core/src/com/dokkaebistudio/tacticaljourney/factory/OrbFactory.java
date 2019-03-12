@@ -5,18 +5,20 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbEnergy;
+import com.dokkaebistudio.tacticaljourney.orbs.OrbVegetal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -48,7 +50,7 @@ public final class OrbFactory {
 	 * @param pos the position
 	 * @return the orb entity
 	 */
-	private Entity createOrbBase(Room room, Vector2 pos, EntityFlagEnum flag, Array<Sprite> texture) {
+	private Entity createOrbBase(Room room, Vector2 pos, EntityFlagEnum flag, Animation<Sprite> anim) {
 		Entity orb = engine.createEntity();
 		orb.flags = flag.getFlag();
 
@@ -56,15 +58,17 @@ public final class OrbFactory {
 		orb.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(0, AnimationsEnum.ENERGY_ORB.getAnimation());
+		animCompo.animations.put(0, anim);
 		orb.add(animCompo);
 		StateComponent stateComponent = engine.createComponent(StateComponent.class);
 		stateComponent.set(0);
 		orb.add(stateComponent);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(orb, pos, room);
-		gridPosition.zIndex = ZIndexConstants.PLAYER;
+		if (pos != null) {
+			gridPosition.coord(orb, pos, room);
+		}
+		gridPosition.zIndex = ZIndexConstants.ORB;
 		orb.add(gridPosition);
 				
 		return orb;
@@ -77,10 +81,22 @@ public final class OrbFactory {
 	 * @return the orb entity
 	 */
 	public Entity createEnergyOrb(Vector2 pos, Room room) {
-		Entity orb = createOrbBase(room, pos, EntityFlagEnum.ENERGY_ORB, Assets.energy_orb);
+		Entity orb = createOrbBase(room, pos, EntityFlagEnum.ENERGY_ORB, AnimationsEnum.ENERGY_ORB.getAnimation());
 		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbEnergy());
+		orb.add(orbCompo);
+		
+		room.addEntity(orb);
+		
+		return orb;
+	}
+	
+	public Entity createVegetalOrb(Vector2 pos, Room room) {
+		Entity orb = createOrbBase(room, pos, EntityFlagEnum.VEGETAL_ORB, AnimationsEnum.VEGETAL_ORB.getAnimation());
+		
+		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
+		orbCompo.setType(new OrbVegetal());
 		orb.add(orbCompo);
 		
 		room.addEntity(orb);

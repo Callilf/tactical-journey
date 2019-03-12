@@ -18,12 +18,17 @@ public enum ItemEnum {
 	ARMOR_PIECE(1),
 	ARMOR_LIGHT(2),
 	
+	ORB_CONTAINER(1),
+	
 	// Misc
 	WEB_SACK(1),
 	VENOM_GLAND(1),
 	PEBBLE(1),
 	
 	
+	// Orbs
+	ENERGY_ORB(1),
+	VEGETAL_ORB(1),
 	
 	
 	

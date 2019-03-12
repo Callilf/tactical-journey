@@ -24,6 +24,8 @@ public class BasicShopItemPool extends ShopItemPool {
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10, 8));
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10, 10));
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10, 8));
+		
+		shopItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 10, 5));
 	}
 	
 	

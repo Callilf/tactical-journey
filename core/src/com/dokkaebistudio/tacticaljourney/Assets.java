@@ -222,6 +222,8 @@ public class Assets {
 	public static AtlasRegion lootable_satchel_opened;
 	public static AtlasRegion lootable_belongings;
 	public static AtlasRegion lootable_belongings_opened;
+	public static AtlasRegion lootable_orb_bag;
+	public static AtlasRegion lootable_orb_bag_opened;
 
 	//*********
 	// Statuses
@@ -237,6 +239,9 @@ public class Assets {
 	// Orbs
 	
 	public static Array<Sprite> energy_orb;
+	public static AtlasRegion energy_orb_item;
+	public static Array<Sprite> vegetal_orb;
+	public static AtlasRegion vegetal_orb_item;
 
 	
 	//******
@@ -255,6 +260,8 @@ public class Assets {
 	
 	public static AtlasRegion armor_up_item;
 	public static AtlasRegion armor_piece_item;
+	
+	public static AtlasRegion orb_container_item;
 	
 	public static AtlasRegion arrow_item;
 	public static AtlasRegion bomb_item;
@@ -493,6 +500,8 @@ public class Assets {
 		lootable_satchel_opened = Assets.getTexture("remains_satchel_opened");
 		lootable_belongings = Assets.getTexture("remains_belongings");
 		lootable_belongings_opened = Assets.getTexture("remains_belongings_opened");
+		lootable_orb_bag = Assets.getTexture("remains_orb_bag");
+		lootable_orb_bag_opened = Assets.getTexture("remains_orb_bag_opened");
 
 		//*********
 		// Statuses
@@ -507,7 +516,10 @@ public class Assets {
 		// Orbs
 		
 		energy_orb = Assets.getAnimation("energy_orb");
-		
+		energy_orb_item = Assets.getTexture("item-orb-energy");
+		vegetal_orb = Assets.getAnimation("vegetal_orb");
+		vegetal_orb_item = Assets.getTexture("item-orb-vegetal");
+
 
 		//******
 		// Items
@@ -524,6 +536,7 @@ public class Assets {
 		pebble_item = Assets.getTexture("item-consumable-pebble");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
+		orb_container_item = Assets.getTexture("item-consumable-orb-container");
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");

@@ -175,6 +175,13 @@ public class MovementHandler {
 	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
 		moveCompo.arrivedOnTile = true;
 		
+		Mappers.gridPositionComponent.get(mover).coord(mover, moveCompo.currentMoveDestinationTilePos, room);
+		for (Component c : mover.getComponents()) {
+			if (c instanceof MovableInterface) {
+				((MovableInterface) c).endMovement(moveCompo.currentMoveDestinationTilePos);
+			}
+		}
+		
 		// Creep
 		Entity creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
 		if (creep != null) {

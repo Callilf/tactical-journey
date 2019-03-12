@@ -31,6 +31,13 @@ public enum LootableEnum {
 		public String getDescription() {
 			return "A box of personal belongings that a past adventurer probably lost. It feels a bit like violating privacy but there could be something useful inside.";
 		}
+	},
+	
+	ORB_BAG("Orb bag", 3, Assets.lootable_orb_bag, Assets.lootable_orb_bag_opened) {
+		@Override
+		public String getDescription() {
+			return "An special bag designed to hold orbs. Upon opening the orbs will automatically take the empty orb spots around you.";
+		}
 	};
 	
 	/** The name of the lootable that will be displayed in game. */

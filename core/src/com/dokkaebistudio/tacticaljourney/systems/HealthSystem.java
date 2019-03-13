@@ -47,7 +47,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 
     public HealthSystem(GameScreen gameScreen, Room r, Stage s) {
         super(Family.one(HealthComponent.class, DamageDisplayComponent.class).get());
-		this.priority = 21;
+		this.priority = 22;
 
 		this.gameScreen = gameScreen;
         this.room = r;

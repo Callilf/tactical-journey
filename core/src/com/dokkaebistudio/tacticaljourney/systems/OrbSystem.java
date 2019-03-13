@@ -6,14 +6,10 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.OrbUtil;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class OrbSystem extends EntitySystem implements RoomSystem {
 	
@@ -26,7 +22,7 @@ public class OrbSystem extends EntitySystem implements RoomSystem {
 
 		
 	public OrbSystem(Entity player, Room r, Stage stage) {
-		this.priority = 22;
+		this.priority = 21;
 
 		this.fxStage = stage;
 		this.player = player;

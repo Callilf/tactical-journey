@@ -16,8 +16,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public class ItemOrbVegetal extends ItemOrb {
 
 	public ItemOrbVegetal() {
-		super("Vegetal orb", Assets.vegetal_orb_item);
-		this.type = ItemEnum.VEGETAL_ORB;
+		super(ItemEnum.VEGETAL_ORB, Assets.vegetal_orb_item);
 	}
 	
 	@Override

@@ -30,7 +30,8 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
+import com.dokkaebistudio.tacticaljourney.leveling.LevelUpReward;
+import com.dokkaebistudio.tacticaljourney.leveling.LevelUpStatsUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -50,7 +51,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     private Room room;
     
     /** The buttons to select the level up reward. */
-    private List<LevelUpRewardEnum> rewards = new ArrayList<>();
+    private List<LevelUpReward> rewards = new ArrayList<>();
     
     /** The main table of the popin. */
     private Table table;
@@ -58,9 +59,6 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     private List<TextButton> claimButtons = new ArrayList<>();
     
     private TextButton continueButton;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
     
     public LevelUpPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
@@ -83,7 +81,6 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     	if (expCompo.isLevelUpPopinDisplayed()) {
 
     		if (table == null) {
-	    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
 	    		room.setNextState(RoomState.LEVEL_UP_POPIN);
 	    		
 	    		table = new Table();
@@ -118,7 +115,9 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 
 	private void createChoices(final Entity player, int choicesNumber, Table table) {
-		List<LevelUpRewardEnum> list = new ArrayList<>(Arrays.asList(LevelUpRewardEnum.values()));
+		List<LevelUpReward> list = LevelUpReward.getRewards(expCompo.getLevelForPopin(), choicesNumber);
+		if (list.size() == 0) return;
+		
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 
 		rewards.clear();
@@ -127,15 +126,17 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		Table choiceTable = new Table();
 		
 		for (int i=1; i<=choicesNumber ; i++) {
-			int nextInt = unseededRandom.nextInt(list.size());
-			LevelUpRewardEnum reward = list.get(nextInt);
-			list.remove(nextInt);
-			rewards.add(reward);
+			if (!list.isEmpty()) {
+				int nextInt = unseededRandom.nextInt(list.size());
+				LevelUpReward reward = list.get(nextInt);
+				list.remove(nextInt);
+				rewards.add(reward);
+			}
 		}
 		
 		
 		for (int i=0 ; i<rewards.size() ; i++) {
-			final LevelUpRewardEnum levelUpRewardEnum = rewards.get(i);
+			final LevelUpReward levelUpRewardEnum = rewards.get(i);
 			Stack choiceGroup = new Stack();
 			
 			Stack rewardPanelGroup = new Stack();
@@ -248,7 +249,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private void closePopin(ExperienceComponent expCompo) {
 		stage.clear();
 		table = null;
-		room.setNextState(previousState);
+		room.setNextState(room.getLastInGameState());
 		expCompo.setLevelUpPopinDisplayed(false);
 		expCompo.setNumberOfNewLevelReached(expCompo.getNumberOfNewLevelReached() - 1);
 	}
@@ -260,7 +261,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	 * @param descPanelGroup the panel to fade out
 	 * @param claimButton the claim button just pressed
 	 */
-	private void claimReward(final Entity player, final LevelUpRewardEnum levelUpRewardEnum,
+	private void claimReward(final Entity player, final LevelUpReward levelUpRewardEnum,
 			final Stack descPanelGroup, final Button claimButton) {
 		continueButton.setText("Continue");
 		continueButton.setTouchable(Touchable.disabled);
@@ -279,15 +280,15 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private class ApplyRewardAction extends Action {
 		
 		private Entity player;
-		private LevelUpRewardEnum reward;
+		private LevelUpReward reward;
 		
-		public ApplyRewardAction(Entity player, LevelUpRewardEnum levelUpRewardEnum) {
+		public ApplyRewardAction(Entity player, LevelUpReward levelUpRewardEnum) {
 			this.player = player;
 			this.reward = levelUpRewardEnum;
 		}
 		
 	    public boolean act (float delta) {
-			reward.select(player);
+			reward.select(player, room);
 			continueButton.setTouchable(Touchable.enabled);
 	        return true; // An action returns true when it's completed 
 	    }

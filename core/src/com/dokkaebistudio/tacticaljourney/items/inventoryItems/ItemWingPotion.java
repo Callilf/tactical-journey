@@ -23,8 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemWingPotion extends Item {
 
 	public ItemWingPotion() {
-		super("Wing potion", Assets.wing_potion_item, false, true);
-		this.type = ItemEnum.POTION_WING;
+		super(ItemEnum.POTION_WING, Assets.wing_potion_item, false, true);
 	}
 	
 	@Override

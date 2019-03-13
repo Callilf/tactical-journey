@@ -315,6 +315,13 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item));
 						}
 						break;
+					case BOSS_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss_enemy));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss));
+						}
+						break;
 					}
 
 					if (floor.getActiveRoom() == room) {

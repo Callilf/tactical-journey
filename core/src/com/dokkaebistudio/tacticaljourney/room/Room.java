@@ -48,6 +48,7 @@ public class Room extends EntitySystem {
 	public String roomPattern;
 	public RoomType type;
 	
+	private RoomState lastInGameState;
 	private RoomState state;
 	private RoomState nextState;
 	
@@ -285,6 +286,9 @@ public class Room extends EntitySystem {
 	public void setNextState(RoomState nextState) {
 		if (this.nextState != RoomState.LEVEL_UP_POPIN) {
 			this.nextState = nextState;
+			if (!this.nextState.isPopinDisplayed()) {
+				this.lastInGameState = this.nextState;
+			}
 		}
 	}
 	public RoomState getNextState() {
@@ -292,6 +296,10 @@ public class Room extends EntitySystem {
 	}
 	public RoomState getState() {
 		return this.state;
+	}
+	
+	public RoomState getLastInGameState() {
+		return this.lastInGameState;
 	}
 	
 	private void updateState() {

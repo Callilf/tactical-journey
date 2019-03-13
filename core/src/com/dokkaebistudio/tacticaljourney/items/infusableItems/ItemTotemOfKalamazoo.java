@@ -24,8 +24,7 @@ public class ItemTotemOfKalamazoo extends Item {
 	private BlessingOfKalamazoo blessing;
 
 	public ItemTotemOfKalamazoo() {
-		super("Totem of Kalamazoo", Assets.totem_of_kalamazoo, false, true);
-		this.type = ItemEnum.TOTEM_OF_KALAMAZOO;
+		super(ItemEnum.TOTEM_OF_KALAMAZOO, Assets.totem_of_kalamazoo, false, true);
 	}
 	
 	@Override

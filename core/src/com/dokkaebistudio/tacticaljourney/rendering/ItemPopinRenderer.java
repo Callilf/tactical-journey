@@ -55,10 +55,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener useListener;
 
     
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
     public ItemPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
         this.player = p;
@@ -79,7 +75,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     	}
     	
     	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN) {
-    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.ITEM_POPIN);
     		
 			itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
@@ -266,7 +261,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		selectedItemPopin.remove();
 		
 		if (room.getNextState() == null) {
-			room.setNextState(previousState);
+			room.setNextState(room.getLastInGameState());
 		}
 	}
 

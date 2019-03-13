@@ -20,8 +20,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemLightArmor extends Item {
 
 	public ItemLightArmor() {
-		super("Piece of armor", Assets.armor_up_item, false, true);
-		this.type = ItemEnum.ARMOR_LIGHT;
+		super(ItemEnum.ARMOR_LIGHT, Assets.armor_up_item, false, true);
 	}
 	
 	@Override

@@ -56,11 +56,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	private LootableComponent lootableCompo;
 	/** The wallet component. */
 	private WalletComponent walletCompo;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
-    
+        
     
     //***************************
     // BOOLEANS
@@ -150,10 +146,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	    		lootDisplayed = true;
 	
 				// Create the inventory table and set the state
-	    		previousState = room.getNextState();
-	    		if (previousState == null || previousState == RoomState.LOOT_POPIN) {
-	    			previousState = room.getState();
-	    		}
 	    		room.setNextState(RoomState.LOOT_POPIN);
 		    		
 		    	if (mainTable == null) {
@@ -711,7 +703,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		needsRefresh = true;
 		
 		if (room.getNextState() == null) {
-			room.setNextState(previousState);
+			room.setNextState(room.getLastInGameState());
 		}
 	}
 

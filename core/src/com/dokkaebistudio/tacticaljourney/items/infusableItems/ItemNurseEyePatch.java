@@ -27,8 +27,7 @@ public class ItemNurseEyePatch extends Item {
 
 
 	public ItemNurseEyePatch() {
-		super("Nurse eye patch", Assets.nurse_eye_patch, false, true);
-		this.type = ItemEnum.NURSE_EYE_PATCH;
+		super(ItemEnum.NURSE_EYE_PATCH, Assets.nurse_eye_patch, false, true);
 	}
 	
 	@Override

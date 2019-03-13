@@ -2,51 +2,51 @@ package com.dokkaebistudio.tacticaljourney.items.enums;
 
 public enum ItemEnum {
 
-	MONEY(1),
+	MONEY("Gold coin",1),
 	
 	// Ammos
-	AMMO_ARROW(1),
-	AMMO_BOMB(1),
+	AMMO_ARROW("Arrow", 1),
+	AMMO_BOMB("Bomb", 1),
 	
 	// Potions
-	POTION_SMALL_HEALTH(1),
-	POTION_REGEN(1),
-	POTION_FIRE(1),
-	POTION_WING(1),
+	POTION_SMALL_HEALTH("Small health potion", 1),
+	POTION_REGEN("Regeneration potion", 1),
+	POTION_FIRE("Fire potion", 1),
+	POTION_WING("Wing potion", 1),
 	
 	// Armors
-	ARMOR_PIECE(1),
-	ARMOR_LIGHT(2),
+	ARMOR_PIECE("Armor piece", 1),
+	ARMOR_LIGHT("Light armor", 2),
 	
-	ORB_CONTAINER(1),
+	ORB_CONTAINER("Orb container", 1),
 	
 	// Misc
-	WEB_SACK(1),
-	VENOM_GLAND(1),
-	PEBBLE(1),
+	WEB_SACK("Web sack", 1),
+	VENOM_GLAND("Venom gland", 1),
+	PEBBLE("Pebble", 1),
 	
 	
 	// Orbs
-	ENERGY_ORB(1),
-	VEGETAL_ORB(1),
-	POISON_ORB(1),
+	ENERGY_ORB("Energy orb", 1),
+	VEGETAL_ORB("Vegetal orb", 1),
+	POISON_ORB("Poison orb", 1),
 	
 	
 	
 	
 	
 	// Infusables
-	TOTEM_OF_KALAMAZOO(2),
-	FATA_MORGANA(2),
-	MITHRIDATIUM(2),
-	NURSE_EYE_PATCH(2),
-	VEGETAL_GARMENT(2),
-	RAM_SKULL(2),
+	TOTEM_OF_KALAMAZOO("Totem of Kalamazoo", 2),
+	FATA_MORGANA("Fata morgana", 2),
+	MITHRIDATIUM("Mithridatium", 2),
+	NURSE_EYE_PATCH("Nurse eye patch", 2),
+	VEGETAL_GARMENT("Vegetal garment", 2),
+	RAM_SKULL("Ram skull", 2),
 
 	
 	
 	// Boss items
-	PANGOLIN_SCALE(2);
+	PANGOLIN_SCALE("Pangolin scale", 2);
 	
 	
 	
@@ -55,9 +55,11 @@ public enum ItemEnum {
 	
 	/** The level of the item. The higher, the best the item is. */
 	private int level;
+	private String name;
 	
-	private ItemEnum(int lvl) {
+	private ItemEnum(String name, int lvl) {
 		this.setLevel(lvl);
+		this.setName(name);
 	}
 
 	
@@ -71,6 +73,14 @@ public enum ItemEnum {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

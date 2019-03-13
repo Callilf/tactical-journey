@@ -16,8 +16,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public class ItemOrbPoison extends ItemOrb {
 
 	public ItemOrbPoison() {
-		super("Poison orb", Assets.poison_orb_item);
-		this.type = ItemEnum.POISON_ORB;
+		super(ItemEnum.POISON_ORB, Assets.poison_orb_item);
 	}
 	
 	@Override

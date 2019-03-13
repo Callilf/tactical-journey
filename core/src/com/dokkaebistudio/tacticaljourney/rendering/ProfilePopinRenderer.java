@@ -13,10 +13,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
-import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingCelerity;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -89,11 +85,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 
     
-    
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
     public ProfilePopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
         this.player = p;
@@ -121,7 +112,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     	if (playerCompo.isProfilePopinDisplayed() && room.getState() != RoomState.PROFILE_POPIN) {
     		// Popin has just been opened
     		
-    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.PROFILE_POPIN);
     		
     		if (mainTable == null) {
@@ -395,7 +385,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void closePopin() {
 		playerCompo.setProfilePopinDisplayed(false);
 		mainTable.remove();
-		room.setNextState(previousState);
+		room.setNextState(room.getLastInGameState());
 	}
 
 }

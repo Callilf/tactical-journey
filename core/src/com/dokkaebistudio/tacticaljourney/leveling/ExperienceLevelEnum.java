@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.leveling;
 
+
+
 /**
  * 
  * @author Callil
@@ -14,22 +16,21 @@ public enum ExperienceLevelEnum {
 	LEVEL_2(10),
 	LEVEL_3(25),
 	LEVEL_4(50),
-	LEVEL_5(100),
-	LEVEL_6(150),
-	LEVEL_7(200),
-	LEVEL_8(250),
-	LEVEL_9(300),
-	LEVEL_10(350),
-	LEVEL_11(400),
-	LEVEL_12(450),
-	LEVEL_13(500),
-	LEVEL_14(550),
+	LEVEL_5(75),
+	LEVEL_6(100),
+	LEVEL_7(150),
+	LEVEL_8(200),
+	LEVEL_9(250),
+	LEVEL_10(300),
+	LEVEL_11(350),
+	LEVEL_12(400),
+	LEVEL_13(4500),
+	LEVEL_14(500),
 	LEVEL_15(600),
-	LEVEL_16(650),
-	LEVEL_17(700),
-	LEVEL_18(750),
-	LEVEL_19(800),
-	LEVEL_20(850);
+	LEVEL_16(700),
+	LEVEL_17(800),
+	LEVEL_18(900),
+	LEVEL_19(1000);
 	
 	/** The amount of xp needed to reach the next level. */
 	private int xpToNextLevel;

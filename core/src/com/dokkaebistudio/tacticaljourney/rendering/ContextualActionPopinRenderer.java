@@ -52,11 +52,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     private Label desc;
     private TextButton yesBtn;
     private ChangeListener yesBtnListener;
-    
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
+        
     public ContextualActionPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
         this.player = p;
@@ -77,7 +73,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     	}
     	
     	if (playerCompo.getRequestedAction() != PlayerActionEnum.NONE) {
-    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
 			if (mainPopin == null) {
@@ -320,7 +315,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.remove();
 		
 		if (room.getNextState() == null) {
-			room.setNextState(previousState);
+			room.setNextState(room.getLastInGameState());
 		}
 	}
 

@@ -16,8 +16,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public class ItemOrbEnergy extends ItemOrb {
 
 	public ItemOrbEnergy() {
-		super("Energy orb", Assets.energy_orb_item);
-		this.type = ItemEnum.ENERGY_ORB;
+		super(ItemEnum.ENERGY_ORB, Assets.energy_orb_item);
 	}
 	
 	@Override

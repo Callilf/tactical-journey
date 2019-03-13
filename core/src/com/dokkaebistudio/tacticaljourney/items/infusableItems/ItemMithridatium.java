@@ -27,8 +27,7 @@ public class ItemMithridatium extends Item {
 	private BlessingMithridatism blessing;
 
 	public ItemMithridatium() {
-		super("Mithridatium", Assets.mithridatium, false, true);
-		this.type = ItemEnum.MITHRIDATIUM;
+		super(ItemEnum.MITHRIDATIUM, Assets.mithridatium, false, true);
 	}
 	
 	@Override

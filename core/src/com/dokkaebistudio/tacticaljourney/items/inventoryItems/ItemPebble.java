@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -23,8 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class ItemPebble extends Item {
 
 	public ItemPebble() {
-		super("Pebble", Assets.pebble_item, false, true);
-		this.type = ItemEnum.PEBBLE;
+		super(ItemEnum.PEBBLE, Assets.pebble_item, false, true);
 	}
 	
 	@Override

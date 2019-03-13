@@ -31,8 +31,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class ItemFirePotion extends Item {
 
 	public ItemFirePotion() {
-		super("Fire potion", Assets.fire_potion_item, false, true);
-		this.type = ItemEnum.POTION_FIRE;
+		super(ItemEnum.POTION_FIRE, Assets.fire_potion_item, false, true);
 	}
 	
 	@Override

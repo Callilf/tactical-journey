@@ -20,8 +20,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemWebSack extends Item {
 
 	public ItemWebSack() {
-		super("Small sack of web", Assets.web_sack_item, false, true);
-		this.type = ItemEnum.WEB_SACK;
+		super(ItemEnum.WEB_SACK, Assets.web_sack_item, false, true);
 	}
 	
 	@Override

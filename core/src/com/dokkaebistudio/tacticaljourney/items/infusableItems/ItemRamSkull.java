@@ -24,8 +24,7 @@ public class ItemRamSkull extends Item {
 	private BlessingPoisoner blessing;
 
 	public ItemRamSkull() {
-		super("Ram skull", Assets.ram_skull, false, true);
-		this.type = ItemEnum.RAM_SKULL;
+		super(ItemEnum.RAM_SKULL, Assets.ram_skull, false, true);
 	}
 	
 	@Override

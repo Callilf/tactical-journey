@@ -23,8 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemSmallHealthPotion extends Item {
 
 	public ItemSmallHealthPotion() {
-		super("Small health potion", Assets.health_up_item, false, true);
-		this.type = ItemEnum.POTION_SMALL_HEALTH;
+		super(ItemEnum.POTION_SMALL_HEALTH, Assets.health_up_item, false, true);
 	}
 	
 	@Override

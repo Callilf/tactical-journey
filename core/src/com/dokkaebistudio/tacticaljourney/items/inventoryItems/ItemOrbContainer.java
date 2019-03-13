@@ -22,8 +22,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemOrbContainer extends Item {
 	
 	public ItemOrbContainer() {
-		super("Orb container", Assets.orb_container_item, false, true);
-		this.type = ItemEnum.ORB_CONTAINER;
+		super(ItemEnum.ORB_CONTAINER, Assets.orb_container_item, false, true);
 	}
 	
 	@Override

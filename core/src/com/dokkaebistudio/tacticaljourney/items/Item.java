@@ -50,6 +50,20 @@ public abstract class Item {
 	}
 	
 	/**
+	 * Constructor for basic items without random values
+	 * @param label
+	 * @param imageName
+	 * @param instaPickUp
+	 */
+	protected Item(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+		this.type = itemType;
+		this.setLabel(itemType.getName());
+		this.setTexture(texture);
+		this.setInstantPickUp(instaPickUp);
+		this.setGoIntoInventory(goIntoInventory);
+	}
+	
+	/**
 	 * Constructor for items with random values.
 	 * @param label
 	 * @param imageName

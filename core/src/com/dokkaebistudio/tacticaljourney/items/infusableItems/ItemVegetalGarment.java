@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPhotosynthesis;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPoisoner;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
@@ -25,8 +24,7 @@ public class ItemVegetalGarment extends Item {
 	private BlessingPhotosynthesis blessing;
 
 	public ItemVegetalGarment() {
-		super("Vegetal garment", Assets.vegetal_garment, false, true);
-		this.type = ItemEnum.VEGETAL_GARMENT;
+		super(ItemEnum.VEGETAL_GARMENT, Assets.vegetal_garment, false, true);
 	}
 	
 	@Override

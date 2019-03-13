@@ -25,8 +25,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemRegenPotion extends Item {
 
 	public ItemRegenPotion() {
-		super("Regeneration potion", Assets.regen_potion_item, false, true);
-		this.type = ItemEnum.POTION_REGEN;
+		super(ItemEnum.POTION_REGEN, Assets.regen_potion_item, false, true);
 	}
 	
 	@Override

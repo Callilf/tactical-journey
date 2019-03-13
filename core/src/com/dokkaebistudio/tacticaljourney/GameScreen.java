@@ -115,6 +115,8 @@ public class GameScreen extends ScreenAdapter {
 	public Stage hudStage;
 	public Stage miniMapStage;
 	public Stage journalStage;
+	public Stage menuStage;
+
 
 
 	Vector3 touchPoint;
@@ -159,6 +161,7 @@ public class GameScreen extends ScreenAdapter {
 		fxStage = new Stage(viewport);
 		inventoryStage = new Stage(hudViewport);
 		hudStage = new Stage(hudViewport);
+		menuStage = new Stage(hudViewport);
 		miniMapStage = new Stage(hudViewport);
 		journalStage = new Stage(hudViewport);
 		foregroundFxStage = new Stage(viewport);
@@ -168,6 +171,7 @@ public class GameScreen extends ScreenAdapter {
 		InputSingleton.createInstance(this,guiCam, viewport);
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(menuStage);
 		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(inventoryStage);
 		inputMultiplexer.addProcessor(hudStage);
@@ -204,14 +208,14 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new ItemPopinRenderer(room, stage, player));
 		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
 		renderers.add(new LootPopinRenderer(room, inventoryStage, player));
-		renderers.add(new LevelUpPopinRenderer(room, stage, player));
 		renderers.add(new ProfilePopinRenderer(room, stage, player));
-		renderers.add(new MenuPopinRenderer(this, hudStage));
-		renderers.add(new GameOverPopinRenderer(this, hudStage));
+		if (debugMode) { renderers.add(new DebugPopinRenderer(room, inventoryStage, player)); }
+		renderers.add(new LevelUpPopinRenderer(room, stage, player));
+		renderers.add(new GameOverPopinRenderer(this, menuStage));
+		renderers.add(new MenuPopinRenderer(this, menuStage));
+
 		
-		if (debugMode) {
-			renderers.add(new DebugPopinRenderer(room, inventoryStage, player));
-		}
+
 		
 		engine.addSystem(room);
 		engine.addSystem(new StateSystem());

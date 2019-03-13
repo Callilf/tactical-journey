@@ -29,7 +29,7 @@ public class ExperienceComponent implements Component,Poolable {
 	private boolean levelUpPopinDisplayed = false;
 	
 	/** The number of level up reward choices. */
-	private int choicesNumber = 3;
+	private int choicesNumber = 6;
 	
 
 	@Override

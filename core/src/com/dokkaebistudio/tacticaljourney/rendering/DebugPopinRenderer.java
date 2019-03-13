@@ -51,11 +51,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
     private Room room;
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
-	private InventoryComponent inventoryCompo;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
+	private InventoryComponent inventoryCompo;    
     
     
     //***************************
@@ -118,10 +114,6 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 	    		lootDisplayed = true;
 	
 				// Create the inventory table and set the state
-	    		previousState = room.getNextState();
-	    		if (previousState == null || previousState == RoomState.DEBUG_POPIN) {
-	    			previousState = room.getState();
-	    		}
 	    		room.setNextState(RoomState.DEBUG_POPIN);
 		    		
 		    	if (mainTable == null) {
@@ -896,7 +888,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		mainTable.remove();
 		
 		if (room.getNextState() == null) {
-			room.setNextState(previousState);
+			room.setNextState(room.getLastInGameState());
 		}
 	}
 

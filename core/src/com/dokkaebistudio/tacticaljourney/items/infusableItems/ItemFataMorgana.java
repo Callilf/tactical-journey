@@ -24,8 +24,7 @@ public class ItemFataMorgana extends Item {
 	private BlessingOfVilma blessing;
 
 	public ItemFataMorgana() {
-		super("Fata Morgana", Assets.fata_morgana, false, true);
-		this.type = ItemEnum.FATA_MORGANA;
+		super(ItemEnum.FATA_MORGANA, Assets.fata_morgana, false, true);
 	}
 	
 	@Override

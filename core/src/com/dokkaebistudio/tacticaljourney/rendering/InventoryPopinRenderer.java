@@ -48,11 +48,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
 	/** The wallet component. */
-	private WalletComponent walletCompo;
-    
-    /** The state before the level up state. */
-    private RoomState previousState;
-    
+	private WalletComponent walletCompo;    
     
     
     //***************************
@@ -124,7 +120,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	// Check if the inventory is displayed
     	if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INVENTORY && room.getState() != RoomState.INVENTORY_POPIN) {
 			//set the state
-    		previousState = room.getNextState() != null ? room.getNextState() : room.getState();
     		room.setNextState(RoomState.INVENTORY_POPIN);
 
     		if (mainTable == null) {	    		
@@ -466,7 +461,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		needsRefresh = true;
 		
 		if (room.getNextState() == null) {
-			room.setNextState(previousState);
+			room.setNextState(room.getLastInGameState());
 		}
 	}
 

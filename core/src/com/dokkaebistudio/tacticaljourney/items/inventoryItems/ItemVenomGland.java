@@ -26,8 +26,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class ItemVenomGland extends Item {
 
 	public ItemVenomGland() {
-		super("Venom gland", Assets.venom_gland_item, false, true);
-		this.type = ItemEnum.VENOM_GLAND;
+		super(ItemEnum.VENOM_GLAND, Assets.venom_gland_item, false, true);
 	}
 	
 	@Override

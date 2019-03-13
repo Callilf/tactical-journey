@@ -26,8 +26,7 @@ public class ItemPangolinScale extends Item {
 	private CurseOfPangolinMother curse;
 
 	public ItemPangolinScale() {
-		super("Giant pangolin scale", Assets.pangolin_scale, false, true);
-		this.type = ItemEnum.PANGOLIN_SCALE;
+		super(ItemEnum.PANGOLIN_SCALE, Assets.pangolin_scale, false, true);
 	}
 	
 	@Override

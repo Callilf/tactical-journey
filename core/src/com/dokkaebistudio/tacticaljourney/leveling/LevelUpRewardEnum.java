@@ -1,223 +1,75 @@
 package com.dokkaebistudio.tacticaljourney.leveling;
 
-import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum LevelUpRewardEnum {
 
-	HEALTH_UP(10, 15, "Increase max health \nby 10 to 15 hp", "Max health increased \nby # hp") {
-		@Override
-		public void select(Entity player) {
-			HealthComponent healthComponent = Mappers.healthComponent.get(player);
-			
-			healthComponent.increaseMaxHealth(getValue());
-		}
-	},
+	// Stats up
+	HEALTH_UP (LevelUpRewardTypeEnum.STATS_UP),
+	STRENGTH_UP (LevelUpRewardTypeEnum.STATS_UP),
+	MOVEMENT_UP (LevelUpRewardTypeEnum.STATS_UP),
+	ARROW_RANGE_UP (LevelUpRewardTypeEnum.STATS_UP),
+	BOMB_THROW_RANGE_UP (LevelUpRewardTypeEnum.STATS_UP),
+	ITEM_THROW_RANGE_UP (LevelUpRewardTypeEnum.STATS_UP),
 	
 	
-	STRENGTH_UP(1, 1, "Increase strength \nby 1", "Strength increased \nby #") {
-		@Override
-		public void select(Entity player) {
-    		AttackComponent attackComponent = Mappers.attackComponent.get(player);
-    		
-    		attackComponent.increaseStrength(getValue());
-		}
-	},
+	// items
+	ARROWS_MAX_UP (LevelUpRewardTypeEnum.ITEMS),
+	ARROW_RECEIVE (LevelUpRewardTypeEnum.ITEMS),
+	BOMBS_MAX_UP (LevelUpRewardTypeEnum.ITEMS),
+	BOMBS_RECEIVE (LevelUpRewardTypeEnum.ITEMS),
+	BOMBS_AND_ARROWS_MAX_UP (LevelUpRewardTypeEnum.ITEMS),
+	INVENTORY_SLOT (LevelUpRewardTypeEnum.ITEMS),
+	
+	// Alterations
+	RECEIVE_INFUSABLE (LevelUpRewardTypeEnum.ALTERATIONS);
+//	CURE_CURSE (LevelUpRewardTypeEnum.ALTERATIONS);
 	
 	
-	MOVEMENT_UP(1, 1, "Increase movement by 1", "Movement increased by #") {
-		@Override
-		public void select(Entity player) {
-    		MoveComponent moveComponent = Mappers.moveComponent.get(player);
-    		moveComponent.increaseMoveSpeed(1);			
-		}
-	},
 	
-	ARROW_RANGE_UP(1, 1, "Increase max range of\nrange weapon by 1", "Range weapon's range \nincreased by #"){
-		@Override
-		public void select(Entity player) {
-			PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-			AttackComponent attackComponent = Mappers.attackComponent.get(playerComponent.getSkillRange());
+	// Infusables
+	
+	
+	
+	private LevelUpRewardTypeEnum type;
+	
+	private LevelUpRewardEnum(LevelUpRewardTypeEnum type) {
+		this.type = type;
+	}
+	
+	
+	
+	public static List<LevelUpRewardEnum> getValuesForLevel(int level) {
+		List<LevelUpRewardEnum> result = new ArrayList<>();
 		
-			if (attackComponent != null) {
-				attackComponent.increaseRangeMax(getValue());
-			}
+		LevelUpRewardTypeEnum t = null;
+		int modulo = level % 3;
+		if (modulo == 2) {
+			t = LevelUpRewardTypeEnum.STATS_UP;
+		} else if (modulo == 0) {
+			t = LevelUpRewardTypeEnum.ITEMS;
+		} else {
+			t = LevelUpRewardTypeEnum.ALTERATIONS;
 		}
-	},
-	
-	ARROW_MAX_UP(2, 3, "Increase max arrow \namount by 2 to 3", "Max amount of arrows \nincreased by #"){
-		@Override
-		public void select(Entity player) {
-			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
-			if (ammoCarrierComponent != null) {
-				ammoCarrierComponent.increaseMaxArrows(getValue());
-			}
-		}
-	},
-	
-	BOMB_RANGE_UP(1, 1, "Increase max range of\nbomb throw by 1", "Bomb's range \nincreased by #"){
-		@Override
-		public void select(Entity player) {
-			PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-			AttackComponent attackComponent = Mappers.attackComponent.get(playerComponent.getSkillBomb());
 		
-			if (attackComponent != null) {
-				attackComponent.increaseRangeMax(getValue());
-			}
-		}
-	},
-	
-	
-	BOMB_MAX_UP(1, 2, "Increase max bomb \namount by 1 to 2", "Max amount of bombs \nincreased by #"){
-		@Override
-		public void select(Entity player) {
-			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
-			if (ammoCarrierComponent != null) {
-				ammoCarrierComponent.increaseMaxBombs(getValue());
-			}
-		}
-	},
-	
-	BOMB_AND_ARROW_MAX_UP(1, 1, "Increase max bomb and \nmax arrow amount by 1", "Max bombs and max arrows \namount increased by #"){
-		@Override
-		public void select(Entity player) {
-			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
-			if (ammoCarrierComponent != null) {
-				ammoCarrierComponent.increaseMaxBombsAndArrows(getValue());
-			}
-		}
-	},
-	
-	
-	RESTORE_HEALTH(30, 50, "Restore 30 to 50 hp", "# hp restored"){
-		@Override
-		public void select(Entity player) {
-			HealthComponent healthComponent = Mappers.healthComponent.get(player);
-			
-			healthComponent.restoreHealth(getValue());
-		}
-	},
-	
-	
-	RESTORE_ARROWS(10, 15, "Restore 10 to 15 arrows", "# arrows received"){
-		@Override
-		public void select(Entity player) {
-			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
-			if (ammoCarrierComponent != null) {
-				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.ARROWS, getValue());
-			}
-		}
-	},
-	
-	
-	RESTORE_BOMBS(5, 10, "Restore 5 to 10 bombs.", "# bombs received"){
-		@Override
-		public void select(Entity player) {
-			AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
-			if (ammoCarrierComponent != null) {
-				ammoCarrierComponent.pickUpAmmo(AmmoTypeEnum.BOMBS, getValue());
-			}
-		}
-	};
-	
-	// Attributes
-	
-	private Integer valueMin;
-	private Integer valueMax;
-	
-	private Integer value;
-	private String description;
-	private String finalDescription;
-	
-	// Constructors
 		
-	private LevelUpRewardEnum(String desc, String finalDesc) {
-		this.setDescription(desc);
-		this.setFinalDescription(finalDesc);
-	}
-	
-	private LevelUpRewardEnum(Integer valueMin, Integer valueMax, String desc, String finalDesc) {
-		this.setValueMin(valueMin);
-		this.setValueMax(valueMax);
-		this.setDescription(desc);
-		this.setFinalDescription(finalDesc);
-	}
-	
-	
-	
-	
-	// Abstract methods
-	
-	/** Called when this reward is selected. */
-	public abstract void select(Entity player);
-	
-	/** Called for rewards with a randomized value. */
-	public void computeValue() {
-		if (getValueMin() != null && getValueMax() != null) {
-			if (getValueMin() == getValueMax()) {
-				this.setValue( getValueMax());
-			} else {
-				this.setValue(getValueMin() + RandomSingleton.getInstance().getUnseededRandom().nextInt(getValueMax() - getValueMin() + 1));
+		for (LevelUpRewardEnum val : LevelUpRewardEnum.values()) {
+			if (val.type == t) {
+				result.add(val);
 			}
 		}
-	};
-	
-	
-	
-	
-	// Getters and setters
-
-	public Integer getValueMin() {
-		return valueMin;
-	}
-
-	public void setValueMin(Integer valueMin) {
-		this.valueMin = valueMin;
-	}
-
-	public Integer getValueMax() {
-		return valueMax;
-	}
-
-	public void setValueMax(Integer valueMax) {
-		this.valueMax = valueMax;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getValue() {
-		return value;
-	}
-
-	public void setValue(Integer value) {
-		this.value = value;
-	}
-
-	public String getFinalDescription() {
-		computeValue();
 		
-		if (finalDescription != null && getValue() != null) {
-			return finalDescription.replace("#", String.valueOf(getValue()));
-		}
-		return finalDescription;
+		return result;
 	}
-
-	public void setFinalDescription(String finalDescription) {
-		this.finalDescription = finalDescription;
+	
+	
+	public enum LevelUpRewardTypeEnum {
+		STATS_UP,
+		ITEMS,
+		ALTERATIONS;
 	}
 	
 	
 }
+

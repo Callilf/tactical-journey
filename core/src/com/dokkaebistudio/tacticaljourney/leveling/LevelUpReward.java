@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.leveling.infusable.LevelUpAlterationRewardReceiveInfusable;
 import com.dokkaebistudio.tacticaljourney.leveling.items.LevelUpItemRewardArrowsMaxUp;
@@ -90,14 +91,19 @@ public abstract class LevelUpReward {
 	public static List<LevelUpReward> getRewards(int level, int numberOfChoices) {
 		List<LevelUpReward> rewards = new ArrayList<>();
 		
+		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		List<LevelUpRewardEnum> enums = LevelUpRewardEnum.getValuesForLevel(level);
-		Collections.shuffle(enums, RandomSingleton.getInstance().getUnseededRandom());
+		Collections.shuffle(enums, unseededRandom);
 		
 		for (int i=0 ; i<numberOfChoices ; i++) {
+			LevelUpRewardEnum type = null;
 			if (enums.size() > i) {
-				LevelUpRewardEnum type = enums.get(i);
-				rewards.add(LevelUpReward.create(type));
+				type = enums.get(i);
+			} else {
+				type = enums.get(unseededRandom.nextInt(enums.size()));
 			}
+
+			rewards.add(LevelUpReward.create(type));
 		}
 		
 		return rewards;

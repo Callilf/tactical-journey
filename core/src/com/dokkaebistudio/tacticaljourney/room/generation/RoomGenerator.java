@@ -319,18 +319,9 @@ public abstract class RoomGenerator {
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
 			
-//			Entity enemy4 = entityFactory.enemyFactory.createSpider(room, new Vector2(14, 8));
+//			entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
+//			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));
 //			entityFactory.creepFactory.createPoison(room, new Vector2(12, 8), null);
-//			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(12, 9));
-//			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(13, 5));
-//			entityFactory.itemFactory.createItemRegenPotion(room, new Vector2(14, 5));
-//			entityFactory.itemFactory.createItemWingPotion(room, new Vector2(15, 5));
-			
-//			entityFactory.itemFactory.createItemTotemOfKalamazoo(room, new Vector2(10, 10));
-//			entityFactory.itemFactory.createItemFataMorgana(room, new Vector2(10,9));
-//			entityFactory.itemFactory.createItemMithridatium(room, new Vector2(10,8));
-//			entityFactory.itemFactory.createItemNurseEyePatch(room, new Vector2(10,7));
-
 
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
@@ -343,15 +334,6 @@ public abstract class RoomGenerator {
 			
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
 //			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));
-			
-//			entityFactory.itemFactory.createItemVenomGland(room, new Vector2(11, 9));
-//			entityFactory.itemFactory.createItemWebSack(room, new Vector2(10, 8));
-
-//			entityFactory.itemFactory.createItemFirePotion(room, new Vector2(5, 4));
-//			
-//			entityFactory.itemFactory.createItemHealthUp(room, new Vector2(5, 3));
-//			entityFactory.itemFactory.createItemLightArmor(room, new Vector2(5, 5));
-//			entityFactory.itemFactory.createItemArmorPiece(room, new Vector2(6, 5));
 //
 //			
 //			entityFactory.itemFactory.createItemArrows(room, new Vector2(16, 8));

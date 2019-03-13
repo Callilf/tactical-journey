@@ -203,6 +203,8 @@ public class Assets {
 	public static Array<Sprite> enemy_pangolin_baby;
 	public static Array<Sprite> enemy_pangolin_baby_rolled;
 	public static Array<Sprite> enemy_pangolin_baby_rolling;
+	
+	public static Array<Sprite> enemy_tribesman_spear;
 
 	
 	//************
@@ -484,6 +486,8 @@ public class Assets {
 		enemy_pangolin_baby = Assets.getAnimation("pangolin_baby");
 		enemy_pangolin_baby_rolled = Assets.getAnimation("pangolin_baby_rolled");
 		enemy_pangolin_baby_rolling = Assets.getAnimation("pangolin_baby_rolling");
+		
+		enemy_tribesman_spear = Assets.getAnimation("tribesman_spear");
 
 		
 		//************

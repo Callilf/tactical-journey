@@ -34,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
+import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -55,6 +56,7 @@ public final class EnemyFactory {
 	
 	public EnemyPangolinFactory pangolinFactory;
 	public EnemySpiderFactory spiderFactory;
+	public EnemyTribesmenFactory tribesmenFactory;
 	
 	/**
 	 * Constructor.
@@ -66,6 +68,7 @@ public final class EnemyFactory {
 		
 		this.pangolinFactory = new EnemyPangolinFactory(e, this);
 		this.spiderFactory = new EnemySpiderFactory(e, this);
+		this.tribesmenFactory = new EnemyTribesmenFactory(e, this);
 	}
 	
 
@@ -276,6 +279,15 @@ public final class EnemyFactory {
 	 */
 	public Entity createPangolinMother(Room room, Vector2 pos) {
 		return pangolinFactory.createPangolinMother(room, pos);
+	}
+	
+	
+	
+	//**********************
+	// Tribesmen
+	
+	public Entity createTribesmenSpear(Room room, Vector2 pos) {
+		return tribesmenFactory.createSpearman(room, pos);
 	}
 	
 }

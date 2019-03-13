@@ -83,7 +83,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
 		if (spawnPositions.size() == 0) return;
 
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 8));
+		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 6));
 		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
 		
 		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
@@ -91,7 +91,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(9);
+			int enemyTypeRandom = random.nextInt(13);
 			if (enemyTypeRandom == 0) {
 				int spiderType = random.nextInt(2);
 				if (spiderType == 0) {
@@ -118,9 +118,13 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
 				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
 				iterator.remove();
-			} else {
+			} else if (enemyTypeRandom == 7 || enemyTypeRandom == 8){
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
+			} else {
+				enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
+				iterator.remove();
+
 			}
 			
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);

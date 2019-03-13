@@ -37,7 +37,7 @@ public class EnemyActionSelector {
     	switch (moveStrategy) {
     	case MOVE_TOWARD_PLAYER :
 	    	//Strategy 1 : move toward the player(s)
-	    	selectedTile = moveTowardPlayerStrategy(engine, moveComponent, enemyPos);
+	    	selectedTile = moveTowardPlayerStrategy(enemyEntity, engine, moveComponent, enemyPos);
 	    	break;
 	    	
     	case MOVE_RANDOMLY :
@@ -45,7 +45,7 @@ public class EnemyActionSelector {
     		break;
     		
     	case MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE:
-    		selectedTile = moveRandomlyButAttackIfPossible(engine, moveComponent, enemyPos);
+    		selectedTile = moveRandomlyButAttackIfPossible(enemyEntity, engine, moveComponent, enemyPos);
     		break;
     		
     	case MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE:
@@ -80,7 +80,7 @@ public class EnemyActionSelector {
 	 * @param enemyPos the enemy position
 	 * @return the selected tile. Null if no move needed
 	 */
-	private static Entity moveTowardPlayerStrategy(PooledEngine engine,
+	private static Entity moveTowardPlayerStrategy(Entity enemyEntity, PooledEngine engine,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
 		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
@@ -98,21 +98,26 @@ public class EnemyActionSelector {
 			}
 		}
 		
-		if (shortestDistance == 1) {
+		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
+
+		if (shortestDistance == attackComponent.getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {
 			if (target != null) {
 				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 				shortestDistance = -1;
+				
 		    	for (Entity t : moveComponent.movableTiles) {
 		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
-		    		if (selectedTile == null || distance < shortestDistance) {
+		    		if (selectedTile == null 
+		    				|| (shortestDistance > attackComponent.getRangeMax() && distance < shortestDistance)
+		    				|| (shortestDistance <= attackComponent.getRangeMax() && distance > shortestDistance)) {
 		    			selectedTile = t;
 		    			shortestDistance = distance;
 		    		}
 		    		
-		    		if (shortestDistance == 1) {
+		    		if (shortestDistance == attackComponent.getRangeMax()) {
 		    			break;
 		    		}
 		    	}
@@ -203,7 +208,7 @@ public class EnemyActionSelector {
 	 * @param enemyPos the enemy position
 	 * @return the selected tile. Null if no move needed
 	 */
-	private static Entity moveRandomlyButAttackIfPossible(PooledEngine engine,
+	private static Entity moveRandomlyButAttackIfPossible(Entity enemyEntity, PooledEngine engine,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
 		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
@@ -221,17 +226,24 @@ public class EnemyActionSelector {
 			}
 		}
 		
-		if (shortestDistance == 1) {
+		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
+		
+		if (shortestDistance == attackComponent.getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {
 			if (target != null) {
 				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+				
+				int currentDistance = -1;
 		    	for (Entity t : moveComponent.movableTiles) {
 		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
-		    		if (distance == 1) {
-		    			selectedTile = t;
-		    			break;
+		    		if (distance >= attackComponent.getRangeMin() && distance <= attackComponent.getRangeMax()) {
+		    			if (distance > currentDistance) {
+		    				selectedTile = t;
+		    				currentDistance = distance;
+		    			}
+		    			if (distance == attackComponent.getRangeMax()) break;
 		    		}
 		    	}
 		    	

@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
 import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
@@ -187,6 +188,10 @@ public final class ItemFactory {
 			
 		case RAM_SKULL:
 			item = createItemRamSkull(room, tilePos);
+			break;
+			
+		case COLORFUL_TIE:
+			item = createItemColorfulTie(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -438,6 +443,12 @@ public final class ItemFactory {
 	public Entity createItemRamSkull(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.ram_skull, new ItemRamSkull());
 		item.flags = EntityFlagEnum.ITEM_RAM_SKULL.getFlag();
+		return item;
+	}
+	
+	public Entity createItemColorfulTie(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.colorful_tie, new ItemColorfulTie());
+		item.flags = EntityFlagEnum.ITEM_COLORFUL_TIE.getFlag();
 		return item;
 	}
 

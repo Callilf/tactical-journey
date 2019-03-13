@@ -42,6 +42,7 @@ public enum ItemEnum {
 	NURSE_EYE_PATCH("Nurse eye patch", 2),
 	VEGETAL_GARMENT("Vegetal garment", 2),
 	RAM_SKULL("Ram skull", 2),
+	COLORFUL_TIE("Colorful Tie", 2),
 
 	
 	

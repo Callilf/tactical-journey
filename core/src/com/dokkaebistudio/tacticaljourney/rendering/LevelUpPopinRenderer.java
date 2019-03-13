@@ -1,7 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
@@ -31,7 +30,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpReward;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpStatsUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -59,6 +57,9 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     private List<TextButton> claimButtons = new ArrayList<>();
     
     private TextButton continueButton;
+    
+    /** The number of rewards selected. */
+    private int selectedRewards = 0;
     
     public LevelUpPopinRenderer(Room r, Stage s, Entity p) {
         this.room = r;
@@ -115,6 +116,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 
 	private void createChoices(final Entity player, int choicesNumber, Table table) {
+		this.selectedRewards = 0;
+		
 		List<LevelUpReward> list = LevelUpReward.getRewards(expCompo.getLevelForPopin(), choicesNumber);
 		if (list.size() == 0) return;
 		
@@ -216,7 +219,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		
 		popinTop.row();
 		
-		Label selectChoiceLabel = new Label("Select [GREEN]1[WHITE] reward bellow",subtitleStyle);
+		Label selectChoiceLabel = new Label("Select [GREEN]" + expCompo.getSelectNumber() + "[WHITE] reward bellow",subtitleStyle);
 		popinTop.add(selectChoiceLabel).top().uniformX().padBottom(20);
 		
 		table.add(popinTop).fillX().uniformX();
@@ -268,12 +271,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		descPanelGroup.addAction(Actions.sequence(Actions.alpha(0, 1), new ApplyRewardAction(player, levelUpRewardEnum)));
 		
 		for(Button cb : claimButtons) {
-			if (cb != claimButton) {
-				cb.addAction(Actions.hide());
-			}
+			cb.setDisabled(true);
 		}
 		claimButton.setTouchable(Touchable.disabled);
-		claimButton.setDisabled(true);
+		
+		claimButton.addAction(Actions.hide());
+//		claimButton.setDisabled(true);
 	}
 	
 	
@@ -290,6 +293,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    public boolean act (float delta) {
 			reward.select(player, room);
 			continueButton.setTouchable(Touchable.enabled);
+			
+			if (++selectedRewards < expCompo.getSelectNumber()) {
+				for(Button cb : claimButtons) {
+					cb.setDisabled(false);
+				}
+			}
 	        return true; // An action returns true when it's completed 
 	    }
 	}

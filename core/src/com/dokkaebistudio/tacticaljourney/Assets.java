@@ -279,6 +279,7 @@ public class Assets {
 	public static AtlasRegion nurse_eye_patch;
 	public static AtlasRegion vegetal_garment;
 	public static AtlasRegion ram_skull;
+	public static AtlasRegion colorful_tie;
 	
 	
 	// Boss items
@@ -308,6 +309,7 @@ public class Assets {
 	public static AtlasRegion blessing_pangolin;
 	public static AtlasRegion blessing_photosynthesis;
 	public static AtlasRegion blessing_calishka;
+	public static AtlasRegion blessing_fast_learner;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -561,6 +563,7 @@ public class Assets {
 		nurse_eye_patch = Assets.getTexture("item-infusable-eye-patch");
 		vegetal_garment = Assets.getTexture("item-infusable-leafy-bra");
 		ram_skull = Assets.getTexture("item-infusable-ram-skull");
+		colorful_tie = Assets.getTexture("item-infusable-colorful-tie");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -584,6 +587,7 @@ public class Assets {
 		blessing_pangolin = Assets.getTexture("blessing-pangolin");
 		blessing_photosynthesis = Assets.getTexture("blessing-photosynthesis");
 		blessing_calishka = Assets.getTexture("blessing-calishka");
+		blessing_fast_learner = Assets.getTexture("blessing-fast-learner");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

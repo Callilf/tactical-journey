@@ -9,7 +9,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 
 /**
- * Marker to indicate that this entity is solid so the tile on which it stands is blocked.
+ * Marker to indicate that this entity can acquire experience.
  * @author Callil
  *
  */
@@ -29,7 +29,10 @@ public class ExperienceComponent implements Component,Poolable {
 	private boolean levelUpPopinDisplayed = false;
 	
 	/** The number of level up reward choices. */
-	private int choicesNumber = 6;
+	private int choicesNumber = 3;
+	
+	/** The number of choices that can be selected. */
+	private int selectNumber;
 	
 
 	@Override
@@ -39,6 +42,7 @@ public class ExperienceComponent implements Component,Poolable {
 		numberOfNewLevelReached = 0;
 		level = 1;
 		currentXp = 0;
+		selectNumber = 1;
 		
 		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
@@ -151,6 +155,16 @@ public class ExperienceComponent implements Component,Poolable {
 
 	public void addXpGainedAtCurrentFrame(Integer xpGainedAtCurrentFrame) {
 		this.xpGainedAtCurrentFrame.add(xpGainedAtCurrentFrame);
+	}
+
+
+	public int getSelectNumber() {
+		return selectNumber;
+	}
+
+
+	public void setSelectNumber(int selectNumber) {
+		this.selectNumber = selectNumber;
 	}
 
 	

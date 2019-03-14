@@ -30,6 +30,7 @@ public enum ItemEnum {
 	ENERGY_ORB("Energy orb", 1),
 	VEGETAL_ORB("Vegetal orb", 1),
 	POISON_ORB("Poison orb", 1),
+	FIRE_ORB("Fire orb", 1),
 	
 	
 	

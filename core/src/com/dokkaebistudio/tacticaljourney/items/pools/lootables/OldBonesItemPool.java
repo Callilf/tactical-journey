@@ -14,7 +14,7 @@ public class OldBonesItemPool extends LootableItemPool {
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 		
 	static {
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 20));
 
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
@@ -28,6 +28,7 @@ public class OldBonesItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 2));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 2));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 2));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 2));
 		
 	}
 	

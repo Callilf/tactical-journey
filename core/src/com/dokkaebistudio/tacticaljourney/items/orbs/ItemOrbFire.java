@@ -13,15 +13,15 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
  * @author Callil
  *
  */
-public class ItemOrbPoison extends ItemOrb {
+public class ItemOrbFire extends ItemOrb {
 
-	public ItemOrbPoison() {
-		super(ItemEnum.POISON_ORB, Assets.poison_orb_item);
+	public ItemOrbFire() {
+		super(ItemEnum.FIRE_ORB, Assets.fire_orb_item);
 	}
 	
 	@Override
 	public String getDescription() {
-		return "An orb that inflicts the [PURPLE]poison[] status effect for 5 turns on contact.";
+		return "An orb that inclicts the [ORANGE]burning[] status effect on contact, and generate [ORANGE]fire creep[] in a large area in front of the orb holder.";
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class ItemOrbPoison extends ItemOrb {
 
 	@Override
 	public Entity getOrb(Room room) {
-		return room.entityFactory.orbFactory.createPoisonOrb(null, room);
+		return room.entityFactory.orbFactory.createFireOrb(null, room);
 	}
 
 

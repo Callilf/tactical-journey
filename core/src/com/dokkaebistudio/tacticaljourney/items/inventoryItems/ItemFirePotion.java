@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
+import com.dokkaebistudio.tacticaljourney.util.FireUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -72,23 +73,7 @@ public class ItemFirePotion extends Item {
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
 		for (Tile tile : adjacentTiles) {
 			if (tile.isThrowable(thrower)) {
-				boolean canCatchFire = true;
-				Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), CreepComponent.class, room);
-				if (creepAlreadyThere != null) {
-					CreepComponent creepComponent = Mappers.creepComponent.get(creepAlreadyThere);
-					if (creepComponent.getType().getType() == CreepType.FIRE) {
-						//There is already fire on this tile, do nothing
-						canCatchFire = false;
-					}
-				}
-				
-				if (canCatchFire) {
-					Entity wall = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), BlockExplosionComponent.class, room);
-					if (wall != null) {
-						canCatchFire = false;
-					}
-				}
-				
+				boolean canCatchFire = FireUtil.canCatchFire(tile.getGridPos(), room);
 				if (canCatchFire) {
 					room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), thrower);
 				}

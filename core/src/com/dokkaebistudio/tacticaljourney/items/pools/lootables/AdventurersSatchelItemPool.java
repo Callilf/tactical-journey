@@ -14,7 +14,7 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 		
 	static {
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 15));
 
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
@@ -28,9 +28,10 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10));	
 		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 5));	
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 8));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 8));		
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 8));		
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 7));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 7));		
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 7));		
+		itemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 7));		
 	}
 	
 	

@@ -28,8 +28,6 @@ public abstract class LootableItemPool {
 	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet) {
 		List<PooledItemDescriptor> result = new ArrayList<>();
 		
-		int sumOfChances = getSumOfChances();
-		if (sumOfChances == 0) return result;
 		
 		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
 		int randomInt = 0;
@@ -37,6 +35,9 @@ public abstract class LootableItemPool {
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
+			int sumOfChances = getSumOfChances();
+			if (sumOfChances == 0) return result;
+
 			randomInt = seededRandom.nextInt(sumOfChances + 1);
 			Iterator<PooledItemDescriptor> poolIterator = getItemPool().iterator();
 			while(poolIterator.hasNext()) {

@@ -2,7 +2,7 @@ package com.dokkaebistudio.tacticaljourney.enemies.tribesmen;
 
 import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 
-public class EnemyScorpion extends Enemy {
+public class EnemyTribesmanSpear extends Enemy {
 
 
 	@Override

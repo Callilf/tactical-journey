@@ -290,4 +290,8 @@ public final class EnemyFactory {
 		return tribesmenFactory.createSpearman(room, pos);
 	}
 	
+	public Entity createTribesmenShield(Room room, Vector2 pos) {
+		return tribesmenFactory.createShieldHolder(room, pos);
+	}
+	
 }

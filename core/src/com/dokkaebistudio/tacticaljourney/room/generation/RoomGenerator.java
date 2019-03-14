@@ -320,6 +320,7 @@ public abstract class RoomGenerator {
 
 			
 //			entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
+//			entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(14, 5));
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));
 //			entityFactory.creepFactory.createPoison(room, new Vector2(12, 8), null);
 

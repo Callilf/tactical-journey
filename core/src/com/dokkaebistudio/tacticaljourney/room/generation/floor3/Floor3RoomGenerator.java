@@ -91,7 +91,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(13);
+			int enemyTypeRandom = random.nextInt(15);
 			if (enemyTypeRandom == 0) {
 				int spiderType = random.nextInt(2);
 				if (spiderType == 0) {
@@ -121,10 +121,12 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			} else if (enemyTypeRandom == 7 || enemyTypeRandom == 8){
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else {
+			} else if (enemyTypeRandom >= 9 && enemyTypeRandom <= 12){
 				enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
 				iterator.remove();
-
+			} else {
+				enemy = entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(iterator.next()));
+				iterator.remove();
 			}
 			
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);

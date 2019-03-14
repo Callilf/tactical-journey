@@ -35,7 +35,8 @@ public enum AnimationsEnum {
 	PANGOLIN_MOTHER_ENRAGED_STAND(new Animation<Sprite>(0.15f, Assets.boss_pangolin_mother_enraged, PlayMode.LOOP)),
 	PANGOLIN_MOTHER_CRYING(new Animation<Sprite>(0.3f, Assets.boss_pangolin_mother_crying, PlayMode.LOOP)),
 	
-	TRIBESMEN_SPEAR_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_spear, PlayMode.LOOP));
+	TRIBESMEN_SPEAR_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_spear, PlayMode.LOOP)),
+	TRIBESMEN_SHIELD_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_shield, PlayMode.LOOP));
 
 
 	

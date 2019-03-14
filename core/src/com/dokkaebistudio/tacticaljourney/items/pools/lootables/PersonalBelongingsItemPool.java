@@ -22,7 +22,7 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.COLORFUL_TIE, 10, true));
 	}
-	
+		
 	
 	@Override
 	public List<PooledItemDescriptor> getItemPool() {

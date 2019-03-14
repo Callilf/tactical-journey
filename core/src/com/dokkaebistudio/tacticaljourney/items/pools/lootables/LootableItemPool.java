@@ -9,6 +9,9 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public abstract class LootableItemPool {
+	
+	private static final List<PooledItemDescriptor> removedItems = new ArrayList<>();
+
 
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
@@ -45,6 +48,10 @@ public abstract class LootableItemPool {
 					// Remove the item from the pool if needed
 					if (pid.isRemoveFromPool()) {
 						poolIterator.remove();
+						removedItems.add(pid);
+						if (getItemPool().isEmpty()) {
+							getItemPool().addAll(removedItems);
+						}
 					}
 					break;
 				}

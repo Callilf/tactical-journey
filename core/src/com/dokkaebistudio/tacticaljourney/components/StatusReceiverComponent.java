@@ -92,6 +92,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		iconsMap.clear();
 		statusTable.clear();
 		statusTable.remove();
+		
+		clearCurrentAction();
 	}
 
 	

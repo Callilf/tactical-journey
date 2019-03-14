@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
@@ -192,6 +193,10 @@ public final class ItemFactory {
 			
 		case COLORFUL_TIE:
 			item = createItemColorfulTie(room, tilePos);
+			break;
+			
+		case OLD_CROWN:
+			item = createItemOldCrown(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -451,6 +456,13 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_COLORFUL_TIE.getFlag();
 		return item;
 	}
+	
+	public Entity createItemOldCrown(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.old_crown, new ItemOldCrown());
+		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
+		return item;
+	}
+	
 
 	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale());

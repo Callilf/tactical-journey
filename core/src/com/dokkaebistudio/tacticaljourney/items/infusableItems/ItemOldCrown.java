@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfVilma;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCinders;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
@@ -15,21 +15,21 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * An infusable item that grants the blessing of Vilma, ie regeneration on kill.
+ * An infusable item that grants the blessing of the poisoner, ie poison sector on the wheel.
  * @author Callil
  *
  */
-public class ItemFataMorgana extends Item {
+public class ItemOldCrown extends Item {
 	
-	private BlessingOfVilma blessing;
+	private BlessingOfCinders blessing;
 
-	public ItemFataMorgana() {
-		super(ItemEnum.FATA_MORGANA, Assets.fata_morgana, false, true);
+	public ItemOldCrown() {
+		super(ItemEnum.OLD_CROWN, Assets.old_crown, false, true);
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Grants the blessing of Vilma while held in the inventory, and increase the chance for the blessing to activate.";	
+		return "A very old crown with a smell of ashes. Grants the blessing of cinders while held in the inventory, and increase the chance for the blessing to activate.";	
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class ItemFataMorgana extends Item {
 		if (pickedUp) {
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(picker);
 			if (alterationReceiverComponent != null) {
-				blessing = new BlessingOfVilma();
+				blessing = new BlessingOfCinders();
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, blessing);
 			}
 		}

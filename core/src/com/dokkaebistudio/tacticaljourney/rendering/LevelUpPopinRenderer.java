@@ -266,7 +266,6 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void claimReward(final Entity player, final LevelUpReward levelUpRewardEnum,
 			final Stack descPanelGroup, final Button claimButton) {
-		continueButton.setText("Continue");
 		continueButton.setTouchable(Touchable.disabled);
 		descPanelGroup.addAction(Actions.sequence(Actions.alpha(0, 1), new ApplyRewardAction(player, levelUpRewardEnum)));
 		
@@ -298,6 +297,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 				for(Button cb : claimButtons) {
 					cb.setDisabled(false);
 				}
+			} else {
+				continueButton.setText("Continue");
 			}
 	        return true; // An action returns true when it's completed 
 	    }

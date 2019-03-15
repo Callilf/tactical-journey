@@ -23,7 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemArrow extends Item {
 
 	public ItemArrow() {
-		super("# arrow[s]", Assets.arrow_item, false, false, 1, 5);
+		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4);
 		this.type = ItemEnum.AMMO_ARROW;
 	}
 

@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
@@ -90,10 +91,17 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	public void reset() {
 		statuses.clear();
 		iconsMap.clear();
-		statusTable.clear();
-		statusTable.remove();
+		
+		if (statusTable != null) {
+			statusTable.clear();
+			statusTable.remove();
+		}
 		
 		clearCurrentAction();
+	}
+	
+	public void removeStatusTable() {
+		statusTable = null;
 	}
 
 	
@@ -123,6 +131,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		
 					fxStage.addActor(statusTable);
 				}
+			} else {
+				HUDRenderer.needStatusRefresh = true;
 			}
 		}
 	}
@@ -161,7 +171,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		}
 
 		status.onRemove(entity, room);
-		
+		statuses.remove(status);
+
 		if (statusTable != null) {
 			Table table = iconsMap.get(status);
 			table.remove();
@@ -169,13 +180,14 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 			statusTable.invalidate();
 			statusTable.pack();
 			iconsMap.remove(status);
+			
+			if (statuses.isEmpty()) {
+				statusTable.remove();
+			}
+		} else {
+			HUDRenderer.needStatusRefresh = true;
 		}
 		
-		statuses.remove(status);
-		
-		if (statuses.isEmpty()) {
-			statusTable.remove();
-		}
 	}
 	
 	public void removeStatus(Entity entity, Class statusClass, Room room) {
@@ -211,6 +223,8 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 				Table oneStatusTable = iconsMap.get(status);
 				Label durationLabel = (Label) oneStatusTable.getCells().get(1).getActor();
 				durationLabel.setText(status.getDurationString());
+			} else {
+				HUDRenderer.needStatusRefresh = true;
 			}
 		}
 	}
@@ -239,23 +253,29 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
-		statusTable.setPosition(statusTable.getX() + xOffset, statusTable.getY() + yOffset);
+		if (statusTable != null) {
+			statusTable.setPosition(statusTable.getX() + xOffset, statusTable.getY() + yOffset);
+		}
 	}
 
 
 
 	@Override
 	public void endMovement(Vector2 finalPos) {
-		PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
-		statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
-		newPixelPos.free();
+		if (statusTable != null) {
+			PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
+			statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
+			newPixelPos.free();
+		}
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
-		PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-		statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
-		newPixelPos.free();
+		if (statusTable != null) {
+			PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+			statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
+			newPixelPos.free();
+		}
 	}
 	
 	

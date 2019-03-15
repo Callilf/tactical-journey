@@ -47,6 +47,10 @@ public class StatusDebuffBurning extends Status {
 	public AtlasRegion texture() {
 		return Assets.status_burning;
 	}
+	@Override
+	public AtlasRegion fullTexture() {
+		return Assets.status_burning_full;
+	}
 	
 	@Override
 	public void onStartTurn(Entity entity, Room room) {

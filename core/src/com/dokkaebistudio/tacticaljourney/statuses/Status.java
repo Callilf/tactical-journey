@@ -19,6 +19,7 @@ public abstract class Status {
 	
 	public abstract String title();
 	public abstract AtlasRegion texture();
+	public abstract AtlasRegion fullTexture();
 
 	/** Called when this status is received by an entity. */
 	public boolean onReceive(Entity entity, Room room) {

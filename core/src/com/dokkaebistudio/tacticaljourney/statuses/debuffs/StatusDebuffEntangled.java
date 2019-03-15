@@ -37,7 +37,11 @@ public class StatusDebuffEntangled extends Status {
 	public AtlasRegion texture() {
 		return Assets.status_entangled;
 	}
-
+	@Override
+	public AtlasRegion fullTexture() {
+		return Assets.status_entangled_full;
+	}
+	
 	@Override
 	public boolean onReceive(Entity entity, Room room) {
 		MoveComponent moveComponent = Mappers.moveComponent.get(entity);

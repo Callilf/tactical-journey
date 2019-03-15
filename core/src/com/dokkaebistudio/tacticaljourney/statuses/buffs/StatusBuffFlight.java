@@ -39,7 +39,10 @@ public class StatusBuffFlight extends Status {
 	public AtlasRegion texture() {
 		return Assets.status_flight;
 	}
-
+	@Override
+	public AtlasRegion fullTexture() {
+		return Assets.status_flight_full;
+	}
 
 	@Override
 	public boolean onReceive(Entity entity, Room room) {

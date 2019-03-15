@@ -1,7 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -17,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -30,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -43,6 +48,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -51,6 +57,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public static Vector2 POS_FLOOR = new Vector2(0, 1030.0f);
 	public static Vector2 POS_TIMER = new Vector2(200f, 1030.0f);
+	public static Vector2 POS_STATUSES = new Vector2(5f, 160f);
 	public static Vector2 POS_END_TURN_BTN = new Vector2(5f, 5f);
 	public static Vector2 POS_KEY_SLOT = new Vector2(650f,1000f);
 	public static Vector2 POS_MONEY = new Vector2(730f,1000f);
@@ -94,6 +101,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table moneyTable;
 	private Label moneyLabel;
 	
+	// Status effects
+	private Table statusTable;
+	private Map<Status, Table> statusesMap;
+	public static boolean needStatusRefresh;
+	
 
 	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
@@ -136,6 +148,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private MoveComponent moveComponent;
 	private AttackComponent attackComponent;
 	private AmmoCarrierComponent ammoCarrierComponent;
+	private StatusReceiverComponent statusReceiverComponent;
 	
 	
 	public HUDRenderer(Stage s, Entity player) {
@@ -164,6 +177,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		displayFloor();
 		displayTimeAndTurns();
 		displayMoney();
+		displayStatuses();
 		displayBottomLeftHud();
 		displaySkillButtons();
 		displayAmmos();
@@ -290,6 +304,56 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 		
 		moneyLabel.setText("[GOLD]" + String.valueOf(walletComponent.getAmount()));
+	}
+	
+	
+	
+	//***************************
+	// Status effects
+	
+	private void displayStatuses() {
+		if (statusReceiverComponent == null) statusReceiverComponent = Mappers.statusReceiverComponent.get(player);
+		
+		if (statusTable == null) {
+			statusesMap = new HashMap<>();
+			
+			statusTable = new Table();
+			statusTable.setPosition(POS_STATUSES.x, POS_STATUSES.y);
+			
+			stage.addActor(statusTable);
+		}
+		
+		if (needStatusRefresh) {
+			for (Status status : statusReceiverComponent.getStatuses()) {
+				Table oneStatusTable = statusesMap.get(status);
+				if (oneStatusTable == null) {
+					
+					oneStatusTable = new Table();
+					Image image = new Image(status.fullTexture());
+					oneStatusTable.add(image);
+					Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
+					oneStatusTable.add(dur).bottom();
+					statusTable.add(oneStatusTable).left();
+					statusTable.row();
+					
+					statusesMap.put(status, oneStatusTable);
+				} else {
+					Label l = (Label) oneStatusTable.getCells().get(1).getActor();
+					l.setText(status.getDurationString());
+				}
+			}
+			
+			// Check the statuses to remove
+			for (Entry<Status, Table> entry : statusesMap.entrySet()) {
+				Status status = entry.getKey();
+				if (!statusReceiverComponent.getStatuses().contains(status)) {
+					entry.getValue().remove();
+				}
+			}
+			
+			statusTable.pack();			
+			needStatusRefresh = false;
+		}
 	}
 	
 	

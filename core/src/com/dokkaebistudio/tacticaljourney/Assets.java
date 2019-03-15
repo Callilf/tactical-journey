@@ -234,11 +234,16 @@ public class Assets {
 	// Statuses
 	
 	public static AtlasRegion status_poison;
+	public static AtlasRegion status_poison_full;
 	public static AtlasRegion status_regen;
+	public static AtlasRegion status_regen_full;
 	public static AtlasRegion status_flight;
+	public static AtlasRegion status_flight_full;
 	public static AtlasRegion status_burning;
+	public static AtlasRegion status_burning_full;
 	public static AtlasRegion status_entangled;
-	
+	public static AtlasRegion status_entangled_full;
+
 	
 	//*********
 	// Orbs
@@ -526,10 +531,15 @@ public class Assets {
 		// Statuses
 		
 		status_poison = Assets.getTexture("poison");
+		status_poison_full = Assets.getTexture("poison_full");
 		status_regen = Assets.getTexture("regen");
+		status_regen_full = Assets.getTexture("regen_full");
 		status_flight = Assets.getTexture("flight");
+		status_flight_full = Assets.getTexture("flight_full");
 		status_burning = Assets.getTexture("burning");
+		status_burning_full = Assets.getTexture("burning_full");
 		status_entangled = Assets.getTexture("entangled");
+		status_entangled_full = Assets.getTexture("entangled_full");
 		
 		//*************
 		// Orbs

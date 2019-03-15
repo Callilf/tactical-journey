@@ -42,7 +42,10 @@ public class StatusDebuffPoison extends Status {
 	public AtlasRegion texture() {
 		return Assets.status_poison;
 	}
-
+	@Override
+	public AtlasRegion fullTexture() {
+		return Assets.status_poison_full;
+	}
 	
 	
 	@Override

@@ -40,6 +40,10 @@ public class StatusBuffRegen extends Status {
 	public AtlasRegion texture() {
 		return Assets.status_regen;
 	}
+	@Override
+	public AtlasRegion fullTexture() {
+		return Assets.status_regen_full;
+	}
 
 	@Override
 	public void onEndTurn(Entity entity, Room room) {

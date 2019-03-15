@@ -169,6 +169,7 @@ public final class PlayerFactory {
 		
 		// Statuses
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		statusReceiverCompo.removeStatusTable();
 		playerEntity.add(statusReceiverCompo);
 		
 		// Orb carrier

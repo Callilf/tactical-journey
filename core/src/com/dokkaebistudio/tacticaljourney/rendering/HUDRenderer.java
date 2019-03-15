@@ -333,7 +333,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					oneStatusTable.add(image);
 					Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
 					oneStatusTable.add(dur).bottom();
-					statusTable.add(oneStatusTable).left();
+					statusTable.add(oneStatusTable).left().padTop(2);
 					statusTable.row();
 					
 					statusesMap.put(status, oneStatusTable);

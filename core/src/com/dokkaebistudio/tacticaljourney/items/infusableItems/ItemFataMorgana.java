@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfVilma;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
@@ -29,7 +30,7 @@ public class ItemFataMorgana extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Grants the blessing of Vilma while held in the inventory, and increase the chance for the blessing to activate.";	
+		return Descriptions.ITEM_FATA_MORGANA_DESCRIPTION;	
 	}
 	
 	@Override

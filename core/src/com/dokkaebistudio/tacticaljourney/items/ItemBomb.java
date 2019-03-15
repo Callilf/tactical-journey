@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
@@ -29,8 +30,7 @@ public class ItemBomb extends Item {
 
 	@Override
 	public String getDescription() {
-		return "Bombs can be thrown on the ground by using your bomb skill and explode after some turns. Be sure to stay away from the blast. "
-				+ "If there are too much bombs for your bag, the remaining bombs will stay on the ground.";
+		return Descriptions.ITEM_BOMBS_DESCRIPTION;
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems.boss;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfThePangolin;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseOfPangolinMother;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -31,7 +32,7 @@ public class ItemPangolinScale extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A scale of the giant pangolin. It solid as a rock, but as you touch it, you can feel the despair of a mother who lost her childrens.";
+		return Descriptions.ITEM_PANGOLIN_SCALE_DESCRIPTION;
 	}
 	
 	@Override

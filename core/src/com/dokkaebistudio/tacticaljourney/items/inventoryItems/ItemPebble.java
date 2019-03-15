@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -27,7 +28,7 @@ public class ItemPebble extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A common pebble, nothing interesting about it. You could try throwing them at enemies to piss them off though.";		
+		return Descriptions.ITEM_PEBBLE_DESCRIPTION;		
 	}
 	
 	@Override

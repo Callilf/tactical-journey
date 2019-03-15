@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.items.orbs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -21,7 +22,7 @@ public class ItemOrbPoison extends ItemOrb {
 	
 	@Override
 	public String getDescription() {
-		return "An orb that inflicts the [PURPLE]poison[] status effect for 5 turns on contact.";
+		return Descriptions.ORB_POISON_DESCRIPTION;
 	}
 	
 	@Override

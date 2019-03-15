@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.enums;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 
 /**
  * @author Callil
@@ -12,31 +13,31 @@ import com.dokkaebistudio.tacticaljourney.Assets;
  */
 public enum LootableEnum {
 	
-	BONES("Old bones", 2, Assets.lootable_bones, Assets.lootable_bones_opened) {
+	BONES(Descriptions.LOOTABLE_OLD_BONES_TITLE, 2, Assets.lootable_bones, Assets.lootable_bones_opened) {
 		@Override
 		public String getDescription() {
-			return "The remaining bones of a humanoid being. This could be you in like a hundred years.";
+			return Descriptions.LOOTABLE_OLD_BONES_DESCRIPTION;
 		}
 	},
 	
-	SATCHEL("Adventurer's lost satchel", 3, Assets.lootable_satchel, Assets.lootable_satchel_opened) {
+	SATCHEL(Descriptions.LOOTABLE_SATCHEL_TITLE, 3, Assets.lootable_satchel, Assets.lootable_satchel_opened) {
 		@Override
 		public String getDescription() {
-			return "A satchel in an advanced state of decay. It looks like it has been lost here for quite a long time, but it could still contain something useful.";
+			return Descriptions.LOOTABLE_SATCHEL_DESCRIPTION;
 		}
 	},
 	
-	PERSONAL_BELONGINGS("Personal belongings", 3, Assets.lootable_belongings, Assets.lootable_belongings_opened) {
+	PERSONAL_BELONGINGS(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_TITLE, 3, Assets.lootable_belongings, Assets.lootable_belongings_opened) {
 		@Override
 		public String getDescription() {
-			return "A box of personal belongings that a past adventurer probably lost. It feels a bit like violating privacy but there could be something useful inside.";
+			return Descriptions.LOOTABLE_PERSONAL_BELONGINGS_DESCRIPTION;
 		}
 	},
 	
-	ORB_BAG("Orb bag", 3, Assets.lootable_orb_bag, Assets.lootable_orb_bag_opened) {
+	ORB_BAG(Descriptions.LOOTABLE_ORB_BAG_TITLE, 3, Assets.lootable_orb_bag, Assets.lootable_orb_bag_opened) {
 		@Override
 		public String getDescription() {
-			return "An special bag designed to hold orbs. Upon opening the orbs will automatically take the empty orb spots around you.";
+			return Descriptions.LOOTABLE_ORB_BAG_DESCRIPTION;
 		}
 	};
 	

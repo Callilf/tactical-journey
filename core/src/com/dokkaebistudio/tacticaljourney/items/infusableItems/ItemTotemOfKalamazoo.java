@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
@@ -29,7 +30,7 @@ public class ItemTotemOfKalamazoo extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Grants the blessing of kalamazoo while held in the inventory. This blessing restores between 0 and 10 health after clearing a room.";	
+		return Descriptions.ITEM_TOTEM_OF_KALAMAZOO_DESCRIPTION;	
 	}
 	
 	@Override

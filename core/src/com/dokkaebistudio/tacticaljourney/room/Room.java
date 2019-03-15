@@ -286,7 +286,7 @@ public class Room extends EntitySystem {
 	public void setNextState(RoomState nextState) {
 		if (this.nextState != RoomState.LEVEL_UP_POPIN) {
 			this.nextState = nextState;
-			if (!this.nextState.isPopinDisplayed()) {
+			if (this.nextState.isInGameState()) {
 				this.lastInGameState = this.nextState;
 			}
 		}

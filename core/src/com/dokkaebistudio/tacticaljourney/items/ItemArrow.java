@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
@@ -29,8 +30,7 @@ public class ItemArrow extends Item {
 
 	@Override
 	public String getDescription() {
-		return "Arrows can be shot from a distance using your bow skill (down left of the screen). If there are too much arrows for your quiver, the remaining "
-			+ "arrows will stay on the ground.";
+		return Descriptions.ITEM_ARROWS_DESCRIPTION;
 	}
 	
 	@Override

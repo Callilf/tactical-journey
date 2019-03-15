@@ -34,8 +34,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -44,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRendere
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.GameOverPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.InspectPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InventoryPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ItemPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.JournalRenderer;
@@ -67,6 +66,7 @@ import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ExplosionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.HealthSystem;
+import com.dokkaebistudio.tacticaljourney.systems.InspectSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ItemSystem;
 import com.dokkaebistudio.tacticaljourney.systems.OrbSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
@@ -205,6 +205,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new JournalRenderer(journalStage));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
+		renderers.add(new InspectPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));
 		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
 		renderers.add(new LootPopinRenderer(room, inventoryStage, player));
@@ -237,6 +238,10 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new ExperienceSystem(room, stage));
 		engine.addSystem(new OrbSystem(player, room, stage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));
+		
+		engine.addSystem(new InspectSystem(player, room, fxStage));
+		
+		
 
 		
 

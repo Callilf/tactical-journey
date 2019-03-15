@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.Item;
@@ -16,7 +17,7 @@ import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffFlight;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * A consumable item that heals 25 HP.
+ * A consumable item that grants flight.
  * @author Callil
  *
  */
@@ -28,8 +29,7 @@ public class ItemWingPotion extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Upon drink, grants flight for 30 turns.\n"
-				+ "Add lore.....";		
+		return Descriptions.ITEM_WING_POTION_DESCRIPTION;		
 	}
 	
 	@Override

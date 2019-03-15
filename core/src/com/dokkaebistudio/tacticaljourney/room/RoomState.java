@@ -48,6 +48,9 @@ public enum RoomState {
 	
 	ITEM_DROP_ANIM,
 	
+	INSPECT_MODE_INIT,
+	INSPECT_MODE,
+	INSPECT_POPIN,
 	
 	PROFILE_POPIN,
 	LEVEL_UP_POPIN,
@@ -89,6 +92,38 @@ public enum RoomState {
 	 */
 	public boolean isEnemyTurn() {
 		return this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
+				|| this == RoomState.ENEMY_TURN_INIT 
+				|| this == RoomState.ENEMY_COMPUTE_MOVABLE_TILES 
+				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
+    			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 
+    			|| this == RoomState.ENEMY_MOVING 
+    			|| this == RoomState.ENEMY_END_MOVEMENT
+    			|| this == RoomState.ENEMY_ATTACK
+				|| this == RoomState.ENEMY_ATTACK_ANIMATION;
+	}
+	
+	/**
+	 * Whether this state is an in game state.
+	 * @return true if the current state is an in game state
+	 */
+	public boolean isInGameState() {
+		return this == RoomState.PLAYER_TURN_INIT 
+				|| this == RoomState.PLAYER_COMPUTE_MOVABLE_TILES 
+				|| this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
+    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED 
+    			|| this == RoomState.PLAYER_MOVING 
+    			|| this == RoomState.PLAYER_END_MOVEMENT
+    			|| this == RoomState.PLAYER_TARGETING_START
+    			|| this == RoomState.PLAYER_TARGETING
+    			|| this == RoomState.PLAYER_TARGETING_STOP
+    	    	|| this == RoomState.PLAYER_WHEEL_START    			
+    			|| this == RoomState.PLAYER_WHEEL_TURNING    			
+    			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP
+    			|| this == RoomState.PLAYER_WHEEL_FINISHED
+    			|| this == RoomState.PLAYER_ATTACK_ANIMATION
+    			|| this == RoomState.PLAYER_THROWING
+    			|| this == RoomState.PLAYER_END_TURN
+				|| this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
 				|| this == RoomState.ENEMY_TURN_INIT 
 				|| this == RoomState.ENEMY_COMPUTE_MOVABLE_TILES 
 				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
@@ -146,6 +181,9 @@ public enum RoomState {
 		return this == PLAYER_MOVE_TILES_DISPLAYED || this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED || this == RoomState.PLAYER_TARGETING;
 	}
 
+	public boolean isInspectMode() {
+		return this == INSPECT_MODE_INIT || this == RoomState.INSPECT_MODE || this == RoomState.INSPECT_POPIN;
+	}
 	
 	/**
 	 * Whether the game needs to update or not.

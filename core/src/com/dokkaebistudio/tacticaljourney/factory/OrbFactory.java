@@ -8,6 +8,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -83,6 +85,11 @@ public final class OrbFactory {
 	public Entity createEnergyOrb(Vector2 pos, Room room) {
 		Entity orb = createOrbBase(room, pos, EntityFlagEnum.ENERGY_ORB, AnimationsEnum.ENERGY_ORB.getAnimation());
 		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_ENERGY_TITLE);
+		inspect.setDescription(Descriptions.ORB_ENERGY_DESCRIPTION);
+		orb.add(inspect);
+		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbEnergy());
 		orb.add(orbCompo);
@@ -94,6 +101,11 @@ public final class OrbFactory {
 	
 	public Entity createVegetalOrb(Vector2 pos, Room room) {
 		Entity orb = createOrbBase(room, pos, EntityFlagEnum.VEGETAL_ORB, AnimationsEnum.VEGETAL_ORB.getAnimation());
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_VEGETAL_TITLE);
+		inspect.setDescription(Descriptions.ORB_VEGETAL_DESCRIPTION);
+		orb.add(inspect);
 		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbVegetal());
@@ -107,6 +119,11 @@ public final class OrbFactory {
 	public Entity createPoisonOrb(Vector2 pos, Room room) {
 		Entity orb = createOrbBase(room, pos, EntityFlagEnum.POISON_ORB, AnimationsEnum.POISON_ORB.getAnimation());
 		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_POISON_TITLE);
+		inspect.setDescription(Descriptions.ORB_POISON_DESCRIPTION);
+		orb.add(inspect);
+		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbPoison());
 		orb.add(orbCompo);
@@ -118,6 +135,11 @@ public final class OrbFactory {
 	
 	public Entity createFireOrb(Vector2 pos, Room room) {
 		Entity orb = createOrbBase(room, pos, EntityFlagEnum.FIRE_ORB, AnimationsEnum.FIRE_ORB.getAnimation());
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_FIRE_TITLE);
+		inspect.setDescription(Descriptions.ORB_FIRE_DESCRIPTION);
+		orb.add(inspect);
 		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbFire());

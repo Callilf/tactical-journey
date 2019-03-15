@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterati
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
@@ -74,7 +75,12 @@ public final class PlayerFactory {
 	public Entity createPlayer(Vector2 pos, int moveSpeed, Room room) {
 		Entity playerEntity = engine.createEntity();
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
-
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Capitaine Pitaine");
+		inspect.setDescription("It's actually you...");
+		playerEntity.add(inspect);
+		
 		// Player anim
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		playerEntity.add(spriteCompo);
@@ -203,6 +209,11 @@ public final class PlayerFactory {
 		Entity shopKeeperEntity = engine.createEntity();
 		shopKeeperEntity.flags = EntityFlagEnum.SHOPKEEPER.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Shop Keeper");
+		inspect.setDescription("Some random dude with a shop in the middle of a dungeon.");
+		shopKeeperEntity.add(inspect);
+
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.shopkeeper));
@@ -259,6 +270,11 @@ public final class PlayerFactory {
 		Entity godessStatueEntity = engine.createEntity();
 		godessStatueEntity.flags = EntityFlagEnum.GODESS_STATUE.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Godess Statue");
+		inspect.setDescription("A statue of a godess.");
+		godessStatueEntity.add(inspect);
+		
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.godess_statue));

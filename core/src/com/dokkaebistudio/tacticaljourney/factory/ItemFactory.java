@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -71,8 +73,14 @@ public final class ItemFactory {
 		this.entityFactory = ef;
 	}
 	
-	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, Item itemType) {
+	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, Item itemType, String title, String desc) {
 		Entity item = engine.createEntity();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(title);
+		inspect.setDescription(desc);
+		item.add(inspect);
+
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite( texture));
@@ -237,7 +245,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemMoney(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney());
+		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(),
+				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;
 	}
@@ -248,7 +257,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemKey(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.key, new ItemKey());
+		Entity item = createItemBase(room, tilePos, Assets.key, new ItemKey(),
+				Descriptions.ITEM_KEY_TITLE, Descriptions.ITEM_KEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		
 		item.remove(DestructibleComponent.class);
@@ -262,7 +272,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemArrows(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.arrow_item, new ItemArrow());
+		Entity item = createItemBase(room, tilePos, Assets.arrow_item, new ItemArrow(),
+				Descriptions.ITEM_ARROWS_TITLE, Descriptions.ITEM_ARROWS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
 		return item;
 	}
@@ -273,7 +284,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemBombs(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb());
+		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(),
+				Descriptions.ITEM_BOMBS_TITLE, Descriptions.ITEM_BOMBS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;
 	}
@@ -284,7 +296,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.health_up_item, new ItemSmallHealthPotion());
+		Entity item = createItemBase(room, tilePos, Assets.health_up_item, new ItemSmallHealthPotion(),
+				Descriptions.ITEM_SMALL_HEALTH_POTION_TITLE, Descriptions.ITEM_SMALL_HEALTH_POTION_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
 		return item;
 	}
@@ -295,7 +308,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemRegenPotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.regen_potion_item, new ItemRegenPotion());
+		Entity item = createItemBase(room, tilePos, Assets.regen_potion_item, new ItemRegenPotion(),
+				Descriptions.ITEM_REGEN_POTION_TITLE, Descriptions.ITEM_REGEN_POTION_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_REGEN_POTION.getFlag();
 		return item;
 	}
@@ -306,13 +320,15 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemWingPotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.wing_potion_item, new ItemWingPotion());
+		Entity item = createItemBase(room, tilePos, Assets.wing_potion_item, new ItemWingPotion(),
+				Descriptions.ITEM_WING_POTION_TITLE, Descriptions.ITEM_WING_POTION_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_WING_POTION.getFlag();
 		return item;
 	}
 	
 	public Entity createItemOrbContainer(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.orb_container_item, new ItemOrbContainer());
+		Entity item = createItemBase(room, tilePos, Assets.orb_container_item, new ItemOrbContainer(),
+				Descriptions.ITEM_ORB_CONTAINER_TITLE, Descriptions.ITEM_ORB_CONTAINER_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB_CONTAINER.getFlag();
 		return item;
 	}
@@ -323,7 +339,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemFirePotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.fire_potion_item, new ItemFirePotion());
+		Entity item = createItemBase(room, tilePos, Assets.fire_potion_item, new ItemFirePotion(),
+				Descriptions.ITEM_FIRE_POTION_TITLE, Descriptions.ITEM_FIRE_POTION_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_FIRE_POTION.getFlag();
 		return item;
 	}
@@ -334,7 +351,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemLightArmor(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.armor_up_item, new ItemLightArmor());
+		Entity item = createItemBase(room, tilePos, Assets.armor_up_item, new ItemLightArmor(),
+				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ARMOR_UP.getFlag();
 		return item;
 	}
@@ -345,7 +363,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemArmorPiece(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.armor_piece_item, new ItemArmorPiece());
+		Entity item = createItemBase(room, tilePos, Assets.armor_piece_item, new ItemArmorPiece(),
+				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ARMOR_PIECE.getFlag();
 		return item;
 	}
@@ -356,7 +375,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemTutorialPage(int pageNumber, Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.tutorial_page_item, new ItemTutorialPage(pageNumber));
+		Entity item = createItemBase(room, tilePos, Assets.tutorial_page_item, new ItemTutorialPage(pageNumber),
+				Descriptions.ITEM_TUTORIAL_PAGE_TITLE, Descriptions.ITEM_TUTORIAL_PAGE_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_TUTORIAL_PAGE.getFlag();
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
@@ -374,7 +394,8 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemWebSack(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.web_sack_item, new ItemWebSack());
+		Entity item = createItemBase(room, tilePos, Assets.web_sack_item, new ItemWebSack(),
+				Descriptions.ITEM_WEB_SACK_TITLE, Descriptions.ITEM_WEB_SACK_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
@@ -392,13 +413,15 @@ public final class ItemFactory {
 	 * @return the entity created
 	 */
 	public Entity createItemVenomGland(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.venom_gland_item, new ItemVenomGland());
+		Entity item = createItemBase(room, tilePos, Assets.venom_gland_item, new ItemVenomGland(),
+				Descriptions.ITEM_VENOM_GLAND_TITLE, Descriptions.ITEM_VENOM_GLAND_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_VENOM_GLAND.getFlag();
 		return item;
 	}
 	
 	public Entity createItemPebble(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.pebble_item, new ItemPebble());
+		Entity item = createItemBase(room, tilePos, Assets.pebble_item, new ItemPebble(),
+				Descriptions.ITEM_PEBBLE_TITLE, Descriptions.ITEM_PEBBLE_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_PEBBLE.getFlag();
 		return item;
 	}
@@ -409,7 +432,8 @@ public final class ItemFactory {
 	// Infusables 
 	
 	public Entity createItemTotemOfKalamazoo(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.totem_of_kalamazoo, new ItemTotemOfKalamazoo());
+		Entity item = createItemBase(room, tilePos, Assets.totem_of_kalamazoo, new ItemTotemOfKalamazoo(),
+				Descriptions.ITEM_TOTEM_OF_KALAMAZOO_TITLE, Descriptions.ITEM_TOTEM_OF_KALAMAZOO_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_TOTEM_OF_KALAMAZOO.getFlag();
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
@@ -422,14 +446,16 @@ public final class ItemFactory {
 	
 
 	public Entity createItemFataMorgana(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.fata_morgana, new ItemFataMorgana());
+		Entity item = createItemBase(room, tilePos, Assets.fata_morgana, new ItemFataMorgana(),
+				Descriptions.ITEM_FATA_MORGANA_TITLE, Descriptions.ITEM_FATA_MORGANA_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_FATA_MORGANA.getFlag();
 		return item;
 	}
 	
 
 	public Entity createItemMithridatium(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.mithridatium, new ItemMithridatium());
+		Entity item = createItemBase(room, tilePos, Assets.mithridatium, new ItemMithridatium(),
+				Descriptions.ITEM_MITHRIDATIUM_TITLE, Descriptions.ITEM_MITHRIDATIUM_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MITHRIDATIUM.getFlag();
 		return item;
 	}
@@ -437,39 +463,45 @@ public final class ItemFactory {
 	
 
 	public Entity createItemNurseEyePatch(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.nurse_eye_patch, new ItemNurseEyePatch());
+		Entity item = createItemBase(room, tilePos, Assets.nurse_eye_patch, new ItemNurseEyePatch(),
+				Descriptions.ITEM_NURSE_EYE_PATCH_TITLE, Descriptions.ITEM_NURSE_EYE_PATCH_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
 		return item;
 	}
 	
 
 	public Entity createItemVegetalGarment(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.vegetal_garment, new ItemVegetalGarment());
+		Entity item = createItemBase(room, tilePos, Assets.vegetal_garment, new ItemVegetalGarment(),
+				Descriptions.ITEM_VEGETAL_GARMENT_TITLE, Descriptions.ITEM_VEGETAL_GARMENT_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_VEGETAL_GARMENT.getFlag();
 		return item;
 	}
 	
 	public Entity createItemRamSkull(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.ram_skull, new ItemRamSkull());
+		Entity item = createItemBase(room, tilePos, Assets.ram_skull, new ItemRamSkull(),
+				Descriptions.ITEM_RAM_SKULL_TITLE, Descriptions.ITEM_RAM_SKULL_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_RAM_SKULL.getFlag();
 		return item;
 	}
 	
 	public Entity createItemColorfulTie(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.colorful_tie, new ItemColorfulTie());
+		Entity item = createItemBase(room, tilePos, Assets.colorful_tie, new ItemColorfulTie(),
+				Descriptions.ITEM_COLORFUL_TIE_TITLE, Descriptions.ITEM_COLORFUL_TIE_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_COLORFUL_TIE.getFlag();
 		return item;
 	}
 	
 	public Entity createItemOldCrown(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.old_crown, new ItemOldCrown());
+		Entity item = createItemBase(room, tilePos, Assets.old_crown, new ItemOldCrown(),
+				Descriptions.ITEM_OLD_CROWN_TITLE, Descriptions.ITEM_OLD_CROWN_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
 		return item;
 	}
 	
 
 	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale());
+		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale(),
+				Descriptions.ITEM_PANGOLIN_SCALE_TITLE, Descriptions.ITEM_PANGOLIN_SCALE_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_PANGOLIN_SCALE.getFlag();
 		return item;
 	}
@@ -483,41 +515,30 @@ public final class ItemFactory {
 	// Orbs
 	
 	public Entity createItemEnergyOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.energy_orb_item, new ItemOrbEnergy());
+		Entity item = createItemBase(room, tilePos, Assets.energy_orb_item, new ItemOrbEnergy(),
+				Descriptions.ORB_ENERGY_TITLE, Descriptions.ORB_ENERGY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
 		return item;
 	}
 	
 	public Entity createItemVegetalOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.vegetal_orb_item, new ItemOrbVegetal());
+		Entity item = createItemBase(room, tilePos, Assets.vegetal_orb_item, new ItemOrbVegetal(),
+				Descriptions.ORB_VEGETAL_TITLE, Descriptions.ORB_VEGETAL_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
 		return item;
 	}
 	
 	public Entity createItemPoisonOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.poison_orb_item, new ItemOrbPoison());
+		Entity item = createItemBase(room, tilePos, Assets.poison_orb_item, new ItemOrbPoison(),
+				Descriptions.ORB_POISON_TITLE, Descriptions.ORB_POISON_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
 		return item;
 	}
 	
 	public Entity createItemFireOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.fire_orb_item, new ItemOrbFire());
+		Entity item = createItemBase(room, tilePos, Assets.fire_orb_item, new ItemOrbFire(),
+				Descriptions.ORB_FIRE_TITLE, Descriptions.ORB_FIRE_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	// TODO change
-	
-	public Entity createItemVigor(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.blessing_vigor, new ItemVigorBlessing());
-		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
-		
-		return item;
-	}
-	public Entity createItemFrailty(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.curse_frailty, new ItemFrailtyCurse());
-		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
-		
 		return item;
 	}
 	

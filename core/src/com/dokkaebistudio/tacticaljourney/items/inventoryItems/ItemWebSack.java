@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -25,7 +26,7 @@ public class ItemWebSack extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A small sack of spider web. Nothing very interesting about it.";		
+		return Descriptions.ITEM_WEB_SACK_DESCRIPTION;		
 	}
 	
 	@Override

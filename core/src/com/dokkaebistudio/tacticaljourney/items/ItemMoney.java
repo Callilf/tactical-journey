@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -28,7 +29,9 @@ public class ItemMoney extends Item {
 	}
 
 	@Override
-	public String getDescription() {return null;}
+	public String getDescription() {
+		return Descriptions.ITEM_MONEY_DESCRIPTION;
+	}
 	
 	@Override
 	public String getActionLabel() {return null;}

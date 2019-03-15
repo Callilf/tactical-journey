@@ -9,6 +9,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
@@ -35,7 +36,7 @@ public class ItemVenomGland extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A gland full of venom that will probably explode when thrown.";		
+		return Descriptions.ITEM_VENOM_GLAND_DESCRIPTION;		
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.items.orbs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -21,7 +22,7 @@ public class ItemOrbFire extends ItemOrb {
 	
 	@Override
 	public String getDescription() {
-		return "An orb that inclicts the [ORANGE]burning[] status effect on contact, and generate [ORANGE]fire creep[] in a large area in front of the orb holder.";
+		return Descriptions.ORB_FIRE_DESCRIPTION;
 	}
 	
 	@Override

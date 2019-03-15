@@ -96,6 +96,10 @@ public class Assets {
 	public static AtlasRegion btn_profile;
 	public static AtlasRegion btn_profile_pushed;
 	
+	public static AtlasRegion btn_inspect;
+	public static AtlasRegion btn_inspect_pushed;
+	public static AtlasRegion btn_inspect_checked;
+	
 	public static AtlasRegion inventory_background;
 	public static AtlasRegion inventory_money;
 	public static AtlasRegion inventory_slot;
@@ -399,6 +403,11 @@ public class Assets {
 		profile_alteration_background = Assets.getTexture("hud_profile_alteration_background");
 		btn_profile = Assets.getTexture("btn-profile");
 		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
+		
+		btn_inspect = Assets.getTexture("btn-inspect");
+		btn_inspect_pushed = Assets.getTexture("btn-inspect-pushed");
+		btn_inspect_checked = Assets.getTexture("btn-inspect-checked");
+
 		
 		inventory_background = Assets.getTexture("hud_inventory_background");
 		inventory_money = Assets.getTexture("hud_money");

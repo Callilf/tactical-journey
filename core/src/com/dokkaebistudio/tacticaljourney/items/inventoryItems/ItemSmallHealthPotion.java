@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
@@ -28,8 +29,7 @@ public class ItemSmallHealthPotion extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Upon use, heal 25 HP and cure poison.\n"
-				+ "Remember that drinking this potion will take a turn, so don't stay too close from the enemy while doing it.";		
+		return Descriptions.ITEM_SMALL_HEALTH_POTION_DESCRIPTION;		
 	}
 	
 	@Override

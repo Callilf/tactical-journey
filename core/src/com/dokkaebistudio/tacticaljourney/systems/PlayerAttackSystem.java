@@ -295,9 +295,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		
 		Entity thrownEntity = skillAttackCompo.getThrownEntity();
 		ItemComponent itemComponent = Mappers.itemComponent.get(thrownEntity);
+		Journal.addEntry("You threw " + itemComponent.getItemLabel());
+
 		itemComponent.onThrow(targetedGridPosition, player, thrownEntity, room);		
 		
-		Journal.addEntry("You threw " + itemComponent.getItemLabel());
 		
 		room.turnManager.endPlayerTurn();
 	}

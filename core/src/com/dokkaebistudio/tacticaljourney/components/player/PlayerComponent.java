@@ -1,5 +1,9 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 
@@ -51,7 +55,24 @@ public class PlayerComponent implements Component {
 	}
 
 	
+	// inspect
 	
+	private boolean inspectPopinRequested = false;
+	private List<Entity> inspectedEntities = new ArrayList<>();
+	
+	public List<Entity> getInspectedEntities() {
+		return inspectedEntities;
+	}
+	
+	public void addInspectedEntities(Collection<Entity> entities) {
+		inspectedEntities.clear();
+		inspectedEntities.addAll(entities);
+		setInspectPopinRequested(true);
+	}
+	
+	public void clearInspectedEntities() {
+		inspectedEntities.clear();
+	}
 	
 	
 	//**************************
@@ -126,5 +147,13 @@ public class PlayerComponent implements Component {
 
 	public void setActionDoneAtThisFrame(boolean actionDoneAtThisFrame) {
 		this.actionDoneAtThisFrame = actionDoneAtThisFrame;
+	}
+
+	public boolean isInspectPopinRequested() {
+		return inspectPopinRequested;
+	}
+
+	public void setInspectPopinRequested(boolean inspectPopinRequested) {
+		this.inspectPopinRequested = inspectPopinRequested;
 	}
 }

@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
@@ -27,8 +28,7 @@ public class ItemOrbContainer extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Contains a random orb. Orbs are very volatile and will immediately orbit around you when you discover them. If all orb slots are filled and you "
-				+ "open the container, the contained orb will be lost.";
+		return Descriptions.ITEM_ORB_CONTAINER_DESCRIPTION;	
 	}
 	
 	@Override

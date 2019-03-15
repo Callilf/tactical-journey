@@ -1,45 +1,47 @@
 package com.dokkaebistudio.tacticaljourney.items.enums;
 
+import com.dokkaebistudio.tacticaljourney.Descriptions;
+
 public enum ItemEnum {
 
-	MONEY("Gold coin",1),
+	MONEY(Descriptions.ITEM_MONEY_TITLE,1),
 	
 	// Ammos
-	AMMO_ARROW("Arrow", 1),
-	AMMO_BOMB("Bomb", 1),
+	AMMO_ARROW(Descriptions.ITEM_ARROWS_TITLE, 1),
+	AMMO_BOMB(Descriptions.ITEM_BOMBS_TITLE, 1),
 	
 	// Potions
-	POTION_SMALL_HEALTH("Small health potion", 1),
-	POTION_REGEN("Regeneration potion", 1),
-	POTION_FIRE("Fire potion", 1),
-	POTION_WING("Wing potion", 1),
+	POTION_SMALL_HEALTH(Descriptions.ITEM_SMALL_HEALTH_POTION_TITLE, 1),
+	POTION_REGEN(Descriptions.ITEM_REGEN_POTION_TITLE, 1),
+	POTION_FIRE(Descriptions.ITEM_FIRE_POTION_TITLE, 1),
+	POTION_WING(Descriptions.ITEM_WING_POTION_TITLE, 1),
 	
 	// Armors
-	ARMOR_PIECE("Armor piece", 1),
-	ARMOR_LIGHT("Light armor", 2),
+	ARMOR_PIECE(Descriptions.ITEM_ARMOR_PIECE_TITLE, 1),
+	ARMOR_LIGHT(Descriptions.ITEM_LIGHT_ARMOR_TITLE, 2),
 	
-	ORB_CONTAINER("Orb container", 1),
+	ORB_CONTAINER(Descriptions.ITEM_ORB_CONTAINER_TITLE, 1),
 	
 	// Misc
-	WEB_SACK("Web sack", 1),
-	VENOM_GLAND("Venom gland", 1),
-	PEBBLE("Pebble", 1),
+	WEB_SACK(Descriptions.ITEM_WEB_SACK_TITLE, 1),
+	VENOM_GLAND(Descriptions.ITEM_VENOM_GLAND_TITLE, 1),
+	PEBBLE(Descriptions.ITEM_PEBBLE_TITLE, 1),
 	
 	
 	// Orbs
-	ENERGY_ORB("Energy orb", 1),
-	VEGETAL_ORB("Vegetal orb", 1),
-	POISON_ORB("Poison orb", 1),
-	FIRE_ORB("Fire orb", 1),
+	ENERGY_ORB(Descriptions.ORB_ENERGY_TITLE, 1),
+	VEGETAL_ORB(Descriptions.ORB_VEGETAL_TITLE, 1),
+	POISON_ORB(Descriptions.ORB_POISON_TITLE, 1),
+	FIRE_ORB(Descriptions.ORB_FIRE_TITLE, 1),
 	
 	
 	
 	
 	
 	// Infusables
-	TOTEM_OF_KALAMAZOO("Totem of Kalamazoo", 2),
-	FATA_MORGANA("Fata morgana", 2),
-	MITHRIDATIUM("Mithridatium", 2),
+	TOTEM_OF_KALAMAZOO(Descriptions.ITEM_TOTEM_OF_KALAMAZOO_TITLE, 2),
+	FATA_MORGANA(Descriptions.ITEM_FATA_MORGANA_TITLE, 2),
+	MITHRIDATIUM(Descriptions.ITEM_MITHRIDATIUM_TITLE, 2),
 	NURSE_EYE_PATCH("Nurse eye patch", 2),
 	VEGETAL_GARMENT("Vegetal garment", 2),
 	RAM_SKULL("Ram skull", 2),

@@ -36,6 +36,7 @@ public abstract class Status {
 	public void onEndTurn(Entity entity, Room room) {}
 	
 	
+	public void onReceiveDamage(Entity entity, Entity attacker, Room room) {};
 	public void onDeath(Entity entity, Room room) {};
 	
 	

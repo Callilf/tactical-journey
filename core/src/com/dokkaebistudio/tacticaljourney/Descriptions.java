@@ -69,6 +69,37 @@ public class Descriptions {
 	public static final String ORB_FIRE_DESCRIPTION = "An orb that bursts into flammes and inflicts the [ORANGE]burning[] status effect on contact.";
 
 	
+	
+	// Enemies
+	
+	public static final String ENEMY_SPIDER_TITLE = "Spider";
+	public static final String ENEMY_SPIDER_DESCRIPTION = "A big rainforest spider that looks aggressive";
+
+	public static final String ENEMY_WEB_SPIDER_TITLE = "Web spider";
+	public static final String ENEMY_WEB_SPIDER_DESCRIPTION = "A white spider that weaves a incredibly solid web. It is also able to throw web balls.";
+
+	public static final String ENEMY_VENOM_SPIDER_TITLE = "Venomous spider";
+	public static final String ENEMY_VENOM_SPIDER_DESCRIPTION = "An aggressive spider that uses venomous attacks.";
+
+	public static final String ENEMY_SCORPION_TITLE = "Scorpion";
+	public static final String ENEMY_SCORPION_DESCRIPTION = "A very aggressive scorpion that tracks its prey down.";
+
+	public static final String ENEMY_STINGER_TITLE = "Stinger";
+	public static final String ENEMY_STINGER_DESCRIPTION = "A huge mosquito-like insect. It can charge with its stinger from afar.";
+
+	public static final String ENEMY_BABY_PANGOLIN_TITLE = "Baby pangolin";
+	public static final String ENEMY_BABY_PANGOLIN_DESCRIPTION = "A young pangolin that doesn't look aggressive. It rolls into a ball when attacked.";
+
+	public static final String ENEMY_PANGOLIN_MATRIARCH_TITLE = "Pangolin matriarch";
+	public static final String ENEMY_PANGOLIN_MATRIARCH_DESCRIPTION = "A giant pangolin matriarch that looks over her progeny. Attacking her children might piss her off.";
+
+	public static final String ENEMY_TRIBESMAN_SPEAR_TITLE = "Tribesman spearman";
+	public static final String ENEMY_TRIBESMAN_SPEAR_DESCRIPTION = "An autochthonous holding a spear that grants him extra reach.";
+
+	public static final String ENEMY_TRIBESMAN_SHIELD_TITLE = "Tribesman shield holder";
+	public static final String ENEMY_TRIBESMAN_SHIELD_DESCRIPTION = "An autochthonous holding a big shield that grants him extra defense.";
+
+	
 	// Items
 	
 	public static final String ITEM_MONEY_TITLE = "Gold coins";
@@ -149,6 +180,9 @@ public class Descriptions {
 
 	public static final String ITEM_OLD_CROWN_TITLE = "Old crown";
 	public static final String ITEM_OLD_CROWN_DESCRIPTION = "A very old crown with a smell of ashes. Grants the blessing of cinders while held in the inventory, and increase the chance for the blessing to activate.";
+
+	public static final String ITEM_MEMENTO_MORI_TITLE = "Memento mori";
+	public static final String ITEM_MEMENTO_MORI_DESCRIPTION = "A reminder that life is ephemeral and the ultimately leads to death. Grants the blessing of acceptance, as well as the curse of acceptance, while held in the inventory.";
 
 	public static final String ITEM_PANGOLIN_SCALE_TITLE = "Pangolin scale";
 	public static final String ITEM_PANGOLIN_SCALE_DESCRIPTION = "A scale of the giant pangolin. It solid as a rock, but as you touch it, you can feel the despair of a mother who lost her childrens.";

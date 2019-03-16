@@ -22,11 +22,10 @@ import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.items.ItemKey;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
-import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemFrailtyCurse;
-import com.dokkaebistudio.tacticaljourney.items.alterationItems.ItemVigorBlessing;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
@@ -206,6 +205,10 @@ public final class ItemFactory {
 			
 		case OLD_CROWN:
 			item = createItemOldCrown(room, tilePos);
+			break;
+			
+		case MEMENTO_MORI:
+			item = createItemMementoMori(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -494,6 +497,13 @@ public final class ItemFactory {
 	public Entity createItemOldCrown(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.old_crown, new ItemOldCrown(),
 				Descriptions.ITEM_OLD_CROWN_TITLE, Descriptions.ITEM_OLD_CROWN_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
+		return item;
+	}
+	
+	public Entity createItemMementoMori(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.memento_mori, new ItemMementoMori(),
+				Descriptions.ITEM_MEMENTO_MORI_TITLE, Descriptions.ITEM_MEMENTO_MORI_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
 		return item;
 	}

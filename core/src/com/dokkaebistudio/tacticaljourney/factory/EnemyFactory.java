@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -111,6 +113,12 @@ public final class EnemyFactory {
 	public Entity createScorpion(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_SCORPION_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_SCORPION_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.enemy_scorpion));
@@ -185,6 +193,11 @@ public final class EnemyFactory {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_STINGER.getFlag();
 		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_STINGER_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_STINGER_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);

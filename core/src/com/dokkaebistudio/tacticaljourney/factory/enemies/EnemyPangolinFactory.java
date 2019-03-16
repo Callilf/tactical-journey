@@ -8,11 +8,13 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -73,6 +75,12 @@ public final class EnemyPangolinFactory {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_BABY.getFlag();
 		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_BABY_PANGOLIN_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_BABY_PANGOLIN_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 
@@ -159,6 +167,12 @@ public final class EnemyPangolinFactory {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_MOTHER.getFlag();
 		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_PANGOLIN_MATRIARCH_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_PANGOLIN_MATRIARCH_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 

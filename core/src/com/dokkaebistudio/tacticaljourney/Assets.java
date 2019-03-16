@@ -247,6 +247,8 @@ public class Assets {
 	public static AtlasRegion status_burning_full;
 	public static AtlasRegion status_entangled;
 	public static AtlasRegion status_entangled_full;
+	public static AtlasRegion status_death_door;
+	public static AtlasRegion status_death_door_full;
 
 	
 	//*********
@@ -293,6 +295,7 @@ public class Assets {
 	public static AtlasRegion ram_skull;
 	public static AtlasRegion colorful_tie;
 	public static AtlasRegion old_crown;
+	public static AtlasRegion memento_mori;
 	
 	
 	// Boss items
@@ -324,10 +327,12 @@ public class Assets {
 	public static AtlasRegion blessing_calishka;
 	public static AtlasRegion blessing_fast_learner;
 	public static AtlasRegion blessing_cinders;
+	public static AtlasRegion blessing_acceptance;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
 	public static AtlasRegion curse_black_mamba;
+	public static AtlasRegion curse_acceptance;
 	public static AtlasRegion curse_pangolin_mother;
 
 	
@@ -549,6 +554,9 @@ public class Assets {
 		status_burning_full = Assets.getTexture("burning_full");
 		status_entangled = Assets.getTexture("entangled");
 		status_entangled_full = Assets.getTexture("entangled_full");
+		status_death_door = Assets.getTexture("death_door");
+		status_death_door_full = Assets.getTexture("death_door_full");
+
 		
 		//*************
 		// Orbs
@@ -591,6 +599,7 @@ public class Assets {
 		ram_skull = Assets.getTexture("item-infusable-ram-skull");
 		colorful_tie = Assets.getTexture("item-infusable-colorful-tie");
 		old_crown = Assets.getTexture("item-infusable-old-crown");
+		memento_mori = Assets.getTexture("item-infusable-memento-mori");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -616,10 +625,12 @@ public class Assets {
 		blessing_calishka = Assets.getTexture("blessing-calishka");
 		blessing_fast_learner = Assets.getTexture("blessing-fast-learner");
 		blessing_cinders = Assets.getTexture("blessing-cinders");
+		blessing_acceptance = Assets.getTexture("blessing-acceptance");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
 		curse_black_mamba = Assets.getTexture("curse-black-mamba");
+		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 
 	}

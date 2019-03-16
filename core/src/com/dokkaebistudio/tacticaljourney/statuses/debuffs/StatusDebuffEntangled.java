@@ -30,7 +30,7 @@ public class StatusDebuffEntangled extends Status {
 	
 	@Override
 	public String title() {
-		return "Entangled";
+		return "[FOREST]Entangled[]";
 	}
 
 	@Override

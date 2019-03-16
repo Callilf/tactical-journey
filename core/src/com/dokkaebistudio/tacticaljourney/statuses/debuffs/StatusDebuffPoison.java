@@ -35,7 +35,7 @@ public class StatusDebuffPoison extends Status {
 	
 	@Override
 	public String title() {
-		return "Poisoned";
+		return "[PURPLE]Poisoned[]";
 	}
 
 	@Override

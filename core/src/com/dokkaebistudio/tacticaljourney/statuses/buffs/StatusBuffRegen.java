@@ -33,7 +33,7 @@ public class StatusBuffRegen extends Status {
 	
 	@Override
 	public String title() {
-		return "Regen";
+		return "[GREEN]Regen[]";
 	}
 
 	@Override

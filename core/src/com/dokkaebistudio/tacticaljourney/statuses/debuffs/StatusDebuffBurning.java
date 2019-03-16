@@ -40,7 +40,7 @@ public class StatusDebuffBurning extends Status {
 	
 	@Override
 	public String title() {
-		return "Burning";
+		return "[ORANGE]Burning[]";
 	}
 
 	@Override

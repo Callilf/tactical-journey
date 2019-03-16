@@ -32,7 +32,7 @@ public class StatusBuffFlight extends Status {
 	
 	@Override
 	public String title() {
-		return "Flight";
+		return "[CYAN]Flight[]";
 	}
 
 	@Override

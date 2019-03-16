@@ -6,17 +6,17 @@ package com.dokkaebistudio.tacticaljourney.factory.enemies;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -24,24 +24,16 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemySpider;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyVenomSpider;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanSpear;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
-import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenSpearItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
@@ -78,6 +70,12 @@ public final class EnemyTribesmenFactory {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SPEAR.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SPEAR_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_TRIBESMAN_SPEAR_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 		
@@ -158,6 +156,12 @@ public final class EnemyTribesmenFactory {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SHIELD.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SHIELD_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_TRIBESMAN_SHIELD_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 		

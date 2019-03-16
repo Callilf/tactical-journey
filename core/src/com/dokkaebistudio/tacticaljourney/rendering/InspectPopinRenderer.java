@@ -15,7 +15,11 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -47,6 +51,12 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     private Table mainPopin;
     private Label title;
     private Label desc;
+    
+    private Table bigPopin;
+    private Label bigTitle;
+    private Label bigDesc;
+    private Label bigStats;
+
         
     
     
@@ -77,15 +87,19 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 
 			if (mainPopin == null) {
 				initTable();
+				initChoiceTable();
+				initBigTable();
 			}
 			
-			updateContentForAction();
+			updateContent();
 			
 			// Place the popin properly
 			mainPopin.pack();
 			mainPopin.setPosition(GameScreen.SCREEN_W/2 - mainPopin.getWidth()/2, GameScreen.SCREEN_H/2 - mainPopin.getHeight()/2);
+
 		
 			this.stage.addActor(mainPopin);
+			this.stage.addActor(bigPopin);
 			this.stage.addActor(choicePopin);
 			
 			playerCompo.clearRequestedAction();
@@ -103,22 +117,21 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     	}
 	}
 
-	private void updateContentForAction() {
+	private void updateContent() {
 		needRefresh = false;
 		mainPopin.setVisible(false);
 		choicePopin.setVisible(false);
+		bigPopin.setVisible(false);
 
 		if (!playerCompo.getInspectedEntities().isEmpty()) {
 			
 			if (playerCompo.getInspectedEntities().size() == 1) {
-				mainPopin.setVisible(true);
-
-				Entity entity = playerCompo.getInspectedEntities().get(0);
-				InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
-				title.setText(inspectableComponent.getTitle());
-				desc.setText(inspectableComponent.getDescription());
+				
+				// ONE entity: display the inspect popin
+				updateContentForEntity(playerCompo.getInspectedEntities().get(0));
 			} else {
 				
+				// More than ONE entity: display the choice popin
 				choicePopin.setVisible(true);
 				choicePopinSubTable.clear();
 				
@@ -152,6 +165,62 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 
 		}
 	}
+
+	private void updateContentForEntity(Entity entity) {
+
+		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
+		if (inspectableComponent.isBigPopup()) {
+			// BIG popup mode : inspecting an enemy
+			bigPopin.setVisible(true);
+
+			bigTitle.setText(inspectableComponent.getTitle());
+			bigDesc.setText(inspectableComponent.getDescription());
+			
+			StringBuilder sb = new StringBuilder();
+			HealthComponent healthComponent = Mappers.healthComponent.get(entity);
+			if (healthComponent != null) {
+				sb.append("Hp: " + healthComponent.getHpColor() + healthComponent.getHp() + "[]/" + healthComponent.getMaxHp());
+				sb.append("  -  ");
+				sb.append("Armor: " + healthComponent.getArmorColor() + healthComponent.getArmor() + "[]/" + healthComponent.getMaxArmor());
+				sb.append("\n");
+			}
+			
+			AttackComponent attackComponent = Mappers.attackComponent.get(entity);
+			if (attackComponent != null) {
+				sb.append("Strength: " + attackComponent.getStrength());
+				sb.append("  -  ");
+			}
+			
+			MoveComponent moveComponent = Mappers.moveComponent.get(entity);
+			if (moveComponent != null) {
+				sb.append("Move: " + moveComponent.getMoveSpeed());
+				sb.append("  -  ");
+			}
+			
+			if (attackComponent != null) {
+				if (attackComponent.getRangeMin() != attackComponent.getRangeMax()) {
+					sb.append("Range: " + attackComponent.getRangeMin() + "-" + attackComponent.getRangeMax());
+				} else {
+					sb.append("Range: " + attackComponent.getRangeMin());
+				}
+				sb.append("\n");
+			}
+			
+			bigStats.setText(sb.toString());
+
+			bigPopin.pack();
+			bigPopin.setPosition(GameScreen.SCREEN_W/2 - bigPopin.getWidth()/2, GameScreen.SCREEN_H/2 - bigPopin.getHeight()/2);
+
+		} else {
+			mainPopin.setVisible(true);
+
+			title.setText(inspectableComponent.getTitle());
+			desc.setText(inspectableComponent.getDescription());
+		}
+	}
+	
+	
+	
     
 
     /**
@@ -185,10 +254,8 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
-		// 4 - Action buttons
+		// 3 - Action buttons
 		Table buttonTable = new Table();
-		
-		// 4.1 - No button
 		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
@@ -200,16 +267,16 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 		
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);
-		
-		
-		
+	}
+
+	private void initChoiceTable() {		
 		choicePopin = new Table();
 		choicePopin.setTouchable(Touchable.enabled);
 		choicePopin.addListener(new ClickListener() {});
 		
 		// Place the popin and add the background texture
 		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		textureRegionDrawable = new TextureRegionDrawable(Assets.map_background);
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.map_background);
 		choicePopin.setBackground(textureRegionDrawable);
 		
 		choicePopin.align(Align.top);
@@ -221,13 +288,66 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		choicePopinSubTable = new Table();
 		choicePopin.add(choicePopinSubTable).pad(20, 10, 20, 10);
 	}
+	
+	
+	private void initBigTable() {
+		if (bigPopin == null) {
+			bigPopin = new Table();
+		}
 
+		// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
+		bigPopin.setTouchable(Touchable.enabled);
+		bigPopin.addListener(new ClickListener() {});
+		
+		// Place the popin and add the background texture
+		bigPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
+		bigPopin.setBackground(textureRegionDrawable);
+		
+		bigPopin.align(Align.top);
+		
+		// 1 - Title
+		bigTitle = new Label("Title", PopinService.hudStyle());
+		bigPopin.add(bigTitle).top().align(Align.top).pad(20, 0, 20, 0);
+		bigPopin.row().align(Align.center);
+		
+		// 2 - Description
+		bigDesc = new Label("Description", PopinService.hudStyle());
+		bigDesc.setWrap(true);
+		bigPopin.add(bigDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+		bigPopin.row();
+		
+		// 3 - Stats
+		bigStats = new Label("Stats", PopinService.hudStyle());
+		bigStats.setWrap(true);
+		bigPopin.add(bigStats).growY().width(textureRegionDrawable.getMinWidth()).left().pad(20, 20, 0, 20);
+		bigPopin.row();
+		
+		// 4 - Status effects
+		
+		// 5 - Action buttons
+		Table buttonTable = new Table();
+		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+		// Close listener
+		closeBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				closePopin();
+			}
+		});
+		buttonTable.add(closeBtn).pad(0, 20,0,20);
+		
+		bigPopin.add(buttonTable).pad(20, 0, 20, 0);
+	}
+	
 
 	/**
 	 * Close the popin and unpause the game.
 	 */
 	private void closePopin() {
 		mainPopin.remove();
+		choicePopin.remove();
+		bigPopin.remove();
 		
 		if (room.getNextState() == null) {
 			room.setNextState(room.getLastInGameState());

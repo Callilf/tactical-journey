@@ -1,10 +1,14 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,12 +23,14 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -56,6 +62,8 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     private Label bigTitle;
     private Label bigDesc;
     private Label bigStats;
+	private Table statusTable;
+	private Map<Status, Table> statusesMap;
 
         
     
@@ -174,6 +182,11 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			bigPopin.setVisible(true);
 
 			bigTitle.setText(inspectableComponent.getTitle());
+			EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
+			if (enemyComponent != null && enemyComponent.isAlerted()) {
+				bigTitle.setText(bigTitle.getText() + " ([SCARLET]alerted![])");
+			}
+				
 			bigDesc.setText(inspectableComponent.getDescription());
 			
 			StringBuilder sb = new StringBuilder();
@@ -207,6 +220,21 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			}
 			
 			bigStats.setText(sb.toString());
+			
+			statusTable.clear();
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
+			if (statusReceiverComponent != null) {
+				for (Status status : statusReceiverComponent.getStatuses()) {
+					Table oneStatusTable  = new Table();
+						Image image = new Image(status.fullTexture());
+						oneStatusTable.add(image);
+						oneStatusTable.row();
+						Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
+						oneStatusTable.add(dur).bottom();
+						statusTable.add(oneStatusTable).left().pad(0,2, 0, 2);
+				}
+			}
+			statusTable.pack();
 
 			bigPopin.pack();
 			bigPopin.setPosition(GameScreen.SCREEN_W/2 - bigPopin.getWidth()/2, GameScreen.SCREEN_H/2 - bigPopin.getHeight()/2);
@@ -324,6 +352,11 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		bigPopin.row();
 		
 		// 4 - Status effects
+		statusesMap = new HashMap<>();
+		statusTable = new Table();
+		bigPopin.add(statusTable).growY().width(textureRegionDrawable.getMinWidth()).left().pad(20, 20, 0, 20);
+		bigPopin.row();
+
 		
 		// 5 - Action buttons
 		Table buttonTable = new Table();

@@ -35,9 +35,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffRegen;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
@@ -323,8 +321,8 @@ public abstract class RoomGenerator {
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
 			
-//			Entity createTribesmenSpear = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
-//			Mappers.statusReceiverComponent.get(createTribesmenSpear).requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(5));
+			Entity createTribesmenSpear = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
+			Mappers.statusReceiverComponent.get(createTribesmenSpear).requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(5));
 			
 			//			entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(14, 5));
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));

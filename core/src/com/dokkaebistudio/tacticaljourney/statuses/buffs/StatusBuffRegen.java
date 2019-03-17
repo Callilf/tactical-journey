@@ -35,6 +35,11 @@ public class StatusBuffRegen extends Status {
 	public String title() {
 		return "[GREEN]Regen[]";
 	}
+	
+	@Override
+	public String description() {
+		return "Recover 1 hp each turn.";
+	}
 
 	@Override
 	public AtlasRegion texture() {

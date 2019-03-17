@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -326,12 +327,19 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 		
 		if (needStatusRefresh) {
-			for (Status status : statusReceiverComponent.getStatuses()) {
+			for (final Status status : statusReceiverComponent.getStatuses()) {
 				Table oneStatusTable = statusesMap.get(status);
 				if (oneStatusTable == null) {
 					
 					oneStatusTable = new Table();
 					Image image = new Image(status.fullTexture());
+					image.addListener(new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							StatusPopinRenderer.status = status;
+						}
+					});
+					
 					oneStatusTable.add(image);
 					Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
 					oneStatusTable.add(dur).bottom();

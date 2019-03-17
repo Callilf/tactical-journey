@@ -107,6 +107,8 @@ public class Assets {
 	public static AtlasRegion btn_inventory;
 	public static AtlasRegion btn_inventory_pushed;
 	
+	public static AtlasRegion small_popin_background;
+	
 	public static AtlasRegion inventory_item_popin_background;
 	public static AtlasRegion inventory_lootable_item_background;
 
@@ -420,6 +422,8 @@ public class Assets {
 		inventory_slot_disabled = Assets.getTexture("hud_inventory_slot_disabled");
 		btn_inventory = Assets.getTexture("btn-inventory");
 		btn_inventory_pushed = Assets.getTexture("btn-inventory-pushed");
+		
+		small_popin_background = Assets.getTexture("hud_small_popin_background");
 		
 		inventory_item_popin_background = Assets.getTexture("hud_inventory_item_popin_background");
 		inventory_lootable_item_background = Assets.getTexture("hud_lootable_item_background");

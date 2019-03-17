@@ -18,6 +18,7 @@ public abstract class Status {
 	private Integer duration;
 	
 	public abstract String title();
+	public abstract String description();
 	public abstract AtlasRegion texture();
 	public abstract AtlasRegion fullTexture();
 

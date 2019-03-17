@@ -29,6 +29,11 @@ public class StatusDebuffDeathDoor extends Status {
 	public String title() {
 		return "[BLACK]At death's door[]";
 	}
+	
+	@Override
+	public String description() {
+		return "Die in one hit, no matter how much damage that hit does.";
+	}
 
 	@Override
 	public AtlasRegion texture() {

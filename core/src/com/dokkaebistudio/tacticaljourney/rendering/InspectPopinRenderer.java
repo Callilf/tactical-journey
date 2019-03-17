@@ -6,6 +6,7 @@ import java.util.Map;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -224,9 +225,15 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			statusTable.clear();
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
 			if (statusReceiverComponent != null) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
+				for (final Status status : statusReceiverComponent.getStatuses()) {
 					Table oneStatusTable  = new Table();
 						Image image = new Image(status.fullTexture());
+						image.addListener(new ClickListener() {
+							@Override
+							public void clicked(InputEvent event, float x, float y) {
+								StatusPopinRenderer.status = status;
+							}
+						});
 						oneStatusTable.add(image);
 						oneStatusTable.row();
 						Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
@@ -304,7 +311,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.map_background);
+		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.small_popin_background);
 		choicePopin.setBackground(textureRegionDrawable);
 		
 		choicePopin.align(Align.top);

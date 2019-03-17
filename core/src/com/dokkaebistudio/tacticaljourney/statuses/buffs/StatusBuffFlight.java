@@ -34,6 +34,11 @@ public class StatusBuffFlight extends Status {
 	public String title() {
 		return "[CYAN]Flight[]";
 	}
+	
+	@Override
+	public String description() {
+		return "Can move over chasms and most of the hazards like mud, puddles, fire or spider web.";
+	}
 
 	@Override
 	public AtlasRegion texture() {

@@ -37,6 +37,11 @@ public class StatusDebuffPoison extends Status {
 	public String title() {
 		return "[PURPLE]Poisoned[]";
 	}
+	
+	@Override
+	public String description() {
+		return "Receive 2 [PURPLE]poison[] damages each turn. [PURPLE]Poison[] damage ignore the armor.";
+	}
 
 	@Override
 	public AtlasRegion texture() {

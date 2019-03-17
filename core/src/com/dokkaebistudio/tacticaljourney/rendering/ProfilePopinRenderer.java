@@ -57,9 +57,11 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     private Label maxHpLbl;
     private Label maxArmorLbl;
     private Label strengthLbl;
+    private Label accuracyLbl;
 	private Label moveLbl;
 	private Label rangeDistLbl;
 	private Label rangeStrengthLbl;
+	private Label rangeAccuracyLbl;
 	private Label bombDistLbl;
 	private Label bombDmg;
 	private Label bombDuration;
@@ -160,12 +162,14 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTitle.setText("Profile");
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
-		strengthLbl.setText("Strength: " + attackComponent.getStrength());
 		moveLbl.setText("Move: " + moveComponent.getMoveSpeed());
+		strengthLbl.setText("Strength: " + attackComponent.getStrength());
+		accuracyLbl.setText("Melee accuracy: " + attackComponent.getAccuracy());
 
 		AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillRange());
 		rangeDistLbl.setText("Bow range: " + rangeAttackCompo.getRangeMin() + "-" + rangeAttackCompo.getRangeMax());
 		rangeStrengthLbl.setText("Bow damage: " + rangeAttackCompo.getStrength());
+		rangeAccuracyLbl.setText("Bow accuracy: " + rangeAttackCompo.getAccuracy());
 
 		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
 		bombDistLbl.setText("Bomb throw range: " + bombAttackCompo.getRangeMax());
@@ -205,20 +209,28 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.add(maxArmorLbl).expandX().left().pad(0, 20, 0, 20);
 		profileTable.row();
 		
-		strengthLbl = new Label("Strength", PopinService.hudStyle());
+		moveLbl = new Label("Move", PopinService.hudStyle());
+		profileTable.add(moveLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
+		
+		strengthLbl = new Label("Melee Strength", PopinService.hudStyle());
 		profileTable.add(strengthLbl).expandX().left().pad(0, 20, 0, 20);
 		profileTable.row();
 		
-		moveLbl = new Label("Move", PopinService.hudStyle());
-		profileTable.add(moveLbl).expandX().left().pad(0, 20, 20, 20);
+		accuracyLbl = new Label("Melee accuracy", PopinService.hudStyle());
+		profileTable.add(accuracyLbl).expandX().left().pad(0, 20, 20, 20);
 		profileTable.row();
 		
+
 		
 		rangeDistLbl = new Label("Bow range", PopinService.hudStyle());
 		profileTable.add(rangeDistLbl).expandX().left().pad(0, 20, 0, 20);
 		profileTable.row();
 		rangeStrengthLbl = new Label("Bow damage", PopinService.hudStyle());
-		profileTable.add(rangeStrengthLbl).expandX().left().pad(0, 20, 20, 20);
+		profileTable.add(rangeStrengthLbl).expandX().left().pad(0, 20, 0, 20);
+		profileTable.row();
+		rangeAccuracyLbl = new Label("Bow accuracy", PopinService.hudStyle());
+		profileTable.add(rangeAccuracyLbl).expandX().left().pad(0, 20, 20, 20);
 		profileTable.row();
 		
 		bombDistLbl = new Label("Bomb throw range", PopinService.hudStyle());

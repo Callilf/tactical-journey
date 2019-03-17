@@ -79,7 +79,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 	    			//Stop the spinning
 	    			room.setNextState(RoomState.PLAYER_WHEEL_NEEDLE_STOP);
 	    		} else {
-	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.0f);
+	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.25f + (wheel.getAttackComponent().getAccuracy() * 0.25f));
 	    		}
     			
     			break;

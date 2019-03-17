@@ -542,6 +542,28 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(strengthTable).padBottom(20);
 		optionsTable.row();
 		
+		Table accuracyTable = new Table();
+		TextButton accuracyDown = new TextButton("Melee accuracy -1", PopinService.bigButtonStyle());
+		accuracyDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				attackComponent.increaseAccuracy(- 1);
+			}
+		});
+		accuracyTable.add(accuracyDown).padRight(20);
+		TextButton accuracyUp = new TextButton("Melee accuracy +1", PopinService.bigButtonStyle());
+		accuracyUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				attackComponent.increaseAccuracy(1);
+			}
+		});
+		accuracyTable.add(accuracyUp);
+		optionsTable.add(accuracyTable).padBottom(20);
+		optionsTable.row();
+		
 		Table moveTable = new Table();
 		TextButton moveDown = new TextButton("Move -1", PopinService.bigButtonStyle());
 		moveDown.addListener(new ChangeListener() {
@@ -612,6 +634,28 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		});
 		bowDamageTable.add(bowDamageUp);
 		optionsTable.add(bowDamageTable).padBottom(20);
+		optionsTable.row();
+		
+		Table bowAccuracyTable = new Table();
+		TextButton bowAccuracyDown = new TextButton("Bow accuracy -1", PopinService.bigButtonStyle());
+		bowAccuracyDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.increaseAccuracy(- 1);
+			}
+		});
+		bowAccuracyTable.add(bowAccuracyDown).padRight(20);
+		TextButton bowAccuracyUp = new TextButton("Bow accuracy +1", PopinService.bigButtonStyle());
+		bowAccuracyUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				attackComponent.increaseAccuracy(1);
+			}
+		});
+		bowAccuracyTable.add(bowAccuracyUp);
+		optionsTable.add(bowAccuracyTable).padBottom(20);
 		optionsTable.row();
 		
 		

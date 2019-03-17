@@ -116,6 +116,7 @@ public final class PlayerFactory {
 		attackComponent.room = room;
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
+		attackComponent.setAccuracy(1);
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		
 		AttackAnimation attackAnimation = new AttackAnimation(

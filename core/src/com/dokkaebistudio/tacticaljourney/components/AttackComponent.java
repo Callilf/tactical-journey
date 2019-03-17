@@ -20,6 +20,9 @@ import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 public class AttackComponent implements Component, Poolable, RoomSystem {
+	
+	/** The highest possible value for accuracy. */
+	public static final int MAX_ACCURACY = 20;
 		
 	/** The room.*/
 	public Room room;
@@ -30,11 +33,15 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The type of attack (MELEE, RANGE, THROW...). */
 	private AttackTypeEnum attackType;
 	
+	// Range
+	
 	/** The min attack range. */
 	private int rangeMin = 1;
 	/** The max attack range. */
 	private int rangeMax = 1;
 	
+	
+	// Strength
 	
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
@@ -43,10 +50,21 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** Whether the value of strength is a differential from the parentAttackCompo's strength or not. */
 	private boolean isStrengthDifferential = true;
 	
+	// Accuracy
+	
+	private int accuracy = 1;
+	private int realAccuracy = 1;
+
+	
+	// Ammos
+	
 	/** The type of ammunition used by this attack component. */
 	private AmmoTypeEnum ammoType = AmmoTypeEnum.NONE;
 	/** The number of ammos used per attack. */
 	private int ammosUsedPerAttack = 1;
+	
+	
+	// Target
 	
 	/** The target entity. */
 	private Entity target;
@@ -121,6 +139,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.isStrengthDifferential = true;
 		this.additionnalStrength = 0;
 		this.active = true;
+		this.accuracy = 1;
+		this.realAccuracy = 1;
 	}
 	
 	/**
@@ -139,6 +159,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.rangeMax += amount;
 	}
 
+	/**
+	 * Modify the accuracy by the given amount.
+	 * @param amount the amount to add
+	 */
+	public void increaseAccuracy(int amount) {
+		this.realAccuracy += amount;
+		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
+	}
 	
 
 	/**
@@ -402,16 +430,20 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.active = active;
 	}
 
-
 	public AttackAnimation getAttackAnimation() {
 		return attackAnimation;
 	}
 
-
 	public void setAttackAnimation(AttackAnimation attackAnimation) {
 		this.attackAnimation = attackAnimation;
 	}
+
+	public int getAccuracy() {
+		return accuracy;
+	}
 	
-	
-	
+	public void setAccuracy(int accuracy) {
+		this.realAccuracy = accuracy;
+		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
+	}
 }

@@ -724,6 +724,7 @@ public final class EntityFactory {
 		switch(skillNumber) {
 		case 1:
 			playerComponent.setSkillMelee(skillEntity);
+
 			
 			baseWheelComponent = engine.createComponent(WheelComponent.class);
 			baseWheelComponent.addSector(75, Hit.HIT);
@@ -740,6 +741,7 @@ public final class EntityFactory {
 					new Animation<>(0.03f, Assets.slash_animation), 
 					new Animation<>(0.03f, Assets.slash_critical_animation), true);
 			attackComponent.setAttackAnimation(attackAnimation);
+			attackComponent.setAccuracy(1);
 			break;
 		case 2:
 			playerComponent.setSkillRange(skillEntity);
@@ -765,6 +767,7 @@ public final class EntityFactory {
 					new Animation<>(0.1f, Assets.arrow), 
 					new Animation<>(0.1f, Assets.arrow), true);
 			attackComponent.setAttackAnimation(attackAnimation);
+			attackComponent.setAccuracy(1);
 
 			break;
 		case 3:

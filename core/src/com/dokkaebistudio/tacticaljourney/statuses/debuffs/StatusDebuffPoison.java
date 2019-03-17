@@ -35,7 +35,12 @@ public class StatusDebuffPoison extends Status {
 	
 	@Override
 	public String title() {
-		return "Poisoned";
+		return "[PURPLE]Poisoned[]";
+	}
+	
+	@Override
+	public String description() {
+		return "Receive 2 [PURPLE]poison[] damages each turn. [PURPLE]Poison[] damage ignore the armor.";
 	}
 
 	@Override

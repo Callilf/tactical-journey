@@ -166,8 +166,9 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 	
 	public void removeStatus(Entity entity, Status status, Room room) {
-		if (Mappers.playerComponent.has(entity)) {
-			Journal.addEntry("You no longer have the " + status.title() + " status effect");
+		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
+		if (inspectableComponent != null) {
+			Journal.addEntry(inspectableComponent.getTitle() + " no longer have the " + status.title() + " status effect");
 		}
 
 		status.onRemove(entity, room);
@@ -227,6 +228,20 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 				HUDRenderer.needStatusRefresh = true;
 			}
 		}
+	}
+	
+	/**
+	 * Whether the entity has the given status.
+	 * @param statusClass the status class
+	 * @return true if the entity currenty has this status
+	 */
+	public boolean hasStatus(Class statusClass) {
+		for(Status status : statuses) {
+			if (status.getClass().equals(statusClass)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void requestAction(StatusActionEnum action, Status status) {

@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -26,7 +28,6 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Factory used to create presets of entities.
@@ -82,6 +83,11 @@ public final class CreepFactory {
 	public Entity createWeb(Room room, Vector2 pos) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_WEB, Assets.creep_web);
 				
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.WEB_TITLE);
+		inspect.setDescription(Descriptions.WEB_DESCRIPTION);
+		creepEntity.add(inspect);
+		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
 		creepEntity.add(destructible);
 		
@@ -108,6 +114,11 @@ public final class CreepFactory {
 	public Entity createMud(Room room, Vector2 pos) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_MUD, Assets.mud);
     	
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.MUD_TITLE);
+		inspect.setDescription(Descriptions.MUD_DESCRIPTION);
+		creepEntity.add(inspect);
+		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	destructibleCompo.setDestroyedTexture(Assets.mud_destroyed);
 		creepEntity.add(destructibleCompo);
@@ -127,6 +138,11 @@ public final class CreepFactory {
 	public Entity createFire(Room room, Vector2 pos, Entity parentEntity) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_FIRE, null);
     			
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.FIRE_TITLE);
+		inspect.setDescription(Descriptions.FIRE_DESCRIPTION);
+		creepEntity.add(inspect);
+		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepFire());
 		creepCompo.setDuration(3);
@@ -163,6 +179,11 @@ public final class CreepFactory {
 	public Entity createPoison(Room room, Vector2 pos, Entity parentEntity) {
 		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_POISON, Assets.creep_poison);
 				
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.POISON_TITLE);
+		inspect.setDescription(Descriptions.POISON_DESCRIPTION);
+		creepEntity.add(inspect);
+		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
 		creepEntity.add(destructible);
 		

@@ -10,6 +10,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * Singleton used to manager player's inputs.
@@ -147,7 +149,14 @@ public class InputSingleton implements InputProcessor{
 		return touchPoint;
 	}
 	
-	
+	/**
+	 * Get the location of the touch in grid position.
+	 * @return the location of the touch
+	 */
+	public PoolableVector2 getTouchPointInGridPos() {
+		Vector3 touchPoint2 = getTouchPoint();
+		return TileUtil.convertPixelPosIntoGridPos((int)touchPoint2.x, (int)touchPoint2.y);
+	}
 	
 	
 	// Input processor

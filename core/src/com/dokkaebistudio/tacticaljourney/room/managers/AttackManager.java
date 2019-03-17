@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.DropUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -149,6 +150,12 @@ public class AttackManager {
 		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
 		if (alterationReceiverComponent != null) {
 			alterationReceiverComponent.onReceiveDamage(target, attacker, room);
+		}
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
+		if (statusReceiverComponent != null) {
+			for (Status status : statusReceiverComponent.getStatuses()) {
+				status.onReceiveDamage(target, attacker, room);
+			}
 		}
 		
 		if (attacker != null) {

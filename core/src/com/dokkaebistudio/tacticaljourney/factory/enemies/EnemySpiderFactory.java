@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
@@ -70,6 +72,12 @@ public final class EnemySpiderFactory {
 	public Entity createSpider(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_SPIDER_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_SPIDER_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.enemy_spider));
@@ -147,6 +155,12 @@ public final class EnemySpiderFactory {
 	public Entity createSpiderWeb(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_WEB.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_WEB_SPIDER_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_WEB_SPIDER_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_web));
@@ -229,6 +243,12 @@ public final class EnemySpiderFactory {
 	public Entity createVenomSpider(Room room, Vector2 pos) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_VENOM.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_VENOM_SPIDER_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_VENOM_SPIDER_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_venom));

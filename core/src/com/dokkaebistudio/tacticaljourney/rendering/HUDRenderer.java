@@ -20,11 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -49,6 +49,8 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.systems.InspectSystem;
+import com.dokkaebistudio.tacticaljourney.systems.InspectSystem.InspectModeActionEnum;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -64,8 +66,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
 	public static Vector2 POS_BOMB_SPRITE = new Vector2(1230f,1000f);
 
-	public static Vector2 POS_PROFILE = new Vector2(700f, 30f);
-	public static Vector2 POS_INVENTORY = new Vector2(780f, 30f);
+	public static Vector2 POS_PROFILE = new Vector2(640f, 30f);
+	public static Vector2 POS_INVENTORY = new Vector2(720f, 30f);
 	
 	public static Vector2 POS_SKILLS = new Vector2(1050f, 30f);
 
@@ -120,6 +122,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table profileTable; 
 	private Button profileBtn;
 	private Button inventoryBtn;
+	private Button inspectBtn;
 
 	// Skills
 	private Table skillsTable;
@@ -324,12 +327,19 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 		
 		if (needStatusRefresh) {
-			for (Status status : statusReceiverComponent.getStatuses()) {
+			for (final Status status : statusReceiverComponent.getStatuses()) {
 				Table oneStatusTable = statusesMap.get(status);
 				if (oneStatusTable == null) {
 					
 					oneStatusTable = new Table();
 					Image image = new Image(status.fullTexture());
+					image.addListener(new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							StatusPopinRenderer.status = status;
+						}
+					});
+					
 					oneStatusTable.add(image);
 					Label dur = new Label(status.getDurationString(), PopinService.hudStyle());
 					oneStatusTable.add(dur).bottom();
@@ -512,13 +522,35 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				}
 			});
 			profileTable.add(inventoryBtn);
+			
+			// inspect btn
+			Drawable inspectButtonUp = new SpriteDrawable(new Sprite(Assets.btn_inspect));
+			Drawable inspectButtonDown = new SpriteDrawable(new Sprite(Assets.btn_inspect_pushed));
+			Drawable inspectButtonChecked = new SpriteDrawable(new Sprite(Assets.btn_inspect_checked));
+			ButtonStyle inspectButtonStyle = new ButtonStyle(inspectButtonUp, inspectButtonDown, inspectButtonChecked);
+			inspectBtn = new Button(inspectButtonStyle);
+			inspectBtn.setProgrammaticChangeEvents(false);
+			inspectBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					if (inspectBtn.isChecked()) {
+						InspectSystem.requestAction(InspectModeActionEnum.ACTIVATE);
+					} else {
+						InspectSystem.requestAction(InspectModeActionEnum.DEACTIVATE);
+					}
+				}
+			});
+			profileTable.add(inspectBtn);
 
 			
 			profileTable.pack();
 			stage.addActor(profileTable);
 		}
 		
-		
+		if (inspectBtn.isChecked() && !room.getState().isInspectMode() 
+				&& !(room.getNextState() != null && room.getNextState().isInspectMode())) {
+			inspectBtn.setChecked(false);
+		}
 		
 	}
 

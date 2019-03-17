@@ -96,12 +96,18 @@ public class Assets {
 	public static AtlasRegion btn_profile;
 	public static AtlasRegion btn_profile_pushed;
 	
+	public static AtlasRegion btn_inspect;
+	public static AtlasRegion btn_inspect_pushed;
+	public static AtlasRegion btn_inspect_checked;
+	
 	public static AtlasRegion inventory_background;
 	public static AtlasRegion inventory_money;
 	public static AtlasRegion inventory_slot;
 	public static AtlasRegion inventory_slot_disabled;
 	public static AtlasRegion btn_inventory;
 	public static AtlasRegion btn_inventory_pushed;
+	
+	public static AtlasRegion small_popin_background;
 	
 	public static AtlasRegion inventory_item_popin_background;
 	public static AtlasRegion inventory_lootable_item_background;
@@ -243,6 +249,8 @@ public class Assets {
 	public static AtlasRegion status_burning_full;
 	public static AtlasRegion status_entangled;
 	public static AtlasRegion status_entangled_full;
+	public static AtlasRegion status_death_door;
+	public static AtlasRegion status_death_door_full;
 
 	
 	//*********
@@ -289,6 +297,7 @@ public class Assets {
 	public static AtlasRegion ram_skull;
 	public static AtlasRegion colorful_tie;
 	public static AtlasRegion old_crown;
+	public static AtlasRegion memento_mori;
 	
 	
 	// Boss items
@@ -320,10 +329,12 @@ public class Assets {
 	public static AtlasRegion blessing_calishka;
 	public static AtlasRegion blessing_fast_learner;
 	public static AtlasRegion blessing_cinders;
+	public static AtlasRegion blessing_acceptance;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
 	public static AtlasRegion curse_black_mamba;
+	public static AtlasRegion curse_acceptance;
 	public static AtlasRegion curse_pangolin_mother;
 
 	
@@ -400,12 +411,19 @@ public class Assets {
 		btn_profile = Assets.getTexture("btn-profile");
 		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
 		
+		btn_inspect = Assets.getTexture("btn-inspect");
+		btn_inspect_pushed = Assets.getTexture("btn-inspect-pushed");
+		btn_inspect_checked = Assets.getTexture("btn-inspect-checked");
+
+		
 		inventory_background = Assets.getTexture("hud_inventory_background");
 		inventory_money = Assets.getTexture("hud_money");
 		inventory_slot = Assets.getTexture("hud_inventory_slot");
 		inventory_slot_disabled = Assets.getTexture("hud_inventory_slot_disabled");
 		btn_inventory = Assets.getTexture("btn-inventory");
 		btn_inventory_pushed = Assets.getTexture("btn-inventory-pushed");
+		
+		small_popin_background = Assets.getTexture("hud_small_popin_background");
 		
 		inventory_item_popin_background = Assets.getTexture("hud_inventory_item_popin_background");
 		inventory_lootable_item_background = Assets.getTexture("hud_lootable_item_background");
@@ -540,6 +558,9 @@ public class Assets {
 		status_burning_full = Assets.getTexture("burning_full");
 		status_entangled = Assets.getTexture("entangled");
 		status_entangled_full = Assets.getTexture("entangled_full");
+		status_death_door = Assets.getTexture("death_door");
+		status_death_door_full = Assets.getTexture("death_door_full");
+
 		
 		//*************
 		// Orbs
@@ -582,6 +603,7 @@ public class Assets {
 		ram_skull = Assets.getTexture("item-infusable-ram-skull");
 		colorful_tie = Assets.getTexture("item-infusable-colorful-tie");
 		old_crown = Assets.getTexture("item-infusable-old-crown");
+		memento_mori = Assets.getTexture("item-infusable-memento-mori");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -607,10 +629,12 @@ public class Assets {
 		blessing_calishka = Assets.getTexture("blessing-calishka");
 		blessing_fast_learner = Assets.getTexture("blessing-fast-learner");
 		blessing_cinders = Assets.getTexture("blessing-cinders");
+		blessing_acceptance = Assets.getTexture("blessing-acceptance");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
 		curse_black_mamba = Assets.getTexture("curse-black-mamba");
+		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 
 	}

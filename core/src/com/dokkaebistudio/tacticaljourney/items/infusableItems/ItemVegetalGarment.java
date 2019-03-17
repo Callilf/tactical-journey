@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingPhotosynthesis;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
@@ -29,7 +30,7 @@ public class ItemVegetalGarment extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A woman garment made of leaves and entangled roots. Grants the photosynthesis blessing while held in the inventory.";	
+		return Descriptions.ITEM_VEGETAL_GARMENT_DESCRIPTION;	
 	}
 	
 	@Override

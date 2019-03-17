@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
@@ -30,8 +31,7 @@ public class ItemRegenPotion extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Upon drink, grants a regeneration that lasts 20 to 40 turns.\n"
-				+ "This weird concoction will slowly close your wounds but it won't be strong enough to cure any afflictions.";		
+		return Descriptions.ITEM_REGEN_POTION_DESCRIPTION;	
 	}
 	
 	@Override

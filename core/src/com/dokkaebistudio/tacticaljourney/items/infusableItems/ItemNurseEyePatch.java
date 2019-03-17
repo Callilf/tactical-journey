@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingBlackMamba;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseBlackMamba;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -32,8 +33,7 @@ public class ItemNurseEyePatch extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A nurse eye patch for the right eye.\n"
-				+ "Grants both the blessing and the curse of the black mamba.";	
+		return Descriptions.ITEM_NURSE_EYE_PATCH_DESCRIPTION;	
 	}
 	
 	@Override

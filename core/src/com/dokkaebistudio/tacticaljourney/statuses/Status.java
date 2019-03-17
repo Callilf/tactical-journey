@@ -18,6 +18,7 @@ public abstract class Status {
 	private Integer duration;
 	
 	public abstract String title();
+	public abstract String description();
 	public abstract AtlasRegion texture();
 	public abstract AtlasRegion fullTexture();
 
@@ -36,6 +37,7 @@ public abstract class Status {
 	public void onEndTurn(Entity entity, Room room) {}
 	
 	
+	public void onReceiveDamage(Entity entity, Entity attacker, Room room) {};
 	public void onDeath(Entity entity, Room room) {};
 	
 	

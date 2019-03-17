@@ -31,9 +31,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private AttackTypeEnum attackType;
 	
 	/** The min attack range. */
-	private int rangeMin;
+	private int rangeMin = 1;
 	/** The max attack range. */
-	private int rangeMax;
+	private int rangeMax = 1;
 	
 	
 	/** The amount of damage dealt to an ennemy without any protection. */
@@ -113,6 +113,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	@Override
 	public void reset() {
 		clearAttackableTiles();
+		this.rangeMin = 1;
+		this.rangeMax = 1;
 		this.target = null;
 		this.attackType = null;
 		this.room = null;

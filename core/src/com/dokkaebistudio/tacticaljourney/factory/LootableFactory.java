@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
@@ -60,6 +62,11 @@ public final class LootableFactory {
 		Entity remainsEntity = engine.createEntity();
 		remainsEntity.flags = EntityFlagEnum.LOOTABLE_BONES.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LOOTABLE_OLD_BONES_TITLE);
+		inspect.setDescription(Descriptions.LOOTABLE_OLD_BONES_DESCRIPTION);
+		remainsEntity.add(inspect);
+		
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
@@ -96,6 +103,11 @@ public final class LootableFactory {
 		Entity remainsEntity = engine.createEntity();
 		remainsEntity.flags = EntityFlagEnum.LOOTABLE_SATCHEL.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LOOTABLE_SATCHEL_TITLE);
+		inspect.setDescription(Descriptions.LOOTABLE_SATCHEL_DESCRIPTION);
+		remainsEntity.add(inspect);
+		
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(remainsEntity, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
@@ -133,6 +145,11 @@ public final class LootableFactory {
 		Entity lootable = engine.createEntity();
 		lootable.flags = EntityFlagEnum.LOOTABLE_BELONGINGS.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_TITLE);
+		inspect.setDescription(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_DESCRIPTION);
+		lootable.add(inspect);
+		
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(lootable, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
@@ -176,6 +193,11 @@ public final class LootableFactory {
 		Entity lootable = engine.createEntity();
 		lootable.flags = EntityFlagEnum.LOOTABLE_ORB_BAG.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LOOTABLE_ORB_BAG_TITLE);
+		inspect.setDescription(Descriptions.LOOTABLE_ORB_BAG_DESCRIPTION);
+		lootable.add(inspect);
+		
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(lootable, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;

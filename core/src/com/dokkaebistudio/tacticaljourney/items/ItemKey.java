@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
@@ -20,12 +21,12 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemKey extends Item {
 
 	public ItemKey() {
-		super("Staircase key", Assets.key, false, false);
+		super(Descriptions.ITEM_KEY_TITLE, Assets.key, false, false);
 	}
 
 	@Override
 	public String getDescription() {
-		return "The key to the lower floor.";
+		return Descriptions.ITEM_KEY_DESCRIPTION;
 	}
 	
 	@Override

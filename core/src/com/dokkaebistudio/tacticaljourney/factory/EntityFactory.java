@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -23,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -130,6 +132,11 @@ public final class EntityFactory {
 	public Entity createWall(Room room, Vector2 pos) {
 		Entity wallEntity = engine.createEntity();
 		wallEntity.flags = EntityFlagEnum.WALL.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.WALL_TITLE);
+		inspect.setDescription(Descriptions.WALL_DESCRIPTION);
+		wallEntity.add(inspect);
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(wallEntity, pos, room);
@@ -169,6 +176,11 @@ public final class EntityFactory {
 		Entity chasmEntity = engine.createEntity();
 		chasmEntity.flags = EntityFlagEnum.CHASM.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.CHASM_TITLE);
+		inspect.setDescription(Descriptions.CHASM_TITLE);
+		chasmEntity.add(inspect);
+
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(chasmEntity, pos, room);
     	movableTilePos.zIndex = ZIndexConstants.TILE;
@@ -190,6 +202,11 @@ public final class EntityFactory {
 	public Entity createDoor(Room room, Vector2 pos, Room targetedRoom) {
 		Entity doorEntity = engine.createEntity();
 		doorEntity.flags = EntityFlagEnum.DOOR.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.DOOR_TITLE);
+		inspect.setDescription(Descriptions.DOOR_DESCRIPTION);
+		doorEntity.add(inspect);
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(doorEntity, pos, room);
@@ -213,7 +230,12 @@ public final class EntityFactory {
 	
 	public Entity createExit(Room room, Vector2 pos, boolean opened) {
 		Entity exitEntity = engine.createEntity();
-		exitEntity.flags = EntityFlagEnum.REMAINS_BONES.getFlag();
+		exitEntity.flags = EntityFlagEnum.EXIT.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.EXIT_TITLE);
+		inspect.setDescription(Descriptions.EXIT_DESCRIPTION);
+		exitEntity.add(inspect);
 
     	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
     	movableTilePos.coord(exitEntity, pos, room);
@@ -612,6 +634,12 @@ public final class EntityFactory {
 	public Entity createBomb(Room room, Vector2 tilePos, Entity parentEntity, int radius, int turnsToExplode, int damage) {
 		Entity bomb = engine.createEntity();
 		bomb.flags = EntityFlagEnum.BOMB.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.BOMB_TITLE);
+		inspect.setDescription(Descriptions.BOMB_DESCRIPTION);
+		bomb.add(inspect);
+
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		bomb.add(spriteCompo);
@@ -774,6 +802,11 @@ public final class EntityFactory {
 		Entity vaseEntity = engine.createEntity();
 		vaseEntity.flags = EntityFlagEnum.DESTRUCTIBLE_VASE.getFlag();
 
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.VASE_TITLE);
+		inspect.setDescription(Descriptions.VASE_DESCRIPTION);
+		vaseEntity.add(inspect);
+
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);
 		spriteCompo.setSprite(new Sprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big));
@@ -812,6 +845,11 @@ public final class EntityFactory {
 	public Entity createAmmoCrate(Room room, Vector2 pos) {
 		Entity crateEntity = engine.createEntity();
 		crateEntity.flags = EntityFlagEnum.DESTRUCTIBLE_AMMO_CRATE.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.CRATE_TITLE);
+		inspect.setDescription(Descriptions.CRATE_DESCRIPTION);
+		crateEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);

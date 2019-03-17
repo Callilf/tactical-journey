@@ -40,7 +40,13 @@ public class StatusDebuffBurning extends Status {
 	
 	@Override
 	public String title() {
-		return "Burning";
+		return "[ORANGE]Burning[]";
+	}
+	
+	
+	@Override
+	public String description() {
+		return "Lose 3 hp each turn. This status effect has an increasing chance to disappear each turn.";
 	}
 
 	@Override

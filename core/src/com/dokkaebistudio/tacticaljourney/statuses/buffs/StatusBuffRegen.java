@@ -33,7 +33,12 @@ public class StatusBuffRegen extends Status {
 	
 	@Override
 	public String title() {
-		return "Regen";
+		return "[GREEN]Regen[]";
+	}
+	
+	@Override
+	public String description() {
+		return "Recover 1 hp each turn.";
 	}
 
 	@Override

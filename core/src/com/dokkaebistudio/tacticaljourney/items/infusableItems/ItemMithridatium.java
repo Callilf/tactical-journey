@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingMithridatism;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -32,8 +33,7 @@ public class ItemMithridatium extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "A semi-mythical remedy with as many as 65 ingredients, used as an antidote for poisoning. Grants the blessing of Mithridatism.\n"
-				+ "Also, taking a sip from the remedy will instantly cure any kind of poison.";	
+		return Descriptions.ITEM_MITHRIDATIUM_DESCRIPTION;	
 	}
 	
 	@Override

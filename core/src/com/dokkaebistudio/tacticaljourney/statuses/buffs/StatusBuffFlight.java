@@ -32,7 +32,12 @@ public class StatusBuffFlight extends Status {
 	
 	@Override
 	public String title() {
-		return "Flight";
+		return "[CYAN]Flight[]";
+	}
+	
+	@Override
+	public String description() {
+		return "Can move over chasms and most of the hazards like mud, puddles, fire or spider web.";
 	}
 
 	@Override

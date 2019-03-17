@@ -30,9 +30,14 @@ public class StatusDebuffEntangled extends Status {
 	
 	@Override
 	public String title() {
-		return "Entangled";
+		return "[FOREST]Entangled[]";
 	}
 
+	@Override
+	public String description() {
+		return "Cannot move, but can still attack.";
+	}
+	
 	@Override
 	public AtlasRegion texture() {
 		return Assets.status_entangled;

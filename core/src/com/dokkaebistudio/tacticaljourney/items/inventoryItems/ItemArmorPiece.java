@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.items.Item;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -25,8 +26,7 @@ public class ItemArmorPiece extends Item {
 	
 	@Override
 	public String getDescription() {
-		return "Gives 10 armor upon use.\n"
-				+ "The armor protects your health by taking damage. Some kinds of damage however will bypass the armor and lower the health directly.";		
+		return Descriptions.ITEM_ARMOR_PIECE_DESCRIPTION;		
 	}
 	
 	@Override

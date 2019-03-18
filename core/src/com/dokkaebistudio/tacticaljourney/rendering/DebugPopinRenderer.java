@@ -386,6 +386,20 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(fullMap).padBottom(20);
 		optionsTable.row();
 		
+		// Kill all
+		TextButton killAll = new TextButton("Kill all enemies", PopinService.bigButtonStyle());
+		killAll.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				for (Entity e : room.getEnemies()) {
+					HealthComponent healthComponent = Mappers.healthComponent.get(e);
+					healthComponent.setHp(0);
+				}
+			}
+		});
+		optionsTable.add(killAll).padBottom(20);
+		optionsTable.row();
+		
 		// HP
 		Label hpLabel = new Label("Health", PopinService.hudStyle());
 		optionsTable.add(hpLabel).padBottom(20);

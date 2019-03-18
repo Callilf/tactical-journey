@@ -20,7 +20,6 @@ public class SpiderItemPool extends EnemyItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
 				
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.WEB_SACK, 10));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.TOTEM_OF_KALAMAZOO, 10));
 	}
 	
 

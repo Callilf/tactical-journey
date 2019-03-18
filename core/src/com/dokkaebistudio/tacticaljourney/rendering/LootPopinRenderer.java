@@ -166,11 +166,11 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     			refreshLootTable();
     			refreshInventory();
     			
-    			handleTakeAllAction();
-
-	    		stage.addActor(mainTable);
+    			if (handleTakeAllAction()) {
+		    		stage.addActor(mainTable);
+		    		finishRefresh();
+    			}
 	    		
-	    		finishRefresh();
     		}
 
     	} else if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.NONE && room.getState() == RoomState.LOOT_POPIN) {
@@ -580,13 +580,22 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     /**
      * Handle the "Take all" action.
      * Take items one at a time and spend a turn for each item.
+     * @return true if the handleTakeAll has been completed, false if it needs a refresh.
      */
-	private void handleTakeAllAction() {
+	private boolean handleTakeAllAction() {
 		boolean takeAllFinished = false;
 		if (takeAllInProgess && !inventoryCompo.isInventoryActionInProgress() && !lootableCompo.getItems().isEmpty()) {
-			pickUpItem(0);
+			takeAllOrbs();
 			
-			lootableCompo.getItems().removeAll(lootableCompo.getStandByItems());
+			if (!lootableCompo.getItems().isEmpty()) {
+				pickUpItem(0);
+				lootableCompo.getItems().removeAll(lootableCompo.getStandByItems());
+				refreshPopin();
+			} else {
+				// Only orbs
+				return false;
+			}
+			
 			takeAllFinished = lootableCompo.getItems().isEmpty();
 		} else {
 			takeAllFinished = true;
@@ -597,8 +606,8 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			takeAllInProgess = false;
 			lootableCompo.finishTakeAll();
 			refreshPopin();
-
 		}
+		return true;
 	}
 
 
@@ -661,6 +670,20 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+
+	private void takeAllOrbs() {
+		Iterator<Entity> it = lootableCompo.getItems().iterator();
+		while(it.hasNext()) {
+			Entity item = it.next();
+			ItemComponent itemComponent = Mappers.itemComponent.get(item);
+			if (itemComponent.getItemType() instanceof ItemOrb) {
+				itemComponent.pickUp(player, item, room);
+				it.remove();
+				refreshPopin();
+			}
+		}
+	}
+	
 	
 	
 	//*****************************
@@ -686,15 +709,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	private void closePopin() {
 		
 		// Take orbs if there are any
-		Iterator<Entity> it = lootableCompo.getItems().iterator();
-		while(it.hasNext()) {
-			Entity item = it.next();
-			ItemComponent itemComponent = Mappers.itemComponent.get(item);
-			if (itemComponent.getItemType() instanceof ItemOrb) {
-				itemComponent.pickUp(player, item, room);
-				it.remove();
-			}
-		}
+		takeAllOrbs();
 		
 		lootDisplayed = false;
 		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
@@ -706,5 +721,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			room.setNextState(room.getLastInGameState());
 		}
 	}
+
+
 
 }

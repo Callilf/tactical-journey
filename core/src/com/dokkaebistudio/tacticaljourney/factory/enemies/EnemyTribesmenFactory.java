@@ -274,7 +274,7 @@ public final class EnemyTribesmenFactory {
 		enemyComponent.setType(new EnemyTribesmanScout());
 		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.TRIBESMAN_SCOUT_STRATEGY);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);

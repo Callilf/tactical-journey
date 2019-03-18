@@ -41,15 +41,9 @@ public class Floor3RoomGenerator extends RoomGenerator {
 		case SHOP_ROOM:
 		case STATUE_ROOM:
 		case ITEM_ROOM:
+		case KEY_ROOM:
 			super.generateRoomContent(room, generatedRoom);
 			return;
-			
-		case KEY_ROOM:
-			
-			// TODO change this
-			// No key atm, so that its impossible to go deeper
-			
-			break;
 			
 		case START_FLOOR_ROOM:
 			

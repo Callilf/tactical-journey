@@ -76,9 +76,10 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 					if (friendToAlert != null) {
 						// ALERT ALL TRIBESMEN OF THE ROOM
 						
-						Journal.addEntry("[RED]" + scoutType.title() + " alerted all other tribesmen of your presence.");
-						
 						EnemyComponent ec = Mappers.enemyComponent.get(friendToAlert);
+
+						Journal.addEntry("[RED]" + scoutType.title() + " alerted " + ec.getType().title() + " of your presence.");
+						
 						if (ec.getFaction() == EnemyFactionEnum.TRIBESMEN) {
 							ec.setAlerted(true);
 						}

@@ -66,6 +66,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.numberOfItems = 3;
 		this.requestRestock = false;
 		this.firstSpeech = true;
+		this.soldItems.clear();
 	}
 	
 	/**

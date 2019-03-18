@@ -184,6 +184,9 @@ public class Descriptions {
 	public static final String ITEM_MEMENTO_MORI_TITLE = "Memento mori";
 	public static final String ITEM_MEMENTO_MORI_DESCRIPTION = "A reminder that life is ephemeral and the ultimately leads to death. Grants the blessing of acceptance, as well as the curse of acceptance, while held in the inventory.";
 
+	public static final String ITEM_HEADBAND_TITLE = "Headband";
+	public static final String ITEM_HEADBAND_DESCRIPTION = "A sweaty headband with an small inscription on the inside: \"Age is just a number\". Grants the blessing of the goat while held in the inventory.";
+
 	public static final String ITEM_PANGOLIN_SCALE_TITLE = "Pangolin scale";
 	public static final String ITEM_PANGOLIN_SCALE_DESCRIPTION = "A scale of the giant pangolin. It solid as a rock, but as you touch it, you can feel the despair of a mother who lost her childrens.";
 

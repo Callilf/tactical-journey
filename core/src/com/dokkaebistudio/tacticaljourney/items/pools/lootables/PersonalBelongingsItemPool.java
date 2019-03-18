@@ -23,6 +23,7 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.COLORFUL_TIE, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.OLD_CROWN, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.MEMENTO_MORI, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.HEADBAND, 10, true));
 	}
 		
 	

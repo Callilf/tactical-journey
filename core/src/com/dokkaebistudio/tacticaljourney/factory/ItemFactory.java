@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHeadband;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
@@ -209,6 +210,10 @@ public final class ItemFactory {
 			
 		case MEMENTO_MORI:
 			item = createItemMementoMori(room, tilePos);
+			break;
+			
+		case HEADBAND:
+			item = createItemHeadband(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -508,7 +513,14 @@ public final class ItemFactory {
 		return item;
 	}
 	
-
+	public Entity createItemHeadband(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.headband, new ItemHeadband(),
+				Descriptions.ITEM_HEADBAND_TITLE, Descriptions.ITEM_HEADBAND_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_HEADBAND.getFlag();
+		return item;
+	}
+	
+	
 	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale(),
 				Descriptions.ITEM_PANGOLIN_SCALE_TITLE, Descriptions.ITEM_PANGOLIN_SCALE_DESCRIPTION);

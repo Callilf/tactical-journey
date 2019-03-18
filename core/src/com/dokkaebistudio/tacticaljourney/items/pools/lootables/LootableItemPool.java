@@ -6,9 +6,12 @@ import java.util.List;
 
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public abstract class LootableItemPool {
+public abstract class LootableItemPool extends ItemPool {
 	
 	private static final List<PooledItemDescriptor> removedItems = new ArrayList<>();
 
@@ -32,6 +35,8 @@ public abstract class LootableItemPool {
 		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
 		int randomInt = 0;
 		
+		List<PooledItemDescriptor> itemsToRemoveFromAllPools = new ArrayList<>();
+		
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
@@ -50,6 +55,7 @@ public abstract class LootableItemPool {
 					if (pid.isRemoveFromPool()) {
 						poolIterator.remove();
 						removedItems.add(pid);
+						itemsToRemoveFromAllPools.add(pid);
 						if (getItemPool().isEmpty()) {
 							getItemPool().addAll(removedItems);
 						}
@@ -62,7 +68,24 @@ public abstract class LootableItemPool {
 			chance = 0;
 		}
 		
+		
+		for (PooledItemDescriptor pid : itemsToRemoveFromAllPools) {
+			ItemPoolSingleton.getInstance().removeItemFromPools(pid.getType());
+		}		
+		
 		return result;
+	}
+	
+	@Override
+	public void removeItemFromPool(ItemEnum itemType) {
+		Iterator<PooledItemDescriptor> iterator = getItemPool().iterator();
+		while(iterator.hasNext()) {
+			PooledItemDescriptor pid = iterator.next();
+			if (pid.getType() == itemType) {
+				iterator.remove();
+				break;
+			}
+		}
 	}
 
 }

@@ -29,13 +29,15 @@ import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanSpear;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenSpearItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.enemies.TribesmanScoutSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -133,7 +135,7 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new TribesmenSpearItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesmanSpear);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 40);
 		dropRate.add(ItemPoolRarity.RARE, 5);
@@ -220,7 +222,96 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new TribesmenSpearItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesManShield);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 40);
+		dropRate.add(ItemPoolRarity.RARE, 5);
+		lootRewardCompo.setDropRate(dropRate);
+		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
+		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
+		enemyEntity.add(orbCarrierCompo);
+		
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
+	
+	
+	public Entity createScout(Room room, Vector2 pos) {
+		
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SCOUT.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SCOUT_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_TRIBESMAN_SCOUT_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		enemyEntity.add(spriteCompo);
+		
+		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SCOUT_STAND.getState(), AnimationsEnum.TRIBESMEN_SCOUT_STAND.getAnimation());
+		enemyEntity.add(animCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.TRIBESMEN_SCOUT_STAND.getState());
+		enemyEntity.add(stateCompo);
+		
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.room = room;
+		enemyComponent.setSubSystem(new TribesmanScoutSubSystem());
+		enemyComponent.setType(new EnemyTribesmanScout());
+		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
+		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		enemyComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.setMoveSpeed(5);
+		enemyEntity.add(moveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setAttackType(AttackTypeEnum.RANGE);
+		attackComponent.setRangeMax(3);
+		attackComponent.setStrength(3);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				new Animation<>(0.03f, Assets.projectile_pebble), true);
+		attackComponent.setAttackAnimation(attackAnimation);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
+		healthComponent.setMaxHp(10);
+		healthComponent.setHp(10);
+		healthComponent.setMaxArmor(0);
+		healthComponent.setArmor(0);
+		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(6);
+		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesmanScout);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 40);
 		dropRate.add(ItemPoolRarity.RARE, 5);

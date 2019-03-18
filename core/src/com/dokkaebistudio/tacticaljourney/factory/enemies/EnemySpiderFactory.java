@@ -35,9 +35,7 @@ import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
@@ -129,7 +127,7 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new SpiderItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().spider);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 20);
 		dropRate.add(ItemPoolRarity.RARE, 5);
@@ -214,7 +212,7 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new WebSpiderItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().webSpider);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 60);
 		dropRate.add(ItemPoolRarity.RARE, 10);
@@ -301,7 +299,7 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new VenomSpiderItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().venomSpider);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 30);
 		dropRate.add(ItemPoolRarity.RARE, 10);

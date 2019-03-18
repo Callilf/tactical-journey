@@ -175,6 +175,7 @@ public class Assets {
 	public static AtlasRegion projectile_arrow;
 	public static AtlasRegion projectile_bomb;
 	public static Array<Sprite> projectile_web;
+	public static Array<Sprite> projectile_pebble;
 
 	
 	//********
@@ -214,6 +215,7 @@ public class Assets {
 	
 	public static Array<Sprite> enemy_tribesman_spear;
 	public static Array<Sprite> enemy_tribesman_shield;
+	public static Array<Sprite> enemy_tribesman_scout;
 
 	
 	//************
@@ -487,6 +489,7 @@ public class Assets {
 		projectile_arrow = Assets.getTexture("arrow");
 		projectile_bomb = Assets.getTexture("bomb");
 		projectile_web = Assets.getAnimation("projectile-web");
+		projectile_pebble = Assets.getAnimation("item-consumable-pebble");
 
 		
 		//********
@@ -525,6 +528,7 @@ public class Assets {
 		
 		enemy_tribesman_spear = Assets.getAnimation("tribesman_spear");
 		enemy_tribesman_shield = Assets.getAnimation("tribesman_shield");
+		enemy_tribesman_scout = Assets.getAnimation("tribesman_scout");
 
 		
 		//************

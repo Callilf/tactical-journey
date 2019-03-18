@@ -42,6 +42,7 @@ public enum RoomState {
 	ENEMY_END_MOVEMENT,
 	ENEMY_ATTACK,
 	ENEMY_ATTACK_ANIMATION,
+	ENEMY_ATTACK_FINISH,
 	
 	ENEMY_END_TURN,
 	
@@ -100,7 +101,8 @@ public enum RoomState {
     			|| this == RoomState.ENEMY_MOVING 
     			|| this == RoomState.ENEMY_END_MOVEMENT
     			|| this == RoomState.ENEMY_ATTACK
-				|| this == RoomState.ENEMY_ATTACK_ANIMATION;
+				|| this == RoomState.ENEMY_ATTACK_ANIMATION
+				|| this == RoomState.ENEMY_ATTACK_FINISH;
 	}
 	
 	/**
@@ -132,7 +134,8 @@ public enum RoomState {
     			|| this == RoomState.ENEMY_MOVING 
     			|| this == RoomState.ENEMY_END_MOVEMENT
     			|| this == RoomState.ENEMY_ATTACK
-				|| this == RoomState.ENEMY_ATTACK_ANIMATION;
+				|| this == RoomState.ENEMY_ATTACK_ANIMATION
+				|| this == RoomState.ENEMY_ATTACK_FINISH;
 	}
 	
 	/**

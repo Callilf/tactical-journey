@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.BasicShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -247,7 +248,7 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
-		shopKeeperCompo.setItemPool(new BasicShopItemPool());
+		shopKeeperCompo.setItemPool(ItemPoolSingleton.getInstance().basicShopItemPool);
 		shopKeeperCompo.stock(room);
 		shopKeeperCompo.addSpeech("Hey!\nI'm the shop keeper.");
 		shopKeeperCompo.addSpeech("It's good to see a new face around here!");

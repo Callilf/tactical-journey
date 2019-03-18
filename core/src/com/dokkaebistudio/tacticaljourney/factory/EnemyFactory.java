@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -169,7 +170,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new ScorpionItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().scorpion);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 50);
 		dropRate.add(ItemPoolRarity.RARE, 20);
@@ -260,7 +261,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new StingerItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().stinger);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		dropRate.add(ItemPoolRarity.RARE, 20);
@@ -307,4 +308,7 @@ public final class EnemyFactory {
 		return tribesmenFactory.createShieldHolder(room, pos);
 	}
 	
+	public Entity createTribesmenScout(Room room, Vector2 pos) {
+		return tribesmenFactory.createScout(room, pos);
+	}
 }

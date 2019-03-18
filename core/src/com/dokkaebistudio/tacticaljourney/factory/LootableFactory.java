@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
@@ -79,7 +80,7 @@ public final class LootableFactory {
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
-    	lootComponent.setItemPool(new OldBonesItemPool());
+    	lootComponent.setItemPool(ItemPoolSingleton.getInstance().oldBones);
     	lootComponent.setMaxNumberOfItems(2);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -120,7 +121,7 @@ public final class LootableFactory {
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
-    	lootComponent.setItemPool(new AdventurersSatchelItemPool());
+    	lootComponent.setItemPool(ItemPoolSingleton.getInstance().satchel);
     	lootComponent.setMinNumberOfItems(1);
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
@@ -162,7 +163,7 @@ public final class LootableFactory {
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.PERSONAL_BELONGINGS);
-    	lootComponent.setItemPool(new PersonalBelongingsItemPool());
+    	lootComponent.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
     	lootComponent.setMinNumberOfItems(1);
     	lootComponent.setMaxNumberOfItems(1);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
@@ -210,7 +211,7 @@ public final class LootableFactory {
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.ORB_BAG);
-    	lootComponent.setItemPool(new OrbBagItemPool());
+    	lootComponent.setItemPool(ItemPoolSingleton.getInstance().orbBag);
     	lootComponent.setMinNumberOfItems(0);
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);

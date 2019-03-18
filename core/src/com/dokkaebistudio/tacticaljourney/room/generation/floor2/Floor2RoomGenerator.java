@@ -14,6 +14,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -65,9 +66,14 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				
 				if (i == 0) {
 					mother = entityFactory.enemyFactory.createPangolinMother(room, iterator.next());
+					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(mother);
+					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 				} else {
-					entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
+					Entity baby = entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
+					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(baby);
+					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 				}
+				
 			}
 			
 			

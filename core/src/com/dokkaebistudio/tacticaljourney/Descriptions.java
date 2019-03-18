@@ -99,6 +99,10 @@ public class Descriptions {
 	public static final String ENEMY_TRIBESMAN_SHIELD_TITLE = "Tribesman shield holder";
 	public static final String ENEMY_TRIBESMAN_SHIELD_DESCRIPTION = "An autochthonous holding a big shield that grants him extra defense.";
 
+	public static final String ENEMY_TRIBESMAN_SCOUT_TITLE = "Tribesman scout";
+	public static final String ENEMY_TRIBESMAN_SCOUT_DESCRIPTION = "An very fast autochthonous. He doesn't hold any weapon, but he can alert other members of his tribes in case of danger.";
+
+	
 	
 	// Items
 	

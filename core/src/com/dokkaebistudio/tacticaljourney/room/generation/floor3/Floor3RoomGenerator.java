@@ -3,8 +3,6 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.generation.floor3;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -91,7 +89,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(15);
+			int enemyTypeRandom = random.nextInt(18);
 			if (enemyTypeRandom == 0) {
 				int spiderType = random.nextInt(2);
 				if (spiderType == 0) {
@@ -124,9 +122,21 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			} else if (enemyTypeRandom >= 9 && enemyTypeRandom <= 12){
 				enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else {
+			} else if (enemyTypeRandom >= 13 && enemyTypeRandom <= 15) {
 				enemy = entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(iterator.next()));
 				iterator.remove();
+			} else if (enemyTypeRandom == 16 || enemyTypeRandom == 17){
+				enemy = entityFactory.enemyFactory.createTribesmenScout(room, new Vector2(iterator.next()));
+				iterator.remove();
+				if (iterator.hasNext()) {
+					int tribesmanType = random.nextInt(2);
+					if (tribesmanType == 0) {
+						enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
+					} else {
+						enemy = entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(iterator.next()));
+					}
+					iterator.remove();
+				}
 			}
 			
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);

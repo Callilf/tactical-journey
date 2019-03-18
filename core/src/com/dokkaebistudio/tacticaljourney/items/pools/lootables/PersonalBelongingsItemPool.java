@@ -15,15 +15,6 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 	
 	static {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.TOTEM_OF_KALAMAZOO, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MITHRIDATIUM, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.NURSE_EYE_PATCH, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.FATA_MORGANA, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.RAM_SKULL, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.COLORFUL_TIE, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.OLD_CROWN, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MEMENTO_MORI, 10, true));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.HEADBAND, 10, true));
 	}
 		
 	

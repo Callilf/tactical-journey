@@ -7,9 +7,12 @@ import java.util.List;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public abstract class EnemyItemPool {
+public abstract class EnemyItemPool extends ItemPool {
 
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
@@ -33,6 +36,8 @@ public abstract class EnemyItemPool {
 		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
 		int randomInt = 0;
 		
+		List<PooledItemDescriptor> itemsToRemoveFromAllPools = new ArrayList<>();
+		
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
@@ -47,6 +52,7 @@ public abstract class EnemyItemPool {
 					// Remove the item from the pool if needed
 					if (pid.isRemoveFromPool()) {
 						poolIterator.remove();
+						itemsToRemoveFromAllPools.add(pid);
 					}
 					break;
 				}
@@ -55,6 +61,11 @@ public abstract class EnemyItemPool {
 			
 			chance = 0;
 		}
+		
+		
+		for (PooledItemDescriptor pid : itemsToRemoveFromAllPools) {
+			ItemPoolSingleton.getInstance().removeItemFromPools(pid.getType());
+		}		
 		
 		return result;
 	}
@@ -76,5 +87,25 @@ public abstract class EnemyItemPool {
 			return getRareItemPool();
 		}
 		return null;
+	}
+	
+	@Override
+	public void removeItemFromPool(ItemEnum itemType) {
+		Iterator<PooledItemDescriptor> iterator = getPool(ItemPoolRarity.COMMON).iterator();
+		while(iterator.hasNext()) {
+			PooledItemDescriptor pid = iterator.next();
+			if (pid.getType() == itemType) {
+				iterator.remove();
+				break;
+			}
+		}
+		iterator = getPool(ItemPoolRarity.RARE).iterator();
+		while(iterator.hasNext()) {
+			PooledItemDescriptor pid = iterator.next();
+			if (pid.getType() == itemType) {
+				iterator.remove();
+				break;
+			}
+		}
 	}
 }

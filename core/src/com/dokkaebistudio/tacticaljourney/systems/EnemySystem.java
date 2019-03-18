@@ -202,11 +202,21 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	    				//Attack possible
 							Entity target = TileUtil.getAttackableEntityOnTile(attTilePos.coord(), room);
 							if (target != null) {
+								EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
+								if (targetEnemyCompo != null && targetEnemyCompo.getFaction() == enemyComponent.getFaction()) {
+									// Never attack member of the same faction
+									continue;
+								}
+								
 	            				attackCompo.setTarget(target);
 	            				attackCompo.setTargetedTile(room.getTileAtGridPosition(attTilePos.coord()));
 	            				attacked = true;
 	            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
-	            				break;
+	            				
+	            				if (Mappers.playerComponent.has(target)) {
+	            					// Prioritize attacks on the player
+	            					break;
+	            				}
 							}
     	    			}
     	    		}
@@ -214,7 +224,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	    	attackCompo.hideAttackableTiles();
     	    	
     	    	if (!attacked) {
-    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+    	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
     	    	}
     	    	
         		break;
@@ -225,7 +235,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 				  @Override
 				  public boolean act(float delta){
 					room.attackManager.performAttack(enemyEntity, attackCompo);
-    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+    	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				    return true;
 				  }
 				};
@@ -240,12 +250,16 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 					
 					if (!hasAnim) {
 						room.attackManager.performAttack(enemyEntity, attackCompo);
-	    	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+	    	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 					}
 				}
 
         		break;
         		
+        	case ENEMY_ATTACK_FINISH:
+	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+	    		break;
+	    		
         	default:
         	}
     		

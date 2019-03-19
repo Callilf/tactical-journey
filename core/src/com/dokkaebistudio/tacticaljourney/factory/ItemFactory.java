@@ -45,6 +45,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbDeath;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbEnergy;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbFire;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbPoison;
@@ -237,6 +238,9 @@ public final class ItemFactory {
 			break;
 		case FIRE_ORB:
 			item = createItemFireOrb(room, tilePos);
+			break;
+		case DEATH_ORB:
+			item = createItemDeathOrb(room, tilePos);
 			break;
 			
 			default:
@@ -564,4 +568,11 @@ public final class ItemFactory {
 		return item;
 	}
 	
+	
+	public Entity createItemDeathOrb(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.death_orb_item, new ItemOrbDeath(),
+				Descriptions.ORB_DEATH_TITLE, Descriptions.ORB_DEATH_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
+		return item;
+	}
 }

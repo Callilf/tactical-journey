@@ -59,6 +59,7 @@ public enum EntityFlagEnum {
 	FIRE_ORB(401),
 	VEGETAL_ORB(402),
 	POISON_ORB(403),
+	DEATH_ORB(404),
 
 	
 	OK_BUTTON(510),

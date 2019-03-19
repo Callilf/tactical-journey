@@ -267,6 +267,8 @@ public class Assets {
 	public static AtlasRegion poison_orb_item;
 	public static Array<Sprite> fire_orb;
 	public static AtlasRegion fire_orb_item;
+	public static Array<Sprite> death_orb;
+	public static AtlasRegion death_orb_item;
 
 	
 	//******
@@ -581,6 +583,8 @@ public class Assets {
 		poison_orb_item = Assets.getTexture("item-orb-poison");
 		fire_orb = Assets.getAnimation("fire_orb");
 		fire_orb_item = Assets.getTexture("item-orb-fire");
+		death_orb = Assets.getAnimation("death_orb");
+		death_orb_item = Assets.getTexture("item-orb-death");
 
 		//******
 		// Items

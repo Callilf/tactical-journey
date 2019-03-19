@@ -71,6 +71,9 @@ public class Descriptions {
 	public static final String ORB_FIRE_TITLE = "Fire orb";
 	public static final String ORB_FIRE_DESCRIPTION = "An orb that bursts into flammes and inflicts the [ORANGE]burning[] status effect on contact.";
 
+	public static final String ORB_DEATH_TITLE = "Death orb";
+	public static final String ORB_DEATH_DESCRIPTION = "An rare and very dangerous orb that inflicts the [BLACK]Death's door[] status effect for 10 turns on contact.";
+
 	
 	
 	// Enemies

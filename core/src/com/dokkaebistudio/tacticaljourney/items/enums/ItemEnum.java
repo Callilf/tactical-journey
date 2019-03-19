@@ -33,6 +33,7 @@ public enum ItemEnum {
 	VEGETAL_ORB(Descriptions.ORB_VEGETAL_TITLE, 1),
 	POISON_ORB(Descriptions.ORB_POISON_TITLE, 1),
 	FIRE_ORB(Descriptions.ORB_FIRE_TITLE, 1),
+	DEATH_ORB(Descriptions.ORB_DEATH_TITLE, 1),
 	
 	
 	

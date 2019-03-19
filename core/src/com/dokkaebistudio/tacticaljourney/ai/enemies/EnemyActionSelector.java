@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
+import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -172,7 +173,10 @@ public class EnemyActionSelector {
 		for(Entity e : room.getEnemies()) {
 			if (e == enemyEntity) continue;
 			EnemyComponent ec = Mappers.enemyComponent.get(e);
-			if (ec != null && ec.getFaction() == currentEnemyCompo.getFaction() && (!unalertedFriends || (unalertedFriends && !ec.isAlerted()) )) {
+			if (ec != null 
+					&& ec.getFaction() == currentEnemyCompo.getFaction() 
+					&& !(ec.getType() instanceof EnemyTribesmanShaman)
+					&& (!unalertedFriends || (unalertedFriends && !ec.isAlerted()) )) {
 				friends.add(e);
 			}
 		}

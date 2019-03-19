@@ -226,6 +226,8 @@ public class Assets {
 	public static Array<Sprite> boss_pangolin_mother_enraged;
 	public static Array<Sprite> boss_pangolin_mother_crying;
 
+	public static Array<Sprite> boss_shaman;
+
 	
 	//*************
 	// Containers
@@ -542,6 +544,8 @@ public class Assets {
 		boss_pangolin_mother_enraged = Assets.getAnimation("pangolin_enraged");
 		boss_pangolin_mother_crying = Assets.getAnimation("pangolin_crying");
 		
+		boss_shaman = Assets.getAnimation("tribesman_shaman");
+
 		
 		//*************
 		// Containers

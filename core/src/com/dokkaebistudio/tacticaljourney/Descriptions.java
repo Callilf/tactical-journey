@@ -108,6 +108,9 @@ public class Descriptions {
 	public static final String ENEMY_TRIBESMAN_SCOUT_TITLE = "Tribesman scout";
 	public static final String ENEMY_TRIBESMAN_SCOUT_DESCRIPTION = "An very fast autochthonous. He doesn't hold any weapon, but he can alert other members of his tribes in case of danger.";
 
+	public static final String ENEMY_TRIBESMAN_SHAMAN_TITLE = "Tribesman shaman";
+	public static final String ENEMY_TRIBESMAN_SHAMAN_DESCRIPTION = "The shaman of the tribe. He cannot fight but instead he can channel and manipulate orbs, and call other tribesmen to help him.";
+
 	
 	
 	// Items

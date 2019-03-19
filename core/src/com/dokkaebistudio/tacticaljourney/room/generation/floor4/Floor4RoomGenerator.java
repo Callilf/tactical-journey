@@ -14,6 +14,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -73,33 +74,35 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			
 			temp.set(11, 2);
-			room.entityFactory.enemyFactory.createSpider(room, temp);
-			
+			Entity shaman = room.entityFactory.enemyFactory.createTribesmenShaman(room, temp);
+			Mappers.enemyComponent.get(shaman).setAlerted(true);
+
 			temp.free();
 			
-			
-
 			
 			spawnPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(spawnPositions, random);
 
-//			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
-//			Entity mother = null;
-//			for (int i=0 ; i<4 ; i++) {
-//				if (!iterator.hasNext()) break;
-//				
-//				if (i == 0) {
-//					mother = entityFactory.enemyFactory.createPangolinMother(room, iterator.next());
-//					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(mother);
-//					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-//				} else {
-//					Entity baby = entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
-//					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(baby);
-//					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-//				}
-//				
-//			}
-//			
+			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
+			for (int i=0 ; i<2 ; i++) {
+				if (!iterator.hasNext()) break;
+				
+				int tribesmanType = random.nextInt(3);
+				Entity enemy = null;
+				if (tribesmanType == 0) {
+					enemy = entityFactory.enemyFactory.createTribesmenSpear(room, iterator.next());
+				} else if (tribesmanType == 1){
+					enemy = entityFactory.enemyFactory.createTribesmenShield(room, iterator.next());
+				} else {
+					enemy = entityFactory.enemyFactory.createTribesmenScout(room, iterator.next());
+				}
+				
+				EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
+				enemyComponent.setAlerted(true);
+				
+				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
+				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
+			}		
 			
 			// Close doors
 			List<Entity> doors = room.getDoors();

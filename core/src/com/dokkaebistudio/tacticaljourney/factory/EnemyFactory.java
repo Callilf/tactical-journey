@@ -311,4 +311,8 @@ public final class EnemyFactory {
 	public Entity createTribesmenScout(Room room, Vector2 pos) {
 		return tribesmenFactory.createScout(room, pos);
 	}
+	
+	public Entity createTribesmenShaman(Room room, Vector2 pos) {
+		return tribesmenFactory.createShaman(room, pos);
+	}
 }

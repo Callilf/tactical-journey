@@ -267,7 +267,7 @@ public class AttackTileSearchService extends TileSearchService {
 					}
 					
 				} else {
-					if (currxDist > xDist && curryDist > yDist && (obstxDist >= (obstyDist/yDist) - 1) && (obstyDist >= (obstxDist/xDist) - 1)) {
+					if (currxDist >= xDist && curryDist >= yDist && (obstxDist >= (obstyDist/yDist) - 1) && (obstyDist >= (obstxDist/xDist) - 1)) {
 						it.remove();
 					}
 				}
@@ -285,7 +285,7 @@ public class AttackTileSearchService extends TileSearchService {
 					}
 					
 				} else {
-					if (currxDist < xDist && curryDist > yDist && (obstxDist >= (obstyDist/yDist) - 1) && (obstyDist >= (obstxDist/Math.abs(xDist)) - 1)) {
+					if (currxDist <= xDist && curryDist >= yDist && (obstxDist >= (obstyDist/yDist) - 1) && (obstyDist >= (obstxDist/Math.abs(xDist)) - 1)) {
 						it.remove();
 					}
 				}
@@ -303,7 +303,7 @@ public class AttackTileSearchService extends TileSearchService {
 					}
 					
 				} else {
-					if (currxDist > xDist && curryDist < yDist && (obstxDist >= (obstyDist/Math.abs(yDist)) - 1) && (obstyDist >= (obstxDist/xDist) - 1)) {
+					if (currxDist >= xDist && curryDist <= yDist && (obstxDist >= (obstyDist/Math.abs(yDist)) - 1) && (obstyDist >= (obstxDist/xDist) - 1)) {
 						it.remove();
 					}
 				}
@@ -321,7 +321,7 @@ public class AttackTileSearchService extends TileSearchService {
 					}
 					
 				} else {
-					if (currxDist < xDist && curryDist < yDist && (obstxDist >= (obstyDist/Math.abs(yDist)) - 1) && (obstyDist >= (obstxDist/Math.abs(xDist)) - 1)) {
+					if (currxDist <= xDist && curryDist <= yDist && (obstxDist >= (obstyDist/Math.abs(yDist)) - 1) && (obstyDist >= (obstxDist/Math.abs(xDist)) - 1)) {
 						it.remove();
 					}
 				}

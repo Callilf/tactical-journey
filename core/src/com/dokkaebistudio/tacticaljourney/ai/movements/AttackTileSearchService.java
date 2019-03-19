@@ -82,7 +82,7 @@ public class AttackTileSearchService extends TileSearchService {
 			}
 		}
 		
-		System.out.println("Old Search att tiles : " + (System.currentTimeMillis() - time));
+//		System.out.println("Old Search att tiles : " + (System.currentTimeMillis() - time));
 
 		return attackableTiles;
 	}
@@ -114,11 +114,6 @@ public class AttackTileSearchService extends TileSearchService {
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
 		
-		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
-			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
-			attackableTiles.add(tileAtGridPos);
-		}
-		
 		Set<Entity> moveTiles = moveCompo.movableTiles;
 		if (moveTiles.isEmpty()) {
 			moveTiles.add(room.entityFactory.createMovableTile(attackerPosCompo.coord(), room));
@@ -130,6 +125,11 @@ public class AttackTileSearchService extends TileSearchService {
 			attackableTiles.addAll(searchedTiles);
 		}
 		attackableTiles.removeAll(moveCompo.allWalkableTiles);
+		
+		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
+			attackableTiles.add(tileAtGridPos);
+		}
 
 		if (!ignoreObstacles) {
 			//Obstacles post process
@@ -149,7 +149,7 @@ public class AttackTileSearchService extends TileSearchService {
 			}
 		}
 		
-		System.out.println("New Search att tiles : " + (System.currentTimeMillis() - time));
+//		System.out.println("New Search att tiles : " + (System.currentTimeMillis() - time));
 		return attackableTiles;
 	}
 	

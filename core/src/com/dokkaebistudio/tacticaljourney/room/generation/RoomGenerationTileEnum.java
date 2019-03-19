@@ -10,6 +10,7 @@ public enum RoomGenerationTileEnum {
 	GROUND,
 	MUD,
 	
+	H_WALL,
 	WALL,
 	PIT,
 	

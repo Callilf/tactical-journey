@@ -44,6 +44,7 @@ public class Assets {
 	public static AtlasRegion grid1;
 	public static AtlasRegion grid2;
 	public static AtlasRegion tile_ground;
+	public static AtlasRegion heavy_wall;
 	public static AtlasRegion wall;
 	public static AtlasRegion wall_destroyed;
 	public static AtlasRegion tile_pit;
@@ -364,6 +365,7 @@ public class Assets {
 		grid1 = Assets.getTexture("grid_world1");
 		grid2 = Assets.getTexture("grid_world2");
 		tile_ground = Assets.getTexture("tile-test");
+		heavy_wall = Assets.getTexture("tile-heavy-wall");
 		wall = Assets.getTexture("tile-wall-test");
 		wall_destroyed = Assets.getTexture("tile-wall-destroyed");
 		tile_pit = Assets.getTexture("tile-pit-test");

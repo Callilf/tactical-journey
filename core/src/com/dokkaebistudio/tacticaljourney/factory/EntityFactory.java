@@ -114,6 +114,9 @@ public final class EntityFactory {
 	public Entity createTerrain(Room room, Vector2 pos, TileEnum type) {
 		Entity result = null;
 		switch (type) {
+			case H_WALL:
+				result = this.createHeavyWall(room, pos);
+				break;
 			case WALL:
 				result = this.createWall(room, pos);
 				break;
@@ -128,6 +131,37 @@ public final class EntityFactory {
 		}
 		return result;
 	}
+	
+	
+	public Entity createHeavyWall(Room room, Vector2 pos) {
+		Entity wallEntity = engine.createEntity();
+		wallEntity.flags = EntityFlagEnum.HEAVY_WALL.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.HEAVY_WALL_TITLE);
+		inspect.setDescription(Descriptions.HEAVY_WALL_DESCRIPTION);
+		wallEntity.add(inspect);
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(wallEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.WALL;
+    	wallEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	Sprite s = new Sprite(Assets.heavy_wall);
+    	spriteCompo.setSprite(s);
+    	wallEntity.add(spriteCompo);
+    	
+    	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+    	wallEntity.add(solidComponent);    	
+    	
+    	BlockExplosionComponent blockExplosionComponent = engine.createComponent(BlockExplosionComponent.class);
+		wallEntity.add(blockExplosionComponent);				
+    	
+		engine.addEntity(wallEntity);
+
+    	return wallEntity;
+	}	
 	
 	public Entity createWall(Room room, Vector2 pos) {
 		Entity wallEntity = engine.createEntity();

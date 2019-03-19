@@ -10,6 +10,7 @@ public enum TileEnum {
 
 	GROUND(false, false),
 	MUD(false, false),
+	H_WALL(true, false),
 	WALL(true, false),
 	PIT(false, true);
 	

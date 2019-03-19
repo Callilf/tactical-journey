@@ -2,6 +2,9 @@ package com.dokkaebistudio.tacticaljourney;
 
 public class Descriptions {
 	
+	public static final String HEAVY_WALL_TITLE = "Unbreakable Wall";
+	public static final String HEAVY_WALL_DESCRIPTION = "A ridiculously solid wall that cannot be destroyed.";
+
 	public static final String WALL_TITLE = "Wall";
 	public static final String WALL_DESCRIPTION = "It's just a wall. It looks like it could be destroyed with an explosion.";
 

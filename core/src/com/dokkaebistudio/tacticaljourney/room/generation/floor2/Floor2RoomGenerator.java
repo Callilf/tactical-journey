@@ -36,6 +36,10 @@ public class Floor2RoomGenerator extends RoomGenerator {
 	@Override
 	protected FileHandle chooseRoomPattern(Room currentRoom) {		
 		switch(currentRoom.type) {
+		case BOSS_ROOM:
+			currentRoom.roomPattern = "data/rooms/bossRoomFloor2.csv";
+			break;
+			
 			default:
 				currentRoom.roomPattern = "data/rooms/room1.csv";
 		}

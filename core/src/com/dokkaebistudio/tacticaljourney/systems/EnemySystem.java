@@ -156,7 +156,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		       	moveCompo.hideMovementEntities();
             		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
             	} else {
-            		room.setNextState(RoomState.ENEMY_ATTACK);
+            		room.setNextState(RoomState.ENEMY_END_MOVEMENT);
             	}
         		
         		break;

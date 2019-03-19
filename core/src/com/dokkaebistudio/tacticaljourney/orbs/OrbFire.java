@@ -141,5 +141,8 @@ public class OrbFire extends Orb {
 	}
 	
 	
+	public int getHeuristic(Entity mover) {
+		return 1;
+	}
 	
 }

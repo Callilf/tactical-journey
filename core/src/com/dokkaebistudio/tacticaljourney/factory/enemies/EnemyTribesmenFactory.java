@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -77,6 +78,10 @@ public final class EnemyTribesmenFactory {
 		inspect.setDescription(Descriptions.ENEMY_TRIBESMAN_SPEAR_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
+		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
 		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
@@ -164,6 +169,10 @@ public final class EnemyTribesmenFactory {
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
 		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
+
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 		
@@ -252,6 +261,10 @@ public final class EnemyTribesmenFactory {
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
 		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
+
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		enemyEntity.add(spriteCompo);
 		

@@ -43,4 +43,7 @@ public class OrbPoison extends Orb {
 		return true;
 	}
 	
+	public int getHeuristic(Entity mover) {
+		return 1;
+	}
 }

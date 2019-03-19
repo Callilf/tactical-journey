@@ -46,6 +46,19 @@ public abstract class Orb {
 	/** Called when the item is used. */
 	public abstract boolean onContact(Entity user, Entity orb, Entity target, Room room);
 	
+	
+	/**
+	 * Get the heuristic influence of walking on this orb.
+	 * 0 means no influence
+	 * a negative value is a good influence and the pathfinding will tend to use this tile
+	 * a positive value is a bad influence and the pathfinding will tend to avoid this tile
+	 * @param mover the moving entity
+	 * @return the influence of this creep on the heuristic for the pathfinding.
+	 */
+	public int getHeuristic(Entity mover) {
+		return 0;
+	}
+	
 
 	//***********************
 	// Getters and Setters

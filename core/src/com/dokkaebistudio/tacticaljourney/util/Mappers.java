@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -60,6 +61,7 @@ public final class Mappers {
 	public final static ComponentMapper<ShopKeeperComponent> shopKeeperComponent = ComponentMapper.getFor(ShopKeeperComponent.class);
 	public final static ComponentMapper<StatueComponent> statueComponent = ComponentMapper.getFor(StatueComponent.class);
 
+	public final static ComponentMapper<HumanoidComponent> humanoidComponent = ComponentMapper.getFor(HumanoidComponent.class);
 
 	public final static ComponentMapper<SpriteComponent> spriteComponent = ComponentMapper.getFor(SpriteComponent.class);
 	public final static ComponentMapper<AnimationComponent> animationComponent = ComponentMapper.getFor(AnimationComponent.class);

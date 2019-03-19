@@ -23,13 +23,16 @@ public class AttackTileSearchService extends TileSearchService {
 
 	
 	/**
-	 * Compute the tiles where attack is possible.
+	 * NOT USED ANYMORE.
+	 * Compute the tiles where attack is possible in a fast way but not very accurate.
 	 * @param attackerEntity the attacker
 	 * @param room the current room
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> searchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+	public Set<Tile> oldSearchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+		long time = System.currentTimeMillis();
+
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
@@ -57,7 +60,6 @@ public class AttackTileSearchService extends TileSearchService {
 		for (Tile t : moveTiles) {			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
-			visitedTilesWithRemainingMove.put(t, 0);
 			Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
@@ -80,6 +82,74 @@ public class AttackTileSearchService extends TileSearchService {
 			}
 		}
 		
+		System.out.println("Old Search att tiles : " + (System.currentTimeMillis() - time));
+
+		return attackableTiles;
+	}
+	
+	
+	/**
+	 * Compute the tiles where attack is possible by computing attack tiles in real time for each movable tile.
+	 * This is time consuming but it's very accurate.
+	 * WARN: If the perfs are not good enough, we might need to go back to the oldSearchAttackTiles method...
+	 * @param attackerEntity the attacker
+	 * @param room the current room
+	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
+	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
+	 */
+	public Set<Tile> searchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+		long time = System.currentTimeMillis();
+		visitedTilesWithRemainingMove.clear();
+		attackableTilesPerDistance.clear();
+		obstacles.clear();
+		
+		currentEntity = attackerEntity;
+		
+		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
+		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
+		 
+		 if (!attackCompo.isActive()) return null;
+
+		//Search all attackable tiles for each movable tile
+		Set<Tile> attackableTiles = new HashSet<>();
+		
+		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
+			attackableTiles.add(tileAtGridPos);
+		}
+		
+		Set<Entity> moveTiles = moveCompo.movableTiles;
+		if (moveTiles.isEmpty()) {
+			moveTiles.add(room.entityFactory.createMovableTile(attackerPosCompo.coord(), room));
+		}
+		for (Entity t : moveTiles) {
+			Vector2 tilePos = Mappers.gridPositionComponent.get(t).coord();
+			visitedTilesWithRemainingMove.put(TileUtil.getTileAtGridPos(tilePos, room), 0);
+			Set<Tile> searchedTiles = this.searchAttackEntitiesFromOnePosition(t, attackerEntity, room, onlyAttackableEntities);
+			attackableTiles.addAll(searchedTiles);
+		}
+		attackableTiles.removeAll(moveCompo.allWalkableTiles);
+
+		if (!ignoreObstacles) {
+			//Obstacles post process
+			obstaclesPostProcess(attackerPosCompo, attackableTiles);
+		}
+		
+		
+		//Range Postprocess : remove tiles that cannot be attacked
+		if (attackCompo.getRangeMin() > 1) {
+			Iterator<Tile> it = attackableTiles.iterator();
+			while (it.hasNext()) {
+				Tile currentAttackableTile = it.next();
+				//Remove tiles that are too close
+				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
+					it.remove();
+				}
+			}
+		}
+		
+		System.out.println("New Search att tiles : " + (System.currentTimeMillis() - time));
 		return attackableTiles;
 	}
 	
@@ -116,7 +186,7 @@ public class AttackTileSearchService extends TileSearchService {
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, Entity attackerEntity, Room room) {
+	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, Entity attackerEntity, Room room, boolean onlyAttackableEntities) {
 		attackableTilesPerDistance.clear();
 		visitedTilesWithRemainingMove.clear();
 		obstacles.clear();
@@ -134,7 +204,7 @@ public class AttackTileSearchService extends TileSearchService {
 			attackableTiles.add(tileAtGridPos);
 		}
 		
-		CheckTypeEnum checkType =  CheckTypeEnum.ATTACK;
+		CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 		Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackCompo.getRangeMax(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
@@ -229,6 +299,7 @@ public class AttackTileSearchService extends TileSearchService {
 			float curryDist = direction == DirectionEnum.RIGHT || direction == DirectionEnum.LEFT ? Math.abs(currentTilePos.y - attackerPosCompo.coord().y) : currentTilePos.y - attackerPosCompo.coord().y;
 			float obstxDist = Math.abs(currentTilePos.x - obstacle.x); 
 			float obstyDist = Math.abs(currentTilePos.y - obstacle.y); 
+			if (obstxDist == 0 && obstyDist == 0) continue;
 
 			switch(direction) {
 			case RIGHT:

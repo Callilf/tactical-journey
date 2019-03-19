@@ -232,7 +232,7 @@ public class EnemyActionSelector {
 	    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 	    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
 	    		if (distance >= attackCompo.getRangeMin() && distance <= attackCompo.getRangeMax() && distance > selectedDistance) {
-					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, enemyEntity, room);
+					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, enemyEntity, room, true);
 					if (!searchAttackTiles.isEmpty()) {
 		    			selectedTile = t;
 		    			selectedDistance = distance;

@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor2.Floor2Generator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor3.Floor3Generator;
+import com.dokkaebistudio.tacticaljourney.room.generation.floor4.Floor4Generator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
@@ -68,9 +69,13 @@ public class Floor {
 		} else if (level == 3) {
 			this.grid = new Sprite(Assets.grid2);
 			floorGenerator = new Floor3Generator(this.gameScreen.entityFactory);
+		} else if (level == 4) {
+			this.grid = new Sprite(Assets.grid2);
+			floorGenerator = new Floor4Generator(this.gameScreen.entityFactory);
 
 		}
 		
+		 
 		this.grid.setPosition(GameScreen.LEFT_RIGHT_PADDING, GameScreen.BOTTOM_MENU_HEIGHT);
 
 		

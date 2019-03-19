@@ -196,6 +196,9 @@ public class GameScreen extends ScreenAdapter {
 		floors.add(floor2);
 		Floor floor3 = new Floor(this, 3);
 		floors.add(floor3);
+		Floor floor4 = new Floor(this, 4);
+		floors.add(floor4);
+
 		
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
 

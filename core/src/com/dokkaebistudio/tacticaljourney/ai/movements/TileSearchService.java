@@ -337,7 +337,7 @@ public class TileSearchService {
 	 */
 	private boolean checkOneTileForAttack(AttackTypeEnum attackType, Vector2 pos, Room room, int currentDepth, Set<Tile> attackableTiles, Set<Tile> tilesToIgnore, boolean checkEntityToAttack) {
 		Tile tile = room.getTileAtGridPosition(pos);
-		
+				
 		//First, check whether this tiles hasn't already been visited.
 		if (visitedTilesWithRemainingMove.containsKey(tile)) {
 			if (visitedTilesWithRemainingMove.get(tile) <= currentDepth) {
@@ -352,6 +352,8 @@ public class TileSearchService {
 			return true;
 		}
 		
+		boolean result = true;
+
 		// Obstacles		
 		Set<Entity> blockingEntity = null; 
 		if (attackType == AttackTypeEnum.EXPLOSION) {
@@ -360,6 +362,7 @@ public class TileSearchService {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
+			result = false;
 			obstacles.add(tile.getGridPos());
 		}
 		
@@ -369,14 +372,14 @@ public class TileSearchService {
 			Entity entityOnTile = TileUtil.getAttackableEntityOnTile(pos, room);
 			if (entityOnTile == null) {
 				//Nothing to attack on this tile
-				return true;
+				return result;
 			} else {
 				EnemyComponent currentEnemyCompo = Mappers.enemyComponent.get(currentEntity);
 				if (currentEnemyCompo != null) {
 					EnemyComponent targetEnemyComponent = Mappers.enemyComponent.get(entityOnTile);
 					if (targetEnemyComponent != null && targetEnemyComponent.getFaction() == currentEnemyCompo.getFaction()) {
 						//Same faction, do not add the attackable tiles
-						return true;
+						return result;
 					}
 				}
 			}
@@ -394,7 +397,7 @@ public class TileSearchService {
 			
 			attackableTiles.add(tile);
 		}
-		return true;
+		return result;
 	}
 	
 	

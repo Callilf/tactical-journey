@@ -2,11 +2,13 @@ package com.dokkaebistudio.tacticaljourney.ai.enemies;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -16,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -27,7 +30,7 @@ public class EnemyActionSelector {
 	 * @param engine the pooled engine
 	 * @return the tile to move on, null if no move is needed
 	 */
-	public static Entity selectTileToMove(Entity enemyEntity, Room room) {
+	public static Entity selectTileToMove(Entity enemyEntity, Room room, AttackTileSearchService atss) {
     	Entity selectedTile = null;
     	MoveComponent moveComponent = Mappers.moveComponent.get(enemyEntity);
     	GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
@@ -55,7 +58,7 @@ public class EnemyActionSelector {
     		
     	case MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE:
     		AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
-    		selectedTile = moveRandomlyButAttackFromRangeIfPossible(room, moveComponent, attackCompo,enemyPos);
+    		selectedTile = moveRandomlyButAttackFromRangeIfPossible(enemyEntity, room, moveComponent, attackCompo,enemyPos, atss);
     		break;
 
     		
@@ -206,57 +209,41 @@ public class EnemyActionSelector {
 	 * @param enemyPos the enemy position
 	 * @return the selected tile. Null if no move needed
 	 */
-	private static Entity moveRandomlyButAttackFromRangeIfPossible(Room room,
-			MoveComponent moveComponent, AttackComponent attackCompo, GridPositionComponent enemyPos) {
+	private static Entity moveRandomlyButAttackFromRangeIfPossible(Entity enemyEntity, Room room,
+			MoveComponent moveComponent, AttackComponent attackCompo, GridPositionComponent enemyPos, AttackTileSearchService atss) {
 		Entity selectedTile = null;
-		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
-		ImmutableArray<Entity> allPlayers = room.engine.getEntitiesFor(family);
 		
-		//First find the closest target
-		int shortestDistance = -1;
+		//First check if can attack the player
 		Entity target = null;
-		for (Entity p : allPlayers) {
-			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-			if (target == null || distance < shortestDistance) {
-				shortestDistance = distance;
-				target = p;
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
+		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
+		for (Tile attackTile : attackComponent.allAttackableTiles) {
+			if (attackTile.getGridPos().equals(playerPos.coord())) {
+				target = room.floor.getGameScreen().player;
 			}
 		}
-		
+
 
 		if (target != null) {
 			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-
-			boolean playerAttackable = shortestDistance <= moveComponent.getMoveSpeed();			
-			
-			if (!playerAttackable) {
-				for (Entity t : attackCompo.attackableTiles) {
-		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		if (tilePos.coord().equals(targetPos.coord())) {
-		    			//The player can be shot at
-		    			playerAttackable = true;
-		    			break;
-		    		}
-				}
-			}
 						
-			if (playerAttackable) {
-				int selectedDistance = 0;
-				for (Entity t : moveComponent.movableTiles) {
-		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
-		    		if (distance >= attackCompo.getRangeMin() && distance <= attackCompo.getRangeMax() && distance > selectedDistance) {
+			int selectedDistance = 0;
+			for (Entity t : moveComponent.movableTiles) {
+	    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+	    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
+	    		if (distance >= attackCompo.getRangeMin() && distance <= attackCompo.getRangeMax() && distance > selectedDistance) {
+					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, enemyEntity, room);
+					if (!searchAttackTiles.isEmpty()) {
 		    			selectedTile = t;
 		    			selectedDistance = distance;
+
 		    			if (selectedDistance == attackCompo.getRangeMax()) {
 		    				break;
 		    			}
-		    		}
-		    	}
-			} else {
-				selectedTile = moveRandomly(moveComponent);		
-			}
+					}
+	    		}
+	    	}
+
 	    	
 	    	if (selectedTile == null) {
 	    		//No target in range, move randomly
@@ -281,22 +268,29 @@ public class EnemyActionSelector {
 	private static Entity moveRandomlyButAttackIfPossible(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
-		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
-		ImmutableArray<Entity> allPlayers = room.engine.getEntitiesFor(family);
 		
-		//First find the closest target
-		int shortestDistance = -1;
+		//First check if can attack the player
 		Entity target = null;
-		for (Entity p : allPlayers) {
-			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-			if (target == null || distance < shortestDistance) {
-				shortestDistance = distance;
-				target = p;
+		int shortestDistance = -1;
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
+		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
+		for (Tile attackTile : attackComponent.allAttackableTiles) {
+			if (attackTile.getGridPos() == playerPos.coord()) {
+				target = room.floor.getGameScreen().player;
+				shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
 			}
 		}
 		
-		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
+//		int shortestDistance = -1;
+//		for (Entity p : allPlayers) {
+//			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+//			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+//			if (target == null || distance < shortestDistance) {
+//				shortestDistance = distance;
+//				target = p;
+//			}
+//		}
+		
 		
 		if (shortestDistance == attackComponent.getRangeMax()) {
 			//Already facing the player, don't need to move.

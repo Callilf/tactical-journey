@@ -21,6 +21,7 @@ public class AttackTileSearchService extends TileSearchService {
 	public AttackTileSearchService() {}
     
 
+	
 	/**
 	 * Compute the tiles where attack is possible.
 	 * @param attackerEntity the attacker
@@ -28,7 +29,7 @@ public class AttackTileSearchService extends TileSearchService {
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public void buildAttackTilesSet(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+	public Set<Tile> searchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
@@ -39,7 +40,7 @@ public class AttackTileSearchService extends TileSearchService {
 		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
 		 
-		 if (!attackCompo.isActive()) return;
+		 if (!attackCompo.isActive()) return null;
 
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
@@ -78,15 +79,82 @@ public class AttackTileSearchService extends TileSearchService {
 				}
 			}
 		}
-
-		attackCompo.allAttackableTiles = attackableTiles;
-
 		
-		//Create entities for each attackable tiles to display them
-		for (Tile tileCoord : attackCompo.allAttackableTiles) {
-			Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room, false);
-			attackCompo.attackableTiles.add(attackableTileEntity);
+		return attackableTiles;
+	}
+	
+	/**
+	 * Compute the tiles where attack is possible.
+	 * @param attackerEntity the attacker
+	 * @param room the current room
+	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
+	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
+	 */
+	public void buildAttackTilesSet(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+		AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+
+		Set<Tile> searchedAttackTiles = searchAttackTiles(attackerEntity, room, onlyAttackableEntities,
+				ignoreObstacles);
+		if (searchedAttackTiles != null) {
+			attackCompo.allAttackableTiles = searchedAttackTiles;
+			
+			//Create entities for each attackable tiles to display them
+			for (Tile tileCoord : attackCompo.allAttackableTiles) {
+				Entity attackableTileEntity = room.entityFactory.createAttackableTile(tileCoord.getGridPos(), room,
+						false);
+				attackCompo.attackableTiles.add(attackableTileEntity);
+			}
 		}
+	}
+	
+	
+	
+	/**
+	 * Compute the tiles where attack is possible from a given tile.
+	 * @param attackerEntity the attacker
+	 * @param room the current room
+	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
+	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
+	 */
+	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, Entity attackerEntity, Room room) {
+		attackableTilesPerDistance.clear();
+		visitedTilesWithRemainingMove.clear();
+		obstacles.clear();
+		
+		GridPositionComponent posCompo = Mappers.gridPositionComponent.get(tileFromWhereToAttack);
+		AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		 
+		if (!attackCompo.isActive()) return null;
+
+		//Search all attackable tiles for each movable tile
+		Set<Tile> attackableTiles = new HashSet<>();
+		
+		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+			Tile tileAtGridPos = TileUtil.getTileAtGridPos(posCompo.coord(), room);
+			attackableTiles.add(tileAtGridPos);
+		}
+		
+		CheckTypeEnum checkType =  CheckTypeEnum.ATTACK;
+		Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackCompo.getRangeMax(), 1);
+		attackableTiles.addAll(foundAttTiles);
+
+		//Obstacles post process
+		obstaclesPostProcess(posCompo, attackableTiles);
+		
+		
+		//Range Postprocess : remove tiles that cannot be attacked
+		if (attackCompo.getRangeMin() > 1) {
+			Iterator<Tile> it = attackableTiles.iterator();
+			while (it.hasNext()) {
+				Tile currentAttackableTile = it.next();
+				//Remove tiles that are too close
+				if (TileUtil.getDistanceBetweenTiles(posCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
+					it.remove();
+				}
+			}
+		}
+		
+		return attackableTiles;
 	}
 
 	

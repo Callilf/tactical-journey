@@ -140,7 +140,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		
         	case ENEMY_MOVE_TILES_DISPLAYED :
         		
-            	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, room);
+            	Entity selectedTile = EnemyActionSelector.selectTileToMove(enemyEntity, room, attackTileSearchService);
             		
             	if (selectedTile != null) {
             		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);

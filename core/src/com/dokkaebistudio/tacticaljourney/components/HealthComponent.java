@@ -327,6 +327,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.clearModified();
 		this.receivedDamageLastTurn = false;
 		this.latestAttackDamage = 0;
+		this.maxArmor = 0;
+		this.armor = 0;
 	}
 	
 	

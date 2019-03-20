@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.OrbUtil;
 
@@ -40,7 +41,7 @@ public class OrbSystem extends EntitySystem implements RoomSystem {
 	@Override	
 	public void update(float deltaTime) {
 		
-		fillEntitiesOfCurrentRoom();
+		fillEntitiesOfCurrentRoom();		
 		for(Entity orb : allOrbsOfCurrentRoom) {
 			
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(orb);

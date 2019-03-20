@@ -117,9 +117,18 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 
 	
 	private Entity generateOrb(Room room) {
-		numberOfObsSummoned ++;
-		
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
+
+		if (numberOfObsSummoned > 4) {
+			// After 4 orbs have been summoned, 1 chance out of 3 to summon a void
+			// Also 100% chance to summon voids each multiples of 8
+			if (numberOfObsSummoned % 8 == 0 || unseededRandom.nextInt(3) == 0) {
+				numberOfObsSummoned ++;
+				return room.entityFactory.orbFactory.createVoid(null, room);
+			}
+		}
+		
+		numberOfObsSummoned ++;
 		int randInt = unseededRandom.nextInt(101);
 		if (randInt >= 0 && randInt < 25) {
 			return room.entityFactory.orbFactory.createEnergyOrb(null, room);

@@ -273,6 +273,7 @@ public class Assets {
 	public static AtlasRegion fire_orb_item;
 	public static Array<Sprite> death_orb;
 	public static AtlasRegion death_orb_item;
+	public static Array<Sprite> void_orb;
 
 	
 	//******
@@ -593,6 +594,7 @@ public class Assets {
 		fire_orb_item = Assets.getTexture("item-orb-fire");
 		death_orb = Assets.getAnimation("death_orb");
 		death_orb_item = Assets.getTexture("item-orb-death");
+		void_orb = Assets.getAnimation("void_orb");
 
 		//******
 		// Items

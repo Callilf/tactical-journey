@@ -1,5 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -23,10 +25,23 @@ public class OrbUtil {
 			orbComponent.onContact(orb, player, room);
 		} else {
 			Entity enemy = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), EnemyComponent.class, room);
-			if (enemy != null) {
+			if (enemy != null && Mappers.enemyComponent.get(enemy).canActivateOrbs()) {
 				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
 				orbComponent.onContact(orb, enemy, room);
+			} else {
+				
+				Set<Entity> otherOrbs = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), OrbComponent.class, room);
+				for (Entity otherOrb : otherOrbs) {
+					if (otherOrb != null && otherOrb != orb) {
+						OrbComponent orbComponent = Mappers.orbComponent.get(orb);
+						orbComponent.onContactWithAnotherOrb(orb, otherOrb, room);
+						break;
+					}
+				}
 			}
 		}
+		
+		
+		
 	}
 }

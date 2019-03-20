@@ -322,7 +322,7 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-			Entity shaman = entityFactory.enemyFactory.createTribesmenShaman(room, new Vector2(11, 2));
+//			Entity shaman = entityFactory.enemyFactory.createTribesmenShaman(room, new Vector2(11, 2));
 
 //			Entity totem = entityFactory.enemyFactory.createTribesmenTotem(room, new Vector2(14, 8));
 //			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(totem);

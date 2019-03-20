@@ -19,13 +19,15 @@ public class OrbComponent implements Component, Poolable {
 	
 	/** The parent entity. */
 	private Entity parent;
-	
+		
 	
 	
 	@Override
 	public void reset() {
 		this.setType(null);
 	}
+	
+	
 	
 	
 	//******************
@@ -35,6 +37,9 @@ public class OrbComponent implements Component, Poolable {
 		this.type.onContact(this.parent, orb, target, room);
 	}
 
+	public void onContactWithAnotherOrb(Entity orb, Entity targetedOrb, Room room) {
+		this.type.onContactWithAnotherOrb(this.parent, orb, targetedOrb, room);
+	}
 
 	
 	//***********************
@@ -58,4 +63,5 @@ public class OrbComponent implements Component, Poolable {
 	public void setParent(Entity parent) {
 		this.parent = parent;
 	}
+
 }

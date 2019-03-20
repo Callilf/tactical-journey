@@ -26,6 +26,11 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	private Enemy type;
 	private EnemySubSystem subSystem;
 	
+	/** Whether this enemy's turn is over or not. */
+	private boolean turnOver;
+
+	/** Whether this enemy can activate orbs on contact. */
+	private boolean canActivateOrbs = true;
 	
 	
 	/** The faction of this enemy. Enemies from the same faction won't attack
@@ -50,8 +55,6 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	private Entity alertedDisplayer;
 
 	
-	/** Whether this enemy's turn is over or not. */
-	private boolean turnOver;
 	
 	
 	
@@ -69,6 +72,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		setAlerted(false);
 		type = null;
 		subSystem = null;
+		turnOver = false;
+		canActivateOrbs = true;
 	}
 	
 	
@@ -239,6 +244,14 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 
 	public void setTurnOver(boolean turnOver) {
 		this.turnOver = turnOver;
+	}
+
+	public boolean canActivateOrbs() {
+		return canActivateOrbs;
+	}
+
+	public void setCanActivateOrbs(boolean canActivateOrbs) {
+		this.canActivateOrbs = canActivateOrbs;
 	}
 
 }

@@ -6,16 +6,15 @@ package com.dokkaebistudio.tacticaljourney.orbs;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * @author Callil
  *
  */
 public abstract class Orb {
-	
-	/** The type of orb. */
-	public OrbEnum type;
 	
 	/** The name displayed. */
 	private String label;
@@ -38,14 +37,26 @@ public abstract class Orb {
 	
 	// Abstract methods
 	
-	/** Called when the item is picked up. */
-	public void pickUp(Entity picker, Entity item, Room room) {
-
+	/** Called when the item is used. */
+	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
+		boolean result = effectOnContact(user, orb, target, room);
+				
+		if (user != null) {
+			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
+			orbCarrierComponent.clearOrb(orb);
+		}
+		
+		room.removeEntity(orb);
+		
+		return result;
 	}
 	
 	/** Called when the item is used. */
-	public abstract boolean onContact(Entity user, Entity orb, Entity target, Room room);
+	public abstract boolean effectOnContact(Entity user, Entity orb, Entity target, Room room);
+
 	
+	public boolean onContactWithAnotherOrb(Entity user, Entity orb, Entity targetedOrb, Room room) { return true; };
+
 	
 	/**
 	 * Get the heuristic influence of walking on this orb.

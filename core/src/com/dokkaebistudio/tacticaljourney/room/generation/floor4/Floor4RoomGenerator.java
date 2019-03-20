@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -64,13 +65,21 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			// place orbs
 			PoolableVector2 temp = PoolableVector2.create(8, 4);
-			room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			Entity orb1 = room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			orb1.add(room.engine.createComponent(SolidComponent.class));
+			
 			temp.set(9, 5);
-			room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			Entity orb2 = room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			orb2.add(room.engine.createComponent(SolidComponent.class));
+
 			temp.set(13, 5);
-			room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			Entity orb3 = room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			orb3.add(room.engine.createComponent(SolidComponent.class));
+
 			temp.set(14, 4);
-			room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			Entity orb4 = room.entityFactory.orbFactory.createDeathOrb(temp, room);
+			orb4.add(room.engine.createComponent(SolidComponent.class));
+
 			
 			
 			temp.set(11, 2);

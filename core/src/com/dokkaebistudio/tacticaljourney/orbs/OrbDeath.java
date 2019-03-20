@@ -25,7 +25,7 @@ public class OrbDeath extends Orb {
 	}
 
 	@Override
-	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
+	public boolean effectOnContact(Entity user, Entity orb, Entity target, Room room) {
 
 		// Entangle
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
@@ -33,13 +33,6 @@ public class OrbDeath extends Orb {
 			Journal.addEntry("[BLACK]Death orb has been activated");
 			statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(10));
 		}
-
-		if (user != null) {
-			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
-			orbCarrierComponent.clearOrb(orb);
-		}
-		
-		room.removeEntity(orb);
 		
 		return true;
 	}

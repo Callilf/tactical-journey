@@ -23,6 +23,7 @@ public enum AnimationsEnum {
 	POISON_ORB(new Animation<Sprite>(0.2f, Assets.poison_orb, PlayMode.LOOP)),
 	FIRE_ORB(new Animation<Sprite>(0.2f, Assets.fire_orb, PlayMode.LOOP)),
 	DEATH_ORB(new Animation<Sprite>(0.2f, Assets.death_orb, PlayMode.LOOP)),
+	VOID(new Animation<Sprite>(0.15f, Assets.void_orb, PlayMode.LOOP)),
 	
 	STINGER_FLY(new Animation<Sprite>(0.15f, Assets.enemy_stinger, PlayMode.LOOP)),
 	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP)),

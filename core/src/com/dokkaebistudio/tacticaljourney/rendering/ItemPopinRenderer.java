@@ -123,6 +123,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		}
 
 		if (isShop) {
+			pickupItemBtn.setDisabled(false);
 			pickupItemBtn.setText("Buy");
 			// Update the Drop item listener
 			updateBuyListener(item, itemComponent);

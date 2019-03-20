@@ -22,10 +22,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -35,7 +35,6 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
@@ -323,11 +322,16 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-			
+//			Entity shaman = entityFactory.enemyFactory.createTribesmenShaman(room, new Vector2(11, 2));
+
+//			Entity totem = entityFactory.enemyFactory.createTribesmenTotem(room, new Vector2(14, 8));
+//			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(totem);
+//			orbCarrierComponent.acquire(totem, entityFactory.orbFactory.createEnergyOrb(null, room));
+
 //			Entity createTribesmenSpear = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
 //			Mappers.statusReceiverComponent.get(createTribesmenSpear).requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(5));
 			
-			//			entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(14, 5));
+//						entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(14, 5));
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));
 //			entityFactory.creepFactory.createPoison(room, new Vector2(12, 8), null);
 

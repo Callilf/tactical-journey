@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.orbs;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -22,7 +21,7 @@ public class OrbEnergy extends Orb {
 	}
 
 	@Override
-	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
+	public boolean effectOnContact(Entity user, Entity orb, Entity target, Room room) {
 
 		// Deals damage
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
@@ -31,14 +30,11 @@ public class OrbEnergy extends Orb {
 			healthComponent.hit(10, target, user);
 		}
 		
-		if (user != null) {
-			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
-			orbCarrierComponent.clearOrb(orb);
-		}
-		
-		room.removeEntity(orb);
-		
 		return true;
+	}
+	
+	public int getHeuristic(Entity mover) {
+		return 1;
 	}
 	
 }

@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterati
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -105,6 +106,10 @@ public final class PlayerFactory {
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 		playerEntity.add(playerComponent);
+		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		playerEntity.add(humanoidCompo);
 		
 		// Move compo
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

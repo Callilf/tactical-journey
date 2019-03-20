@@ -215,6 +215,12 @@ public class Room extends EntitySystem {
 		if (posCompo != null) {
 			this.removeEntityAtPosition(e, posCompo.coord());
 		}
+		if (this.getEnemies().contains(e)) {
+			this.removeEnemy(e);
+		}
+		if (this.getNeutrals().contains(e)) {
+			this.removeNeutral(e);
+		}
 		
 		this.allEntities.removeValue(e, true);		
 		this.entitiesToRemove.add(e);

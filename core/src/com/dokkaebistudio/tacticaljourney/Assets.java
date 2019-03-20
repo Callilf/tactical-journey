@@ -217,6 +217,7 @@ public class Assets {
 	public static Array<Sprite> enemy_tribesman_spear;
 	public static Array<Sprite> enemy_tribesman_shield;
 	public static Array<Sprite> enemy_tribesman_scout;
+	public static Array<Sprite> enemy_tribesman_totem;
 
 	
 	//************
@@ -225,6 +226,9 @@ public class Assets {
 	public static Array<Sprite> boss_pangolin_mother;
 	public static Array<Sprite> boss_pangolin_mother_enraged;
 	public static Array<Sprite> boss_pangolin_mother_crying;
+
+	public static Array<Sprite> boss_shaman;
+	public static Array<Sprite> boss_shaman_summoning;
 
 	
 	//*************
@@ -267,6 +271,9 @@ public class Assets {
 	public static AtlasRegion poison_orb_item;
 	public static Array<Sprite> fire_orb;
 	public static AtlasRegion fire_orb_item;
+	public static Array<Sprite> death_orb;
+	public static AtlasRegion death_orb_item;
+	public static Array<Sprite> void_orb;
 
 	
 	//******
@@ -531,6 +538,7 @@ public class Assets {
 		enemy_tribesman_spear = Assets.getAnimation("tribesman_spear");
 		enemy_tribesman_shield = Assets.getAnimation("tribesman_shield");
 		enemy_tribesman_scout = Assets.getAnimation("tribesman_scout");
+		enemy_tribesman_totem = Assets.getAnimation("tribesman_totem");
 
 		
 		//************
@@ -540,6 +548,9 @@ public class Assets {
 		boss_pangolin_mother_enraged = Assets.getAnimation("pangolin_enraged");
 		boss_pangolin_mother_crying = Assets.getAnimation("pangolin_crying");
 		
+		boss_shaman = Assets.getAnimation("tribesman_shaman");
+		boss_shaman_summoning = Assets.getAnimation("tribesman_shaman_summon");
+
 		
 		//*************
 		// Containers
@@ -581,6 +592,9 @@ public class Assets {
 		poison_orb_item = Assets.getTexture("item-orb-poison");
 		fire_orb = Assets.getAnimation("fire_orb");
 		fire_orb_item = Assets.getTexture("item-orb-fire");
+		death_orb = Assets.getAnimation("death_orb");
+		death_orb_item = Assets.getTexture("item-orb-death");
+		void_orb = Assets.getAnimation("void_orb");
 
 		//******
 		// Items

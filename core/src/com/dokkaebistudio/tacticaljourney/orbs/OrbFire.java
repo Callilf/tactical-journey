@@ -27,7 +27,7 @@ public class OrbFire extends Orb {
 	}
 
 	@Override
-	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
+	public boolean effectOnContact(Entity user, Entity orb, Entity target, Room room) {
 		OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
 		GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 		
@@ -119,13 +119,6 @@ public class OrbFire extends Orb {
 				addOneFire(PoolableVector2.create(targetPos.coord().x + 2, targetPos.coord().y + 2), room, user);
 			}
 		}
-
-
-		if (user != null) {
-			orbCarrierComponent.clearOrb(orb);
-		}
-		
-		room.removeEntity(orb);
 		
 		return true;
 	}
@@ -141,5 +134,8 @@ public class OrbFire extends Orb {
 	}
 	
 	
+	public int getHeuristic(Entity mover) {
+		return 1;
+	}
 	
 }

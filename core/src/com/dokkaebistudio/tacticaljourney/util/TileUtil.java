@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 
@@ -125,6 +126,16 @@ public final class TileUtil {
 			cost += creepComponent.getMovementConsumed(mover);
 			cost += creepComponent.getHeuristic(mover);
 		}
+		
+		if (Mappers.humanoidComponent.has(mover)) {
+			// Humanoid: avoid orbs
+			Set<Entity> orbs = TileUtil.getEntitiesWithComponentOnTile(pos, OrbComponent.class,  room);
+			for (Entity e : orbs) {
+				OrbComponent orbComponent = Mappers.orbComponent.get(e);
+				cost += orbComponent.getType().getHeuristic(mover);
+			}
+		}
+		
 		return cost;
 	}
 	
@@ -174,7 +185,7 @@ public final class TileUtil {
 	 * @return The entity with the given component standing on the tile at the given position, null if there is none.
 	 */
 	public static Entity getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
-		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
+ 		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
 		for (Entity e : entities) {
 			return e;
 		}

@@ -71,6 +71,12 @@ public class Descriptions {
 	public static final String ORB_FIRE_TITLE = "Fire orb";
 	public static final String ORB_FIRE_DESCRIPTION = "An orb that bursts into flammes and inflicts the [ORANGE]burning[] status effect on contact.";
 
+	public static final String ORB_DEATH_TITLE = "Death orb";
+	public static final String ORB_DEATH_DESCRIPTION = "An rare and very dangerous orb that inflicts the [BLACK]Death's door[] status effect for 10 turns on contact.";
+
+	public static final String ORB_VOID_TITLE = "Void";
+	public static final String ORB_VOID_DESCRIPTION = "An anomaly that sometimes happens when the making of an orb goes wrong. It can make things disappear.";
+
 	
 	
 	// Enemies
@@ -104,6 +110,12 @@ public class Descriptions {
 
 	public static final String ENEMY_TRIBESMAN_SCOUT_TITLE = "Tribesman scout";
 	public static final String ENEMY_TRIBESMAN_SCOUT_DESCRIPTION = "An very fast autochthonous. He doesn't hold any weapon, but he can alert other members of his tribes in case of danger.";
+
+	public static final String ENEMY_TRIBESMAN_SHAMAN_TITLE = "Tribesman shaman";
+	public static final String ENEMY_TRIBESMAN_SHAMAN_DESCRIPTION = "The shaman of the tribe. He cannot fight but instead he can channel and manipulate orbs, and call other tribesmen to help him.";
+
+	public static final String ENEMY_TRIBESMAN_TOTEM_TITLE = "Totem of war";
+	public static final String ENEMY_TRIBESMAN_TOTEM_DESCRIPTION = "A totem manipulated by the Shaman. It cannot be attacked.";
 
 	
 	

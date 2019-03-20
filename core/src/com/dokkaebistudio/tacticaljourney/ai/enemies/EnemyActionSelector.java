@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.ai.enemies;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -8,15 +9,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
+import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -49,7 +53,7 @@ public class EnemyActionSelector {
     		break;
     		
     	case MOVE_RANDOMLY :
-    		selectedTile = moveRandomly(moveComponent);
+    		selectedTile = moveRandomly(enemyEntity, room, moveComponent);
     		break;
     		
     	case MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE:
@@ -71,13 +75,21 @@ public class EnemyActionSelector {
     	return selectedTile;
 	}
 
-	private static Entity moveRandomly(MoveComponent moveComponent) {
-		Entity selectedTile;
-		List<Entity> movableTilesList = new ArrayList<>(moveComponent.movableTiles);
+	private static Entity moveRandomly(Entity enemyEntity, Room room, MoveComponent moveComponent) {
+		Entity selectedTile = null;
+		RandomXS128 random = RandomSingleton.getInstance().getUnseededRandom();
 
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-		int randomIndex = random.nextInt(movableTilesList.size());
-		selectedTile = movableTilesList.get(randomIndex);
+		List<Entity> movableTilesList = new ArrayList<>(moveComponent.movableTiles);
+		Collections.shuffle(movableTilesList, random);
+
+		//TODO improve this
+		for (Entity tile : movableTilesList) {
+			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(tile);
+			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) continue;
+			selectedTile = tile;
+			break;
+		}
+		
 		return selectedTile;
 	}
 
@@ -121,6 +133,10 @@ public class EnemyActionSelector {
 		    		if (selectedTile == null 
 		    				|| (shortestDistance > attackComponent.getRangeMax() && distance < shortestDistance)
 		    				|| (shortestDistance <= attackComponent.getRangeMax() && distance > shortestDistance)) {
+		    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
+		    				continue;
+		    			}
+		    			
 		    			selectedTile = t;
 		    			shortestDistance = distance;
 		    		}
@@ -131,7 +147,7 @@ public class EnemyActionSelector {
 		    	}
 			} else {
 				//No target, move randomly
-				selectedTile = moveRandomly(moveComponent);				
+				selectedTile = moveRandomly(enemyEntity, room, moveComponent);				
 			}
 		}
 		return selectedTile;
@@ -157,7 +173,10 @@ public class EnemyActionSelector {
 		for(Entity e : room.getEnemies()) {
 			if (e == enemyEntity) continue;
 			EnemyComponent ec = Mappers.enemyComponent.get(e);
-			if (ec != null && ec.getFaction() == currentEnemyCompo.getFaction() && (!unalertedFriends || (unalertedFriends && !ec.isAlerted()) )) {
+			if (ec != null 
+					&& ec.getFaction() == currentEnemyCompo.getFaction() 
+					&& !(ec.getType() instanceof EnemyTribesmanShaman)
+					&& (!unalertedFriends || (unalertedFriends && !ec.isAlerted()) )) {
 				friends.add(e);
 			}
 		}
@@ -232,6 +251,10 @@ public class EnemyActionSelector {
 	    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 	    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
 	    		if (distance >= attackCompo.getRangeMin() && distance <= attackCompo.getRangeMax() && distance > selectedDistance) {
+	    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
+	    				continue;
+	    			}
+	    			
 					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, enemyEntity, room, true);
 					if (!searchAttackTiles.isEmpty()) {
 		    			selectedTile = t;
@@ -247,11 +270,11 @@ public class EnemyActionSelector {
 	    	
 	    	if (selectedTile == null) {
 	    		//No target in range, move randomly
-				selectedTile = moveRandomly(moveComponent);		
+				selectedTile = moveRandomly(enemyEntity, room,moveComponent);		
 	    	}
 		} else {
 			//No target, move randomly
-			selectedTile = moveRandomly(moveComponent);				
+			selectedTile = moveRandomly(enemyEntity, room, moveComponent);				
 		}
 		return selectedTile;
 	}
@@ -275,7 +298,7 @@ public class EnemyActionSelector {
 		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 		for (Tile attackTile : attackComponent.allAttackableTiles) {
-			if (attackTile.getGridPos() == playerPos.coord()) {
+			if (attackTile.getGridPos().equals(playerPos.coord())) {
 				target = room.floor.getGameScreen().player;
 				shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
 			}
@@ -303,6 +326,10 @@ public class EnemyActionSelector {
 		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
 		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
 		    		if (distance >= attackComponent.getRangeMin() && distance <= attackComponent.getRangeMax()) {
+		    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
+		    				continue;
+		    			}
+		    			
 		    			if (distance > currentDistance) {
 		    				selectedTile = t;
 		    				currentDistance = distance;
@@ -313,14 +340,28 @@ public class EnemyActionSelector {
 		    	
 		    	if (selectedTile == null) {
 		    		//No target in range, move randomly
-					selectedTile = moveRandomly(moveComponent);		
+					selectedTile = moveRandomly(enemyEntity, room, moveComponent);		
 		    	}
 			} else {
 				//No target, move randomly
-				selectedTile = moveRandomly(moveComponent);				
+				selectedTile = moveRandomly(enemyEntity, room, moveComponent);				
 			}
 		}
 		return selectedTile;
 	}
 	
+	
+	
+	private static int getOrbHeuristic(Vector2 pos, Entity enemyEntity, Room room) {
+		if (Mappers.humanoidComponent.has(enemyEntity)) {
+			Entity orb = TileUtil.getEntityWithComponentOnTile(pos, OrbComponent.class, room);
+			if (orb != null) {
+				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
+				if (orbComponent != null) {
+					return orbComponent.getType().getHeuristic(enemyEntity);
+				}
+			}
+		}
+		return 0;
+	}
 }

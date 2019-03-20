@@ -17,10 +17,12 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
+import com.dokkaebistudio.tacticaljourney.orbs.OrbDeath;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbEnergy;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbFire;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbPoison;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbVegetal;
+import com.dokkaebistudio.tacticaljourney.orbs.OrbVoid;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -143,6 +145,42 @@ public final class OrbFactory {
 		
 		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
 		orbCompo.setType(new OrbFire());
+		orb.add(orbCompo);
+		
+		room.addEntity(orb);
+		
+		return orb;
+	}
+	
+	
+	public Entity createDeathOrb(Vector2 pos, Room room) {
+		Entity orb = createOrbBase(room, pos, EntityFlagEnum.DEATH_ORB, AnimationsEnum.DEATH_ORB.getAnimation());
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_DEATH_TITLE);
+		inspect.setDescription(Descriptions.ORB_DEATH_DESCRIPTION);
+		orb.add(inspect);
+		
+		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
+		orbCompo.setType(new OrbDeath());
+		orb.add(orbCompo);
+		
+		room.addEntity(orb);
+		
+		return orb;
+	}
+	
+	
+	public Entity createVoid(Vector2 pos, Room room) {
+		Entity orb = createOrbBase(room, pos, EntityFlagEnum.VOID, AnimationsEnum.VOID.getAnimation());
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ORB_VOID_TITLE);
+		inspect.setDescription(Descriptions.ORB_VOID_DESCRIPTION);
+		orb.add(inspect);
+		
+		OrbComponent orbCompo = engine.createComponent(OrbComponent.class);
+		orbCompo.setType(new OrbVoid());
 		orb.add(orbCompo);
 		
 		room.addEntity(orb);

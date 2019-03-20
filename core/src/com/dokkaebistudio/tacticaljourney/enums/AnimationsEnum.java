@@ -22,6 +22,8 @@ public enum AnimationsEnum {
 	VEGETAL_ORB(new Animation<Sprite>(0.2f, Assets.vegetal_orb, PlayMode.LOOP)),
 	POISON_ORB(new Animation<Sprite>(0.2f, Assets.poison_orb, PlayMode.LOOP)),
 	FIRE_ORB(new Animation<Sprite>(0.2f, Assets.fire_orb, PlayMode.LOOP)),
+	DEATH_ORB(new Animation<Sprite>(0.2f, Assets.death_orb, PlayMode.LOOP)),
+	VOID(new Animation<Sprite>(0.15f, Assets.void_orb, PlayMode.LOOP)),
 	
 	STINGER_FLY(new Animation<Sprite>(0.15f, Assets.enemy_stinger, PlayMode.LOOP)),
 	STINGER_ATTACK(new Animation<Sprite>(0.1f, Assets.enemy_stinger_charge, PlayMode.LOOP)),
@@ -37,7 +39,11 @@ public enum AnimationsEnum {
 	
 	TRIBESMEN_SPEAR_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_spear, PlayMode.LOOP)),
 	TRIBESMEN_SHIELD_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_shield, PlayMode.LOOP)),
-	TRIBESMEN_SCOUT_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_scout, PlayMode.LOOP));
+	TRIBESMEN_SCOUT_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_scout, PlayMode.LOOP)),
+	TRIBESMEN_TOTEM(new Animation<Sprite>(0.15f, Assets.enemy_tribesman_totem, PlayMode.LOOP_PINGPONG)),
+
+	TRIBESMEN_SHAMAN_STAND(new Animation<Sprite>(0.3f, Assets.boss_shaman, PlayMode.LOOP)),
+	TRIBESMEN_SHAMAN_SUMMONING(new Animation<Sprite>(0.15f, Assets.boss_shaman_summoning, PlayMode.LOOP_PINGPONG));
 
 
 	

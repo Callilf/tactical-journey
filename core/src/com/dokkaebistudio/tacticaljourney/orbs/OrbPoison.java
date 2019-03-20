@@ -24,7 +24,7 @@ public class OrbPoison extends Orb {
 	}
 
 	@Override
-	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
+	public boolean effectOnContact(Entity user, Entity orb, Entity target, Room room) {
 
 		// Entangle
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
@@ -32,15 +32,11 @@ public class OrbPoison extends Orb {
 			Journal.addEntry("[PURPLE]Poison orb has been activated");
 			statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, user));
 		}
-
-		if (user != null) {
-			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
-			orbCarrierComponent.clearOrb(orb);
-		}
-		
-		room.removeEntity(orb);
 		
 		return true;
 	}
 	
+	public int getHeuristic(Entity mover) {
+		return 1;
+	}
 }

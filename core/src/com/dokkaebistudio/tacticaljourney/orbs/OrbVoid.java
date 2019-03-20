@@ -22,9 +22,7 @@ public class OrbVoid extends Orb {
 
 	@Override
 	public boolean effectOnContact(Entity user, Entity orb, Entity target, Room room) {
-		Journal.addEntry("Void has disappeared");
-		
-		return true;
+		return false;
 	}
 	
 	@Override

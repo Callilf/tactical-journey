@@ -75,7 +75,7 @@ public class Descriptions {
 	public static final String ORB_DEATH_DESCRIPTION = "An rare and very dangerous orb that inflicts the [BLACK]Death's door[] status effect for 10 turns on contact.";
 
 	public static final String ORB_VOID_TITLE = "Void";
-	public static final String ORB_VOID_DESCRIPTION = "An anomaly that sometimes happens when the making of an orb goes wrong. It can make things disappear.";
+	public static final String ORB_VOID_DESCRIPTION = "An anomaly that sometimes happens when the making of an orb goes wrong. It doesn't do anything to living creatures, but it can negate another orb.";
 
 	
 	

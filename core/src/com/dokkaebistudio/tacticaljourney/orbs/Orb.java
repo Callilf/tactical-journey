@@ -41,12 +41,14 @@ public abstract class Orb {
 	public boolean onContact(Entity user, Entity orb, Entity target, Room room) {
 		boolean result = effectOnContact(user, orb, target, room);
 				
-		if (user != null) {
-			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
-			orbCarrierComponent.clearOrb(orb);
+		if (result) {
+			if (user != null) {
+				OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
+				orbCarrierComponent.clearOrb(orb);
+			}
+			
+			room.removeEntity(orb);
 		}
-		
-		room.removeEntity(orb);
 		
 		return result;
 	}

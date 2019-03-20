@@ -29,12 +29,15 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
@@ -95,6 +98,8 @@ public class Room extends EntitySystem {
 	private List<Entity> addedItems;
 	/** The items removed from the room at the current frame. */
 	private List<Entity> removedItems;
+	
+	private int rewardGold;
 
 	
 	/** The doors entities of this room. */
@@ -120,6 +125,8 @@ public class Room extends EntitySystem {
 		this.entitiesToRemove = new ArrayList<>();
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
+		
+		this.rewardGold = 1 + RandomSingleton.getInstance().getSeededRandom().nextInt(5);
 	}
 	
 	public Array<Entity> getAllEntities() {
@@ -254,6 +261,11 @@ public class Room extends EntitySystem {
 			for (Entity door : doors) {
 				Mappers.doorComponent.get(door).open(door);
 			}
+			
+			// Give reward
+			Journal.addEntry("Room reward: [GOLDENROD]" + this.rewardGold + " gold coin(s).");
+			Mappers.walletComponent.get(this.floor.getGameScreen().player).receive(this.rewardGold);
+			
 			this.cleared = RoomClearedState.CLEARED;
 		}		
 		
@@ -547,6 +559,10 @@ public class Room extends EntitySystem {
 
 	public void setCleared(RoomClearedState cleared) {
 		this.cleared = cleared;
+	}
+	
+	public int getRewardGold() {
+		return rewardGold;
 	}
 	
 }

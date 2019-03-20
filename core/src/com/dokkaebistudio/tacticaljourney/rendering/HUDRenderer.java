@@ -140,7 +140,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	// Room cleared image
 	private Image roomClearedImage;
-
+	private Table rewardTable;
+	private Label reward;
 	
 	
 	// Components
@@ -156,14 +157,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public HUDRenderer(Stage s, Entity player) {
 		this.stage = s;
-		this.player = player;
-		
-		this.roomClearedImage = new Image(Assets.hud_room_cleared);
-		this.roomClearedImage.setPosition(GameScreen.SCREEN_W/2 - this.roomClearedImage.getWidth()/2, GameScreen.SCREEN_H/2 -  this.roomClearedImage.getHeight()/2 + 20);
-		this.roomClearedImage.setOrigin(Align.center);
-		this.roomClearedImage.setVisible(false);
-		
-		stage.addActor(this.roomClearedImage);
+		this.player = player;		
 	}
 	
 	@Override
@@ -841,11 +835,44 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	 * Display the animation when a room was just cleared.
 	 */
 	private void displayRoomCleared() {
-		roomClearedImage.setVisible(true);
-		roomClearedImage.addAction(Actions.sequence(Actions.alpha(1),
+		if (roomClearedImage == null) {
+			this.roomClearedImage = new Image(Assets.hud_room_cleared);
+			this.roomClearedImage.setPosition(GameScreen.SCREEN_W/2 - this.roomClearedImage.getWidth()/2, GameScreen.SCREEN_H/2 -  this.roomClearedImage.getHeight()/2 + 20);
+			this.roomClearedImage.setOrigin(Align.center);
+			this.roomClearedImage.setVisible(false);
+			
+			this.rewardTable = new Table();
+			TextureRegionDrawable background = new TextureRegionDrawable(Assets.small_popin_background);
+			rewardTable.setBackground(background);
+			
+			this.reward = new Label("", PopinService.hudStyle());
+			this.rewardTable.add(reward);
+			this.rewardTable.setOrigin(Align.center);
+			this.rewardTable.setVisible(false);
+			this.rewardTable.pack();
+			this.rewardTable.setPosition(GameScreen.SCREEN_W/2 - background.getRegion().getRegionWidth()/2, GameScreen.SCREEN_H/2 - rewardTable.getHeight() - 50);
+
+			
+			stage.addActor(this.roomClearedImage);
+			stage.addActor(this.rewardTable);
+		}
+		
+		this.roomClearedImage.setVisible(true);
+		this.roomClearedImage.addAction(Actions.sequence(Actions.alpha(1),
 				Actions.scaleBy(20, 20),
 				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
-				Actions.fadeOut(2, Interpolation.pow5In)));
+				Actions.delay(2.5f),
+				Actions.fadeOut(1, Interpolation.pow5In)));
+		
+		this.rewardTable.setVisible(true);
+		this.reward.setText("REWARDS\n [GOLDENROD]" + room.getRewardGold() + " gold coin(s)");
+		this.rewardTable.pack();
+		this.rewardTable.addAction(Actions.sequence(Actions.alpha(0),
+				Actions.delay(1),
+				Actions.fadeIn(1),
+				Actions.delay(1.5f),
+				Actions.fadeOut(1, Interpolation.pow5In)));
+
 	}
 	
 }

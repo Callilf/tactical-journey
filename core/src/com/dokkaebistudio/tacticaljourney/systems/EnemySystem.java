@@ -1,9 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -36,10 +34,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
    
     /** The enemies of the current room that need updating. */
     private List<Entity> allEnemiesOfCurrentRoom;
-    
-    /** For each enemy, store whether it's turn is over or not. */
-    private Map<Entity, Boolean> turnFinished = new HashMap<>();
-    
+        
 	/** The tile search service. */
 	private TileSearchService tileSearchService;
 	/** The attack tile search service. */
@@ -90,11 +85,12 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     	enemyFinishedCount = 0;
     	for (final Entity enemyEntity : allEnemiesOfCurrentRoom) {
     		HealthComponent healthComponent = Mappers.healthComponent.get(enemyEntity);
-    		if (healthComponent == null || healthComponent.isDead()) {
+    		if (healthComponent != null && healthComponent.isDead()) {
     			continue;
     		}
     		
-    		if (turnFinished.get(enemyEntity) != null && turnFinished.get(enemyEntity).booleanValue() == true) {
+    		final EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
+    		if (enemyComponent.isTurnOver()) {
     			enemyFinishedCount ++;
     			continue;
     		}
@@ -102,7 +98,6 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		enemyCurrentyPlaying = enemyEntity;
     		
     		// Check if this enemy uses a sub system
-    		final EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
     		if (enemyComponent.getSubSystem() != null) {
     			boolean enemyHandled = enemyComponent.getSubSystem().update(this, enemyEntity, room);
     			if (enemyHandled) {
@@ -273,8 +268,10 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 	private void checkAllEnemiesFinished() {
 		if (allEnemiesOfCurrentRoom.size() == 0 || enemyFinishedCount == allEnemiesOfCurrentRoom.size()) {
+			for (Entity e : allEnemiesOfCurrentRoom) {
+				Mappers.enemyComponent.get(e).setTurnOver(false);
+			}
 			enemyFinishedCount = 0;
-			turnFinished.clear();
 			enemyCurrentyPlaying = null;
 			room.turnManager.endEnemyTurn();
 		}
@@ -288,7 +285,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
     	
 		enemyFinishedCount ++;
-		turnFinished.put(enemyEntity, new Boolean(true));
+		enemyComponent.setTurnOver(true);
 		room.setNextState(RoomState.ENEMY_TURN_INIT);
 	}
 
@@ -324,7 +321,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
     		tileSearchService.buildMoveTilesSet(enemyEntity, room);
     		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, false, true);
     		moveCompo.hideMovableTiles();
-    		attackCompo.hideAttackableTiles();
+    		if (attackCompo != null) attackCompo.hideAttackableTiles();
     	}
     	
     	room.setNextState(RoomState.PLAYER_MOVE_TILES_DISPLAYED);

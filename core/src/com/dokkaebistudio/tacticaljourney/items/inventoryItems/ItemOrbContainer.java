@@ -43,13 +43,17 @@ public class ItemOrbContainer extends Item {
 		OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(user);
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		
-		int randInt = unseededRandom.nextInt(3);
-		if (randInt == 0) {
+		int randInt = unseededRandom.nextInt(101);
+		if (randInt >= 0 && randInt < 25) {
 			orbCarrierComponent.acquire(user, room.entityFactory.orbFactory.createEnergyOrb(null, room));
-		} else if (randInt == 1) {
+		} else if (randInt >= 25 && randInt < 50) {
 			orbCarrierComponent.acquire(user, room.entityFactory.orbFactory.createVegetalOrb(null, room));
-		} else {
+		} else if (randInt >= 50 && randInt < 75) {
 			orbCarrierComponent.acquire(user, room.entityFactory.orbFactory.createPoisonOrb(null, room));
+		} else if ( randInt >= 75 && randInt < 100) {
+			orbCarrierComponent.acquire(user, room.entityFactory.orbFactory.createFireOrb(null, room));
+		} else {
+			orbCarrierComponent.acquire(user, room.entityFactory.orbFactory.createDeathOrb(null, room));
 		}
 
 		return true;

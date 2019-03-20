@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -321,7 +322,12 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
-			
+			Entity shaman = entityFactory.enemyFactory.createTribesmenShaman(room, new Vector2(11, 2));
+
+//			Entity totem = entityFactory.enemyFactory.createTribesmenTotem(room, new Vector2(14, 8));
+//			OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(totem);
+//			orbCarrierComponent.acquire(totem, entityFactory.orbFactory.createEnergyOrb(null, room));
+
 //			Entity createTribesmenSpear = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(14, 8));
 //			Mappers.statusReceiverComponent.get(createTribesmenSpear).requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(5));
 			

@@ -109,7 +109,7 @@ public class AttackTileSearchService extends TileSearchService {
 		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
 		 
-		 if (!attackCompo.isActive()) return null;
+		 if (!attackCompo.isActive() || attackCompo.getRangeMax() == 0) return null;
 
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();

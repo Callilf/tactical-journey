@@ -50,6 +50,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	private Entity alertedDisplayer;
 
 	
+	/** Whether this enemy's turn is over or not. */
+	private boolean turnOver;
 	
 	
 	
@@ -229,6 +231,14 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 
 	public void setSubSystem(EnemySubSystem subSystem) {
 		this.subSystem = subSystem;
+	}
+
+	public boolean isTurnOver() {
+		return turnOver;
+	}
+
+	public void setTurnOver(boolean turnOver) {
+		this.turnOver = turnOver;
 	}
 
 }

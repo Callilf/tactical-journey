@@ -185,7 +185,7 @@ public final class TileUtil {
 	 * @return The entity with the given component standing on the tile at the given position, null if there is none.
 	 */
 	public static Entity getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
-		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
+ 		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
 		for (Entity e : entities) {
 			return e;
 		}

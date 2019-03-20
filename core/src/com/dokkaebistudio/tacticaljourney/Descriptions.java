@@ -111,6 +111,9 @@ public class Descriptions {
 	public static final String ENEMY_TRIBESMAN_SHAMAN_TITLE = "Tribesman shaman";
 	public static final String ENEMY_TRIBESMAN_SHAMAN_DESCRIPTION = "The shaman of the tribe. He cannot fight but instead he can channel and manipulate orbs, and call other tribesmen to help him.";
 
+	public static final String ENEMY_TRIBESMAN_TOTEM_TITLE = "Totem of war";
+	public static final String ENEMY_TRIBESMAN_TOTEM_DESCRIPTION = "A totem manipulated by the Shaman. It cannot be attacked.";
+
 	
 	
 	// Items

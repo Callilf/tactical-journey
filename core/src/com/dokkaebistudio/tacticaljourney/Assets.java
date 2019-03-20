@@ -217,6 +217,7 @@ public class Assets {
 	public static Array<Sprite> enemy_tribesman_spear;
 	public static Array<Sprite> enemy_tribesman_shield;
 	public static Array<Sprite> enemy_tribesman_scout;
+	public static Array<Sprite> enemy_tribesman_totem;
 
 	
 	//************
@@ -227,6 +228,7 @@ public class Assets {
 	public static Array<Sprite> boss_pangolin_mother_crying;
 
 	public static Array<Sprite> boss_shaman;
+	public static Array<Sprite> boss_shaman_summoning;
 
 	
 	//*************
@@ -535,6 +537,7 @@ public class Assets {
 		enemy_tribesman_spear = Assets.getAnimation("tribesman_spear");
 		enemy_tribesman_shield = Assets.getAnimation("tribesman_shield");
 		enemy_tribesman_scout = Assets.getAnimation("tribesman_scout");
+		enemy_tribesman_totem = Assets.getAnimation("tribesman_totem");
 
 		
 		//************
@@ -545,6 +548,7 @@ public class Assets {
 		boss_pangolin_mother_crying = Assets.getAnimation("pangolin_crying");
 		
 		boss_shaman = Assets.getAnimation("tribesman_shaman");
+		boss_shaman_summoning = Assets.getAnimation("tribesman_shaman_summon");
 
 		
 		//*************

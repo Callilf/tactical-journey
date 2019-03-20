@@ -310,7 +310,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				int y = (int) touchPoint.y;
 				
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
+				Entity attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
 				tempPos.free();
 				
 				if (attackableEntity != null) {
@@ -344,7 +344,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int y = (int) touchPoint.y;
 
 			PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-			Entity attackableEntity = TileUtil.getAttackableEntityOnTile(tempPos, room);
+			Entity attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
 			tempPos.free();
 			
 			if (attackableEntity != null) {

@@ -11,8 +11,10 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -33,11 +35,14 @@ import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanSpear;
+import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanTotem;
 import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
+import com.dokkaebistudio.tacticaljourney.orbs.OrbEnergy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanScoutSubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanShamanSubSystem;
@@ -366,6 +371,7 @@ public final class EnemyTribesmenFactory {
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState(), AnimationsEnum.TRIBESMEN_SHAMAN_STAND.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState(), AnimationsEnum.TRIBESMEN_SHAMAN_SUMMONING.getAnimation());
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -410,7 +416,7 @@ public final class EnemyTribesmenFactory {
 		healthComponent.room = room;
 		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(10);
-		healthComponent.setHp(10);
+		healthComponent.setHp(5);
 		healthComponent.setMaxArmor(0);
 		healthComponent.setArmor(0);
 		enemyEntity.add(healthComponent);
@@ -439,4 +445,71 @@ public final class EnemyTribesmenFactory {
 	}
 	
 	
+	public Entity createTotem(Room room, Vector2 pos) {
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_TOTEM.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_TOTEM_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_TRIBESMAN_TOTEM_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		enemyEntity.add(spriteCompo);
+		
+		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
+		animCompo.animations.put(StatesEnum.TRIBESMEN_TOTEM.getState(), AnimationsEnum.TRIBESMEN_TOTEM.getAnimation());
+		enemyEntity.add(animCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.TRIBESMEN_TOTEM.getState());
+		enemyEntity.add(stateCompo);
+		
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.room = room;
+		enemyComponent.setType(new EnemyTribesmanTotem());
+		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
+		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		enemyEntity.add(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.setMoveSpeed(3);
+		enemyEntity.add(moveComponent);
+		
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		attackComponent.setRangeMax(0);
+		attackComponent.setStrength(0);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		FlyComponent flyCompo = engine.createComponent(FlyComponent.class);
+		enemyEntity.add(flyCompo);
+		
+		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
+		orbCarrierCompo.room = room;
+		enemyEntity.add(orbCarrierCompo);
+		
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	enemyEntity.add(destructibleCompo);
+
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
 }

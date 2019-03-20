@@ -39,7 +39,10 @@ public enum AnimationsEnum {
 	TRIBESMEN_SPEAR_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_spear, PlayMode.LOOP)),
 	TRIBESMEN_SHIELD_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_shield, PlayMode.LOOP)),
 	TRIBESMEN_SCOUT_STAND(new Animation<Sprite>(0.3f, Assets.enemy_tribesman_scout, PlayMode.LOOP)),
-	TRIBESMEN_SHAMAN_STAND(new Animation<Sprite>(0.3f, Assets.boss_shaman, PlayMode.LOOP));
+	TRIBESMEN_TOTEM(new Animation<Sprite>(0.15f, Assets.enemy_tribesman_totem, PlayMode.LOOP_PINGPONG)),
+
+	TRIBESMEN_SHAMAN_STAND(new Animation<Sprite>(0.3f, Assets.boss_shaman, PlayMode.LOOP)),
+	TRIBESMEN_SHAMAN_SUMMONING(new Animation<Sprite>(0.15f, Assets.boss_shaman_summoning, PlayMode.LOOP_PINGPONG));
 
 
 	

@@ -50,6 +50,7 @@ import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbEnergy;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbFire;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbPoison;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbVegetal;
+import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrbVoid;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -242,7 +243,9 @@ public final class ItemFactory {
 		case DEATH_ORB:
 			item = createItemDeathOrb(room, tilePos);
 			break;
-			
+		case VOID_ORB:
+			item = createItemVoidOrb(room, tilePos);
+			break;
 			default:
 				System.out.println("Item type " + type.name() + " not handled in ItemFactory.");
 				
@@ -572,6 +575,13 @@ public final class ItemFactory {
 	public Entity createItemDeathOrb(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.death_orb_item, new ItemOrbDeath(),
 				Descriptions.ORB_DEATH_TITLE, Descriptions.ORB_DEATH_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
+		return item;
+	}
+	
+	public Entity createItemVoidOrb(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.void_orb_item, new ItemOrbVoid(),
+				Descriptions.ORB_VOID_TITLE, Descriptions.ORB_VOID_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
 		return item;
 	}

@@ -72,6 +72,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		clearMovableTiles();
 		this.room = null;
 		this.selectedAttackTile = null;
+		this.frozen = false;
+		this.freeMove = false;
 	}
 	
 	

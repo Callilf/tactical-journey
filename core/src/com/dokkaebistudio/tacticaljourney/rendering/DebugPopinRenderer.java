@@ -393,7 +393,9 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				for (Entity e : room.getEnemies()) {
 					HealthComponent healthComponent = Mappers.healthComponent.get(e);
-					healthComponent.setHp(0);
+					if (healthComponent != null) {
+						healthComponent.setHp(0);
+					}
 				}
 			}
 		});

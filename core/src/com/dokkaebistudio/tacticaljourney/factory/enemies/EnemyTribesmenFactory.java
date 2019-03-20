@@ -479,7 +479,7 @@ public final class EnemyTribesmenFactory {
 		enemyComponent.room = room;
 		enemyComponent.setCanActivateOrbs(false);
 		enemyComponent.setType(new EnemyTribesmanTotem());
-		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
+		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyEntity.add(enemyComponent);

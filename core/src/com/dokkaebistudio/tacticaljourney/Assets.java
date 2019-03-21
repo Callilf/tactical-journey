@@ -85,6 +85,7 @@ public class Assets {
 	
 	public static NinePatch popinNinePatch;
 	public static NinePatch popinInnerNinePatch;
+	public static NinePatch popinOuterNinePatch;
 	public static NinePatch buttonNinePatch;
 	public static NinePatch buttonPressedNinePatch;
 	public static NinePatch buttonDisabledNinePatch;
@@ -418,6 +419,7 @@ public class Assets {
 		
 		popinNinePatch = getNinePatch("popin", 17, 17, 17, 17);
 		popinInnerNinePatch = getNinePatch("popin_inner", 13, 13, 13, 13);
+		popinOuterNinePatch = getNinePatch("popin_outer", 13, 13, 13, 13);
 		buttonNinePatch = getNinePatch("button", 17, 17, 17, 17);
 		buttonPressedNinePatch = getNinePatch("button_pressed", 17, 17, 17, 17);
 		buttonDisabledNinePatch = getNinePatch("button_disabled", 17, 17, 17, 17);

@@ -30,7 +30,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpReward;
+import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -50,7 +50,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     private Room room;
     
     /** The buttons to select the level up reward. */
-    private List<LevelUpReward> rewards = new ArrayList<>();
+    private List<AbstractLevelUpReward> rewards = new ArrayList<>();
     
     /** The main table of the popin. */
     private Table table;
@@ -121,7 +121,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private void createChoices(final Entity player, int choicesNumber, Table table) {
 		this.selectedRewards = 0;
 		
-		List<LevelUpReward> list = LevelUpReward.getRewards(expCompo.getLevelForPopin(), choicesNumber);
+		List<AbstractLevelUpReward> list = AbstractLevelUpReward.getRewards(expCompo.getLevelForPopin(), choicesNumber);
 		if (list.size() == 0) return;
 		
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
@@ -134,7 +134,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		for (int i=1; i<=choicesNumber ; i++) {
 			if (!list.isEmpty()) {
 				int nextInt = unseededRandom.nextInt(list.size());
-				LevelUpReward reward = list.get(nextInt);
+				AbstractLevelUpReward reward = list.get(nextInt);
 				list.remove(nextInt);
 				rewards.add(reward);
 			}
@@ -142,38 +142,41 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		
 		
 		for (int i=0 ; i<rewards.size() ; i++) {
-			final LevelUpReward levelUpRewardEnum = rewards.get(i);
+			final AbstractLevelUpReward levelUpRewardEnum = rewards.get(i);
 			Stack choiceGroup = new Stack();
 			
-			Stack rewardPanelGroup = new Stack();
-			Image rewardTextBackground = new Image(Assets.lvl_up_choice_reward_panel);
 			Table rewardTable = new Table();
-			Label rewardText = new Label(levelUpRewardEnum.getFinalDescription(), PopinService.smallTextStyle());
+    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+    		ninePatchDrawable.setMinWidth(200);
+    		ninePatchDrawable.setMinHeight(80);
+    		rewardTable.setBackground(ninePatchDrawable);
+			
+			Label rewardText = new Label(levelUpRewardEnum.getFinalDescription(), PopinService.hudStyle());
+			rewardText.setWrap(true);
 			rewardText.setAlignment(Align.center);
-			rewardTable.add(rewardText).width(Value.percentWidth(.70F, rewardTable));
-			rewardTable.add().width(Value.percentWidth(.30F, rewardTable));
-			rewardPanelGroup.addActor(rewardTextBackground);
-			rewardPanelGroup.addActor(rewardTable);
-			choiceGroup.addActor(rewardPanelGroup);
+			rewardTable.add(rewardText).width(500);
+			choiceGroup.addActor(rewardTable);
 
-			final Stack descPanelGroup = new Stack();
-			Image descTextBackground = new Image(Assets.lvl_up_choice_desc_panel);
-			Table descTable = new Table();
-			Label descText = new Label(levelUpRewardEnum.getDescription(), PopinService.smallTextStyle());
+			
+			final Table descTable = new Table();
+    		ninePatchDrawable = new NinePatchDrawable(Assets.popinOuterNinePatch);
+    		ninePatchDrawable.setMinWidth(200);
+    		ninePatchDrawable.setMinHeight(80);
+    		descTable.setBackground(ninePatchDrawable);
+
+			Label descText = new Label(levelUpRewardEnum.getDescription(), PopinService.hudStyle());
+			descText.setWrap(true);
 			descText.setAlignment(Align.center);
-			descTable.add(descText).width(Value.percentWidth(.70F, descTable));
-			descTable.add().width(Value.percentWidth(.30F, descTable));
-			descPanelGroup.addActor(descTextBackground);
-			descPanelGroup.addActor(descTable);
-			choiceGroup.addActor(descPanelGroup);
-			
-			
-			
-			Table frameTable = new Table();
+			descText.setAlignment(Align.center);
+			descTable.add(descText).width(500);
 
-			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.lvl_up_choice_frame);
-			frameTable.setBackground(frame);
-			
+			choiceGroup.addActor(descTable);
+
+
+
+			Table frameTable = new Table();
+			frameTable.add(choiceGroup).left().padRight(20);
+
 			final TextButton claimButton = new TextButton("Claim", PopinService.buttonStyle());
 			claimButtons.add(claimButton);
 			
@@ -182,22 +185,20 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 				
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					claimReward(player, levelUpRewardEnum, descPanelGroup, claimButton);
+					claimReward(player, levelUpRewardEnum, descTable, claimButton);
 				}
 			});
 			
-			frameTable.add().width(Value.percentWidth(.70F, descTable));
-			frameTable.add(claimButton).center();
-			choiceGroup.addActor(frameTable);
+			frameTable.add(claimButton).right();
 			
-			choiceTable.add(choiceGroup).padTop(-1);
+			choiceTable.add(frameTable).padBottom(10);
 			choiceTable.row();
 		
 		}
 		
 		choiceTable.pack();
 		
-		table.add(choiceTable).expandY().growX();
+		table.add(choiceTable).expandY().growX().pad(10, 0, 10, 0);
 		table.row();
 	
 	}
@@ -267,10 +268,10 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	 * @param descPanelGroup the panel to fade out
 	 * @param claimButton the claim button just pressed
 	 */
-	private void claimReward(final Entity player, final LevelUpReward levelUpRewardEnum,
-			final Stack descPanelGroup, final Button claimButton) {
+	private void claimReward(final Entity player, final AbstractLevelUpReward levelUpRewardEnum,
+			final Table descTable, final Button claimButton) {
 		continueButton.setTouchable(Touchable.disabled);
-		descPanelGroup.addAction(Actions.sequence(Actions.alpha(0, 1), new ApplyRewardAction(player, levelUpRewardEnum)));
+		descTable.addAction(Actions.sequence(Actions.alpha(0, 1), new ApplyRewardAction(player, levelUpRewardEnum)));
 		
 		for(Button cb : claimButtons) {
 			cb.setDisabled(true);
@@ -285,9 +286,9 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private class ApplyRewardAction extends Action {
 		
 		private Entity player;
-		private LevelUpReward reward;
+		private AbstractLevelUpReward reward;
 		
-		public ApplyRewardAction(Entity player, LevelUpReward levelUpRewardEnum) {
+		public ApplyRewardAction(Entity player, AbstractLevelUpReward levelUpRewardEnum) {
 			this.player = player;
 			this.reward = levelUpRewardEnum;
 		}

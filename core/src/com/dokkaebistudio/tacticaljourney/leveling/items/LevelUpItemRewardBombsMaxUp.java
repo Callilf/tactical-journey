@@ -18,7 +18,7 @@ public class LevelUpItemRewardBombsMaxUp extends AbstractLevelUpItemReward {
 	
 	
 	public LevelUpItemRewardBombsMaxUp() {
-		super(1, 2, "Increase max bomb \namount by 1 to 2", "Max amount of bombs \nincreased by #");
+		super(1, 2, "Increase max bomb amount by 1 to 2", "Max amount of bombs increased by #");
 		this.type = LevelUpRewardEnum.BOMBS_MAX_UP;
 	}
 

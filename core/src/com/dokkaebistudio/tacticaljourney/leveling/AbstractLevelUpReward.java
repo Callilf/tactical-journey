@@ -22,7 +22,7 @@ import com.dokkaebistudio.tacticaljourney.leveling.statsUp.LevelUpStatsUpRewardM
 import com.dokkaebistudio.tacticaljourney.leveling.statsUp.LevelUpStatsUpRewardStrengthUp;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
-public abstract class LevelUpReward {
+public abstract class AbstractLevelUpReward {
 
 	// Attributes	
 	public LevelUpRewardEnum type;
@@ -31,7 +31,7 @@ public abstract class LevelUpReward {
 	protected String finalDescription;
 	
 	// Constructors
-	public LevelUpReward(String desc, String finalDesc) {
+	public AbstractLevelUpReward(String desc, String finalDesc) {
 		this.setDescription(desc);
 		this.setFinalDescription(finalDesc);
 	}
@@ -88,8 +88,8 @@ public abstract class LevelUpReward {
 	
 	
 	
-	public static List<LevelUpReward> getRewards(int level, int numberOfChoices) {
-		List<LevelUpReward> rewards = new ArrayList<>();
+	public static List<AbstractLevelUpReward> getRewards(int level, int numberOfChoices) {
+		List<AbstractLevelUpReward> rewards = new ArrayList<>();
 		
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		List<LevelUpRewardEnum> enums = LevelUpRewardEnum.getValuesForLevel(level);
@@ -103,7 +103,7 @@ public abstract class LevelUpReward {
 				type = enums.get(unseededRandom.nextInt(enums.size()));
 			}
 
-			rewards.add(LevelUpReward.create(type));
+			rewards.add(AbstractLevelUpReward.create(type));
 		}
 		
 		return rewards;
@@ -112,8 +112,8 @@ public abstract class LevelUpReward {
 	//********************
 	// Factory
 	
-	public static LevelUpReward create(LevelUpRewardEnum type) {
-		LevelUpReward reward = null;
+	public static AbstractLevelUpReward create(LevelUpRewardEnum type) {
+		AbstractLevelUpReward reward = null;
 		
 		switch(type) {
 		case HEALTH_UP:

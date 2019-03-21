@@ -18,7 +18,7 @@ public class LevelUpStatsUpRewardHealthUp extends AbstractLevelUpStatsUpReward {
 	
 	
 	public LevelUpStatsUpRewardHealthUp() {
-		super(10, 15, "Increase max health \nby 10 to 15 hp", "Max health increased \nby # hp");
+		super(10, 15, "Increase max health by 10 to 15 hp", "Max health increased by # hp");
 		this.type = LevelUpRewardEnum.HEALTH_UP;
 	}
 

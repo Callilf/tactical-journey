@@ -18,7 +18,7 @@ public class LevelUpItemRewardArrowsMaxUp extends AbstractLevelUpItemReward {
 	
 	
 	public LevelUpItemRewardArrowsMaxUp() {
-		super(2, 3, "Increase max arrow \namount by 2 to 3", "Max amount of arrows \nincreased by #");
+		super(2, 3, "Increase max arrow amount by 2 to 3", "Max amount of arrows increased by #");
 		this.type = LevelUpRewardEnum.ARROWS_MAX_UP;
 	}
 

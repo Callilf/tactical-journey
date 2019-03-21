@@ -19,7 +19,7 @@ public class LevelUpStatsUpRewardBombThrowRangeUp extends AbstractLevelUpStatsUp
 	
 	
 	public LevelUpStatsUpRewardBombThrowRangeUp() {
-		super(1, 1, "Increase max range of\nbomb throw by 1", "Bomb's range \nincreased by #");
+		super(1, 1, "Increase max range of bomb throw by 1", "Bomb's range increased by #");
 		this.type = LevelUpRewardEnum.BOMB_THROW_RANGE_UP;
 	}
 

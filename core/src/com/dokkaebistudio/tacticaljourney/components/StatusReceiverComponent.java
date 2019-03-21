@@ -106,19 +106,18 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 
 	
 	public void addStatus(Entity entity, Status status, Room room, Stage fxStage) {
-		boolean canBeAdded = status.onReceive(entity, room);
-		
-		if (canBeAdded) {
-			// If the same status has already been received, increase its duration
-			for (Status alreadyReceivedStatus : statuses) {
-				if (alreadyReceivedStatus.getClass().equals( status.getClass())) {
-					alreadyReceivedStatus.addUp(status);
-					// update the duration label
-					this.updateDuration(alreadyReceivedStatus, 0);
-					return;
-				}
+		// If the same status has already been received, increase its duration
+		for (Status alreadyReceivedStatus : statuses) {
+			if (alreadyReceivedStatus.getClass().equals( status.getClass())) {
+				alreadyReceivedStatus.addUp(status);
+				// update the duration label
+				this.updateDuration(alreadyReceivedStatus, 0);
+				return;
 			}
-			
+		}
+		
+		boolean canBeReceived = status.onReceive(entity, room);
+		if (canBeReceived) {
 			statuses.add(status);
 			
 			// Update the statuses display

@@ -38,7 +38,8 @@ public class MenuPopinRenderer implements Renderer {
     public void render(float deltaTime) {
     	
     	if (gamescreen.state == GameScreen.GAME_PAUSED) {
-    		
+    		RoomRenderer.showBlackFilter();
+
     		if (!menuDisplayed) {
     			//Init the menu
     			initTable();
@@ -156,6 +157,8 @@ public class MenuPopinRenderer implements Renderer {
 	 * Close the popin and unpause the game.
 	 */
 	private void closePopin() {
+		RoomRenderer.hideBlackFilter();
+
 		table.remove();
 		menuDisplayed = false;
 		

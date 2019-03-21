@@ -36,6 +36,7 @@ public class GameOverPopinRenderer implements Renderer {
     public void render(float deltaTime) {
     	
     	if (gamescreen.state == GameScreen.GAME_OVER) {
+    		RoomRenderer.showBlackFilter();
     		
     		if (!menuDisplayed) {
 				initTable();
@@ -127,6 +128,8 @@ public class GameOverPopinRenderer implements Renderer {
 	 * Close the popin and unpause the game.
 	 */
 	private void closePopin() {
+		RoomRenderer.hideBlackFilter();
+
 		table.remove();
 		menuDisplayed = false;
 		

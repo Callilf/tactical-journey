@@ -190,27 +190,36 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_MOVING:
-			moveCompo.selectCurrentMoveDestinationTile(player);
-
-			// Do the movement on screen
-			Boolean movementFinished = movementHandler.performRealMovement(player, room);
-			if (movementFinished == null)
-				return;
-			else if (movementFinished)
+			if (moveCompo.moving) {
+				moveCompo.selectCurrentMoveDestinationTile(player);
+	
+				// Do the movement on screen
+				Boolean movementFinished = movementHandler.performRealMovement(player, room);
+				if (movementFinished == null)
+					return;
+				else if (movementFinished)
+					room.setNextState(RoomState.PLAYER_END_MOVEMENT);
+				
+			} else {
 				room.setNextState(RoomState.PLAYER_END_MOVEMENT);
+			}
 
 			break;
 
 		case PLAYER_END_MOVEMENT:
-			movementHandler.finishRealMovement(player, room);
+			if (moveCompo.moving) {
+				MovementHandler.finishRealMovement(player, room);
+	
+				// Compute the cost of this move
+				if (room.hasEnemies()) {
+					int cost = computeCostOfMovement(player);
+					moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - cost);
+				}
 
-			// Compute the cost of this move
-			if (room.hasEnemies()) {
-				int cost = computeCostOfMovement(player);
-				moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - cost);
 			}
-
+			moveCompo.clearMovableTiles();
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+
 			break;
 
 		default:

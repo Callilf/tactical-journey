@@ -164,22 +164,27 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		break;
         		
         	case ENEMY_MOVING:
-        		
-    	    	moveCompo.selectCurrentMoveDestinationTile(enemyEntity);
-    	    		
-    	    	//Do the movement on screen
-    	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
-        		if (movementFinished) room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+        		if (moveCompo.moving) {
+	    	    	moveCompo.selectCurrentMoveDestinationTile(enemyEntity);
+	    	    		
+	    	    	//Do the movement on screen
+	    	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
+	        		if (movementFinished) room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+        		} else {
+        			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+        		}
         		
         		break;
         		
         	case ENEMY_END_MOVEMENT:
-        		
-        		movementHandler.finishRealMovement(enemyEntity, room);
-    	    	moveCompo.clearMovableTiles();
-
-        		if (attackCompo != null) attackCompo.clearAttackableTiles();
-        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
+        		if (moveCompo.moving) {
+	        		MovementHandler.finishRealMovement(enemyEntity, room);
+	    	    	moveCompo.clearMovableTiles();
+	
+	        		if (attackCompo != null) attackCompo.clearAttackableTiles();
+	        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
+        		}
+        		moveCompo.clearMovableTiles();
 
     	    	room.setNextState(RoomState.ENEMY_ATTACK);
 

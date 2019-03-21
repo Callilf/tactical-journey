@@ -195,7 +195,7 @@ public class Descriptions {
 			+ "Grants both the blessing and the curse of the black mamba.";
 
 	public static final String ITEM_VEGETAL_GARMENT_TITLE = "Vegetal garment";
-	public static final String ITEM_VEGETAL_GARMENT_DESCRIPTION = "A woman garment made of leaves and entangled roots. Grants the photosynthesis blessing while held in the inventory.";
+	public static final String ITEM_VEGETAL_GARMENT_DESCRIPTION = "A woman garment made of leaves and entangled roots. While held in the inventory, it grants immunity to the [FOREST]entangled[] status effect, as well as the photosynthesis blessing.";
 
 	public static final String ITEM_RAM_SKULL_TITLE = "Ram skull";
 	public static final String ITEM_RAM_SKULL_DESCRIPTION = "A ram skull that looks like it has been turned into some kind of helmet. Grants the blessing of the poisoner while held in the inventory.";

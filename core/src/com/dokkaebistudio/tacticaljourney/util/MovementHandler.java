@@ -54,6 +54,7 @@ public class MovementHandler {
 		moverGridPosCompo.absolutePos((int)startPos.x, (int) startPos.y);
 		
 		moveComponent.currentMoveDestinationIndex = 0;
+		moveComponent.moving = true;
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {
@@ -219,7 +220,7 @@ public class MovementHandler {
 	}
 	
 	
-	public void finishRealMovement(Entity e, Room room) {
+	public static void finishRealMovement(Entity e, Room room) {
 		MoveComponent moveCompo = Mappers.moveComponent.get(e);
 		if (moveCompo == null) return;
 		
@@ -235,6 +236,8 @@ public class MovementHandler {
 				}
 			}
 		}
+		
+		moveCompo.moving = false;
 		
 		//TODO improve
 		if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {

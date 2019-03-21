@@ -54,6 +54,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	private Entity fastAttackTarget;
 	
 	
+	public boolean moving;
 	public boolean arrivedOnTile;
 	public Vector2 currentMoveDestinationTilePos;
 	public Vector2 currentMoveDestinationPos;

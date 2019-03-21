@@ -360,9 +360,9 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 			entityFactory.itemFactory.createItemTutorialPage(5,room, new Vector2(11, 10));
 
-//			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
-//			entityFactory.lootableFactory.createOrbBag(room, new Vector2(12, 9));
-//			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(13, 9));
+			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
+			entityFactory.lootableFactory.createOrbBag(room, new Vector2(13, 9));
+			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(14, 9));
 //
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));

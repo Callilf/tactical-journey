@@ -2,9 +2,9 @@ package com.dokkaebistudio.tacticaljourney.leveling.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpReward;
+import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 
-public abstract class AbstractLevelUpItemReward extends LevelUpReward {
+public abstract class AbstractLevelUpItemReward extends AbstractLevelUpReward {
 
 	
 	// Attributes

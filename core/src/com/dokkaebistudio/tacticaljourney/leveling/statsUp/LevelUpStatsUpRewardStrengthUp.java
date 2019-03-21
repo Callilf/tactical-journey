@@ -18,7 +18,7 @@ public class LevelUpStatsUpRewardStrengthUp extends AbstractLevelUpStatsUpReward
 	
 	
 	public LevelUpStatsUpRewardStrengthUp() {
-		super(1, 1, "Increase strength \nby 1", "Strength increased \nby #");
+		super(1, 1, "Increase strength by 1", "Strength increased by #");
 		this.type = LevelUpRewardEnum.STRENGTH_UP;
 	}
 

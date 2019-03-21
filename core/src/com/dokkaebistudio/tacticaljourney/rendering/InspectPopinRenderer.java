@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -147,7 +148,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 				for (final Entity e : playerCompo.getInspectedEntities()) {
 					InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(e);
 					
-					final TextButton btn = new TextButton(inspectableComponent.getTitle(),PopinService.bigButtonStyle());			
+					final TextButton btn = new TextButton(inspectableComponent.getTitle(),PopinService.buttonStyle());			
 					// Close listener
 					btn.addListener(new ChangeListener() {
 						@Override
@@ -273,8 +274,8 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-		mainPopin.setBackground(textureRegionDrawable);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		mainPopin.setBackground(ninePatchDrawable);
 		
 		mainPopin.align(Align.top);
 		
@@ -286,12 +287,12 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		// 2 - Description
 		desc = new Label("Description", PopinService.hudStyle());
 		desc.setWrap(true);
-		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+		mainPopin.add(desc).growY().width(900).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
 		// 3 - Action buttons
 		Table buttonTable = new Table();
-		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -310,9 +311,9 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		choicePopin.addListener(new ClickListener() {});
 		
 		// Place the popin and add the background texture
-		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.small_popin_background);
-		choicePopin.setBackground(textureRegionDrawable);
+		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		choicePopin.setBackground(ninePatchDrawable);
 		
 		choicePopin.align(Align.top);
 
@@ -336,8 +337,8 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		bigPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-		bigPopin.setBackground(textureRegionDrawable);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		bigPopin.setBackground(ninePatchDrawable);
 		
 		bigPopin.align(Align.top);
 		
@@ -349,25 +350,25 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		// 2 - Description
 		bigDesc = new Label("Description", PopinService.hudStyle());
 		bigDesc.setWrap(true);
-		bigPopin.add(bigDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+		bigPopin.add(bigDesc).growY().width(900).left().pad(0, 20, 0, 20);
 		bigPopin.row();
 		
 		// 3 - Stats
 		bigStats = new Label("Stats", PopinService.hudStyle());
 		bigStats.setWrap(true);
-		bigPopin.add(bigStats).growY().width(textureRegionDrawable.getMinWidth()).left().pad(20, 20, 0, 20);
+		bigPopin.add(bigStats).growY().width(900).left().pad(20, 20, 0, 20);
 		bigPopin.row();
 		
 		// 4 - Status effects
 		statusesMap = new HashMap<>();
 		statusTable = new Table();
-		bigPopin.add(statusTable).growY().width(textureRegionDrawable.getMinWidth()).left().pad(20, 20, 0, 20);
+		bigPopin.add(statusTable).growY().width(900).left().pad(20, 20, 0, 20);
 		bigPopin.row();
 
 		
 		// 5 - Action buttons
 		Table buttonTable = new Table();
-		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override

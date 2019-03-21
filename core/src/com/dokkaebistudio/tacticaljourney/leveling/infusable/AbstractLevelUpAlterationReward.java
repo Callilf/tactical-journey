@@ -1,10 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.leveling.infusable;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.leveling.LevelUpReward;
+import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
-public abstract class AbstractLevelUpAlterationReward extends LevelUpReward {
+public abstract class AbstractLevelUpAlterationReward extends AbstractLevelUpReward {
 
 	
 	protected String valueStr;

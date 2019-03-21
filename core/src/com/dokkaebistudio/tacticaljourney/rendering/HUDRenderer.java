@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -111,7 +112,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
-	private Button endTurnBtn;
+	private TextButton endTurnBtn;
 	private Table healthTable;
 	private Label healthLabel;
 	private Label armorLabel;
@@ -139,8 +140,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	
 	// Room cleared image
-	private Image roomClearedImage;
-	private Table rewardTable;
+	private Table roomClearedTable;
 	private Label reward;
 	
 	
@@ -377,10 +377,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
-			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.btn_end_turn));
-			Drawable endTurnButtonDown = new SpriteDrawable(new Sprite(Assets.btn_end_turn_pushed));
-			ButtonStyle endTurnButtonStyle = new ButtonStyle(endTurnButtonUp, endTurnButtonDown,null);
-			endTurnBtn = new Button(endTurnButtonStyle);
+			endTurnBtn = new TextButton("END TURN", PopinService.checkedButtonStyle());
 			
 			endTurnBtn.addListener(new ChangeListener() {
 				@Override
@@ -397,10 +394,22 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			
 			// Add shortcut to activate the end turn button
 			stage.addListener(new InputListener() {
+				public boolean keyDown(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.SPACE) {
+						if (!endTurnBtn.isDisabled()) {
+							endTurnBtn.setProgrammaticChangeEvents(false);
+							endTurnBtn.setChecked(true);
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
 				@Override
 				public boolean keyUp(InputEvent event, int keycode) {
 					if (keycode == Input.Keys.SPACE) {
 						if (!endTurnBtn.isDisabled()) {
+							endTurnBtn.setProgrammaticChangeEvents(true);
+
 							endTurnBtn.toggle();
 						}
 						return false;
@@ -409,7 +418,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				}
 			});
 
-			bottomLeftTable.add(endTurnBtn);
+			bottomLeftTable.add(endTurnBtn).width(165).height(110);
 			
 			bottomLeftTable.pack();
 			stage.addActor(bottomLeftTable);
@@ -835,42 +844,39 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	 * Display the animation when a room was just cleared.
 	 */
 	private void displayRoomCleared() {
-		if (roomClearedImage == null) {
-			this.roomClearedImage = new Image(Assets.hud_room_cleared);
-			this.roomClearedImage.setPosition(GameScreen.SCREEN_W/2 - this.roomClearedImage.getWidth()/2, GameScreen.SCREEN_H/2 -  this.roomClearedImage.getHeight()/2 + 20);
-			this.roomClearedImage.setOrigin(Align.center);
-			this.roomClearedImage.setVisible(false);
+		if (roomClearedTable == null) {
 			
-			this.rewardTable = new Table();
+			this.roomClearedTable = new Table();
 			TextureRegionDrawable background = new TextureRegionDrawable(Assets.small_popin_background);
-			rewardTable.setBackground(background);
+			roomClearedTable.setBackground(background);
+			
+			Label roomCleared = new Label("ROOM CLEARED", PopinService.hudStyle());
+			this.roomClearedTable.add(roomCleared).pad(0, 0, 20, 0);
+			this.roomClearedTable.row();
 			
 			this.reward = new Label("", PopinService.hudStyle());
-			this.rewardTable.add(reward);
-			this.rewardTable.setOrigin(Align.center);
-			this.rewardTable.setVisible(false);
-			this.rewardTable.pack();
-			this.rewardTable.setPosition(GameScreen.SCREEN_W/2 - background.getRegion().getRegionWidth()/2, GameScreen.SCREEN_H/2 - rewardTable.getHeight() - 50);
+			this.roomClearedTable.add(reward);
+			this.roomClearedTable.setOrigin(Align.center);
+			this.roomClearedTable.setVisible(false);
+			this.roomClearedTable.pack();
+			this.roomClearedTable.setPosition(GameScreen.SCREEN_W/2 - background.getRegion().getRegionWidth()/2, GameScreen.SCREEN_H/2 - roomClearedTable.getHeight()/2);
 
-			
-			stage.addActor(this.roomClearedImage);
-			stage.addActor(this.rewardTable);
+			stage.addActor(this.roomClearedTable);
 		}
 		
-		this.roomClearedImage.setVisible(true);
-		this.roomClearedImage.addAction(Actions.sequence(Actions.alpha(1),
-				Actions.scaleBy(20, 20),
-				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
-				Actions.delay(2.5f),
-				Actions.fadeOut(1, Interpolation.pow5In)));
+//		this.roomClearedImage.setVisible(true);
+//		this.roomClearedImage.addAction(Actions.sequence(Actions.alpha(1),
+//				Actions.scaleBy(20, 20),
+//				Actions.scaleTo(1, 1, 1, Interpolation.pow5Out),
+//				Actions.delay(2.5f),
+//				Actions.fadeOut(1, Interpolation.pow5In)));
 		
-		this.rewardTable.setVisible(true);
+		this.roomClearedTable.setVisible(true);
 		this.reward.setText("REWARDS\n [GOLDENROD]" + room.getRewardGold() + " gold coin(s)");
-		this.rewardTable.pack();
-		this.rewardTable.addAction(Actions.sequence(Actions.alpha(0),
-				Actions.delay(1),
-				Actions.fadeIn(1),
-				Actions.delay(1.5f),
+		this.roomClearedTable.pack();
+		this.roomClearedTable.addAction(Actions.sequence(Actions.alpha(0f),
+				Actions.fadeIn(1, Interpolation.pow5Out),
+				Actions.delay(2.5f),
 				Actions.fadeOut(1, Interpolation.pow5In)));
 
 	}

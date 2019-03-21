@@ -18,7 +18,7 @@ public class LevelUpItemRewardInventorySlot extends AbstractLevelUpItemReward {
 	
 	
 	public LevelUpItemRewardInventorySlot() {
-		super(1, 1, "Add 1 inventory\nslot", "Added 1 slot \nin inventory");
+		super(1, 1, "Add 1 inventory slot", "Added 1 slot in inventory");
 		this.type = LevelUpRewardEnum.INVENTORY_SLOT;
 	}
 

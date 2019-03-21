@@ -19,7 +19,7 @@ public class LevelUpStatsUpRewardItemThrowRangeUp extends AbstractLevelUpStatsUp
 	
 	
 	public LevelUpStatsUpRewardItemThrowRangeUp() {
-		super(1, 1, "Increase max range of\nitem throw by 1", "Item throw range \nincreased by #");
+		super(1, 1, "Increase max range of item throw by 1", "Item throw range increased by #");
 		this.type = LevelUpRewardEnum.ITEM_THROW_RANGE_UP;
 	}
 

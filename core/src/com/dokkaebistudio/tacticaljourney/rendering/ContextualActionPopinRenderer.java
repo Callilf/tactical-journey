@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -191,8 +191,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-		mainPopin.setBackground(textureRegionDrawable);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		mainPopin.setBackground(ninePatchDrawable);
 		
 		mainPopin.align(Align.top);
 		
@@ -204,14 +204,14 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		// 2 - Description
 		desc = new Label("Description", PopinService.hudStyle());
 		desc.setWrap(true);
-		mainPopin.add(desc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+		mainPopin.add(desc).growY().width(900).left().pad(0, 20, 0, 20);
 		mainPopin.row();
 		
 		// 4 - Action buttons
 		Table buttonTable = new Table();
 		
 		// 4.1 - No button
-		final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -222,7 +222,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
 		// 4.2 - Yes button
-		yesBtn = new TextButton("Loot",PopinService.bigButtonStyle());			
+		yesBtn = new TextButton("Loot",PopinService.buttonStyle());			
 		buttonTable.add(yesBtn).pad(0, 20,0,20);
 		
 		mainPopin.add(buttonTable).pad(20, 0, 20, 0);

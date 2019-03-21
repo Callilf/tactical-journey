@@ -1,9 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
  * Marker to indicate that this entity is a dialog popin
@@ -12,18 +11,16 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class DialogComponent implements Component, Poolable {
 
-	private Vector2 pos;
+	private String speaker;
 	private String text;
 	private float currentDuration;
 	private float duration;
-	
-	private Table table;
+	private Room room;
 	
 	@Override
 	public void reset() {
 		currentDuration = 0f;
 		duration = 0f;
-		table = null;
 	}
 	
 	
@@ -42,23 +39,32 @@ public class DialogComponent implements Component, Poolable {
 	public void setDuration(float duration) {
 		this.duration = duration;
 	}
-	public Vector2 getPos() {
-		return pos;
-	}
-	public void setPos(Vector2 pos) {
-		this.pos = pos;
-	}
+
 	public float getCurrentDuration() {
 		return currentDuration;
 	}
 	public void setCurrentDuration(float currentDuration) {
 		this.currentDuration = currentDuration;
 	}
-	public Table getTable() {
-		return table;
+
+
+	public Room getRoom() {
+		return room;
 	}
-	public void setTable(Table table) {
-		this.table = table;
+
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+
+	public String getSpeaker() {
+		return speaker;
+	}
+
+
+	public void setSpeaker(String speaker) {
+		this.speaker = speaker;
 	}
 	
 }

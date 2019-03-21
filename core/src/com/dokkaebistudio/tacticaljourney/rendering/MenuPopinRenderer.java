@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -38,7 +38,8 @@ public class MenuPopinRenderer implements Renderer {
     public void render(float deltaTime) {
     	
     	if (gamescreen.state == GameScreen.GAME_PAUSED) {
-    		
+    		RoomRenderer.showBlackFilter();
+
     		if (!menuDisplayed) {
     			//Init the menu
     			initTable();
@@ -72,8 +73,9 @@ public class MenuPopinRenderer implements Renderer {
 			
 			// Place the popin and add the background texture
 			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.profile_background);
-			table.setBackground(textureRegionDrawable);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			ninePatchDrawable.setMinWidth(400);
+			table.setBackground(ninePatchDrawable);
 			
 			table.align(Align.top);
 			
@@ -85,18 +87,18 @@ public class MenuPopinRenderer implements Renderer {
 	
 			// 2 - Resume button
 			
-			final TextButton resumeBtn = new TextButton("Resume", PopinService.bigButtonStyle());			
+			final TextButton resumeBtn = new TextButton("Resume", PopinService.buttonStyle());			
 			resumeBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					closePopin();
 				}
 			});
-			table.add(resumeBtn).padBottom(20);
+			table.add(resumeBtn).minWidth(200).padBottom(20);
 			table.row();
 			
 			if (GameScreen.debugMode) {
-				final TextButton debugBtn = new TextButton("Debug", PopinService.bigButtonStyle());			
+				final TextButton debugBtn = new TextButton("Debug", PopinService.buttonStyle());			
 				debugBtn.addListener(new ChangeListener() {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
@@ -105,12 +107,12 @@ public class MenuPopinRenderer implements Renderer {
 						closePopin();
 					}
 				});
-				table.add(debugBtn).padBottom(20);
+				table.add(debugBtn).minWidth(200).padBottom(20);
 				table.row();
 			}
 			
 			// 3 - Return to menu
-			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.bigButtonStyle());			
+			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -118,11 +120,11 @@ public class MenuPopinRenderer implements Renderer {
 					closePopin();
 				}
 			});
-			table.add(mainMenuBtn).padBottom(20);
+			table.add(mainMenuBtn).minWidth(200).padBottom(20);
 			table.row();
 			
 			// 4 - Quit game
-			final TextButton quitBtn = new TextButton("Quit game", PopinService.bigButtonStyle());			
+			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
 			quitBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -142,7 +144,7 @@ public class MenuPopinRenderer implements Renderer {
 //				}
 //			});
 			
-			table.add(quitBtn).padBottom(20);
+			table.add(quitBtn).minWidth(200).padBottom(20);
 			
 			
 			// Place the popin properly
@@ -155,6 +157,8 @@ public class MenuPopinRenderer implements Renderer {
 	 * Close the popin and unpause the game.
 	 */
 	private void closePopin() {
+		RoomRenderer.hideBlackFilter();
+
 		table.remove();
 		menuDisplayed = false;
 		

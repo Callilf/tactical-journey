@@ -24,7 +24,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -36,11 +39,15 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class RoomRenderer implements Renderer, RoomSystem {
 
-	private Stage stage;
+	private static Stage stage;
 	private SpriteBatch batch;
 	private Comparator<Entity> comparator;
 	private OrthographicCamera cam;
 	private Array<Entity> renderQueue;
+	
+	public boolean showBlackFilter;
+	private static Image fullBackground;
+
 	
 	/** The current room. */
 	private Room room;
@@ -65,6 +72,10 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		this.batch = batch;
 		this.cam = camera;
 		this.room = room;
+		
+		fullBackground = new Image(Assets.menuBackground);
+		fullBackground.setPosition(0, 0);
+		fullBackground.addAction(Actions.alpha(0.5f));
 	}
 	
 	@Override
@@ -150,13 +161,22 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		
 		batch.end();
 		
-		
 		stage.act(deltaTime);
 		stage.draw();
-		
-		
+
 	}
 	
+	public static void showBlackFilter() {
+		if (fullBackground != null && stage != null) {
+			stage.addActor(fullBackground);
+		}
+	}
+	
+	public static void hideBlackFilter() {
+		if (fullBackground != null) {
+			fullBackground.remove();
+		}
+	}
 	
 	public OrthographicCamera getCamera() {
 		return cam;

@@ -54,7 +54,7 @@ public class JournalRenderer implements Renderer {
 		
 		smallBackground = new Image(Assets.journal_background);
 		smallBackground.setPosition(GameScreen.SCREEN_W - Assets.journal_background.getRegionWidth() - 5, 5);
-		smallBackground.addAction(Actions.alpha(0.5f));
+		smallBackground.addAction(Actions.alpha(0.75f));
 		stage.addActor(smallBackground);
 				
 		
@@ -65,12 +65,12 @@ public class JournalRenderer implements Renderer {
 		entries.setWrap(true);
 		entries.setWidth(Assets.journal_background.getRegionWidth() - 10);
 		entries.setAlignment(Align.left);
-		journalTable.add(entries).width(Assets.journal_background.getRegionWidth() - 10);
+		journalTable.add(entries).width(Assets.journal_background.getRegionWidth() - 20);
 //		roomsTable.setDebug(true);
 
 		scrollPane = new ScrollPane(journalTable);
 		scrollPane.setSmoothScrolling(true);
-		scrollPane.setBounds(smallBackground.getX() + 5, smallBackground.getY() + 5, Assets.journal_background.getRegionWidth() - 10, Assets.journal_background.getRegionHeight() - 10);
+		scrollPane.setBounds(smallBackground.getX() + 10, smallBackground.getY() + 5, Assets.journal_background.getRegionWidth() - 20, Assets.journal_background.getRegionHeight() - 10);
 //		scrollPane.addAction(Actions.alpha(0.5f));
 
 		stage.addActor(scrollPane);

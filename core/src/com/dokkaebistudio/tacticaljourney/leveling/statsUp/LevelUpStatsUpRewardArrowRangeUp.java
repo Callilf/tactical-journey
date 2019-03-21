@@ -19,7 +19,7 @@ public class LevelUpStatsUpRewardArrowRangeUp extends AbstractLevelUpStatsUpRewa
 	
 	
 	public LevelUpStatsUpRewardArrowRangeUp() {
-		super(1, 1, "Increase max range of\nrange weapon by 1", "Range weapon's range \nincreased by #");
+		super(1, 1, "Increase max range of bow by 1", "Bow's range increased by #");
 		this.type = LevelUpRewardEnum.ARROW_RANGE_UP;
 	}
 

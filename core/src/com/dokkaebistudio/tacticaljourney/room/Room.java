@@ -38,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
@@ -324,6 +325,12 @@ public class Room extends EntitySystem {
 		if (this.nextState != null) {
 			this.state = this.nextState;
 			this.nextState = null;
+			
+			if (this.state.isPopinDisplayed()) {
+				RoomRenderer.showBlackFilter();
+			} else {
+				RoomRenderer.hideBlackFilter();
+			}
 		}
 	}
 
@@ -536,12 +543,12 @@ public class Room extends EntitySystem {
 		return requestedDialog;
 	}
 
-	public void setRequestedDialog(String text, Vector2 pos) {
-		Dialog d = new Dialog(text, pos, false);
+	public void setRequestedDialog(String speaker, String text) {
+		Dialog d = new Dialog(speaker, text, false);
 		this.requestedDialog = d;
 	}
-	public void setRequestedDialog(String text, Vector2 pos, boolean force) {
-		Dialog d = new Dialog(text, pos, force);
+	public void setRequestedDialog(String speaker, String text, boolean force) {
+		Dialog d = new Dialog(speaker, text, force);
 		this.requestedDialog = d;
 	}
 

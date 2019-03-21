@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
@@ -79,8 +80,8 @@ public final class PlayerFactory {
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle("Capitaine Pitaine");
-		inspect.setDescription("It's actually you...");
+		inspect.setTitle("The Adventurer");
+		inspect.setDescription("You, apparently.");
 		playerEntity.add(inspect);
 		
 		// Player anim
@@ -217,8 +218,8 @@ public final class PlayerFactory {
 		shopKeeperEntity.flags = EntityFlagEnum.SHOPKEEPER.getFlag();
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle("Shop Keeper");
-		inspect.setDescription("Some random dude with a shop in the middle of a dungeon.");
+		inspect.setTitle(Descriptions.SHOPKEEPER_TITLE);
+		inspect.setDescription(Descriptions.SHOPKEEPER_DESCRIPTION);
 		shopKeeperEntity.add(inspect);
 
 		// Sprite

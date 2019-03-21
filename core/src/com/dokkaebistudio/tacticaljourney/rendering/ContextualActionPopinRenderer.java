@@ -2,7 +2,10 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -77,6 +80,18 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 
 			if (mainPopin == null) {
 				initTable();
+				
+    			// Close popin with ESCAPE
+	    		stage.addListener(new InputListener() {
+					@Override
+					public boolean keyUp(InputEvent event, int keycode) {
+						if (room.getState() == RoomState.CONTEXTUAL_ACTION_POPIN && keycode == Input.Keys.ESCAPE) {
+							closePopin();
+							return true;
+						}
+						return super.keyUp(event, keycode);
+					}
+				});
 			}
 			
 			updateContentForAction();

@@ -43,6 +43,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -67,10 +68,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public static Vector2 POS_ARROW_SPRITE = new Vector2(1050f,1000f);
 	public static Vector2 POS_BOMB_SPRITE = new Vector2(1230f,1000f);
 
-	public static Vector2 POS_PROFILE = new Vector2(640f, 30f);
+	public static Vector2 POS_PROFILE = new Vector2(640f, 20f);
 	public static Vector2 POS_INVENTORY = new Vector2(720f, 30f);
 	
-	public static Vector2 POS_SKILLS = new Vector2(1050f, 30f);
+	public static Vector2 POS_SKILLS = new Vector2(1050f, 20f);
 
 	public static Vector2 POS_FPS = new Vector2(5f, 130f);
 
@@ -380,7 +381,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
-			endTurnBtn = new TextButton("END TURN", PopinService.checkedButtonStyle());
+			endTurnBtn = new TextButton("END TURN\n(spacebar)", PopinService.checkedButtonStyle());
 			
 			endTurnBtn.addListener(new ChangeListener() {
 				@Override
@@ -421,7 +422,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				}
 			});
 
-			bottomLeftTable.add(endTurnBtn).width(165).height(110);
+			bottomLeftTable.add(endTurnBtn).width(180).height(110);
 			
 			bottomLeftTable.pack();
 			stage.addActor(bottomLeftTable);
@@ -492,6 +493,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			profileTable.setPosition(POS_PROFILE.x, POS_PROFILE.y);
 		
 			// Profile btn
+			Table profileButtonTable = new Table();
 			Drawable profileButtonUp = new SpriteDrawable(new Sprite(Assets.btn_profile));
 			Drawable profileButtonDown = new SpriteDrawable(
 					new Sprite(Assets.btn_profile_pushed));
@@ -505,10 +507,28 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
 				}
 			});
-			profileTable.add(profileBtn);
+			// P to open profile
+			stage.addListener(new InputListener() {
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.P) {
+						if (!profileBtn.isDisabled()) {
+							profileBtn.toggle();
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
+			});
+			profileButtonTable.add(profileBtn).center();
+			profileButtonTable.row();
+			Label profileShortcut = new Label(" (P)", PopinService.hudStyle());
+			profileButtonTable.add(profileShortcut).center();
+			profileTable.add(profileButtonTable);
 
 			
 			// Inventory btn
+			Table inventoryButtonTable = new Table();
 			Drawable inventoryButtonUp = new SpriteDrawable(new Sprite(Assets.btn_inventory));
 			Drawable inventoryButtonDown = new SpriteDrawable(
 					new Sprite(Assets.btn_inventory_pushed));
@@ -527,9 +547,27 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					}
 				}
 			});
-			profileTable.add(inventoryBtn);
+			// I to open inventory
+			stage.addListener(new InputListener() {
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.I) {
+						if (!inventoryBtn.isDisabled()) {
+							inventoryBtn.toggle();
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
+			});
+			inventoryButtonTable.add(inventoryBtn).center();
+			inventoryButtonTable.row();
+			Label inventoryShortcut = new Label(" (I)", PopinService.hudStyle());
+			inventoryButtonTable.add(inventoryShortcut).center();
+			profileTable.add(inventoryButtonTable);
 			
 			// inspect btn
+			Table inspectButtonTable = new Table();
 			Drawable inspectButtonUp = new SpriteDrawable(new Sprite(Assets.btn_inspect));
 			Drawable inspectButtonDown = new SpriteDrawable(new Sprite(Assets.btn_inspect_pushed));
 			Drawable inspectButtonChecked = new SpriteDrawable(new Sprite(Assets.btn_inspect_checked));
@@ -546,7 +584,25 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					}
 				}
 			});
-			profileTable.add(inspectBtn);
+			// L to inspect
+			stage.addListener(new InputListener() {
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.O) {
+						if (!inspectBtn.isDisabled()) {
+							inspectBtn.setProgrammaticChangeEvents(true);
+							inspectBtn.toggle();
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
+			});
+			inspectButtonTable.add(inspectBtn).center();
+			inspectButtonTable.row();
+			Label inspectShortcut = new Label(" (O)", PopinService.hudStyle());
+			inspectButtonTable.add(inspectShortcut).center();
+			profileTable.add(inspectButtonTable);
 
 			
 			profileTable.pack();
@@ -575,6 +631,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			skillsTable.setTouchable(Touchable.enabled);
 	
 			if (meleeSkillButton == null) {
+				Table meleeSkillButtonTable = new Table();
 				Drawable meleeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_attack));
 				Drawable meleeSkillButtonDown = new SpriteDrawable(
 						new Sprite(Assets.btn_skill_attack_pushed));
@@ -620,14 +677,20 @@ public class HUDRenderer implements Renderer, RoomSystem {
 						return super.keyUp(event, keycode);
 					}
 				});
-	
 				allSkillButtons.add(meleeSkillButton);
+
+				meleeSkillButtonTable.add(meleeSkillButton).center();
+				meleeSkillButtonTable.row();
+				Label meleeShortcut = new Label(" (1)", PopinService.hudStyle());
+				meleeSkillButtonTable.add(meleeShortcut).center();
+				skillsTable.add(meleeSkillButtonTable);
+
 			}
-			skillsTable.add(meleeSkillButton);
 			
 			
 	
 			if (rangeSkillButton == null) {
+				Table rangeSkillButtonTable = new Table();
 				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_bow));
 				Drawable rangeSkillButtonDown = new SpriteDrawable(
 						new Sprite(Assets.btn_skill_bow_pushed));
@@ -677,11 +740,17 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				});
 	
 				allSkillButtons.add(rangeSkillButton);
-				skillsTable.add(rangeSkillButton);
-
+				
+				
+				rangeSkillButtonTable.add(rangeSkillButton).center();
+				rangeSkillButtonTable.row();
+				Label rangeShortcut = new Label(" (2)", PopinService.hudStyle());
+				rangeSkillButtonTable.add(rangeShortcut).center();
+				skillsTable.add(rangeSkillButtonTable);
 			}			
 			
 			if (bombSkillButton == null) {
+				Table bombSkillButtonTable = new Table();
 				Drawable rangeSkillButtonUp = new SpriteDrawable(new Sprite(Assets.btn_skill_bomb));
 				Drawable rangeSkillButtonDown = new SpriteDrawable(
 						new Sprite(Assets.btn_skill_bomb_pushed));
@@ -731,7 +800,13 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				});
 
 				allSkillButtons.add(bombSkillButton);
-				skillsTable.add(bombSkillButton);
+				
+				
+				bombSkillButtonTable.add(bombSkillButton).center();
+				bombSkillButtonTable.row();
+				Label bombShortcut = new Label(" (3)", PopinService.hudStyle());
+				bombSkillButtonTable.add(bombShortcut).center();
+				skillsTable.add(bombSkillButtonTable);
 			}			
 
 	
@@ -779,6 +854,14 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 		if (canActivate) {
 			room.setNextState(RoomState.PLAYER_TARGETING_START);
+		} else {
+			//TODO improve
+			if (button == rangeSkillButton) {
+				healthComponent.healthChangeMap.put(HealthChangeEnum.HIT, "NO ARROW");
+			} else if (button == bombSkillButton) {
+				healthComponent.healthChangeMap.put(HealthChangeEnum.HIT, "NO BOMB");
+			}
+//			Journal.addEntry("[SCARLET]No ammos to activate the skill!");
 		}
 		return canActivate;
 	}

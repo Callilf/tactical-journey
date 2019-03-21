@@ -14,18 +14,18 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 		
 	static {
-		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 15));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 25));
 
-		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 20));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 20));
 		
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 2));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 15));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 12));
 
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10));
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));				
-		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10));	
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 20));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 20));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 20));				
+		itemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 20));	
 		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 5));	
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 7));

@@ -384,6 +384,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				public void changed(ChangeEvent event, Actor actor) {
 
 					if (room.getState().canEndTurn()) {
+						endTurnBtn.setChecked(false);
 						moveComponent.clearMovableTiles();
 						attackComponent.clearAttackableTiles();
 						room.turnManager.endPlayerTurn();
@@ -409,7 +410,6 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					if (keycode == Input.Keys.SPACE) {
 						if (!endTurnBtn.isDisabled()) {
 							endTurnBtn.setProgrammaticChangeEvents(true);
-
 							endTurnBtn.toggle();
 						}
 						return false;

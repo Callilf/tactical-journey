@@ -22,6 +22,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -81,6 +82,12 @@ public class Assets {
 	
 	//**********
 	// Popins
+	
+	public static NinePatch popinNinePatch;
+	public static NinePatch popinInnerNinePatch;
+	public static NinePatch buttonNinePatch;
+	public static NinePatch buttonPressedNinePatch;
+	public static NinePatch buttonDisabledNinePatch;
 	
 	public static AtlasRegion popin_big_btn_up;
 	public static AtlasRegion popin_big_btn_down;
@@ -409,6 +416,13 @@ public class Assets {
 		//**********
 		// Popins
 		
+		popinNinePatch = getNinePatch("popin", 17, 17, 17, 17);
+		popinInnerNinePatch = getNinePatch("popin_inner", 13, 13, 13, 13);
+		buttonNinePatch = getNinePatch("button", 17, 17, 17, 17);
+		buttonPressedNinePatch = getNinePatch("button_pressed", 17, 17, 17, 17);
+		buttonDisabledNinePatch = getNinePatch("button_disabled", 17, 17, 17, 17);
+		
+		
 		popin_big_btn_up = Assets.getTexture("hud_inventory_item_popin_btn_up");
 		popin_big_btn_down = Assets.getTexture("hud_inventory_item_popin_btn_down");
 		popin_small_btn_up = Assets.getTexture("hud_lvl_up_choice_claim_btn");
@@ -729,6 +743,11 @@ public class Assets {
 		}
 		return a;
 	}
+	
+	public static NinePatch getNinePatch(String file, int left, int right, int top, int bottom){
+		return new NinePatch(getTexture(file), left, right, top, bottom);
+	}
+	
 
 	private void registerMusic(String file) {
 		this.manager.load(file, Music.class);

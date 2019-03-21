@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -28,7 +29,6 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrb;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -54,8 +54,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	private InventoryComponent inventoryCompo;
 	/** The current lootable component. */
 	private LootableComponent lootableCompo;
-	/** The wallet component. */
-	private WalletComponent walletCompo;
         
     
     //***************************
@@ -82,7 +80,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     
     /** The inventory table. */
     private Table inventoryTable;
-    private Label money;
     private Table[] slots = new Table[16];
     private Image[] slotImages = new Image[16];
     private Label[] slotQuantities = new Label[16];
@@ -130,7 +127,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
-    		walletCompo = Mappers.walletComponent.get(player);
     	}
     	
     	
@@ -204,13 +200,15 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		lootTable.setTouchable(Touchable.enabled);
 		lootTable.addListener(new ClickListener() {});
 		
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_background);
-		lootTable.setBackground(lootBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(653);
+		ninePatchDrawable.setMinHeight(746);
+		lootTable.setBackground(ninePatchDrawable);
 		lootTable.align(Align.top);
 
 		// 1 - Title
 		lootTableTitle = new Label("Title", PopinService.hudStyle());
-		lootTable.add(lootTableTitle).uniformX().pad(40, 0, 40, 0);
+		lootTable.add(lootTableTitle).uniformX().pad(20, 0, 40, 0);
 		lootTable.row();
 		
 		// The table that will contain all loot items
@@ -220,12 +218,12 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		
 		//The scroll pane for the loot items
 		lootableItemsScroll = new ScrollPane(lootableItemsTable);
-		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(535);
+		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(530);
 		lootTable.row();
 		
 		Table btnTable = new Table();
 		
-		TextButton closeBtn = new TextButton("Close", PopinService.bigButtonStyle());
+		TextButton closeBtn = new TextButton("Close", PopinService.buttonStyle());
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -236,7 +234,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		btnTable.add(closeBtn).pad(0, 0, 0, 20);
 
 		
-		takeAllBtn = new TextButton("Take all", PopinService.bigButtonStyle());
+		takeAllBtn = new TextButton("Take all", PopinService.buttonStyle());
 		btnTable.add(takeAllBtn).pad(0, 20, 0, 0);
 		btnTable.pack();
 		
@@ -252,12 +250,15 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		Table oneItem = new Table();
 //		oneItem.setDebug(true);
 
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_lootable_item_background);
-		oneItem.setBackground(lootBackground);
+		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		ninePatchDrawable.setMinWidth(600);
+		ninePatchDrawable.setMinHeight(100);
+		oneItem.setBackground(ninePatchDrawable);
 		
 		oneItem.left();
 		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
-		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(0, 20, 0, 20);
+		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(-5, 0, -5, 20);
 		image.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -276,7 +277,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		});
 		
 		if (!(itemComponent.getItemType() instanceof ItemOrb)) {
-			TextButton takeBtn = new TextButton("Take", PopinService.smallButtonStyle());
+			TextButton takeBtn = new TextButton("Take", PopinService.buttonStyle());
 			takeBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -293,7 +294,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			if (inventoryCompo.isInventoryActionInProgress()) takeBtn.setDisabled(true);
 			lootTakeBtns.add(takeBtn);
 		
-			oneItem.add(takeBtn).padRight(20);
+			oneItem.add(takeBtn);
 		}
 		
 		oneItem.pack();
@@ -344,30 +345,20 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.inventory_background);
-		inventoryTable.setBackground(topBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(653);
+		ninePatchDrawable.setMinHeight(746);
+		inventoryTable.setBackground(ninePatchDrawable);
 		
 		inventoryTable.align(Align.top);
 		
-		// 1 - Title and money
+		// 1 - Title 
 		Table topTable = new Table();
-		topTable.add().width(Value.percentWidth(0.25f, inventoryTable));
-		
-		// 1.1 - Title
 		Label title = new Label("Inventory", PopinService.hudStyle());
 		title.setAlignment(Align.center);
-		topTable.add(title).width(Value.percentWidth(0.5f, inventoryTable));
+		topTable.add(title);
 		
-		// 1.2 - Money
-		Table moneyTable = new Table();
-		Image moneyImage = new Image(Assets.inventory_money);
-		moneyTable.add(moneyImage);
-		money = new Label("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
-		moneyTable.add(money);
-		money.setAlignment(Align.right);
-		topTable.add(moneyTable).width(Value.percentWidth(0.25f, inventoryTable));
-		
-		inventoryTable.add(topTable).uniformX().pad(20, 0, 20, 0);
+		inventoryTable.add(topTable).uniformX().pad(20, 0, 40, 0);
 		inventoryTable.row();
 		
 		
@@ -378,7 +369,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		for (int row = 0 ; row < 4 ; row++) {
 			for (int col=0 ; col<4 ; col++) {
 				Table slot = createSlot( index);
-				slotsTable.add(slot);
+				slotsTable.add(slot).pad(0, 5, 10, 5);
 				slots[index] = slot;
 				
 				index ++;
@@ -399,9 +390,11 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 //		slot.setDebug(true);
 
 		//Background
-		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
-		slot.setBackground(slotBackground);
-
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		ninePatchDrawable.setMinWidth(140);
+		ninePatchDrawable.setMinHeight(140);
+		slot.setBackground(ninePatchDrawable);
+		
 		final Stack slotStack = new Stack();
 
 		Table imageStackTable = new Table();
@@ -417,7 +410,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		slotStack.add(quantity);
 
 		//Add the drop button
-		final TextButton dropBtn = new TextButton("Drop", PopinService.smallButtonStyle());
+		final TextButton dropBtn = new TextButton("Drop", PopinService.buttonStyle());
 		slotDropBtns[index] = dropBtn;
 		inventoryDropButtons.add(dropBtn);
 		dropBtn.setVisible(false);
@@ -426,7 +419,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		slotStackTable.setTouchable(Touchable.childrenOnly);
 		slotStackTable.add(dropBtn);
 		slotStack.add(slotStackTable);
-		slot.add(slotStack);
+		slot.add(slotStack).pad(-5, -5, -5, -5);
 
 		slot.pack();
 		return slot;
@@ -434,7 +427,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 	
 	private void refreshInventory() {
-		money.setText("[GOLD]" + walletCompo.getAmount());
 		for(int i=0 ; i<slots.length ; i++) {
 			final Table slot = slots[i];
 			Image image = slotImages[i];
@@ -517,8 +509,8 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-			selectedItemPopin.setBackground(textureRegionDrawable);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			selectedItemPopin.setBackground(ninePatchDrawable);
 			
 			selectedItemPopin.align(Align.top);
 			
@@ -530,14 +522,14 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			// 2 - Description
 			itemDesc = new Label("Description", PopinService.hudStyle());
 			itemDesc.setWrap(true);
-			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.add(itemDesc).growY().width(900).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 			
 			// 3 - Action buttons
 			Table buttonTable = new Table();
 			
 			// 3.1 - Close button
-			final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+			final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 			// continueButton listener
 			closeBtn.addListener(new ChangeListener() {
 				@Override

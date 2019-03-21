@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -203,8 +204,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.inventory_background);
-		inventoryTable.setBackground(topBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(653);
+		ninePatchDrawable.setMinHeight(746);
+		inventoryTable.setBackground(ninePatchDrawable);
+
 		
 		inventoryTable.align(Align.top);
 		
@@ -214,16 +218,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		title.setAlignment(Align.center);
 		topTable.add(title);
 		
-//		// 1.2 - Money
-//		Table moneyTable = new Table();
-//		Image moneyImage = new Image(Assets.getTexture(Assets.inventory_money));
-//		moneyTable.add(moneyImage);
-//		money = new Label("[GOLD]" + walletCompo.getAmount(), PopinService.hudStyle());
-//		moneyTable.add(money);
-//		money.setAlignment(Align.right);
-//		topTable.add(moneyTable).width(Value.percentWidth(0.25f, inventoryTable));
-		
-		inventoryTable.add(topTable).uniformX().pad(40, 0, 40, 0);
+		inventoryTable.add(topTable).uniformX().pad(20, 0, 40, 0);
 		inventoryTable.row();
 		
 		
@@ -234,7 +229,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		for (int row = 0 ; row < 4 ; row++) {
 			for (int col=0 ; col<4 ; col++) {
 				Table slot = createSlot( index);
-				slotsTable.add(slot);
+				slotsTable.add(slot).pad(0, 5, 10, 5);
 				slots[index] = slot;
 				
 				index ++;
@@ -258,8 +253,10 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 //		slot.setDebug(true);
 
 		//Background
-		TextureRegionDrawable slotBackground = new TextureRegionDrawable(Assets.inventory_slot);
-		slot.setBackground(slotBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		ninePatchDrawable.setMinWidth(140);
+		ninePatchDrawable.setMinHeight(140);
+		slot.setBackground(ninePatchDrawable);
 
 		Stack imageStack = new Stack();
 
@@ -272,7 +269,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		slotQuantities[index] = quantity;
 		imageStack.add(quantity);
 		
-		slot.add(imageStack).expand();
+		slot.add(imageStack).expand().pad(-5, -5, -5, -5);
 		
 		slot.pack();
 		return slot;
@@ -304,8 +301,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-			selectedItemPopin.setBackground(textureRegionDrawable);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			selectedItemPopin.setBackground(ninePatchDrawable);
 			
 			selectedItemPopin.align(Align.top);
 			
@@ -317,14 +314,14 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			// 2 - Description
 			itemDesc = new Label("Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller. Un test de description d'idem qui est assez long pour voir jusqu'ou on peut aller.", PopinService.hudStyle());
 			itemDesc.setWrap(true);
-			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.add(itemDesc).growY().width(900).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 			
 			// 3 - Action buttons
 			Table buttonTable = new Table();
 			
 			// 3.1 - Close button
-			final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+			final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 			// continueButton listener
 			closeBtn.addListener(new ChangeListener() {
 				@Override
@@ -335,15 +332,15 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			buttonTable.add(closeBtn).pad(0, 20,0,20);
 			
 			// 3.2 - Drop button
-			dropItemBtn = new TextButton("Drop",PopinService.bigButtonStyle());			
+			dropItemBtn = new TextButton("Drop",PopinService.buttonStyle());			
 			buttonTable.add(dropItemBtn).pad(0, 20,0,20);
 
 			// 3.3 - Use button
-			useItemBtn = new TextButton("Use",PopinService.bigButtonStyle());			
+			useItemBtn = new TextButton("Use",PopinService.buttonStyle());			
 			buttonTable.add(useItemBtn).pad(0, 20,0,20);
 			
 			// 3.4 - Throw button
-			throwItemBtn = new TextButton("Throw",PopinService.bigButtonStyle());		
+			throwItemBtn = new TextButton("Throw",PopinService.buttonStyle());		
 			buttonTable.add(throwItemBtn).pad(0, 20,0,20);
 
 			

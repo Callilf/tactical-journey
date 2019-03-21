@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 
@@ -18,6 +19,7 @@ public class PopinService {
     
 	private LabelStyle hudStyle;
 	private LabelStyle smallTextStyle;
+    private TextButtonStyle buttonStyle;
     private TextButtonStyle bigButtonStyle;
     private TextButtonStyle smallButtonStyle;
     private TextButtonStyle smallButtonCheckedStyle;
@@ -27,6 +29,13 @@ public class PopinService {
 		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
 		smallTextStyle = new LabelStyle(Assets.smallFont, Color.WHITE);
 
+		
+		Drawable npBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
+		Drawable npBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
+		Drawable npBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
+		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, Assets.font);
+		buttonStyle.disabled = npBtnDisabled;
+		
 		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up));
 		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down));
 		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up);
@@ -53,9 +62,16 @@ public class PopinService {
     	return instance.hudStyle;
     }
     
+    
+    
     public static LabelStyle smallTextStyle() {
     	if (instance == null) instance = new PopinService();
     	return instance.smallTextStyle;
+    }
+    
+    public static TextButtonStyle buttonStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.buttonStyle;
     }
     
     public static TextButtonStyle bigButtonStyle() {

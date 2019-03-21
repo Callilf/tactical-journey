@@ -79,8 +79,8 @@ public final class PlayerFactory {
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle("Capitaine Pitaine");
-		inspect.setDescription("It's actually you...");
+		inspect.setTitle("The Adventurer");
+		inspect.setDescription("You, apparently.");
 		playerEntity.add(inspect);
 		
 		// Player anim

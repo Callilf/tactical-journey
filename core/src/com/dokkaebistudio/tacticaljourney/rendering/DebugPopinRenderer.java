@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -161,13 +162,15 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootTable.setTouchable(Touchable.enabled);
 		lootTable.addListener(new ClickListener() {});
 		
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_background);
-		lootTable.setBackground(lootBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(653);
+		ninePatchDrawable.setMinHeight(746);
+		lootTable.setBackground(ninePatchDrawable);
 		lootTable.align(Align.top);
 
 		// 1 - Title
 		lootTableTitle = new Label("Get item", PopinService.hudStyle());
-		lootTable.add(lootTableTitle).uniformX().pad(40, 0, 40, 0);
+		lootTable.add(lootTableTitle).uniformX().pad(20, 0, 40, 0);
 		lootTable.row();
 		
 		// The table that will contain all loot items
@@ -177,12 +180,12 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		//The scroll pane for the loot items
 		lootableItemsScroll = new ScrollPane(lootableItemsTable);
-		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(535);
+		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(530);
 		lootTable.row();
 		
 		Table btnTable = new Table();
 		
-		TextButton closeBtn = new TextButton("Close", PopinService.bigButtonStyle());
+		TextButton closeBtn = new TextButton("Close", PopinService.buttonStyle());
 		// Close listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -220,12 +223,14 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		Table oneItem = new Table();
 //		oneItem.setDebug(true);
 
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_lootable_item_background);
-		oneItem.setBackground(lootBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		ninePatchDrawable.setMinWidth(600);
+		ninePatchDrawable.setMinHeight(100);
+		oneItem.setBackground(ninePatchDrawable);
 		
 		oneItem.left();
 		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
-		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(0, 20, 0, 20);
+		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(-5, 0, -5, 20);
 		image.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -243,7 +248,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		
-		TextButton takeBtn = new TextButton("Take", PopinService.smallButtonStyle());
+		TextButton takeBtn = new TextButton("Take", PopinService.buttonStyle());
 		takeBtn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -259,7 +264,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		
-		oneItem.add(takeBtn).padRight(20);
+		oneItem.add(takeBtn);
 		
 		oneItem.pack();
 		return oneItem;
@@ -285,8 +290,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-			selectedItemPopin.setBackground(textureRegionDrawable);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			selectedItemPopin.setBackground(ninePatchDrawable);
 			
 			selectedItemPopin.align(Align.top);
 			
@@ -298,14 +303,14 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			// 2 - Description
 			itemDesc = new Label("Description", PopinService.hudStyle());
 			itemDesc.setWrap(true);
-			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.add(itemDesc).growY().width(900).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 			
 			// 3 - Action buttons
 			Table buttonTable = new Table();
 			
 			// 3.1 - Close button
-			final TextButton closeBtn = new TextButton("Close",PopinService.bigButtonStyle());			
+			final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 			// continueButton listener
 			closeBtn.addListener(new ChangeListener() {
 				@Override
@@ -349,8 +354,10 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		debugTable.setTouchable(Touchable.enabled);
 		debugTable.addListener(new ClickListener() {});
 		
-		TextureRegionDrawable lootBackground = new TextureRegionDrawable(Assets.inventory_background);
-		debugTable.setBackground(lootBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(653);
+		ninePatchDrawable.setMinHeight(746);
+		debugTable.setBackground(ninePatchDrawable);
 		debugTable.align(Align.top);
 
 		// 1 - Title
@@ -375,7 +382,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		// Add all options here
 		
 		// Mapping
-		TextButton fullMap = new TextButton("Show full map", PopinService.bigButtonStyle());
+		TextButton fullMap = new TextButton("Show full map", PopinService.buttonStyle());
 		fullMap.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -387,7 +394,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		// Kill all
-		TextButton killAll = new TextButton("Kill all enemies", PopinService.bigButtonStyle());
+		TextButton killAll = new TextButton("Kill all enemies", PopinService.buttonStyle());
 		killAll.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -408,7 +415,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table healthTable = new Table();
-		TextButton healthDown = new TextButton("HP -5", PopinService.bigButtonStyle());
+		TextButton healthDown = new TextButton("HP -5", PopinService.buttonStyle());
 		healthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -417,7 +424,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		healthTable.add(healthDown).padRight(20);
-		TextButton healthUp = new TextButton("HP +5", PopinService.bigButtonStyle());
+		TextButton healthUp = new TextButton("HP +5", PopinService.buttonStyle());
 		healthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -431,7 +438,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		// HP MAX
 		Table maxHealthTable = new Table();
-		TextButton maxHealthDown = new TextButton("HP Max -5", PopinService.bigButtonStyle());
+		TextButton maxHealthDown = new TextButton("HP Max -5", PopinService.buttonStyle());
 		maxHealthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -440,7 +447,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		maxHealthTable.add(maxHealthDown).padRight(20);
-		TextButton maxHealthUp = new TextButton("HP Max +5", PopinService.bigButtonStyle());
+		TextButton maxHealthUp = new TextButton("HP Max +5", PopinService.buttonStyle());
 		maxHealthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -458,7 +465,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table armorTable = new Table();
-		TextButton armorDown = new TextButton("Armor -5", PopinService.bigButtonStyle());
+		TextButton armorDown = new TextButton("Armor -5", PopinService.buttonStyle());
 		armorDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -467,7 +474,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		armorTable.add(armorDown).padRight(20);
-		TextButton armorUp = new TextButton("Armor +5", PopinService.bigButtonStyle());
+		TextButton armorUp = new TextButton("Armor +5", PopinService.buttonStyle());
 		armorUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -481,7 +488,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		// ARMOR MAX
 		Table maxArmorTable = new Table();
-		TextButton maxArmorDown = new TextButton("Armor Max -5", PopinService.bigButtonStyle());
+		TextButton maxArmorDown = new TextButton("Armor Max -5", PopinService.buttonStyle());
 		maxArmorDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -490,7 +497,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		maxArmorTable.add(maxArmorDown).padRight(20);
-		TextButton maxArmorUp = new TextButton("Armor Max +5", PopinService.bigButtonStyle());
+		TextButton maxArmorUp = new TextButton("Armor Max +5", PopinService.buttonStyle());
 		maxArmorUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -509,7 +516,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table xpTable = new Table();
-		TextButton xpUp = new TextButton("XP +10", PopinService.bigButtonStyle());
+		TextButton xpUp = new TextButton("XP +10", PopinService.buttonStyle());
 		xpUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -518,7 +525,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		xpTable.add(xpUp).padRight(20);
-		TextButton xpUpUp = new TextButton("XP +50", PopinService.bigButtonStyle());
+		TextButton xpUpUp = new TextButton("XP +50", PopinService.buttonStyle());
 		xpUpUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -537,7 +544,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 
 		Table strengthTable = new Table();
-		TextButton strengthDown = new TextButton("Strength -1", PopinService.bigButtonStyle());
+		TextButton strengthDown = new TextButton("Strength -1", PopinService.buttonStyle());
 		strengthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -546,7 +553,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		strengthTable.add(strengthDown).padRight(20);
-		TextButton strengthUp = new TextButton("Strength +1", PopinService.bigButtonStyle());
+		TextButton strengthUp = new TextButton("Strength +1", PopinService.buttonStyle());
 		strengthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -559,7 +566,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table accuracyTable = new Table();
-		TextButton accuracyDown = new TextButton("Melee accuracy -1", PopinService.bigButtonStyle());
+		TextButton accuracyDown = new TextButton("Melee accuracy -1", PopinService.buttonStyle());
 		accuracyDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -568,7 +575,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		accuracyTable.add(accuracyDown).padRight(20);
-		TextButton accuracyUp = new TextButton("Melee accuracy +1", PopinService.bigButtonStyle());
+		TextButton accuracyUp = new TextButton("Melee accuracy +1", PopinService.buttonStyle());
 		accuracyUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -581,7 +588,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table moveTable = new Table();
-		TextButton moveDown = new TextButton("Move -1", PopinService.bigButtonStyle());
+		TextButton moveDown = new TextButton("Move -1", PopinService.buttonStyle());
 		moveDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -590,7 +597,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		moveTable.add(moveDown).padRight(20);
-		TextButton moveUp = new TextButton("Move +1", PopinService.bigButtonStyle());
+		TextButton moveUp = new TextButton("Move +1", PopinService.buttonStyle());
 		moveUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -609,7 +616,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 
 		Table bowRangeTable = new Table();
-		TextButton bowRangeDown = new TextButton("Bow range -1", PopinService.bigButtonStyle());
+		TextButton bowRangeDown = new TextButton("Bow range -1", PopinService.buttonStyle());
 		bowRangeDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -618,7 +625,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bowRangeTable.add(bowRangeDown).padRight(20);
-		TextButton bowRangeUp = new TextButton("Bow range +1", PopinService.bigButtonStyle());
+		TextButton bowRangeUp = new TextButton("Bow range +1", PopinService.buttonStyle());
 		bowRangeUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -631,7 +638,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table bowDamageTable = new Table();
-		TextButton bowDamageDown = new TextButton("Bow damage -1", PopinService.bigButtonStyle());
+		TextButton bowDamageDown = new TextButton("Bow damage -1", PopinService.buttonStyle());
 		bowDamageDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -640,7 +647,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bowDamageTable.add(bowDamageDown).padRight(20);
-		TextButton bowDamageUp = new TextButton("Bow damage +1", PopinService.bigButtonStyle());
+		TextButton bowDamageUp = new TextButton("Bow damage +1", PopinService.buttonStyle());
 		bowDamageUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -653,7 +660,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table bowAccuracyTable = new Table();
-		TextButton bowAccuracyDown = new TextButton("Bow accuracy -1", PopinService.bigButtonStyle());
+		TextButton bowAccuracyDown = new TextButton("Bow accuracy -1", PopinService.buttonStyle());
 		bowAccuracyDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -662,7 +669,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bowAccuracyTable.add(bowAccuracyDown).padRight(20);
-		TextButton bowAccuracyUp = new TextButton("Bow accuracy +1", PopinService.bigButtonStyle());
+		TextButton bowAccuracyUp = new TextButton("Bow accuracy +1", PopinService.buttonStyle());
 		bowAccuracyUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -682,7 +689,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 
 		Table bombThrowRangeTable = new Table();
-		TextButton bombThrowRangeDown = new TextButton("Bomb throw rg -1", PopinService.bigButtonStyle());
+		TextButton bombThrowRangeDown = new TextButton("Bomb throw rg -1", PopinService.buttonStyle());
 		bombThrowRangeDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -691,7 +698,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bombThrowRangeTable.add(bombThrowRangeDown).padRight(20);
-		TextButton bombThrowRangeUp = new TextButton("Bomb throw rg +1", PopinService.bigButtonStyle());
+		TextButton bombThrowRangeUp = new TextButton("Bomb throw rg +1", PopinService.buttonStyle());
 		bombThrowRangeUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -704,7 +711,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table bombDamageTable = new Table();
-		TextButton bombDamageDown = new TextButton("Bomb damage -1", PopinService.bigButtonStyle());
+		TextButton bombDamageDown = new TextButton("Bomb damage -1", PopinService.buttonStyle());
 		bombDamageDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -713,7 +720,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bombDamageTable.add(bombDamageDown).padRight(20);
-		TextButton bombDamageUp = new TextButton("Bomb damage +1", PopinService.bigButtonStyle());
+		TextButton bombDamageUp = new TextButton("Bomb damage +1", PopinService.buttonStyle());
 		bombDamageUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -726,7 +733,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table bombFuseTable = new Table();
-		TextButton bombFuseDown = new TextButton("Bomb fuse -1", PopinService.bigButtonStyle());
+		TextButton bombFuseDown = new TextButton("Bomb fuse -1", PopinService.buttonStyle());
 		bombFuseDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -735,7 +742,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bombFuseTable.add(bombFuseDown).padRight(20);
-		TextButton bombFuseUp = new TextButton("Bomb fuse +1", PopinService.bigButtonStyle());
+		TextButton bombFuseUp = new TextButton("Bomb fuse +1", PopinService.buttonStyle());
 		bombFuseUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -748,7 +755,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		Table bombRadiusTable = new Table();
-		TextButton bombRadiusDown = new TextButton("Bomb radius -1", PopinService.bigButtonStyle());
+		TextButton bombRadiusDown = new TextButton("Bomb radius -1", PopinService.buttonStyle());
 		bombRadiusDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -757,7 +764,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		bombRadiusTable.add(bombRadiusDown).padRight(20);
-		TextButton bombRadiusUp = new TextButton("Bomb radius +1", PopinService.bigButtonStyle());
+		TextButton bombRadiusUp = new TextButton("Bomb radius +1", PopinService.buttonStyle());
 		bombRadiusUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -777,7 +784,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		// Poison
 		Table poisonResistTable = new Table();
-		TextButton poisonResistDown = new TextButton("Poison resist -50", PopinService.bigButtonStyle());
+		TextButton poisonResistDown = new TextButton("Poison resist -50", PopinService.buttonStyle());
 		poisonResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -786,7 +793,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		poisonResistTable.add(poisonResistDown).padRight(20);
-		TextButton poisonResistUp = new TextButton("Poison resist +50", PopinService.bigButtonStyle());
+		TextButton poisonResistUp = new TextButton("Poison resist +50", PopinService.buttonStyle());
 		poisonResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -800,7 +807,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		// Fire
 		Table fireResistTable = new Table();
-		TextButton fireResistDown = new TextButton("Fire resist -10", PopinService.bigButtonStyle());
+		TextButton fireResistDown = new TextButton("Fire resist -10", PopinService.buttonStyle());
 		fireResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -809,7 +816,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		fireResistTable.add(fireResistDown).padRight(20);
-		TextButton fireResistUp = new TextButton("Fire resist +10", PopinService.bigButtonStyle());
+		TextButton fireResistUp = new TextButton("Fire resist +10", PopinService.buttonStyle());
 		fireResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -823,7 +830,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		
 		// Explosion
 		Table explosionResistTable = new Table();
-		TextButton explosionResistDown = new TextButton("Expl. resist -10", PopinService.bigButtonStyle());
+		TextButton explosionResistDown = new TextButton("Expl. resist -10", PopinService.buttonStyle());
 		explosionResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -832,7 +839,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		explosionResistTable.add(explosionResistDown).padRight(20);
-		TextButton explosionResistUp = new TextButton("Expl. resist +10", PopinService.bigButtonStyle());
+		TextButton explosionResistUp = new TextButton("Expl. resist +10", PopinService.buttonStyle());
 		explosionResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -850,7 +857,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(tpLabel).padBottom(20);
 		optionsTable.row();
 		
-		TextButton nextFloor = new TextButton("Go to next floor", PopinService.bigButtonStyle());
+		TextButton nextFloor = new TextButton("Go to next floor", PopinService.buttonStyle());
 		nextFloor.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -860,7 +867,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(nextFloor).padBottom(20);
 		optionsTable.row();
 
-		TextButton itemRoom = new TextButton("Go to item room", PopinService.bigButtonStyle());
+		TextButton itemRoom = new TextButton("Go to item room", PopinService.buttonStyle());
 		itemRoom.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -873,7 +880,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(itemRoom).padBottom(20);
 		optionsTable.row();
 
-		TextButton shopRoom = new TextButton("Go to shop", PopinService.bigButtonStyle());
+		TextButton shopRoom = new TextButton("Go to shop", PopinService.buttonStyle());
 		shopRoom.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -886,7 +893,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(shopRoom).padBottom(20);
 		optionsTable.row();
 
-		TextButton statueRoom = new TextButton("Go to statue", PopinService.bigButtonStyle());
+		TextButton statueRoom = new TextButton("Go to statue", PopinService.buttonStyle());
 		statueRoom.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -899,7 +906,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(statueRoom).padBottom(20);
 		optionsTable.row();
 
-		TextButton keyRoom = new TextButton("Go to key", PopinService.bigButtonStyle());
+		TextButton keyRoom = new TextButton("Go to key", PopinService.buttonStyle());
 		keyRoom.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -912,7 +919,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(keyRoom).padBottom(20);
 		optionsTable.row();
 
-		TextButton exitRoom = new TextButton("Go to exit", PopinService.bigButtonStyle());
+		TextButton exitRoom = new TextButton("Go to exit", PopinService.buttonStyle());
 		exitRoom.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

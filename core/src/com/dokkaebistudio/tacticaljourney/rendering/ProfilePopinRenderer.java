@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -191,8 +191,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initProfileTable() {
 		profileTable = new Table();
 		
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
-		profileTable.setBackground(topBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(500);
+		ninePatchDrawable.setMinHeight(680);
+		profileTable.setBackground(ninePatchDrawable);
 		
 		profileTable.align(Align.top);
 		
@@ -270,7 +272,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		blessingList.clear();
 		for (Alteration blessing : alterationReceiverCompo.getBlessings()) {
 			Table oneBlessingTable = createOneAlteration(blessing);
-			blessingList.add(oneBlessingTable).fillX().pad(0, 15, 15, 15);
+			blessingList.add(oneBlessingTable).fillX().pad(0, 5, 15, 5);
 			blessingList.row();
 		}
 				
@@ -285,8 +287,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initBlessingTable() {
 		blessingTable = new Table();
 
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
-		blessingTable.setBackground(topBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(500);
+		ninePatchDrawable.setMinHeight(680);
+		blessingTable.setBackground(ninePatchDrawable);
 		
 		blessingTable.align(Align.top);
 		
@@ -301,7 +305,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		
 		//Scrollpane
 		blessingScroll = new ScrollPane(blessingList);
-		blessingTable.add(blessingScroll).fill().expand().maxHeight(590);
+		blessingTable.add(blessingScroll).fill().expand().maxHeight(580);
 		
 		mainTable.add(blessingTable).pad(0, 5, 0, 5);
 	}
@@ -315,7 +319,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseList.clear();
 		for (Alteration curse : alterationReceiverCompo.getCurses()) {
 			Table oneCurseTable = createOneAlteration(curse);
-			curseList.add(oneCurseTable).fillX().pad(0, 15, 15, 15);
+			curseList.add(oneCurseTable).fillX().pad(0, 5, 15, 5);
 			curseList.row();
 		}
 		
@@ -329,8 +333,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initCurseTable() {
 		curseTable = new Table();
 
-		TextureRegionDrawable topBackground = new TextureRegionDrawable(Assets.profile_background);
-		curseTable.setBackground(topBackground);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(500);
+		ninePatchDrawable.setMinHeight(680);
+		curseTable.setBackground(ninePatchDrawable);
 
 		curseTable.align(Align.top);
 
@@ -345,9 +351,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 		// Scrollpane
 		curseScroll = new ScrollPane(curseList);
-		curseTable.add(curseScroll).fill().expand().maxHeight(590);
+		curseTable.add(curseScroll).fill().expand().maxHeight(580);
 
-		mainTable.add(curseTable).pad(0, 5, 0, 5);
+		mainTable.add(curseTable);
 	}
 	
 	
@@ -358,8 +364,11 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	private Table createOneAlteration(Alteration alteration) {
 		Table oneAlterationTable = new Table();
-		TextureRegionDrawable background = new TextureRegionDrawable(Assets.profile_alteration_background);
-		oneAlterationTable.setBackground(background);
+		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		ninePatchDrawable.setMinWidth(455);
+		ninePatchDrawable.setMinHeight(102);
+		oneAlterationTable.setBackground(ninePatchDrawable);
 		
 		oneAlterationTable.align(Align.left);
 

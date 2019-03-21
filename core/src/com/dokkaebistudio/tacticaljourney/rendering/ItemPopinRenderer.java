@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -170,8 +170,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-		selectedItemPopin.setBackground(textureRegionDrawable);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		selectedItemPopin.setBackground(ninePatchDrawable);
 		
 		selectedItemPopin.align(Align.top);
 		
@@ -184,7 +184,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		if (itemComponent.getItemDescription() != null) {
 			itemDesc = new Label("Desc", PopinService.hudStyle());
 			itemDesc.setWrap(true);
-			selectedItemPopin.add(itemDesc).growY().width(textureRegionDrawable.getMinWidth()).left().pad(0, 20, 0, 20);
+			selectedItemPopin.add(itemDesc).growY().width(900).left().pad(0, 20, 0, 20);
 			selectedItemPopin.row();
 		}
 		
@@ -192,7 +192,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		Table buttonTable = new Table();
 		
 		// 3.1 - Close button
-		final TextButton closeBtn = new TextButton("Close", PopinService.bigButtonStyle());			
+		final TextButton closeBtn = new TextButton("Close", PopinService.buttonStyle());			
 		// continueButton listener
 		closeBtn.addListener(new ChangeListener() {
 			@Override
@@ -203,11 +203,11 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		buttonTable.add(closeBtn).pad(0, 20,0,20);
 
 		// 3.2 - Take button
-		pickupItemBtn = new TextButton("Take", PopinService.bigButtonStyle());			
+		pickupItemBtn = new TextButton("Take", PopinService.buttonStyle());			
 		buttonTable.add(pickupItemBtn).pad(0, 20,0,20);
 
 		// 3.3 - Use button
-		useItemBtn = new TextButton("Use", PopinService.bigButtonStyle());			
+		useItemBtn = new TextButton("Use", PopinService.buttonStyle());			
 		buttonTable.add(useItemBtn).pad(0, 20,0,20);
 		
 		selectedItemPopin.add(buttonTable).pad(20, 0, 20, 0);

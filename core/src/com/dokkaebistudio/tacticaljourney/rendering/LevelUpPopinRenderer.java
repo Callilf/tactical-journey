@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -88,8 +89,10 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		table.setTouchable(Touchable.childrenOnly);
 	    		
-	    		TextureRegionDrawable background = new TextureRegionDrawable(Assets.lvl_up_background);
-	    		table.setBackground(background);
+	    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+	    		ninePatchDrawable.setMinWidth(600);
+	    		ninePatchDrawable.setMinHeight(500);
+	    		table.setBackground(ninePatchDrawable);
 
 	    		
 	    		// TOP PART (labels)
@@ -171,7 +174,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			TextureRegionDrawable frame = new TextureRegionDrawable(Assets.lvl_up_choice_frame);
 			frameTable.setBackground(frame);
 			
-			final TextButton claimButton = new TextButton("Claim", PopinService.smallButtonStyle());
+			final TextButton claimButton = new TextButton("Claim", PopinService.buttonStyle());
 			claimButtons.add(claimButton);
 			
 			// continueButton listener
@@ -232,7 +235,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		Table popinBottom = new Table();
 		table.add(popinBottom).fillX().uniformX();
 		
-		continueButton = new TextButton("Skip", PopinService.bigButtonStyle());
+		continueButton = new TextButton("Skip", PopinService.buttonStyle());
 		continueButton.addListener(new ClickListener() {
 
 			@Override

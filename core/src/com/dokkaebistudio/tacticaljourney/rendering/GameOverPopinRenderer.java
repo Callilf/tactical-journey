@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -68,8 +69,8 @@ public class GameOverPopinRenderer implements Renderer {
 			
 			// Place the popin and add the background texture
 			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(Assets.inventory_item_popin_background);
-			table.setBackground(textureRegionDrawable);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			table.setBackground(ninePatchDrawable);
 			
 			table.align(Align.top);
 			
@@ -87,7 +88,7 @@ public class GameOverPopinRenderer implements Renderer {
 			Table buttonTable = new Table();
 			
 			// 3.1 - Quit button
-			final TextButton quitBtn = new TextButton("Quit game", PopinService.bigButtonStyle());			
+			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
 			quitBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -99,7 +100,7 @@ public class GameOverPopinRenderer implements Renderer {
 			buttonTable.add(quitBtn).pad(0, 20,0,20);
 
 			// 3.2 - Main menu button
-			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.bigButtonStyle());			
+			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {

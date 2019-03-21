@@ -14,11 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -103,13 +105,16 @@ public class MapRenderer implements Renderer {
 		Table mapTable = new Table();
 		mapTable.setPosition(GameScreen.SCREEN_W - Assets.map_panel.getRegionWidth() - 5, GameScreen.SCREEN_H - Assets.map_panel.getRegionHeight() - 5);
 		mapTable.setTouchable(Touchable.childrenOnly);
-		TextureRegionDrawable panelBackground = new TextureRegionDrawable(Assets.map_panel);
-		mapTable.setBackground(panelBackground);
 		
-		noMapBtn = new TextButton("None", PopinService.smallButtonCheckedStyle());
-		smallMapBtn = new TextButton("Small", PopinService.smallButtonCheckedStyle());
-		fullMapBtn = new TextButton("Full", PopinService.smallButtonCheckedStyle());
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable.setMinWidth(444);
+		ninePatchDrawable.setMinHeight(68);
+		mapTable.setBackground(ninePatchDrawable);
 		
+		noMapBtn = new TextButton("None", PopinService.checkedButtonStyle());
+		smallMapBtn = new TextButton("Small", PopinService.checkedButtonStyle());
+		fullMapBtn = new TextButton("Full", PopinService.checkedButtonStyle());
+
 		noMapBtn.setProgrammaticChangeEvents(false);
 		noMapBtn.addListener(new ChangeListener() {
 			@Override
@@ -182,11 +187,11 @@ public class MapRenderer implements Renderer {
 		});
 		
 		
-		
-		mapTable.add().width(65);
-		mapTable.add(noMapBtn).padRight(2);
-		mapTable.add(smallMapBtn).padRight(2);
-		mapTable.add(fullMapBtn);
+		Label mapTitle = new Label("MAP", PopinService.hudStyle());
+		mapTable.add(mapTitle).width(65).pad(-5, 0, -5, 10);
+		mapTable.add(noMapBtn).width(100).height(50).pad(-5, 0, -5, 10);
+		mapTable.add(smallMapBtn).width(100).height(50).pad(-5, 0, -5, 10);
+		mapTable.add(fullMapBtn).width(100).height(50).pad(-5, 0, -5, 0);;
 
 		mapTable.pack();
 		stage.addActor(mapTable);
@@ -198,7 +203,7 @@ public class MapRenderer implements Renderer {
 		scrollPane = new ScrollPane(roomsTable);
 		scrollPane.setTouchable(Touchable.disabled);
 		scrollPane.setSmoothScrolling(false);
-		scrollPane.setBounds(smallBackground.getX() + 5, smallBackground.getY() + 5, Assets.map_background.getRegionWidth() - 10, Assets.map_background.getRegionHeight() - 10);
+		scrollPane.setBounds(smallBackground.getX() + 12, smallBackground.getY() + 12, Assets.map_background.getRegionWidth() - 24, Assets.map_background.getRegionHeight() - 24);
 //		scrollPane.addAction(Actions.alpha(0.5f));
 
 		stage.addActor(scrollPane);

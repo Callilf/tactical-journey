@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -111,7 +112,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	// End turn, Health and Experience, profile
 	private Table bottomLeftTable; 
-	private Button endTurnBtn;
+	private TextButton endTurnBtn;
 	private Table healthTable;
 	private Label healthLabel;
 	private Label armorLabel;
@@ -377,10 +378,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.setPosition(POS_END_TURN_BTN.x, POS_END_TURN_BTN.y);
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
-			Drawable endTurnButtonUp = new SpriteDrawable(new Sprite(Assets.btn_end_turn));
-			Drawable endTurnButtonDown = new SpriteDrawable(new Sprite(Assets.btn_end_turn_pushed));
-			ButtonStyle endTurnButtonStyle = new ButtonStyle(endTurnButtonUp, endTurnButtonDown,null);
-			endTurnBtn = new Button(endTurnButtonStyle);
+			endTurnBtn = new TextButton("END TURN", PopinService.checkedButtonStyle());
 			
 			endTurnBtn.addListener(new ChangeListener() {
 				@Override
@@ -397,10 +395,22 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			
 			// Add shortcut to activate the end turn button
 			stage.addListener(new InputListener() {
+				public boolean keyDown(InputEvent event, int keycode) {
+					if (keycode == Input.Keys.SPACE) {
+						if (!endTurnBtn.isDisabled()) {
+							endTurnBtn.setProgrammaticChangeEvents(false);
+							endTurnBtn.setChecked(true);
+						}
+						return false;
+					}
+					return super.keyUp(event, keycode);
+				}
 				@Override
 				public boolean keyUp(InputEvent event, int keycode) {
 					if (keycode == Input.Keys.SPACE) {
 						if (!endTurnBtn.isDisabled()) {
+							endTurnBtn.setProgrammaticChangeEvents(true);
+
 							endTurnBtn.toggle();
 						}
 						return false;
@@ -409,7 +419,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				}
 			});
 
-			bottomLeftTable.add(endTurnBtn);
+			bottomLeftTable.add(endTurnBtn).width(165).height(110);
 			
 			bottomLeftTable.pack();
 			stage.addActor(bottomLeftTable);

@@ -20,6 +20,7 @@ public class PopinService {
 	private LabelStyle hudStyle;
 	private LabelStyle smallTextStyle;
     private TextButtonStyle buttonStyle;
+    private TextButtonStyle checkedButtonStyle;
     private TextButtonStyle bigButtonStyle;
     private TextButtonStyle smallButtonStyle;
     private TextButtonStyle smallButtonCheckedStyle;
@@ -35,6 +36,12 @@ public class PopinService {
 		Drawable npBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
 		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, Assets.font);
 		buttonStyle.disabled = npBtnDisabled;
+		
+		Drawable npCheckedBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
+		Drawable npCheckedBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
+		Drawable npCheckedBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
+		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, Assets.font);
+		checkedButtonStyle.disabled = npCheckedBtnDisabled;
 		
 		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up));
 		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down));
@@ -72,6 +79,11 @@ public class PopinService {
     public static TextButtonStyle buttonStyle() {
     	if (instance == null) instance = new PopinService();
     	return instance.buttonStyle;
+    }
+    
+    public static TextButtonStyle checkedButtonStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.checkedButtonStyle;
     }
     
     public static TextButtonStyle bigButtonStyle() {

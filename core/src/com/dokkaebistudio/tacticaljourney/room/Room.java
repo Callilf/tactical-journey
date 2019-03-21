@@ -536,12 +536,12 @@ public class Room extends EntitySystem {
 		return requestedDialog;
 	}
 
-	public void setRequestedDialog(String text, Vector2 pos) {
-		Dialog d = new Dialog(text, pos, false);
+	public void setRequestedDialog(String speaker, String text) {
+		Dialog d = new Dialog(speaker, text, false);
 		this.requestedDialog = d;
 	}
-	public void setRequestedDialog(String text, Vector2 pos, boolean force) {
-		Dialog d = new Dialog(text, pos, force);
+	public void setRequestedDialog(String speaker, String text, boolean force) {
+		Dialog d = new Dialog(speaker, text, force);
 		this.requestedDialog = d;
 	}
 

@@ -23,6 +23,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -90,7 +91,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 						
 					} else {
 						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-						room.setRequestedDialog(shopKeeperComponent.getSpeech(), gridPositionComponent.getWorldPos());
+						room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,shopKeeperComponent.getSpeech());
 					}
 				}
 				
@@ -113,7 +114,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 					shopKeeperComponent.restock(room);
 				} else {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-					room.setRequestedDialog("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), true);
+					room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,"Come back when you've got enough gold coins.", true);
 				}
 				
 				shopKeeperComponent.setRequestRestock(false);
@@ -153,12 +154,12 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				
 				// TEST
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-				room.setRequestedDialog("Good choice !", gridPositionComponent.getWorldPos(), true);
+				room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,"Good choice !",  true);
 			} else {
 				
 				// TEST
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
-				room.setRequestedDialog("Come back when you've got enough gold coins.", gridPositionComponent.getWorldPos(), true);
+				room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,"Come back when you've got enough gold coins.",  true);
 				playerInventoryCompo.setCurrentAction(null);
 			}
 			

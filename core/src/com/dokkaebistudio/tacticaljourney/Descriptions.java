@@ -2,6 +2,8 @@ package com.dokkaebistudio.tacticaljourney;
 
 public class Descriptions {
 	
+	
+	
 	public static final String HEAVY_WALL_TITLE = "Unbreakable Wall";
 	public static final String HEAVY_WALL_DESCRIPTION = "A ridiculously solid wall that cannot be destroyed.";
 
@@ -25,6 +27,11 @@ public class Descriptions {
 
 	public static final String CRATE_TITLE = "Crate";
 	public static final String CRATE_DESCRIPTION = "A crate that doesn't look very solid. It would probably break if you hit it.";
+
+	
+	// Neutrals
+	public static final String SHOPKEEPER_TITLE = "Shopkeeper";
+	public static final String SHOPKEEPER_DESCRIPTION = "Some random dude with a shop in the middle of a dungeon.";
 
 	
 	// Lootables

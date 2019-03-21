@@ -1,11 +1,9 @@
 package com.dokkaebistudio.tacticaljourney.dialog;
 
-import com.badlogic.gdx.math.Vector2;
-
 public class Dialog {
 
-	/** The position to display it. */
-	private Vector2 pos;
+	/** The speaker. */
+	private String speaker;
 	
 	/** The text. */
 	private String text;
@@ -17,9 +15,9 @@ public class Dialog {
 	private boolean forceDisplay = false;;
 	
 	
-	public Dialog(String text, Vector2 pos) {
+	public Dialog(String speaker, String text) {
 		this.text = text;
-		this.pos = pos;
+		this.speaker = speaker;
 		this.forceDisplay = false;
 		
 		if (text.length() > 0) {
@@ -28,8 +26,8 @@ public class Dialog {
 		}
 	}
 
-	public Dialog(String text, Vector2 pos, boolean forceDisplay) {
-		this(text, pos);
+	public Dialog(String speaker, String text, boolean forceDisplay) {
+		this(speaker, text);
 		this.forceDisplay = forceDisplay;
 	}
 	
@@ -37,13 +35,6 @@ public class Dialog {
 	
 	// Getters and setters
 
-	public Vector2 getPos() {
-		return pos;
-	}
-
-	public void setPos(Vector2 pos) {
-		this.pos = pos;
-	}
 
 	public String getText() {
 		return text;
@@ -67,6 +58,14 @@ public class Dialog {
 
 	public void setForceDisplay(boolean forceDisplay) {
 		this.forceDisplay = forceDisplay;
+	}
+
+	public String getSpeaker() {
+		return speaker;
+	}
+
+	public void setSpeaker(String speaker) {
+		this.speaker = speaker;
 	}
 	
 }

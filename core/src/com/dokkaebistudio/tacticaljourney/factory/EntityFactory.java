@@ -924,12 +924,13 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the dialog
 	 */
-	public Entity createDialogPopin(String text, Vector2 pos, float duration, Room room) {
+	public Entity createDialogPopin(String speaker, String text, float duration, Room room) {
 		Entity dialogEntity = engine.createEntity();
 		dialogEntity.flags = EntityFlagEnum.DIALOG_POPIN.getFlag();
 
 		DialogComponent dialogCompo = engine.createComponent(DialogComponent.class);
-		dialogCompo.setPos(pos);
+		dialogCompo.setRoom(room);
+		dialogCompo.setSpeaker(speaker);
 		dialogCompo.setDuration(duration);
 		dialogCompo.setText(text);
 		dialogEntity.add(dialogCompo);

@@ -40,6 +40,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.DialogRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.GameOverPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.InspectPopinRenderer;
@@ -207,6 +208,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new HUDRenderer(hudStage, player));
 		renderers.add(mapRenderer);
 		renderers.add(new JournalRenderer(journalStage));
+		renderers.add(new DialogRenderer(room, stage));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new InspectPopinRenderer(room, stage, player));
@@ -239,7 +241,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new StatusSystem(player, room, fxStage));
 		engine.addSystem(new ShopSystem(	player, room, fxStage));
 		engine.addSystem(new ContextualActionSystem(	player, room));
-		engine.addSystem(new DialogSystem(room, fxStage));
+		engine.addSystem(new DialogSystem(room));
 		engine.addSystem(new ExperienceSystem(room, stage));
 		engine.addSystem(new OrbSystem(player, room, stage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));

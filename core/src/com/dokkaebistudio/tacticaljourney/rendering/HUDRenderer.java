@@ -876,7 +876,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		this.roomClearedTable.pack();
 		this.roomClearedTable.addAction(Actions.sequence(Actions.alpha(0f),
 				Actions.fadeIn(1, Interpolation.pow5Out),
-				Actions.delay(2.5f),
+				Actions.delay(1.5f),
 				Actions.fadeOut(1, Interpolation.pow5In)));
 
 	}

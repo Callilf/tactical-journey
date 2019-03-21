@@ -45,7 +45,6 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	private OrthographicCamera cam;
 	private Array<Entity> renderQueue;
 	
-	public boolean showBlackFilter;
 	private static Image fullBackground;
 
 	

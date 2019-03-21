@@ -185,9 +185,12 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		}
 
 
-		stage.act(Gdx.graphics.getDeltaTime());
+		if (room.getState().updateNeeded()) {
+			// If pause, do not play "act" to prevent the room cleared popup to show while another popup is already displayed
+			stage.act(Gdx.graphics.getDeltaTime());
+		}
 		stage.draw();
-
+		
 	}
 
 	

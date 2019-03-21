@@ -434,6 +434,7 @@ public class GameScreen extends ScreenAdapter {
 		GameTimeSingleton.dispose();
 		RandomSingleton.dispose();
 		Journal.dispose();
+		AnimationSingleton.dispose();
 		super.dispose();
 	}
 }

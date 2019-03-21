@@ -24,10 +24,6 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatchelItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OrbBagItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**

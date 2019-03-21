@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -36,13 +37,10 @@ import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanSpear;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanTotem;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.orbs.OrbEnergy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanScoutSubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanShamanSubSystem;
@@ -94,7 +92,7 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.TRIBESMEN_SPEAR_STAND.getState(), AnimationsEnum.TRIBESMEN_SPEAR_STAND.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SPEAR_STAND.getState(), AnimationSingleton.getInstance().tribesmenSpearStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -184,7 +182,7 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.TRIBESMEN_SHIELD_STAND.getState(), AnimationsEnum.TRIBESMEN_SHIELD_STAND.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SHIELD_STAND.getState(), AnimationSingleton.getInstance().tribesmenShieldStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -276,7 +274,7 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.TRIBESMEN_SCOUT_STAND.getState(), AnimationsEnum.TRIBESMEN_SCOUT_STAND.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SCOUT_STAND.getState(), AnimationSingleton.getInstance().tribesmenScoutStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -370,8 +368,8 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState(), AnimationsEnum.TRIBESMEN_SHAMAN_STAND.getAnimation());
-		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState(), AnimationsEnum.TRIBESMEN_SHAMAN_SUMMONING.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState(), AnimationSingleton.getInstance().tribesmenShamanStand);
+		animCompo.animations.put(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState(), AnimationSingleton.getInstance().tribesmenShamanSummoning);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -463,7 +461,7 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.TRIBESMEN_TOTEM.getState(), AnimationsEnum.TRIBESMEN_TOTEM.getAnimation());
+		animCompo.animations.put(StatesEnum.TRIBESMEN_TOTEM.getState(), AnimationSingleton.getInstance().tribesmenTotem);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

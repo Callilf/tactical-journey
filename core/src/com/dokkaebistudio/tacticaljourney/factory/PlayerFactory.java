@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -36,11 +37,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.shops.BasicShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
@@ -93,9 +92,9 @@ public final class PlayerFactory {
 		playerEntity.add(stateCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.PLAYER_STANDING.getState(), AnimationsEnum.PLAYER_STANDING.getAnimation());
-		animCompo.animations.put(StatesEnum.PLAYER_RUNNING.getState(), AnimationsEnum.PLAYER_RUNNING.getAnimation());
-		animCompo.animations.put(StatesEnum.PLAYER_FLYING.getState(), AnimationsEnum.PLAYER_FLYING.getAnimation());
+		animCompo.animations.put(StatesEnum.PLAYER_STANDING.getState(), AnimationSingleton.getInstance().player_standing);
+		animCompo.animations.put(StatesEnum.PLAYER_RUNNING.getState(), AnimationSingleton.getInstance().player_running);
+		animCompo.animations.put(StatesEnum.PLAYER_FLYING.getState(), AnimationSingleton.getInstance().player_flying);
 		playerEntity.add(animCompo);
 		
 		// Grid position

@@ -5,15 +5,14 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -61,7 +60,7 @@ public final class EffectFactory {
 		explosion.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationsEnum.EXPLOSION.getAnimation());
+		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationSingleton.getInstance().explosion);
 		explosion.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

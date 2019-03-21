@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -32,14 +33,11 @@ import com.dokkaebistudio.tacticaljourney.enemies.EnemyScorpion;
 import com.dokkaebistudio.tacticaljourney.enemies.EnemyStinger;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
@@ -204,8 +202,8 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.STINGER_FLY.getState(), AnimationsEnum.STINGER_FLY.getAnimation());
-		animationCompo.animations.put(StatesEnum.STINGER_ATTACK.getState(), AnimationsEnum.STINGER_ATTACK.getAnimation());
+		animationCompo.animations.put(StatesEnum.STINGER_FLY.getState(), AnimationSingleton.getInstance().stingerFly);
+		animationCompo.animations.put(StatesEnum.STINGER_ATTACK.getState(), AnimationSingleton.getInstance().stingerAttack);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

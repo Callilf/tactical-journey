@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -43,7 +44,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
@@ -691,8 +691,8 @@ public final class EntityFactory {
 		bomb.add(explosionCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationsEnum.BOMB_SLOW.getAnimation());
-		animationCompo.animations.put(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationsEnum.BOMB_FAST.getAnimation());
+		animationCompo.animations.put(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationSingleton.getInstance().bomb_slow);
+		animationCompo.animations.put(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationSingleton.getInstance().bomb_fast);
 		bomb.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

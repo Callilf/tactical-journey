@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -30,14 +31,11 @@ import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinBaby;
 import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinMother;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
@@ -86,9 +84,9 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationsEnum.PANGOLIN_BABY_STAND.getAnimation());
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationsEnum.PANGOLIN_BABY_ROLLED.getAnimation());
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationsEnum.PANGOLIN_BABY_ROLLING.getAnimation());
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
+		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -178,9 +176,9 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_STAND.getState(), AnimationsEnum.PANGOLIN_MOTHER_STAND.getAnimation());
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState(), AnimationsEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getAnimation());
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_CRYING.getState(), AnimationsEnum.PANGOLIN_MOTHER_CRYING.getAnimation());
+		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
+		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_CRYING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -25,7 +26,6 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
-import com.dokkaebistudio.tacticaljourney.enums.AnimationsEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -151,7 +151,7 @@ public final class CreepFactory {
 		creepEntity.add(creepCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.FIRE_LOOP.getState(), AnimationsEnum.FIRE.getAnimation());
+		animationCompo.animations.put(StatesEnum.FIRE_LOOP.getState(), AnimationSingleton.getInstance().fire);
 		creepEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

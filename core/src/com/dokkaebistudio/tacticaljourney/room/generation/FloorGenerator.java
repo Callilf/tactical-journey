@@ -25,6 +25,9 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
  */
 public abstract class FloorGenerator {
 	
+	public static final int MIN_ROOM_NB = 17;
+	public static final int MAX_ROOM_NB = 25;
+	
 	protected RandomXS128 random;
 	private RoomGenerator roomGenerator;
 	
@@ -48,7 +51,7 @@ public abstract class FloorGenerator {
 		List<Room> rooms = new ArrayList<>();		
 		
 		// 1 - compute distance between start room and end room
-		int distanceStartToEnd = 3 + random.nextInt(4);
+		int distanceStartToEnd = 3 ;//+ random.nextInt(4);
 		
 		// 2 - Given that startRoom is 0,0, find where to place endRoom
 		int endRoomX = - distanceStartToEnd + random.nextInt((distanceStartToEnd * 2) + 1);
@@ -103,8 +106,15 @@ public abstract class FloorGenerator {
 		
 		// 4 - Add rooms to this path
 		
+		// 4.1 add rooms randomly throughout the path
 		int additionnalRoomsNumber = 6 + random.nextInt(2);
-		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber);
+		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber, false);
+		
+		// 4.2 if it wasn't enough to reach the min number of room, add some more
+		if (rooms.size() < MIN_ROOM_NB) {
+			// Add more rooms to reach the min number
+			addAdditionalRooms(floor, gameScreen, rooms, MIN_ROOM_NB - rooms.size(), true);
+		}
 		
 		
 		// 5 - Place mandatory rooms
@@ -137,7 +147,7 @@ public abstract class FloorGenerator {
 		
 		// 6 - Add corridors between rooms
 		addCorridors(rooms, roomsPerPosition);
-		
+				
 		// 7 - Generate the content of all rooms
 		for (Room r : rooms) {
 			r.create();
@@ -171,8 +181,9 @@ public abstract class FloorGenerator {
 	 * @param gameScreen the gameScreen
 	 * @param rooms the list of rooms which are at the moment the path from the start to the end
 	 * @param additionalRoomsNumber the number of rooms we want to add to the main path
+	 * @param addToReachMinNb always add rooms to reach the minimal number of rooms in a floor
 	 */
-	private void addAdditionalRooms(Floor floor, GameScreen gameScreen, List<Room> rooms, int additionalRoomsNumber) {
+	private void addAdditionalRooms(Floor floor, GameScreen gameScreen, List<Room> rooms, int additionalRoomsNumber, boolean addToReachMin) {
 		int chanceToAddRoom = 100;
 
 		Room previousRoom;
@@ -183,7 +194,7 @@ public abstract class FloorGenerator {
 				previousRoom = rooms.get(j);
 				if (previousRoom.getNumberOfNeighbors() < 4) {
 					int rand = random.nextInt(100);
-					if (rand <= chanceToAddRoom) {
+					if (rand <= chanceToAddRoom || addToReachMin) {
 						//Add room here
 												
 						fillPossibleMoves(previousRoom, possibleMove);
@@ -203,7 +214,14 @@ public abstract class FloorGenerator {
 						
 						setNeighbors(direction, previousRoom, currentRoom);
 						
-						addAdditionalSubRooms(floor, gameScreen, currentRoom, chanceToAddRoom/2, rooms);
+						if (addToReachMin && rooms.size() >= MIN_ROOM_NB) {
+							return;
+						}
+						if (rooms.size() >= MAX_ROOM_NB) {
+							return;
+						}
+						
+						addAdditionalSubRooms(floor, gameScreen, currentRoom, chanceToAddRoom/2, rooms, addToReachMin);
 						
 						chanceToAddRoom = chanceToAddRoom - 10;
 						if (chanceToAddRoom <= 0) {
@@ -246,8 +264,9 @@ public abstract class FloorGenerator {
 	 * @param parentRoom the current room
 	 * @param chanceToAddRoom the chance to add a room (on 100)
 	 * @param allRooms the list of all rooms of this floor that we might complete
+	 * @param addToReachMinNb always add rooms to reach the minimal number of rooms in a floor
 	 */
-	private void addAdditionalSubRooms(Floor floor, GameScreen gameScreen, Room parentRoom, int chanceToAddRoom, List<Room> allRooms) {
+	private void addAdditionalSubRooms(Floor floor, GameScreen gameScreen, Room parentRoom, int chanceToAddRoom, List<Room> allRooms, boolean addToReachMinNb) {
 		List<GenerationMoveEnum> possibleMove = new ArrayList<>();
 		fillPossibleMoves(parentRoom, possibleMove);
 		if (possibleMove.isEmpty()) {
@@ -270,7 +289,13 @@ public abstract class FloorGenerator {
 				roomsPerPosition.put(vector2, currentRoom);
 				positionsPerRoom.put(currentRoom, vector2);
 				
-				addAdditionalSubRooms(floor, gameScreen, currentRoom, chanceToAddRoom, allRooms);
+				if (addToReachMinNb && allRooms.size() >= MIN_ROOM_NB) {
+					return;
+				}
+				if (allRooms.size() >= MAX_ROOM_NB) {
+					return;
+				}
+				addAdditionalSubRooms(floor, gameScreen, currentRoom, chanceToAddRoom, allRooms, addToReachMinNb);
 				
 			}
 		}

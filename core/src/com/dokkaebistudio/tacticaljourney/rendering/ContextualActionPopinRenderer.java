@@ -200,6 +200,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			} else {
 				descStr += " It will cost you [GOLDENROD]" + soulBenderComponent.getPrice() + " gold coins[].";
 			}
+			descStr += "\nKeep in mind that only personal items can be infused.";
 			desc.setText(descStr);
 			yesBtn.setText("Infuse");
 			

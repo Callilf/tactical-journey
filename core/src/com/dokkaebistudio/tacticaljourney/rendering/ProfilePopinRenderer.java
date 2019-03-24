@@ -139,6 +139,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 				});
     		}
     		
+    		alterationReceiverCompo.sort();
     		refreshProfileTable();
     		refreshBlessingTable();
     		refreshCurseTable();

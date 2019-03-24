@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -933,7 +934,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		if (roomClearedTable == null) {
 			
 			this.roomClearedTable = new Table();
-			TextureRegionDrawable background = new TextureRegionDrawable(Assets.small_popin_background);
+			TextureRegionDrawable background = new TextureRegionDrawable(Assets.small_popin_background);;
 			roomClearedTable.setBackground(background);
 			
 			Label roomCleared = new Label("ROOM CLEARED", PopinService.hudStyle());
@@ -961,7 +962,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		this.reward.setText("REWARDS\n [GOLDENROD]" + room.getRewardGold() + " gold coin(s)");
 		this.roomClearedTable.pack();
 		this.roomClearedTable.addAction(Actions.sequence(Actions.alpha(0f),
-				Actions.fadeIn(1, Interpolation.pow5Out),
+				Actions.alpha(0.8f, 1, Interpolation.pow5Out),
 				Actions.delay(1.5f),
 				Actions.fadeOut(1, Interpolation.pow5In)));
 

@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
 import java.util.List;
 

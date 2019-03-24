@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemBomb extends Item {
+public class ItemBomb extends AbstractItem {
 
 	public ItemBomb() {
 		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2);

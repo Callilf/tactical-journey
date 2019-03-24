@@ -19,15 +19,16 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
@@ -177,7 +178,9 @@ public final class PlayerFactory {
 		
 		// Alteration receiver compo
 		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
-		alterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_BLESSING, new BlessingOfCalishka());
+		BlessingOfCalishka initialBlessing = new BlessingOfCalishka();
+		initialBlessing.setInfused(true);
+		alterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_BLESSING, initialBlessing);
 		playerEntity.add(alterationReceiverCompo);
 		
 		// Statuses
@@ -311,4 +314,48 @@ public final class PlayerFactory {
 	}
 	
 
+	/**
+	 * Create a soul bender.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the player entity
+	 */
+	public Entity createSoulbender(Vector2 pos, Room room) {
+		Entity soulBenderEntity = engine.createEntity();
+		soulBenderEntity.flags = EntityFlagEnum.SOUL_BENDER.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.SOULBENDER_TITLE);
+		inspect.setDescription(Descriptions.SOULBENDER_DESCRIPTION);
+		soulBenderEntity.add(inspect);
+
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(new Sprite(Assets.soulbender));
+		soulBenderEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(soulBenderEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.PLAYER;
+		soulBenderEntity.add(gridPosition);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		soulBenderEntity.add(solidComponent);
+		
+		// Shop keeper component
+		SoulbenderComponent soulbenderCompo = engine.createComponent(SoulbenderComponent.class);
+		soulbenderCompo.addSpeech("Hello there ! I'm a soul bender.");
+		soulbenderCompo.addSpeech("I can infuse items' auras into your soul.");
+		soulbenderCompo.addSpeech("This allows you keeping the blessings provided by items permanently, and free an inventory slot.");
+		soulbenderCompo.addSpeech("The bad side is that it also keeps the curses provided by the item.");
+		soulbenderCompo.addSpeech("And also it's not free.");
+		
+		soulBenderEntity.add(soulbenderCompo);
+		
+		room.addNeutral(soulBenderEntity);
+		return soulBenderEntity;
+	}
+	
 }

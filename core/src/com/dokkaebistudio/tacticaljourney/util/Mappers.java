@@ -17,9 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
@@ -35,6 +33,9 @@ import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectCompone
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -59,6 +60,7 @@ public final class Mappers {
 	public final static ComponentMapper<PlayerComponent> playerComponent = ComponentMapper.getFor(PlayerComponent.class);
 	public final static ComponentMapper<EnemyComponent> enemyComponent = ComponentMapper.getFor(EnemyComponent.class);
 	public final static ComponentMapper<ShopKeeperComponent> shopKeeperComponent = ComponentMapper.getFor(ShopKeeperComponent.class);
+	public final static ComponentMapper<SoulbenderComponent> soulbenderComponent = ComponentMapper.getFor(SoulbenderComponent.class);
 	public final static ComponentMapper<StatueComponent> statueComponent = ComponentMapper.getFor(StatueComponent.class);
 
 	public final static ComponentMapper<HumanoidComponent> humanoidComponent = ComponentMapper.getFor(HumanoidComponent.class);

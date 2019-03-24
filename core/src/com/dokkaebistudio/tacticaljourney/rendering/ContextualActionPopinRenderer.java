@@ -18,16 +18,19 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -186,6 +189,23 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			updateRestockListener(shopKeeperCompo);
 
 			break;
+			
+		case INFUSE:
+			SoulbenderComponent soulBenderComponent = Mappers.soulbenderComponent.get(actionEntity);
+			
+			title.setText("Infuse an item");
+			String descStr = "Would you like to infuse an item ?";
+			if (soulBenderComponent.getPrice() == 0) {
+				descStr += " The first infusion is free!";
+			} else {
+				descStr += " It will cost you [GOLDENROD]" + soulBenderComponent.getPrice() + " gold coins[].";
+			}
+			descStr += "\nKeep in mind that only personal items can be infused.";
+			desc.setText(descStr);
+			yesBtn.setText("Infuse");
+			
+			updateInfuseListener(actionEntity, soulBenderComponent);
+			break;
 			default:
 		}
 	}
@@ -322,6 +342,31 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		};
 		yesBtn.addListener(yesBtnListener);
 	}
+	
+	private void updateInfuseListener(final Entity soulbender, final SoulbenderComponent soulbenderComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				//Open inventory popin to select the item to infuse.
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INFUSION);
+				inventoryComponent.setSoulbender(soulbender);
+
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
+	
+	
+	
+	
+	// CLOSE
 
 	/**
 	 * Close the popin and unpause the game.

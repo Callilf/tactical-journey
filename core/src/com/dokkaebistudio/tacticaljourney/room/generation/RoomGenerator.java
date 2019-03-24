@@ -25,7 +25,6 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -316,6 +315,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
 //			entityFactory.orbFactory.createEnergyOrb(new Vector2(6, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
@@ -387,9 +387,16 @@ public abstract class RoomGenerator {
 			break;
 		case END_FLOOR_ROOM:
 			if (possibleSpawns.size() == 0) return;
-			int nextInt = random.nextInt(possibleSpawns.size());
-			Vector2 pos = possibleSpawns.get(nextInt);
+			
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random);
+			
+			Vector2 pos = spawnPositions.get(0);
 			entityFactory.createExit(room, pos, false);
+			
+			pos = spawnPositions.get(1);
+			entityFactory.playerFactory.createSoulbender(	pos, room);
+			
 			default:
 			break;
 		}

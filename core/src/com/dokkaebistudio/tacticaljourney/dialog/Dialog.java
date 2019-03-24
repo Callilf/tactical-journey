@@ -22,7 +22,7 @@ public class Dialog {
 		
 		if (text.length() > 0) {
 			this.duration = text.length() / 20f;
-			if (duration < 1f) duration = 1f;
+			this.duration = this.duration + 1f;
 		}
 	}
 

@@ -15,7 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -28,7 +28,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  * @author Callil
  *
  */
-public class ItemVenomGland extends Item {
+public class ItemVenomGland extends AbstractItem {
 
 	public ItemVenomGland() {
 		super(ItemEnum.VENOM_GLAND, Assets.venom_gland_item, false, true);

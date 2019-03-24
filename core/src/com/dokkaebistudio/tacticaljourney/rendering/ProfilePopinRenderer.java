@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -138,6 +139,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 				});
     		}
     		
+    		alterationReceiverCompo.sort();
     		refreshProfileTable();
     		refreshBlessingTable();
     		refreshCurseTable();
@@ -379,13 +381,14 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 	private Table createOneAlteration(Alteration alteration) {
 		Table oneAlterationTable = new Table();
-		
+		Table oneAlterationSubTable = new Table();
+
 		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
 		ninePatchDrawable.setMinWidth(455);
 		ninePatchDrawable.setMinHeight(102);
-		oneAlterationTable.setBackground(ninePatchDrawable);
+		oneAlterationSubTable.setBackground(ninePatchDrawable);
 		
-		oneAlterationTable.align(Align.left);
+		oneAlterationSubTable.align(Align.left);
 
 		Table upTable = new Table();
 		upTable.align(Align.left);
@@ -396,16 +399,25 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseTitle.setWrap(true);
 		curseTitle.setWidth(350);
 		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
-		upTable.pack();
-		oneAlterationTable.add(upTable).left();
 		
-		oneAlterationTable.row();
+		AtlasRegion itemSprite = alteration.getItemSprite();
+		if (alteration.isInfused()) itemSprite = Assets.item_infused_icon;
+		Image itemImage = new Image(itemSprite);
+		upTable.add(itemImage).right().top().pad(-40, -20, -20, -40);
+		
+		upTable.pack();
+		oneAlterationSubTable.add(upTable).left();
+		
+		oneAlterationSubTable.row();
 		Label desc = new Label(alteration.description(), PopinService.smallTextStyle());
 		desc.setAlignment(Align.left);
 		desc.setWidth(Assets.profile_alteration_background.getRegionWidth() - 10);
 		desc.setWrap(true);
-		oneAlterationTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
+		oneAlterationSubTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
 		
+		oneAlterationSubTable.pack();
+		
+		oneAlterationTable.add(oneAlterationSubTable).pad(15, 0, 0, 15);
 		oneAlterationTable.pack();
 		return oneAlterationTable;
 	}

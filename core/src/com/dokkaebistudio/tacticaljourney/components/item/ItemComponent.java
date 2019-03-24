@@ -16,14 +16,15 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class ItemComponent implements Component, Poolable {
 		
 	/** The king of item. */
-	private Item itemType;
+	private AbstractItem itemType;
 	
 	/** The random value used by some items. Null if not used. */
 	private Integer quantity;
@@ -114,6 +115,17 @@ public class ItemComponent implements Component, Poolable {
 		itemType.onThrow( thrownPosition, thrower, item, room);
 	}
 	
+	
+	/**
+	 * Infuse the given item.
+	 * @param player the player.
+	 * @param item the item to infuse
+	 * @param room the room
+	 * @return true if the item was infused correctly
+	 */
+	public boolean infuse(Entity player, Entity item, Room room) {
+		return itemType.infuse(player, item, room);
+	}
 	
 	/**
 	 * Set up the pickup animation.
@@ -228,15 +240,18 @@ public class ItemComponent implements Component, Poolable {
 	}
 	
 	
+	public boolean isInfusable() {
+		return itemType instanceof AbstractInfusableItem;
+	}
 	
 	//*******************************
 	// Getters and Setters
 
-	public Item getItemType() {
+	public AbstractItem getItemType() {
 		return itemType;
 	}
 
-	public void setItemType(Item itemType) {
+	public void setItemType(AbstractItem itemType) {
 		this.itemType = itemType;
 	}
 

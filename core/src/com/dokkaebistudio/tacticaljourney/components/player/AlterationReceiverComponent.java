@@ -1,6 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Component;
@@ -36,6 +38,15 @@ import com.dokkaebistudio.tacticaljourney.wheel.Sector;
  *
  */
 public class AlterationReceiverComponent implements Component, Poolable {
+	
+	public Comparator<Alteration> comparator = new Comparator<Alteration>() {
+		public int compare(Alteration o1, Alteration o2) {
+			if (o1.isInfused() == o2.isInfused()) return 0;
+			if (o1.isInfused() && !o2.isInfused()) return -1;
+			if (!o1.isInfused() && o2.isInfused()) return 1;
+			return 0;
+		}
+	};
 	
 	/** The list of blessings already received. */
 	private List<Blessing> blessings = new ArrayList<>();
@@ -242,6 +253,10 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		}
 	}
 	
+	public void sort() {
+		Collections.sort(blessings, comparator);
+		Collections.sort(curses, comparator);
+	}
 	
 	
 	

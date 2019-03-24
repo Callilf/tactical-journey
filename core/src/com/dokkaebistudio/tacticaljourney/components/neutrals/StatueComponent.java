@@ -53,9 +53,11 @@ public class StatueComponent implements Component, Poolable {
 		this.alterationPool = alterationPool;
 		List<BlessingsEnum> blessingType = alterationPool.getBlessingTypes(1);
 		blessingToGive = Blessing.createBlessing(blessingType.get(0));
+		blessingToGive.setInfused(true);
 		
 		List<CursesEnum> curseType = alterationPool.getCurseTypes(1);
 		curseToGive = Curse.createCurse(curseType.get(0));
+		curseToGive.setInfused(true);
 	}
 
 	public boolean isHasBlessing() {

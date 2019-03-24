@@ -401,7 +401,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
 		
 		AtlasRegion itemSprite = alteration.getItemSprite();
-		if (alteration.isInfused()) itemSprite = Assets.item_infused_icon;
+		if (itemSprite == null || alteration.isInfused()) itemSprite = Assets.item_infused_icon;
 		Image itemImage = new Image(itemSprite);
 		upTable.add(itemImage).right().top().pad(-40, -20, -20, -40);
 		

@@ -17,7 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.items.Item;
+import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.items.ItemKey;
@@ -75,7 +75,7 @@ public final class ItemFactory {
 		this.entityFactory = ef;
 	}
 	
-	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, Item itemType, String title, String desc) {
+	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, AbstractItem itemType, String title, String desc) {
 		Entity item = engine.createEntity();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);

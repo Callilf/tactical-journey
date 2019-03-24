@@ -16,6 +16,9 @@ import com.dokkaebistudio.tacticaljourney.wheel.Sector;
  */
 public abstract class Alteration {
 	
+	private AtlasRegion itemSprite;
+	private boolean infused;
+	
 	public abstract String title();
 	public abstract String description();
 	public abstract AtlasRegion texture();
@@ -52,7 +55,24 @@ public abstract class Alteration {
 	/** Called when a room has been cleared. */
 	public void onRoomCleared(Entity entity, Room room) {};
 	
-	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {};
+	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {}
+	
+	
+	
+	// getters and setters
+	
+	public AtlasRegion getItemSprite() {
+		return itemSprite;
+	}
+	public void setItemSprite(AtlasRegion itemSprite) {
+		this.itemSprite = itemSprite;
+	}
+	public boolean isInfused() {
+		return infused;
+	}
+	public void setInfused(boolean infused) {
+		this.infused = infused;
+	};
 
 	
 	

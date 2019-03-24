@@ -18,7 +18,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemKey extends Item {
+public class ItemKey extends AbstractItem {
 
 	public ItemKey() {
 		super(Descriptions.ITEM_KEY_TITLE, Assets.key, false, false);

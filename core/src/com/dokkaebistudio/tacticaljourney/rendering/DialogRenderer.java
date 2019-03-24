@@ -125,7 +125,7 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		// 2 - Description
 		content = new Label("Description", PopinService.hudStyle());
 		content.setWrap(true);
-		mainPopin.add(content).growY().width(600).left().pad(0, 20, 0, 20);
+		mainPopin.add(content).growY().width(900).left().pad(0, 20, 0, 20);
 	}
 
 	

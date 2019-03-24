@@ -32,6 +32,10 @@ public class Descriptions {
 	// Neutrals
 	public static final String SHOPKEEPER_TITLE = "Shopkeeper";
 	public static final String SHOPKEEPER_DESCRIPTION = "Some random dude with a shop in the middle of a dungeon.";
+	
+	public static final String SOULBENDER_TITLE = "Soul bender";
+	public static final String SOULBENDER_DESCRIPTION = "A old wizard that can extract souls from items and infuse them into another soul.";
+
 
 	
 	// Lootables

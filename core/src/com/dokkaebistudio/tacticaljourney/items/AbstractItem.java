@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -19,7 +20,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public abstract class Item {
+public abstract class AbstractItem {
 	
 	/** The type of item. */
 	public ItemEnum type;
@@ -42,7 +43,7 @@ public abstract class Item {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
 		this.setTexture(texture);
 		this.setInstantPickUp(instaPickUp);
@@ -55,7 +56,7 @@ public abstract class Item {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected Item(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.type = itemType;
 		this.setLabel(itemType.getName());
 		this.setTexture(texture);
@@ -71,7 +72,7 @@ public abstract class Item {
 	 * @param valMin
 	 * @param valMax
 	 */
-	protected Item(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
+	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, texture, instaPickUp, goIntoInventory);
 		this.setRandomValueMin(valMin);
 		this.setRandomValueMax(valMax);
@@ -139,6 +140,18 @@ public abstract class Item {
 		GridPositionComponent itemPosCompo = Mappers.gridPositionComponent.get(item);
 		itemPosCompo.coord().set(thrownPosition);
 		itemPosCompo.setActive(item, room);
+	}
+	
+	
+	/** Called when the item is infused. */
+	public boolean infuse(Entity player, Entity item, Room room) {
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+		if (inventoryComponent != null) {
+			inventoryComponent.remove(item);
+		}
+
+		room.removeEntity(item);
+		return true;
 	}
 	
 	/** Return the description of the item. */

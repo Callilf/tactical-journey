@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +67,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.requestRestock = false;
 		this.firstSpeech = true;
 		this.soldItems.clear();
+		this.mainSpeeches.clear();
 	}
 	
 	/**

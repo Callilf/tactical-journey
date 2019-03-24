@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -25,9 +26,9 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -50,8 +51,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
-	/** The wallet component. */
-	private WalletComponent walletCompo;    
     
     
     //***************************
@@ -62,6 +61,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     /** Whether the item popin is displayed. */
     private boolean itemPopinDisplayed = false;
+    private boolean infusionPopinDisplayed = false;
     
     
     //*****************************
@@ -69,6 +69,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     
     /** The main table of the popin. */
     private Table mainTable;
+    private Label title;
+    private TextButton closeBtn;
     
     /** The inventory table. */
     private Table inventoryTable;
@@ -90,6 +92,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private TextButton throwItemBtn;
     private ChangeListener throwListener;
 
+
+    /** The Infusion popin. */
+    private Table infusionPopin;
+    private Label infusionTitle;
+    private Label infusionDesc;
+    private TextButton infuseBtn;
+    private ChangeListener infuseListener;
 
     
     /**
@@ -116,12 +125,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(player);
-    		walletCompo = Mappers.walletComponent.get(player);
     	}
 
     	
     	// Check if the inventory is displayed
-    	if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INVENTORY && room.getState() != RoomState.INVENTORY_POPIN) {
+    	if (inventoryCompo.getDisplayMode().isInventoryPopin() && room.getState() != RoomState.INVENTORY_POPIN) {
 			//set the state
     		room.setNextState(RoomState.INVENTORY_POPIN);
 
@@ -144,6 +152,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		if (needsRefresh || inventoryCompo.isNeedInventoryRefresh()) {
 	        	
 //    			money.setText("[GOLD]" + walletCompo.getAmount());
+    			if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INFUSION) {
+    				title.setText("Select the item to infuse");
+    			} else {
+    				title.setText("Inventory");
+    			}
     			
     			for(int i=0 ; i<slots.length ; i++) {
     				final Table slot = slots[i];
@@ -152,21 +165,35 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				final Entity item = inventoryCompo.get(i);
     				
     				slot.clearListeners();
+    				image.addAction(Actions.alpha(1f));
     				if (item != null) {
     					// An item is present in this inventory slot
     					final ItemComponent itemComponent = Mappers.itemComponent.get(item);
     					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
     					image.setDrawable(texture);
+    					if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INFUSION && !itemComponent.isInfusable()) {
+    						image.addAction(Actions.alpha(0.3f));
+    					}
+    					
     					quantity.setText(inventoryCompo.getQuantity(i) > 1 ? String.valueOf(inventoryCompo.getQuantity(i)) : "");
 
     					slot.clearListeners();
-    					slot.addListener(new ClickListener() {
-    						
-    						@Override
-    						public void clicked(InputEvent event, float x, float y) {
-    							displaySelectedItemPopin( item, slot);
-    						}
-    					});
+    					
+    					if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INVENTORY) {
+	    					slot.addListener(new ClickListener() {
+	    						@Override
+	    						public void clicked(InputEvent event, float x, float y) {
+	    							displaySelectedItemPopin( item, slot);
+	    						}
+	    					});
+    					} else if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INFUSION && itemComponent.isInfusable()) {
+    						slot.addListener(new ClickListener() {
+	    						@Override
+	    						public void clicked(InputEvent event, float x, float y) {
+	    							displayInfusionPopin( item, slot);
+	    						}
+	    					});
+    					}
     					
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
@@ -228,7 +255,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		// 1 - Title
 		Table topTable = new Table();
-		Label title = new Label("Inventory", PopinService.hudStyle());
+		title = new Label("Inventory", PopinService.hudStyle());
 		title.setAlignment(Align.center);
 		topTable.add(title);
 		
@@ -251,6 +278,16 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			slotsTable.row();
 		}
 		inventoryTable.add(slotsTable);
+		inventoryTable.row();
+		
+		closeBtn = new TextButton("Close", PopinService.buttonStyle());
+		closeBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				closePopin();
+			}
+		});
+		inventoryTable.add(closeBtn).pad(20, 0, 20, 0);
 		
     	mainTable.add(inventoryTable);
     	mainTable.pack();
@@ -449,6 +486,113 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	
 	
+	
+	
+	//*********************************
+	// Infusion popin
+	
+	
+	/**
+	 * Display the popin to validate the infusion.
+	 * @param item the item selected
+	 * @param slot the slot on which the item was
+	 */
+	private void displayInfusionPopin(final Entity item, final Table slot) {
+		if (infusionPopin == null) {
+			infusionPopin = new Table();
+//			infusionPopin.setDebug(true);
+
+			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
+			infusionPopin.setTouchable(Touchable.enabled);
+			infusionPopin.addListener(new ClickListener() {});
+			
+			// Place the popin and add the background texture
+			infusionPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			infusionPopin.setBackground(ninePatchDrawable);
+			
+			infusionPopin.align(Align.top);
+			
+			// 1 - Title
+			infusionTitle = new Label("Title", PopinService.hudStyle());
+			infusionPopin.add(infusionTitle).top().align(Align.top).pad(20, 0, 20, 0);
+			infusionPopin.row().align(Align.center);
+			
+			// 2 - Description
+			infusionDesc = new Label("Are you sure ?", PopinService.hudStyle());
+			infusionDesc.setWrap(true);
+			infusionPopin.add(infusionDesc).growY().width(900).left().pad(0, 20, 0, 20);
+			infusionPopin.row();
+			
+			// 3 - Action buttons
+			Table buttonTable = new Table();
+			
+			// 3.1 - Close button
+			final TextButton closeBtn = new TextButton("Cancel",PopinService.buttonStyle());			
+			// continueButton listener
+			closeBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					hideInfusionPopin();
+				}
+			});
+			buttonTable.add(closeBtn).pad(0, 20,0,20);
+			
+			// 3.2 - Drop button
+			infuseBtn = new TextButton("Infuse",PopinService.buttonStyle());			
+			buttonTable.add(infuseBtn).pad(0, 20,0,20);
+
+			
+			infusionPopin.add(buttonTable).pad(20, 0, 20, 0);
+			
+		}
+		
+		
+		final ItemComponent itemComponent = Mappers.itemComponent.get(item);
+		
+		// Update the content
+		infusionTitle.setText("Infusion");
+		
+		SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(inventoryCompo.getSoulbender());
+		if (soulbenderComponent.getPrice() == 0) {
+			infusionDesc.setText("Are you sure you want to infuse the " + itemComponent.getItemLabel() + "?");
+		} else {
+			infusionDesc.setText("Are you sure you want to infuse the " + itemComponent.getItemLabel() 
+				+ " for [GOLDENROD]" + soulbenderComponent.getPrice() + " gold coins[]?");
+		}
+		
+		// Update the throw item listener
+		updateInfuseListener(item, slot);
+		
+		// Place the popin properly
+		infusionPopin.pack();
+		infusionPopin.setPosition(GameScreen.SCREEN_W/2 - infusionPopin.getWidth()/2, GameScreen.SCREEN_H/2 - infusionPopin.getHeight()/2);
+	
+		infusionPopinDisplayed = true;
+		this.stage.addActor(infusionPopin);
+	}
+	
+	private void updateInfuseListener(final Entity item, final Table slot) {
+		if (infuseListener != null) {
+			infuseBtn.removeListener(infuseListener);
+		}
+		infuseListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				inventoryCompo.requestAction(InventoryActionEnum.INFUSE, item);
+				slot.removeListener(this);				
+				closePopin();
+			}
+		};
+		infuseBtn.addListener(infuseListener);
+	}
+	
+	private void hideInfusionPopin() {
+		infusionPopin.remove();
+		infusionPopinDisplayed = false;
+	}
+	
+	
 	//*****************************
 	// CLOSE and REFRESH
 	
@@ -467,6 +611,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		inventoryCompo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
 		if (itemPopinDisplayed) hideSelectedItemPopin();
+		if (infusionPopinDisplayed) hideInfusionPopin();
 
 		mainTable.remove();
 		needsRefresh = true;

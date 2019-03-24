@@ -316,6 +316,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
 //			entityFactory.orbFactory.createEnergyOrb(new Vector2(6, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));

@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemArrow extends Item {
+public class ItemArrow extends AbstractItem {
 
 	public ItemArrow() {
 		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4);

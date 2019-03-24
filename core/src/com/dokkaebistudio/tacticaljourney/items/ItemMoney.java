@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  * @author Callil
  *
  */
-public class ItemMoney extends Item {
+public class ItemMoney extends AbstractItem {
 
 	public ItemMoney() {
 		super("# gold coin[s]", Assets.money_item, true, false, 1, 5);

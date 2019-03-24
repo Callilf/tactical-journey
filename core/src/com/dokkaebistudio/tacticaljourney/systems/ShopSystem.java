@@ -25,9 +25,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.components.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
@@ -66,6 +66,10 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 		
 		if (playerInventoryCompo == null) {
 			playerInventoryCompo = Mappers.inventoryComponent.get(player);
+		}
+		
+		if (!room.getState().isPlayerTurn()) {
+			return;
 		}
 		
 		// Handle clicks on a shopkeeper

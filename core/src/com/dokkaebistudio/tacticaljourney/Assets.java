@@ -38,6 +38,7 @@ public class Assets {
 	public static Array<Sprite> player_running;
 	public static Array<Sprite> player_flying;
 	public static AtlasRegion shopkeeper;
+	public static AtlasRegion soulbender;
 	public static AtlasRegion godess_statue;
 	public static AtlasRegion godess_statue_broken;
 	
@@ -51,6 +52,8 @@ public class Assets {
 	public static AtlasRegion tile_pit;
 	public static AtlasRegion mud;
 	public static AtlasRegion mud_destroyed;
+	public static AtlasRegion tallGrass;
+	public static AtlasRegion vineGrass;
 	public static AtlasRegion entangled_vines;
 	
 	public static AtlasRegion exit_opened;
@@ -104,6 +107,7 @@ public class Assets {
 	public static AtlasRegion profile_alteration_background;
 	public static AtlasRegion btn_profile;
 	public static AtlasRegion btn_profile_pushed;
+	public static AtlasRegion item_infused_icon;
 	
 	public static AtlasRegion btn_inspect;
 	public static AtlasRegion btn_inspect_pushed;
@@ -375,6 +379,7 @@ public class Assets {
 		player_flying = Assets.getAnimation("player_flight");
 		
 		shopkeeper = Assets.getTexture("shopkeeper");
+		soulbender = Assets.getTexture("soulbender");
 		godess_statue = Assets.getTexture("godess_statue");
 		godess_statue_broken = Assets.getTexture("godess_statue_broken");
 
@@ -386,6 +391,8 @@ public class Assets {
 		wall_destroyed = Assets.getTexture("tile-wall-destroyed");
 		tile_pit = Assets.getTexture("tile-pit-test");
 		mud = Assets.getTexture("tile-mud-test");
+		tallGrass = Assets.getTexture("tile-tall-grass");
+		vineGrass = Assets.getTexture("tile-vines-grass");
 		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
 		entangled_vines = Assets.getTexture("entangled_vines");
 		
@@ -440,6 +447,7 @@ public class Assets {
 		profile_alteration_background = Assets.getTexture("hud_profile_alteration_background");
 		btn_profile = Assets.getTexture("btn-profile");
 		btn_profile_pushed = Assets.getTexture("btn-profile-pushed");
+		item_infused_icon = Assets.getTexture("item-infused-icon");
 		
 		btn_inspect = Assets.getTexture("btn-inspect");
 		btn_inspect_pushed = Assets.getTexture("btn-inspect-pushed");

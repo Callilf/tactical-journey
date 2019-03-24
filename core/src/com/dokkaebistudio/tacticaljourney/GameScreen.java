@@ -75,6 +75,7 @@ import com.dokkaebistudio.tacticaljourney.systems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.systems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ShopSystem;
+import com.dokkaebistudio.tacticaljourney.systems.SoulbenderSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StatusSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
@@ -240,6 +241,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AlterationSystem(player, room, foregroundFxStage));
 		engine.addSystem(new StatusSystem(player, room, fxStage));
 		engine.addSystem(new ShopSystem(	player, room, fxStage));
+		engine.addSystem(new SoulbenderSystem(	player, room, fxStage));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new DialogSystem(room));
 		engine.addSystem(new ExperienceSystem(room, stage));

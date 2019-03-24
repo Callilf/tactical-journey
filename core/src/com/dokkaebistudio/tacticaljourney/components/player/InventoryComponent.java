@@ -41,6 +41,9 @@ public class InventoryComponent implements Component, Poolable {
 	private boolean keyJustChanged = false;
 
 
+	/** The soulbender in case of an infusion. */
+	private Entity soulbender;
+
 	
 	private int firstEmptySlot = 0;
 	
@@ -58,7 +61,8 @@ public class InventoryComponent implements Component, Poolable {
 		USE,
 		DROP,
 		THROW,
-		BUY;
+		BUY,
+		INFUSE;
 	}
 	
 	
@@ -383,5 +387,13 @@ public class InventoryComponent implements Component, Poolable {
 
 	public boolean hasKeyChanged() {
 		return this.keyJustChanged;
+	}
+
+	public Entity getSoulbender() {
+		return soulbender;
+	}
+
+	public void setSoulbender(Entity soulbender) {
+		this.soulbender = soulbender;
 	}
 }

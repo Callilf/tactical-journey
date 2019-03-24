@@ -38,7 +38,8 @@ public class PlayerComponent implements Component {
 		LOOT,
 		EXIT,
 		PRAY,
-		RESTOCK_SHOP;
+		RESTOCK_SHOP,
+		INFUSE,
 	}
 	
 	/** Whether the popin to ask for loot should open or not. */

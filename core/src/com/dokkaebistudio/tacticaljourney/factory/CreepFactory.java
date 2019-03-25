@@ -156,6 +156,12 @@ public final class CreepFactory {
 		creepCompo.setType(new CreepBush());
 		creepCompo.setDuration(0);
 		bushEntity.add(creepCompo);
+		
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(true);
+		flammable.setDestroyedTexture(Assets.tallGrass);
+		bushEntity.add(flammable);
     	
 		engine.addEntity(bushEntity);
 

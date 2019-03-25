@@ -64,6 +64,21 @@ public class MainMenuScreen extends ScreenAdapter {
 		Gdx.input.setInputProcessor(hudStage);
 				
 		Table t = new Table();
+		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		TextFieldStyle tfs = new TextFieldStyle(Assets.font, Color.WHITE, null, null, ninePatchDrawable);
+		seedField = new TextField("Enter seed", tfs);
+		seedField.addListener(new FocusListener() {
+			@Override
+			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+				enteredSeed = true;
+				seedField.setText("");
+			}
+		});
+		
+		t.add(seedField).width(500).padBottom(300);
+		t.row();
+		
 		TextButton start = new TextButton("START", PopinService.buttonStyle());
 		start.addListener(new ChangeListener() {
 			
@@ -84,23 +99,8 @@ public class MainMenuScreen extends ScreenAdapter {
 		t.add(start).width(500).height(200).padBottom(50);
 		t.row();
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
-		TextFieldStyle tfs = new TextFieldStyle(Assets.font, Color.WHITE, null, null, ninePatchDrawable);
-		seedField = new TextField("Enter seed", tfs);
-		seedField.addListener(new FocusListener() {
-			@Override
-			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-				enteredSeed = true;
-				seedField.setText("");
-			}
-		});
-		
-		t.add(seedField).width(500);
-		t.row();
-		
-		
 		t.pack();
-		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2);
+		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2 + 200);
 		hudStage.addActor(t);
 	}
 

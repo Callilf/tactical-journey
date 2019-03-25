@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
@@ -155,6 +156,9 @@ public final class EntityFactory {
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
     	wallEntity.add(solidComponent);    	
     	
+    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
+    	wallEntity.add(blockVisibilityComponent);
+    	
     	BlockExplosionComponent blockExplosionComponent = engine.createComponent(BlockExplosionComponent.class);
 		wallEntity.add(blockExplosionComponent);				
     	
@@ -183,7 +187,10 @@ public final class EntityFactory {
     	wallEntity.add(spriteCompo);
     	
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-    	wallEntity.add(solidComponent);    	
+    	wallEntity.add(solidComponent);
+    	
+    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
+    	wallEntity.add(blockVisibilityComponent);
     	
     	BlockExplosionComponent blockExplosionComponent = engine.createComponent(BlockExplosionComponent.class);
 		wallEntity.add(blockExplosionComponent);
@@ -856,6 +863,9 @@ public final class EntityFactory {
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		vaseEntity.add(solidComponent);
+    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
+    	vaseEntity.add(blockVisibilityComponent);
+
 		
 		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
 		destructibleComponent.setDestroyedTexture(nextInt == 0 ? Assets.destructible_vase_destroyed : Assets.destructible_vase_big_destroyed);
@@ -889,7 +899,6 @@ public final class EntityFactory {
 		crateEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);
 		spriteCompo.setSprite(new Sprite(Assets.destructible_ammo_crate));
 		crateEntity.add(spriteCompo);
 

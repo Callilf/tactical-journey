@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -359,7 +360,7 @@ public class TileSearchService {
 		if (attackType == AttackTypeEnum.EXPLOSION) {
 			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockExplosionComponent.class, room);
 		} else {
-			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, SolidComponent.class, room);
+			blockingEntity = TileUtil.getEntitiesWithComponentOnTile(pos, BlockVisibilityComponent.class, room);
 		}
 		if (!blockingEntity.isEmpty()) {
 			result = false;

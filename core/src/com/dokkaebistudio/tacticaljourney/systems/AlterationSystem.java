@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -121,6 +122,8 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 				// Deliver the curse
 				playerAlterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_CURSE, statueComponent.getCurseToGive());
 				statueComponent.setJustDestroyed(false);
+				
+				statue.remove(BlockVisibilityComponent.class);
 			}
 		}
 		

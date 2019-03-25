@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
@@ -303,6 +304,10 @@ public final class PlayerFactory {
 		// Solid compo
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		godessStatueEntity.add(solidComponent);
+		
+		BlockVisibilityComponent blockVisibilityCompo = engine.createComponent(BlockVisibilityComponent.class);
+		godessStatueEntity.add(blockVisibilityCompo);
+
 		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
 		destructible.setDestroyedTexture(Assets.godess_statue_broken);

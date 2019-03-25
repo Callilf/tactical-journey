@@ -12,6 +12,7 @@ public final class ZIndexConstants {
 	
 	// ENTITIES ON TILE
 	public static final int WALL = 30;
+	public static final int BUSH = 30;
 	public static final int MUD = 2;
 	public static final int DOOR = 2;
 	public static final int EXIT = 2;

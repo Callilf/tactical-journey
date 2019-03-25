@@ -30,6 +30,7 @@ public enum EntityFlagEnum {
 	DESTROYED_SPRITE(105),
 	SHOP_ITEM_BACKGROUND(106),
 	HEAVY_WALL(107),
+	BUSH(108),
 
 	
 	LOOTABLE_BONES(140),
@@ -41,6 +42,7 @@ public enum EntityFlagEnum {
 	CREEP_WEB(151),
 	CREEP_FIRE(152),
 	CREEP_POISON(153),
+	CREEP_BUSH(154),
 
 	
 	END_TURN_BUTTON(500),

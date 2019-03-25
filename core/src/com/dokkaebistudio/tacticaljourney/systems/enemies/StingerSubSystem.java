@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -260,10 +261,11 @@ public class StingerSubSystem extends EnemySubSystem {
 			AttackComponent attackCompo, Room room) {
 		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
 		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
+		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
 		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
 			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room, false));
 		}
-		return solid == null;
+		return solid == null && blockVision == null;
 	}
 	
 	
@@ -331,7 +333,9 @@ public class StingerSubSystem extends EnemySubSystem {
 	
 	private boolean checkTileForSolid(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
 		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
-		return solid != null;
+		if (solid != null) return true;
+		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
+		return blockVision != null;
 	}
 	private boolean checkTileForPlayer(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
 		Entity player = TileUtil.getEntityWithComponentOnTile(position, PlayerComponent.class, room);

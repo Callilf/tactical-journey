@@ -129,6 +129,9 @@ public final class EntityFactory {
 			case MUD:
 				result = this.creepFactory.createMud(room, pos);
 				break;
+			case BUSH:
+				result = this.creepFactory.createBush(room, pos);
+				break;
 		}
 		return result;
 	}
@@ -212,6 +215,7 @@ public final class EntityFactory {
 
     	return wallEntity;
 	}	
+
 	
 	public Entity createChasm(Room room, Vector2 pos) {
 		Entity chasmEntity = engine.createEntity();

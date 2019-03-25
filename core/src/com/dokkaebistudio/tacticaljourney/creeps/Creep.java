@@ -17,7 +17,8 @@ public abstract class Creep {
 		WEB,
 		POISON,
 		MUD,
-		FIRE;
+		FIRE,
+		BUSH;
 	}
 	
 	/** The type. */

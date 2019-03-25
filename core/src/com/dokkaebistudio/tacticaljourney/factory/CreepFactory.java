@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -22,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
@@ -132,6 +134,33 @@ public final class CreepFactory {
 		creepCompo.onAppear(creepEntity, room);
     	return creepEntity;
 	}
+	
+	
+	public Entity createBush(Room room, Vector2 pos) {
+		Entity bushEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_BUSH, Assets.tallGrass);
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.BUSH_TITLE);
+		inspect.setDescription(Descriptions.BUSH_DESCRIPTION);
+		bushEntity.add(inspect);
+    	    	
+    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
+    	bushEntity.add(blockVisibilityComponent);
+    	    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+//    	destructibleCompo.setDestroyedTexture(Assets.wall_destroyed);
+    	destructibleCompo.setDestroyableWithWeapon(true);
+    	bushEntity.add(destructibleCompo);	
+    	
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(new CreepBush());
+		creepCompo.setDuration(0);
+		bushEntity.add(creepCompo);
+    	
+		engine.addEntity(bushEntity);
+
+    	return bushEntity;
+	}	
 	
 	
 	

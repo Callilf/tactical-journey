@@ -84,6 +84,7 @@ public abstract class RoomGenerator {
 			groom.getTileTypes()[x][GameScreen.GRID_H - 1] = TileEnum.WALL;
 		}
 		
+		boolean hasBushInLayout = false;
 		Entity createdDoor = null;
 		int y = 0;
 		while (scanner.hasNext() && y < GameScreen.GRID_H) {
@@ -149,6 +150,11 @@ public abstract class RoomGenerator {
             		groom.getTileTypes()[x][realY] = TileEnum.PIT;
             		break;
             		
+            	case BUSH:
+            		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
+            		hasBushInLayout = true;
+            		break;
+            		
             	case SPAWN:
             		groom.getPossibleSpawns().add(PoolableVector2.create(tempPos));
             		groom.getTileTypes()[x][realY] = TileEnum.GROUND;
@@ -160,9 +166,11 @@ public abstract class RoomGenerator {
             		break;
             		
             		default:
-            			int nextInt = random.nextInt(10);
+            			int nextInt = random.nextInt(20);
             			if (nextInt == 0 && currentRoom.type != RoomType.SHOP_ROOM) {
             				groom.getTileTypes()[x][realY] = TileEnum.MUD;
+            			} else if (nextInt == 1 && currentRoom.type != RoomType.SHOP_ROOM && !hasBushInLayout) {
+            				groom.getTileTypes()[x][realY] = TileEnum.BUSH;
             			} else {
             				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
             			}
@@ -213,7 +221,7 @@ public abstract class RoomGenerator {
 		case KEY_ROOM:
 		case END_FLOOR_ROOM:
 			
-			int roomNb = 1 + random.nextInt(11);
+			int roomNb = 1 + random.nextInt(12);
 			currentRoom.roomPattern = "data/rooms/room" + roomNb + ".csv";
 
 			break;

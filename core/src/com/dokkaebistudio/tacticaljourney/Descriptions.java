@@ -10,6 +10,9 @@ public class Descriptions {
 	public static final String WALL_TITLE = "Wall";
 	public static final String WALL_DESCRIPTION = "It's just a wall. It looks like it could be destroyed with an explosion.";
 
+	public static final String BUSH_TITLE = "Bush";
+	public static final String BUSH_DESCRIPTION = "A thick bush that hides visibility. It can be walked through but consumes 2 moves, and can also be destroyed by any attack.";
+
 	public static final String CHASM_TITLE = "Chasm";
 	public static final String CHASM_DESCRIPTION = "A chasm so deep that you cannot see the bottom of it.";
 

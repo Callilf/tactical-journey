@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
@@ -216,6 +217,10 @@ public final class ItemFactory {
 			
 		case HEADBAND:
 			item = createItemHeadband(room, tilePos);
+			break;
+			
+		case VILLANELLE:
+			item = createItemVillanelle(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -527,6 +532,12 @@ public final class ItemFactory {
 		return item;
 	}
 	
+	public Entity createItemVillanelle(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.villanelle, new ItemVillanelle(),
+				Descriptions.ITEM_VILLANELLE_TITLE, Descriptions.ITEM_VILLANELLE_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_HEADBAND.getFlag();
+		return item;
+	}
 	
 	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.pangolin_scale, new ItemPangolinScale(),

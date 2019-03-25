@@ -35,14 +35,18 @@ import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
+import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
+import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -100,7 +104,7 @@ public class Room extends EntitySystem {
 	/** The items removed from the room at the current frame. */
 	private List<Entity> removedItems;
 	
-	private int rewardGold;
+	private List<AbstractRoomReward> rewards;
 
 	
 	/** The doors entities of this room. */
@@ -127,7 +131,8 @@ public class Room extends EntitySystem {
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
 		
-		this.rewardGold = 1 + RandomSingleton.getInstance().getSeededRandom().nextInt(5);
+		this.rewards = new ArrayList<>();
+		this.rewards.add(new RoomRewardMoney(1 + RandomSingleton.getInstance().getSeededRandom().nextInt(5)));
 	}
 	
 	public Array<Entity> getAllEntities() {
@@ -257,19 +262,33 @@ public class Room extends EntitySystem {
 		}
 		this.entitiesToRemove.clear();
 		
-		// Open doors on room clear
 		if (this.getCleared() == RoomClearedState.JUST_CLEARED) {
+			this.cleared = RoomClearedState.CLEARED;
+		}	
+		
+		// Check if room cleared
+		if (!this.isCleared() && this.enemies.isEmpty()) {
+			this.setCleared(RoomClearedState.JUST_CLEARED);
+			
+			Journal.addEntry("The " + this.type.title() + " has been cleared");
+			MapRenderer.requireRefresh();
+
+			Entity player = this.floor.getGameScreen().player;
+			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+			if (alterationReceiverComponent != null) {
+				alterationReceiverComponent.onRoomCleared(player, this);
+			}
+
 			for (Entity door : doors) {
 				Mappers.doorComponent.get(door).open(door);
 			}
 			
-			// Give reward
-			Journal.addEntry("Room reward: [GOLDENROD]" + this.rewardGold + " gold coin(s).");
-			Mappers.walletComponent.get(this.floor.getGameScreen().player).receive(this.rewardGold);
-			
-			this.cleared = RoomClearedState.CLEARED;
-		}		
-		
+			// Receive rewards
+			for (AbstractRoomReward reward : this.rewards) {
+				reward.receive(player, this);
+			}
+		}
+
 		// Update the room state
 		updateState();
 		
@@ -567,9 +586,15 @@ public class Room extends EntitySystem {
 	public void setCleared(RoomClearedState cleared) {
 		this.cleared = cleared;
 	}
-	
-	public int getRewardGold() {
-		return rewardGold;
+
+	public List<AbstractRoomReward> getRewards() {
+		return rewards;
 	}
+
+	public void addRewards(AbstractRoomReward reward) {
+		this.rewards.add(reward);
+	}
+
+	
 	
 }

@@ -178,15 +178,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						}
 					}
 					
-					room.removeEnemy(entity);
-					
-					
-					
-					// Check if there are still enemies remaining. If not, the room has just been cleared !
-					if (!room.hasEnemies()) {
-						clearRoom(healthCompo.getAttacker(), attackerAlterationReceiverCompo);
-					}
-					
+					room.removeEnemy(entity);					
 				}
 			
 	    	}
@@ -208,19 +200,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     	}
     }
 
-	private void clearRoom(Entity attacker, AlterationReceiverComponent attackerAlterationReceiverCompo) {
-		if (!room.isCleared()) {
-			Journal.addEntry("The " + room.type.title() + " has been cleared");
-			room.setCleared(RoomClearedState.JUST_CLEARED);
-
-			if (attackerAlterationReceiverCompo != null) {
-				attackerAlterationReceiverCompo.onRoomCleared(attacker, room);
-			}
-		}
-		
-		//TODO move this
-		MapRenderer.requireRefresh();
-	}
 
     /**
      * Switch the alert state of an enemy if the player attacked it or it the enemy came close enough to

@@ -217,6 +217,9 @@ public class Descriptions {
 	public static final String ITEM_HEADBAND_TITLE = "Headband";
 	public static final String ITEM_HEADBAND_DESCRIPTION = "A sweaty headband with an small inscription on the inside: \"Age is just a number\". Grants the blessing of the goat while held in the inventory.";
 
+	public static final String ITEM_VILLANELLE_TITLE = "Villanelle";
+	public static final String ITEM_VILLANELLE_DESCRIPTION = "A bottle of perfume called Villanelle. Grants the blessing of the contract killer while held in the inventory.";
+
 	public static final String ITEM_PANGOLIN_SCALE_TITLE = "Pangolin scale";
 	public static final String ITEM_PANGOLIN_SCALE_DESCRIPTION = "A scale of the giant pangolin. It solid as a rock, but as you touch it, you can feel the despair of a mother who lost her childrens.";
 

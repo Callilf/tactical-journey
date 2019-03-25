@@ -322,6 +322,7 @@ public class Assets {
 	public static AtlasRegion old_crown;
 	public static AtlasRegion memento_mori;
 	public static AtlasRegion headband;
+	public static AtlasRegion villanelle;
 	
 	
 	// Boss items
@@ -355,6 +356,7 @@ public class Assets {
 	public static AtlasRegion blessing_cinders;
 	public static AtlasRegion blessing_acceptance;
 	public static AtlasRegion blessing_goat;
+	public static AtlasRegion blessing_contract_killer;
 	public static AtlasRegion curse_frailty;
 	public static AtlasRegion curse_slowness;
 	public static AtlasRegion curse_weakness;
@@ -653,6 +655,7 @@ public class Assets {
 		old_crown = Assets.getTexture("item-infusable-old-crown");
 		memento_mori = Assets.getTexture("item-infusable-memento-mori");
 		headband = Assets.getTexture("item-infusable-headband");
+		villanelle = Assets.getTexture("item-infusable-villanelle");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -680,6 +683,7 @@ public class Assets {
 		blessing_cinders = Assets.getTexture("blessing-cinders");
 		blessing_acceptance = Assets.getTexture("blessing-acceptance");
 		blessing_goat = Assets.getTexture("blessing-goat");
+		blessing_contract_killer = Assets.getTexture("blessing-bounty");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

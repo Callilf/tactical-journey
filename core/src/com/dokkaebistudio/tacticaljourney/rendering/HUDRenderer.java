@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -51,6 +50,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.systems.InspectSystem;
 import com.dokkaebistudio.tacticaljourney.systems.InspectSystem.InspectModeActionEnum;
@@ -959,13 +959,31 @@ public class HUDRenderer implements Renderer, RoomSystem {
 //				Actions.fadeOut(1, Interpolation.pow5In)));
 		
 		this.roomClearedTable.setVisible(true);
-		this.reward.setText("REWARDS\n [GOLDENROD]" + room.getRewardGold() + " gold coin(s)");
+		String rewardsText = buildRewards(room.getRewards());
+		this.reward.setText(rewardsText);
+		float duration = rewardsText.length()/20f;
+		
 		this.roomClearedTable.pack();
 		this.roomClearedTable.addAction(Actions.sequence(Actions.alpha(0f),
 				Actions.alpha(0.8f, 1, Interpolation.pow5Out),
-				Actions.delay(1.5f),
+				Actions.delay(duration),
 				Actions.fadeOut(1, Interpolation.pow5In)));
 
+	}
+	
+	private String buildRewards(List<AbstractRoomReward> rewards) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("REWARDS\n");
+		
+		for ( int i=0 ; i < rewards.size() ; i++) {
+			AbstractRoomReward reward = rewards.get(i);
+			sb.append(reward.getColor() + reward.getQuantity() + reward.getTitle());
+			if (i != rewards.size() - 1) {
+				sb.append("\n");
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 }

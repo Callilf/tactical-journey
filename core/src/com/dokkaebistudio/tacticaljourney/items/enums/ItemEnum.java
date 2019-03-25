@@ -51,6 +51,7 @@ public enum ItemEnum {
 	OLD_CROWN(Descriptions.ITEM_OLD_CROWN_TITLE, 2),
 	MEMENTO_MORI(Descriptions.ITEM_MEMENTO_MORI_TITLE, 2),
 	HEADBAND(Descriptions.ITEM_HEADBAND_TITLE, 2),
+	VILLANELLE(Descriptions.ITEM_VILLANELLE_TITLE, 2),
 
 	
 	

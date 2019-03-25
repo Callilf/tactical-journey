@@ -44,6 +44,7 @@ public class MenuPopinRenderer implements Renderer {
     		if (!menuDisplayed) {
     			//Init the menu
     			initTable();
+    			this.stage.addActor(table);
 				menuDisplayed = true;
     		}
     		
@@ -65,24 +66,25 @@ public class MenuPopinRenderer implements Renderer {
 	private void initTable() {
 		if (table == null) {
 			table = new Table();
+			
+			Table buttonTable = new Table();
 	//			selectedItemPopin.setDebug(true);
 	
 			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
-			table.setTouchable(Touchable.enabled);
-			table.addListener(new ClickListener() {});
+			buttonTable.setTouchable(Touchable.enabled);
+			buttonTable.addListener(new ClickListener() {});
 			
 			// Place the popin and add the background texture
-			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
 			ninePatchDrawable.setMinWidth(400);
-			table.setBackground(ninePatchDrawable);
+			buttonTable.setBackground(ninePatchDrawable);
 			
-			table.align(Align.top);
+			buttonTable.align(Align.top);
 			
 			// 1 - Title
 			Label title = new Label("Game paused", PopinService.hudStyle());
-			table.add(title).top().align(Align.top).pad(20, 0, 60, 0);
-			table.row().align(Align.center);
+			buttonTable.add(title).top().align(Align.top).pad(20, 0, 60, 0);
+			buttonTable.row().align(Align.center);
 			
 	
 			// 2 - Resume button
@@ -94,8 +96,8 @@ public class MenuPopinRenderer implements Renderer {
 					closePopin();
 				}
 			});
-			table.add(resumeBtn).minWidth(200).padBottom(20);
-			table.row();
+			buttonTable.add(resumeBtn).minWidth(200).padBottom(20);
+			buttonTable.row();
 			
 			if (GameScreen.debugMode) {
 				final TextButton debugBtn = new TextButton("Debug", PopinService.buttonStyle());			
@@ -107,8 +109,8 @@ public class MenuPopinRenderer implements Renderer {
 						closePopin();
 					}
 				});
-				table.add(debugBtn).minWidth(200).padBottom(20);
-				table.row();
+				buttonTable.add(debugBtn).minWidth(200).padBottom(20);
+				buttonTable.row();
 			}
 			
 			// 3 - Return to menu
@@ -120,8 +122,8 @@ public class MenuPopinRenderer implements Renderer {
 					closePopin();
 				}
 			});
-			table.add(mainMenuBtn).minWidth(200).padBottom(20);
-			table.row();
+			buttonTable.add(mainMenuBtn).minWidth(200).padBottom(20);
+			buttonTable.row();
 			
 			// 4 - Quit game
 			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
@@ -144,19 +146,23 @@ public class MenuPopinRenderer implements Renderer {
 //				}
 //			});
 			
-			table.add(quitBtn).minWidth(200).padBottom(20);
+			buttonTable.add(quitBtn).minWidth(200).padBottom(20);
 
 			// Place the popin properly
+			buttonTable.pack();
+			table.add(buttonTable).padBottom(50);
+			table.row();
+			
+			Table seedTable = new Table();
+			ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			ninePatchDrawable.setMinWidth(400);
+			seedTable.setBackground(ninePatchDrawable);
+			Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());
+			seedTable.add(seed);
+			table.add(seedTable);
+			
 			table.pack();
 			table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
-			
-			this.stage.addActor(table);
-
-			
-			Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());
-			seed.layout();
-			seed.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, table.getY() - 50);
-			stage.addActor(seed);
 
 		}
 	}

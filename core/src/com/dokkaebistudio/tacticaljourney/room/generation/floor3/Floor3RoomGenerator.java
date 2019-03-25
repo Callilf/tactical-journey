@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
@@ -31,7 +30,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 	
 	@Override
 	public void generateRoomContent(Room room, GeneratedRoom generatedRoom) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 
 		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
 		List<PoolableVector2> spawnPositions = null;
@@ -50,7 +49,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			break;
 		case END_FLOOR_ROOM:
 			if (possibleSpawns.size() == 0) return;
-			int nextInt = random.nextInt(possibleSpawns.size());
+			int nextInt = random.nextSeededInt(possibleSpawns.size());
 			Vector2 pos = possibleSpawns.get(nextInt);
 			entityFactory.createExit(room, pos, false);
 			default:
@@ -72,10 +71,10 @@ public class Floor3RoomGenerator extends RoomGenerator {
 	 * @param spawnPositions the possible spawn positions
 	 * @param canBeEmpty true if there can be no enemies
 	 */
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
+	protected void placeEnemies(Room room, RandomSingleton random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
 		if (spawnPositions.size() == 0) return;
 
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 6));
+		int enemyNb = random.nextSeededInt(Math.min(spawnPositions.size(), 6));
 		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
 		
 		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
@@ -83,9 +82,9 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(18);
+			int enemyTypeRandom = random.nextSeededInt(18);
 			if (enemyTypeRandom == 0) {
-				int spiderType = random.nextInt(2);
+				int spiderType = random.nextSeededInt(2);
 				if (spiderType == 0) {
 					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				} else {
@@ -96,7 +95,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					int spiderType = random.nextInt(2);
+					int spiderType = random.nextSeededInt(2);
 					if (spiderType == 0) {
 						enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 					} else {
@@ -123,7 +122,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 				enemy = entityFactory.enemyFactory.createTribesmenScout(room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					int tribesmanType = random.nextInt(2);
+					int tribesmanType = random.nextSeededInt(2);
 					if (tribesmanType == 0) {
 						enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
 					} else {

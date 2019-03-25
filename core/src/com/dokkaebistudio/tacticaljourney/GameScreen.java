@@ -148,9 +148,6 @@ public class GameScreen extends ScreenAdapter {
 		this.game = game;
 		
 		Gdx.input.setCatchBackKey(true);
-		
-		//Instanciate the RNG
-		RandomSingleton.createInstance();
 
 		// already running
 		state = GAME_RUNNING;

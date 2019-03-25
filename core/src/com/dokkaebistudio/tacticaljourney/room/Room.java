@@ -29,7 +29,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
@@ -132,7 +131,7 @@ public class Room extends EntitySystem {
 		this.removedItems = new ArrayList<>();
 		
 		this.rewards = new ArrayList<>();
-		this.rewards.add(new RoomRewardMoney(1 + RandomSingleton.getInstance().getSeededRandom().nextInt(5)));
+		this.rewards.add(new RoomRewardMoney(1 + RandomSingleton.getInstance().nextSeededInt(5)));
 	}
 	
 	public Array<Entity> getAllEntities() {

@@ -6,9 +6,9 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -34,8 +34,7 @@ public abstract class AbstractItem {
 	private boolean goIntoInventory;
 	
 	
-	private Integer randomValueMin;
-	private Integer randomValueMax;	
+	private Integer quantity;
 	
 	/**
 	 * Constructor for basic items without random values
@@ -74,8 +73,13 @@ public abstract class AbstractItem {
 	 */
 	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, texture, instaPickUp, goIntoInventory);
-		this.setRandomValueMin(valMin);
-		this.setRandomValueMax(valMax);
+		
+		RandomSingleton random = RandomSingleton.getInstance();
+		int value = valMin;
+		if (valMax > valMin) {
+			value += random.nextSeededInt(valMax - valMin + 1);
+		}
+		this.quantity = value;
 	}
 	
 	
@@ -218,20 +222,11 @@ public abstract class AbstractItem {
 		this.goIntoInventory = goIntoInventory;
 	}
 
-	public Integer getRandomValueMin() {
-		return randomValueMin;
-	}
-
-	public void setRandomValueMin(Integer randomValueMin) {
-		this.randomValueMin = randomValueMin;
-	}
-
-	public Integer getRandomValueMax() {
-		return randomValueMax;
-	}
-
-	public void setRandomValueMax(Integer randomValueMax) {
-		this.randomValueMax = randomValueMax;
+	public Integer getQuantity() {
+		return quantity;
 	}
 	
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 }

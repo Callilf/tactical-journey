@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
@@ -31,7 +30,7 @@ public abstract class ShopItemPool extends ItemPool {
 		int sumOfChances = getSumOfChances();
 		if (sumOfChances == 0) return result;
 		
-		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 		int randomInt = 0;
 		
 		List<PooledItemDescriptor> itemsToRemoveFromAllPools = new ArrayList<>();
@@ -39,7 +38,7 @@ public abstract class ShopItemPool extends ItemPool {
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
-			randomInt = seededRandom.nextInt(sumOfChances);
+			randomInt = random.nextSeededInt(sumOfChances);
 			Iterator<PooledItemDescriptor> poolIterator = getItemPool().iterator();
 			while(poolIterator.hasNext()) {
 				PooledItemDescriptor pid = poolIterator.next();

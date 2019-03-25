@@ -52,7 +52,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 	
 	@Override
 	public void generateRoomContent(Room room, GeneratedRoom generatedRoom) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 
 		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
 		List<PoolableVector2> spawnPositions = null;
@@ -90,13 +90,13 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 
 			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
 			for (int i=0 ; i<2 ; i++) {
 				if (!iterator.hasNext()) break;
 				
-				int tribesmanType = random.nextInt(3);
+				int tribesmanType = random.nextSeededInt(3);
 				Entity enemy = null;
 				if (tribesmanType == 0) {
 					enemy = entityFactory.enemyFactory.createTribesmenSpear(room, iterator.next());
@@ -142,5 +142,5 @@ public class Floor4RoomGenerator extends RoomGenerator {
 
 
 	@Override
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {}
+	protected void placeEnemies(Room room, RandomSingleton random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {}
 }

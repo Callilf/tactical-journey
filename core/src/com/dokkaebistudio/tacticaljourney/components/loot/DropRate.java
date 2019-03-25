@@ -1,6 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.components.loot;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -12,7 +12,7 @@ public class DropRate implements Poolable {
 		RARE;
 	}
 	
-	private Map<ItemPoolRarity, Integer> ratePerRarity = new HashMap<>();
+	private Map<ItemPoolRarity, Integer> ratePerRarity = new LinkedHashMap<>();
 	
 	public void add(ItemPoolRarity rarity, Integer rate) {
 		ratePerRarity.put(rarity, rate);

@@ -31,7 +31,7 @@ public class Floor2Generator extends FloorGenerator {
 	 * @param floor the floor to generate.
 	 */
 	public void generateFloor(Floor floor, GameScreen gameScreen) {
-		random = RandomSingleton.getInstance().getSeededRandom();
+		random = RandomSingleton.getInstance();
 		List<Room> rooms = new ArrayList<>();
 
 		// Create the boss room

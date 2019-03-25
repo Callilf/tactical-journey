@@ -18,41 +18,100 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
 public class MainMenuScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
-	Rectangle soundBounds;
-	Rectangle playBounds;
 	Vector3 touchPoint;
+	FitViewport viewport;
+	Stage hudStage;
 
 	TextureRegion menuBackground;
-
-	public MainMenuScreen (TacticalJourney game) {
+	
+	boolean enteredSeed = false;
+	TextField seedField;
+	
+	public MainMenuScreen (final TacticalJourney game) {
 		this.game = game;
 
 		guiCam = new OrthographicCamera(1920, 1080);
 		guiCam.position.set(1920 / 2, 1080 / 2, 0);
-		soundBounds = new Rectangle(0, 0, 64, 64);
-		
-		playBounds = new Rectangle(1920/2 - 300/2, 1080/2 + 70, 300, 36);
+		viewport = new FitViewport(GameScreen.SCREEN_W, GameScreen.SCREEN_H, guiCam);
+		hudStage = new Stage(viewport);
+
 		touchPoint = new Vector3();
 
 		// should be already loaded
 		menuBackground = Assets.menuBackground;
+		
+		Gdx.input.setInputProcessor(hudStage);
+				
+		Table t = new Table();
+		TextButton start = new TextButton("START", PopinService.buttonStyle());
+		start.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				//Instantiate the RNG
+				if (enteredSeed) {
+					RandomSingleton.createInstance(seedField.getText());
+				} else {
+					RandomSingleton.createInstance();
+				}
+				
+				// Launch the game
+				game.setScreen(new GameScreen(game));
+			}
+		});
+		t.add(start).width(500).height(200).padBottom(50);
+		t.row();
+		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		TextFieldStyle tfs = new TextFieldStyle(Assets.font, Color.WHITE, null, null, ninePatchDrawable);
+		seedField = new TextField("Enter seed", tfs);
+		seedField.addListener(new FocusListener() {
+			@Override
+			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+				enteredSeed = true;
+				seedField.setText("");
+			}
+		});
+		
+		t.add(seedField).width(500);
+		t.row();
+		
+		
+		t.pack();
+		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2);
+		hudStage.addActor(t);
 	}
 
 	public void update () {
-		if (Gdx.input.justTouched()) {
-			// touched screen, start the fucking game already
-			game.setScreen(new GameScreen(game));
-		}
+//		if (Gdx.input.justTouched()) {
+//			// touched screen, start the fucking game already
+//			game.setScreen(new GameScreen(game));
+//		}
 	}
 
 	public void draw () {
@@ -62,20 +121,13 @@ public class MainMenuScreen extends ScreenAdapter {
 		guiCam.update();
 		game.batcher.setProjectionMatrix(guiCam.combined);
 
-		game.batcher.disableBlending();
+
+//		game.batcher.enableBlending();
 		game.batcher.begin();
 		game.batcher.draw(menuBackground, 0, 0, 1920, 1080);
-		game.batcher.end();
-
-		game.batcher.enableBlending();
-		game.batcher.begin();
-		// draw loading text in the center
-		String text = "TOUCH ANYWHERE TO START";
-		GlyphLayout loadingLayout = new GlyphLayout();
-		// update layout. It is used to compute the real text height and width to aid positioning
-		loadingLayout.setText(Assets.font, text);
-		Assets.font.draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
+		
+		hudStage.draw();
 	}
 
 	@Override

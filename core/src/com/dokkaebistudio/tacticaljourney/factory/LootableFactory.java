@@ -8,7 +8,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -227,9 +226,9 @@ public final class LootableFactory {
 	// Fill lootable
 	
 	private void fillLootable(LootableComponent lootableComponent) {		
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 		
-		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMinNumberOfItems() + 1);
+		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextSeededInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMinNumberOfItems() + 1);
 		if (nbLoot > 0) {
 			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
 			for (PooledItemDescriptor pid : itemTypes) {

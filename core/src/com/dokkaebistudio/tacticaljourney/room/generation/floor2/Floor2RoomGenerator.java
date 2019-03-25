@@ -11,7 +11,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
@@ -50,7 +49,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 	
 	@Override
 	public void generateRoomContent(Room room, GeneratedRoom generatedRoom) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 
 		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
 		List<PoolableVector2> spawnPositions = null;
@@ -61,7 +60,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 
 			// BOSS FIGHT : Pangolin mother
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 
 			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
 			Entity mother = null;
@@ -109,5 +108,5 @@ public class Floor2RoomGenerator extends RoomGenerator {
 
 
 	@Override
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {}
+	protected void placeEnemies(Room room, RandomSingleton random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {}
 }

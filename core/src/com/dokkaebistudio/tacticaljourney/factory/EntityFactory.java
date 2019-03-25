@@ -856,7 +856,7 @@ public final class EntityFactory {
 		vaseEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		int nextInt = RandomSingleton.getInstance().getSeededRandom().nextInt(2);
+		int nextInt = RandomSingleton.getInstance().nextSeededInt(2);
 		spriteCompo.setSprite(new Sprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big));
 		vaseEntity.add(spriteCompo);
 

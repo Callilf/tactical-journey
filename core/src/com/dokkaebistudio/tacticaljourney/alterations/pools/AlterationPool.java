@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.alterations.pools;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
@@ -32,13 +31,13 @@ public abstract class AlterationPool {
 	public List<BlessingsEnum> getBlessingTypes(int numberOfBlessingsToGet) {
 		List<BlessingsEnum> result = new ArrayList<>();
 		
-		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton randomSingleton = RandomSingleton.getInstance();
 		int randomInt = 0;
 		
 		int chance = 0;
 		for (int i=0 ; i<numberOfBlessingsToGet ; i++) {
 			
-			randomInt = seededRandom.nextInt(blessingSumOfChances());
+			randomInt = randomSingleton.nextSeededInt(blessingSumOfChances());
 			for (PooledAlterationDescriptor<BlessingsEnum> blessingDescriptor : blessingPool()) {
 				if (randomInt >= chance && randomInt < chance + blessingDescriptor.getChanceToDrop()) {
 					//This item is chosen
@@ -62,13 +61,13 @@ public abstract class AlterationPool {
 	public List<CursesEnum> getCurseTypes(int numberOfCursesToGet) {
 		List<CursesEnum> result = new ArrayList<>();
 		
-		RandomXS128 seededRandom = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton randomSingleton = RandomSingleton.getInstance();
 		int randomInt = 0;
 		
 		int chance = 0;
 		for (int i=0 ; i<numberOfCursesToGet ; i++) {
 			
-			randomInt = seededRandom.nextInt(curseSumOfChances());
+			randomInt = randomSingleton.nextSeededInt(curseSumOfChances());
 			for (PooledAlterationDescriptor<CursesEnum> curseDescriptor : cursePool()) {
 				if (randomInt >= chance && randomInt < chance + curseDescriptor.getChanceToDrop()) {
 					result.add(curseDescriptor.getType());

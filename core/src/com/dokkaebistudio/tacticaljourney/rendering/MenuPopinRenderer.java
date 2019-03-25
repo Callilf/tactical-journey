@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -43,7 +44,6 @@ public class MenuPopinRenderer implements Renderer {
     		if (!menuDisplayed) {
     			//Init the menu
     			initTable();
-    			this.stage.addActor(table);
 				menuDisplayed = true;
     		}
     		
@@ -145,11 +145,19 @@ public class MenuPopinRenderer implements Renderer {
 //			});
 			
 			table.add(quitBtn).minWidth(200).padBottom(20);
-			
-			
+
 			// Place the popin properly
 			table.pack();
 			table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
+			
+			this.stage.addActor(table);
+
+			
+			Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());
+			seed.layout();
+			seed.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, table.getY() - 50);
+			stage.addActor(seed);
+
 		}
 	}
 

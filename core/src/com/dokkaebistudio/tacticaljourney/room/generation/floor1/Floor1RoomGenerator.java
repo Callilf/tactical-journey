@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -34,10 +34,10 @@ public class Floor1RoomGenerator extends RoomGenerator {
 	 * @param spawnPositions the possible spawn positions
 	 * @param canBeEmpty true if there can be no enemies
 	 */
-	protected void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
+	protected void placeEnemies(Room room, RandomSingleton random, List<PoolableVector2> spawnPositions, boolean canBeEmpty) {
 		if (spawnPositions.size() == 0) return;
 
-		int enemyNb = random.nextInt(Math.min(spawnPositions.size(), 6));
+		int enemyNb = random.nextSeededInt(Math.min(spawnPositions.size(), 6));
 		if (enemyNb == 0 && !canBeEmpty) enemyNb = 1;
 		
 		Iterator<PoolableVector2> iterator = spawnPositions.iterator();
@@ -45,7 +45,7 @@ public class Floor1RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextInt(9);
+			int enemyTypeRandom = random.nextSeededInt(9);
 			if (enemyTypeRandom == 0) {
 				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
 				iterator.remove();

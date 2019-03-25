@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -28,7 +27,7 @@ public abstract class FloorGenerator {
 	public static final int MIN_ROOM_NB = 17;
 	public static final int MAX_ROOM_NB = 25;
 	
-	protected RandomXS128 random;
+	protected RandomSingleton random;
 	private RoomGenerator roomGenerator;
 	
 	protected Map<Room, Vector2> positionsPerRoom = new HashMap<>();
@@ -47,16 +46,16 @@ public abstract class FloorGenerator {
 	 * @param floor the floor to generate.
 	 */
 	public void generateFloor(Floor floor, GameScreen gameScreen) {
-		random = RandomSingleton.getInstance().getSeededRandom();
+		random = RandomSingleton.getInstance();
 		List<Room> rooms = new ArrayList<>();		
 		
 		// 1 - compute distance between start room and end room
-		int distanceStartToEnd = 3 ;//+ random.nextInt(4);
+		int distanceStartToEnd = 3 + random.nextSeededInt(4);
 		
 		// 2 - Given that startRoom is 0,0, find where to place endRoom
-		int endRoomX = - distanceStartToEnd + random.nextInt((distanceStartToEnd * 2) + 1);
+		int endRoomX = - distanceStartToEnd + random.nextSeededInt((distanceStartToEnd * 2) + 1);
 		int endRoomY = distanceStartToEnd - Math.abs(endRoomX);
-		endRoomY = random.nextBoolean() ? endRoomY : -endRoomY;
+		endRoomY = random.nextSeededInt(2) == 0 ? endRoomY : -endRoomY;
 		
 		// 3 - Build a path from startRoom to endRoom
 		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
@@ -70,7 +69,7 @@ public abstract class FloorGenerator {
 		Room previousRoom = startRoom;
 		while (currX != endRoomX || currY != endRoomY) {
 			if (currX != endRoomX && currY != endRoomY) {
-				if (random.nextBoolean()) {
+				if (random.nextSeededInt(2) == 0) {
 					NewRoomPos newRoomPos = moveHorizontally(currX, endRoomX);
 					currX = newRoomPos.newCoord;
 					currentMove = newRoomPos.direction;
@@ -107,7 +106,7 @@ public abstract class FloorGenerator {
 		// 4 - Add rooms to this path
 		
 		// 4.1 add rooms randomly throughout the path
-		int additionnalRoomsNumber = 6 + random.nextInt(2);
+		int additionnalRoomsNumber = 6 + random.nextSeededInt(2);
 		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber, false);
 		
 		// 4.2 if it wasn't enough to reach the min number of room, add some more
@@ -119,7 +118,7 @@ public abstract class FloorGenerator {
 		
 		// 5 - Place mandatory rooms
 		List<Room> values = new ArrayList<>(roomsPerPosition.values());
-		Collections.shuffle(values, random);
+		Collections.shuffle(values, random.getSeededRandomForShuffle());
 		for (Room r : values) {
 			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
 				r.type = RoomType.KEY_ROOM;
@@ -165,7 +164,7 @@ public abstract class FloorGenerator {
 	 * @return the type of room
 	 */
 	protected RoomType chooseRoomType() {
-		if (random.nextInt(100) < 10) {
+		if (random.nextSeededInt(100) < 10) {
 			return RoomType.EMPTY_ROOM;
 		} else {
 			return RoomType.COMMON_ENEMY_ROOM;
@@ -193,7 +192,7 @@ public abstract class FloorGenerator {
 			for (int j=0 ; j < rooms.size() ; j++) {
 				previousRoom = rooms.get(j);
 				if (previousRoom.getNumberOfNeighbors() < 4) {
-					int rand = random.nextInt(100);
+					int rand = random.nextSeededInt(100);
 					if (rand <= chanceToAddRoom || addToReachMin) {
 						//Add room here
 												
@@ -203,7 +202,7 @@ public abstract class FloorGenerator {
 							continue;
 						}
 						
-						int directionIndex = random.nextInt(possibleMove.size());
+						int directionIndex = random.nextSeededInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
 						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 						rooms.add(currentRoom);
@@ -273,10 +272,10 @@ public abstract class FloorGenerator {
 			return;
 		}
 		
-		Collections.shuffle(possibleMove, random);
+		Collections.shuffle(possibleMove, random.getSeededRandomForShuffle());
 		
 		for (GenerationMoveEnum direction : possibleMove) {
-			int rand = random.nextInt(100);
+			int rand = random.nextSeededInt(100);
 			if (rand <= chanceToAddRoom) {
 				//Add room here
 				chanceToAddRoom = chanceToAddRoom/2;
@@ -314,7 +313,7 @@ public abstract class FloorGenerator {
 				vector2.y += 1;
 				Room linkedRoom = roomsPerPosition.get(vector2);
 				if (linkedRoom != null) {
-					boolean addCorridor = random.nextInt(4) == 0;
+					boolean addCorridor = random.nextSeededInt(4) == 0;
 					if (addCorridor) {
 						currentRoom.setNorthNeighbor(linkedRoom);
 						linkedRoom.setSouthNeighbor(currentRoom);
@@ -328,7 +327,7 @@ public abstract class FloorGenerator {
 				vector2.y -= 1;
 				Room linkedRoom = roomsPerPosition.get(vector2);
 				if (linkedRoom != null) {
-					boolean addCorridor = random.nextInt(4) == 0;
+					boolean addCorridor = random.nextSeededInt(4) == 0;
 					if (addCorridor) {
 						currentRoom.setSouthNeighbor(linkedRoom);
 						linkedRoom.setNorthNeighbor(currentRoom);
@@ -342,7 +341,7 @@ public abstract class FloorGenerator {
 				vector2.x += 1;
 				Room linkedRoom = roomsPerPosition.get(vector2);
 				if (linkedRoom != null) {
-					boolean addCorridor = random.nextInt(4) == 0;
+					boolean addCorridor = random.nextSeededInt(4) == 0;
 					if (addCorridor) {
 						currentRoom.setEastNeighbor(linkedRoom);
 						linkedRoom.setWestNeighbor(currentRoom);
@@ -356,7 +355,7 @@ public abstract class FloorGenerator {
 				vector2.x -= 1;
 				Room linkedRoom = roomsPerPosition.get(vector2);
 				if (linkedRoom != null) {
-					boolean addCorridor = random.nextInt(4) == 0;
+					boolean addCorridor = random.nextSeededInt(4) == 0;
 					if (addCorridor) {
 						currentRoom.setWestNeighbor(linkedRoom);
 						linkedRoom.setEastNeighbor(currentRoom);

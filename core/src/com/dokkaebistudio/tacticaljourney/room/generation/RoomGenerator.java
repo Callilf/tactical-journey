@@ -17,7 +17,6 @@ import java.util.Scanner;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -70,7 +69,7 @@ public abstract class RoomGenerator {
         groom.setPossibleDestr(new ArrayList<PoolableVector2>());
 
 		//Choose the room pattern
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 		FileHandle roomPattern = chooseRoomPattern(currentRoom);
 		Reader reader = roomPattern.reader();
 		
@@ -166,7 +165,7 @@ public abstract class RoomGenerator {
             		break;
             		
             		default:
-            			int nextInt = random.nextInt(20);
+            			int nextInt = random.nextSeededInt(20);
             			if (nextInt == 0 && currentRoom.type != RoomType.SHOP_ROOM) {
             				groom.getTileTypes()[x][realY] = TileEnum.MUD;
             			} else if (nextInt == 1 && currentRoom.type != RoomType.SHOP_ROOM && !hasBushInLayout) {
@@ -210,7 +209,7 @@ public abstract class RoomGenerator {
 
 
 	protected FileHandle chooseRoomPattern(Room currentRoom) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 		
 		switch(currentRoom.type) {
 		case START_FLOOR_ROOM:
@@ -221,7 +220,7 @@ public abstract class RoomGenerator {
 		case KEY_ROOM:
 		case END_FLOOR_ROOM:
 			
-			int roomNb = 1 + random.nextInt(12);
+			int roomNb = 1 + random.nextSeededInt(12);
 			currentRoom.roomPattern = "data/rooms/room" + roomNb + ".csv";
 
 			break;
@@ -230,7 +229,7 @@ public abstract class RoomGenerator {
 			break;
 
 		case STATUE_ROOM:
-			int statueRoomNb = 1 + random.nextInt(2);
+			int statueRoomNb = 1 + random.nextSeededInt(2);
 			currentRoom.roomPattern = "data/rooms/statueRoom" + statueRoomNb + ".csv";
 
 			break;
@@ -244,7 +243,7 @@ public abstract class RoomGenerator {
 	
 	
 	public void generateRoomContent(Room room, GeneratedRoom generatedRoom) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 
 		List<PoolableVector2> possibleSpawns = generatedRoom.getPossibleSpawns();
 		List<PoolableVector2> spawnPositions = null;
@@ -255,7 +254,7 @@ public abstract class RoomGenerator {
 			
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			
 			// Place a loot
 			placeLootable(90, room, random, spawnPositions);
@@ -268,7 +267,7 @@ public abstract class RoomGenerator {
 		case ITEM_ROOM:
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 
 			Vector2 lootPos = spawnPositions.get(0);
 			Entity belongings = entityFactory.lootableFactory.createPersonalBelongings(room, lootPos);
@@ -283,7 +282,7 @@ public abstract class RoomGenerator {
 			
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			
 			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(0));
 			spawnPositions.remove(0);
@@ -317,7 +316,7 @@ public abstract class RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			placeEnemies(room, random, spawnPositions, true);
 			break;
 			
@@ -397,7 +396,7 @@ public abstract class RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random);
+			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			
 			Vector2 pos = spawnPositions.get(0);
 			entityFactory.createExit(room, pos, false);
@@ -417,11 +416,11 @@ public abstract class RoomGenerator {
 	}
 
 
-	protected void placeLootable(int lootableChancePercentage, Room room, RandomXS128 random, List<PoolableVector2> spawnPositions) {
-		int lootRandom = random.nextInt(10);
+	protected void placeLootable(int lootableChancePercentage, Room room, RandomSingleton random, List<PoolableVector2> spawnPositions) {
+		int lootRandom = random.nextSeededInt(10);
 		boolean isLoot = lootRandom < lootableChancePercentage;
 		if (isLoot) {
-			lootRandom = random.nextInt(12);
+			lootRandom = random.nextSeededInt(12);
 			Vector2 lootPos = spawnPositions.get(0);
 			if (lootRandom <= 5) {
 				entityFactory.lootableFactory.createBones(room, lootPos);				
@@ -442,7 +441,7 @@ public abstract class RoomGenerator {
 	 * @param spawnPositions the possible spawn positions
 	 * @param canBeEmpty true if there can be no enemies
 	 */
-	protected abstract void placeEnemies(Room room, RandomXS128 random, List<PoolableVector2> spawnPositions, boolean canBeEmpty);
+	protected abstract void placeEnemies(Room room, RandomSingleton random, List<PoolableVector2> spawnPositions, boolean canBeEmpty);
 	
 	/**
 	 * Scan all destructible possible locations and randomly place a destructible on it
@@ -450,14 +449,14 @@ public abstract class RoomGenerator {
 	 * @param random the random
 	 * @param destrPositions the possible spawn positions for destructibles
 	 */
-	protected void placeDestructibles(Room room, RandomXS128 random, List<PoolableVector2> destrPositions) {
+	protected void placeDestructibles(Room room, RandomSingleton random, List<PoolableVector2> destrPositions) {
 		if (destrPositions == null || destrPositions.isEmpty()) return;
 
 		Iterator<PoolableVector2> iterator = destrPositions.iterator();
 		while (iterator.hasNext()) {
 			PoolableVector2 location = iterator.next();
 			
-			int nextInt = random.nextInt(15);
+			int nextInt = random.nextSeededInt(15);
 			Entity destructible = null;
 			
 			if (nextInt <= 2) {
@@ -474,10 +473,10 @@ public abstract class RoomGenerator {
 	}
 	
 	protected Entity generateEnemyLoot(EnemyItemPool itemPool, DropRate dropRate) {
-		RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
+		RandomSingleton random = RandomSingleton.getInstance();
 		
-		float unit = (float) random.nextInt(100);
-		float decimal = random.nextFloat();
+		float unit = (float) random.nextSeededInt(100);
+		float decimal = random.nextSeededFloat();
 		float randomValue = unit + decimal;
 		
 		int chance = 0;

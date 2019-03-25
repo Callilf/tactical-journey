@@ -7,13 +7,11 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
@@ -25,10 +23,7 @@ public class ItemComponent implements Component, Poolable {
 		
 	/** The king of item. */
 	private AbstractItem itemType;
-	
-	/** The random value used by some items. Null if not used. */
-	private Integer quantity;
-	
+		
 	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
 	private Entity quantityDisplayer;
 	
@@ -55,7 +50,6 @@ public class ItemComponent implements Component, Poolable {
 
 	@Override
 	public void reset() {
-		this.quantity = null;
 		this.quantityPickedUp = null;
 		this.quantityDisplayer = null;
 		this.price = null;
@@ -256,19 +250,11 @@ public class ItemComponent implements Component, Poolable {
 	}
 
 	public Integer getQuantity() {
-		if (quantity == null && this.itemType.getRandomValueMax() != null) {
-			RandomXS128 random = RandomSingleton.getInstance().getSeededRandom();
-			int value = this.itemType.getRandomValueMin();
-			if (this.itemType.getRandomValueMax() > this.itemType.getRandomValueMin()) {
-				value += random.nextInt(this.itemType.getRandomValueMax() - this.itemType.getRandomValueMin() + 1);
-			}
-			setQuantity(value);
-		}
-		return quantity;
+		return this.itemType.getQuantity();
 	}
 
 	public void setQuantity(Integer value) {
-		this.quantity = value;
+		this.itemType.setQuantity(value);
 		
 		if (quantityDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);

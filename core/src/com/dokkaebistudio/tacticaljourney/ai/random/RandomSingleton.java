@@ -24,6 +24,8 @@ public class RandomSingleton {
 	/** The current seed. */
 	private String seed;
 	
+	private int seededNextCounter = 0;
+	
 	/**
 	 * Creates the instance. Should be used only when the game starts.
 	 * @return the created instance
@@ -72,10 +74,16 @@ public class RandomSingleton {
 	 */
 	private RandomSingleton(String seed) {
 		String[] split = seed.split("-");
+		
 		Long l = new Long(split[0]);
-		Long l2 = new Long(split[1]);
+		if (split.length > 1) {
+			Long l2 = new Long(split[1]);
+			this.seededRandom = new RandomXS128(l, l2);
+		} else {
+			this.seededRandom = new RandomXS128(l, 0);
+		}
+		
 		this.setSeed(seed);
-		this.seededRandom = new RandomXS128(l, l2);
 		this.unseededRandom = new RandomXS128();
 	}
 	
@@ -85,24 +93,43 @@ public class RandomSingleton {
 	}
 	
 	
+	public int nextSeededInt(int max) {
+		seededNextCounter++;
+		int nextInt = getSeededRandom().nextInt(max);
+//		System.out.println("nextInt(" + max + "): " + nextInt);
+		return nextInt;
+	}
+	public float nextSeededFloat() {
+		seededNextCounter++;
+		float f = getSeededRandom().nextFloat();
+//		System.out.println("nextFloat(): " + f);
+		return f;
+	}
+	
+	public int nextUnseededInt(int max) {
+		return getUnseededRandom().nextInt(max);
+	}
+	public float nextUnseededFloat() {
+		return getUnseededRandom().nextFloat();
+	}
+	
+	
+	public RandomXS128 getSeededRandomForShuffle() {
+		String[] split = seed.split("-");
+		Long l = new Long(split[0]);
+		RandomXS128 r = new RandomXS128(l, nextSeededInt(1000));
+		return r;
+	}
+	
 	// Get and Set
 
-	public RandomXS128 getSeededRandom() {
+	private RandomXS128 getSeededRandom() {
 		return seededRandom;
-	}
-
-	public void setSeededRandom(RandomXS128 random) {
-		this.seededRandom = random;
 	}
 	
 	public RandomXS128 getUnseededRandom() {
 		return unseededRandom;
 	}
-
-	public void setUnseededRandom(RandomXS128 unseededRandom) {
-		this.unseededRandom = unseededRandom;
-	}
-
 
 	public String getSeed() {
 		return seed;
@@ -110,5 +137,9 @@ public class RandomSingleton {
 
 	public void setSeed(String seed) {
 		this.seed = seed;
+	}
+	
+	public int getSeededNextCounter() {
+		return seededNextCounter;
 	}
 }

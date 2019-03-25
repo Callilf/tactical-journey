@@ -977,7 +977,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		for ( int i=0 ; i < rewards.size() ; i++) {
 			AbstractRoomReward reward = rewards.get(i);
-			sb.append(reward.getColor() + reward.getQuantity() + reward.getTitle());
+			sb.append(reward.getColor() + reward.getQuantity() + " " + reward.getTitle());
 			if (i != rewards.size() - 1) {
 				sb.append("\n");
 			}

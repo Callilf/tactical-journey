@@ -5,19 +5,26 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class AttackComponent implements Component, Poolable, RoomSystem {
 	
@@ -27,6 +34,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The room.*/
 	public Room room;
 	
+	//**********************************
+	// Serialized attributes
+	
 	/** Whether this component is active or not. */
 	public boolean active = true;
 	
@@ -34,7 +44,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private AttackTypeEnum attackType;
 	
 	// Range
-	
 	/** The min attack range. */
 	private int rangeMin = 1;
 	/** The max attack range. */
@@ -42,26 +51,44 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	
 	// Strength
-	
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
 	private int additionnalStrength;
-	
 	/** Whether the value of strength is a differential from the parentAttackCompo's strength or not. */
 	private boolean isStrengthDifferential = true;
 	
 	// Accuracy
-	
 	private int accuracy = 1;
 	private int realAccuracy = 1;
 
 	
 	// Ammos
-	
 	/** The type of ammunition used by this attack component. */
 	private AmmoTypeEnum ammoType = AmmoTypeEnum.NONE;
 	/** The number of ammos used per attack. */
 	private int ammosUsedPerAttack = 1;
+	
+	
+	// Bombs
+	private int bombRadius;
+	private int bombTurnsToExplode;
+	
+	
+	// Animations
+	private AttackAnimation attackAnimation;
+
+	
+	// Skill
+	
+	/** The skill that corresponds to this attack component. */
+	private int skillNumber;
+	
+
+	
+	
+	
+	//**********************************
+	// Not serialized attributes
 	
 	
 	// Target
@@ -71,40 +98,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The targeted tile entity. */
 	private Tile targetedTile;
 	
-	//************
-	// Bombs
-	
-	private int bombRadius;
-	private int bombTurnsToExplode;
-	
-	//************
 	// Throwing
-	
 	private Entity thrownEntity;
 	
-	
-	
-	//*********
-	// Animations
-	
-	private AttackAnimation attackAnimation;
-
-	
-	//*************
-	// Skill
-	
-	/** The skill that corresponds to this attack component. */
-	private int skillNumber;
-	
-	/** The parent attack compo. Used only if the current attack compo belongs to a skill.
-	 * If so, the parent attack compo gives the basic strength, and this attack compo's strength
-	 * is a differential which is added to the base strength (positive or negative).
-	 */
-	private AttackComponent parentAttackCompo;
-	
-	
-	
-	//**************************************
 	// Attack tiles selection and display
 	
 	/** The tiles where the player can attack. */
@@ -119,6 +115,13 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	/** The button used to confirm movements. */
 	private Entity attackConfirmationButton;
 	
+	
+	
+	/** The parent attack compo. Used only if the current attack compo belongs to a skill.
+	 * If so, the parent attack compo gives the basic strength, and this attack compo's strength
+	 * is a differential which is added to the base strength (positive or negative).
+	 */
+	private AttackComponent parentAttackCompo;
 	
 	
 	@Override
@@ -445,5 +448,87 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	public void setAccuracy(int accuracy) {
 		this.realAccuracy = accuracy;
 		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
+	}
+	
+	
+	
+	
+	
+	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<AttackComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, AttackComponent object) {
+				
+				output.writeBoolean(object.active);
+				output.writeString(object.attackType.name());
+
+				// Range
+				output.writeInt(object.rangeMin);
+				output.writeInt(object.rangeMax);
+				
+				// Strength
+				output.writeInt(object.strength);
+				output.writeInt(object.additionnalStrength);
+				output.writeBoolean(object.isStrengthDifferential);
+
+				
+				// Accuracy
+				output.writeInt(object.accuracy);
+				output.writeInt(object.realAccuracy);
+
+				
+				// Ammos
+				output.writeString(object.ammoType.name());
+				output.writeInt(object.ammosUsedPerAttack);
+
+				// Bombs
+				output.writeInt(object.bombRadius);
+				output.writeInt(object.bombTurnsToExplode);
+
+				// Skill
+				output.writeInt(object.skillNumber);
+				
+				// Animations
+				output.writeInt(AnimationSingleton.getInstance().getIndex(object.attackAnimation.getAttackAnim()));
+				output.writeInt(AnimationSingleton.getInstance().getIndex(object.attackAnimation.getCriticalAttackAnim()));
+				output.writeBoolean(object.attackAnimation.isOriented());
+			}
+
+			@Override
+			public AttackComponent read(Kryo kryo, Input input, Class<AttackComponent> type) {
+				AttackComponent compo = engine.createComponent(AttackComponent.class);
+				compo.active = input.readBoolean();
+				compo.attackType = AttackTypeEnum.valueOf(input.readString());
+				
+				compo.rangeMin = input.readInt();
+				compo.rangeMax = input.readInt();
+
+				compo.strength = input.readInt();
+				compo.additionnalStrength = input.readInt();
+				compo.isStrengthDifferential = input.readBoolean();
+
+				compo.accuracy = input.readInt();
+				compo.realAccuracy = input.readInt();
+
+				compo.ammoType = AmmoTypeEnum.valueOf(input.readString());
+				compo.ammosUsedPerAttack = input.readInt();
+				
+				compo.bombRadius = input.readInt();
+				compo.bombTurnsToExplode = input.readInt();
+				
+				compo.skillNumber = input.readInt();
+				
+				// Animation
+				AttackAnimation attackAnimation = new AttackAnimation(
+						AnimationSingleton.getInstance().getAnimation(input.readInt()),
+						AnimationSingleton.getInstance().getAnimation(input.readInt()),
+							input.readBoolean());
+				compo.setAttackAnimation(attackAnimation);
+
+				return compo;
+			}
+		
+		};
 	}
 }

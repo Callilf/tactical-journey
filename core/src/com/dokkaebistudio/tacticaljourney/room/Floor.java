@@ -61,16 +61,16 @@ public class Floor {
 		this.setLevel(level);
 		
 		if (level == 1) {
-			this.grid = new Sprite(Assets.grid1);
+			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);
 		} else if (level == 2) {
-			this.grid = new Sprite(Assets.grid1);
+			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor2Generator(this.gameScreen.entityFactory);
 		} else if (level == 3) {
-			this.grid = new Sprite(Assets.grid2);
+			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor3Generator(this.gameScreen.entityFactory);
 		} else if (level == 4) {
-			this.grid = new Sprite(Assets.grid2);
+			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor4Generator(this.gameScreen.entityFactory);
 
 		}
@@ -153,6 +153,20 @@ public class Floor {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * Get a room given an index.
+	 * @param roomIndex the room index
+	 * @return the room with the given index
+	 */
+	public Room getRoomFromIndex(int roomIndex) {
+		for (Room r : rooms) {
+			if (r.getIndex() == roomIndex) return r;
+		}
+		return null;
+	}
+	
 	
 	// Getters & setters 
 	

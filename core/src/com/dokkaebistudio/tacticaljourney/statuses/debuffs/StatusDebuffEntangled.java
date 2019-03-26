@@ -4,8 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -44,11 +44,11 @@ public class StatusDebuffEntangled extends Status {
 	}
 	
 	@Override
-	public AtlasRegion texture() {
+	public RegionDescriptor texture() {
 		return Assets.status_entangled;
 	}
 	@Override
-	public AtlasRegion fullTexture() {
+	public RegionDescriptor fullTexture() {
 		return Assets.status_entangled_full;
 	}
 	

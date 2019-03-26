@@ -42,7 +42,7 @@ public class AttackWheel {
 		this.displayed = false;
 		
 //		this.sectors = new LinkedList<WheelComponent.Sector>();
-		this.arrow = new Sprite(Assets.wheel_arrow);
+		this.arrow = new Sprite(Assets.wheel_arrow.getRegion());
 		
 //		this.arcs = new ArrayList<>();
 //		for (int i=0 ; i<360 ; i++) {

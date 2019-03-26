@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,11 +20,16 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can receive buffs and debuffs.
@@ -139,7 +145,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 
 	private void addOneStatusTable(Status status) {
 		Table oneStatusTable = new Table();
-		Image img = new Image(status.texture());
+		Image img = new Image(status.texture().getRegion());
 		oneStatusTable.add(img);
 		oneStatusTable.row();
 		Label label = new Label(status.getDurationString(), PopinService.smallTextStyle());
@@ -320,4 +326,37 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		this.currentStatus = currentStatus;
 	}
 	
+	
+	
+	
+	
+	public static Serializer<StatusReceiverComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<StatusReceiverComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, StatusReceiverComponent object) {
+				kryo.writeClassAndObject(output, object.statuses);
+			}
+
+			@Override
+			public StatusReceiverComponent read(Kryo kryo, Input input, Class<StatusReceiverComponent> type) {
+				StatusReceiverComponent compo = engine.createComponent(StatusReceiverComponent.class);
+
+				List<Status> statusList = (List<Status>) kryo.readClassAndObject(input);
+				for (Status status : statusList) {
+					compo.statuses.add(status);
+					
+					// Update the statuses display
+					if (compo.statusTable != null) {
+						compo.addOneStatusTable(status);
+					} else {
+						HUDRenderer.needStatusRefresh = true;
+					}				
+				}
+				
+				return compo;
+			}
+		
+		};
+	}
 }

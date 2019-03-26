@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -27,7 +28,7 @@ public abstract class AbstractItem {
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
-	private AtlasRegion texture;
+	private RegionDescriptor texture;
 	/** Whether this item is picked up automatically while walking on its tile. */
 	private boolean instantPickUp;
 	/** Whether this item can go into the inventory. */
@@ -42,7 +43,7 @@ public abstract class AbstractItem {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
 		this.setTexture(texture);
 		this.setInstantPickUp(instaPickUp);
@@ -55,7 +56,7 @@ public abstract class AbstractItem {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected AbstractItem(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(ItemEnum itemType, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.type = itemType;
 		this.setLabel(itemType.getName());
 		this.setTexture(texture);
@@ -71,7 +72,7 @@ public abstract class AbstractItem {
 	 * @param valMin
 	 * @param valMax
 	 */
-	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, texture, instaPickUp, goIntoInventory);
 		
 		RandomSingleton random = RandomSingleton.getInstance();
@@ -204,12 +205,12 @@ public abstract class AbstractItem {
 	}
 
 
-	public AtlasRegion getTexture() {
+	public RegionDescriptor getTexture() {
 		return texture;
 	}
 
 
-	public void setTexture(AtlasRegion texture) {
+	public void setTexture(RegionDescriptor texture) {
 		this.texture = texture;
 	}
 

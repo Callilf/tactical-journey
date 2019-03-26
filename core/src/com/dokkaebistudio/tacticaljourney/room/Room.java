@@ -51,6 +51,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
 	public Floor floor;
+	private int index;
 	
 	public String roomPattern;
 	public RoomType type;
@@ -114,8 +115,10 @@ public class Room extends EntitySystem {
 	private Room westNeighbor;
 	private Room eastNeighbor;
 
-	public Room (Floor f, PooledEngine engine, EntityFactory ef, RoomType type) {
+	public Room (Floor f, int index, PooledEngine engine, EntityFactory ef, RoomType type) {
 		this.priority = 1;
+		
+		this.index = index;
 		
 		this.floor = f;
 		this.engine = engine;
@@ -592,6 +595,14 @@ public class Room extends EntitySystem {
 
 	public void addRewards(AbstractRoomReward reward) {
 		this.rewards.add(reward);
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	

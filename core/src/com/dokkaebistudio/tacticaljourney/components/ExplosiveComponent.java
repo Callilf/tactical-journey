@@ -5,12 +5,18 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can explode, dealing AoE damages.
@@ -124,4 +130,28 @@ public class ExplosiveComponent implements Component, Poolable, RoomSystem {
 	
 	
 
+	public static Serializer<ExplosiveComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<ExplosiveComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, ExplosiveComponent object) {
+				output.writeInt(object.turnsToExplode);
+				kryo.writeObjectOrNull(output, object.explosionTurn, Integer.class);
+				output.writeInt(object.radius);
+				output.writeInt(object.damage);
+			}
+
+			@Override
+			public ExplosiveComponent read(Kryo kryo, Input input, Class<ExplosiveComponent> type) {
+				ExplosiveComponent compo = engine.createComponent(ExplosiveComponent.class);
+				compo.turnsToExplode = input.readInt();
+				compo.explosionTurn = kryo.readObjectOrNull(input, Integer.class);
+				compo.radius = input.readInt();
+				compo.damage = input.readInt();
+				return compo;
+			}
+		
+		};
+	}
+	
 }

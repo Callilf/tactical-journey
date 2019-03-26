@@ -28,7 +28,7 @@ public class ExitComponent implements Component {
 	public void open(Entity exit) {
 		if (!opened) {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(exit);
-			spriteComponent.getSprite().setRegion(Assets.exit_opened);
+			spriteComponent.getSprite().setRegion(Assets.exit_opened.getRegion());
 			
 			opened = true;
 		}

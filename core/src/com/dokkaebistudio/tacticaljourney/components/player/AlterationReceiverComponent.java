@@ -209,7 +209,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setReceiveAnimation(blessing.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -220,7 +220,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setReceiveAnimation(curse.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -230,7 +230,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setRemoveAnimation(blessing.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -240,7 +240,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setRemoveAnimation(curse.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	

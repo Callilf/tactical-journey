@@ -5,11 +5,10 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -76,7 +75,7 @@ public final class ItemFactory {
 		this.entityFactory = ef;
 	}
 	
-	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, AbstractItem itemType, String title, String desc) {
+	public Entity createItemBase(Room room, Vector2 tilePos, RegionDescriptor texture, AbstractItem itemType, String title, String desc) {
 		Entity item = engine.createEntity();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
@@ -86,7 +85,7 @@ public final class ItemFactory {
 
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( texture));
+		spriteCompo.setSprite( texture);
 		item.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

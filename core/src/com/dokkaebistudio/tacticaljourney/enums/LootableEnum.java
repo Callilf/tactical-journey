@@ -3,9 +3,9 @@
  */
 package com.dokkaebistudio.tacticaljourney.enums;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 
 /**
  * @author Callil
@@ -47,11 +47,11 @@ public enum LootableEnum {
 	/** The number of turns it takes to open. */
 	private int nbTurnsToOpen;
 	
-	private AtlasRegion closedTexture;
-	private AtlasRegion openedTexture;
+	private RegionDescriptor closedTexture;
+	private RegionDescriptor openedTexture;
 	
 	
-	private LootableEnum(String label, int nbTurnsToOpen, AtlasRegion closedTexture, AtlasRegion openedTexture) {
+	private LootableEnum(String label, int nbTurnsToOpen, RegionDescriptor closedTexture, RegionDescriptor openedTexture) {
 		this.setLabel(label);
 		this.setNbTurnsToOpen(nbTurnsToOpen);
 		this.setClosedTexture(closedTexture);
@@ -86,19 +86,19 @@ public enum LootableEnum {
 		this.nbTurnsToOpen = nbTurnsToOpen;
 	}
 
-	public AtlasRegion getClosedTexture() {
+	public RegionDescriptor getClosedTexture() {
 		return closedTexture;
 	}
 
-	public void setClosedTexture(AtlasRegion closedTexture) {
+	public void setClosedTexture(RegionDescriptor closedTexture) {
 		this.closedTexture = closedTexture;
 	}
 
-	public AtlasRegion getOpenedTexture() {
+	public RegionDescriptor getOpenedTexture() {
 		return openedTexture;
 	}
 
-	public void setOpenedTexture(AtlasRegion openedTexture) {
+	public void setOpenedTexture(RegionDescriptor openedTexture) {
 		this.openedTexture = openedTexture;
 	}
 	

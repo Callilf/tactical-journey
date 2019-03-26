@@ -229,7 +229,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		oneItem.setBackground(ninePatchDrawable);
 		
 		oneItem.left();
-		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
+		Image image = new Image(Assets.loadAndGetTexture(itemComponent.getItemImageName().getNameFull()).getRegion());
 		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(-5, 0, -5, 20);
 		image.addListener(new ClickListener() {
 			@Override

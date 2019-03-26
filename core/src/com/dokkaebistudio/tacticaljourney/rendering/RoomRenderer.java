@@ -72,7 +72,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		this.cam = camera;
 		this.room = room;
 		
-		fullBackground = new Image(Assets.menuBackground);
+		fullBackground = new Image(Assets.menuBackground.getRegion());
 		fullBackground.setPosition(0, 0);
 		fullBackground.addAction(Actions.alpha(0.5f));
 	}

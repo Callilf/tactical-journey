@@ -84,9 +84,9 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -176,9 +176,9 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
-		animationCompo.animations.put(StatesEnum.PANGOLIN_MOTHER_CRYING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
+		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_CRYING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.factory.enemies;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -78,9 +77,9 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.enemy_spider));
+		spriteCompo.setSprite(Assets.enemy_spider);
 		enemyEntity.add(spriteCompo);
-
+		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
@@ -161,7 +160,7 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_web));
+		spriteCompo.setSprite(Assets.enemy_spider_web);
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -249,7 +248,7 @@ public final class EnemySpiderFactory {
 		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.enemy_spider_venom));
+		spriteCompo.setSprite(Assets.enemy_spider_venom);
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

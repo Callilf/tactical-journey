@@ -213,7 +213,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		Action finishThrowAction = null;
 		    		if (skillAttackCompo.getThrownEntity() != null) {
 		    			ItemComponent itemComponent = Mappers.itemComponent.get(skillAttackCompo.getThrownEntity());
-		    			skillAttackCompo.getAttackAnimation().setAttackAnim(itemComponent.getItemImageName());
+		    			skillAttackCompo.getAttackAnimation().setAttackAnim(itemComponent.getItemImageName().getRegion());
 		    			// Throw item from inventory
 		    			finishThrowAction = new Action(){
 							  @Override

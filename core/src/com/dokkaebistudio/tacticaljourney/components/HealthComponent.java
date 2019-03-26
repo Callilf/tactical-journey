@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -13,10 +14,15 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.
@@ -480,6 +486,43 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 
     
 
+	
+	
+	public static Serializer<HealthComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<HealthComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, HealthComponent object) {
+				
+				output.writeInt(object.maxHp);
+				output.writeInt(object.hp);
+				kryo.writeClassAndObject(output, object.hpDisplayer);
+
+				// Armor
+				output.writeInt(object.maxArmor);
+				output.writeInt(object.armor);
+
+				// Resistance
+				kryo.writeClassAndObject(output, object.resitanceMap);
+			}
+
+			@Override
+			public HealthComponent read(Kryo kryo, Input input, Class<HealthComponent> type) {
+				HealthComponent compo = engine.createComponent(HealthComponent.class);
+				compo.maxHp = input.readInt();
+				compo.hp = input.readInt();
+				compo.hpDisplayer = (Entity) kryo.readClassAndObject(input);
+
+				compo.maxArmor = input.readInt();
+				compo.armor = input.readInt();
+
+				compo.resitanceMap = (Map<DamageType, Integer>) kryo.readClassAndObject(input);
+
+				return compo;
+			}
+		
+		};
+	}
 
 	
 }

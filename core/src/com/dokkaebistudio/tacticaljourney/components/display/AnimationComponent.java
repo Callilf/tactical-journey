@@ -17,16 +17,64 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class AnimationComponent implements Component, Poolable {
-	public IntMap<Animation<Sprite>> animations = new IntMap<Animation<Sprite>>();
+	private IntMap<Integer> animationsIndexes = new IntMap<>();
+//	private IntMap<Animation<Sprite>> animations = new IntMap<>();
 	
 	@Override
 	public void reset() {
-		animations.clear();
+		animationsIndexes.clear();
+//		animations.clear();
 	}
+	
+	
+	public void addAnimation(int state, Animation<Sprite> anim) {
+		int index = AnimationSingleton.getInstance().getIndex(anim);
+		if (index == -1) {
+			System.out.println("EPIC FAIL in animation component");
+		} else {
+			animationsIndexes.put(state, AnimationSingleton.getInstance().getIndex(anim));
+		}
+	}
+	
+	public Animation<Sprite> getAnimation(int state) {
+		return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(state));
+	}
+	
+	
+	
+	
+	
+	
+	public static Serializer<AnimationComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<AnimationComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, AnimationComponent object) {
+				kryo.writeClassAndObject(output, object.animationsIndexes);
+			}
+
+			@Override
+			public AnimationComponent read(Kryo kryo, Input input, Class<AnimationComponent> type) {
+				AnimationComponent compo = engine.createComponent(AnimationComponent.class);
+				compo.animationsIndexes.putAll((IntMap<Integer>) kryo.readClassAndObject(input));
+				return compo;
+			}
+		
+		};
+	}
+	
 }

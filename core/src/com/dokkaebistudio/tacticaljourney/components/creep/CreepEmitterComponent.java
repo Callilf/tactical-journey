@@ -2,12 +2,20 @@ package com.dokkaebistudio.tacticaljourney.components.creep;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is a creep on the floor and have an effect when an entity
@@ -59,4 +67,24 @@ public class CreepEmitterComponent implements Component, Poolable {
 		this.type = type;
 	}
 	
+	
+	
+	
+	public static Serializer<CreepEmitterComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<CreepEmitterComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, CreepEmitterComponent object) {
+				output.writeString(object.type.name());
+			}
+
+			@Override
+			public CreepEmitterComponent read(Kryo kryo, Input input, Class<CreepEmitterComponent> type) {
+				CreepEmitterComponent compo = engine.createComponent(CreepEmitterComponent.class);
+				compo.type = CreepType.valueOf(input.readString());
+				return compo;
+			}
+		
+		};
+	}
 }

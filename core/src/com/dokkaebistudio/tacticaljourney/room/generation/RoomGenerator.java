@@ -380,7 +380,7 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 			
-//			Entity enemy3 = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(12, 10));
+			Entity enemy3 = entityFactory.enemyFactory.createStinger(room, new Vector2(12, 10));
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 //			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);

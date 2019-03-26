@@ -5,8 +5,8 @@ package com.dokkaebistudio.tacticaljourney.statuses.buffs;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -41,11 +41,11 @@ public class StatusBuffFlight extends Status {
 	}
 
 	@Override
-	public AtlasRegion texture() {
+	public RegionDescriptor texture() {
 		return Assets.status_flight;
 	}
 	@Override
-	public AtlasRegion fullTexture() {
+	public RegionDescriptor fullTexture() {
 		return Assets.status_flight_full;
 	}
 

@@ -43,17 +43,17 @@ public class PopinService {
 		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, Assets.font);
 		checkedButtonStyle.disabled = npCheckedBtnDisabled;
 		
-		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up));
-		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down));
-		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up);
+		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up.getRegion()));
+		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down.getRegion()));
+		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up.getRegion());
 		disableSprite.setAlpha(0.5f);
 		Drawable btnDisabled = new SpriteDrawable(disableSprite);
 		bigButtonStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
 		bigButtonStyle.disabled = btnDisabled;
 
-		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.popin_small_btn_up));
-		Drawable sbtnDown = new SpriteDrawable(new Sprite(Assets.popin_small_btn_down));
-		Sprite sdisableSprite = new Sprite(Assets.popin_small_btn_up);
+		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.popin_small_btn_up.getRegion()));
+		Drawable sbtnDown = new SpriteDrawable(new Sprite(Assets.popin_small_btn_down.getRegion()));
+		Sprite sdisableSprite = new Sprite(Assets.popin_small_btn_up.getRegion());
 		sdisableSprite.setAlpha(0.5f);
 		Drawable sbtnDisabled = new SpriteDrawable(sdisableSprite);
 		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font);

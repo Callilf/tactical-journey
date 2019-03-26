@@ -35,14 +35,16 @@ public class Floor4Generator extends FloorGenerator {
 		List<Room> rooms = new ArrayList<>();
 
 		// Create the boss room
-		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.BOSS_ROOM);
+		Room startRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, RoomType.BOSS_ROOM);
+		roomCounter++;
 		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
 		
 
 		// Create the exit room
-		Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.END_FLOOR_ROOM);
+		Room currentRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, RoomType.END_FLOOR_ROOM);
+		roomCounter++;
 		roomsPerPosition.put(new Vector2(0, 1), currentRoom);
 		positionsPerRoom.put(currentRoom, new Vector2(0, 1));
 		rooms.add(currentRoom);

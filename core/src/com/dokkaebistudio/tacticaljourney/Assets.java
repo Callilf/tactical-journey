@@ -16,6 +16,8 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -31,48 +33,50 @@ import com.badlogic.gdx.utils.Array;
 public class Assets {
 	
 	public static final String atlas = "tacticaljourney.atlas";
+	public static HashMap<String, RegionDescriptor> allSprites;
+	public static int spritesCounter;
 
-	public static AtlasRegion menuBackground;
+	public static RegionDescriptor menuBackground;
 	
 	public static Array<Sprite> player_standing;
 	public static Array<Sprite> player_running;
 	public static Array<Sprite> player_flying;
-	public static AtlasRegion shopkeeper;
-	public static AtlasRegion soulbender;
-	public static AtlasRegion godess_statue;
-	public static AtlasRegion godess_statue_broken;
+	public static RegionDescriptor shopkeeper;
+	public static RegionDescriptor soulbender;
+	public static RegionDescriptor godess_statue;
+	public static RegionDescriptor godess_statue_broken;
 	
 	
-	public static AtlasRegion grid1;
-	public static AtlasRegion grid2;
-	public static AtlasRegion tile_ground;
-	public static AtlasRegion heavy_wall;
-	public static AtlasRegion wall;
-	public static AtlasRegion wall_destroyed;
-	public static AtlasRegion tile_pit;
-	public static AtlasRegion mud;
-	public static AtlasRegion mud_destroyed;
-	public static AtlasRegion tallGrass;
-	public static AtlasRegion vineGrass;
-	public static AtlasRegion entangled_vines;
+	public static RegionDescriptor grid1;
+	public static RegionDescriptor grid2;
+	public static RegionDescriptor tile_ground;
+	public static RegionDescriptor heavy_wall;
+	public static RegionDescriptor wall;
+	public static RegionDescriptor wall_destroyed;
+	public static RegionDescriptor tile_pit;
+	public static RegionDescriptor mud;
+	public static RegionDescriptor mud_destroyed;
+	public static RegionDescriptor tallGrass;
+	public static RegionDescriptor vineGrass;
+	public static RegionDescriptor entangled_vines;
 	
-	public static AtlasRegion exit_opened;
-	public static AtlasRegion exit_closed;
-	public static AtlasRegion door_closed;
-	public static AtlasRegion door_opened;
+	public static RegionDescriptor exit_opened;
+	public static RegionDescriptor exit_closed;
+	public static RegionDescriptor door_closed;
+	public static RegionDescriptor door_opened;
 
-	public static AtlasRegion tile_movable;
-	public static AtlasRegion tile_attackable;
-	public static AtlasRegion tile_explosion;
+	public static RegionDescriptor tile_movable;
+	public static RegionDescriptor tile_attackable;
+	public static RegionDescriptor tile_explosion;
 	
-	public static AtlasRegion tile_movable_waypoint;
-	public static AtlasRegion tile_movable_selected;
+	public static RegionDescriptor tile_movable_waypoint;
+	public static RegionDescriptor tile_movable_selected;
 	
-	public static AtlasRegion btn_move_confirmation;
-	public static AtlasRegion btn_end_turn;
-	public static AtlasRegion btn_end_turn_pushed;
+	public static RegionDescriptor btn_move_confirmation;
+	public static RegionDescriptor btn_end_turn;
+	public static RegionDescriptor btn_end_turn_pushed;
 	
-	public static AtlasRegion hud_room_cleared;
+	public static RegionDescriptor hud_room_cleared;
 	
 	
 	//*****************
@@ -93,132 +97,132 @@ public class Assets {
 	public static NinePatch buttonPressedNinePatch;
 	public static NinePatch buttonDisabledNinePatch;
 	
-	public static AtlasRegion popin_big_btn_up;
-	public static AtlasRegion popin_big_btn_down;
-	public static AtlasRegion popin_small_btn_up;
-	public static AtlasRegion popin_small_btn_down;
+	public static RegionDescriptor popin_big_btn_up;
+	public static RegionDescriptor popin_big_btn_down;
+	public static RegionDescriptor popin_small_btn_up;
+	public static RegionDescriptor popin_small_btn_down;
 	
-	public static AtlasRegion lvl_up_background;
-	public static AtlasRegion lvl_up_choice_frame;
-	public static AtlasRegion lvl_up_choice_desc_panel;
-	public static AtlasRegion lvl_up_choice_reward_panel;
+	public static RegionDescriptor lvl_up_background;
+	public static RegionDescriptor lvl_up_choice_frame;
+	public static RegionDescriptor lvl_up_choice_desc_panel;
+	public static RegionDescriptor lvl_up_choice_reward_panel;
 	
-	public static AtlasRegion profile_background;
-	public static AtlasRegion profile_alteration_background;
-	public static AtlasRegion btn_profile;
-	public static AtlasRegion btn_profile_pushed;
-	public static AtlasRegion item_infused_icon;
+	public static RegionDescriptor profile_background;
+	public static RegionDescriptor profile_alteration_background;
+	public static RegionDescriptor btn_profile;
+	public static RegionDescriptor btn_profile_pushed;
+	public static RegionDescriptor item_infused_icon;
 	
-	public static AtlasRegion btn_inspect;
-	public static AtlasRegion btn_inspect_pushed;
-	public static AtlasRegion btn_inspect_checked;
+	public static RegionDescriptor btn_inspect;
+	public static RegionDescriptor btn_inspect_pushed;
+	public static RegionDescriptor btn_inspect_checked;
 	
-	public static AtlasRegion inventory_background;
-	public static AtlasRegion inventory_money;
-	public static AtlasRegion inventory_slot;
-	public static AtlasRegion inventory_slot_disabled;
-	public static AtlasRegion btn_inventory;
-	public static AtlasRegion btn_inventory_pushed;
+	public static RegionDescriptor inventory_background;
+	public static RegionDescriptor inventory_money;
+	public static RegionDescriptor inventory_slot;
+	public static RegionDescriptor inventory_slot_disabled;
+	public static RegionDescriptor btn_inventory;
+	public static RegionDescriptor btn_inventory_pushed;
 	
-	public static AtlasRegion small_popin_background;
+	public static RegionDescriptor small_popin_background;
 	
-	public static AtlasRegion inventory_item_popin_background;
-	public static AtlasRegion inventory_lootable_item_background;
+	public static RegionDescriptor inventory_item_popin_background;
+	public static RegionDescriptor inventory_lootable_item_background;
 
-	public static AtlasRegion dialog_background;
-	public static AtlasRegion shop_item_background;	
+	public static RegionDescriptor dialog_background;
+	public static RegionDescriptor shop_item_background;	
 	
-	public static AtlasRegion btn_skill_attack;
-	public static AtlasRegion btn_skill_attack_pushed;
-	public static AtlasRegion btn_skill_attack_checked;
+	public static RegionDescriptor btn_skill_attack;
+	public static RegionDescriptor btn_skill_attack_pushed;
+	public static RegionDescriptor btn_skill_attack_checked;
 	
-	public static AtlasRegion btn_skill_bow;
-	public static AtlasRegion btn_skill_bow_pushed;
-	public static AtlasRegion btn_skill_bow_checked;
+	public static RegionDescriptor btn_skill_bow;
+	public static RegionDescriptor btn_skill_bow_pushed;
+	public static RegionDescriptor btn_skill_bow_checked;
 	
-	public static AtlasRegion btn_skill_bomb;
-	public static AtlasRegion btn_skill_bomb_pushed;
-	public static AtlasRegion btn_skill_bomb_checked;
+	public static RegionDescriptor btn_skill_bomb;
+	public static RegionDescriptor btn_skill_bomb_pushed;
+	public static RegionDescriptor btn_skill_bomb_checked;
 
-	public static AtlasRegion key_slot;
-	public static AtlasRegion key;
+	public static RegionDescriptor key_slot;
+	public static RegionDescriptor key;
 	
 	
 	
-//	public static AtlasRegion wheel_arc;
-	public static AtlasRegion wheel_arrow;
+//	public static RegionDescriptor wheel_arc;
+	public static RegionDescriptor wheel_arrow;
 	
 	
 	//***********************
 	// Map
 	
-	//public static AtlasRegion map_background;
-	public static AtlasRegion map_panel;
-	public static AtlasRegion map_plus;
-	public static AtlasRegion map_minus;
-	public static AtlasRegion map_background;
+	//public static RegionDescriptor map_background;
+	public static RegionDescriptor map_panel;
+	public static RegionDescriptor map_plus;
+	public static RegionDescriptor map_minus;
+	public static RegionDescriptor map_background;
 	
-	public static AtlasRegion map_player;
-	public static AtlasRegion map_corridor;
-	public static AtlasRegion map_room;
-	public static AtlasRegion map_room_enemy;
-	public static AtlasRegion map_room_exit;
-	public static AtlasRegion map_room_shop;
-	public static AtlasRegion map_room_statue;
-	public static AtlasRegion map_room_statue_enemy;
-	public static AtlasRegion map_room_key;
-	public static AtlasRegion map_room_key_enemy;
-	public static AtlasRegion map_room_item;
-	public static AtlasRegion map_room_item_enemy;
-	public static AtlasRegion map_room_boss;
-	public static AtlasRegion map_room_boss_enemy;
-	public static AtlasRegion map_room_start;
-	public static AtlasRegion map_room_unknown;
+	public static RegionDescriptor map_player;
+	public static RegionDescriptor map_corridor;
+	public static RegionDescriptor map_room;
+	public static RegionDescriptor map_room_enemy;
+	public static RegionDescriptor map_room_exit;
+	public static RegionDescriptor map_room_shop;
+	public static RegionDescriptor map_room_statue;
+	public static RegionDescriptor map_room_statue_enemy;
+	public static RegionDescriptor map_room_key;
+	public static RegionDescriptor map_room_key_enemy;
+	public static RegionDescriptor map_room_item;
+	public static RegionDescriptor map_room_item_enemy;
+	public static RegionDescriptor map_room_boss;
+	public static RegionDescriptor map_room_boss_enemy;
+	public static RegionDescriptor map_room_start;
+	public static RegionDescriptor map_room_unknown;
 	
 	
 	//********
 	// Journal
 	
-	public static AtlasRegion journal_background;
+	public static RegionDescriptor journal_background;
 
 	
 	//**************
 	// Projectiles
 	
-	public static AtlasRegion projectile_arrow;
-	public static AtlasRegion projectile_bomb;
+	public static RegionDescriptor projectile_arrow;
+	public static RegionDescriptor projectile_bomb;
 	public static Array<Sprite> projectile_web;
 	public static Array<Sprite> projectile_pebble;
 
 	
 	//********
 	// Creep
-	public static AtlasRegion creep_web;
-	public static AtlasRegion creep_poison;
-	public static AtlasRegion creep_fire;
+	public static RegionDescriptor creep_web;
+	public static RegionDescriptor creep_poison;
+	public static RegionDescriptor creep_fire;
 	public static Array<Sprite> creep_fire_animation;
 	
 	
 	//***************
 	// Destructibles
 	
-	public static AtlasRegion destructible_vase;
-	public static AtlasRegion destructible_vase_destroyed;
-	public static AtlasRegion destructible_vase_big;
-	public static AtlasRegion destructible_vase_big_destroyed;
-	public static AtlasRegion destructible_ammo_crate;
-	public static AtlasRegion destructible_ammo_crate_destroyed;
-	public static AtlasRegion destructible_ammo_crate_reinforced;
+	public static RegionDescriptor destructible_vase;
+	public static RegionDescriptor destructible_vase_destroyed;
+	public static RegionDescriptor destructible_vase_big;
+	public static RegionDescriptor destructible_vase_big_destroyed;
+	public static RegionDescriptor destructible_ammo_crate;
+	public static RegionDescriptor destructible_ammo_crate_destroyed;
+	public static RegionDescriptor destructible_ammo_crate_reinforced;
 
 
 
 	//********
 	// Enemies
 	
-	public static AtlasRegion enemy_spider;
-	public static AtlasRegion enemy_spider_venom;
-	public static AtlasRegion enemy_spider_web;
-	public static AtlasRegion enemy_scorpion;
+	public static RegionDescriptor enemy_spider;
+	public static RegionDescriptor enemy_spider_venom;
+	public static RegionDescriptor enemy_spider_web;
+	public static RegionDescriptor enemy_scorpion;
 	public static Array<Sprite> enemy_stinger;
 	public static Array<Sprite> enemy_stinger_charge;
 	
@@ -246,87 +250,87 @@ public class Assets {
 	//*************
 	// Containers
 	
-	public static AtlasRegion lootable_bones;
-	public static AtlasRegion lootable_bones_opened;
-	public static AtlasRegion lootable_satchel;
-	public static AtlasRegion lootable_satchel_opened;
-	public static AtlasRegion lootable_belongings;
-	public static AtlasRegion lootable_belongings_opened;
-	public static AtlasRegion lootable_orb_bag;
-	public static AtlasRegion lootable_orb_bag_opened;
+	public static RegionDescriptor lootable_bones;
+	public static RegionDescriptor lootable_bones_opened;
+	public static RegionDescriptor lootable_satchel;
+	public static RegionDescriptor lootable_satchel_opened;
+	public static RegionDescriptor lootable_belongings;
+	public static RegionDescriptor lootable_belongings_opened;
+	public static RegionDescriptor lootable_orb_bag;
+	public static RegionDescriptor lootable_orb_bag_opened;
 
 	//*********
 	// Statuses
 	
-	public static AtlasRegion status_poison;
-	public static AtlasRegion status_poison_full;
-	public static AtlasRegion status_regen;
-	public static AtlasRegion status_regen_full;
-	public static AtlasRegion status_flight;
-	public static AtlasRegion status_flight_full;
-	public static AtlasRegion status_burning;
-	public static AtlasRegion status_burning_full;
-	public static AtlasRegion status_entangled;
-	public static AtlasRegion status_entangled_full;
-	public static AtlasRegion status_death_door;
-	public static AtlasRegion status_death_door_full;
+	public static RegionDescriptor status_poison;
+	public static RegionDescriptor status_poison_full;
+	public static RegionDescriptor status_regen;
+	public static RegionDescriptor status_regen_full;
+	public static RegionDescriptor status_flight;
+	public static RegionDescriptor status_flight_full;
+	public static RegionDescriptor status_burning;
+	public static RegionDescriptor status_burning_full;
+	public static RegionDescriptor status_entangled;
+	public static RegionDescriptor status_entangled_full;
+	public static RegionDescriptor status_death_door;
+	public static RegionDescriptor status_death_door_full;
 
 	
 	//*********
 	// Orbs
 	
 	public static Array<Sprite> energy_orb;
-	public static AtlasRegion energy_orb_item;
+	public static RegionDescriptor energy_orb_item;
 	public static Array<Sprite> vegetal_orb;
-	public static AtlasRegion vegetal_orb_item;
+	public static RegionDescriptor vegetal_orb_item;
 	public static Array<Sprite> poison_orb;
-	public static AtlasRegion poison_orb_item;
+	public static RegionDescriptor poison_orb_item;
 	public static Array<Sprite> fire_orb;
-	public static AtlasRegion fire_orb_item;
+	public static RegionDescriptor fire_orb_item;
 	public static Array<Sprite> death_orb;
-	public static AtlasRegion death_orb_item;
+	public static RegionDescriptor death_orb_item;
 	public static Array<Sprite> void_orb;
-	public static AtlasRegion void_orb_item;
+	public static RegionDescriptor void_orb_item;
 
 	
 	//******
 	// Items
 	
-	public static AtlasRegion tutorial_page_item;
+	public static RegionDescriptor tutorial_page_item;
 
-	public static AtlasRegion money_item;
-	public static AtlasRegion health_up_item;
-	public static AtlasRegion regen_potion_item;
-	public static AtlasRegion wing_potion_item;
-	public static AtlasRegion fire_potion_item;
-	public static AtlasRegion web_sack_item;
-	public static AtlasRegion venom_gland_item;
-	public static AtlasRegion pebble_item;
+	public static RegionDescriptor money_item;
+	public static RegionDescriptor health_up_item;
+	public static RegionDescriptor regen_potion_item;
+	public static RegionDescriptor wing_potion_item;
+	public static RegionDescriptor fire_potion_item;
+	public static RegionDescriptor web_sack_item;
+	public static RegionDescriptor venom_gland_item;
+	public static RegionDescriptor pebble_item;
 	
-	public static AtlasRegion armor_up_item;
-	public static AtlasRegion armor_piece_item;
+	public static RegionDescriptor armor_up_item;
+	public static RegionDescriptor armor_piece_item;
 	
-	public static AtlasRegion orb_container_item;
+	public static RegionDescriptor orb_container_item;
 	
-	public static AtlasRegion arrow_item;
-	public static AtlasRegion bomb_item;
+	public static RegionDescriptor arrow_item;
+	public static RegionDescriptor bomb_item;
 	
 	// Personal items
-	public static AtlasRegion totem_of_kalamazoo;
-	public static AtlasRegion fata_morgana;
-	public static AtlasRegion mithridatium;
-	public static AtlasRegion nurse_eye_patch;
-	public static AtlasRegion vegetal_garment;
-	public static AtlasRegion ram_skull;
-	public static AtlasRegion colorful_tie;
-	public static AtlasRegion old_crown;
-	public static AtlasRegion memento_mori;
-	public static AtlasRegion headband;
-	public static AtlasRegion villanelle;
+	public static RegionDescriptor totem_of_kalamazoo;
+	public static RegionDescriptor fata_morgana;
+	public static RegionDescriptor mithridatium;
+	public static RegionDescriptor nurse_eye_patch;
+	public static RegionDescriptor vegetal_garment;
+	public static RegionDescriptor ram_skull;
+	public static RegionDescriptor colorful_tie;
+	public static RegionDescriptor old_crown;
+	public static RegionDescriptor memento_mori;
+	public static RegionDescriptor headband;
+	public static RegionDescriptor villanelle;
 	
 	
 	// Boss items
-	public static AtlasRegion pangolin_scale;
+	public static RegionDescriptor pangolin_scale;
 
 	
 	
@@ -341,28 +345,28 @@ public class Assets {
 	//**************************
 	// Alterations
 	
-	public static AtlasRegion blessing_vigor;
-	public static AtlasRegion blessing_strength;
-	public static AtlasRegion blessing_celerity;
-	public static AtlasRegion blessing_of_kalamazoo;
-	public static AtlasRegion blessing_of_vilma;
-	public static AtlasRegion blessing_mithridatism;
-	public static AtlasRegion blessing_black_mamba;
-	public static AtlasRegion blessing_poisoner;
-	public static AtlasRegion blessing_pangolin;
-	public static AtlasRegion blessing_photosynthesis;
-	public static AtlasRegion blessing_calishka;
-	public static AtlasRegion blessing_fast_learner;
-	public static AtlasRegion blessing_cinders;
-	public static AtlasRegion blessing_acceptance;
-	public static AtlasRegion blessing_goat;
-	public static AtlasRegion blessing_contract_killer;
-	public static AtlasRegion curse_frailty;
-	public static AtlasRegion curse_slowness;
-	public static AtlasRegion curse_weakness;
-	public static AtlasRegion curse_black_mamba;
-	public static AtlasRegion curse_acceptance;
-	public static AtlasRegion curse_pangolin_mother;
+	public static RegionDescriptor blessing_vigor;
+	public static RegionDescriptor blessing_strength;
+	public static RegionDescriptor blessing_celerity;
+	public static RegionDescriptor blessing_of_kalamazoo;
+	public static RegionDescriptor blessing_of_vilma;
+	public static RegionDescriptor blessing_mithridatism;
+	public static RegionDescriptor blessing_black_mamba;
+	public static RegionDescriptor blessing_poisoner;
+	public static RegionDescriptor blessing_pangolin;
+	public static RegionDescriptor blessing_photosynthesis;
+	public static RegionDescriptor blessing_calishka;
+	public static RegionDescriptor blessing_fast_learner;
+	public static RegionDescriptor blessing_cinders;
+	public static RegionDescriptor blessing_acceptance;
+	public static RegionDescriptor blessing_goat;
+	public static RegionDescriptor blessing_contract_killer;
+	public static RegionDescriptor curse_frailty;
+	public static RegionDescriptor curse_slowness;
+	public static RegionDescriptor curse_weakness;
+	public static RegionDescriptor curse_black_mamba;
+	public static RegionDescriptor curse_acceptance;
+	public static RegionDescriptor curse_pangolin_mother;
 
 	
 
@@ -374,6 +378,7 @@ public class Assets {
 	
 	
 	public void initTextures() {
+		allSprites = new HashMap<>();
 		menuBackground = Assets.getTexture("background-test-menu");
 
 		player_standing = Assets.getAnimation("player_stand");
@@ -693,6 +698,15 @@ public class Assets {
 
 	}
 	
+	public static void addSprite(RegionDescriptor sprite) {
+		allSprites.put(sprite.getName(), sprite);
+	}
+	
+	public static RegionDescriptor findSprite(String name) {
+		if (name == null) return null;
+		RegionDescriptor regionDescriptor = allSprites.get(name);
+		return regionDescriptor;
+	}
 	
 
 	public static Assets getInstance() {
@@ -741,10 +755,22 @@ public class Assets {
 		this.manager.load(atlasFile, TextureAtlas.class);
 	}
 
-	public static TextureAtlas.AtlasRegion getTexture(String file){
+	private static RegionDescriptor getTexture(String file){
 		AtlasRegion region = getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
 		region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		return region;
+		
+		RegionDescriptor regionDescriptor = new RegionDescriptor(file, region);
+		addSprite(regionDescriptor);
+		return regionDescriptor;
+	}
+	
+	@Deprecated
+	public static RegionDescriptor loadAndGetTexture(String file){
+		AtlasRegion region = getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
+		region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		RegionDescriptor regionDescriptor = new RegionDescriptor(file, region);
+		return regionDescriptor;
 	}
 	
 	public static Array<Sprite> getAnimation(String file){
@@ -759,7 +785,7 @@ public class Assets {
 	}
 	
 	public static NinePatch getNinePatch(String file, int left, int right, int top, int bottom){
-		return new NinePatch(getTexture(file), left, right, top, bottom);
+		return new NinePatch(getTexture(file).getRegion(), left, right, top, bottom);
 	}
 	
 

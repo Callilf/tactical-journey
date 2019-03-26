@@ -34,6 +34,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -124,7 +125,7 @@ public class GameScreen extends ScreenAdapter {
 
 	Vector3 touchPoint;
 	
-	List<Floor> floors;
+	public List<Floor> floors;
 	Floor activeFloor;
 	Floor requestedFloor;
 	
@@ -133,7 +134,7 @@ public class GameScreen extends ScreenAdapter {
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
 	
-	public PooledEngine engine;	
+	public PublicPooledEngine engine;	
 	public int state;
 	
 	AttackWheel attackWheel = new AttackWheel();
@@ -182,7 +183,7 @@ public class GameScreen extends ScreenAdapter {
 
 		touchPoint = new Vector3();
 		
-		engine = new PooledEngine();
+		engine = new PublicPooledEngine();
 		this.entityFactory = new EntityFactory(this.engine);
 		
 		floors = new ArrayList<>();
@@ -200,7 +201,7 @@ public class GameScreen extends ScreenAdapter {
 
 		
 		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
-
+		
 		mapRenderer = new MapRenderer(miniMapStage, activeFloor);
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
 		renderers.add(new HUDRenderer(hudStage, player));
@@ -311,7 +312,9 @@ public class GameScreen extends ScreenAdapter {
 	
 	private void enterFloor(Floor newFloor) {
 		// Generate the new floor
-		newFloor.generate();
+		if (newFloor.getRooms() == null) {
+			newFloor.generate();
+		}
 		
 		// Leave the room of the current floor
 		Room oldRoom = this.activeFloor.getActiveRoom();

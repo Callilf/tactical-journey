@@ -59,7 +59,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground;
+		menuBackground = Assets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 				

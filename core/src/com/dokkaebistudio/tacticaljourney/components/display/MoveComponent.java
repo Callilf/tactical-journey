@@ -7,32 +7,41 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class MoveComponent implements Component, Poolable, RoomSystem {
 
 	/** The room that managed entities.*/
 	public Room room;
 	
+	// Serialized attributes
+	
 	/** The number of tiles the player can move. */
 	private int moveSpeed;
 	
 	/** The number of tiles the player can move during this turn. */
 	private int moveRemaining;
-	
-	/** Whether we are in free move mode, which mean there are no enemies in the room. */
-	public boolean freeMove;
-	
+
 	/** Temporary modifier. */
 	private boolean frozen;
 	
 	
+	// Other attributes
+	
+	/** Whether we are in free move mode, which mean there are no enemies in the room. */
+	public boolean freeMove;
 	
 	/** The tiles where the player can move. */
 	public Set<Tile> allWalkableTiles;
@@ -244,5 +253,28 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 
 	
 	
+	
+	
+	public static Serializer<MoveComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<MoveComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, MoveComponent object) {
+				output.writeInt(object.moveSpeed);
+				output.writeInt(object.moveRemaining);
+				output.writeBoolean(object.frozen);
+			}
+
+			@Override
+			public MoveComponent read(Kryo kryo, Input input, Class<MoveComponent> type) {
+				MoveComponent compo = engine.createComponent(MoveComponent.class);
+				compo.moveSpeed = input.readInt();
+				compo.moveRemaining = input.readInt();
+				compo.frozen = input.readBoolean();
+				return compo;
+			}
+		
+		};
+	}
 	
 }

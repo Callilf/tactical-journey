@@ -23,12 +23,12 @@ public class DoorComponent implements Component {
 	
 	public void open(Entity door) {
 		this.opened = true;
-		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_opened);
+		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_opened.getRegion());
 	}
 	
 	public void close(Entity door) {
 		this.opened = false;
-		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_closed);
+		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_closed.getRegion());
 	}
 	
 	// Getters and Setters

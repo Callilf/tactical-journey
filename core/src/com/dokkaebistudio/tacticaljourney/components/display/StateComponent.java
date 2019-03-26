@@ -17,6 +17,13 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class StateComponent implements Component {
 	private int state = 0;
@@ -29,5 +36,25 @@ public class StateComponent implements Component {
 	public void set(int newState) {
 		state = newState;
 		time = 0.0f;
+	}
+	
+	
+	
+	public static Serializer<StateComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<StateComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, StateComponent object) {
+				output.writeInt(object.state);
+			}
+
+			@Override
+			public StateComponent read(Kryo kryo, Input input, Class<StateComponent> type) {
+				StateComponent compo = engine.createComponent(StateComponent.class);
+				compo.state = input.readInt();
+				return compo;
+			}
+		
+		};
 	}
 }

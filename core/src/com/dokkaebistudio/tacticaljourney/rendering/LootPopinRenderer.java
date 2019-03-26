@@ -271,7 +271,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		oneItem.setBackground(ninePatchDrawable);
 		
 		oneItem.left();
-		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
+		Image image = new Image(Assets.loadAndGetTexture(itemComponent.getItemImageName().getNameFull()).getRegion());
 		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(-5, 0, -5, 20);
 		image.addListener(new ClickListener() {
 			@Override
@@ -454,7 +454,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 
 				// An item is present in this inventory slot
 				final ItemComponent itemComponent = Mappers.itemComponent.get(item);
-				TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
+				TextureRegionDrawable texture = new TextureRegionDrawable(Assets.loadAndGetTexture(itemComponent.getItemImageName().getNameFull()).getRegion());
 				image.setDrawable(texture);
 				quantity.setText(inventoryCompo.getQuantity(i) > 1 ? String.valueOf(inventoryCompo.getQuantity(i)) : "");
 
@@ -490,7 +490,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			} else {
 		        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
 		        if (!activeSlot) {
-					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled);
+					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled.getRegion());
 					image.setDrawable(texture);
 		        } else {
 		        	image.setDrawable(null);

@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.statuses;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -19,8 +19,8 @@ public abstract class Status {
 	
 	public abstract String title();
 	public abstract String description();
-	public abstract AtlasRegion texture();
-	public abstract AtlasRegion fullTexture();
+	public abstract RegionDescriptor texture();
+	public abstract RegionDescriptor fullTexture();
 
 	/** Called when this status is received by an entity. */
 	public boolean onReceive(Entity entity, Room room) {

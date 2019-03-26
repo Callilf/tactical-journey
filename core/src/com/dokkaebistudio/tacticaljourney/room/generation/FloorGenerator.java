@@ -30,6 +30,8 @@ public abstract class FloorGenerator {
 	protected RandomSingleton random;
 	private RoomGenerator roomGenerator;
 	
+	protected int roomCounter = 0;
+	
 	protected Map<Room, Vector2> positionsPerRoom = new HashMap<>();
 	protected Map<Vector2, Room> roomsPerPosition = new HashMap<>();
 
@@ -58,7 +60,8 @@ public abstract class FloorGenerator {
 		endRoomY = random.nextSeededInt(2) == 0 ? endRoomY : -endRoomY;
 		
 		// 3 - Build a path from startRoom to endRoom
-		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
+		Room startRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
+		roomCounter++;
 		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
@@ -89,7 +92,8 @@ public abstract class FloorGenerator {
 			}
 			
 			// Create the room
-			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+			Room currentRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+			roomCounter++;
 			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
 			positionsPerRoom.put(currentRoom, new Vector2(currX, currY));
 
@@ -204,7 +208,8 @@ public abstract class FloorGenerator {
 						
 						int directionIndex = random.nextSeededInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
-						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+						Room currentRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+						roomCounter++;
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction);
@@ -280,7 +285,8 @@ public abstract class FloorGenerator {
 				//Add room here
 				chanceToAddRoom = chanceToAddRoom/2;
 							
-				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+				Room currentRoom = new Room(floor, roomCounter, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+				roomCounter++;
 				allRooms.add(currentRoom);
 				setNeighbors(direction, parentRoom, currentRoom);
 				

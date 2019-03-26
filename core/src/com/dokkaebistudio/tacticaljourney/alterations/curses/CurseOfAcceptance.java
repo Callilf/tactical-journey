@@ -4,9 +4,9 @@
 package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -36,7 +36,7 @@ public class CurseOfAcceptance extends Curse {
 	}
 	
 	@Override
-	public AtlasRegion texture() {
+	public RegionDescriptor texture() {
 		return Assets.curse_acceptance;
 	}
 	

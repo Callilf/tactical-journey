@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -113,8 +113,8 @@ public class LootableComponent implements Component, Poolable {
 		this.lootableState = lootableState;
 		
 		if (lootable != null) {
-			AtlasRegion newRegion = lootableState == LootableStateEnum.CLOSED ? type.getClosedTexture() : type.getOpenedTexture();
-			Mappers.spriteComponent.get(lootable).getSprite().setRegion(newRegion);
+			RegionDescriptor newRegion = lootableState == LootableStateEnum.CLOSED ? type.getClosedTexture() : type.getOpenedTexture();
+			Mappers.spriteComponent.get(lootable).updateSprite(newRegion);
 		}
 	}
 

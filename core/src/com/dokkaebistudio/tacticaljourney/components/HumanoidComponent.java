@@ -18,7 +18,7 @@ public class HumanoidComponent implements Component {
 
 	
 	
-	public static Serializer<HumanoidComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<HumanoidComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<HumanoidComponent>() {
 
 			@Override

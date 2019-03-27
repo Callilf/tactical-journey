@@ -81,7 +81,7 @@ public class DialogComponent implements Component, Poolable, RoomSystem {
 	
 	
 	
-	public static Serializer<DialogComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<DialogComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<DialogComponent>() {
 
 			@Override

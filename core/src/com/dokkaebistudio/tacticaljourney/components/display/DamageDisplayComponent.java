@@ -42,7 +42,7 @@ public class DamageDisplayComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<DamageDisplayComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<DamageDisplayComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<DamageDisplayComponent>() {
 
 			@Override

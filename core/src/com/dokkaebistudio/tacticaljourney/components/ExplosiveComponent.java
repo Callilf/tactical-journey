@@ -130,7 +130,7 @@ public class ExplosiveComponent implements Component, Poolable, RoomSystem {
 	
 	
 
-	public static Serializer<ExplosiveComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ExplosiveComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ExplosiveComponent>() {
 
 			@Override

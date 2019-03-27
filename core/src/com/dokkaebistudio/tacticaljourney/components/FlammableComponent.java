@@ -102,7 +102,7 @@ public class FlammableComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<FlammableComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<FlammableComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<FlammableComponent>() {
 
 			@Override

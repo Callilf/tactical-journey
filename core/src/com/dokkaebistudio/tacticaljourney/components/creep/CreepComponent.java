@@ -201,7 +201,7 @@ public class CreepComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<CreepComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<CreepComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<CreepComponent>() {
 
 			@Override
@@ -210,7 +210,7 @@ public class CreepComponent implements Component, Poolable {
 				kryo.writeClassAndObject(output, object.type);
 				output.writeInt(object.duration);
 				output.writeInt(object.currentDuration);
-				output.writeString(object.releasedTurn.name());
+				kryo.writeClassAndObject(output, object.releasedTurn);
 			}
 
 			@Override
@@ -221,7 +221,7 @@ public class CreepComponent implements Component, Poolable {
 				
 				compo.duration = input.readInt();
 				compo.currentDuration = input.readInt();
-				compo.releasedTurn = CreepReleasedTurnEnum.valueOf(input.readString());
+				compo.releasedTurn = (CreepReleasedTurnEnum) kryo.readClassAndObject(input);
 				
 				return compo;
 			}

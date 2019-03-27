@@ -20,7 +20,6 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -330,7 +329,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	
 	
 	
-	public static Serializer<StatusReceiverComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<StatusReceiverComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<StatusReceiverComponent>() {
 
 			@Override

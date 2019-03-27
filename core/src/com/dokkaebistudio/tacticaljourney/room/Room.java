@@ -124,6 +124,7 @@ public class Room extends EntitySystem {
 		this.engine = engine;
 		this.entityFactory = ef;
 		this.turnManager = new TurnManager(this);
+		this.attackManager = new AttackManager(this);
 		this.type = type;
 		this.visited = false;
 		
@@ -133,8 +134,12 @@ public class Room extends EntitySystem {
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
 		
+		this.enemies = new ArrayList<>();
+		this.neutrals = new ArrayList<>();
+		this.doors = new ArrayList<>();
+
+		
 		this.rewards = new ArrayList<>();
-		this.rewards.add(new RoomRewardMoney(1 + RandomSingleton.getInstance().nextSeededInt(5)));
 	}
 	
 	public Array<Entity> getAllEntities() {
@@ -146,7 +151,10 @@ public class Room extends EntitySystem {
 			this.allEntities.add(e);
 		}
 	}
-	
+
+	public Map<Vector2, Set<Entity>> getEntitiesAtPosition() {
+		return entitiesAtPositions;
+	}
 	
 	/**
 	 * Add an entity at the given position.
@@ -304,10 +312,7 @@ public class Room extends EntitySystem {
 	public void create() {
 		this.state = RoomState.PLAYER_TURN_INIT;
 
-		enemies = new ArrayList<>();
-		neutrals = new ArrayList<>();
-		doors = new ArrayList<>();
-		attackManager = new AttackManager(this);
+		this.rewards.add(new RoomRewardMoney(1 + RandomSingleton.getInstance().nextSeededInt(5)));
 	 
 		RoomGenerator generator = this.floor.getFloorGenerator().getRoomGenerator();
 		
@@ -336,6 +341,10 @@ public class Room extends EntitySystem {
 	}
 	public RoomState getState() {
 		return this.state;
+	}
+	
+	public void forceState(RoomState forcedState) {
+		this.state = forcedState;
 	}
 	
 	public RoomState getLastInGameState() {

@@ -28,7 +28,7 @@ public class ExpRewardComponent implements Component {
 	
 	
 	
-	public static Serializer<ExpRewardComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ExpRewardComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ExpRewardComponent>() {
 
 			@Override

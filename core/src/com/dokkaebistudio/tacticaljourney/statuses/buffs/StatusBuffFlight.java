@@ -24,6 +24,8 @@ public class StatusBuffFlight extends Status {
 	/** The entity that inflicted the poison. */
 	private PooledEngine engine;
 	
+	public StatusBuffFlight() {}
+	
 	public StatusBuffFlight(int duration, PooledEngine engine) {
 		this.setDuration(duration);
 		this.engine = engine;

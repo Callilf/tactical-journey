@@ -331,7 +331,7 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 	
 	
 	
-	public static Serializer<OrbCarrierComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<OrbCarrierComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<OrbCarrierComponent>() {
 
 			@Override

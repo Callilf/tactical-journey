@@ -73,7 +73,7 @@ public class OrbComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<OrbComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<OrbComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<OrbComponent>() {
 
 			@Override

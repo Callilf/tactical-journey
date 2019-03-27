@@ -86,7 +86,7 @@ public class SoulbenderComponent implements Component, Poolable {
 
 	
 	
-	public static Serializer<SoulbenderComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<SoulbenderComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<SoulbenderComponent>() {
 
 			@Override

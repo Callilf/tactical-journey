@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -68,7 +67,7 @@ public class SkillComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<SkillComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<SkillComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<SkillComponent>() {
 
 			@Override

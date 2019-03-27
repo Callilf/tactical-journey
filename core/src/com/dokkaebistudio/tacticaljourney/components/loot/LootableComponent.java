@@ -159,7 +159,7 @@ public class LootableComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<LootableComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<LootableComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<LootableComponent>() {
 
 			@Override

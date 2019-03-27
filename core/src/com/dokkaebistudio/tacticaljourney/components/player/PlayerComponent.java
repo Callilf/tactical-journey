@@ -166,7 +166,7 @@ public class PlayerComponent implements Component {
 	
 	
 	
-	public static Serializer<PlayerComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<PlayerComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<PlayerComponent>() {
 
 			@Override

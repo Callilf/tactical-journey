@@ -19,7 +19,6 @@ package com.dokkaebistudio.tacticaljourney.components.display;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -42,7 +41,7 @@ public class VisualEffectComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<VisualEffectComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<VisualEffectComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<VisualEffectComponent>() {
 
 			@Override

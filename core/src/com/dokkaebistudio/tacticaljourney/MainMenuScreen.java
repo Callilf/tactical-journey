@@ -16,6 +16,9 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -35,6 +38,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.esotericsoftware.kryo.io.Input;
 
 public class MainMenuScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -62,6 +66,11 @@ public class MainMenuScreen extends ScreenAdapter {
 		menuBackground = Assets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
+		
+		File f = new File("gamestate.bin");
+		boolean hasLoadBtn = f.exists();
+
+		
 				
 		Table t = new Table();
 		
@@ -76,10 +85,10 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		});
 		
-		t.add(seedField).width(500).padBottom(300);
+		t.add(seedField).width(500).padBottom(hasLoadBtn ? 200 : 300);
 		t.row();
 		
-		TextButton start = new TextButton("START", PopinService.buttonStyle());
+		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
 		start.addListener(new ChangeListener() {
 			
 			@Override
@@ -93,11 +102,34 @@ public class MainMenuScreen extends ScreenAdapter {
 				}
 				
 				// Launch the game
-				game.setScreen(new GameScreen(game));
+				game.setScreen(new GameScreen(game, true));
 			}
 		});
 		t.add(start).width(500).height(200).padBottom(50);
 		t.row();
+		
+		
+		if (hasLoadBtn) {
+			TextButton load = new TextButton("LOAD", PopinService.buttonStyle());
+			load.addListener(new ChangeListener() {
+				
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					
+					//Instantiate the RNG
+					if (enteredSeed) {
+						RandomSingleton.createInstance(seedField.getText());
+					} else {
+						RandomSingleton.createInstance();
+					}
+					
+					// Launch the game
+					game.setScreen(new GameScreen(game, false));
+				}
+			});
+			t.add(load).width(500).height(100);
+			t.row();
+		}
 		
 		t.pack();
 		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2 + 200);

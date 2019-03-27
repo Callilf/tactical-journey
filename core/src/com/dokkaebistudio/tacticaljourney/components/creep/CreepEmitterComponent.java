@@ -70,7 +70,7 @@ public class CreepEmitterComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<CreepEmitterComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<CreepEmitterComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<CreepEmitterComponent>() {
 
 			@Override

@@ -85,13 +85,6 @@ public class AttackManager {
 			return;
 		}
 		
-		
-		if (attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
-			Persister p = new Persister((PublicPooledEngine) room.engine);
-			p.saveEnemy(target, room.floor);
-		}
-		
-		
 		int damage = 0;
 		
 		//Compute damage

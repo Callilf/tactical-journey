@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -175,7 +174,7 @@ public class ExperienceComponent implements Component,Poolable {
 
 	
 
-	public static Serializer<ExperienceComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ExperienceComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ExperienceComponent>() {
 
 			@Override

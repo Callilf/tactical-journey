@@ -1,5 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
+import java.util.Map;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -112,13 +114,13 @@ public class GridPositionComponent implements Component, Poolable {
 	}
 	
 	
-	public static Serializer<GridPositionComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<GridPositionComponent> getSerializer(final PooledEngine engine,  final Map<Integer, Room> loadedRooms) {
 		return new Serializer<GridPositionComponent>() {
 
 			@Override
 			public void write(Kryo kryo, Output output, GridPositionComponent object) {
 				output.writeInt(object.zIndex);
-				output.writeInt(object.room.getIndex());
+				output.writeInt(object.room != null ? object.room.getIndex() : -1);
 				
 				// Coord
 				output.writeFloat(object.coord().x);
@@ -137,8 +139,10 @@ public class GridPositionComponent implements Component, Poolable {
 				gridPosCompo.zIndex = input.readInt(); 
 						
 				int roomIndex = input.readInt();
-				Room roomFromIndex = floor.getRoomFromIndex(roomIndex);
-				gridPosCompo.room = roomFromIndex;
+				if (roomIndex != -1) {
+					Room roomFromIndex = loadedRooms.get(roomIndex);
+					gridPosCompo.room = roomFromIndex;
+				}
 				
 				// Coord
 				gridPosCompo.coord((int)input.readFloat(), (int)input.readFloat());

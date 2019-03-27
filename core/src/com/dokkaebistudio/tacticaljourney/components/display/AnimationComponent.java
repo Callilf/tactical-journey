@@ -58,7 +58,7 @@ public class AnimationComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<AnimationComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<AnimationComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<AnimationComponent>() {
 
 			@Override

@@ -1,10 +1,11 @@
 package com.dokkaebistudio.tacticaljourney.components;
 
+import java.util.Map;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
@@ -58,7 +59,7 @@ public class DoorComponent implements Component {
 	
 	
 	
-	public static Serializer<DoorComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<DoorComponent> getSerializer(final PooledEngine engine,  final Map<Integer, Room> loadedRooms) {
 		return new Serializer<DoorComponent>() {
 
 			@Override
@@ -73,7 +74,7 @@ public class DoorComponent implements Component {
 				compo.opened = input.readBoolean();
 				
 				int roomIndex = input.readInt();
-				Room roomFromIndex = floor.getRoomFromIndex(roomIndex);
+				Room roomFromIndex = loadedRooms.get(roomIndex);
 				compo.targetedRoom = roomFromIndex;
 				
 				return compo;

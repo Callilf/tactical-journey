@@ -40,7 +40,7 @@ public class StateComponent implements Component {
 	
 	
 	
-	public static Serializer<StateComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<StateComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<StateComponent>() {
 
 			@Override

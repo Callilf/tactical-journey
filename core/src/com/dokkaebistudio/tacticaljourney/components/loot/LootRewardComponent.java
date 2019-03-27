@@ -71,7 +71,7 @@ public class LootRewardComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<LootRewardComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<LootRewardComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<LootRewardComponent>() {
 
 			@Override

@@ -16,8 +16,10 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class MenuPopinRenderer implements Renderer {
@@ -27,6 +29,8 @@ public class MenuPopinRenderer implements Renderer {
     
 	boolean menuDisplayed = false;
     private Table table;    
+    
+    private TextButton saveBtn;
             
     public MenuPopinRenderer(GameScreen gs, Stage s) {
     	this.gamescreen = gs;
@@ -113,7 +117,22 @@ public class MenuPopinRenderer implements Renderer {
 				buttonTable.row();
 			}
 			
+			
 			// 3 - Return to menu
+			saveBtn = new TextButton("Save", PopinService.buttonStyle());			
+			saveBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					//Save the game
+					Persister persister = new Persister(gamescreen);
+					persister.saveGameState();
+					closePopin();
+				}
+			});
+			buttonTable.add(saveBtn).minWidth(200).padBottom(20);
+			buttonTable.row();
+			
+			// 4 - Return to menu
 			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
@@ -125,7 +144,7 @@ public class MenuPopinRenderer implements Renderer {
 			buttonTable.add(mainMenuBtn).minWidth(200).padBottom(20);
 			buttonTable.row();
 			
-			// 4 - Quit game
+			// 5 - Quit game
 			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
 			quitBtn.addListener(new ChangeListener() {
 				@Override
@@ -165,6 +184,9 @@ public class MenuPopinRenderer implements Renderer {
 			table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
 
 		}
+		
+		
+		saveBtn.setDisabled(gamescreen.activeFloor.getActiveRoom().getState() != RoomState.PLAYER_MOVE_TILES_DISPLAYED);
 	}
 
 	/**

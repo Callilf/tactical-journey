@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -56,7 +55,7 @@ public class WalletComponent implements Component {
 	
 
 	
-	public static Serializer<WalletComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<WalletComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<WalletComponent>() {
 
 			@Override

@@ -19,7 +19,7 @@ public class SolidComponent implements Component {
 	
 	
 	
-	public static Serializer<SolidComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<SolidComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<SolidComponent>() {
 
 			@Override

@@ -14,7 +14,6 @@ import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -454,7 +453,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	
 	
-	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<AttackComponent>() {
 
 			@Override

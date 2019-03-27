@@ -331,7 +331,7 @@ public class ItemComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<ItemComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ItemComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ItemComponent>() {
 
 			@Override
@@ -347,12 +347,16 @@ public class ItemComponent implements Component, Poolable {
 				ItemComponent compo = engine.createComponent(ItemComponent.class);
 				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
 				compo.quantityDisplayer = (Entity) kryo.readClassAndObject(input);
-				engine.addEntity(compo.quantityDisplayer);
+//				if (compo.quantityDisplayer != null) {
+//					engine.addEntity(compo.quantityDisplayer);
+//				}
 				
 				compo.price = (Integer) kryo.readClassAndObject(input);
 				compo.priceDisplayer = (Entity) kryo.readClassAndObject(input);
-				engine.addEntity(compo.priceDisplayer);
-
+//				if (compo.priceDisplayer != null) {
+//					engine.addEntity(compo.priceDisplayer);
+//				}
+				
 				return compo;
 			}
 		

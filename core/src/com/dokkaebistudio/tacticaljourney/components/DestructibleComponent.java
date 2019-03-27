@@ -100,7 +100,7 @@ public class DestructibleComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<DestructibleComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<DestructibleComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<DestructibleComponent>() {
 
 			@Override

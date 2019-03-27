@@ -17,7 +17,7 @@ public class FlyComponent implements Component {
 
 	
 	
-	public static Serializer<FlyComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<FlyComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<FlyComponent>() {
 
 			@Override

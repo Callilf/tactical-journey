@@ -20,6 +20,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public class StatusDebuffDeathDoor extends Status {
 	
+	public StatusDebuffDeathDoor() {}
+	
 	public StatusDebuffDeathDoor(int duration) {
 		this.setDuration(duration);
 	}

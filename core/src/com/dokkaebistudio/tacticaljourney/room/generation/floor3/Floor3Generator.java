@@ -12,9 +12,18 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
  *
  */
 public class Floor3Generator extends FloorGenerator {
+	
+	private int roomIndex = 300;
 
 	public Floor3Generator(EntityFactory ef) {
 		this.setRoomGenerator(new Floor3RoomGenerator(ef));
+	}
+	
+	@Override
+	protected int getNextRoomIndex() {
+		int index = roomIndex;
+		roomIndex++;
+		return index;
 	}
 	
 	/**

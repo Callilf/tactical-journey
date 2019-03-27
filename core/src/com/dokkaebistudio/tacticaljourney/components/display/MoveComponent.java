@@ -10,7 +10,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
@@ -255,7 +254,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	
 	
 	
-	public static Serializer<MoveComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<MoveComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<MoveComponent>() {
 
 			@Override

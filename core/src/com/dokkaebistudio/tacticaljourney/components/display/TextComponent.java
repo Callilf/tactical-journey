@@ -95,7 +95,7 @@ public class TextComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<TextComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<TextComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<TextComponent>() {
 
 			@Override

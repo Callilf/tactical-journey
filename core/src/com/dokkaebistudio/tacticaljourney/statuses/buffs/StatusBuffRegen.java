@@ -21,6 +21,7 @@ public class StatusBuffRegen extends Status {
 	/** The entity that inflicted the poison. */
 	private Entity parent;
 	
+	public StatusBuffRegen() {}
 	public StatusBuffRegen(int duration) {
 		this.setDuration(duration);
 	}

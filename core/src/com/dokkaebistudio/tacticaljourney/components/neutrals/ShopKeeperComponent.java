@@ -227,7 +227,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<ShopKeeperComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ShopKeeperComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ShopKeeperComponent>() {
 
 			@Override

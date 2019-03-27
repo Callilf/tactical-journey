@@ -2,16 +2,20 @@ package com.dokkaebistudio.tacticaljourney.persistence;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -59,9 +63,18 @@ import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.RoomType;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
+import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.Serializer;
@@ -70,131 +83,260 @@ import com.esotericsoftware.kryo.io.Output;
 
 public class Persister {
 	
+	public GameScreen gameScreen;
 	public PublicPooledEngine engine;
 	private List<Long> savedEntities = new ArrayList<>();
 	private Map<Long, PooledEntity> loadedEntities = new HashMap<>();
 	
-	public Persister(PublicPooledEngine engine) {
-		this.engine = engine;
+	private List<Integer> savedRooms = new ArrayList<>();
+	private Map<Integer, Room> loadedRooms = new HashMap<>();
+
+	public Persister(GameScreen gs) {
+		this.gameScreen = gs;
+		this.engine = gs.engine;
+	}
+	
+	
+	
+	public void saveGameState() {
+		Kryo kryo = new Kryo();
+		
+		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
+		
+		
+		try {
+			File f = new File("gamestate.bin");
+			if (f.exists()) f.delete();
+			f.createNewFile();
+			Output output = new Output(new FileOutputStream(f));
+			kryo.writeObject(output, gameScreen);
+			output.close();
+		} catch (KryoException | IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void loadGameState() {
+		Kryo kryo = new Kryo();
+		
+		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
+		
+		try {
+			File f = new File("gamestate.bin");
+		    Input input = new Input(new FileInputStream(f));
+		    kryo.readObject(input, GameScreen.class);
+		    input.close();   
+		} catch (KryoException | IOException e ) {
+			e.printStackTrace();
+		}
 	}
 	
 
 	
+	// Serializers
 	
 	
-	
-	public void saveEnemy(Entity enemy, Floor floor) {
-		Kryo kryo = new Kryo();
-		
-		this.registerSerializers(kryo, floor, floor.getGameScreen().floors);
-		
-		
-		try {
-			File f = new File("entity.bin");
-			if (f.exists()) f.delete();
-			f.createNewFile();
-			Output output = new Output(new FileOutputStream(f));
-			kryo.writeObject(output, enemy);
-			output.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KryoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
+	public Serializer<GameScreen> getGameScreenSerializer() {
+		return new Serializer<GameScreen>() {
 
-	public Entity loadEnemy(Floor floor) {
-		Entity loadedEntity = null;
-		Kryo kryo = new Kryo();
-		
-		this.registerSerializers(kryo, floor, floor.getGameScreen().floors);
-		
-		try {
-			File f = new File("entity.bin");
-		    Input input = new Input(new FileInputStream(f));
-		    loadedEntity = kryo.readObject(input, PooledEntity.class);
-		    input.close();   
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KryoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		floor.getActiveRoom().addEnemy(loadedEntity);
-		return loadedEntity;
+			@Override
+			public void write(Kryo kryo, Output output, GameScreen gs) {				
+				// Save the floors
+				output.writeInt(gs.floors.size());
+				for (Floor f : gs.floors) {
+					kryo.writeClassAndObject(output, f);
+				}
+				
+				// Save the player
+				kryo.writeClassAndObject(output, gs.player);
+				
+				// Save the current time
+				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
+			}
+
+			@Override
+			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {				
+				// load floors
+				int floorNb = input.readInt();
+				gameScreen.floors.clear();
+				for (int i=0 ; i<floorNb ; i++) {
+					gameScreen.floors.add((Floor) kryo.readClassAndObject(input));
+				}
+				
+				//TODO change this
+				gameScreen.activeFloor = gameScreen.floors.get(0);
+
+				
+				// Load the player
+				gameScreen.player = (Entity) kryo.readClassAndObject(input);
+				
+						
+				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(gameScreen.player);
+				MovementHandler.placeEntity(gameScreen.player, gridPositionComponent.coord(), gameScreen.activeFloor.getActiveRoom());
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gameScreen.player);
+				inventoryComponent.player = gameScreen.player;
+				
+				
+				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
+				return null;
+			}
+			
+		};
+	}
+	
+	public Serializer<Floor> getFloorSerializer() {
+		return new Serializer<Floor>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, Floor floor) {
+				output.writeInt(floor.getLevel());
+				
+				// Save the rooms
+				output.writeInt(floor.getRooms().size());
+				for (Room r : floor.getRooms()) {
+					kryo.writeClassAndObject(output, r);
+				}
+				
+				kryo.writeClassAndObject(output, floor.getRoomPositions());				
+				kryo.writeClassAndObject(output, floor.getActiveRoom());
+			}
+
+			@Override
+			public Floor read(Kryo kryo, Input input, Class<Floor> type) {
+				int level = input.readInt();
+				Floor f = new Floor(gameScreen, level);
+				
+				// load rooms
+				f.setRooms(new ArrayList<Room>());
+				int roomNb = input.readInt();
+				for (int i=0 ; i<roomNb ; i++) {
+					Room room = (Room) kryo.readClassAndObject(input);
+					room.floor = f;
+					f.getRooms().add(room);
+				}
+				
+				f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
+				f.setActiveRoom( (Room) kryo.readClassAndObject(input));
+
+				return f;
+			}
+			
+		};
+	}
+	
+	
+	public Serializer<Room> getRoomSerializer() {
+		return new Serializer<Room>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, Room roomToSave) {
+				// Write the room id
+				output.writeInt(roomToSave.getIndex());
+				
+				// If the entity has already been saved, stop here
+				if (!savedRooms.contains(roomToSave.getIndex())) {
+					// If not, save the whole entity
+					
+					output.writeString(roomToSave.type.name());
+					
+					output.writeInt(roomToSave.turnManager.getTurn());
+					
+					kryo.writeClassAndObject(output, roomToSave.getRewards());
+					kryo.writeClassAndObject(output, roomToSave.grid);
+					output.writeString(roomToSave.getCleared().name());
+					output.writeBoolean(roomToSave.isVisited());
+					
+					output.writeInt(roomToSave.getAllEntities().size);
+					for (Entity e : roomToSave.getAllEntities()) {
+						kryo.writeClassAndObject(output, e);
+					}
+					
+					kryo.writeClassAndObject(output, roomToSave.getEntitiesAtPosition());
+					
+					kryo.writeClassAndObject(output, roomToSave.getEnemies());
+					kryo.writeClassAndObject(output, roomToSave.getNeutrals());
+					kryo.writeClassAndObject(output, roomToSave.getDoors());
+					
+					kryo.writeClassAndObject(output, roomToSave.getNorthNeighbor());
+					kryo.writeClassAndObject(output, roomToSave.getSouthNeighbor());
+					kryo.writeClassAndObject(output, roomToSave.getWestNeighbor());
+					kryo.writeClassAndObject(output, roomToSave.getEastNeighbor());
+
+					savedRooms.add(roomToSave.getIndex());
+				}
+			}
+
+			@Override
+			public Room read(Kryo kryo, Input input, Class<Room> type) {
+				// Read the room id
+				int roomIndex = input.readInt();
+				
+				// If the entity has been previously loaded, return it
+				if (loadedRooms.containsKey(roomIndex)) {
+					return loadedRooms.get(roomIndex);
+				}
+				
+				// Otherwise, load it
+				RoomType roomType = RoomType.valueOf(input.readString());
+				Room loadedRoom = new Room(null, roomIndex, engine, gameScreen.entityFactory, roomType);
+				loadedRooms.put(roomIndex, loadedRoom);
+				
+				loadedRoom.forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+				loadedRoom.turnManager = new TurnManager(loadedRoom);
+				loadedRoom.turnManager .setTurn(input.readInt());
+				
+				loadedRoom.getRewards().addAll((Collection<? extends AbstractRoomReward>) kryo.readClassAndObject(input));
+				
+				// The tile grid
+				loadedRoom.grid = (Tile[][]) kryo.readClassAndObject(input);
+				for (int i=0 ; i<loadedRoom.grid.length ; i++) {
+					for (int j=0 ; j<loadedRoom.grid[i].length ; j++) {
+						loadedRoom.grid[i][j].setRoom(loadedRoom);
+					}
+				}
+				
+				loadedRoom.setCleared(RoomClearedState.valueOf(input.readString()));
+				loadedRoom.setVisited(input.readBoolean());
+				
+				// All entities
+				int entityNb = input.readInt();
+				for (int i=0 ; i<entityNb ; i++) {
+					Entity loadedEntity = (Entity) kryo.readClassAndObject(input);
+					if (isEntityToLoad(loadedEntity)) {
+						loadedRoom.addEntity(loadedEntity);
+					}
+				}
+				
+				loadedRoom.getEntitiesAtPosition().putAll( (Map<? extends Vector2, ? extends Set<Entity>>) kryo.readClassAndObject(input));
+//				for (Entry<Vector2, Set<Entity>> entry : loadedRoom.getEntitiesAtPosition().entrySet()) {
+//					
+//				}
+				
+				loadedRoom.getEnemies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
+				loadedRoom.getNeutrals().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
+				loadedRoom.getDoors().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
+
+				loadedRoom.setNorthNeighbor((Room) kryo.readClassAndObject(input));
+				loadedRoom.setSouthNeighbor((Room) kryo.readClassAndObject(input));
+				loadedRoom.setWestNeighbor((Room) kryo.readClassAndObject(input));
+				loadedRoom.setEastNeighbor((Room) kryo.readClassAndObject(input));
+
+				return loadedRoom;
+			}
+			
+		};
+	}
+	
+	public boolean isEntityToLoad(Entity e) {
+		boolean movableTile = e.flags == EntityFlagEnum.MOVABLE_TILE.getFlag();
+		boolean attackableTile = e.flags == EntityFlagEnum.ATTACK_TILE.getFlag();
+		return !movableTile && !attackableTile;
 	}
 	
 	
 	
-	
-	// TEST
-	public void save(EnemyComponent enemyCompo) {
-		
-		Kryo kryo = new Kryo();
-		
-		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine, null));
-		
-		try {
-			File f = new File("stinger.bin");
-			if (f.exists()) f.delete();
-			f.createNewFile();
-			Output output = new Output(new FileOutputStream(f));
-			kryo.writeObject(output, enemyCompo);
-			output.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KryoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public EnemyComponent loadStinger() {
-		EnemyComponent object2 = null;
-		Kryo kryo = new Kryo();
-		
-		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine, null));
-		
-		try {
-			File f = new File("stinger.bin");
-		    Input input = new Input(new FileInputStream(f));
-		    object2 = kryo.readObject(input, EnemyComponent.class);
-		    input.close();   
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KryoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return object2;
-	}
-	
-	
-	
-	
-	public Serializer getEngineSerializer() {
+	public Serializer<PublicPooledEngine> getEngineSerializer() {
 		return new Serializer<PublicPooledEngine>() {
 
 			@Override
@@ -208,7 +350,7 @@ public class Persister {
 		};
 	}
 
-	public Serializer getEntitySerializer(final Floor floor) {
+	public Serializer<PooledEntity> getEntitySerializer() {
 		return new Serializer<PooledEntity>() {
 
 			@Override
@@ -241,24 +383,26 @@ public class Persister {
 				// Otherwise, load it
 				PooledEntity loadedEntity = (PooledEntity) engine.createEntity();
 				loadedEntity.flags = input.readInt();
+				loadedEntities.put(entityId, loadedEntity);
 				
 				int componentNumber = input.readInt();
 				for (int i=0 ; i<componentNumber ; i++) {
 					loadedEntity.add((Component) kryo.readClassAndObject(input));
 				}
 				
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(loadedEntity);
-				if (gridPositionComponent.room != null) {
-					gridPositionComponent.coord(loadedEntity, gridPositionComponent.coord(), gridPositionComponent.room);
-					
-					for (Component compo : loadedEntity.getComponents()) {
-						if (compo instanceof RoomSystem) {
-							((RoomSystem)compo).enterRoom(gridPositionComponent.room);
+				if (isEntityToLoad(loadedEntity)) {
+					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(loadedEntity);
+					if (gridPositionComponent.room != null) {
+						gridPositionComponent.coord(loadedEntity, gridPositionComponent.coord(), gridPositionComponent.room);
+						
+						for (Component compo : loadedEntity.getComponents()) {
+							if (compo instanceof RoomSystem) {
+								((RoomSystem)compo).enterRoom(gridPositionComponent.room);
+							}
 						}
 					}
 				}
 				
-				loadedEntities.put(entityId, loadedEntity);
 				return loadedEntity;
 			}
 			
@@ -268,76 +412,89 @@ public class Persister {
 	
 	
 	public void registerSerializers(Kryo kryo, Floor currentFloor, List<Floor> floors) {
-		kryo.register(PooledEntity.class, getEntitySerializer(currentFloor));
+		
+		// general serializers
+		kryo.register(GameScreen.class, getGameScreenSerializer());
+		kryo.register(Floor.class, getFloorSerializer());
+		kryo.register(Room.class, getRoomSerializer());
+		kryo.register(PublicPooledEngine.class, getEngineSerializer());
+		kryo.register(PooledEntity.class, getEntitySerializer());
 		kryo.register(RegionDescriptor.class, RegionDescriptor.getSerializer(engine));
 		kryo.register(FontDescriptor.class, FontDescriptor.getSerializer(engine));
 		
 		
-		kryo.register(PlayerComponent.class, PlayerComponent.getSerializer(engine, currentFloor));
-		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine, currentFloor));
-
-		kryo.register(ShopKeeperComponent.class, ShopKeeperComponent.getSerializer(engine, currentFloor));
-		kryo.register(SoulbenderComponent.class, SoulbenderComponent.getSerializer(engine, currentFloor));
-		kryo.register(StatueComponent.class, StatueComponent.getSerializer(engine, currentFloor));
-
-
-		kryo.register(HumanoidComponent.class, HumanoidComponent.getSerializer(engine, currentFloor));
-
-		kryo.register(SpriteComponent.class, SpriteComponent.getSerializer(engine, currentFloor));
-		kryo.register(AnimationComponent.class, AnimationComponent.getSerializer(engine, currentFloor));
-		kryo.register(StateComponent.class, StateComponent.getSerializer(engine, currentFloor));
-		kryo.register(VisualEffectComponent.class, VisualEffectComponent.getSerializer(engine, currentFloor));
+		// Misc serializers
+		kryo.register(Tile.class, Tile.getSerializer(engine));
 
 		
-		kryo.register(ParentEntityComponent.class, ParentEntityComponent.getSerializer(engine, currentFloor));
-		kryo.register(GridPositionComponent.class, GridPositionComponent.getSerializer(engine, currentFloor));
+		
+		// Component serializers
+		
+		kryo.register(PlayerComponent.class, PlayerComponent.getSerializer(engine));
+		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine));
+
+		kryo.register(ShopKeeperComponent.class, ShopKeeperComponent.getSerializer(engine));
+		kryo.register(SoulbenderComponent.class, SoulbenderComponent.getSerializer(engine));
+		kryo.register(StatueComponent.class, StatueComponent.getSerializer(engine));
+
+
+		kryo.register(HumanoidComponent.class, HumanoidComponent.getSerializer(engine));
+
+		kryo.register(SpriteComponent.class, SpriteComponent.getSerializer(engine));
+		kryo.register(AnimationComponent.class, AnimationComponent.getSerializer(engine));
+		kryo.register(StateComponent.class, StateComponent.getSerializer(engine));
+		kryo.register(VisualEffectComponent.class, VisualEffectComponent.getSerializer(engine));
+
+		
+		kryo.register(ParentEntityComponent.class, ParentEntityComponent.getSerializer(engine));
+		kryo.register(GridPositionComponent.class, GridPositionComponent.getSerializer(engine, loadedRooms));
 //		kryo.register(TileComponent.class, TileComponent.getSerializer(engine, floor));
-		kryo.register(DoorComponent.class, DoorComponent.getSerializer(engine, currentFloor));
-		kryo.register(ExitComponent.class, ExitComponent.getSerializer(engine, currentFloor, floors));
+		kryo.register(DoorComponent.class, DoorComponent.getSerializer(engine, loadedRooms));
+		kryo.register(ExitComponent.class, ExitComponent.getSerializer(engine));
 		
 		
-		kryo.register(MoveComponent.class, MoveComponent.getSerializer(engine, currentFloor));
-		kryo.register(AttackComponent.class, AttackComponent.getSerializer(engine, currentFloor));
-		kryo.register(SkillComponent.class, SkillComponent.getSerializer(engine, currentFloor));
-		kryo.register(WalletComponent.class, WalletComponent.getSerializer(engine, currentFloor));
-		kryo.register(AmmoCarrierComponent.class, AmmoCarrierComponent.getSerializer(engine, currentFloor));
-		kryo.register(InventoryComponent.class, InventoryComponent.getSerializer(engine, currentFloor));
-		kryo.register(AlterationReceiverComponent.class, AlterationReceiverComponent.getSerializer(engine, currentFloor));
-		kryo.register(StatusReceiverComponent.class, StatusReceiverComponent.getSerializer(engine, currentFloor));
+		kryo.register(MoveComponent.class, MoveComponent.getSerializer(engine));
+		kryo.register(AttackComponent.class, AttackComponent.getSerializer(engine));
+		kryo.register(SkillComponent.class, SkillComponent.getSerializer(engine));
+		kryo.register(WalletComponent.class, WalletComponent.getSerializer(engine));
+		kryo.register(AmmoCarrierComponent.class, AmmoCarrierComponent.getSerializer(engine));
+		kryo.register(InventoryComponent.class, InventoryComponent.getSerializer(engine));
+		kryo.register(AlterationReceiverComponent.class, AlterationReceiverComponent.getSerializer(engine));
+		kryo.register(StatusReceiverComponent.class, StatusReceiverComponent.getSerializer(engine));
 
 		
-		kryo.register(ExperienceComponent.class, ExperienceComponent.getSerializer(engine, currentFloor));
+		kryo.register(ExperienceComponent.class, ExperienceComponent.getSerializer(engine));
 
-		kryo.register(LootableComponent.class, LootableComponent.getSerializer(engine, currentFloor));
-		kryo.register(ItemComponent.class, ItemComponent.getSerializer(engine, currentFloor));
+		kryo.register(LootableComponent.class, LootableComponent.getSerializer(engine));
+		kryo.register(ItemComponent.class, ItemComponent.getSerializer(engine));
 
-		kryo.register(HealthComponent.class, HealthComponent.getSerializer(engine, currentFloor));
-		kryo.register(ExpRewardComponent.class, ExpRewardComponent.getSerializer(engine, currentFloor));
-		kryo.register(LootRewardComponent.class, LootRewardComponent.getSerializer(engine, currentFloor));
+		kryo.register(HealthComponent.class, HealthComponent.getSerializer(engine));
+		kryo.register(ExpRewardComponent.class, ExpRewardComponent.getSerializer(engine));
+		kryo.register(LootRewardComponent.class, LootRewardComponent.getSerializer(engine));
 
 		
-		kryo.register(TextComponent.class, TextComponent.getSerializer(engine, currentFloor));
-		kryo.register(DamageDisplayComponent.class, DamageDisplayComponent.getSerializer(engine, currentFloor));
-		kryo.register(DialogComponent.class, DialogComponent.getSerializer(engine, currentFloor));
+		kryo.register(TextComponent.class, TextComponent.getSerializer(engine));
+		kryo.register(DamageDisplayComponent.class, DamageDisplayComponent.getSerializer(engine));
+		kryo.register(DialogComponent.class, DialogComponent.getSerializer(engine));
 
 //		kryo.register(WheelModifierComponent.class, WheelModifierComponent.getSerializer(engine, floor));
-		kryo.register(WheelComponent.class, WheelComponent.getSerializer(engine, currentFloor));
+		kryo.register(WheelComponent.class, WheelComponent.getSerializer(engine));
 		
-		kryo.register(InspectableComponent.class, InspectableComponent.getSerializer(engine, currentFloor));
+		kryo.register(InspectableComponent.class, InspectableComponent.getSerializer(engine));
 		
-		kryo.register(SolidComponent.class, SolidComponent.getSerializer(engine, currentFloor));
-		kryo.register(ChasmComponent.class, ChasmComponent.getSerializer(engine, currentFloor));
-		kryo.register(FlyComponent.class, FlyComponent.getSerializer(engine, currentFloor));
+		kryo.register(SolidComponent.class, SolidComponent.getSerializer(engine));
+		kryo.register(ChasmComponent.class, ChasmComponent.getSerializer(engine));
+		kryo.register(FlyComponent.class, FlyComponent.getSerializer(engine));
 
-		kryo.register(CreepComponent.class, CreepComponent.getSerializer(engine, currentFloor));
-		kryo.register(CreepEmitterComponent.class, CreepEmitterComponent.getSerializer(engine, currentFloor));
+		kryo.register(CreepComponent.class, CreepComponent.getSerializer(engine));
+		kryo.register(CreepEmitterComponent.class, CreepEmitterComponent.getSerializer(engine));
 		
-		kryo.register(OrbComponent.class, OrbComponent.getSerializer(engine, currentFloor));
-		kryo.register(OrbCarrierComponent.class, OrbCarrierComponent.getSerializer(engine, currentFloor));
+		kryo.register(OrbComponent.class, OrbComponent.getSerializer(engine));
+		kryo.register(OrbCarrierComponent.class, OrbCarrierComponent.getSerializer(engine));
 		
-		kryo.register(FlammableComponent.class, FlammableComponent.getSerializer(engine, currentFloor));
-		kryo.register(ExplosiveComponent.class, ExplosiveComponent.getSerializer(engine, currentFloor));
-		kryo.register(DestructibleComponent.class, DestructibleComponent.getSerializer(engine, currentFloor));
+		kryo.register(FlammableComponent.class, FlammableComponent.getSerializer(engine));
+		kryo.register(ExplosiveComponent.class, ExplosiveComponent.getSerializer(engine));
+		kryo.register(DestructibleComponent.class, DestructibleComponent.getSerializer(engine));
 
 		
 	

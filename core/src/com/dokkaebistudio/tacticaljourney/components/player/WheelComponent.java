@@ -27,7 +27,7 @@ public class WheelComponent implements Component {
     
     
     
-	public static Serializer<WheelComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<WheelComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<WheelComponent>() {
 
 			@Override

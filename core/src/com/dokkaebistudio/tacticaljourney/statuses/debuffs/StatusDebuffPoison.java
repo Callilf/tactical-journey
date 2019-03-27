@@ -23,6 +23,8 @@ public class StatusDebuffPoison extends Status {
 	/** The entity that inflicted the poison. */
 	private Entity parent;
 	
+	public StatusDebuffPoison() {}
+	
 	public StatusDebuffPoison(int duration) {
 		this.setDuration(duration);
 	}

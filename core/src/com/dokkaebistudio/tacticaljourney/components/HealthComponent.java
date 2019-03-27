@@ -488,7 +488,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 
 	
 	
-	public static Serializer<HealthComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<HealthComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<HealthComponent>() {
 
 			@Override
@@ -512,7 +512,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 				compo.maxHp = input.readInt();
 				compo.hp = input.readInt();
 				compo.hpDisplayer = (Entity) kryo.readClassAndObject(input);
-				engine.addEntity(compo.hpDisplayer);
+//				if (compo.hpDisplayer != null) { 
+//					engine.addEntity(compo.hpDisplayer);
+//				}
 
 				compo.maxArmor = input.readInt();
 				compo.armor = input.readInt();

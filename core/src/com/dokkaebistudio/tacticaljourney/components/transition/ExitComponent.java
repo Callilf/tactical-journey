@@ -1,7 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.components.transition;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -63,7 +61,7 @@ public class ExitComponent implements Component {
 
 	
 	
-	public static Serializer<ExitComponent> getSerializer(final PooledEngine engine, final Floor floor, final List<Floor> floors) {
+	public static Serializer<ExitComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ExitComponent>() {
 
 			@Override
@@ -78,12 +76,13 @@ public class ExitComponent implements Component {
 				compo.opened = input.readBoolean();
 				
 				int floorLevel = input.readInt();
-				for (Floor f : floors) {
-					if (f.getLevel() == floorLevel) {
-						compo.targetedFloor = f;
-						break;
-					}
-				}
+				// TODO
+//				for (Floor f : floors) {
+//					if (f.getLevel() == floorLevel) {
+//						compo.targetedFloor = f;
+//						break;
+//					}
+//				}
 				
 				return compo;
 			}

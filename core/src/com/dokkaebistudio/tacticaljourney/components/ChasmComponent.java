@@ -17,7 +17,7 @@ public class ChasmComponent implements Component {
 
 	
 	
-	public static Serializer<ChasmComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<ChasmComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ChasmComponent>() {
 
 			@Override

@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
@@ -44,6 +45,7 @@ public class Floor {
 	private Map<Vector2, Room> roomPositions;
 	
 	/** The room grid for this floor. */
+	private RegionDescriptor gridDescriptor;
 	private Sprite grid;
 	
 	/** The currently active room. */
@@ -61,15 +63,19 @@ public class Floor {
 		this.setLevel(level);
 		
 		if (level == 1) {
+			this.gridDescriptor = Assets.grid1;
 			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);
 		} else if (level == 2) {
+			this.gridDescriptor = Assets.grid1;
 			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor2Generator(this.gameScreen.entityFactory);
 		} else if (level == 3) {
+			this.gridDescriptor = Assets.grid2;
 			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor3Generator(this.gameScreen.entityFactory);
 		} else if (level == 4) {
+			this.gridDescriptor = Assets.grid2;
 			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor4Generator(this.gameScreen.entityFactory);
 

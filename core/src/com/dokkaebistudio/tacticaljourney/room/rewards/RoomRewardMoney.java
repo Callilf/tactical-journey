@@ -15,6 +15,10 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
  */
 public class RoomRewardMoney extends AbstractRoomReward {
 
+	public RoomRewardMoney() {
+		super("gold coin(s)", 0, "[GOLDENROD]");
+	}
+	
 	public RoomRewardMoney(int quantity) {
 		super("gold coin(s)", quantity, "[GOLDENROD]");
 	}

@@ -28,6 +28,8 @@ public class StatusDebuffEntangled extends Status {
 
 	private Entity vines;
 	
+	public StatusDebuffEntangled() {}
+	
 	public StatusDebuffEntangled(int duration) {
 		this.setDuration(duration);
 	}

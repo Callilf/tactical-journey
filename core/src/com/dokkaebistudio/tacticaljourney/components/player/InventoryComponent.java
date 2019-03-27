@@ -11,7 +11,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
@@ -407,13 +406,12 @@ public class InventoryComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<InventoryComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<InventoryComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<InventoryComponent>() {
 
 			@Override
 			public void write(Kryo kryo, Output output, InventoryComponent object) {
 
-				kryo.writeClassAndObject(output, object.player);
 				output.writeInt(object.numberOfSlots);
 				kryo.writeClassAndObject(output, object.slots);
 				output.writeBoolean(object.hasKey);
@@ -424,11 +422,13 @@ public class InventoryComponent implements Component, Poolable {
 			@Override
 			public InventoryComponent read(Kryo kryo, Input input, Class<InventoryComponent> type) {
 				InventoryComponent compo = engine.createComponent(InventoryComponent.class);
-				compo.player = (Entity) kryo.readClassAndObject(input);
+
 				compo.numberOfSlots = input.readInt();
 				compo.slots = (List<List<Entity>>) kryo.readClassAndObject(input);
 				compo.hasKey = input.readBoolean();
 				compo.firstEmptySlot = input.readInt();
+				
+				compo.setDisplayMode(InventoryDisplayModeEnum.NONE);
 				return compo;
 			}
 		

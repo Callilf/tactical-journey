@@ -27,7 +27,6 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -331,7 +330,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<AlterationReceiverComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<AlterationReceiverComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<AlterationReceiverComponent>() {
 
 			@Override

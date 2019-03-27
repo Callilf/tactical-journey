@@ -100,7 +100,7 @@ public class StatueComponent implements Component, Poolable {
 
 	
 	
-	public static Serializer<StatueComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<StatueComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<StatueComponent>() {
 
 			@Override

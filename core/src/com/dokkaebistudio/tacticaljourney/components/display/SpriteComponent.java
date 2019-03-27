@@ -23,7 +23,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -99,14 +98,14 @@ public class SpriteComponent implements Component, Poolable {
 
 	
 	
-	public static Serializer<SpriteComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<SpriteComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<SpriteComponent>() {
 
 			@Override
 			public void write(Kryo kryo, Output output, SpriteComponent object) {
 				output.writeBoolean(object.hide);
 				output.writeBoolean(object.flipX);
-				output.writeString(object.regionName);
+				output.writeString(object.regionName != null ? object.regionName : "");
 			}
 
 			@Override
@@ -114,7 +113,12 @@ public class SpriteComponent implements Component, Poolable {
 				SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 				spriteCompo.hide = input.readBoolean();
 				spriteCompo.flipX = input.readBoolean();
-				spriteCompo.setSprite(Assets.findSprite(input.readString()));
+				
+				String regionName = input.readString();
+				if (regionName != "") {
+					spriteCompo.setSprite(Assets.findSprite(regionName));
+				}
+				
 				return spriteCompo;
 			}
 		

@@ -22,7 +22,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
@@ -39,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DialogRenderer;
@@ -126,7 +126,7 @@ public class GameScreen extends ScreenAdapter {
 	Vector3 touchPoint;
 	
 	public List<Floor> floors;
-	Floor activeFloor;
+	public Floor activeFloor;
 	Floor requestedFloor;
 	
 	public EntityFactory entityFactory;
@@ -145,7 +145,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	public Entity player;
 
-	public GameScreen (TacticalJourney game) {
+	public GameScreen (TacticalJourney game, boolean newGame) {
 		this.game = game;
 		
 		Gdx.input.setCatchBackKey(true);
@@ -187,20 +187,31 @@ public class GameScreen extends ScreenAdapter {
 		this.entityFactory = new EntityFactory(this.engine);
 		
 		floors = new ArrayList<>();
-		Floor floor1 = new Floor(this, 1);
-		floor1.generate();
-		Room room = floor1.getActiveRoom();
-		floors.add(floor1);
-		activeFloor = floor1;
-		Floor floor2 = new Floor(this, 2);
-		floors.add(floor2);
-		Floor floor3 = new Floor(this, 3);
-		floors.add(floor3);
-		Floor floor4 = new Floor(this, 4);
-		floors.add(floor4);
+		
+		
+		if (newGame) {
+			Floor floor1 = new Floor(this, 1);
+			floor1.generate();
+			floors.add(floor1);
+			activeFloor = floor1;
+	//		Floor floor2 = new Floor(this, 2);
+	//		floors.add(floor2);
+	//		Floor floor3 = new Floor(this, 3);
+	//		floors.add(floor3);
+	//		Floor floor4 = new Floor(this, 4);
+	//		floors.add(floor4);
+	
+			
+			player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, floor1.getActiveRoom());
+		} else {
+			Persister persister = new Persister(this);
+			persister.loadGameState();
+		}
+		Room room = floors.get(0).getActiveRoom();
 
 		
-		player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, room);
+		
+		
 		
 		mapRenderer = new MapRenderer(miniMapStage, activeFloor);
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));

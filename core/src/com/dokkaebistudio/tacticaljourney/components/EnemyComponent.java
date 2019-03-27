@@ -264,7 +264,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	
 	
 	
-	public static Serializer<EnemyComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<EnemyComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<EnemyComponent>() {
 
 			@Override
@@ -301,7 +301,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 				
 				compo.alerted = input.readBoolean();
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
-				engine.addEntity(compo.alertedDisplayer);
+//				engine.addEntity(compo.alertedDisplayer);
 				
 				return compo;
 			}

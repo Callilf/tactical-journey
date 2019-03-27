@@ -12,6 +12,8 @@ public class Sector {
     public int range;
     public Hit hit;
 
+    public Sector() {}
+    
     public Sector(int range, Hit hit) {
         this.range = range;
         this.hit = hit;

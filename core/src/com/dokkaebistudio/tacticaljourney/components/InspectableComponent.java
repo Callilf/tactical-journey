@@ -60,7 +60,7 @@ public class InspectableComponent implements Component, Poolable {
 	
 	
 	
-	public static Serializer<InspectableComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+	public static Serializer<InspectableComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<InspectableComponent>() {
 
 			@Override

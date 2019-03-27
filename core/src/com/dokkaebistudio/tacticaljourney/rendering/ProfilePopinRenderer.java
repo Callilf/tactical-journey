@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -147,6 +148,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
     		
     		stage.addActor(mainTable);
+    		
+    		for (int i=0 ; i<10 ; i++) {
+    			System.out.println(RandomSingleton.getInstance().nextSeededInt(100));
+    		}
     
     	}
     	

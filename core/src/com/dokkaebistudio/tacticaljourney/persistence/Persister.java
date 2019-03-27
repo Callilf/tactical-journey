@@ -16,6 +16,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -153,6 +154,11 @@ public class Persister {
 				
 				// Save the current time
 				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
+				
+				// Save the random seed and the number of time nextInt has been called
+				String seed = RandomSingleton.getInstance().getSeed();
+				output.writeString(seed);
+				output.writeString(RandomSingleton.getInstance().getStateOfSeededRandom());
 			}
 
 			@Override
@@ -177,8 +183,13 @@ public class Persister {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gameScreen.player);
 				inventoryComponent.player = gameScreen.player;
 				
-				
+				// Resotre the time
 				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
+				
+				// Init the random
+				RandomSingleton.createInstance(input.readString());
+				String seed = input.readString();
+				RandomSingleton.getInstance().restoreState(seed);
 				return null;
 			}
 			

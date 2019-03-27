@@ -121,6 +121,17 @@ public class RandomSingleton {
 		return r;
 	}
 	
+	public String getStateOfSeededRandom() {
+		long seed0 = getSeededRandom().getState(0);
+		long seed1 = getSeededRandom().getState(1);
+		return seed0 + "#" + seed1;
+	}
+	
+	public void restoreState(String seed) {
+		String[] split = seed.split("#");
+		getSeededRandom().setState(Long.valueOf(split[0]), Long.valueOf(split[1]));
+	}
+	
 	// Get and Set
 
 	private RandomXS128 getSeededRandom() {

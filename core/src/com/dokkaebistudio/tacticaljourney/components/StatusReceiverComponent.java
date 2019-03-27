@@ -335,6 +335,11 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 			@Override
 			public void write(Kryo kryo, Output output, StatusReceiverComponent object) {
 				kryo.writeClassAndObject(output, object.statuses);
+				output.writeBoolean(object.statusTable == null);
+				if (object.statusTable != null) {
+					output.writeFloat(object.statusTable.getX());
+					output.writeFloat(object.statusTable.getY());
+				}
 			}
 
 			@Override
@@ -342,6 +347,12 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 				StatusReceiverComponent compo = engine.createComponent(StatusReceiverComponent.class);
 
 				List<Status> statusList = (List<Status>) kryo.readClassAndObject(input);
+				if(input.readBoolean()) {
+					compo.statusTable = null;
+				} else {
+					compo.statusTable.setPosition(input.readFloat(), input.readFloat());
+				}
+				
 				for (Status status : statusList) {
 					compo.statuses.add(status);
 					

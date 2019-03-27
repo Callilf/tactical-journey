@@ -270,7 +270,7 @@ public class GameScreen extends ScreenAdapter {
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
 				
 		//Enter the first room
-		enterRoom(room, null);
+		activeFloor.enterRoom(activeFloor.getActiveRoom());
 		
 		Journal.addEntry("Welcome to Tactical Journey!");
 	}

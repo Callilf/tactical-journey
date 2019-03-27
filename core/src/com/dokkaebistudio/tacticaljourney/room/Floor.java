@@ -101,35 +101,41 @@ public class Floor {
 	 */
 	public void enterRoom(Room newRoom) {
 		Room oldRoom = this.getActiveRoom();
+		if (oldRoom == newRoom) oldRoom = null;
+		
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
 		
 		//TODO maybe move this
-		for (Entity e : oldRoom.getEnemies()) {
-			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-			statusReceiverComponent.hideStatusTable();
+		if (oldRoom != null) {
+			for (Entity e : oldRoom.getEnemies()) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+				statusReceiverComponent.hideStatusTable();
+			}
 		}
 		for (Entity e : newRoom.getEnemies()) {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 			statusReceiverComponent.displayStatusTable(gameScreen.fxStage);
 		}
 		
-		this.removePlayerFromRoom(oldRoom);
-		
-		//Place the player
-		if (newRoom.getNorthNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
-		} else if (newRoom.getSouthNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
-		} else if (newRoom.getWestNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
-		} else if (newRoom.getEastNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
-		} else {
-			// TP case
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+		if (oldRoom != null) {
+			this.removePlayerFromRoom(oldRoom);
+
+			//Place the player
+			if (newRoom.getNorthNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+			} else if (newRoom.getSouthNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
+			} else if (newRoom.getWestNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
+			} else if (newRoom.getEastNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
+			} else {
+				// TP case
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+			}
 		}
-	
+		
 		MapRenderer.requireRefresh();
 	}
 	

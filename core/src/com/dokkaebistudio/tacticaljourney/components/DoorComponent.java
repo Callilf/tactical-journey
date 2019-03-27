@@ -65,18 +65,14 @@ public class DoorComponent implements Component {
 			@Override
 			public void write(Kryo kryo, Output output, DoorComponent object) {
 				output.writeBoolean(object.opened);
-				output.writeInt(object.targetedRoom.getIndex());
+				kryo.writeClassAndObject(output, object.targetedRoom);
 			}
 
 			@Override
 			public DoorComponent read(Kryo kryo, Input input, Class<DoorComponent> type) {
 				DoorComponent compo = engine.createComponent(DoorComponent.class);
 				compo.opened = input.readBoolean();
-				
-				int roomIndex = input.readInt();
-				Room roomFromIndex = loadedRooms.get(roomIndex);
-				compo.targetedRoom = roomFromIndex;
-				
+				compo.targetedRoom = (Room) kryo.readClassAndObject(input);				
 				return compo;
 			}
 		

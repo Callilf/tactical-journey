@@ -52,7 +52,8 @@ public abstract class FloorGenerator {
 		List<Room> rooms = new ArrayList<>();		
 		
 		// 1 - compute distance between start room and end room
-		int distanceStartToEnd = 3 + random.nextSeededInt(4);
+		//TODO change that
+		int distanceStartToEnd = 1;//3 + random.nextSeededInt(4);
 		
 		// 2 - Given that startRoom is 0,0, find where to place endRoom
 		int endRoomX = - distanceStartToEnd + random.nextSeededInt((distanceStartToEnd * 2) + 1);
@@ -65,44 +66,44 @@ public abstract class FloorGenerator {
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
 		
-//		int currX = 0;
-//		int currY = 0;
-//		GenerationMoveEnum currentMove = null;
-//		Room previousRoom = startRoom;
-//		while (currX != endRoomX || currY != endRoomY) {
-//			if (currX != endRoomX && currY != endRoomY) {
-//				if (random.nextSeededInt(2) == 0) {
-//					NewRoomPos newRoomPos = moveHorizontally(currX, endRoomX);
-//					currX = newRoomPos.newCoord;
-//					currentMove = newRoomPos.direction;
-//				} else {
-//					NewRoomPos newRoomPos = moveVertically(currY, endRoomY);
-//					currY = newRoomPos.newCoord;
-//					currentMove = newRoomPos.direction;
-//				}
-//			} else if (currX != endRoomX) {
-//				NewRoomPos newRoomPos = moveHorizontally(currX, endRoomX);
-//				currX = newRoomPos.newCoord;
-//				currentMove = newRoomPos.direction;
-//			} else {
-//				NewRoomPos newRoomPos = moveVertically(currY, endRoomY);
-//				currY = newRoomPos.newCoord;
-//				currentMove = newRoomPos.direction;
-//			}
-//			
-//			// Create the room
-//			Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
-//			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
-//			positionsPerRoom.put(currentRoom, new Vector2(currX, currY));
-//
-//			rooms.add(currentRoom);
-//			
-//			// Set the neighbors
-//			setNeighbors(currentMove, previousRoom, currentRoom);		
-//			
-//			previousRoom = currentRoom;
-//		}
-//		previousRoom.type = RoomType.END_FLOOR_ROOM;
+		int currX = 0;
+		int currY = 0;
+		GenerationMoveEnum currentMove = null;
+		Room previousRoom = startRoom;
+		while (currX != endRoomX || currY != endRoomY) {
+			if (currX != endRoomX && currY != endRoomY) {
+				if (random.nextSeededInt(2) == 0) {
+					NewRoomPos newRoomPos = moveHorizontally(currX, endRoomX);
+					currX = newRoomPos.newCoord;
+					currentMove = newRoomPos.direction;
+				} else {
+					NewRoomPos newRoomPos = moveVertically(currY, endRoomY);
+					currY = newRoomPos.newCoord;
+					currentMove = newRoomPos.direction;
+				}
+			} else if (currX != endRoomX) {
+				NewRoomPos newRoomPos = moveHorizontally(currX, endRoomX);
+				currX = newRoomPos.newCoord;
+				currentMove = newRoomPos.direction;
+			} else {
+				NewRoomPos newRoomPos = moveVertically(currY, endRoomY);
+				currY = newRoomPos.newCoord;
+				currentMove = newRoomPos.direction;
+			}
+			
+			// Create the room
+			Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
+			positionsPerRoom.put(currentRoom, new Vector2(currX, currY));
+
+			rooms.add(currentRoom);
+			
+			// Set the neighbors
+			setNeighbors(currentMove, previousRoom, currentRoom);		
+			
+			previousRoom = currentRoom;
+		}
+		previousRoom.type = RoomType.END_FLOOR_ROOM;
 //		
 //		
 //		// 4 - Add rooms to this path

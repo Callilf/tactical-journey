@@ -237,7 +237,8 @@ public class Persister {
 				// If the entity has already been saved, stop here
 				if (!savedRooms.contains(roomToSave.getIndex())) {
 					// If not, save the whole entity
-					
+					savedRooms.add(roomToSave.getIndex());
+
 					output.writeString(roomToSave.type.name());
 					
 					output.writeInt(roomToSave.turnManager.getTurn());
@@ -263,7 +264,6 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.getWestNeighbor());
 					kryo.writeClassAndObject(output, roomToSave.getEastNeighbor());
 
-					savedRooms.add(roomToSave.getIndex());
 				}
 			}
 
@@ -282,7 +282,7 @@ public class Persister {
 				Room loadedRoom = new Room(null, roomIndex, engine, gameScreen.entityFactory, roomType);
 				loadedRooms.put(roomIndex, loadedRoom);
 				
-				loadedRoom.forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+				loadedRoom.forceState(RoomState.PLAYER_TURN_INIT);
 				loadedRoom.turnManager = new TurnManager(loadedRoom);
 				loadedRoom.turnManager .setTurn(input.readInt());
 				
@@ -392,7 +392,7 @@ public class Persister {
 				
 				if (isEntityToLoad(loadedEntity)) {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(loadedEntity);
-					if (gridPositionComponent.room != null) {
+					if (gridPositionComponent != null && gridPositionComponent.room != null) {
 						gridPositionComponent.coord(loadedEntity, gridPositionComponent.coord(), gridPositionComponent.room);
 						
 						for (Component compo : loadedEntity.getComponents()) {

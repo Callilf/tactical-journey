@@ -5,7 +5,7 @@ package com.dokkaebistudio.tacticaljourney.enums;
 
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 /**
  * @author Callil

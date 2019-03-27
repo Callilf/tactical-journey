@@ -512,6 +512,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 				compo.maxHp = input.readInt();
 				compo.hp = input.readInt();
 				compo.hpDisplayer = (Entity) kryo.readClassAndObject(input);
+				engine.addEntity(compo.hpDisplayer);
 
 				compo.maxArmor = input.readInt();
 				compo.armor = input.readInt();

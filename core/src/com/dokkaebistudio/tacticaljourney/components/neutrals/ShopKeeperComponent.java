@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -14,8 +15,13 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is a shopkeeper.
@@ -216,6 +222,42 @@ public class ShopKeeperComponent implements Component, Poolable {
 
 	public void setItemPool(ShopItemPool itemPool) {
 		this.itemPool = itemPool;
+	}
+	
+	
+	
+	
+	public static Serializer<ShopKeeperComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<ShopKeeperComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, ShopKeeperComponent object) {
+
+				output.writeBoolean(object.hostile);
+				output.writeInt(object.numberOfItems);
+				kryo.writeClassAndObject(output, object.soldItems);
+				output.writeInt(object.restockNumber);
+				output.writeBoolean(object.firstSpeech);
+				kryo.writeClassAndObject(output, object.mainSpeeches);
+
+				// TODO 	private ShopItemPool itemPool;
+
+			}
+
+			@Override
+			public ShopKeeperComponent read(Kryo kryo, Input input, Class<ShopKeeperComponent> type) {
+				ShopKeeperComponent compo = engine.createComponent(ShopKeeperComponent.class);
+				compo.hostile = input.readBoolean();
+				compo.numberOfItems = input.readInt();
+				compo.soldItems = (Map<Entity, Vector2>) kryo.readClassAndObject(input);
+				compo.restockNumber = input.readInt();
+				compo.firstSpeech = input.readBoolean();
+				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
+
+				return compo;
+			}
+		
+		};
 	}
 
 	

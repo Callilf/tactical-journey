@@ -4,8 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -17,11 +15,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public abstract class Orb {
 	
 	/** The name displayed. */
-	private String label;
-	
-	/** The name of the image in the assets. */
-	private Array<Sprite> texture;
-	
+	private String label;	
 
 	
 	/**
@@ -29,9 +23,8 @@ public abstract class Orb {
 	 * @param label
 	 * @param texture
 	 */
-	protected Orb(String label, Array<Sprite> texture) {
+	protected Orb(String label) {
 		this.setLabel(label);
-		this.setTexture(texture);
 	}
 	
 	
@@ -83,13 +76,4 @@ public abstract class Orb {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-	public Array<Sprite> getTexture() {
-		return texture;
-	}
-
-	public void setTexture(Array<Sprite> texture) {
-		this.texture = texture;
-	}
-	
 }

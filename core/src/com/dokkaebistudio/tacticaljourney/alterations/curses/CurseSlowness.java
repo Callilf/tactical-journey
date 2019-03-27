@@ -4,8 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 /**
  * Curse of slowness. Reduce the entity's movement speed by 1.

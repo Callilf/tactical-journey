@@ -2,8 +2,14 @@ package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Represent a skill of the player.
@@ -59,4 +65,30 @@ public class SkillComponent implements Component, Poolable {
 		this.type = type;
 	}
 	
+	
+	
+	
+	public static Serializer<SkillComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<SkillComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, SkillComponent object) {
+				output.writeInt(object.skillNumber);
+				output.writeString(object.type.name());
+				kryo.writeClassAndObject(output, object.parentEntity);
+			}
+
+			@Override
+			public SkillComponent read(Kryo kryo, Input input, Class<SkillComponent> type) {
+				SkillComponent compo = engine.createComponent(SkillComponent.class);
+
+				compo.skillNumber = input.readInt(); 
+				compo.type = SkillEnum.valueOf(input.readString()); 
+				compo.parentEntity = (Entity) kryo.readClassAndObject(input);
+				
+				return compo;
+			}
+		
+		};
+	}
 }

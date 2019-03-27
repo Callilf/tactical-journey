@@ -5,13 +5,19 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Means that the entity can carry items.
@@ -395,5 +401,37 @@ public class InventoryComponent implements Component, Poolable {
 
 	public void setSoulbender(Entity soulbender) {
 		this.soulbender = soulbender;
+	}
+	
+	
+	
+	
+	
+	public static Serializer<InventoryComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<InventoryComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, InventoryComponent object) {
+
+				kryo.writeClassAndObject(output, object.player);
+				output.writeInt(object.numberOfSlots);
+				kryo.writeClassAndObject(output, object.slots);
+				output.writeBoolean(object.hasKey);
+				output.writeInt(object.firstEmptySlot);
+
+			}
+
+			@Override
+			public InventoryComponent read(Kryo kryo, Input input, Class<InventoryComponent> type) {
+				InventoryComponent compo = engine.createComponent(InventoryComponent.class);
+				compo.player = (Entity) kryo.readClassAndObject(input);
+				compo.numberOfSlots = input.readInt();
+				compo.slots = (List<List<Entity>>) kryo.readClassAndObject(input);
+				compo.hasKey = input.readBoolean();
+				compo.firstEmptySlot = input.readInt();
+				return compo;
+			}
+		
+		};
 	}
 }

@@ -152,12 +152,13 @@ public abstract class FloorGenerator {
 		addCorridors(rooms, roomsPerPosition);
 				
 		// 7 - Generate the content of all rooms
-		for (Room r : rooms) {
-			r.create();
-		}
 		floor.setRooms(rooms);
 		floor.setActiveRoom(startRoom);
 		floor.setRoomPositions(roomsPerPosition);
+
+		for (Room r : rooms) {
+			r.create();
+		}
 
 	}
 

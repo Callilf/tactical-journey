@@ -4,10 +4,9 @@
 package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
@@ -21,7 +20,7 @@ public class OrbDeath extends Orb {
 
 
 	public OrbDeath() {
-		super("Death orb", Assets.death_orb);
+		super(Descriptions.ORB_DEATH_TITLE);
 	}
 
 	@Override

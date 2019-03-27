@@ -27,20 +27,20 @@ public class PopinService {
 	
     
     private PopinService() {
-		hudStyle = new LabelStyle(Assets.font, Color.WHITE);
-		smallTextStyle = new LabelStyle(Assets.smallFont, Color.WHITE);
+		hudStyle = new LabelStyle(Assets.font.getFont(), Color.WHITE);
+		smallTextStyle = new LabelStyle(Assets.smallFont.getFont(), Color.WHITE);
 
 		
 		Drawable npBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
 		Drawable npBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
 		Drawable npBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
-		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, Assets.font);
+		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, Assets.font.getFont());
 		buttonStyle.disabled = npBtnDisabled;
 		
 		Drawable npCheckedBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
 		Drawable npCheckedBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
 		Drawable npCheckedBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
-		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, Assets.font);
+		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, Assets.font.getFont());
 		checkedButtonStyle.disabled = npCheckedBtnDisabled;
 		
 		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up.getRegion()));
@@ -48,7 +48,7 @@ public class PopinService {
 		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up.getRegion());
 		disableSprite.setAlpha(0.5f);
 		Drawable btnDisabled = new SpriteDrawable(disableSprite);
-		bigButtonStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font);
+		bigButtonStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font.getFont());
 		bigButtonStyle.disabled = btnDisabled;
 
 		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.popin_small_btn_up.getRegion()));
@@ -56,10 +56,10 @@ public class PopinService {
 		Sprite sdisableSprite = new Sprite(Assets.popin_small_btn_up.getRegion());
 		sdisableSprite.setAlpha(0.5f);
 		Drawable sbtnDisabled = new SpriteDrawable(sdisableSprite);
-		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font);
+		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font.getFont());
 		smallButtonStyle.disabled = sbtnDisabled;	
 		
-		smallButtonCheckedStyle = new TextButtonStyle(sbtnUp, sbtnDown, sbtnDown, Assets.font);
+		smallButtonCheckedStyle = new TextButtonStyle(sbtnUp, sbtnDown, sbtnDown, Assets.font.getFont());
 		smallButtonCheckedStyle.disabled = sbtnDisabled;	
     }
     

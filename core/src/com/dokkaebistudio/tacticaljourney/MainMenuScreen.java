@@ -66,7 +66,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		Table t = new Table();
 		
 		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
-		TextFieldStyle tfs = new TextFieldStyle(Assets.font, Color.WHITE, null, null, ninePatchDrawable);
+		TextFieldStyle tfs = new TextFieldStyle(Assets.font.getFont(), Color.WHITE, null, null, ninePatchDrawable);
 		seedField = new TextField("Enter seed", tfs);
 		seedField.addListener(new FocusListener() {
 			@Override

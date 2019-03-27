@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -23,7 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 public class OrbFire extends Orb {
 
 	public OrbFire() {
-		super("Fire orb", Assets.fire_orb);
+		super(Descriptions.ORB_FIRE_TITLE);
 	}
 
 	@Override

@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.statuses;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**

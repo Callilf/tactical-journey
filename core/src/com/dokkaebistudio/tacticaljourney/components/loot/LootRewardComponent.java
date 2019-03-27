@@ -86,6 +86,10 @@ public class LootRewardComponent implements Component, Poolable {
 			public LootRewardComponent read(Kryo kryo, Input input, Class<LootRewardComponent> type) {
 				LootRewardComponent compo = engine.createComponent(LootRewardComponent.class);
 				compo.drop = (Entity) kryo.readClassAndObject(input);
+				if (compo.drop != null) {
+					engine.addEntity(compo.drop);
+				}
+
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				//TODO item pool
 				

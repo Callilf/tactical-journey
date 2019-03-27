@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -23,7 +23,7 @@ import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 public class OrbVegetal extends Orb {
 
 	public OrbVegetal() {
-		super("Vegetal orb", Assets.vegetal_orb);
+		super(Descriptions.ORB_VEGETAL_TITLE);
 	}
 
 	@Override

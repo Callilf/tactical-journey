@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pools;
 
 public class PoolableTextButton extends TextButton implements Poolable {
 
-	private static TextButtonStyle defaultStyle = new TextButtonStyle(null, null, null, Assets.font);
+	private static TextButtonStyle defaultStyle = new TextButtonStyle(null, null, null, Assets.font.getFont());
 
 	public PoolableTextButton() {
 		super((String)null, defaultStyle);

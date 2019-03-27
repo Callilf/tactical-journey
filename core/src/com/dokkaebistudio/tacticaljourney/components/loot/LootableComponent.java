@@ -5,11 +5,17 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Indicate that this entity can be looted by the player.
@@ -151,5 +157,36 @@ public class LootableComponent implements Component, Poolable {
 	}
 
 	
+	
+	
+	public static Serializer<LootableComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<LootableComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, LootableComponent object) {
+				output.writeString(object.type.name());
+				output.writeInt(object.minNumberOfItems);
+				output.writeInt(object.maxNumberOfItems);
+				kryo.writeClassAndObject(output, object.items);
+				output.writeString(object.lootableState.name());
+				
+				// TODO private LootableItemPool itemPool;
+			}
+
+			@Override
+			public LootableComponent read(Kryo kryo, Input input, Class<LootableComponent> type) {
+				LootableComponent compo = engine.createComponent(LootableComponent.class);
+
+				compo.type = LootableEnum.valueOf(input.readString()); 
+				compo.minNumberOfItems = input.readInt(); 
+				compo.maxNumberOfItems = input.readInt(); 
+				compo.items = (List<Entity>) kryo.readClassAndObject(input);
+				compo.lootableState = LootableStateEnum.valueOf(input.readString()); 
+				
+				return compo;
+			}
+		
+		};
+	}
 	
 }

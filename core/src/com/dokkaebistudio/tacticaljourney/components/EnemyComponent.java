@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
@@ -302,7 +301,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 				
 				compo.alerted = input.readBoolean();
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
-
+				engine.addEntity(compo.alertedDisplayer);
+				
 				return compo;
 			}
 		

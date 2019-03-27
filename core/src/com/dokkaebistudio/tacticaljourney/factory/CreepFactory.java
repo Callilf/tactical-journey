@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
@@ -27,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 

@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
@@ -347,8 +347,12 @@ public class ItemComponent implements Component, Poolable {
 				ItemComponent compo = engine.createComponent(ItemComponent.class);
 				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
 				compo.quantityDisplayer = (Entity) kryo.readClassAndObject(input);
+				engine.addEntity(compo.quantityDisplayer);
+				
 				compo.price = (Integer) kryo.readClassAndObject(input);
 				compo.priceDisplayer = (Entity) kryo.readClassAndObject(input);
+				engine.addEntity(compo.priceDisplayer);
+
 				return compo;
 			}
 		

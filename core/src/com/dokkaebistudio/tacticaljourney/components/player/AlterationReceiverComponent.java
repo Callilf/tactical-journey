@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -26,11 +27,16 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can receive blessings and curses.
@@ -322,5 +328,27 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		return this.currentAlterations;
 	}
 	
+	
+	
+	
+	public static Serializer<AlterationReceiverComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<AlterationReceiverComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, AlterationReceiverComponent object) {
+				kryo.writeClassAndObject(output, object.blessings);
+				kryo.writeClassAndObject(output, object.curses);
+			}
+
+			@Override
+			public AlterationReceiverComponent read(Kryo kryo, Input input, Class<AlterationReceiverComponent> type) {
+				AlterationReceiverComponent compo = engine.createComponent(AlterationReceiverComponent.class);
+				compo.blessings = (List<Blessing>) kryo.readClassAndObject(input);
+				compo.curses = (List<Curse>) kryo.readClassAndObject(input);
+				return compo;
+			}
+		
+		};
+	}
 	
 }

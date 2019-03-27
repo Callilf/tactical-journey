@@ -29,6 +29,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 public class Assets {
 	
@@ -370,8 +372,8 @@ public class Assets {
 
 	
 
-	public static BitmapFont font;	
-	public static BitmapFont smallFont;
+	public static FontDescriptor font;	
+	public static FontDescriptor smallFont;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -708,6 +710,12 @@ public class Assets {
 		return regionDescriptor;
 	}
 	
+	public static FontDescriptor findFont(String name) {
+		if (font.getName().equals(name)) return font;
+		if (smallFont.getName().equals(name)) return smallFont;
+		return null;
+	}
+	
 
 	public static Assets getInstance() {
 		if (instance == null) {
@@ -733,7 +741,7 @@ public class Assets {
 	private void registerAssets() {
 		// register the only texture atlas we have
 		registerTextureAtlas(atlas);
-		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);	
+		loadFont();
 	}
 
 	/**
@@ -811,11 +819,15 @@ public class Assets {
 	 * Should be called as soon as possible to display loading info.
 	 */
 	public void loadFont() {
-		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		font.getData().markupEnabled = true;
-		smallFont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		smallFont.getData().markupEnabled = true;
-		smallFont.getData().setScale(0.8f);
+		BitmapFont bmfont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		bmfont.getData().markupEnabled = true;
+		font = new FontDescriptor("font", bmfont);
+
+		
+		BitmapFont bmSmallFont  = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+		bmSmallFont.getData().markupEnabled = true;
+		bmSmallFont.getData().setScale(0.8f);
+		smallFont = new FontDescriptor("smallfont", bmSmallFont);
 
 	}
 

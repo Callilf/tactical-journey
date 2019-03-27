@@ -485,13 +485,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		moveCompo.setWayPoints(waypoints);
 		
 		// Create an entity to show that this tile is selected as the destination
-		Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
-//		Persister p = new Persister((PublicPooledEngine) room.engine);
-//		p.saveEnemy(destinationTileEntity, room.floor);
-		
-//		Entity destinationTileEntity = p.loadEnemy(room.floor);
-//		room.engine.addEntity(destinationTileEntity);
-		
+		Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);		
 		moveCompo.setSelectedTile(destinationTileEntity);
 
 		return true;

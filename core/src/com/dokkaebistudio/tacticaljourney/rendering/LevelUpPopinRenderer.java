@@ -14,17 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -206,13 +203,13 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private void createPopinTop(ExperienceComponent expCompo, Table table) {
 		Table popinTop = new Table();
 		
-		LabelStyle titleStyle = new LabelStyle(Assets.font, Color.WHITE);
+		LabelStyle titleStyle = new LabelStyle(Assets.font.getFont(), Color.WHITE);
 		Label titleLabel = new Label("[GREEN]LEVEL UP",titleStyle);
 		popinTop.add(titleLabel).top().uniformX().pad(20, 0, 10, 0);
 		
 		popinTop.row();
 		
-		LabelStyle subtitleStyle = new LabelStyle(Assets.font, Color.WHITE);
+		LabelStyle subtitleStyle = new LabelStyle(Assets.font.getFont(), Color.WHITE);
 		Label subTitleLabel = new Label("Congratulations",subtitleStyle);
 		popinTop.add(subTitleLabel).top().uniformX();
 

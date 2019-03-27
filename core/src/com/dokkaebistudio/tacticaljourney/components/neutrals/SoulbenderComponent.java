@@ -2,9 +2,18 @@ package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is a soul bender.
@@ -75,6 +84,31 @@ public class SoulbenderComponent implements Component, Poolable {
 	
 	
 
+	
+	
+	public static Serializer<SoulbenderComponent> getSerializer(final PooledEngine engine, final Floor floor) {
+		return new Serializer<SoulbenderComponent>() {
 
+			@Override
+			public void write(Kryo kryo, Output output, SoulbenderComponent object) {
+				output.writeBoolean(object.hasInfused);
+				output.writeInt(object.price);
+				kryo.writeClassAndObject(output, object.mainSpeeches);
+				output.writeInt(object.currentSpeech);
+			}
+
+			@Override
+			public SoulbenderComponent read(Kryo kryo, Input input, Class<SoulbenderComponent> type) {
+				SoulbenderComponent compo = engine.createComponent(SoulbenderComponent.class);
+				compo.hasInfused = input.readBoolean();
+				compo.price = input.readInt();
+				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
+				compo.currentSpeech = input.readInt();
+
+				return compo;
+			}
+		
+		};
+	}
 	
 }

@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -17,7 +17,7 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class OrbVoid extends Orb {
 
 	public OrbVoid() {
-		super("Void", Assets.void_orb);
+		super(Descriptions.ORB_VOID_TITLE);
 	}
 
 	@Override

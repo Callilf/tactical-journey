@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ReflectionPool;
  */
 public class PublicPooledEngine extends PooledEngine {
 	
+	public long entityCounter = 0;
 	private EntityPool entityPool;
 	private ComponentPools componentPools;
 			
@@ -46,7 +47,10 @@ public class PublicPooledEngine extends PooledEngine {
 
 	/** @return Clean {@link Entity} from the Engine pool. In order to add it to the {@link Engine}, use {@link #addEntity(Entity)}. */
 	public Entity createEntity () {
-		return entityPool.obtain();
+		PooledEntity entity = entityPool.obtain();
+		entity.id = entityCounter;
+		entityCounter++;
+		return entity;
 	}
 
 	/**

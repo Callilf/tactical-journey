@@ -489,8 +489,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.skillNumber);
 				
 				// Animations
-				output.writeInt(AnimationSingleton.getInstance().getIndex(object.attackAnimation.getAttackAnim()));
-				output.writeInt(AnimationSingleton.getInstance().getIndex(object.attackAnimation.getCriticalAttackAnim()));
+				output.writeInt(object.attackAnimation.getAttackAnim());
+				output.writeInt(object.attackAnimation.getCriticalAttackAnim());
 				output.writeBoolean(object.attackAnimation.isOriented());
 			}
 

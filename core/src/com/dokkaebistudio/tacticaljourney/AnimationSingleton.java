@@ -57,6 +57,11 @@ public class AnimationSingleton {
 	
 	public Animation<Sprite> attack_slash;
 	public Animation<Sprite> attack_slash_critical;
+	public Animation<Sprite> arrow;
+	public Animation<Sprite> bomb;
+	public Animation<Sprite> web_projectile;
+	public Animation<Sprite> pebble_projectile;
+	
 
 	private void init() {
 		animationsCount = 0;
@@ -132,6 +137,15 @@ public class AnimationSingleton {
 		createAnimation(attack_slash);
 		attack_slash_critical = new Animation<>(0.03f, Assets.slash_critical_animation);
 		createAnimation(attack_slash_critical);
+		arrow = new Animation<>(0.1f, Assets.arrow);
+		createAnimation(arrow);
+		bomb = new Animation<>(0.1f, Assets.bomb_animation);
+		createAnimation(bomb);
+		web_projectile = new Animation<>(0.1f, Assets.projectile_web);
+		createAnimation(web_projectile);
+		pebble_projectile = new Animation<>(0.1f, Assets.projectile_pebble);
+		createAnimation(pebble_projectile);
+
 	}
 
 

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -105,8 +106,7 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -189,8 +189,7 @@ public final class EnemySpiderFactory {
 		attackComponent.setRangeMin(2);
 		attackComponent.setRangeMax(3);
 		attackComponent.setStrength(3);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.projectile_web), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().web_projectile, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 
 		enemyEntity.add(attackComponent);
@@ -276,8 +275,7 @@ public final class EnemySpiderFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation),  true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		

@@ -119,8 +119,7 @@ public final class EnemyPangolinFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(9);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation),  true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -211,8 +210,7 @@ public final class EnemyPangolinFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(12);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation),  true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		

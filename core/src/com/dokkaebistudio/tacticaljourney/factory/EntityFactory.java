@@ -776,9 +776,8 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 			
-			AttackAnimation attackAnimation = new AttackAnimation(
-					new Animation<>(0.03f, Assets.slash_animation), 
-					new Animation<>(0.03f, Assets.slash_critical_animation), true);
+			AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, 
+					AnimationSingleton.getInstance().attack_slash_critical, true);
 			attackComponent.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
 			break;
@@ -802,9 +801,8 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 
-			attackAnimation = new AttackAnimation(
-					new Animation<>(0.1f, Assets.arrow), 
-					new Animation<>(0.1f, Assets.arrow), true);
+			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().arrow, 
+					AnimationSingleton.getInstance().arrow, true);
 			attackComponent.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
 
@@ -812,9 +810,8 @@ public final class EntityFactory {
 		case 3:
 			playerComponent.setSkillBomb(skillEntity);
 			
-			attackAnimation = new AttackAnimation(
-					new Animation<>(0.2f, Assets.bomb_animation), 
-					new Animation<>(0.2f, Assets.bomb_animation), false);
+			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().bomb, 
+					AnimationSingleton.getInstance().bomb, false);
 			attackComponent.setAttackAnimation(attackAnimation);
 
 			break;

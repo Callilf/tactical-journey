@@ -124,8 +124,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(2);
 		attackComponent.setStrength(7);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -214,8 +213,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(6);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -307,8 +305,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.setAttackType(AttackTypeEnum.RANGE);
 		attackComponent.setRangeMax(3);
 		attackComponent.setStrength(3);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.projectile_pebble), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().pebble_projectile, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -402,8 +399,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.setAttackType(AttackTypeEnum.RANGE);
 		attackComponent.setRangeMax(3);
 		attackComponent.setStrength(3);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.projectile_pebble), true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().pebble_projectile, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		

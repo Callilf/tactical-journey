@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -20,9 +21,10 @@ import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 public class AttackAnimation {
 	private boolean hasAnim;
 
-	private Animation<Sprite> attackAnim;
+	private Integer attackAnimIndex = -1;
+	private Integer criticalAttackAnimIndex = -1;
 	
-	private Animation<Sprite> criticalAttackAnim;
+	private Animation<Sprite> staticAttackAnim;
 	
 	private AnimatedImage animatedImage;
 
@@ -41,8 +43,8 @@ public class AttackAnimation {
 	
 
 	public AttackAnimation(Animation<Sprite> attackAnim, Animation<Sprite> critAnim, boolean oriented) {
-		this.attackAnim = attackAnim;
-		this.criticalAttackAnim = critAnim;
+		this.attackAnimIndex = AnimationSingleton.getInstance().getIndex(attackAnim);
+		this.criticalAttackAnimIndex = AnimationSingleton.getInstance().getIndex(critAnim);
 		this.oriented = oriented;
 		
 		if (attackAnim != null) {
@@ -128,10 +130,12 @@ public class AttackAnimation {
 	 * @return the animation to use.
 	 */
 	public Animation<Sprite> getAnim(Sector pointedSector) {
+		if (staticAttackAnim != null) return staticAttackAnim;
+		
 		if (pointedSector != null && pointedSector.hit == Hit.CRITICAL) {
-			return this.criticalAttackAnim;
+			return AnimationSingleton.getInstance().getAnimation(this.criticalAttackAnimIndex);
 		} else {
-			return this.attackAnim;
+			return AnimationSingleton.getInstance().getAnimation(this.attackAnimIndex);
 		}
 	}
 	
@@ -146,28 +150,28 @@ public class AttackAnimation {
 	//************************
 	// Getters and setters
 	
-	public Animation<Sprite> getAttackAnim() {
-		return attackAnim;
+	public Integer getAttackAnim() {
+		return attackAnimIndex;
 	}
 	
 	public void setAttackAnim(Animation<Sprite> attackAnim) {
-		this.attackAnim = attackAnim;
+		this.attackAnimIndex = AnimationSingleton.getInstance().getIndex(attackAnim);
 	}
 	
 	public void setAttackAnim(TextureRegion region) {
 		Array<Sprite> array = new Array<Sprite>();
 		array.add(new Sprite(region));
-		this.attackAnim = new Animation<>(0.1f, array);
+		this.staticAttackAnim = new Animation<>(0.1f, array);
 		
 		this.hasAnim = true;
 	}
 
-	public Animation<Sprite> getCriticalAttackAnim() {
-		return criticalAttackAnim;
+	public Integer getCriticalAttackAnim() {
+		return criticalAttackAnimIndex;
 	}
 
 	public void setCriticalAttackAnim(Animation<Sprite> criticalAttackAnim) {
-		this.criticalAttackAnim = criticalAttackAnim;
+		this.criticalAttackAnimIndex = AnimationSingleton.getInstance().getIndex(criticalAttackAnim);
 	}
 
 	public AnimatedImage getAnimatedImage() {

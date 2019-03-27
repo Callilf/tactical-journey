@@ -127,9 +127,12 @@ public class GridPositionComponent implements Component, Poolable {
 				output.writeFloat(object.coord().y);
 				
 				// Absolute pos
-				output.writeBoolean(object.hasAbsolutePos);
 				output.writeFloat(object.getAbsolutePos().x);
 				output.writeFloat(object.getAbsolutePos().y);
+				output.writeBoolean(object.hasAbsolutePos);
+				
+				// Inactive
+				output.writeBoolean(object.inactive);
 			}
 
 			@Override
@@ -148,9 +151,10 @@ public class GridPositionComponent implements Component, Poolable {
 				gridPosCompo.coord((int)input.readFloat(), (int)input.readFloat());
 				
 				// Absolute pos
-				gridPosCompo.hasAbsolutePos = input.readBoolean();
 				gridPosCompo.absolutePos((int)input.readFloat(), (int)input.readFloat());
+				gridPosCompo.hasAbsolutePos = input.readBoolean();
 
+				gridPosCompo.inactive = input.readBoolean();
 				return gridPosCompo;
 			}
 		

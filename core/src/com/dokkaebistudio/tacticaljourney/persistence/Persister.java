@@ -100,7 +100,7 @@ public class Persister {
 	
 	public void saveGameState() {
 		Kryo kryo = new Kryo();
-		
+		kryo.setReferences(false);
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		
@@ -119,7 +119,7 @@ public class Persister {
 	
 	public void loadGameState() {
 		Kryo kryo = new Kryo();
-		
+		kryo.setReferences(false);
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		try {
@@ -360,13 +360,13 @@ public class Persister {
 				
 				// If the entity has already been saved, stop here
 				if (!savedEntities.contains(entityToSave.id)) {
+					savedEntities.add(entityToSave.id);
 					// If not, save the whole entity
 					output.writeInt(entityToSave.flags);
 					output.writeInt(entityToSave.getComponents().size());
 					for (Component compo : entityToSave.getComponents()) {
 						kryo.writeClassAndObject(output, compo);
 					}
-					savedEntities.add(entityToSave.id);
 				}
 			}
 

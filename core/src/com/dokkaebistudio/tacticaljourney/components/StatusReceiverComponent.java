@@ -212,7 +212,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	public void updateDuration(Status status, int value) {
 		if (status.getDuration() != null) {
 			if (status.getDuration() == 0) {
-				//TODO remove
+				//TODO //DEBUG remove
 				Journal.addEntry("[RED]DEBUG: status duration = 0");
 			}
 			status.setDuration(status.getDuration() + value);

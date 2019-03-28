@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -169,8 +170,8 @@ public class LootableComponent implements Component, Poolable {
 				output.writeInt(object.maxNumberOfItems);
 				kryo.writeClassAndObject(output, object.items);
 				output.writeString(object.lootableState.name());
-				
-				// TODO private LootableItemPool itemPool;
+				output.writeInt(object.itemPool.id);				
+
 			}
 
 			@Override
@@ -182,6 +183,7 @@ public class LootableComponent implements Component, Poolable {
 				compo.maxNumberOfItems = input.readInt(); 
 				compo.items = (List<Entity>) kryo.readClassAndObject(input);
 				compo.lootableState = LootableStateEnum.valueOf(input.readString()); 
+				compo.itemPool = (LootableItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
 				
 				return compo;
 			}

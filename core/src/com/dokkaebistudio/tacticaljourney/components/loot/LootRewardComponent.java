@@ -4,9 +4,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -77,9 +76,8 @@ public class LootRewardComponent implements Component, Poolable {
 			@Override
 			public void write(Kryo kryo, Output output, LootRewardComponent object) {
 				kryo.writeClassAndObject(output, object.drop);
-				kryo.writeClassAndObject(output, object.dropRate);				
-				//TODO item pool
-				
+				kryo.writeClassAndObject(output, object.dropRate);
+				output.writeInt(object.itemPool.id);				
 			}
 
 			@Override
@@ -91,8 +89,7 @@ public class LootRewardComponent implements Component, Poolable {
 				}
 
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
-				//TODO item pool
-				
+				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
 				return compo;
 			}
 		

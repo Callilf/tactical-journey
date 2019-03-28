@@ -155,6 +155,9 @@ public class Persister {
 					kryo.writeClassAndObject(output, f);
 				}
 				
+				// Save the current floor
+				output.writeInt(gs.activeFloor.getLevel());
+				
 				// Save the player
 				kryo.writeClassAndObject(output, gs.player);
 				
@@ -179,9 +182,14 @@ public class Persister {
 					gameScreen.floors.add((Floor) kryo.readClassAndObject(input));
 				}
 				
-				//TODO change this
-				gameScreen.activeFloor = gameScreen.floors.get(0);
-
+				// Restore current floor
+				int currentFloorLevel = input.readInt();
+				for (Floor f : gameScreen.floors) {
+					if (f.getLevel() == currentFloorLevel) {
+						gameScreen.activeFloor = f;
+						break;
+					}
+				}
 				
 				// Load the player
 				gameScreen.player = (Entity) kryo.readClassAndObject(input);

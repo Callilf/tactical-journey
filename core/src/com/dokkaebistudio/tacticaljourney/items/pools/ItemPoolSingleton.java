@@ -62,26 +62,53 @@ public class ItemPoolSingleton {
 	
 	public ItemPoolSingleton() {
 		
+		// Shops
+		basicShopItemPool.id = 1;
 		allItemPools.add(basicShopItemPool);
 		
+		// Lootables
+		oldBones.id = 2;
 		allItemPools.add(oldBones);
+		satchel.id = 3;
 		allItemPools.add(satchel);
+		personalBelongings.id = 4;
 		allItemPools.add(personalBelongings);
+		orbBag.id = 5;
 		allItemPools.add(orbBag);
 		
+		// Enemies
+		spider.id = 6;
 		allItemPools.add(spider);
+		webSpider.id = 7;
 		allItemPools.add(webSpider);
+		venomSpider.id = 8;
 		allItemPools.add(venomSpider);
+		scorpion.id = 9;
 		allItemPools.add(scorpion);
+		stinger.id = 10;
 		allItemPools.add(stinger);
+		pangolin.id = 11;
 		allItemPools.add(pangolin);
+		pangolinMatriarch.id = 12;
 		allItemPools.add(pangolinMatriarch);
+		tribesmanSpear.id = 13;
 		allItemPools.add(tribesmanSpear);
-		allItemPools.add(tribesManShield);		
-		allItemPools.add(tribesmanScout);	
+		tribesManShield.id = 14;
+		allItemPools.add(tribesManShield);
+		tribesmanScout.id = 15;
+		allItemPools.add(tribesmanScout);
 		
 	}
 	
+	
+	public ItemPool getPoolById(int id) {
+		for (ItemPool pool : allItemPools) {
+			if (pool.id == id) {
+				return pool;
+			}
+		}
+		return null;
+	}
 	
 	public void removeItemFromPools(ItemEnum item) {
 		this.removedItems.add(item);

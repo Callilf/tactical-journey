@@ -13,7 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -232,16 +234,13 @@ public class ShopKeeperComponent implements Component, Poolable {
 
 			@Override
 			public void write(Kryo kryo, Output output, ShopKeeperComponent object) {
-
 				output.writeBoolean(object.hostile);
 				output.writeInt(object.numberOfItems);
 				kryo.writeClassAndObject(output, object.soldItems);
 				output.writeInt(object.restockNumber);
 				output.writeBoolean(object.firstSpeech);
 				kryo.writeClassAndObject(output, object.mainSpeeches);
-
-				// TODO 	private ShopItemPool itemPool;
-
+				output.writeInt(object.itemPool.id);				
 			}
 
 			@Override
@@ -253,6 +252,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 				compo.restockNumber = input.readInt();
 				compo.firstSpeech = input.readBoolean();
 				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
+				compo.itemPool = (ShopItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
 
 				return compo;
 			}

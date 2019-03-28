@@ -6,11 +6,10 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
+import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.AlterationPool;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -108,9 +107,6 @@ public class StatueComponent implements Component, Poolable {
 				output.writeBoolean(object.hasBlessing);
 				kryo.writeClassAndObject(output, object.blessingToGive);
 				kryo.writeClassAndObject(output, object.curseToGive);
-				
-				// TODO : private AlterationPool alterationPool;
-
 			}
 
 			@Override

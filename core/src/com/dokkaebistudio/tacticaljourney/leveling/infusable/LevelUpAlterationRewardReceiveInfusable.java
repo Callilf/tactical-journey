@@ -32,7 +32,7 @@ public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlte
 
 	@Override
 	public void select(Entity player, Room room) {
-		ItemPoolSingleton.getInstance().personalBelongings.removeItemFromPool(item);
+		ItemPoolSingleton.getInstance().removeItemFromPools(item);
 		
 		Entity clonedItem = room.entityFactory.itemFactory.createItem(item);
 		ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);

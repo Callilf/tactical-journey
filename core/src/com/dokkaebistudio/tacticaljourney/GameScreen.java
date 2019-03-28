@@ -372,8 +372,6 @@ public class GameScreen extends ScreenAdapter {
 			break;
 		case GAME_OVER:
 			
-			//TODO 
-			
 			break;
 			default:
 		}

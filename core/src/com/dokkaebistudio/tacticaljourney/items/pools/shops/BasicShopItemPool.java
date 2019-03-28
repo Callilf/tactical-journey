@@ -1,13 +1,16 @@
 package com.dokkaebistudio.tacticaljourney.items.pools.shops;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public class BasicShopItemPool extends ShopItemPool {
+	
+	public BasicShopItemPool() {
+		this.id = "BasicShop";
+	}
 
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.

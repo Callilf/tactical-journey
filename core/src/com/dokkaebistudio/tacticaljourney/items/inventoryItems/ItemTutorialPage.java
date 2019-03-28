@@ -5,14 +5,9 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * A tutorial page.
@@ -22,6 +17,10 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemTutorialPage extends AbstractItem {
 	
 	private int pageNumber;
+	
+	public ItemTutorialPage() {
+		super("Tutorial page", Assets.tutorial_page_item, false, true);
+	}
 
 	public ItemTutorialPage(int pageNumber) {
 		super("Tutorial page", Assets.tutorial_page_item, false, true);

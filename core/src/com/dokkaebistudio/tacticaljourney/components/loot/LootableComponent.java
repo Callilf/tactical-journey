@@ -170,7 +170,7 @@ public class LootableComponent implements Component, Poolable {
 				output.writeInt(object.maxNumberOfItems);
 				kryo.writeClassAndObject(output, object.items);
 				output.writeString(object.lootableState.name());
-				output.writeInt(object.itemPool.id);				
+				output.writeString(object.itemPool.id);				
 
 			}
 
@@ -183,7 +183,7 @@ public class LootableComponent implements Component, Poolable {
 				compo.maxNumberOfItems = input.readInt(); 
 				compo.items = (List<Entity>) kryo.readClassAndObject(input);
 				compo.lootableState = LootableStateEnum.valueOf(input.readString()); 
-				compo.itemPool = (LootableItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
+				compo.itemPool = (LootableItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				
 				return compo;
 			}

@@ -8,6 +8,10 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public class OrbBagItemPool extends LootableItemPool {
 	
+	public OrbBagItemPool() {
+		this.id = "OrbBag";
+	}
+	
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
 	
 	static {

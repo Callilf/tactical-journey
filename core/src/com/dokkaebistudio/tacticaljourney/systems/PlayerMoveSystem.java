@@ -110,7 +110,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
-			ItemPoolSingleton instance = ItemPoolSingleton.getInstance();
+//			ItemPoolSingleton instance = ItemPoolSingleton.getInstance();
 			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();

@@ -77,7 +77,7 @@ public class LootRewardComponent implements Component, Poolable {
 			public void write(Kryo kryo, Output output, LootRewardComponent object) {
 				kryo.writeClassAndObject(output, object.drop);
 				kryo.writeClassAndObject(output, object.dropRate);
-				output.writeInt(object.itemPool.id);				
+				output.writeString(object.itemPool.id);				
 			}
 
 			@Override
@@ -89,7 +89,7 @@ public class LootRewardComponent implements Component, Poolable {
 				}
 
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
-				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
+				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				return compo;
 			}
 		

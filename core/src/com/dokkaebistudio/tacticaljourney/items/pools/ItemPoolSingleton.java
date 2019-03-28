@@ -11,6 +11,9 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenScoutItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenShieldItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenSpearItemPool;
@@ -46,6 +49,11 @@ public class ItemPoolSingleton {
 	public PersonalBelongingsItemPool personalBelongings = new PersonalBelongingsItemPool();
 	public OrbBagItemPool orbBag = new OrbBagItemPool();
 	
+	// DESTRUCTIBLES
+	public AmmoCrateItemPool ammoCrate = new AmmoCrateItemPool();
+	public VaseItemPool vase = new VaseItemPool();
+	public WallItemPool wall = new WallItemPool();
+	
 	// ENEMIES
 	public SpiderItemPool spider = new SpiderItemPool();
 	public WebSpiderItemPool webSpider = new WebSpiderItemPool();
@@ -63,47 +71,37 @@ public class ItemPoolSingleton {
 	public ItemPoolSingleton() {
 		
 		// Shops
-		basicShopItemPool.id = 1;
 		allItemPools.add(basicShopItemPool);
 		
 		// Lootables
-		oldBones.id = 2;
 		allItemPools.add(oldBones);
-		satchel.id = 3;
 		allItemPools.add(satchel);
-		personalBelongings.id = 4;
 		allItemPools.add(personalBelongings);
-		orbBag.id = 5;
 		allItemPools.add(orbBag);
 		
+		//Destructibles
+		allItemPools.add(ammoCrate);
+		allItemPools.add(vase);
+		allItemPools.add(wall);
+		
 		// Enemies
-		spider.id = 6;
 		allItemPools.add(spider);
-		webSpider.id = 7;
 		allItemPools.add(webSpider);
-		venomSpider.id = 8;
 		allItemPools.add(venomSpider);
-		scorpion.id = 9;
 		allItemPools.add(scorpion);
-		stinger.id = 10;
 		allItemPools.add(stinger);
-		pangolin.id = 11;
 		allItemPools.add(pangolin);
-		pangolinMatriarch.id = 12;
 		allItemPools.add(pangolinMatriarch);
-		tribesmanSpear.id = 13;
 		allItemPools.add(tribesmanSpear);
-		tribesManShield.id = 14;
 		allItemPools.add(tribesManShield);
-		tribesmanScout.id = 15;
 		allItemPools.add(tribesmanScout);
 		
 	}
 	
 	
-	public ItemPool getPoolById(int id) {
+	public ItemPool getPoolById(String id) {
 		for (ItemPool pool : allItemPools) {
-			if (pool.id == id) {
+			if (pool.id.equals(id)) {
 				return pool;
 			}
 		}

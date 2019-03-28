@@ -8,6 +8,10 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public class AdventurersSatchelItemPool extends LootableItemPool {
 	
+	public AdventurersSatchelItemPool() {
+		this.id = "AdventurersSatchel";
+	}
+	
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */

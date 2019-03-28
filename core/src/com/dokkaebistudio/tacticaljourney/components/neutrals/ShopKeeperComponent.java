@@ -15,9 +15,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
@@ -240,7 +238,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 				output.writeInt(object.restockNumber);
 				output.writeBoolean(object.firstSpeech);
 				kryo.writeClassAndObject(output, object.mainSpeeches);
-				output.writeInt(object.itemPool.id);				
+				output.writeString(object.itemPool.id);				
 			}
 
 			@Override
@@ -252,7 +250,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 				compo.restockNumber = input.readInt();
 				compo.firstSpeech = input.readBoolean();
 				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
-				compo.itemPool = (ShopItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readInt());
+				compo.itemPool = (ShopItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 
 				return compo;
 			}

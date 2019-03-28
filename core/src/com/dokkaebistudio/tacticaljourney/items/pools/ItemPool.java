@@ -4,7 +4,7 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 
 public abstract class ItemPool {
 	
-	public int id;
+	public String id;
 
 	public abstract void removeItemFromPool(ItemEnum itemEnum);
 	

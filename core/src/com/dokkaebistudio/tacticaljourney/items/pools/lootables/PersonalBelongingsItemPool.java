@@ -8,6 +8,10 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public class PersonalBelongingsItemPool extends LootableItemPool {
 	
+	public PersonalBelongingsItemPool() {
+		this.id = "PersonalBelongings";
+	}
+	
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */

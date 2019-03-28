@@ -16,8 +16,6 @@
 
 package com.dokkaebistudio.tacticaljourney;
 
-import java.io.File;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
@@ -67,11 +65,11 @@ public class MainMenuScreen extends ScreenAdapter {
 		Gdx.input.setInputProcessor(hudStage);
 		
 		FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
-		boolean hasLoadBtn = saveFile.exists();
+		boolean hasSave = saveFile.exists();
 
 		
 				
-		Table t = new Table();
+		Table mainTable = new Table();
 		
 		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
 		TextFieldStyle tfs = new TextFieldStyle(Assets.font.getFont(), Color.WHITE, null, null, ninePatchDrawable);
@@ -84,8 +82,11 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		});
 		
-		t.add(seedField).width(500).padBottom(hasLoadBtn ? 200 : 300);
-		t.row();
+		mainTable.add(seedField).width(500).padBottom(300);
+		mainTable.row();
+		
+		
+		Table buttonTable = new Table();
 		
 		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
 		start.addListener(new ChangeListener() {
@@ -104,35 +105,55 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new GameScreen(game, true));
 			}
 		});
-		t.add(start).width(500).height(200).padBottom(50);
-		t.row();
+		buttonTable.add(start).width(500).height(200).padBottom(350).padRight(50);
 		
 		
-		if (hasLoadBtn) {
-			TextButton load = new TextButton("LOAD", PopinService.buttonStyle());
-			load.addListener(new ChangeListener() {
+		TextButton load = new TextButton("LOAD", PopinService.buttonStyle());
+		load.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
 				
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					
-					//Instantiate the RNG
-					if (enteredSeed) {
-						RandomSingleton.createInstance(seedField.getText());
-					} else {
-						RandomSingleton.createInstance();
-					}
-					
-					// Launch the game
-					game.setScreen(new GameScreen(game, false));
+				//Instantiate the RNG
+				if (enteredSeed) {
+					RandomSingleton.createInstance(seedField.getText());
+				} else {
+					RandomSingleton.createInstance();
 				}
-			});
-			t.add(load).width(500).height(100);
-			t.row();
-		}
+				
+				// Launch the game
+				game.setScreen(new GameScreen(game, false));
+			}
+		});
+		buttonTable.add(load).width(500).height(200).padBottom(350).padLeft(50);
+		load.setDisabled(!hasSave);
+		mainTable.add(buttonTable);
+		mainTable.row();
 		
-		t.pack();
-		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2 + 200);
-		hudStage.addActor(t);
+		
+		TextButton removeSave = new TextButton("Erase save", PopinService.buttonStyle());
+		load.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				//Instantiate the RNG
+				if (enteredSeed) {
+					RandomSingleton.createInstance(seedField.getText());
+				} else {
+					RandomSingleton.createInstance();
+				}
+				
+				// Launch the game
+				game.setScreen(new GameScreen(game, false));
+			}
+		});
+		mainTable.add(removeSave).padBottom(50);
+		removeSave.setVisible(hasSave);
+		
+		mainTable.pack();
+		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
+		hudStage.addActor(mainTable);
 	}
 
 	public void update () {

@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -109,6 +110,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
+			ItemPoolSingleton instance = ItemPoolSingleton.getInstance();
 			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();

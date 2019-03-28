@@ -31,8 +31,11 @@ public class ItemPoolSingleton {
 		return instance;
 	}
 	
+	private List<ItemEnum> removedItems = new ArrayList<>();
+
 	
 	private List<ItemPool> allItemPools = new ArrayList<>();
+	
 	
 	// SHOPS
 	public BasicShopItemPool basicShopItemPool = new BasicShopItemPool();
@@ -81,8 +84,24 @@ public class ItemPoolSingleton {
 	
 	
 	public void removeItemFromPools(ItemEnum item) {
+		this.removedItems.add(item);
 		for (ItemPool pool : allItemPools) {
 			pool.removeItemFromPool(item);
+		}
+	}
+	
+	
+	public List<ItemEnum> getRemovedItems() {
+		return removedItems;
+	}
+	
+	public void restoreRemoveditems(List<ItemEnum> removedItemsToRestore) {
+		removedItems.clear();
+		removedItems.addAll(removedItemsToRestore);
+		for (ItemEnum removedItem : removedItems) {
+			for (ItemPool pool : allItemPools) {
+				pool.removeItemFromPool(removedItem);
+			}
 		}
 	}
 }

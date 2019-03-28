@@ -27,6 +27,11 @@ public class ItemBomb extends AbstractItem {
 		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2);
 		this.type = ItemEnum.AMMO_BOMB;
 	}
+	
+	public ItemBomb(boolean noRandom) {
+		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2, noRandom);
+		this.type = ItemEnum.AMMO_BOMB;
+	}
 
 	@Override
 	public String getDescription() {

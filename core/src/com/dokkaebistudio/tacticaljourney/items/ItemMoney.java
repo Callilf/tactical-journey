@@ -27,6 +27,11 @@ public class ItemMoney extends AbstractItem {
 		super("# gold coin[s]", Assets.money_item, true, false, 1, 5);
 		this.type = ItemEnum.MONEY;
 	}
+	
+	public ItemMoney(boolean noRandom) {
+		super("# gold coin[s]", Assets.money_item, true, false, 1, 5, noRandom);
+		this.type = ItemEnum.MONEY;
+	}
 
 	@Override
 	public String getDescription() {

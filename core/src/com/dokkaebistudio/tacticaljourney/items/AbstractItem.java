@@ -83,6 +83,20 @@ public abstract class AbstractItem {
 		this.quantity = value;
 	}
 	
+	/**
+	 * Constructor for items with random values.
+	 * @param label
+	 * @param imageName
+	 * @param instaPickUp
+	 * @param valMin
+	 * @param valMax
+	 */
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax, 
+			boolean noRandom) {
+		this(label, texture, instaPickUp, goIntoInventory);
+		this.quantity = 1;
+	}
+	
 	
 	// Abstract methods
 	

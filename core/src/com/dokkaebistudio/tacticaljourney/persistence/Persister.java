@@ -65,6 +65,8 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
@@ -162,6 +164,9 @@ public class Persister {
 				String seed = RandomSingleton.getInstance().getSeed();
 				output.writeString(seed);
 				output.writeString(RandomSingleton.getInstance().getStateOfSeededRandom());
+				
+				// Save the removed items from Item Pools
+				kryo.writeClassAndObject(output, ItemPoolSingleton.getInstance().getRemovedItems());
 			}
 
 			@Override
@@ -193,6 +198,9 @@ public class Persister {
 				RandomSingleton.createInstance(input.readString());
 				String seed = input.readString();
 				RandomSingleton.getInstance().restoreState(seed);
+				
+				// Restore the item pools
+				ItemPoolSingleton.getInstance().restoreRemoveditems((List<ItemEnum>) kryo.readClassAndObject(input));
 				return null;
 			}
 			

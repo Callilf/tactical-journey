@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -31,6 +32,8 @@ public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlte
 
 	@Override
 	public void select(Entity player, Room room) {
+		ItemPoolSingleton.getInstance().personalBelongings.removeItemFromPool(item);
+		
 		Entity clonedItem = room.entityFactory.itemFactory.createItem(item);
 		ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);
 		boolean pickedUp = clonedItemCompo.pickUp(player, clonedItem, room);
@@ -45,8 +48,8 @@ public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlte
 
 	@Override
 	public void computeValue() {
-		PersonalBelongingsItemPool itemPool = new PersonalBelongingsItemPool();
-		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1);
+		PersonalBelongingsItemPool itemPool = ItemPoolSingleton.getInstance().personalBelongings;
+		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, false);
 		PooledItemDescriptor pooledItemDescriptor = itemTypes.get(0);
 		
 		item = pooledItemDescriptor.getType();

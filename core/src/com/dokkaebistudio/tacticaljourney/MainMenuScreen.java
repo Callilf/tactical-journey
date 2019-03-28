@@ -17,10 +17,10 @@
 package com.dokkaebistudio.tacticaljourney;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,7 +38,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
-import com.esotericsoftware.kryo.io.Input;
 
 public class MainMenuScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -67,8 +66,8 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
-		File f = new File("gamestate.bin");
-		boolean hasLoadBtn = f.exists();
+		FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+		boolean hasLoadBtn = saveFile.exists();
 
 		
 				

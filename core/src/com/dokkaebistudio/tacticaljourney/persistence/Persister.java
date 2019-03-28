@@ -13,6 +13,8 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
@@ -111,10 +113,9 @@ public class Persister {
 		
 		
 		try {
-			File f = new File("gamestate.bin");
-			if (f.exists()) f.delete();
-			f.createNewFile();
-			Output output = new Output(new FileOutputStream(f));
+			FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+			if (saveFile.exists()) saveFile.delete();
+			Output output = new Output(new FileOutputStream(saveFile.file()));
 			kryo.writeObject(output, gameScreen);
 			output.close();
 		} catch (KryoException | IOException e) {
@@ -129,8 +130,8 @@ public class Persister {
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		try {
-			File f = new File("gamestate.bin");
-		    Input input = new Input(new FileInputStream(f));
+			FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+		    Input input = new Input(new FileInputStream(saveFile.file()));
 		    kryo.readObject(input, GameScreen.class);
 		    input.close();   
 		} catch (KryoException | IOException e ) {

@@ -22,12 +22,22 @@ public abstract class LootableItemPool extends ItemPool {
 	public abstract int getSumOfChances();
 	
 	
+	
 	/**
 	 * Randomly retrieve x item types. There can be duplicates.
 	 * @param numberOfItemsToGet the number of items to retrieve
 	 * @return the list of item types randomly chosen
 	 */
 	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet) {
+		return getItemTypes(numberOfItemsToGet, true);
+	}
+	
+	/**
+	 * Randomly retrieve x item types. There can be duplicates.
+	 * @param numberOfItemsToGet the number of items to retrieve
+	 * @return the list of item types randomly chosen
+	 */
+	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet, boolean allowRemoval) {
 		List<PooledItemDescriptor> result = new ArrayList<>();
 		
 		
@@ -51,7 +61,7 @@ public abstract class LootableItemPool extends ItemPool {
 					result.add(pid);
 					
 					// Remove the item from the pool if needed
-					if (pid.isRemoveFromPool()) {
+					if (pid.isRemoveFromPool() && allowRemoval) {
 						poolIterator.remove();
 						removedItems.add(pid);
 						itemsToRemoveFromAllPools.add(pid);

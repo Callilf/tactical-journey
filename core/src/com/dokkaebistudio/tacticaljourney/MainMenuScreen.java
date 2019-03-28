@@ -18,6 +18,7 @@ package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -59,14 +60,19 @@ public class MainMenuScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground;
+		menuBackground = Assets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
+		
+		FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+		boolean hasSave = saveFile.exists();
+
+		
 				
-		Table t = new Table();
+		Table mainTable = new Table();
 		
 		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
-		TextFieldStyle tfs = new TextFieldStyle(Assets.font, Color.WHITE, null, null, ninePatchDrawable);
+		TextFieldStyle tfs = new TextFieldStyle(Assets.font.getFont(), Color.WHITE, null, null, ninePatchDrawable);
 		seedField = new TextField("Enter seed", tfs);
 		seedField.addListener(new FocusListener() {
 			@Override
@@ -76,10 +82,13 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		});
 		
-		t.add(seedField).width(500).padBottom(300);
-		t.row();
+		mainTable.add(seedField).width(500).padBottom(300);
+		mainTable.row();
 		
-		TextButton start = new TextButton("START", PopinService.buttonStyle());
+		
+		Table buttonTable = new Table();
+		
+		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
 		start.addListener(new ChangeListener() {
 			
 			@Override
@@ -93,15 +102,52 @@ public class MainMenuScreen extends ScreenAdapter {
 				}
 				
 				// Launch the game
-				game.setScreen(new GameScreen(game));
+				game.setScreen(new GameScreen(game, true));
 			}
 		});
-		t.add(start).width(500).height(200).padBottom(50);
-		t.row();
+		buttonTable.add(start).width(500).height(200).padBottom(350).padRight(50);
 		
-		t.pack();
-		t.setPosition(GameScreen.SCREEN_W/2 - t.getWidth()/2, GameScreen.SCREEN_H/2 - t.getHeight()/2 + 200);
-		hudStage.addActor(t);
+		
+		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
+		loadBtn.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				//Instantiate the RNG
+				if (enteredSeed) {
+					RandomSingleton.createInstance(seedField.getText());
+				} else {
+					RandomSingleton.createInstance();
+				}
+				
+				// Launch the game
+				game.setScreen(new GameScreen(game, false));
+			}
+		});
+		buttonTable.add(loadBtn).width(500).height(200).padBottom(350).padLeft(50);
+		loadBtn.setDisabled(!hasSave);
+		mainTable.add(buttonTable);
+		mainTable.row();
+		
+		
+		final TextButton removeSaveBtn = new TextButton("Erase save", PopinService.buttonStyle());
+		removeSaveBtn.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+				saveFile.delete();
+				loadBtn.setDisabled(true);
+				removeSaveBtn.setDisabled(true);
+			}
+		});
+		mainTable.add(removeSaveBtn).padBottom(50);
+		removeSaveBtn.setDisabled(!hasSave);
+		
+		mainTable.pack();
+		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
+		hudStage.addActor(mainTable);
 	}
 
 	public void update () {

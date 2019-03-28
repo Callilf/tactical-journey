@@ -1,7 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -43,7 +42,7 @@ public class DropUtil {
 			}
 		} else {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(d);
-			spriteComponent.setSprite(new Sprite(destructibleComponent.getDestroyedTexture()));
+			spriteComponent.setSprite(destructibleComponent.getDestroyedTexture());
 			
 			// If it's a statue, set its "destroyed" status so that the statues delivers a curse
 			StatueComponent statueComponent = Mappers.statueComponent.get(d);

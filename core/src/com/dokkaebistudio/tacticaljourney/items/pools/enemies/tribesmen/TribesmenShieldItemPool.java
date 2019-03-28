@@ -9,6 +9,10 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 
 public class TribesmenShieldItemPool extends EnemyItemPool {
 	
+	public TribesmenShieldItemPool() {
+		this.id = "TribesmanShield";
+	}
+	
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */

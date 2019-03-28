@@ -7,9 +7,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -69,8 +67,7 @@ public final class LootableFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.lootable_bones);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(LootableEnum.BONES.getClosedTexture());
     	remainsEntity.add(spriteCompo);
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
@@ -110,8 +107,7 @@ public final class LootableFactory {
     	remainsEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(LootableEnum.SATCHEL.getClosedTexture());
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(LootableEnum.SATCHEL.getClosedTexture());
     	remainsEntity.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
@@ -152,8 +148,7 @@ public final class LootableFactory {
     	lootable.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(LootableEnum.PERSONAL_BELONGINGS.getClosedTexture());
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(LootableEnum.PERSONAL_BELONGINGS.getClosedTexture());
     	lootable.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
@@ -200,8 +195,7 @@ public final class LootableFactory {
     	lootable.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(LootableEnum.ORB_BAG.getClosedTexture());
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(LootableEnum.ORB_BAG.getClosedTexture());
     	lootable.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);

@@ -2,9 +2,14 @@ package com.dokkaebistudio.tacticaljourney.components.orbs;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.orbs.Orb;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is an orb that will have a special effect when on contact
@@ -64,4 +69,26 @@ public class OrbComponent implements Component, Poolable {
 		this.parent = parent;
 	}
 
+	
+	
+	
+	public static Serializer<OrbComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<OrbComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, OrbComponent object) {
+				kryo.writeClassAndObject(output, object.type);
+				kryo.writeClassAndObject(output, object.parent);
+			}
+
+			@Override
+			public OrbComponent read(Kryo kryo, Input input, Class<OrbComponent> type) {
+				OrbComponent compo = engine.createComponent(OrbComponent.class);
+				compo.type = (Orb) kryo.readClassAndObject(input);
+				compo.parent = (Entity) kryo.readClassAndObject(input);
+				return compo;
+			}
+		
+		};
+	}
 }

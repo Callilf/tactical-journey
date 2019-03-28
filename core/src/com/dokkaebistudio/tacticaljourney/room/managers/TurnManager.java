@@ -24,6 +24,10 @@ public class TurnManager {
 	public int getTurn() {
 		return turn;
 	}
+	
+	public void setTurn(int t) {
+		turn = t;
+	}
 
 	
 	/**

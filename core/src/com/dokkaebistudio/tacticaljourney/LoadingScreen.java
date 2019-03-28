@@ -64,8 +64,8 @@ public class LoadingScreen extends ScreenAdapter {
 		String text = "LOADING - " + progress + "%";
 		GlyphLayout loadingLayout = new GlyphLayout();
 		// update layout. It is used to compute the real text height and width to aid positioning
-		loadingLayout.setText(Assets.font, text);
-		Assets.font.draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
+		loadingLayout.setText(Assets.font.getFont(), text);
+		Assets.font.getFont().draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
 	}
 

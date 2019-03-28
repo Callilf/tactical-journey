@@ -1,11 +1,19 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
+import java.util.Map;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class GridPositionComponent implements Component, Poolable {
 	
@@ -19,6 +27,8 @@ public class GridPositionComponent implements Component, Poolable {
     private boolean hasAbsolutePos = false;
     /** The absolute position of the entity (if using it). */
 	private Vector2 absolutePos = new Vector2();
+	
+	public Room room;
 
     
     public int zIndex = 0;
@@ -51,6 +61,7 @@ public class GridPositionComponent implements Component, Poolable {
     	if (r != null) r.removeEntityAtPosition(e, this.coord);    	
     	this.coord.set(coord.x,coord.y);
     	if (r != null) r.addEntityAtPosition(e, this.coord);
+    	this.room = r;
     }
     
     public void coord(Entity e, int x, int y, Room r) {
@@ -58,6 +69,7 @@ public class GridPositionComponent implements Component, Poolable {
     	if (r != null) r.removeEntityAtPosition(e, this.coord);    	
     	this.coord.set(x,y);
     	if (r != null) r.addEntityAtPosition(e, this.coord);
+    	this.room = r;
     }
     
     public Vector2 coord() {
@@ -102,6 +114,52 @@ public class GridPositionComponent implements Component, Poolable {
 	}
 	
 	
-    
+	public static Serializer<GridPositionComponent> getSerializer(final PooledEngine engine,  final Map<Integer, Room> loadedRooms) {
+		return new Serializer<GridPositionComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, GridPositionComponent object) {
+				output.writeInt(object.zIndex);
+				output.writeInt(object.room != null ? object.room.getIndex() : -1);
+				
+				// Coord
+				output.writeFloat(object.coord().x);
+				output.writeFloat(object.coord().y);
+				
+				// Absolute pos
+				output.writeFloat(object.getAbsolutePos().x);
+				output.writeFloat(object.getAbsolutePos().y);
+				output.writeBoolean(object.hasAbsolutePos);
+				
+				// Inactive
+				output.writeBoolean(object.inactive);
+			}
+
+			@Override
+			public GridPositionComponent read(Kryo kryo, Input input, Class<GridPositionComponent> type) {
+				GridPositionComponent gridPosCompo = engine.createComponent(GridPositionComponent.class);
+
+				gridPosCompo.zIndex = input.readInt(); 
+						
+				int roomIndex = input.readInt();
+				if (roomIndex != -1) {
+					Room roomFromIndex = loadedRooms.get(roomIndex);
+					gridPosCompo.room = roomFromIndex;
+				}
+				
+				// Coord
+				gridPosCompo.coord((int)input.readFloat(), (int)input.readFloat());
+				
+				// Absolute pos
+				gridPosCompo.absolutePos((int)input.readFloat(), (int)input.readFloat());
+				gridPosCompo.hasAbsolutePos = input.readBoolean();
+
+				gridPosCompo.inactive = input.readBoolean();
+				return gridPosCompo;
+			}
+		
+		};
+	}
+	
     
 }

@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -38,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
+import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
@@ -120,7 +120,7 @@ public final class EnemyFactory {
 		enemyEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.enemy_scorpion));
+		spriteCompo.setSprite(Assets.enemy_scorpion);
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -148,8 +148,7 @@ public final class EnemyFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(10);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation),  true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		
@@ -202,8 +201,8 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.STINGER_FLY.getState(), AnimationSingleton.getInstance().stingerFly);
-		animationCompo.animations.put(StatesEnum.STINGER_ATTACK.getState(), AnimationSingleton.getInstance().stingerAttack);
+		animationCompo.addAnimation(StatesEnum.STINGER_FLY.getState(), AnimationSingleton.getInstance().stingerFly);
+		animationCompo.addAnimation(StatesEnum.STINGER_ATTACK.getState(), AnimationSingleton.getInstance().stingerAttack);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -215,6 +214,11 @@ public final class EnemyFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		
+//		Persister p = new Persister(engine);
+//		EnemyComponent enemyComponent = p.loadStinger();
+//		enemyComponent.room = room;
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyStinger());
@@ -225,6 +229,9 @@ public final class EnemyFactory {
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
+		
+//		Persister p = new Persister(engine);
+//		p.save(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
@@ -239,8 +246,7 @@ public final class EnemyFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(6);
-		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation),  true);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		enemyEntity.add(attackComponent);
 		

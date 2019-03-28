@@ -3,9 +3,9 @@
  */
 package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 /**
  * Curse of slowness. Reduce the entity's movement speed by 1.
@@ -25,7 +25,7 @@ public class CurseSlowness extends Curse {
 	}
 	
 	@Override
-	public AtlasRegion texture() {
+	public RegionDescriptor texture() {
 		return Assets.curse_slowness;
 	}
 }

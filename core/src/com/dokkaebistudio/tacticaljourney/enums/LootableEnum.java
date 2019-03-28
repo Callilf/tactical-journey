@@ -3,9 +3,9 @@
  */
 package com.dokkaebistudio.tacticaljourney.enums;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 /**
  * @author Callil
@@ -13,28 +13,28 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
  */
 public enum LootableEnum {
 	
-	BONES(Descriptions.LOOTABLE_OLD_BONES_TITLE, 2, Assets.lootable_bones, Assets.lootable_bones_opened) {
+	BONES(Descriptions.LOOTABLE_OLD_BONES_TITLE, 2, Assets.lootable_bones.getName(), Assets.lootable_bones_opened.getName()) {
 		@Override
 		public String getDescription() {
 			return Descriptions.LOOTABLE_OLD_BONES_DESCRIPTION;
 		}
 	},
 	
-	SATCHEL(Descriptions.LOOTABLE_SATCHEL_TITLE, 3, Assets.lootable_satchel, Assets.lootable_satchel_opened) {
+	SATCHEL(Descriptions.LOOTABLE_SATCHEL_TITLE, 3, Assets.lootable_satchel.getName(), Assets.lootable_satchel_opened.getName()) {
 		@Override
 		public String getDescription() {
 			return Descriptions.LOOTABLE_SATCHEL_DESCRIPTION;
 		}
 	},
 	
-	PERSONAL_BELONGINGS(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_TITLE, 3, Assets.lootable_belongings, Assets.lootable_belongings_opened) {
+	PERSONAL_BELONGINGS(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_TITLE, 3, Assets.lootable_belongings.getName(), Assets.lootable_belongings_opened.getName()) {
 		@Override
 		public String getDescription() {
 			return Descriptions.LOOTABLE_PERSONAL_BELONGINGS_DESCRIPTION;
 		}
 	},
 	
-	ORB_BAG(Descriptions.LOOTABLE_ORB_BAG_TITLE, 3, Assets.lootable_orb_bag, Assets.lootable_orb_bag_opened) {
+	ORB_BAG(Descriptions.LOOTABLE_ORB_BAG_TITLE, 3, Assets.lootable_orb_bag.getName(), Assets.lootable_orb_bag_opened.getName()) {
 		@Override
 		public String getDescription() {
 			return Descriptions.LOOTABLE_ORB_BAG_DESCRIPTION;
@@ -47,15 +47,15 @@ public enum LootableEnum {
 	/** The number of turns it takes to open. */
 	private int nbTurnsToOpen;
 	
-	private AtlasRegion closedTexture;
-	private AtlasRegion openedTexture;
+	private String closedTextureName;
+	private String openedTextureName;
 	
 	
-	private LootableEnum(String label, int nbTurnsToOpen, AtlasRegion closedTexture, AtlasRegion openedTexture) {
+	private LootableEnum(String label, int nbTurnsToOpen, String closedTexture, String openedTexture) {
 		this.setLabel(label);
 		this.setNbTurnsToOpen(nbTurnsToOpen);
-		this.setClosedTexture(closedTexture);
-		this.setOpenedTexture(openedTexture);
+		this.setClosedTextureName(closedTexture);
+		this.setOpenedTextureName(openedTexture);
 	}
 
 	/**
@@ -86,20 +86,20 @@ public enum LootableEnum {
 		this.nbTurnsToOpen = nbTurnsToOpen;
 	}
 
-	public AtlasRegion getClosedTexture() {
-		return closedTexture;
+	public RegionDescriptor getClosedTexture() {
+		return Assets.findSprite(closedTextureName);
 	}
 
-	public void setClosedTexture(AtlasRegion closedTexture) {
-		this.closedTexture = closedTexture;
+	public void setClosedTextureName(String closedTexture) {
+		this.closedTextureName = closedTexture;
 	}
 
-	public AtlasRegion getOpenedTexture() {
-		return openedTexture;
+	public RegionDescriptor getOpenedTexture() {
+		return Assets.findSprite(openedTextureName);
 	}
 
-	public void setOpenedTexture(AtlasRegion openedTexture) {
-		this.openedTexture = openedTexture;
+	public void setOpenedTextureName(String openedTexture) {
+		this.openedTextureName = openedTexture;
 	}
 	
 }

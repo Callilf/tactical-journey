@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -14,10 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class ItemComponent implements Component, Poolable {
 		
@@ -143,7 +149,7 @@ public class ItemComponent implements Component, Poolable {
 		
 		for (int i=0 ; i<numberOfImages ; i++) {
 		
-			final Image pickupImage = new Image(itemComponent.getItemType().getTexture());
+			final Image pickupImage = new Image(itemComponent.getItemType().getTexture().getRegion());
 			
 			Vector2 worldPos = itemPositionComponent.getWorldPos();
 			pickupImage.setPosition(worldPos.x, worldPos.y);
@@ -175,7 +181,7 @@ public class ItemComponent implements Component, Poolable {
 	public Image getDropAnimationImage(Entity dropper, Entity item, Action dropAction) {
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
-		final Image drop = new Image(itemComponent.getItemType().getTexture());
+		final Image drop = new Image(itemComponent.getItemType().getTexture().getRegion());
 		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(dropper);
 		Vector2 worldPos = gridPositionComponent.getWorldPos();
@@ -229,7 +235,7 @@ public class ItemComponent implements Component, Poolable {
 		return itemType.getActionLabel();
 	}
 	
-	public AtlasRegion getItemImageName() {
+	public RegionDescriptor getItemImageName() {
 		return itemType.getTexture();
 	}
 	
@@ -319,4 +325,42 @@ public class ItemComponent implements Component, Poolable {
 	public void setQuantityPickedUp(Integer quantityPickedUp) {
 		this.quantityPickedUp = quantityPickedUp;
 	}
+	
+	
+	
+	
+	
+	
+	public static Serializer<ItemComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<ItemComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, ItemComponent object) {
+				kryo.writeClassAndObject(output, object.itemType);
+				kryo.writeClassAndObject(output, object.quantityDisplayer);
+				kryo.writeClassAndObject(output, object.price);
+				kryo.writeClassAndObject(output, object.priceDisplayer);
+			}
+
+			@Override
+			public ItemComponent read(Kryo kryo, Input input, Class<ItemComponent> type) {
+				ItemComponent compo = engine.createComponent(ItemComponent.class);
+				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
+				compo.quantityDisplayer = (Entity) kryo.readClassAndObject(input);
+//				if (compo.quantityDisplayer != null) {
+//					engine.addEntity(compo.quantityDisplayer);
+//				}
+				
+				compo.price = (Integer) kryo.readClassAndObject(input);
+				compo.priceDisplayer = (Entity) kryo.readClassAndObject(input);
+//				if (compo.priceDisplayer != null) {
+//					engine.addEntity(compo.priceDisplayer);
+//				}
+				
+				return compo;
+			}
+		
+		};
+	}
+
 }

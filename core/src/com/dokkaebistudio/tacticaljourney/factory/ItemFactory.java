@@ -5,8 +5,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -17,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
@@ -76,7 +75,7 @@ public final class ItemFactory {
 		this.entityFactory = ef;
 	}
 	
-	public Entity createItemBase(Room room, Vector2 tilePos, TextureAtlas.AtlasRegion texture, AbstractItem itemType, String title, String desc) {
+	public Entity createItemBase(Room room, Vector2 tilePos, RegionDescriptor texture, AbstractItem itemType, String title, String desc) {
 		Entity item = engine.createEntity();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
@@ -86,7 +85,7 @@ public final class ItemFactory {
 
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite( texture));
+		spriteCompo.setSprite( texture);
 		item.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -122,6 +121,10 @@ public final class ItemFactory {
 	public Entity createItem(ItemEnum type) {
 		return createItem(type, null, null);
 	}
+	public Entity createItem(ItemEnum type, boolean noRandom) {
+		return createItem(type, null, null, noRandom);
+	}
+	
 	
 	/**
 	 * Create an item of the given type at the given position in the given room.
@@ -131,18 +134,29 @@ public final class ItemFactory {
 	 * @return the item created
 	 */
 	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos) {
+		return createItem(type, room, tilePos, false);
+	}
+	
+	/**
+	 * Create an item of the given type at the given position in the given room.
+	 * @param type the type of item
+	 * @param room the room
+	 * @param tilePos the position
+	 * @return the item created
+	 */
+	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos, boolean noRandom) {
 		Entity item = null;
 		
 		switch (type) {
 		case MONEY:
-			item = createItemMoney(room, tilePos);
+			item = createItemMoney(room, tilePos, noRandom);
 			break;
 			
 		case AMMO_ARROW:
-			item = createItemArrows(room, tilePos);
+			item = createItemArrows(room, tilePos, noRandom);
 			break;
 		case AMMO_BOMB:
-			item = createItemBombs(room, tilePos);
+			item = createItemBombs(room, tilePos, noRandom);
 			break;
 			
 		case ARMOR_LIGHT:
@@ -270,6 +284,12 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;
 	}
+	public Entity createItemMoney(Room room, Vector2 tilePos, boolean noRandom) {
+		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(noRandom),
+				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
+		return item;
+	}
 	
 	/**
 	 * Create the key to next floor.
@@ -297,6 +317,12 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
 		return item;
 	}
+	public Entity createItemArrows(Room room, Vector2 tilePos, boolean noRandom) {
+		Entity item = createItemBase(room, tilePos, Assets.arrow_item, new ItemArrow(noRandom),
+				Descriptions.ITEM_ARROWS_TITLE, Descriptions.ITEM_ARROWS_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
+		return item;
+	}
 	
 	/**
 	 * Create a bomb item that is consumed when picked up.
@@ -305,6 +331,12 @@ public final class ItemFactory {
 	 */
 	public Entity createItemBombs(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(),
+				Descriptions.ITEM_BOMBS_TITLE, Descriptions.ITEM_BOMBS_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
+		return item;
+	}
+	public Entity createItemBombs(Room room, Vector2 tilePos, boolean noRandom) {
+		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(noRandom),
 				Descriptions.ITEM_BOMBS_TITLE, Descriptions.ITEM_BOMBS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;

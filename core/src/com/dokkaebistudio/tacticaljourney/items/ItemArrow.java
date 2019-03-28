@@ -27,7 +27,12 @@ public class ItemArrow extends AbstractItem {
 		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4);
 		this.type = ItemEnum.AMMO_ARROW;
 	}
-
+	
+	public ItemArrow(boolean noRandom) {
+		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4, noRandom);
+		this.type = ItemEnum.AMMO_ARROW;
+	}
+	
 	@Override
 	public String getDescription() {
 		return Descriptions.ITEM_ARROWS_DESCRIPTION;

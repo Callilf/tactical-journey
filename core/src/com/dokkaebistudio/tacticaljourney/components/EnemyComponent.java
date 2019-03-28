@@ -2,6 +2,7 @@ package com.dokkaebistudio.tacticaljourney.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -11,11 +12,16 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class EnemyComponent implements Component, Poolable, MovableInterface, RoomSystem {
 	
@@ -254,4 +260,52 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		this.canActivateOrbs = canActivateOrbs;
 	}
 
+	
+	
+	
+	
+	public static Serializer<EnemyComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<EnemyComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, EnemyComponent object) {
+				
+				kryo.writeClassAndObject(output, object.type);
+				kryo.writeClassAndObject(output, object.subSystem);
+				
+				output.writeBoolean(object.turnOver);
+				output.writeBoolean(object.canActivateOrbs);
+
+				output.writeString(object.faction.name());
+				output.writeString(object.basicMoveStrategy.name());
+				output.writeString(object.alertedMoveStrategy.name());
+
+				output.writeBoolean(object.alerted);
+				
+				kryo.writeClassAndObject(output, object.alertedDisplayer);
+			}
+
+			@Override
+			public EnemyComponent read(Kryo kryo, Input input, Class<EnemyComponent> type) {
+				EnemyComponent compo = engine.createComponent(EnemyComponent.class);
+				
+				compo.type = (Enemy) kryo.readClassAndObject(input);
+				compo.subSystem = (EnemySubSystem) kryo.readClassAndObject(input);
+				
+				compo.turnOver = input.readBoolean();
+				compo.canActivateOrbs = input.readBoolean();
+				
+				compo.faction = EnemyFactionEnum.valueOf(input.readString());
+				compo.basicMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
+				compo.alertedMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
+				
+				compo.alerted = input.readBoolean();
+				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
+//				engine.addEntity(compo.alertedDisplayer);
+				
+				return compo;
+			}
+		
+		};
+	}
 }

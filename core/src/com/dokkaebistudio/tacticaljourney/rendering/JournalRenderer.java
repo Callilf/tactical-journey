@@ -52,7 +52,7 @@ public class JournalRenderer implements Renderer {
 		this.journalDisplayed = true;
 		
 		
-		smallBackground = new Image(Assets.journal_background);
+		smallBackground = new Image(Assets.journal_background.getRegion());
 		smallBackground.setPosition(GameScreen.SCREEN_W - Assets.journal_background.getRegionWidth() - 5, 5);
 		smallBackground.addAction(Actions.alpha(0.75f));
 		stage.addActor(smallBackground);

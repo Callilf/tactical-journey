@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -31,6 +32,10 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can receive blessings and curses.
@@ -209,7 +214,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setReceiveAnimation(blessing.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -220,7 +225,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setReceiveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setReceiveAnimation(curse.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -230,7 +235,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(blessing.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setRemoveAnimation(blessing.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -240,7 +245,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		
 		if (fxStage != null) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-			this.setRemoveAnimation(curse.texture(), gridPositionComponent.coord(), fxStage, offset);
+			this.setRemoveAnimation(curse.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	
@@ -322,5 +327,27 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		return this.currentAlterations;
 	}
 	
+	
+	
+	
+	public static Serializer<AlterationReceiverComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<AlterationReceiverComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, AlterationReceiverComponent object) {
+				kryo.writeClassAndObject(output, object.blessings);
+				kryo.writeClassAndObject(output, object.curses);
+			}
+
+			@Override
+			public AlterationReceiverComponent read(Kryo kryo, Input input, Class<AlterationReceiverComponent> type) {
+				AlterationReceiverComponent compo = engine.createComponent(AlterationReceiverComponent.class);
+				compo.blessings = (List<Blessing>) kryo.readClassAndObject(input);
+				compo.curses = (List<Curse>) kryo.readClassAndObject(input);
+				return compo;
+			}
+		
+		};
+	}
 	
 }

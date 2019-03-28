@@ -1,6 +1,11 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can carry and pick up money.
@@ -49,4 +54,24 @@ public class WalletComponent implements Component {
 	}
 	
 
+	
+	public static Serializer<WalletComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<WalletComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, WalletComponent object) {
+				output.writeInt(object.amount);
+			}
+
+			@Override
+			public WalletComponent read(Kryo kryo, Input input, Class<WalletComponent> type) {
+				WalletComponent compo = engine.createComponent(WalletComponent.class);
+
+				compo.amount = input.readInt(); 
+				
+				return compo;
+			}
+		
+		};
+	}
 }

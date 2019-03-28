@@ -2,6 +2,7 @@ package com.dokkaebistudio.tacticaljourney.components.creep;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -10,8 +11,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is a creep on the floor and have an effect when an entity
@@ -134,7 +140,7 @@ public class CreepComponent implements Component, Poolable {
 		GridPositionComponent positionComponent = Mappers.gridPositionComponent.get(creep);
 		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
 
-		this.removeCreepImage = new Image(creepComponent.getType().getTexture());
+		this.removeCreepImage = new Image(creepComponent.getType().getTexture().getRegion());
 		
 		Vector2 worldPos = positionComponent.getWorldPos();
 		this.removeCreepImage.setPosition(worldPos.x, worldPos.y);
@@ -192,4 +198,34 @@ public class CreepComponent implements Component, Poolable {
 		this.releasedTurn = releasedTurn;
 	}
 
+	
+	
+	
+	public static Serializer<CreepComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<CreepComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, CreepComponent object) {
+				
+				kryo.writeClassAndObject(output, object.type);
+				output.writeInt(object.duration);
+				output.writeInt(object.currentDuration);
+				kryo.writeClassAndObject(output, object.releasedTurn);
+			}
+
+			@Override
+			public CreepComponent read(Kryo kryo, Input input, Class<CreepComponent> type) {
+				CreepComponent compo = engine.createComponent(CreepComponent.class);
+				
+				compo.type = (Creep) kryo.readClassAndObject(input);
+				
+				compo.duration = input.readInt();
+				compo.currentDuration = input.readInt();
+				compo.releasedTurn = (CreepReleasedTurnEnum) kryo.readClassAndObject(input);
+				
+				return compo;
+			}
+		
+		};
+	}
 }

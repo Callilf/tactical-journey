@@ -1,7 +1,12 @@
 package com.dokkaebistudio.tacticaljourney.components.player;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is solid so the tile on which it stands is blocked.
@@ -190,4 +195,33 @@ public class AmmoCarrierComponent implements Component {
 		this.maxBombs = maxBombs;
 	}
 
+	
+	
+	
+	
+	public static Serializer<AmmoCarrierComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<AmmoCarrierComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, AmmoCarrierComponent object) {
+				output.writeInt(object.maxArrows);
+				output.writeInt(object.arrows);
+				output.writeInt(object.maxBombs);
+				output.writeInt(object.bombs);
+			}
+
+			@Override
+			public AmmoCarrierComponent read(Kryo kryo, Input input, Class<AmmoCarrierComponent> type) {
+				AmmoCarrierComponent compo = engine.createComponent(AmmoCarrierComponent.class);
+
+				compo.maxArrows = input.readInt(); 
+				compo.arrows = input.readInt(); 
+				compo.maxBombs = input.readInt(); 
+				compo.bombs = input.readInt(); 
+				
+				return compo;
+			}
+		
+		};
+	}
 }

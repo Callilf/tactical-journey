@@ -60,7 +60,7 @@ public final class EffectFactory {
 		explosion.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.EXPLOSION.getState(), AnimationSingleton.getInstance().explosion);
+		animationCompo.addAnimation(StatesEnum.EXPLOSION.getState(), AnimationSingleton.getInstance().explosion);
 		explosion.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

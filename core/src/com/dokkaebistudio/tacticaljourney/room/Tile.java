@@ -4,12 +4,19 @@
 package com.dokkaebistudio.tacticaljourney.room;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * @author Callil
@@ -25,7 +32,6 @@ public class Tile {
 	
 	/** The pixel position of this tile. */
 	private Vector2 absolutePos;
-	
 	
 	public Tile(Room room, Vector2 gridPos) {
 		this.room = room;
@@ -101,4 +107,24 @@ public class Tile {
 	
 	
 
+	
+	public static Serializer<Tile> getSerializer(final PooledEngine engine) {
+		return new Serializer<Tile>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, Tile object) {
+				// Coord
+				output.writeFloat(object.getGridPos().x);
+				output.writeFloat(object.getGridPos().y);
+			}
+
+			@Override
+			public Tile read(Kryo kryo, Input input, Class<Tile> type) {
+				Vector2 gridPos = new Vector2((int)input.readFloat(), (int)input.readFloat());
+				Tile t = new Tile(null, gridPos);
+				return t;
+			}
+		
+		};
+	}
 }

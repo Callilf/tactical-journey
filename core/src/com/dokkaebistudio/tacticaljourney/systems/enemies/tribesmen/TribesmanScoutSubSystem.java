@@ -46,7 +46,6 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 
 		case ENEMY_ATTACK:
 
-			//TODO
 			// Alert other tribesmen
 			if (scoutType.hasFriendsNotAlerted()) {
 				

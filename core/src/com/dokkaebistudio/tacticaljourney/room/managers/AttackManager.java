@@ -4,6 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -14,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;

@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
@@ -16,12 +17,12 @@ import com.dokkaebistudio.tacticaljourney.wheel.Sector;
  */
 public abstract class Alteration {
 	
-	private AtlasRegion itemSprite;
+	private RegionDescriptor itemSprite;
 	private boolean infused;
 	
 	public abstract String title();
 	public abstract String description();
-	public abstract AtlasRegion texture();
+	public abstract RegionDescriptor texture();
 
 	/** Called when this alteration is received by an entity. */
 	public void onReceive(Entity entity) {};
@@ -61,10 +62,10 @@ public abstract class Alteration {
 	
 	// getters and setters
 	
-	public AtlasRegion getItemSprite() {
+	public RegionDescriptor getItemSprite() {
 		return itemSprite;
 	}
-	public void setItemSprite(AtlasRegion itemSprite) {
+	public void setItemSprite(RegionDescriptor itemSprite) {
 		this.itemSprite = itemSprite;
 	}
 	public boolean isInfused() {

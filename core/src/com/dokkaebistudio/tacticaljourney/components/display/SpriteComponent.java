@@ -17,13 +17,22 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class SpriteComponent implements Component, Poolable {
 	public boolean hide;
 	public boolean flipX;
+	
+	private String regionName;
 	private Sprite sprite = new Sprite();
 	
 	
@@ -55,18 +64,66 @@ public class SpriteComponent implements Component, Poolable {
 	}
 	
 	
+	public void setSprite(RegionDescriptor texture) {
+		this.sprite = new Sprite(texture.getRegion());
+		this.regionName = texture.getName();
+	}
+	
+	public void updateSprite(RegionDescriptor texture) {
+		this.sprite.setRegion(texture.getRegion());
+		this.regionName = texture.getName();
+	}
+	
+	
 	
 
 	public Sprite getSprite() {
 		return sprite;
 	}
 
-	public void setSprite(Sprite sprite) {
+	private void setSprite(Sprite sprite) {
 		this.sprite = sprite;
 	}
 
 
+	public String getTextureRegion() {
+		return regionName;
+	}
+
+
+	public void setTextureRegion(String textureRegion) {
+		this.regionName = textureRegion;
+	}
+
+
 	
+	
+	public static Serializer<SpriteComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<SpriteComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, SpriteComponent object) {
+				output.writeBoolean(object.hide);
+				output.writeBoolean(object.flipX);
+				output.writeString(object.regionName != null ? object.regionName : "");
+			}
+
+			@Override
+			public SpriteComponent read(Kryo kryo, Input input, Class<SpriteComponent> type) {
+				SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+				spriteCompo.hide = input.readBoolean();
+				spriteCompo.flipX = input.readBoolean();
+				
+				String regionName = input.readString();
+				if (regionName != "") {
+					spriteCompo.setSprite(Assets.findSprite(regionName));
+				}
+				
+				return spriteCompo;
+			}
+		
+		};
+	}
 	
 	
 }

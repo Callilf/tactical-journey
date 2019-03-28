@@ -93,12 +93,12 @@ public class MapRenderer implements Renderer {
 		this.mapDisplayed = true;
 		
 		
-		smallBackground = new Image(Assets.map_background);
+		smallBackground = new Image(Assets.map_background.getRegion());
 		smallBackground.setPosition(GameScreen.SCREEN_W - Assets.map_background.getRegionWidth() - 5, GameScreen.SCREEN_H - Assets.map_background.getRegionHeight() - Assets.map_panel.getRegionHeight() - 5);
 		smallBackground.addAction(Actions.alpha(0.5f));
 		stage.addActor(smallBackground);
 		
-		fullBackground = new Image(Assets.menuBackground);
+		fullBackground = new Image(Assets.menuBackground.getRegion());
 		fullBackground.setPosition(0, 0);
 		fullBackground.addAction(Actions.alpha(0.5f));
 		
@@ -283,54 +283,54 @@ public class MapRenderer implements Renderer {
 				if (room.isVisited()) {
 					switch(room.type) {
 					case START_FLOOR_ROOM:
-						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_start));
+						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_start.getRegion()));
 						break;
 					case END_FLOOR_ROOM:
-						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_exit));
+						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_exit.getRegion()));
 						break;
 					case COMMON_ENEMY_ROOM:
 					case EMPTY_ROOM:
 						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_enemy));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_enemy.getRegion()));
 						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room.getRegion()));
 						}
 						break;
 					case SHOP_ROOM:
-						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_shop));
+						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_shop.getRegion()));
 						break;
 					case STATUE_ROOM:
 						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue_enemy));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue_enemy.getRegion()));
 						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_statue.getRegion()));
 						}
 						break;
 					case KEY_ROOM:
 						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key_enemy));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key_enemy.getRegion()));
 						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_key.getRegion()));
 						}
 						break;
 					case ITEM_ROOM:
 						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item_enemy));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item_enemy.getRegion()));
 						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item.getRegion()));
 						}
 						break;
 					case BOSS_ROOM:
 						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss_enemy));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss_enemy.getRegion()));
 						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss));
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss.getRegion()));
 						}
 						break;
 					}
 
 					if (floor.getActiveRoom() == room) {
-						playerImage.setDrawable(new TextureRegionDrawable(Assets.map_player));
+						playerImage.setDrawable(new TextureRegionDrawable(Assets.map_player.getRegion()));
 						player = playerImage;
 					} else {
 						playerImage.setDrawable(null);
@@ -348,7 +348,7 @@ public class MapRenderer implements Renderer {
 							|| (room.getWestNeighbor() != null && room.getWestNeighbor().isVisited())
 							|| (room.getEastNeighbor() != null && room.getEastNeighbor().isVisited())) {
 						// Draw unknown room
-						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_unknown));
+						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_unknown.getRegion()));
 						
 						if (room.getSouthNeighbor() != null && room.getSouthNeighbor().isVisited()) {
 							// Draw corridor
@@ -416,7 +416,7 @@ public class MapRenderer implements Renderer {
 		if (room.getSouthNeighbor() != null) {
 			Cell result = findCell(tableX, tableY + 1, cells);
 			Image corridorImg = (Image) result.getActor();
-			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor));
+			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor.getRegion()));
 			result.setActor(corridorImg);
 			result.width(Assets.map_corridor.getRegionWidth());
 		}
@@ -428,7 +428,7 @@ public class MapRenderer implements Renderer {
 		if (room.getEastNeighbor() != null) {
 			Cell result = findCell(tableX + 1, tableY, cells);
 			Image corridorImg = (Image) result.getActor();
-			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor));
+			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor.getRegion()));
 			result.setActor(corridorImg);
 		}
 	}

@@ -380,15 +380,12 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 			
-//			Entity enemy3 = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(12, 10));
+//			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 10));
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 //			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
 //			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
 //			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
-
-			
-			
 
 			
 			break;
@@ -403,6 +400,9 @@ public abstract class RoomGenerator {
 			
 			pos = spawnPositions.get(1);
 			entityFactory.playerFactory.createSoulbender(	pos, room);
+			
+			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(2));
+
 			
 			default:
 			break;

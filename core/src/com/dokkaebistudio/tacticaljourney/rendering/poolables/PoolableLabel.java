@@ -8,7 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 
 public class PoolableLabel extends Label implements Poolable {
 
-	private static LabelStyle defaultStyle = new LabelStyle(Assets.font, Color.WHITE);
+	private static LabelStyle defaultStyle = new LabelStyle(Assets.font.getFont(), Color.WHITE);
 	 
 	public PoolableLabel() {
 		super((CharSequence)null, defaultStyle);

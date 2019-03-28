@@ -32,7 +32,7 @@ public class TacticalJourney extends Game {
 		batcher = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		Settings.load();
-		Assets.getInstance().loadFont();
+		Assets.getInstance();
 		setScreen(new LoadingScreen(this));
 	}
 	

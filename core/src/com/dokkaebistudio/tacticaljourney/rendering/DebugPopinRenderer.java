@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -206,7 +205,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsTable.clear();
 		ItemEnum[] values = ItemEnum.values();
 		for (ItemEnum v : values) {
-			Entity item = room.entityFactory.itemFactory.createItem(v);
+			Entity item = room.entityFactory.itemFactory.createItem(v, true);
 			Table oneItem = createOneLootItem(item);
 			lootableItemsTable.add(oneItem).pad(0, 0, 10, 0).maxWidth(630);
 			lootableItemsTable.row();
@@ -229,7 +228,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		oneItem.setBackground(ninePatchDrawable);
 		
 		oneItem.left();
-		Image image = new Image(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
+		Image image = new Image(Assets.loadAndGetTexture(itemComponent.getItemImageName().getNameFull()).getRegion());
 		oneItem.add(image).width(Value.percentWidth(1f, image)).pad(-5, 0, -5, 20);
 		image.addListener(new ClickListener() {
 			@Override
@@ -253,7 +252,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//add item in inventory and remove it from lootable entity
-				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type);
+				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type, true);
 				ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);
 				boolean pickedUp = clonedItemCompo.pickUp(player, clonedItem, room);
 				if (pickedUp) {

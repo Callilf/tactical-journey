@@ -61,7 +61,7 @@ public class VisualEffectSystem extends IteratingSystem implements RoomSystem {
 			AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
 			StateComponent stateComponent = Mappers.stateComponent.get(entity);
 			if (animationComponent != null && stateComponent != null) {
-				Animation<Sprite> animation = animationComponent.animations.get(stateComponent.get());
+				Animation<Sprite> animation = animationComponent.getAnimation(stateComponent.get());
 				boolean animationFinished = animation.isAnimationFinished(stateComponent.time);
 				
 				if (animationFinished) {

@@ -41,6 +41,8 @@ public abstract class FloorGenerator {
 		EAST
 	}
 	
+	protected abstract int getNextRoomIndex();
+	
 	/**
 	 * Generate all the layout of the given floor.
 	 * @param floor the floor to generate.
@@ -58,7 +60,7 @@ public abstract class FloorGenerator {
 		endRoomY = random.nextSeededInt(2) == 0 ? endRoomY : -endRoomY;
 		
 		// 3 - Build a path from startRoom to endRoom
-		Room startRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
+		Room startRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
 		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
@@ -89,7 +91,7 @@ public abstract class FloorGenerator {
 			}
 			
 			// Create the room
-			Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+			Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
 			positionsPerRoom.put(currentRoom, new Vector2(currX, currY));
 
@@ -148,12 +150,13 @@ public abstract class FloorGenerator {
 		addCorridors(rooms, roomsPerPosition);
 				
 		// 7 - Generate the content of all rooms
-		for (Room r : rooms) {
-			r.create();
-		}
 		floor.setRooms(rooms);
 		floor.setActiveRoom(startRoom);
 		floor.setRoomPositions(roomsPerPosition);
+
+		for (Room r : rooms) {
+			r.create();
+		}
 
 	}
 
@@ -204,7 +207,7 @@ public abstract class FloorGenerator {
 						
 						int directionIndex = random.nextSeededInt(possibleMove.size());
 						GenerationMoveEnum direction = possibleMove.get(directionIndex);
-						Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+						Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 						rooms.add(currentRoom);
 						
 						Vector2 vector2 = getNewRoomPosition(previousRoom, direction);
@@ -280,7 +283,7 @@ public abstract class FloorGenerator {
 				//Add room here
 				chanceToAddRoom = chanceToAddRoom/2;
 							
-				Room currentRoom = new Room(floor, gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+				Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
 				allRooms.add(currentRoom);
 				setNeighbors(direction, parentRoom, currentRoom);
 				

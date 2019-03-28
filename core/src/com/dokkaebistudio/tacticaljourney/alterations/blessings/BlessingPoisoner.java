@@ -6,10 +6,10 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
@@ -34,7 +34,7 @@ public class BlessingPoisoner extends Blessing {
 	}
 	
 	@Override
-	public AtlasRegion texture() {
+	public RegionDescriptor texture() {
 		return Assets.blessing_poisoner;
 	}
 

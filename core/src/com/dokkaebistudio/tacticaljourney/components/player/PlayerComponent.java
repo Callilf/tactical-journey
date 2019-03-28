@@ -6,6 +6,12 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class PlayerComponent implements Component {
 	
@@ -156,5 +162,31 @@ public class PlayerComponent implements Component {
 
 	public void setInspectPopinRequested(boolean inspectPopinRequested) {
 		this.inspectPopinRequested = inspectPopinRequested;
+	}
+	
+	
+	
+	public static Serializer<PlayerComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<PlayerComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, PlayerComponent object) {
+				kryo.writeClassAndObject(output, object.skillMelee);
+				kryo.writeClassAndObject(output, object.skillRange);
+				kryo.writeClassAndObject(output, object.skillBomb);
+				kryo.writeClassAndObject(output, object.skillThrow);
+			}
+
+			@Override
+			public PlayerComponent read(Kryo kryo, Input input, Class<PlayerComponent> type) {
+				PlayerComponent compo = engine.createComponent(PlayerComponent.class);
+				compo.skillMelee = (Entity) kryo.readClassAndObject(input);
+				compo.skillRange = (Entity) kryo.readClassAndObject(input);
+				compo.skillBomb = (Entity) kryo.readClassAndObject(input);
+				compo.skillThrow = (Entity) kryo.readClassAndObject(input);
+				return compo;
+			}
+		
+		};
 	}
 }

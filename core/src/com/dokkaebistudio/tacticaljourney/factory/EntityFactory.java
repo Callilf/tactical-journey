@@ -8,9 +8,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
@@ -45,6 +42,8 @@ import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
@@ -152,8 +151,7 @@ public final class EntityFactory {
     	wallEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.heavy_wall);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(Assets.heavy_wall);
     	wallEntity.add(spriteCompo);
     	
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -185,8 +183,7 @@ public final class EntityFactory {
     	wallEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.wall);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(Assets.wall);
     	wallEntity.add(spriteCompo);
     	
     	SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -232,8 +229,7 @@ public final class EntityFactory {
     	chasmEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.tile_pit);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(Assets.tile_pit);
     	chasmEntity.add(spriteCompo);
     	
     	ChasmComponent chasmCompo = engine.createComponent(ChasmComponent.class);
@@ -259,8 +255,7 @@ public final class EntityFactory {
     	doorEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(Assets.door_opened);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(Assets.door_opened);
     	doorEntity.add(spriteCompo);
     	
     	DoorComponent doorCompo = engine.createComponent(DoorComponent.class);
@@ -294,8 +289,7 @@ public final class EntityFactory {
     	}
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	Sprite s = new Sprite(opened ? Assets.exit_opened : Assets.exit_closed);
-    	spriteCompo.setSprite(s);
+    	spriteCompo.setSprite(opened ? Assets.exit_opened : Assets.exit_closed);
     	exitEntity.add(spriteCompo);
     	
     	ExitComponent exitCompo = engine.createComponent(ExitComponent.class);
@@ -317,7 +311,7 @@ public final class EntityFactory {
     	movableTileEntity.add(movableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.tile_movable));
+    	spriteCompo.setSprite(Assets.tile_movable);
     	movableTileEntity.add(spriteCompo);
     	
 		try {
@@ -339,7 +333,7 @@ public final class EntityFactory {
     	attackableTileEntity.add(attackableTilePos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(explosion ? Assets.tile_explosion : Assets.tile_attackable));
+    	spriteCompo.setSprite(explosion ? Assets.tile_explosion : Assets.tile_attackable);
     	attackableTileEntity.add(spriteCompo);
     	
 		engine.addEntity(attackableTileEntity);
@@ -361,7 +355,7 @@ public final class EntityFactory {
     	selectedTilePos.zIndex = ZIndexConstants.DESTINATION_TILE;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.tile_movable_selected));
+    	spriteCompo.setSprite(Assets.tile_movable_selected);
     	redCross.add(spriteCompo);
     	
 		engine.addEntity(redCross);
@@ -384,7 +378,7 @@ public final class EntityFactory {
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(new Sprite(Assets.tile_movable_waypoint));
+    	spriteCompo.setSprite(Assets.tile_movable_waypoint);
     	waypoint.add(spriteCompo);
     	
 		engine.addEntity(waypoint);
@@ -399,7 +393,7 @@ public final class EntityFactory {
 	 * @param flag the flag of the entity (for debugging purpose)
 	 * @return the sprite entity
 	 */
-	public Entity createSprite(AtlasRegion texture, EntityFlagEnum flag) {
+	public Entity createSprite(RegionDescriptor texture, EntityFlagEnum flag) {
 		return createSprite(null, texture, flag, null);
 	}
 	
@@ -410,7 +404,7 @@ public final class EntityFactory {
 	 * @param flag the flag of the entity (for debugging purpose)
 	 * @return the sprite entity
 	 */
-	public Entity createSprite(Vector3 pos, AtlasRegion texture, EntityFlagEnum flag) {
+	public Entity createSprite(Vector3 pos, RegionDescriptor texture, EntityFlagEnum flag) {
 		return createSprite(pos, texture, flag, null);
 	}
 	
@@ -422,12 +416,12 @@ public final class EntityFactory {
 	 * @param room the parent room
 	 * @return the sprite entity
 	 */
-	public Entity createSprite(Vector3 pos, AtlasRegion texture, EntityFlagEnum flag, Room room) {
+	public Entity createSprite(Vector3 pos, RegionDescriptor texture, EntityFlagEnum flag, Room room) {
 		Entity sprite = engine.createEntity();
 		sprite.flags = flag.getFlag();
 		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(texture));
+		spriteCompo.setSprite(texture);
 		sprite.add(spriteCompo);
 		
 		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
@@ -450,12 +444,12 @@ public final class EntityFactory {
 	 * @param room the parent room
 	 * @return the sprite entity
 	 */
-	public Entity createSpriteOnTile(Vector2 tilePos, int zIndex, AtlasRegion texture, EntityFlagEnum flag, Room room) {
+	public Entity createSpriteOnTile(Vector2 tilePos, int zIndex, RegionDescriptor texture, EntityFlagEnum flag, Room room) {
 		Entity sprite = engine.createEntity();
 		sprite.flags = flag.getFlag();
 		
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(texture));
+		spriteCompo.setSprite(texture);
 		sprite.add(spriteCompo);
 		
 		GridPositionComponent gridPos = engine.createComponent(GridPositionComponent.class);
@@ -514,7 +508,7 @@ public final class EntityFactory {
 	 * @param room the parent room of this text
 	 * @return the text entity
 	 */
-	public Entity createText(Vector3 pos, String text, BitmapFont font, Room room) {
+	public Entity createText(Vector3 pos, String text, FontDescriptor font, Room room) {
 		Entity textTest = engine.createEntity();
 		textTest.flags = EntityFlagEnum.TEXT.getFlag();
 
@@ -702,8 +696,8 @@ public final class EntityFactory {
 		bomb.add(explosionCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationSingleton.getInstance().bomb_slow);
-		animationCompo.animations.put(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationSingleton.getInstance().bomb_fast);
+		animationCompo.addAnimation(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationSingleton.getInstance().bomb_slow);
+		animationCompo.addAnimation(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationSingleton.getInstance().bomb_fast);
 		bomb.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
@@ -782,9 +776,8 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 			
-			AttackAnimation attackAnimation = new AttackAnimation(
-					new Animation<>(0.03f, Assets.slash_animation), 
-					new Animation<>(0.03f, Assets.slash_critical_animation), true);
+			AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, 
+					AnimationSingleton.getInstance().attack_slash_critical, true);
 			attackComponent.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
 			break;
@@ -808,9 +801,8 @@ public final class EntityFactory {
 			baseWheelComponent.addSector(20, Hit.GRAZE);
 			skillEntity.add(baseWheelComponent);
 
-			attackAnimation = new AttackAnimation(
-					new Animation<>(0.1f, Assets.arrow), 
-					new Animation<>(0.1f, Assets.arrow), true);
+			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().arrow, 
+					AnimationSingleton.getInstance().arrow, true);
 			attackComponent.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
 
@@ -818,9 +810,8 @@ public final class EntityFactory {
 		case 3:
 			playerComponent.setSkillBomb(skillEntity);
 			
-			attackAnimation = new AttackAnimation(
-					new Animation<>(0.2f, Assets.bomb_animation), 
-					new Animation<>(0.2f, Assets.bomb_animation), false);
+			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().bomb, 
+					AnimationSingleton.getInstance().bomb, false);
 			attackComponent.setAttackAnimation(attackAnimation);
 
 			break;
@@ -857,7 +848,7 @@ public final class EntityFactory {
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 		int nextInt = RandomSingleton.getInstance().nextSeededInt(2);
-		spriteCompo.setSprite(new Sprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big));
+		spriteCompo.setSprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big);
 		vaseEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -903,7 +894,7 @@ public final class EntityFactory {
 		crateEntity.add(inspect);
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.destructible_ammo_crate));
+		spriteCompo.setSprite(Assets.destructible_ammo_crate);
 		crateEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

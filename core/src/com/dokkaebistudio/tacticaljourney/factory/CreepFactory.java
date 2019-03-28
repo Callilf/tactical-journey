@@ -5,8 +5,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -28,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -60,12 +59,12 @@ public final class CreepFactory {
 	 * @param pos the position
 	 * @return the creep entity
 	 */
-	private Entity createCreepBase(Room room, Vector2 pos, EntityFlagEnum flag, AtlasRegion texture) {
+	private Entity createCreepBase(Room room, Vector2 pos, EntityFlagEnum flag, RegionDescriptor texture) {
 		Entity creepEntity = engine.createEntity();
 		creepEntity.flags = flag.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		if (texture != null) spriteCompo.setSprite(new Sprite(texture));
+		if (texture != null) spriteCompo.setSprite(texture);
 		creepEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -186,7 +185,7 @@ public final class CreepFactory {
 		creepEntity.add(creepCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.animations.put(StatesEnum.FIRE_LOOP.getState(), AnimationSingleton.getInstance().fire);
+		animationCompo.addAnimation(StatesEnum.FIRE_LOOP.getState(), AnimationSingleton.getInstance().fire);
 		creepEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

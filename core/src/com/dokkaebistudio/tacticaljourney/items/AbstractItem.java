@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
@@ -27,7 +28,7 @@ public abstract class AbstractItem {
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
-	private AtlasRegion texture;
+	private RegionDescriptor texture;
 	/** Whether this item is picked up automatically while walking on its tile. */
 	private boolean instantPickUp;
 	/** Whether this item can go into the inventory. */
@@ -42,7 +43,7 @@ public abstract class AbstractItem {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.setLabel(label);
 		this.setTexture(texture);
 		this.setInstantPickUp(instaPickUp);
@@ -55,7 +56,7 @@ public abstract class AbstractItem {
 	 * @param imageName
 	 * @param instaPickUp
 	 */
-	protected AbstractItem(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory) {
+	protected AbstractItem(ItemEnum itemType, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory) {
 		this.type = itemType;
 		this.setLabel(itemType.getName());
 		this.setTexture(texture);
@@ -71,7 +72,7 @@ public abstract class AbstractItem {
 	 * @param valMin
 	 * @param valMax
 	 */
-	protected AbstractItem(String label, AtlasRegion texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax) {
 		this(label, texture, instaPickUp, goIntoInventory);
 		
 		RandomSingleton random = RandomSingleton.getInstance();
@@ -80,6 +81,20 @@ public abstract class AbstractItem {
 			value += random.nextSeededInt(valMax - valMin + 1);
 		}
 		this.quantity = value;
+	}
+	
+	/**
+	 * Constructor for items with random values.
+	 * @param label
+	 * @param imageName
+	 * @param instaPickUp
+	 * @param valMin
+	 * @param valMax
+	 */
+	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax, 
+			boolean noRandom) {
+		this(label, texture, instaPickUp, goIntoInventory);
+		this.quantity = 1;
 	}
 	
 	
@@ -204,12 +219,12 @@ public abstract class AbstractItem {
 	}
 
 
-	public AtlasRegion getTexture() {
+	public RegionDescriptor getTexture() {
 		return texture;
 	}
 
 
-	public void setTexture(AtlasRegion texture) {
+	public void setTexture(RegionDescriptor texture) {
 		this.texture = texture;
 	}
 

@@ -17,7 +17,12 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that the entity is a visual effect and has to disappear.
@@ -28,5 +33,26 @@ public class VisualEffectComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
+	}
+	
+	
+	
+	
+	
+	
+	
+	public static Serializer<VisualEffectComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<VisualEffectComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, VisualEffectComponent object) {}
+
+			@Override
+			public VisualEffectComponent read(Kryo kryo, Input input, Class<VisualEffectComponent> type) {
+				VisualEffectComponent compo = engine.createComponent(VisualEffectComponent.class);
+				return compo;
+			}
+		
+		};
 	}
 }

@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.creeps;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
@@ -26,14 +26,14 @@ public abstract class Creep {
 	/** The name displayed. */
 	private String label;
 	/** The name of the image in the assets. */
-	private AtlasRegion texture;
+	private RegionDescriptor texture;
 	
 	/**
 	 * Constructor for creep
 	 * @param label
 	 * @param texture
 	 */
-	Creep(String label, AtlasRegion texture) {
+	Creep(String label, RegionDescriptor texture) {
 		this.setLabel(label);
 		this.setTexture(texture);
 	}
@@ -113,12 +113,12 @@ public abstract class Creep {
 	}
 
 
-	public AtlasRegion getTexture() {
+	public RegionDescriptor getTexture() {
 		return texture;
 	}
 
 
-	public void setTexture(AtlasRegion texture) {
+	public void setTexture(RegionDescriptor texture) {
 		this.texture = texture;
 	}
 

@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
@@ -44,6 +45,7 @@ public class Floor {
 	private Map<Vector2, Room> roomPositions;
 	
 	/** The room grid for this floor. */
+	private RegionDescriptor gridDescriptor;
 	private Sprite grid;
 	
 	/** The currently active room. */
@@ -61,16 +63,20 @@ public class Floor {
 		this.setLevel(level);
 		
 		if (level == 1) {
-			this.grid = new Sprite(Assets.grid1);
+			this.gridDescriptor = Assets.grid1;
+			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);
 		} else if (level == 2) {
-			this.grid = new Sprite(Assets.grid1);
+			this.gridDescriptor = Assets.grid1;
+			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor2Generator(this.gameScreen.entityFactory);
 		} else if (level == 3) {
-			this.grid = new Sprite(Assets.grid2);
+			this.gridDescriptor = Assets.grid2;
+			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor3Generator(this.gameScreen.entityFactory);
 		} else if (level == 4) {
-			this.grid = new Sprite(Assets.grid2);
+			this.gridDescriptor = Assets.grid2;
+			this.grid = new Sprite(Assets.grid2.getRegion());
 			floorGenerator = new Floor4Generator(this.gameScreen.entityFactory);
 
 		}
@@ -95,35 +101,41 @@ public class Floor {
 	 */
 	public void enterRoom(Room newRoom) {
 		Room oldRoom = this.getActiveRoom();
+		if (oldRoom == newRoom) oldRoom = null;
+		
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
 		
 		//TODO maybe move this
-		for (Entity e : oldRoom.getEnemies()) {
-			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-			statusReceiverComponent.hideStatusTable();
+		if (oldRoom != null) {
+			for (Entity e : oldRoom.getEnemies()) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+				statusReceiverComponent.hideStatusTable();
+			}
 		}
 		for (Entity e : newRoom.getEnemies()) {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 			statusReceiverComponent.displayStatusTable(gameScreen.fxStage);
 		}
 		
-		this.removePlayerFromRoom(oldRoom);
-		
-		//Place the player
-		if (newRoom.getNorthNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
-		} else if (newRoom.getSouthNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
-		} else if (newRoom.getWestNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
-		} else if (newRoom.getEastNeighbor() == oldRoom) {
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
-		} else {
-			// TP case
-			MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+		if (oldRoom != null) {
+			this.removePlayerFromRoom(oldRoom);
+
+			//Place the player
+			if (newRoom.getNorthNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+			} else if (newRoom.getSouthNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
+			} else if (newRoom.getWestNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
+			} else if (newRoom.getEastNeighbor() == oldRoom) {
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
+			} else {
+				// TP case
+				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+			}
 		}
-	
+		
 		MapRenderer.requireRefresh();
 	}
 	
@@ -153,6 +165,20 @@ public class Floor {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * Get a room given an index.
+	 * @param roomIndex the room index
+	 * @return the room with the given index
+	 */
+	public Room getRoomFromIndex(int roomIndex) {
+		for (Room r : rooms) {
+			if (r.getIndex() == roomIndex) return r;
+		}
+		return null;
+	}
+	
 	
 	// Getters & setters 
 	

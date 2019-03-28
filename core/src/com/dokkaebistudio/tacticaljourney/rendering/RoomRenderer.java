@@ -72,7 +72,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		this.cam = camera;
 		this.room = room;
 		
-		fullBackground = new Image(Assets.menuBackground);
+		fullBackground = new Image(Assets.menuBackground.getRegion());
 		fullBackground.setPosition(0, 0);
 		fullBackground.addAction(Actions.alpha(0.5f));
 	}
@@ -128,7 +128,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {					
-					textCompo.getFont().draw(batch, textCompo.getText(), gridPosComponent.getAbsolutePos().x, gridPosComponent.getAbsolutePos().y);
+					textCompo.getFont().getFont().draw(batch, textCompo.getText(), gridPosComponent.getAbsolutePos().x, gridPosComponent.getAbsolutePos().y);
 				}
 			} else {
 				// use grid position to render instead of real screen coordinates
@@ -151,7 +151,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 					}
 				}
 				if (textCompo != null && textCompo.getFont() != null) {
-					textCompo.getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y + textCompo.getHeight());
+					textCompo.getFont().getFont().draw(batch, textCompo.getText(), realPos.x, realPos.y + textCompo.getHeight());
 				}
 
 			} 

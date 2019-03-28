@@ -3,7 +3,6 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -392,7 +393,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 		Table upTable = new Table();
 		upTable.align(Align.left);
-		Image curseImage = new Image(alteration.texture());
+		Image curseImage = new Image(alteration.texture().getRegion());
 		upTable.add(curseImage).left().pad(5, 5, 0, 10);
 		
 		Label curseTitle = new Label(alteration.title(), PopinService.hudStyle());
@@ -400,9 +401,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseTitle.setWidth(350);
 		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
 		
-		AtlasRegion itemSprite = alteration.getItemSprite();
+		RegionDescriptor itemSprite = alteration.getItemSprite();
 		if (itemSprite == null || alteration.isInfused()) itemSprite = Assets.item_infused_icon;
-		Image itemImage = new Image(itemSprite);
+		Image itemImage = new Image(itemSprite.getRegion());
 		upTable.add(itemImage).right().top().pad(-40, -20, -20, -40);
 		
 		upTable.pack();

@@ -145,20 +145,7 @@ public final class TileUtil {
 	 * @param room the room
 	 * @return the tile at the given position
 	 */
-	public static Tile getTileAtGridPos(Vector2 gridPos, Room room) {
-		
-//		//TODO test
-//		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(gridPos);
-//		if (entitiesAtPosition != null) {
-//			for (Entity e : entitiesAtPosition) {
-//				if (Mappers.tileComponent.get(e) != null) {
-//					return e;
-//				}
-//			}
-//		}
-//		
-//		return null;
-		
+	public static Tile getTileAtGridPos(Vector2 gridPos, Room room) {		
 		return room.grid[(int) gridPos.x][(int) gridPos.y];
 	}
 	

@@ -8,6 +8,10 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
 public class SpiderItemPool extends EnemyItemPool {
 	
+	public SpiderItemPool() {
+		this.id = "Spider";
+	}
+	
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */

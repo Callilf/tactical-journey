@@ -54,7 +54,7 @@ public class AnimationSystem extends IteratingSystem implements RoomSystem {
 		StateComponent state = Mappers.stateComponent.get(entity);
 		if (spriteCompo == null || state == null) return;
 		
-		Animation<Sprite> animation = anim.animations.get(state.get());
+		Animation<Sprite> animation = anim.getAnimation(state.get());
 		
 		if (animation != null) {
 			Sprite keyFrame = animation.getKeyFrame(state.time);

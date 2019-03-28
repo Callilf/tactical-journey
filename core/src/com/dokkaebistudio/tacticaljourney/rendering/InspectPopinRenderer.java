@@ -242,7 +242,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			if (statusReceiverComponent != null) {
 				for (final Status status : statusReceiverComponent.getStatuses()) {
 					Table oneStatusTable  = new Table();
-						Image image = new Image(status.fullTexture());
+						Image image = new Image(status.fullTexture().getRegion());
 						image.addListener(new ClickListener() {
 							@Override
 							public void clicked(InputEvent event, float x, float y) {

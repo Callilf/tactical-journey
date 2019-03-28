@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity can acquire experience.
@@ -168,5 +173,33 @@ public class ExperienceComponent implements Component,Poolable {
 	}
 
 	
+
+	public static Serializer<ExperienceComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<ExperienceComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, ExperienceComponent object) {
+				output.writeInt(object.level);
+				output.writeInt(object.currentXp);
+				output.writeInt(object.nextLevelXp);
+				output.writeInt(object.choicesNumber);
+				output.writeInt(object.selectNumber);
+			}
+
+			@Override
+			public ExperienceComponent read(Kryo kryo, Input input, Class<ExperienceComponent> type) {
+				ExperienceComponent compo = engine.createComponent(ExperienceComponent.class);
+
+				compo.level = input.readInt(); 
+				compo.currentXp = input.readInt(); 
+				compo.nextLevelXp = input.readInt(); 
+				compo.choicesNumber = input.readInt(); 
+				compo.selectNumber = input.readInt(); 
+				
+				return compo;
+			}
+		
+		};
+	}
 
 }

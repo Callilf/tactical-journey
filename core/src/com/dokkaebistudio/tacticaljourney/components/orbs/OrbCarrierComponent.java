@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -13,11 +14,16 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.OrbUtil;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Marker to indicate that this entity is an orb that will have a special effect when on contact
@@ -321,6 +327,34 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 
 	public void setEasthOrb(Entity easthOrb) {
 		this.eastOrb = easthOrb;
+	}
+	
+	
+	
+	public static Serializer<OrbCarrierComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<OrbCarrierComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, OrbCarrierComponent object) {
+				output.writeInt(object.freeOrbSlotsNumber);
+				kryo.writeClassAndObject(output, object.northOrb);
+				kryo.writeClassAndObject(output, object.southOrb);
+				kryo.writeClassAndObject(output, object.eastOrb);
+				kryo.writeClassAndObject(output, object.westOrb);
+			}
+
+			@Override
+			public OrbCarrierComponent read(Kryo kryo, Input input, Class<OrbCarrierComponent> type) {
+				OrbCarrierComponent compo = engine.createComponent(OrbCarrierComponent.class);
+				compo.freeOrbSlotsNumber = input.readInt();
+				compo.northOrb = (Entity) kryo.readClassAndObject(input);
+				compo.southOrb = (Entity) kryo.readClassAndObject(input);
+				compo.eastOrb = (Entity) kryo.readClassAndObject(input);
+				compo.westOrb = (Entity) kryo.readClassAndObject(input);
+				return compo;
+			}
+		
+		};
 	}
 
 }

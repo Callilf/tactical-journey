@@ -62,7 +62,7 @@ public final class OrbFactory {
 		orb.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(0, anim);
+		animCompo.addAnimation(0, anim);
 		orb.add(animCompo);
 		StateComponent stateComponent = engine.createComponent(StateComponent.class);
 		stateComponent.set(0);

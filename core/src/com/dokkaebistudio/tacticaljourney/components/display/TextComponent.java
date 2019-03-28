@@ -17,9 +17,15 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * Component for entities that want to display text on screen.
@@ -28,7 +34,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class TextComponent implements Component, Poolable {
 	
 	/** The font to use. */
-	private BitmapFont font;
+	private FontDescriptor font;
 	
 	/** the text to display. */
 	private String text;
@@ -37,7 +43,7 @@ public class TextComponent implements Component, Poolable {
 	private float height;
 	
 	public TextComponent() {}
-	public TextComponent(BitmapFont f) {
+	public TextComponent(FontDescriptor f) {
 		font = f;
 	}
 	
@@ -60,7 +66,7 @@ public class TextComponent implements Component, Poolable {
 		//Compute width and height
 		if (text != null) {
 			GlyphLayout layout = new GlyphLayout();
-			layout.setText(font, text);
+			layout.setText(font.getFont(), text);
 			this.width = layout.width;
 			this.height = layout.height;
 		} else {
@@ -70,11 +76,11 @@ public class TextComponent implements Component, Poolable {
 	}
 	
 	
-	public void setFont(BitmapFont font) {
+	public void setFont(FontDescriptor font) {
 		this.font = font;
 	}
 	
-	public BitmapFont getFont() {
+	public FontDescriptor getFont() {
 		return font;
 	}
 
@@ -86,6 +92,28 @@ public class TextComponent implements Component, Poolable {
 		return height;
 	}
 	
+	
+	
+	
+	public static Serializer<TextComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<TextComponent>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, TextComponent object) {
+				kryo.writeClassAndObject(output, object.font);
+				output.writeString(object.text);
+			}
+
+			@Override
+			public TextComponent read(Kryo kryo, Input input, Class<TextComponent> type) {
+				TextComponent compo = engine.createComponent(TextComponent.class);
+				compo.font = (FontDescriptor) kryo.readClassAndObject(input);
+				compo.text = input.readString();
+				return compo;
+			}
+		
+		};
+	}
 	
 		
 }

@@ -19,7 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.TileComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -73,7 +72,7 @@ public final class Mappers {
 	
 	public final static ComponentMapper<ParentEntityComponent> parentEntityComponent = ComponentMapper.getFor(ParentEntityComponent.class);
 	public final static ComponentMapper<GridPositionComponent> gridPositionComponent = ComponentMapper.getFor(GridPositionComponent.class);
-	public final static ComponentMapper<TileComponent> tileComponent = ComponentMapper.getFor(TileComponent.class);
+//	public final static ComponentMapper<TileComponent> tileComponent = ComponentMapper.getFor(TileComponent.class);
 	public final static ComponentMapper<DoorComponent> doorComponent = ComponentMapper.getFor(DoorComponent.class);
 	public final static ComponentMapper<ExitComponent> exitComponent = ComponentMapper.getFor(ExitComponent.class);
 	

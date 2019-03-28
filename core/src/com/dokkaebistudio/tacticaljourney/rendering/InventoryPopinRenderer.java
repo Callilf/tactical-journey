@@ -169,7 +169,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				if (item != null) {
     					// An item is present in this inventory slot
     					final ItemComponent itemComponent = Mappers.itemComponent.get(item);
-    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.getTexture(itemComponent.getItemImageName() + "-full"));
+    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.loadAndGetTexture(itemComponent.getItemImageName().getNameFull()).getRegion());
     					image.setDrawable(texture);
     					if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INFUSION && !itemComponent.isInfusable()) {
     						image.addAction(Actions.alpha(0.3f));
@@ -198,7 +198,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
     			        if (!activeSlot) {
-	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled);
+	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled.getRegion());
 	    					image.setDrawable(texture);
     			        } else {
     			        	image.setDrawable(null);

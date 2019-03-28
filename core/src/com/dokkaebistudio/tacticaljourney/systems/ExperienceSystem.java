@@ -15,9 +15,6 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 	
 	/** The current room. */
     private Room room;
-    
-    //TODO remove this when no longer testing the levelup popin
-    private boolean test = false;
 
     public ExperienceSystem(Room r, Stage s) {
         super(Family.all(ExperienceComponent.class).get());
@@ -36,12 +33,6 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     protected void processEntity(final Entity player, float deltaTime) {
     	
     	ExperienceComponent expCompo = Mappers.experienceComponent.get(player);
-    	
-    	//TODO remove
-    	if (test) {
-    		test = false;
-    		expCompo.earnXp(expCompo.getNextLevelXp());
-    	}
     	
     	// Display experience gained
     	if (!expCompo.getXpGainedAtCurrentFrame().isEmpty()) {

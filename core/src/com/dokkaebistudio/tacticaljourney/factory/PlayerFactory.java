@@ -5,8 +5,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -94,9 +92,9 @@ public final class PlayerFactory {
 		playerEntity.add(stateCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.animations.put(StatesEnum.PLAYER_STANDING.getState(), AnimationSingleton.getInstance().player_standing);
-		animCompo.animations.put(StatesEnum.PLAYER_RUNNING.getState(), AnimationSingleton.getInstance().player_running);
-		animCompo.animations.put(StatesEnum.PLAYER_FLYING.getState(), AnimationSingleton.getInstance().player_flying);
+		animCompo.addAnimation(StatesEnum.PLAYER_STANDING.getState(), AnimationSingleton.getInstance().player_standing);
+		animCompo.addAnimation(StatesEnum.PLAYER_RUNNING.getState(), AnimationSingleton.getInstance().player_running);
+		animCompo.addAnimation(StatesEnum.PLAYER_FLYING.getState(), AnimationSingleton.getInstance().player_flying);
 		playerEntity.add(animCompo);
 		
 		// Grid position
@@ -128,8 +126,8 @@ public final class PlayerFactory {
 		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		
 		AttackAnimation attackAnimation = new AttackAnimation(
-				new Animation<>(0.03f, Assets.slash_animation), 
-				new Animation<>(0.03f, Assets.slash_critical_animation), true);
+				AnimationSingleton.getInstance().attack_slash,
+				AnimationSingleton.getInstance().attack_slash_critical, true);
 		attackComponent.setAttackAnimation(attackAnimation);
 		
 		playerEntity.add(attackComponent);
@@ -227,7 +225,7 @@ public final class PlayerFactory {
 
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.shopkeeper));
+		spriteCompo.setSprite(Assets.shopkeeper);
 		shopKeeperEntity.add(spriteCompo);
 		
 		// Grid position
@@ -288,7 +286,7 @@ public final class PlayerFactory {
 		
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.godess_statue));
+		spriteCompo.setSprite(Assets.godess_statue);
 		godessStatueEntity.add(spriteCompo);
 		
 		// Grid position
@@ -336,7 +334,7 @@ public final class PlayerFactory {
 
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(new Sprite(Assets.soulbender));
+		spriteCompo.setSprite(Assets.soulbender);
 		soulBenderEntity.add(spriteCompo);
 		
 		// Grid position

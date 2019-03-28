@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -28,7 +28,7 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 	protected List<Blessing> blessings = new ArrayList<>();
 	protected List<Curse> curses = new ArrayList<>();
 	
-	protected AbstractInfusableItem(ItemEnum itemType, AtlasRegion texture, boolean instaPickUp,
+	protected AbstractInfusableItem(ItemEnum itemType, RegionDescriptor texture, boolean instaPickUp,
 			boolean goIntoInventory) {
 		super(itemType, texture, instaPickUp, goIntoInventory);
 	}

@@ -36,7 +36,6 @@ public class Assets {
 	
 	public static final String atlas = "tacticaljourney.atlas";
 	public static HashMap<String, RegionDescriptor> allSprites;
-	public static int spritesCounter;
 
 	public static RegionDescriptor menuBackground;
 	

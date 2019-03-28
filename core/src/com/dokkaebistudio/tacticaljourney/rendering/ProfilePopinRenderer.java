@@ -148,10 +148,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
     		
     		stage.addActor(mainTable);
-    		
-    		for (int i=0 ; i<10 ; i++) {
-    			System.out.println(RandomSingleton.getInstance().nextSeededInt(100));
-    		}
     
     	}
     	

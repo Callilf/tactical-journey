@@ -489,9 +489,12 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.skillNumber);
 				
 				// Animations
-				output.writeInt(object.attackAnimation.getAttackAnim());
-				output.writeInt(object.attackAnimation.getCriticalAttackAnim());
-				output.writeBoolean(object.attackAnimation.isOriented());
+				output.writeBoolean(object.attackAnimation != null);
+				if (object.attackAnimation != null) {
+					output.writeInt(object.attackAnimation.getAttackAnim());
+					output.writeInt(object.attackAnimation.getCriticalAttackAnim());
+					output.writeBoolean(object.attackAnimation.isOriented());
+				}
 			}
 
 			@Override
@@ -519,11 +522,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				compo.skillNumber = input.readInt();
 				
 				// Animation
-				AttackAnimation attackAnimation = new AttackAnimation(
-						AnimationSingleton.getInstance().getAnimation(input.readInt()),
-						AnimationSingleton.getInstance().getAnimation(input.readInt()),
-							input.readBoolean());
-				compo.setAttackAnimation(attackAnimation);
+				boolean hasAttackAnim = input.readBoolean();
+				if (hasAttackAnim) {
+					AttackAnimation attackAnimation = new AttackAnimation(
+							AnimationSingleton.getInstance().getAnimation(input.readInt()),
+							AnimationSingleton.getInstance().getAnimation(input.readInt()),
+								input.readBoolean());
+					compo.setAttackAnimation(attackAnimation);
+				}
 
 				return compo;
 			}

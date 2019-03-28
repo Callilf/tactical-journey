@@ -52,8 +52,7 @@ public abstract class FloorGenerator {
 		List<Room> rooms = new ArrayList<>();		
 		
 		// 1 - compute distance between start room and end room
-		//TODO change that
-		int distanceStartToEnd = 1;//3 + random.nextSeededInt(4);
+		int distanceStartToEnd = 3 + random.nextSeededInt(4);
 		
 		// 2 - Given that startRoom is 0,0, find where to place endRoom
 		int endRoomX = - distanceStartToEnd + random.nextSeededInt((distanceStartToEnd * 2) + 1);
@@ -104,51 +103,51 @@ public abstract class FloorGenerator {
 			previousRoom = currentRoom;
 		}
 		previousRoom.type = RoomType.END_FLOOR_ROOM;
-//		
-//		
-//		// 4 - Add rooms to this path
-//		
-//		// 4.1 add rooms randomly throughout the path
-//		int additionnalRoomsNumber = 6 + random.nextSeededInt(2);
-//		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber, false);
-//		
-//		// 4.2 if it wasn't enough to reach the min number of room, add some more
-//		if (rooms.size() < MIN_ROOM_NB) {
-//			// Add more rooms to reach the min number
-//			addAdditionalRooms(floor, gameScreen, rooms, MIN_ROOM_NB - rooms.size(), true);
-//		}
-//		
-//		
-//		// 5 - Place mandatory rooms
-//		List<Room> values = new ArrayList<>(roomsPerPosition.values());
-//		Collections.shuffle(values, random.getSeededRandomForShuffle());
-//		for (Room r : values) {
-//			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-//				r.type = RoomType.KEY_ROOM;
-//				break;
-//			}
-//		}
-//		for (Room r : values) {
-//			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-//				r.type = RoomType.ITEM_ROOM;
-//				break;
-//			}
-//		}
-//		for (Room r : values) {
-//			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-//				r.type = RoomType.SHOP_ROOM;
-//				break;
-//			}
-//		}
-//		for (Room r : values) {
-//			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-//				r.type = RoomType.STATUE_ROOM;
-//				break;
-//			}
-//		}
-//		
-//		// 6 - Add corridors between rooms
-//		addCorridors(rooms, roomsPerPosition);
+		
+		
+		// 4 - Add rooms to this path
+		
+		// 4.1 add rooms randomly throughout the path
+		int additionnalRoomsNumber = 6 + random.nextSeededInt(2);
+		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber, false);
+		
+		// 4.2 if it wasn't enough to reach the min number of room, add some more
+		if (rooms.size() < MIN_ROOM_NB) {
+			// Add more rooms to reach the min number
+			addAdditionalRooms(floor, gameScreen, rooms, MIN_ROOM_NB - rooms.size(), true);
+		}
+		
+		
+		// 5 - Place mandatory rooms
+		List<Room> values = new ArrayList<>(roomsPerPosition.values());
+		Collections.shuffle(values, random.getSeededRandomForShuffle());
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.KEY_ROOM;
+				break;
+			}
+		}
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.ITEM_ROOM;
+				break;
+			}
+		}
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.SHOP_ROOM;
+				break;
+			}
+		}
+		for (Room r : values) {
+			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+				r.type = RoomType.STATUE_ROOM;
+				break;
+			}
+		}
+		
+		// 6 - Add corridors between rooms
+		addCorridors(rooms, roomsPerPosition);
 				
 		// 7 - Generate the content of all rooms
 		floor.setRooms(rooms);

@@ -280,9 +280,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 				output.writeString(object.basicMoveStrategy.name());
 				output.writeString(object.alertedMoveStrategy.name());
 
-				output.writeBoolean(object.alerted);
-				
 				kryo.writeClassAndObject(output, object.alertedDisplayer);
+				output.writeBoolean(object.alerted);
 			}
 
 			@Override
@@ -299,8 +298,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 				compo.basicMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
 				compo.alertedMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
 				
-				compo.alerted = input.readBoolean();
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
+				compo.setAlerted(input.readBoolean());
 //				engine.addEntity(compo.alertedDisplayer);
 				
 				return compo;

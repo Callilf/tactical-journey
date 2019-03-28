@@ -14,7 +14,6 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -494,9 +493,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			@Override
 			public void write(Kryo kryo, Output output, HealthComponent object) {
 				
+				kryo.writeClassAndObject(output, object.hpDisplayer);
 				output.writeInt(object.maxHp);
 				output.writeInt(object.hp);
-				kryo.writeClassAndObject(output, object.hpDisplayer);
 
 				// Armor
 				output.writeInt(object.maxArmor);
@@ -509,15 +508,13 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			@Override
 			public HealthComponent read(Kryo kryo, Input input, Class<HealthComponent> type) {
 				HealthComponent compo = engine.createComponent(HealthComponent.class);
-				compo.maxHp = input.readInt();
-				compo.hp = input.readInt();
+				
 				compo.hpDisplayer = (Entity) kryo.readClassAndObject(input);
-//				if (compo.hpDisplayer != null) { 
-//					engine.addEntity(compo.hpDisplayer);
-//				}
+				compo.setMaxHp(input.readInt());
+				compo.setHp(input.readInt());
 
-				compo.maxArmor = input.readInt();
-				compo.armor = input.readInt();
+				compo.setMaxArmor(input.readInt());
+				compo.setArmor(input.readInt());
 
 				compo.resitanceMap = (Map<DamageType, Integer>) kryo.readClassAndObject(input);
 

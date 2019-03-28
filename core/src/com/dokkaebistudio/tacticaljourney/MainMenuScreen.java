@@ -108,8 +108,8 @@ public class MainMenuScreen extends ScreenAdapter {
 		buttonTable.add(start).width(500).height(200).padBottom(350).padRight(50);
 		
 		
-		TextButton load = new TextButton("LOAD", PopinService.buttonStyle());
-		load.addListener(new ChangeListener() {
+		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
+		loadBtn.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -125,31 +125,25 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new GameScreen(game, false));
 			}
 		});
-		buttonTable.add(load).width(500).height(200).padBottom(350).padLeft(50);
-		load.setDisabled(!hasSave);
+		buttonTable.add(loadBtn).width(500).height(200).padBottom(350).padLeft(50);
+		loadBtn.setDisabled(!hasSave);
 		mainTable.add(buttonTable);
 		mainTable.row();
 		
 		
-		TextButton removeSave = new TextButton("Erase save", PopinService.buttonStyle());
-		load.addListener(new ChangeListener() {
+		final TextButton removeSaveBtn = new TextButton("Erase save", PopinService.buttonStyle());
+		removeSaveBtn.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				
-				//Instantiate the RNG
-				if (enteredSeed) {
-					RandomSingleton.createInstance(seedField.getText());
-				} else {
-					RandomSingleton.createInstance();
-				}
-				
-				// Launch the game
-				game.setScreen(new GameScreen(game, false));
+				FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+				saveFile.delete();
+				loadBtn.setDisabled(true);
+				removeSaveBtn.setDisabled(true);
 			}
 		});
-		mainTable.add(removeSave).padBottom(50);
-		removeSave.setVisible(hasSave);
+		mainTable.add(removeSaveBtn).padBottom(50);
+		removeSaveBtn.setDisabled(!hasSave);
 		
 		mainTable.pack();
 		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);

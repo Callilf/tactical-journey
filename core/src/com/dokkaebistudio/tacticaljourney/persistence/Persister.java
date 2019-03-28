@@ -266,6 +266,9 @@ public class Persister {
 					
 					f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
 					f.setActiveRoom( (Room) kryo.readClassAndObject(input));
+					
+					// Restore the state of the active room
+					f.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 				}
 				return f;
 			}
@@ -440,7 +443,7 @@ public class Persister {
 				
 				if (isEntityToLoad(loadedEntity)) {
 					GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(loadedEntity);
-					if (gridPositionComponent != null && gridPositionComponent.room != null) {
+					if (gridPositionComponent != null && gridPositionComponent.room != null && !gridPositionComponent.isInactive()) {
 						gridPositionComponent.coord(loadedEntity, gridPositionComponent.coord(), gridPositionComponent.room);
 						
 						for (Component compo : loadedEntity.getComponents()) {

@@ -194,8 +194,8 @@ public class GameScreen extends ScreenAdapter {
 			floor1.generate();
 			floors.add(floor1);
 			activeFloor = floor1;
-	//		Floor floor2 = new Floor(this, 2);
-	//		floors.add(floor2);
+			Floor floor2 = new Floor(this, 2);
+			floors.add(floor2);
 	//		Floor floor3 = new Floor(this, 3);
 	//		floors.add(floor3);
 	//		Floor floor4 = new Floor(this, 4);

@@ -89,6 +89,9 @@ public class Persister {
 	private List<Long> savedEntities = new ArrayList<>();
 	private Map<Long, PooledEntity> loadedEntities = new HashMap<>();
 	
+	private List<Integer> savedFloors = new ArrayList<>();
+	private Map<Integer, Floor> loadedFloors = new HashMap<>();
+
 	private List<Integer> savedRooms = new ArrayList<>();
 	private Map<Integer, Room> loadedRooms = new HashMap<>();
 
@@ -203,33 +206,50 @@ public class Persister {
 			public void write(Kryo kryo, Output output, Floor floor) {
 				output.writeInt(floor.getLevel());
 				
-				// Save the rooms
-				output.writeInt(floor.getRooms().size());
-				for (Room r : floor.getRooms()) {
-					kryo.writeClassAndObject(output, r);
+				// If the floor has already been saved, stop here
+				if (!savedFloors.contains(floor.getLevel())) {
+
+					output.writeBoolean(floor.getRooms() != null);
+					
+					if (floor.getRooms() != null) {
+						// Save the rooms
+						output.writeInt(floor.getRooms().size());
+						for (Room r : floor.getRooms()) {
+							kryo.writeClassAndObject(output, r);
+						}
+						
+						kryo.writeClassAndObject(output, floor.getRoomPositions());				
+						kryo.writeClassAndObject(output, floor.getActiveRoom());
+					}
 				}
-				
-				kryo.writeClassAndObject(output, floor.getRoomPositions());				
-				kryo.writeClassAndObject(output, floor.getActiveRoom());
 			}
 
 			@Override
 			public Floor read(Kryo kryo, Input input, Class<Floor> type) {
 				int level = input.readInt();
-				Floor f = new Floor(gameScreen, level);
 				
-				// load rooms
-				f.setRooms(new ArrayList<Room>());
-				int roomNb = input.readInt();
-				for (int i=0 ; i<roomNb ; i++) {
-					Room room = (Room) kryo.readClassAndObject(input);
-					room.floor = f;
-					f.getRooms().add(room);
+				// If the entity has been previously loaded, return it
+				if (loadedFloors.containsKey(level)) {
+					return loadedFloors.get(level);
 				}
 				
-				f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
-				f.setActiveRoom( (Room) kryo.readClassAndObject(input));
+				Floor f = new Floor(gameScreen, level);
+				loadedFloors.put(level, f);
 
+				boolean isGenerated = input.readBoolean();
+				if (isGenerated) {
+					// load rooms
+					f.setRooms(new ArrayList<Room>());
+					int roomNb = input.readInt();
+					for (int i=0 ; i<roomNb ; i++) {
+						Room room = (Room) kryo.readClassAndObject(input);
+						room.floor = f;
+						f.getRooms().add(room);
+					}
+					
+					f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
+					f.setActiveRoom( (Room) kryo.readClassAndObject(input));
+				}
 				return f;
 			}
 			

@@ -59,11 +59,12 @@ public class Floor2Generator extends FloorGenerator {
 		setNeighbors(GenerationMoveEnum.NORTH, startRoom, currentRoom);		
 				
 		// Generate the content of all rooms
-		for (Room r : rooms) {
-			r.create();
-		}
 		floor.setRooms(rooms);
 		floor.setActiveRoom(startRoom);
 		floor.setRoomPositions(roomsPerPosition);
+
+		for (Room r : rooms) {
+			r.create();
+		}
 	}
 }

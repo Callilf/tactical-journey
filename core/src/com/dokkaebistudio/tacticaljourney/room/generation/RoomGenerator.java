@@ -396,10 +396,13 @@ public abstract class RoomGenerator {
 			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			
 			Vector2 pos = spawnPositions.get(0);
-//			entityFactory.createExit(room, pos, false);
+			entityFactory.createExit(room, pos, false);
 			
 			pos = spawnPositions.get(1);
 			entityFactory.playerFactory.createSoulbender(	pos, room);
+			
+			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(2));
+
 			
 			default:
 			break;

@@ -150,6 +150,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			// When right clicking on an ennemy, display it's possible movement
 			handleRightClickOnEnemies(player);
+			
+			handleClickOnPlayer(player);
 
 			break;
 
@@ -300,6 +302,25 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		}
 	}
 	
+	
+	/**
+	 * Click on the player to end the turn if no move remaining
+	 */
+	private void handleClickOnPlayer(Entity player) {
+		if (moveCompo.getMoveRemaining() == 0) {
+			if (InputSingleton.getInstance().leftClickJustReleased) {
+				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+				int x = (int) touchPoint.x;
+				int y = (int) touchPoint.y;
+	
+				if (TileUtil.isPixelPosOnEntity(x, y, player)) {
+					moveCompo.clearMovableTiles();
+					attackCompo.clearAttackableTiles();
+					room.turnManager.endPlayerTurn();
+				}
+			}
+		}
+	}
 	
 	
 	

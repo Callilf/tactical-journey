@@ -213,10 +213,12 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		this.alerted = alerted;
 		if (alertedDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(alertedDisplayer);
-			textComponent.setText(this.alerted ? "[WHITE]!!" : "");
-			
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			this.place(gridPositionComponent.coord());
+			if (textComponent != null && gridPositionComponent != null) {
+				textComponent.setText(this.alerted ? "[WHITE]!!" : "");
+				
+				this.place(gridPositionComponent.coord());
+			}
 		}
 	}
 

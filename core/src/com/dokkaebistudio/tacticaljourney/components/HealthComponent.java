@@ -399,10 +399,12 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.hp = hp;
 		if (hpDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
-			textComponent.setText(String.valueOf(this.hp));
-			
-			if (this.armor > 0) {
-				textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+			if (textComponent != null) {
+				textComponent.setText(String.valueOf(this.hp));
+				
+				if (this.armor > 0) {
+					textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+				}
 			}
 		}
 	}
@@ -417,10 +419,12 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		this.armor = armor;
 		if (hpDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
-			textComponent.setText(String.valueOf(this.hp));
-			
-			if (this.armor > 0) {
-				textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+			if (textComponent != null) {
+				textComponent.setText(String.valueOf(this.hp));
+				
+				if (this.armor > 0) {
+					textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
+				}
 			}
 		}
 	}

@@ -36,6 +36,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -268,6 +269,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		if (itemComponent.getQuantity() != null) {
 			Entity quantityDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
 					String.valueOf(itemComponent.getQuantity()), room);
+			quantityDisplayer.flags = EntityFlagEnum.TEXT_QUANTITY_DISPLAYER.getFlag();
 			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
 			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(quantityDisplayer);
 			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + 10, displayerPosCompo.getAbsolutePos().y + 10 + textComponent.getHeight());
@@ -277,6 +279,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		if (itemComponent.getPrice() != null) {
 			Entity priceDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
 					String.valueOf(itemComponent.getPrice()), room);
+			priceDisplayer.flags = EntityFlagEnum.TEXT_PRICE_DISPLAYER.getFlag();
 			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
 			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(priceDisplayer);
 			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + GameScreen.GRID_SIZE/2 - textComponent.getWidth()/2,

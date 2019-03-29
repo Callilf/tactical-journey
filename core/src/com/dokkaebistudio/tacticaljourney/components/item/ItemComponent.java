@@ -17,7 +17,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
@@ -337,25 +336,14 @@ public class ItemComponent implements Component, Poolable {
 			@Override
 			public void write(Kryo kryo, Output output, ItemComponent object) {
 				kryo.writeClassAndObject(output, object.itemType);
-				kryo.writeClassAndObject(output, object.quantityDisplayer);
 				kryo.writeClassAndObject(output, object.price);
-				kryo.writeClassAndObject(output, object.priceDisplayer);
 			}
 
 			@Override
 			public ItemComponent read(Kryo kryo, Input input, Class<ItemComponent> type) {
 				ItemComponent compo = engine.createComponent(ItemComponent.class);
 				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
-				compo.quantityDisplayer = (Entity) kryo.readClassAndObject(input);
-//				if (compo.quantityDisplayer != null) {
-//					engine.addEntity(compo.quantityDisplayer);
-//				}
-				
-				compo.price = (Integer) kryo.readClassAndObject(input);
-				compo.priceDisplayer = (Entity) kryo.readClassAndObject(input);
-//				if (compo.priceDisplayer != null) {
-//					engine.addEntity(compo.priceDisplayer);
-//				}
+				compo.setPrice((Integer) kryo.readClassAndObject(input));
 				
 				return compo;
 			}

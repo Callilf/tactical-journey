@@ -200,7 +200,7 @@ public class Persister {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gameScreen.player);
 				inventoryComponent.player = gameScreen.player;
 				
-				// Resotre the time
+				// Restore the time
 				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
 				
 				// Init the random
@@ -269,6 +269,11 @@ public class Persister {
 					
 					// Restore the state of the active room
 					f.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+					
+					// Restore the items' quantity and price displayers
+					for(Entity e : f.getActiveRoom().getAllEntities()) {
+						if (Mappers.itemComponent.has(e)) f.getActiveRoom().getAddedItems().add(e);
+					}
 				}
 				return f;
 			}
@@ -309,6 +314,9 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.getEnemies());
 					kryo.writeClassAndObject(output, roomToSave.getNeutrals());
 					kryo.writeClassAndObject(output, roomToSave.getDoors());
+					
+					kryo.writeClassAndObject(output, roomToSave.getAddedItems());
+					kryo.writeClassAndObject(output, roomToSave.getRemovedItems());
 					
 					kryo.writeClassAndObject(output, roomToSave.getNorthNeighbor());
 					kryo.writeClassAndObject(output, roomToSave.getSouthNeighbor());
@@ -355,18 +363,23 @@ public class Persister {
 				for (int i=0 ; i<entityNb ; i++) {
 					Entity loadedEntity = (Entity) kryo.readClassAndObject(input);
 					if (isEntityToLoad(loadedEntity)) {
-						loadedRoom.addEntity(loadedEntity);
+						try {
+							loadedRoom.addEntity(loadedEntity);
+						} catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				
 				loadedRoom.getEntitiesAtPosition().putAll( (Map<? extends Vector2, ? extends Set<Entity>>) kryo.readClassAndObject(input));
-//				for (Entry<Vector2, Set<Entity>> entry : loadedRoom.getEntitiesAtPosition().entrySet()) {
-//					
-//				}
 				
 				loadedRoom.getEnemies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getNeutrals().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getDoors().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
+				
+				loadedRoom.getAddedItems().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
+				loadedRoom.getRemovedItems().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 
 				loadedRoom.setNorthNeighbor((Room) kryo.readClassAndObject(input));
 				loadedRoom.setSouthNeighbor((Room) kryo.readClassAndObject(input));
@@ -382,7 +395,8 @@ public class Persister {
 	public boolean isEntityToLoad(Entity e) {
 		boolean movableTile = e.flags == EntityFlagEnum.MOVABLE_TILE.getFlag();
 		boolean attackableTile = e.flags == EntityFlagEnum.ATTACK_TILE.getFlag();
-		return !movableTile && !attackableTile;
+		boolean itemDisplayer = e.flags == EntityFlagEnum.TEXT_QUANTITY_DISPLAYER.getFlag() || e.flags == EntityFlagEnum.TEXT_PRICE_DISPLAYER.getFlag(); 
+		return !movableTile && !attackableTile && !itemDisplayer;
 	}
 	
 	

@@ -66,7 +66,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 	public void update(float deltaTime) {
 		
 		// Update state
-		if (room.getState() == RoomState.PLAYER_TURN_INIT) {
+		if (room.getState() == RoomState.PLAYER_COMPUTE_MOVABLE_TILES) {
 
 			fillEntitiesOfCurrentRoom();
 			for (Entity explosive : allExplosivesOfCurrentRoom) {

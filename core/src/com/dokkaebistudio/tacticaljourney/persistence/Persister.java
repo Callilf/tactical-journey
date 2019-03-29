@@ -1,6 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.persistence;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -98,6 +97,8 @@ public class Persister {
 
 	private List<Integer> savedRooms = new ArrayList<>();
 	private Map<Integer, Room> loadedRooms = new HashMap<>();
+	
+	private int currentLevel;
 
 	public Persister(GameScreen gs) {
 		this.gameScreen = gs;
@@ -148,15 +149,17 @@ public class Persister {
 		return new Serializer<GameScreen>() {
 
 			@Override
-			public void write(Kryo kryo, Output output, GameScreen gs) {				
+			public void write(Kryo kryo, Output output, GameScreen gs) {
+				currentLevel = gs.activeFloor.getLevel();
+				
+				// Save the current floor
+				output.writeInt(gs.activeFloor.getLevel());
+
 				// Save the floors
 				output.writeInt(gs.floors.size());
 				for (Floor f : gs.floors) {
 					kryo.writeClassAndObject(output, f);
 				}
-				
-				// Save the current floor
-				output.writeInt(gs.activeFloor.getLevel());
 				
 				// Save the player
 				kryo.writeClassAndObject(output, gs.player);
@@ -174,7 +177,9 @@ public class Persister {
 			}
 
 			@Override
-			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {				
+			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {			
+				currentLevel = input.readInt();
+
 				// load floors
 				int floorNb = input.readInt();
 				gameScreen.floors.clear();
@@ -183,9 +188,8 @@ public class Persister {
 				}
 				
 				// Restore current floor
-				int currentFloorLevel = input.readInt();
 				for (Floor f : gameScreen.floors) {
-					if (f.getLevel() == currentFloorLevel) {
+					if (f.getLevel() == currentLevel) {
 						gameScreen.activeFloor = f;
 						break;
 					}
@@ -210,6 +214,13 @@ public class Persister {
 				
 				// Restore the item pools
 				ItemPoolSingleton.getInstance().restoreRemoveditems((List<ItemEnum>) kryo.readClassAndObject(input));
+				
+				
+				
+				// Restore the state of the active room
+				gameScreen.activeFloor.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+				if (!gameScreen.activeFloor.getActiveRoom().hasEnemies()) Mappers.moveComponent.get(gameScreen.player).setFreeMove(true);
+
 				return null;
 			}
 			
@@ -224,7 +235,8 @@ public class Persister {
 				output.writeInt(floor.getLevel());
 				
 				// If the floor has already been saved, stop here
-				if (!savedFloors.contains(floor.getLevel())) {
+				if (floor.getLevel() >= currentLevel && !savedFloors.contains(floor.getLevel())) {
+					savedFloors.add(floor.getLevel());
 
 					output.writeBoolean(floor.getRooms() != null);
 					
@@ -252,6 +264,9 @@ public class Persister {
 				
 				Floor f = new Floor(gameScreen, level);
 				loadedFloors.put(level, f);
+				
+				// Old level, no need to load more
+				if (level < currentLevel) return f;
 
 				boolean isGenerated = input.readBoolean();
 				if (isGenerated) {
@@ -266,10 +281,7 @@ public class Persister {
 					
 					f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
 					f.setActiveRoom( (Room) kryo.readClassAndObject(input));
-					
-					// Restore the state of the active room
-					f.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
-					
+										
 					// Restore the items' quantity and price displayers
 					for(Entity e : f.getActiveRoom().getAllEntities()) {
 						if (Mappers.itemComponent.has(e)) f.getActiveRoom().getAddedItems().add(e);

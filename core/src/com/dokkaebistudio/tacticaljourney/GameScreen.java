@@ -188,7 +188,6 @@ public class GameScreen extends ScreenAdapter {
 		
 		floors = new ArrayList<>();
 		
-		
 		if (newGame) {
 			Floor floor1 = new Floor(this, 1);
 			floor1.generate();
@@ -207,9 +206,9 @@ public class GameScreen extends ScreenAdapter {
 			Persister persister = new Persister(this);
 			persister.loadGameState();
 		}
-		Room room = floors.get(0).getActiveRoom();
 
-		
+		Room room = activeFloor.getActiveRoom();
+
 		
 		
 		

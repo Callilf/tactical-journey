@@ -58,6 +58,7 @@ public class Assets {
 	public static RegionDescriptor mud;
 	public static RegionDescriptor mud_destroyed;
 	public static RegionDescriptor tallGrass;
+	public static RegionDescriptor tallGrass_destroyed;
 	public static RegionDescriptor vineGrass;
 	public static RegionDescriptor entangled_vines;
 	
@@ -402,6 +403,7 @@ public class Assets {
 		tile_pit = Assets.getTexture("tile-pit-test");
 		mud = Assets.getTexture("tile-mud-test");
 		tallGrass = Assets.getTexture("tile-tall-grass");
+		tallGrass_destroyed = Assets.getTexture("tile-tall-grass-destroyed");
 		vineGrass = Assets.getTexture("tile-vines-grass");
 		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
 		entangled_vines = Assets.getTexture("entangled_vines");

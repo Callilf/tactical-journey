@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
@@ -130,6 +129,9 @@ public final class EntityFactory {
 				break;
 			case BUSH:
 				result = this.creepFactory.createBush(room, pos);
+				break;
+			case VINES_BUSH:
+				result = this.creepFactory.createVinesBush(room, pos);
 				break;
 		}
 		return result;

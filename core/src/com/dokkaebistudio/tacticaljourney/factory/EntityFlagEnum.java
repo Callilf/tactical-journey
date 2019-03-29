@@ -43,6 +43,7 @@ public enum EntityFlagEnum {
 	CREEP_FIRE(152),
 	CREEP_POISON(153),
 	CREEP_BUSH(154),
+	CREEP_VINES_BUSH(155),
 
 	DIALOG_POPIN(210),
 	

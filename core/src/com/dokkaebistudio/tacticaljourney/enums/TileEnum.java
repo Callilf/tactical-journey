@@ -13,7 +13,9 @@ public enum TileEnum {
 	H_WALL(true, false),
 	WALL(true, false),
 	PIT(false, true),
-	BUSH(false, false);
+	BUSH(false, false),
+	VINES_BUSH(false, false);
+	
 	
 	private boolean isWall;
 	private boolean isPit;

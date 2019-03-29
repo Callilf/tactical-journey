@@ -40,7 +40,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	// Other attributes
 	
 	/** Whether we are in free move mode, which mean there are no enemies in the room. */
-	public boolean freeMove;
+	private boolean freeMove;
 	
 	/** The tiles where the player can move. */
 	public Set<Tile> allWalkableTiles;
@@ -249,7 +249,15 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;
 	}
+	
+	public boolean isFreeMove() {
+		if (isFrozen()) return false;
+		return freeMove;
+	}
 
+	public void setFreeMove(boolean freeMove) {
+		this.freeMove = freeMove;
+	}
 	
 	
 	

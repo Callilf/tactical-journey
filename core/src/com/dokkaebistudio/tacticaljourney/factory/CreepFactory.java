@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepVinesBush;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -147,7 +148,7 @@ public final class CreepFactory {
     	bushEntity.add(blockVisibilityComponent);
     	    	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
-//    	destructibleCompo.setDestroyedTexture(Assets.wall_destroyed);
+    	destructibleCompo.setDestroyedTexture(Assets.tallGrass_destroyed);
     	destructibleCompo.setDestroyableWithWeapon(true);
     	bushEntity.add(destructibleCompo);	
     	
@@ -167,6 +168,37 @@ public final class CreepFactory {
     	return bushEntity;
 	}	
 	
+	public Entity createVinesBush(Room room, Vector2 pos) {
+		Entity bushEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_VINES_BUSH, Assets.vineGrass);
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.BUSH_TITLE);
+		inspect.setDescription(Descriptions.BUSH_DESCRIPTION);
+		bushEntity.add(inspect);
+    	    	
+    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
+    	bushEntity.add(blockVisibilityComponent);
+    	    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	destructibleCompo.setDestroyedTexture(Assets.tallGrass_destroyed);
+    	destructibleCompo.setDestroyableWithWeapon(true);
+    	bushEntity.add(destructibleCompo);	
+    	
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(new CreepVinesBush());
+		creepCompo.setDuration(0);
+		bushEntity.add(creepCompo);
+		
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroyed(true);
+		flammable.setDestroyedTexture(Assets.tallGrass);
+		bushEntity.add(flammable);
+    	
+		engine.addEntity(bushEntity);
+
+    	return bushEntity;
+	}	
 	
 	
 	public Entity createFire(Room room, Vector2 pos, Entity parentEntity) {

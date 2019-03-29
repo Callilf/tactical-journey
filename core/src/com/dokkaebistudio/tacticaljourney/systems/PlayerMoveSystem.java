@@ -6,13 +6,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -24,9 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -102,9 +98,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		case PLAYER_TURN_INIT:	
 			if (room.hasEnemies()) {
 				moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
-				moveCompo.freeMove = false;
+				moveCompo.setFreeMove(false);
 			} else {
-				moveCompo.freeMove = true;
+				moveCompo.setFreeMove(true);
 			}
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 			break;
@@ -135,10 +131,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			boolean stillLooting = handleLoot(player);
 			if (stillLooting) return;
 			
-			if (!room.hasEnemies() && !moveCompo.freeMove) {
-				room.turnManager.endPlayerTurn();
-				break;
-			}
+//			if (!room.hasEnemies() && !moveCompo.isFreeMove()) {
+//				room.turnManager.endPlayerTurn();
+//				break;
+//			}
 			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {

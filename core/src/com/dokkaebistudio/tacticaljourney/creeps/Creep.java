@@ -18,7 +18,8 @@ public abstract class Creep {
 		POISON,
 		MUD,
 		FIRE,
-		BUSH;
+		BUSH,
+		VINES_BUSH;
 	}
 	
 	/** The type. */

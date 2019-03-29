@@ -150,7 +150,12 @@ public abstract class RoomGenerator {
             		break;
             		
             	case BUSH:
-            		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
+            		int nextSeededInt = random.nextSeededInt(20);
+            		if (nextSeededInt == 0) {
+                		groom.getTileTypes()[x][realY] = TileEnum.VINES_BUSH;
+            		} else {
+                		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
+            		}
             		hasBushInLayout = true;
             		break;
             		
@@ -169,7 +174,12 @@ public abstract class RoomGenerator {
             			if (nextInt == 0 && currentRoom.type != RoomType.SHOP_ROOM) {
             				groom.getTileTypes()[x][realY] = TileEnum.MUD;
             			} else if (nextInt == 1 && currentRoom.type != RoomType.SHOP_ROOM && !hasBushInLayout) {
-            				groom.getTileTypes()[x][realY] = TileEnum.BUSH;
+                    		nextSeededInt = random.nextSeededInt(20);
+            				if (nextSeededInt == 0) {
+                        		groom.getTileTypes()[x][realY] = TileEnum.VINES_BUSH;
+                    		} else {
+                        		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
+                    		}
             			} else {
             				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
             			}
@@ -323,7 +333,7 @@ public abstract class RoomGenerator {
 		case START_FLOOR_ROOM:
 			
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
-//			entityFactory.orbFactory.createEnergyOrb(new Vector2(6, 10), room);
+//			entityFactory.orbFactory.createVegetalOrb(new Vector2(6, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
@@ -340,7 +350,7 @@ public abstract class RoomGenerator {
 			
 //						entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(14, 5));
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));
-//			entityFactory.creepFactory.createPoison(room, new Vector2(12, 8), null);
+//			entityFactory.creepFactory.createVinesBush(room, new Vector2(12, 8));
 
 //			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
@@ -365,7 +375,7 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(2,room, new Vector2(8, 8));
 			entityFactory.itemFactory.createItemTutorialPage(3,room, new Vector2(8, 7));
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
-			entityFactory.itemFactory.createItemTutorialPage(5,room, new Vector2(11, 10));
+			entityFactory.itemFactory.createItemTutorialPage(5,room, new Vector2(8, 5));
 
 //			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
 //			entityFactory.lootableFactory.createOrbBag(room, new Vector2(13, 9));

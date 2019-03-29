@@ -3,9 +3,10 @@
  */
 package com.dokkaebistudio.tacticaljourney.alterations;
 
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingCelerity;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingStrength;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingAccuracy;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingCelerity;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingStrength;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingVigor;
 
 /**
  * A blessing, which is a positive alteration.
@@ -17,7 +18,8 @@ public abstract class Blessing extends Alteration {
 	public enum BlessingsEnum {
 		VIGOR,
 		STRENGTH,
-		CELERITY;
+		CELERITY,
+		ACCURACY;
 	}
 	
 	
@@ -39,7 +41,9 @@ public abstract class Blessing extends Alteration {
 		case CELERITY:
 			result = new BlessingCelerity();
 			break;
-			
+		case ACCURACY:
+			result = new BlessingAccuracy();
+			break;
 			
 			default:
 		}

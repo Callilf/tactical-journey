@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.alterationItems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingVigor;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingVigor;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;

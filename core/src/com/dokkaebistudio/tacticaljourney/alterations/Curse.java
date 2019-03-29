@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseFrailty;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseSlowness;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseTremors;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseWeakness;
 
 /**
@@ -17,7 +18,8 @@ public abstract class Curse extends Alteration {
 	public enum CursesEnum {
 		FRAILTY,
 		WEAKNESS,
-		SLOWNESS;
+		SLOWNESS,
+		TREMORS;
 	}
 	
 	/**
@@ -38,7 +40,9 @@ public abstract class Curse extends Alteration {
 		case SLOWNESS:
 			result = new CurseSlowness();
 			break;
-			
+		case TREMORS:
+			result = new CurseTremors();
+			break;
 			
 			default:
 		}

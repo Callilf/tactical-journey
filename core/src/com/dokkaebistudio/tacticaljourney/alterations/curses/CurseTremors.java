@@ -1,58 +1,58 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.blessings;
+package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of the goat.
+ * Curse of tremors, reduce accuracy.
  * @author Callil
  *
  */
-public class BlessingOfTheGoat extends Blessing {
+public class CurseTremors extends Curse {
 	
 	@Override
 	public String title() {
-		return "Blessing of the goat";
+		return "Curse of tremors";
 	}
 	
 	@Override
 	public String description() {
-		return "Increase melee and bow accuracy by 3";
+		return "Reduce melee and range accuracy by 1";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
-		return Assets.blessing_goat;
+		return Assets.curse_tremors;
 	}
 
 	@Override
 	public void onReceive(Entity entity) {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		if (attackCompo != null) {
-			attackCompo.increaseAccuracy(3);
+			attackCompo.increaseAccuracy(-1);
 		}
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 		if (playerComponent != null && playerComponent.getSkillMelee() != null) {
 			AttackComponent meleeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillMelee());
 			if (meleeAttackCompo != null) {
-				meleeAttackCompo.increaseAccuracy(3);
+				meleeAttackCompo.increaseAccuracy(-1);
 			}
 		}
 		if (playerComponent != null && playerComponent.getSkillRange() != null) {
 			AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillRange());
 			if (rangeAttackCompo != null) {
-				rangeAttackCompo.increaseAccuracy(3);
+				rangeAttackCompo.increaseAccuracy(-1);
 			}
-		}
+		}	
 	}
 	
 
@@ -60,23 +60,22 @@ public class BlessingOfTheGoat extends Blessing {
 	public void onRemove(Entity entity) {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		if (attackCompo != null) {
-			attackCompo.increaseAccuracy(-3);
+			attackCompo.increaseAccuracy(1);
 		}
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 		if (playerComponent != null && playerComponent.getSkillMelee() != null) {
 			AttackComponent meleeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillMelee());
 			if (meleeAttackCompo != null) {
-				meleeAttackCompo.increaseAccuracy(-3);
+				meleeAttackCompo.increaseAccuracy(1);
 			}
 		}
 		if (playerComponent != null && playerComponent.getSkillRange() != null) {
 			AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillRange());
 			if (rangeAttackCompo != null) {
-				rangeAttackCompo.increaseAccuracy(-3);
+				rangeAttackCompo.increaseAccuracy(1);
 			}
 		}
-
 	}
 
 }

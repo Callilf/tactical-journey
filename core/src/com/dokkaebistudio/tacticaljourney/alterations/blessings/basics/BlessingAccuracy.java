@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.blessings;
+package com.dokkaebistudio.tacticaljourney.alterations.blessings.basics;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -12,45 +12,45 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of the goat.
+ * Blessing of accuracy, increase accuracy.
  * @author Callil
  *
  */
-public class BlessingOfTheGoat extends Blessing {
+public class BlessingAccuracy extends Blessing {
 	
 	@Override
 	public String title() {
-		return "Blessing of the goat";
+		return "Blessing of accuracy";
 	}
 	
 	@Override
 	public String description() {
-		return "Increase melee and bow accuracy by 3";
+		return "Increase melee and range accuracy by 1";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
-		return Assets.blessing_goat;
+		return Assets.blessing_accuracy;
 	}
 
 	@Override
 	public void onReceive(Entity entity) {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		if (attackCompo != null) {
-			attackCompo.increaseAccuracy(3);
+			attackCompo.increaseAccuracy(1);
 		}
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 		if (playerComponent != null && playerComponent.getSkillMelee() != null) {
 			AttackComponent meleeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillMelee());
 			if (meleeAttackCompo != null) {
-				meleeAttackCompo.increaseAccuracy(3);
+				meleeAttackCompo.increaseAccuracy(1);
 			}
 		}
 		if (playerComponent != null && playerComponent.getSkillRange() != null) {
 			AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillRange());
 			if (rangeAttackCompo != null) {
-				rangeAttackCompo.increaseAccuracy(3);
+				rangeAttackCompo.increaseAccuracy(1);
 			}
 		}
 	}
@@ -60,20 +60,20 @@ public class BlessingOfTheGoat extends Blessing {
 	public void onRemove(Entity entity) {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		if (attackCompo != null) {
-			attackCompo.increaseAccuracy(-3);
+			attackCompo.increaseAccuracy(-1);
 		}
 		
 		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
 		if (playerComponent != null && playerComponent.getSkillMelee() != null) {
 			AttackComponent meleeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillMelee());
 			if (meleeAttackCompo != null) {
-				meleeAttackCompo.increaseAccuracy(-3);
+				meleeAttackCompo.increaseAccuracy(-1);
 			}
 		}
 		if (playerComponent != null && playerComponent.getSkillRange() != null) {
 			AttackComponent rangeAttackCompo = Mappers.attackComponent.get(playerComponent.getSkillRange());
 			if (rangeAttackCompo != null) {
-				rangeAttackCompo.increaseAccuracy(-3);
+				rangeAttackCompo.increaseAccuracy(-1);
 			}
 		}
 

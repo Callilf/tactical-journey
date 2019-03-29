@@ -349,6 +349,7 @@ public class Assets {
 	public static RegionDescriptor blessing_vigor;
 	public static RegionDescriptor blessing_strength;
 	public static RegionDescriptor blessing_celerity;
+	public static RegionDescriptor blessing_accuracy;
 	public static RegionDescriptor blessing_of_kalamazoo;
 	public static RegionDescriptor blessing_of_vilma;
 	public static RegionDescriptor blessing_mithridatism;
@@ -365,6 +366,7 @@ public class Assets {
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
+	public static RegionDescriptor curse_tremors;
 	public static RegionDescriptor curse_black_mamba;
 	public static RegionDescriptor curse_acceptance;
 	public static RegionDescriptor curse_pangolin_mother;
@@ -677,6 +679,7 @@ public class Assets {
 		blessing_vigor = Assets.getTexture("blessing-vigor");
 		blessing_strength = Assets.getTexture("blessing-strength");
 		blessing_celerity = Assets.getTexture("blessing-celerity");
+		blessing_accuracy = Assets.getTexture("blessing-accuracy");
 		blessing_of_kalamazoo = Assets.getTexture("blessing-kalamazoo");
 		blessing_of_vilma = Assets.getTexture("blessing-vilma");
 		blessing_mithridatism = Assets.getTexture("blessing-mithridatism");
@@ -693,6 +696,7 @@ public class Assets {
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
+		curse_tremors = Assets.getTexture("curse-tremors");
 		curse_black_mamba = Assets.getTexture("curse-black-mamba");
 		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");

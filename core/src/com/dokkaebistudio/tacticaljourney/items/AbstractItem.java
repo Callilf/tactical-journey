@@ -94,7 +94,16 @@ public abstract class AbstractItem {
 	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax, 
 			boolean noRandom) {
 		this(label, texture, instaPickUp, goIntoInventory);
-		this.quantity = 1;
+		if (noRandom) {
+			this.quantity = 1;
+		} else {
+			RandomSingleton random = RandomSingleton.getInstance();
+			int value = valMin;
+			if (valMax > valMin) {
+				value += random.nextSeededInt(valMax - valMin + 1);
+			}
+			this.quantity = value;
+		}
 	}
 	
 	

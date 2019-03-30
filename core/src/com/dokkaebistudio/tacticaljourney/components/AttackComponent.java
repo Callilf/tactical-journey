@@ -120,7 +120,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	 * If so, the parent attack compo gives the basic strength, and this attack compo's strength
 	 * is a differential which is added to the base strength (positive or negative).
 	 */
-	private AttackComponent parentAttackCompo;
+	private Entity parentEntity;
 	
 	
 	@Override
@@ -304,8 +304,11 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 	public int getStrength() {
 		int result = strength;
-		if (isStrengthDifferential && parentAttackCompo != null) {
-			result += parentAttackCompo.getStrength();
+		if (isStrengthDifferential && parentEntity != null) {
+			AttackComponent parentAttackCompo = Mappers.attackComponent.get(parentEntity);
+			if (parentAttackCompo != null) {
+				result += parentAttackCompo.getStrength();
+			}
 		}
 		result += additionnalStrength;
 		return result;
@@ -356,13 +359,13 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	}
 
 
-	public AttackComponent getParentAttackCompo() {
-		return parentAttackCompo;
+	public Entity getParentEntity() {
+		return parentEntity;
 	}
 
 
-	public void setParentAttackCompo(AttackComponent parentAttackCompo) {
-		this.parentAttackCompo = parentAttackCompo;
+	public void setParentEntity(Entity parentEntity) {
+		this.parentEntity = parentEntity;
 	}
 
 	public Tile getTargetedTile() {
@@ -470,7 +473,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.strength);
 				output.writeInt(object.additionnalStrength);
 				output.writeBoolean(object.isStrengthDifferential);
-
+				kryo.writeClassAndObject(output, object.parentEntity);
 				
 				// Accuracy
 				output.writeInt(object.accuracy);
@@ -509,7 +512,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				compo.strength = input.readInt();
 				compo.additionnalStrength = input.readInt();
 				compo.isStrengthDifferential = input.readBoolean();
-
+				compo.parentEntity = (Entity) kryo.readClassAndObject(input);
+				
 				compo.accuracy = input.readInt();
 				compo.realAccuracy = input.readInt();
 

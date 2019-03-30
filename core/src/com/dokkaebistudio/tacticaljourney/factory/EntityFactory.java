@@ -738,9 +738,6 @@ public final class EntityFactory {
 		skillMoveComponent.setMoveRemaining(0);
 		skillEntity.add(skillMoveComponent);
 		
-		AttackComponent parentAttackCompo = Mappers.attackComponent.get(parent);
-		
-		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
 		attackComponent.setAttackType(type.getAttackType());
@@ -750,7 +747,7 @@ public final class EntityFactory {
 		attackComponent.setAmmoType(type.getAmmosType());
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
-		attackComponent.setParentAttackCompo(parentAttackCompo);
+		attackComponent.setParentEntity(parent);
 		skillEntity.add(attackComponent);
 		
 		if (type == SkillEnum.BOMB) {

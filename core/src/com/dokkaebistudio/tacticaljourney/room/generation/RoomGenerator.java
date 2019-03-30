@@ -411,9 +411,6 @@ public abstract class RoomGenerator {
 			pos = spawnPositions.get(1);
 			entityFactory.playerFactory.createSoulbender(	pos, room);
 			
-			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(2));
-
-			
 			default:
 			break;
 		}

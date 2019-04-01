@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -24,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.orbs.OrbPoison;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbVegetal;
 import com.dokkaebistudio.tacticaljourney.orbs.OrbVoid;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 
 /**
  * Factory used to create orbs.

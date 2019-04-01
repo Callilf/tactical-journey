@@ -1,9 +1,10 @@
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.singletons;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.IntMap;
+import com.dokkaebistudio.tacticaljourney.Assets;
 
 public class AnimationSingleton {
 

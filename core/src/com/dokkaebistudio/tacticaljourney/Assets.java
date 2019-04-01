@@ -38,6 +38,7 @@ public class Assets {
 	public static HashMap<String, RegionDescriptor> allSprites;
 
 	public static RegionDescriptor menuBackground;
+	public static RegionDescriptor mainTitle;
 	
 	public static Array<Sprite> player_standing;
 	public static Array<Sprite> player_running;
@@ -377,6 +378,7 @@ public class Assets {
 
 	public static FontDescriptor font;	
 	public static FontDescriptor smallFont;
+	public static RegionDescriptor textfield_cursor;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -385,6 +387,7 @@ public class Assets {
 	public void initTextures() {
 		allSprites = new HashMap<>();
 		menuBackground = Assets.getTexture("background-test-menu");
+		mainTitle = Assets.getTexture("main_title");
 
 		player_standing = Assets.getAnimation("player_stand");
 		player_running = Assets.getAnimation("player_run");
@@ -706,6 +709,10 @@ public class Assets {
 		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 
+		
+		
+		
+		textfield_cursor = Assets.getTexture("textfield_cursor");
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

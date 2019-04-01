@@ -60,6 +60,9 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
@@ -105,7 +108,7 @@ public class GameScreen extends ScreenAdapter {
 	public static final boolean debugMode = true;
 	
 
-	TacticalJourney game;
+	public TacticalJourney game;
 
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
@@ -145,7 +148,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	public Entity player;
 
-	public GameScreen (TacticalJourney game, boolean newGame) {
+	public GameScreen (TacticalJourney game, boolean newGame, String playerName) {
 		this.game = game;
 		
 		Gdx.input.setCatchBackKey(true);
@@ -201,7 +204,7 @@ public class GameScreen extends ScreenAdapter {
 			floors.add(floor4);
 	
 			
-			player = entityFactory.playerFactory.createPlayer(new Vector2(11, 11), 5, floor1.getActiveRoom());
+			player = entityFactory.playerFactory.createPlayer(playerName, new Vector2(11, 11), 5, floor1.getActiveRoom());
 		} else {
 			Persister persister = new Persister(this);
 			persister.loadGameState();

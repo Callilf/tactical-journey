@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 
 public class PopinService {
@@ -24,6 +26,8 @@ public class PopinService {
     private TextButtonStyle bigButtonStyle;
     private TextButtonStyle smallButtonStyle;
     private TextButtonStyle smallButtonCheckedStyle;
+    
+    private TextFieldStyle textFieldStyle;
 	
     
     private PopinService() {
@@ -61,6 +65,14 @@ public class PopinService {
 		
 		smallButtonCheckedStyle = new TextButtonStyle(sbtnUp, sbtnDown, sbtnDown, Assets.font.getFont());
 		smallButtonCheckedStyle.disabled = sbtnDisabled;	
+		
+		
+		textFieldStyle = new TextFieldStyle();
+		textFieldStyle.background = new NinePatchDrawable(Assets.popinNinePatch);
+		textFieldStyle.font = Assets.font.getFont();
+		textFieldStyle.fontColor = Color.WHITE;
+		textFieldStyle.cursor = new TextureRegionDrawable(Assets.textfield_cursor.getRegion());
+		textFieldStyle.cursor.setMinWidth(1f);
     }
     
     
@@ -100,6 +112,11 @@ public class PopinService {
     	if (instance == null) instance = new PopinService();
     	return instance.smallButtonCheckedStyle;
     }
+    
+    public static TextFieldStyle textFieldStyle() {
+    	if (instance == null) instance = new PopinService();
+		return instance.textFieldStyle;
+	}
     
     public static void dispose() {
     	instance = null;

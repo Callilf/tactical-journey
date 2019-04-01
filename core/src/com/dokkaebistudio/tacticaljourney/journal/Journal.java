@@ -3,8 +3,8 @@ package com.dokkaebistudio.tacticaljourney.journal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.rendering.JournalRenderer;
+import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 
 public class Journal {
 	

@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -35,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
+import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -206,6 +206,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		ItemEnum[] values = ItemEnum.values();
 		for (ItemEnum v : values) {
 			Entity item = room.entityFactory.itemFactory.createItem(v, true);
+			if (item == null) continue;
 			Table oneItem = createOneLootItem(item);
 			lootableItemsTable.add(oneItem).pad(0, 0, 10, 0).maxWidth(630);
 			lootableItemsTable.row();

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.singletons;
 
 /**
  * The Game time and turn singleton used for the whole game.

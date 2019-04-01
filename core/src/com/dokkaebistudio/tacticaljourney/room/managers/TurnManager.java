@@ -3,9 +3,9 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
-import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 
 /**
  * Manages the turns of a room.

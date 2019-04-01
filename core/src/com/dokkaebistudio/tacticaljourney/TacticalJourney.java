@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.dokkaebistudio.tacticaljourney.mainmenu.LoadingScreen;
 
 public class TacticalJourney extends Game {
 	// used by all screens

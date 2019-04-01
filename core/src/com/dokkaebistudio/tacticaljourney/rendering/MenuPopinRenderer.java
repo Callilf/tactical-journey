@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -137,8 +138,8 @@ public class MenuPopinRenderer implements Renderer {
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					//TODO go back to the main menu
 					closePopin();
+					gamescreen.game.setScreen(new MainMenuScreen(gamescreen.game));
 				}
 			});
 			buttonTable.add(mainMenuBtn).minWidth(200).padBottom(20);

@@ -14,26 +14,27 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.Settings;
+import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
@@ -71,20 +72,10 @@ public class MainMenuScreen extends ScreenAdapter {
 				
 		Table mainTable = new Table();
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
-		TextFieldStyle tfs = new TextFieldStyle(Assets.font.getFont(), Color.WHITE, null, null, ninePatchDrawable);
-		seedField = new TextField("Enter seed", tfs);
-		seedField.addListener(new FocusListener() {
-			@Override
-			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-				enteredSeed = true;
-				seedField.setText("");
-			}
-		});
-		
-		mainTable.add(seedField).width(500).padBottom(300);
+		Image mainTitle = new Image(Assets.mainTitle.getRegion());
+		mainTable.add(mainTitle).padBottom(150);
 		mainTable.row();
-		
+
 		
 		Table buttonTable = new Table();
 		
@@ -93,19 +84,10 @@ public class MainMenuScreen extends ScreenAdapter {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				
-				//Instantiate the RNG
-				if (enteredSeed) {
-					RandomSingleton.createInstance(seedField.getText());
-				} else {
-					RandomSingleton.createInstance();
-				}
-				
-				// Launch the game
-				game.setScreen(new GameScreen(game, true));
+				game.setScreen(new NewGameScreen(game));
 			}
 		});
-		buttonTable.add(start).width(500).height(200).padBottom(350).padRight(50);
+		buttonTable.add(start).width(500).height(200).padBottom(5).padRight(50);
 		
 		
 		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
@@ -122,10 +104,10 @@ public class MainMenuScreen extends ScreenAdapter {
 				}
 				
 				// Launch the game
-				game.setScreen(new GameScreen(game, false));
+				game.setScreen(new GameScreen(game, false, null));
 			}
 		});
-		buttonTable.add(loadBtn).width(500).height(200).padBottom(350).padLeft(50);
+		buttonTable.add(loadBtn).width(500).height(200).padBottom(5).padLeft(50);
 		loadBtn.setDisabled(!hasSave);
 		mainTable.add(buttonTable);
 		mainTable.row();
@@ -142,7 +124,7 @@ public class MainMenuScreen extends ScreenAdapter {
 				removeSaveBtn.setDisabled(true);
 			}
 		});
-		mainTable.add(removeSaveBtn).padBottom(50);
+		mainTable.add(removeSaveBtn).right().padBottom(400);
 		removeSaveBtn.setDisabled(!hasSave);
 		
 		mainTable.pack();

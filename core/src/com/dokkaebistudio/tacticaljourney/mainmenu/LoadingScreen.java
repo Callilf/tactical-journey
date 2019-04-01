@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -22,6 +22,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Settings;
+import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 
 public class LoadingScreen extends ScreenAdapter {
 	TacticalJourney game;

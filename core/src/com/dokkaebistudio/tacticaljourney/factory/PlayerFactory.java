@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
@@ -41,6 +40,7 @@ import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
@@ -74,12 +74,12 @@ public final class PlayerFactory {
 	 * @param moveSpeed the speed
 	 * @return the player entity
 	 */
-	public Entity createPlayer(Vector2 pos, int moveSpeed, Room room) {
+	public Entity createPlayer(String name, Vector2 pos, int moveSpeed, Room room) {
 		Entity playerEntity = engine.createEntity();
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle("The Adventurer");
+		inspect.setTitle(name != null ? name : "The adventurer");
 		inspect.setDescription("You, apparently.");
 		playerEntity.add(inspect);
 		

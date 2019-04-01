@@ -14,11 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -29,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -59,6 +59,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     /** The main table of the popin. */
     private Table profileTable;
     private Label profileTitle;
+    private Label nameLbl;
     private Label maxHpLbl;
     private Label maxArmorLbl;
     private Label strengthLbl;
@@ -173,11 +174,13 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     // PROFILE
 
 	private void refreshProfileTable() {
+		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(player);
 		MoveComponent moveComponent = Mappers.moveComponent.get(player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(player);
 		HealthComponent healthComponent = Mappers.healthComponent.get(player);
 
 		profileTitle.setText("Profile");
+		nameLbl.setText("Name: " + inspectableComponent.getTitle());
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
 		moveLbl.setText("Move: " + moveComponent.getMoveSpeed());
@@ -221,6 +224,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.add(profileTitle).expandX().pad(20, 0, 20, 0);
 		profileTable.row();
 		
+		nameLbl = new Label("Name", PopinService.hudStyle());
+		profileTable.add(nameLbl).expandX().left().pad(0, 20, 20, 20);
+		profileTable.row();
+
 		maxHpLbl = new Label("Max hp", PopinService.hudStyle());
 		profileTable.add(maxHpLbl).expandX().left().pad(0, 20, 0, 20);
 		profileTable.row();

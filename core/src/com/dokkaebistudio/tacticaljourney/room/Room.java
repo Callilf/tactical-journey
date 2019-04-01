@@ -31,7 +31,6 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -46,6 +45,7 @@ import com.dokkaebistudio.tacticaljourney.room.managers.AttackManager;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
+import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

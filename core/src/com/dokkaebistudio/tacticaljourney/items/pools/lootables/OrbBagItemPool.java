@@ -13,7 +13,8 @@ public class OrbBagItemPool extends LootableItemPool {
 	}
 	
 	private static final List<PooledItemDescriptor> itemPool = new ArrayList<>();
-	
+	private static int initialSumOfChances = -1;
+
 	static {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 25, false));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 25, false));
@@ -30,6 +31,17 @@ public class OrbBagItemPool extends LootableItemPool {
 		return itemPool;
 	}
 
+	
+	@Override
+	public int getInitialSumOfChances() {
+		if (initialSumOfChances == -1) {
+			initialSumOfChances = 0;
+			for (PooledItemDescriptor pid : getItemPool()) {
+				initialSumOfChances += pid.getChanceToDrop();
+			}
+		}
+		return initialSumOfChances;
+	}
 	
 	@Override
 	public int getSumOfChances() {

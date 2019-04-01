@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.leveling.infusable;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -15,9 +16,11 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlterationReward {
 
 	private ItemEnum item;
+	private RandomXS128 random;
 	
-	public LevelUpAlterationRewardReceiveInfusable() {
+	public LevelUpAlterationRewardReceiveInfusable(RandomXS128 levelUpSeededRandom) {
 		super("Receive an infusable item", "Received #");
+		this.random = levelUpSeededRandom;
 	}
 	
 	
@@ -49,7 +52,7 @@ public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlte
 	@Override
 	public void computeValue() {
 		PersonalBelongingsItemPool itemPool = ItemPoolSingleton.getInstance().personalBelongings;
-		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, false);
+		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, false, this.random);
 		PooledItemDescriptor pooledItemDescriptor = itemTypes.get(0);
 		
 		item = pooledItemDescriptor.getType();

@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.leveling.ExperienceLevelEnum;
 import com.esotericsoftware.kryo.Kryo;
@@ -39,6 +41,11 @@ public class ExperienceComponent implements Component,Poolable {
 	/** The number of choices that can be selected. */
 	private int selectNumber;
 	
+	
+	/** The random used only for leveling up, so that no matter when the level up occurs,
+	 * it doesn't mess with the floor generation.  */
+	private RandomXS128 levelUpSeededRandom;
+	
 
 	@Override
 	public void reset() {
@@ -51,6 +58,16 @@ public class ExperienceComponent implements Component,Poolable {
 		
 		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
+		
+		String seed = RandomSingleton.getInstance().getSeed();
+		String[] split = seed.split("-");
+		Long l = new Long(split[0]);
+		if (split.length > 1) {
+			Long l2 = new Long(split[1]);
+			this.levelUpSeededRandom = new RandomXS128(l, l2);
+		} else {
+			this.levelUpSeededRandom = new RandomXS128(l, 0);
+		}
 	}
 
 	
@@ -200,6 +217,16 @@ public class ExperienceComponent implements Component,Poolable {
 			}
 		
 		};
+	}
+
+
+	public RandomXS128 getLevelUpSeededRandom() {
+		return levelUpSeededRandom;
+	}
+
+
+	public void setLevelUpSeededRandom(RandomXS128 levelUpSeededRandom) {
+		this.levelUpSeededRandom = levelUpSeededRandom;
 	}
 
 }

@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -17,8 +18,8 @@ public class LevelUpItemRewardInventorySlot extends AbstractLevelUpItemReward {
 
 	
 	
-	public LevelUpItemRewardInventorySlot() {
-		super(1, 1, "Add 1 inventory slot", "Added 1 slot in inventory");
+	public LevelUpItemRewardInventorySlot(RandomXS128 levelUpRandom) {
+		super(1, 1, "Add 1 inventory slot", "Added 1 slot in inventory", levelUpRandom);
 		this.type = LevelUpRewardEnum.INVENTORY_SLOT;
 	}
 

@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.leveling.infusable.LevelUpAlterationRewardReceiveInfusable;
 import com.dokkaebistudio.tacticaljourney.leveling.items.LevelUpItemRewardArrowsMaxUp;
 import com.dokkaebistudio.tacticaljourney.leveling.items.LevelUpItemRewardArrowsReceive;
@@ -88,22 +87,21 @@ public abstract class AbstractLevelUpReward {
 	
 	
 	
-	public static List<AbstractLevelUpReward> getRewards(int level, int numberOfChoices) {
+	public static List<AbstractLevelUpReward> getRewards(int level, int numberOfChoices, RandomXS128 levelUpSeededRandom) {
 		List<AbstractLevelUpReward> rewards = new ArrayList<>();
 		
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		List<LevelUpRewardEnum> enums = LevelUpRewardEnum.getValuesForLevel(level);
-		Collections.shuffle(enums, unseededRandom);
+		Collections.shuffle(enums, levelUpSeededRandom);
 		
 		for (int i=0 ; i<numberOfChoices ; i++) {
 			LevelUpRewardEnum type = null;
 			if (enums.size() > i) {
 				type = enums.get(i);
 			} else {
-				type = enums.get(unseededRandom.nextInt(enums.size()));
+				type = enums.get(levelUpSeededRandom.nextInt(enums.size()));
 			}
 
-			rewards.add(AbstractLevelUpReward.create(type));
+			rewards.add(AbstractLevelUpReward.create(type, levelUpSeededRandom));
 		}
 		
 		return rewards;
@@ -112,54 +110,54 @@ public abstract class AbstractLevelUpReward {
 	//********************
 	// Factory
 	
-	public static AbstractLevelUpReward create(LevelUpRewardEnum type) {
+	public static AbstractLevelUpReward create(LevelUpRewardEnum type, RandomXS128 levelUpSeededRandom) {
 		AbstractLevelUpReward reward = null;
 		
 		switch(type) {
 		case HEALTH_UP:
-			reward = new LevelUpStatsUpRewardHealthUp();
+			reward = new LevelUpStatsUpRewardHealthUp(levelUpSeededRandom);
 			break;
 		case STRENGTH_UP:
-			reward = new LevelUpStatsUpRewardStrengthUp();
+			reward = new LevelUpStatsUpRewardStrengthUp(levelUpSeededRandom);
 			break;
 		case MOVEMENT_UP:
-			reward = new LevelUpStatsUpRewardMoveUp();
+			reward = new LevelUpStatsUpRewardMoveUp(levelUpSeededRandom);
 			break;
 		case ARROW_RANGE_UP:
-			reward = new LevelUpStatsUpRewardArrowRangeUp();
+			reward = new LevelUpStatsUpRewardArrowRangeUp(levelUpSeededRandom);
 			break;
 		case BOMB_THROW_RANGE_UP:
-			reward = new LevelUpStatsUpRewardBombThrowRangeUp();
+			reward = new LevelUpStatsUpRewardBombThrowRangeUp(levelUpSeededRandom);
 			break;
 		case ITEM_THROW_RANGE_UP:
-			reward = new LevelUpStatsUpRewardItemThrowRangeUp();
+			reward = new LevelUpStatsUpRewardItemThrowRangeUp(levelUpSeededRandom);
 			break;
 			
 			
 			
 			
 		case ARROWS_MAX_UP:
-			reward = new LevelUpItemRewardArrowsMaxUp();
+			reward = new LevelUpItemRewardArrowsMaxUp(levelUpSeededRandom);
 			break;
 		case ARROW_RECEIVE:
-			reward = new LevelUpItemRewardArrowsReceive();
+			reward = new LevelUpItemRewardArrowsReceive(levelUpSeededRandom);
 			break;
 		case BOMBS_MAX_UP:
-			reward = new LevelUpItemRewardBombsMaxUp();
+			reward = new LevelUpItemRewardBombsMaxUp(levelUpSeededRandom);
 			break;
 		case BOMBS_RECEIVE:
-			reward = new LevelUpItemRewardBombsReceive();
+			reward = new LevelUpItemRewardBombsReceive(levelUpSeededRandom);
 			break;
 		case BOMBS_AND_ARROWS_MAX_UP:
-			reward = new LevelUpItemRewardBombsAndArrowsMaxUp();
+			reward = new LevelUpItemRewardBombsAndArrowsMaxUp(levelUpSeededRandom);
 			break;
 		case INVENTORY_SLOT:
-			reward = new LevelUpItemRewardInventorySlot();
+			reward = new LevelUpItemRewardInventorySlot(levelUpSeededRandom);
 			break;
 			
 			
 		case RECEIVE_INFUSABLE:
-			reward = new LevelUpAlterationRewardReceiveInfusable();
+			reward = new LevelUpAlterationRewardReceiveInfusable(levelUpSeededRandom);
 			break;
 //		case CURE_CURSE:
 //			reward = new LevelUpAlterationRewardReceiveInfusable();

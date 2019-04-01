@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.statsUp;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
@@ -18,8 +19,8 @@ public class LevelUpStatsUpRewardArrowRangeUp extends AbstractLevelUpStatsUpRewa
 
 	
 	
-	public LevelUpStatsUpRewardArrowRangeUp() {
-		super(1, 1, "Increase max range of bow by 1", "Bow's range increased by #");
+	public LevelUpStatsUpRewardArrowRangeUp(RandomXS128 levelUpRandom) {
+		super(1, 1, "Increase max range of bow by 1", "Bow's range increased by #", levelUpRandom);
 		this.type = LevelUpRewardEnum.ARROW_RANGE_UP;
 	}
 

@@ -6,9 +6,11 @@ package com.dokkaebistudio.tacticaljourney.room.generation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -31,7 +33,7 @@ public abstract class FloorGenerator {
 	private RoomGenerator roomGenerator;
 	
 	protected Map<Room, Vector2> positionsPerRoom = new HashMap<>();
-	protected Map<Vector2, Room> roomsPerPosition = new HashMap<>();
+	protected Map<Vector2, Room> roomsPerPosition = new LinkedHashMap<>();
 
 	
 	public enum GenerationMoveEnum {
@@ -120,7 +122,10 @@ public abstract class FloorGenerator {
 		
 		// 5 - Place mandatory rooms
 		List<Room> values = new ArrayList<>(roomsPerPosition.values());
-		Collections.shuffle(values, random.getSeededRandomForShuffle());
+		
+		RandomXS128 seededRandomForShuffle = random.getSeededRandomForShuffle();
+		System.out.println("shuffle : " + seededRandomForShuffle.getState(0) + "-" + seededRandomForShuffle.getState(1));
+		Collections.shuffle(values, seededRandomForShuffle);
 		for (Room r : values) {
 			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
 				r.type = RoomType.KEY_ROOM;

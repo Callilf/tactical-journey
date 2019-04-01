@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.statsUp;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -17,8 +18,8 @@ public class LevelUpStatsUpRewardHealthUp extends AbstractLevelUpStatsUpReward {
 
 	
 	
-	public LevelUpStatsUpRewardHealthUp() {
-		super(10, 15, "Increase max health by 10 to 15 hp", "Max health increased by # hp");
+	public LevelUpStatsUpRewardHealthUp(RandomXS128 levelUpRandom) {
+		super(10, 15, "Increase max health by 10 to 15 hp", "Max health increased by # hp", levelUpRandom);
 		this.type = LevelUpRewardEnum.HEALTH_UP;
 	}
 

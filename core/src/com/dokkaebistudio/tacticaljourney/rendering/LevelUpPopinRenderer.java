@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -118,10 +117,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	private void createChoices(final Entity player, int choicesNumber, Table table) {
 		this.selectedRewards = 0;
 		
-		List<AbstractLevelUpReward> list = AbstractLevelUpReward.getRewards(expCompo.getLevelForPopin(), choicesNumber);
-		if (list.size() == 0) return;
+		ExperienceComponent experienceComponent = Mappers.experienceComponent.get(player);
+		RandomXS128 levelUpSeededRandom = experienceComponent.getLevelUpSeededRandom();
 		
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
+		List<AbstractLevelUpReward> list = AbstractLevelUpReward.getRewards(
+				expCompo.getLevelForPopin(), choicesNumber, levelUpSeededRandom);
+		if (list.size() == 0) return;
 
 		rewards.clear();
 		claimButtons.clear();
@@ -130,7 +131,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 		
 		for (int i=1; i<=choicesNumber ; i++) {
 			if (!list.isEmpty()) {
-				int nextInt = unseededRandom.nextInt(list.size());
+				int nextInt = levelUpSeededRandom.nextInt(list.size());
 				AbstractLevelUpReward reward = list.get(nextInt);
 				list.remove(nextInt);
 				rewards.add(reward);

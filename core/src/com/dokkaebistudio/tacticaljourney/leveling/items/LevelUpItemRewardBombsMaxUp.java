@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -17,8 +18,8 @@ public class LevelUpItemRewardBombsMaxUp extends AbstractLevelUpItemReward {
 
 	
 	
-	public LevelUpItemRewardBombsMaxUp() {
-		super(1, 2, "Increase max bomb amount by 1 to 2", "Max amount of bombs increased by #");
+	public LevelUpItemRewardBombsMaxUp(RandomXS128 levelUpRandom) {
+		super(1, 2, "Increase max bomb amount by 1 to 2", "Max amount of bombs increased by #", levelUpRandom);
 		this.type = LevelUpRewardEnum.BOMBS_MAX_UP;
 	}
 

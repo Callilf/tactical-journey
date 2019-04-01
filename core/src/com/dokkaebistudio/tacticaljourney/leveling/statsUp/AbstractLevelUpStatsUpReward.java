@@ -1,7 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.leveling.statsUp;
 
-import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 
 public abstract class AbstractLevelUpStatsUpReward extends AbstractLevelUpReward {
@@ -12,12 +11,15 @@ public abstract class AbstractLevelUpStatsUpReward extends AbstractLevelUpReward
 	private Integer valueMin;
 	private Integer valueMax;
 	
+	private RandomXS128 random;
+	
 	// Constructors
 	
-	public AbstractLevelUpStatsUpReward(Integer valueMin, Integer valueMax, String desc, String finalDesc) {
+	public AbstractLevelUpStatsUpReward(Integer valueMin, Integer valueMax, String desc, String finalDesc, RandomXS128 levelUpRandom) {
 		super(desc, finalDesc);
 		this.setValueMin(valueMin);
 		this.setValueMax(valueMax);
+		this.random = levelUpRandom;
 	}
 	
 	
@@ -32,7 +34,7 @@ public abstract class AbstractLevelUpStatsUpReward extends AbstractLevelUpReward
 			if (getValueMin() == getValueMax()) {
 				this.setValue( getValueMax());
 			} else {
-				this.setValue(getValueMin() + RandomSingleton.getInstance().getUnseededRandom().nextInt(getValueMax() - getValueMin() + 1));
+				this.setValue(getValueMin() + random.nextInt(getValueMax() - getValueMin() + 1));
 			}
 		}
 	};

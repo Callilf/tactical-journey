@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
@@ -14,14 +15,12 @@ public abstract class LootableItemPool extends ItemPool {
 	
 	private static final List<PooledItemDescriptor> removedItems = new ArrayList<>();
 
-
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
 	public abstract List<PooledItemDescriptor> getItemPool();
 	public abstract int getSumOfChances();
-	
-	
+	public abstract int getInitialSumOfChances();
 	
 	/**
 	 * Randomly retrieve x item types. There can be duplicates.
@@ -38,10 +37,19 @@ public abstract class LootableItemPool extends ItemPool {
 	 * @return the list of item types randomly chosen
 	 */
 	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet, boolean allowRemoval) {
+		return getItemTypes(numberOfItemsToGet, allowRemoval, null);
+	}
+	
+	
+	
+	/**
+	 * Randomly retrieve x item types. There can be duplicates.
+	 * @param numberOfItemsToGet the number of items to retrieve
+	 * @return the list of item types randomly chosen
+	 */
+	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet, boolean allowRemoval, RandomXS128 randomToUse) {
 		List<PooledItemDescriptor> result = new ArrayList<>();
 		
-		
-		RandomSingleton random = RandomSingleton.getInstance();
 		int randomInt = 0;
 		
 		List<PooledItemDescriptor> itemsToRemoveFromAllPools = new ArrayList<>();
@@ -52,7 +60,8 @@ public abstract class LootableItemPool extends ItemPool {
 			int sumOfChances = getSumOfChances();
 			if (sumOfChances == 0) return result;
 
-			randomInt = random.nextSeededInt(sumOfChances + 1);
+			randomInt = getNextRandomInt(getInitialSumOfChances() + 1, randomToUse);
+			randomInt = randomInt % sumOfChances;
 			Iterator<PooledItemDescriptor> poolIterator = getItemPool().iterator();
 			while(poolIterator.hasNext()) {
 				PooledItemDescriptor pid = poolIterator.next();
@@ -84,6 +93,16 @@ public abstract class LootableItemPool extends ItemPool {
 		
 		return result;
 	}
+	
+	
+	private int getNextRandomInt(int max, RandomXS128 random) {
+		if (random != null) {
+			return random.nextInt(max);
+		} else {
+			return RandomSingleton.getInstance().nextSeededInt(max);
+		}
+	}
+	
 	
 	@Override
 	public void removeItemFromPool(ItemEnum itemType) {

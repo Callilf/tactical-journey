@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.statsUp;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -17,8 +18,8 @@ public class LevelUpStatsUpRewardMoveUp extends AbstractLevelUpStatsUpReward {
 
 	
 	
-	public LevelUpStatsUpRewardMoveUp() {
-		super(1, 1, "Increase movement by 1", "Movement increased by #");
+	public LevelUpStatsUpRewardMoveUp(RandomXS128 levelUpRandom) {
+		super(1, 1, "Increase movement by 1", "Movement increased by #", levelUpRandom);
 		this.type = LevelUpRewardEnum.MOVEMENT_UP;
 	}
 

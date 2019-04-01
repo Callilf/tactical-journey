@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.leveling.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.AmmoTypeEnum;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
@@ -18,8 +19,8 @@ public class LevelUpItemRewardBombsReceive extends AbstractLevelUpItemReward {
 
 	
 	
-	public LevelUpItemRewardBombsReceive() {
-		super(5, 10, "Restore 5 to 10 bombs.", "# bombs received");
+	public LevelUpItemRewardBombsReceive(RandomXS128 levelUpRandom) {
+		super(5, 10, "Restore 5 to 10 bombs.", "# bombs received", levelUpRandom);
 		this.type = LevelUpRewardEnum.BOMBS_RECEIVE;
 	}
 

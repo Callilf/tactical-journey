@@ -10,6 +10,10 @@ public enum ItemEnum {
 	AMMO_ARROW(Descriptions.ITEM_ARROWS_TITLE, 1),
 	AMMO_BOMB(Descriptions.ITEM_BOMBS_TITLE, 1),
 	
+	// End game
+	UNIVERSAL_CURE(Descriptions.ITEM_UNIVERSAL_CURE_TITLE, 1),
+
+	
 	// Potions
 	POTION_SMALL_HEALTH(Descriptions.ITEM_SMALL_HEALTH_POTION_TITLE, 1),
 	POTION_REGEN(Descriptions.ITEM_REGEN_POTION_TITLE, 1),

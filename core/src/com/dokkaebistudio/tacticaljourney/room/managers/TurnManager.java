@@ -3,6 +3,7 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
+import com.dokkaebistudio.tacticaljourney.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 
@@ -36,6 +37,7 @@ public class TurnManager {
 	public void startNewTurn() {
 		this.turn ++;
 		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
+		GameTimeSingleton.getInstance().nextTurn();
 	}
 	
 	

@@ -42,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemUniversalCure;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWebSack;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemWingPotion;
@@ -339,6 +340,14 @@ public final class ItemFactory {
 		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(noRandom),
 				Descriptions.ITEM_BOMBS_TITLE, Descriptions.ITEM_BOMBS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
+		return item;
+	}
+	
+	
+	public Entity createUniversalCure(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.universal_cure, new ItemUniversalCure(),
+				Descriptions.ITEM_UNIVERSAL_CURE_TITLE, Descriptions.ITEM_UNIVERSAL_CURE_DESCRIPTION);
+		item.flags = EntityFlagEnum.UNIVERSAL_CURE.getFlag();
 		return item;
 	}
 	

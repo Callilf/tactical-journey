@@ -149,6 +149,9 @@ public class Descriptions {
 	public static final String ITEM_BOMBS_DESCRIPTION = "Bombs can be thrown on the ground by using your bomb skill and explode after some turns. Be sure to stay away from the blast. "
 			+ "If there are too much bombs for your bag, the remaining bombs will stay on the ground.";
 
+	public static final String ITEM_UNIVERSAL_CURE_TITLE = "Universal cure";
+	public static final String ITEM_UNIVERSAL_CURE_DESCRIPTION = "The dream potion that can cure any kind of illness.";
+
 	public static final String ITEM_SMALL_HEALTH_POTION_TITLE = "Health potion";
 	public static final String ITEM_SMALL_HEALTH_POTION_DESCRIPTION = "Upon use, heal 25 HP and cure poison.\n"
 			+ "Remember that drinking this potion will take a turn, so don't stay too close from the enemy while doing it.";

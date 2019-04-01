@@ -4,8 +4,7 @@
 package com.dokkaebistudio.tacticaljourney;
 
 /**
- * The Random Number Generator used for the whole game.
- * Should be instanciated with a seed once the game starts, and then used throughout the entire game.
+ * The Game time and turn singleton used for the whole game.
  * @author Callil
  *
  */
@@ -15,6 +14,7 @@ public class GameTimeSingleton {
 	private static GameTimeSingleton instance;
 	
 	private float elapsedTime;
+	private int currentTurn= 1;
 	
 	/**
 	 * Returns the singleton instance.
@@ -35,6 +35,9 @@ public class GameTimeSingleton {
 		this.elapsedTime += delta;
 	}
 	
+	public void nextTurn() {
+		this.currentTurn ++;
+	}
 	
 	
 	
@@ -51,6 +54,14 @@ public class GameTimeSingleton {
 	
 	public static void dispose() {
 		instance = null;
+	}
+
+	public int getCurrentTurn() {
+		return currentTurn;
+	}
+
+	public void setCurrentTurn(int currentTurn) {
+		this.currentTurn = currentTurn;
 	}
 
 }

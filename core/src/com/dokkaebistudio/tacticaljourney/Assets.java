@@ -298,8 +298,9 @@ public class Assets {
 	//******
 	// Items
 	
-	public static RegionDescriptor tutorial_page_item;
+	public static RegionDescriptor universal_cure;
 
+	public static RegionDescriptor tutorial_page_item;
 	public static RegionDescriptor money_item;
 	public static RegionDescriptor health_up_item;
 	public static RegionDescriptor regen_potion_item;
@@ -636,6 +637,8 @@ public class Assets {
 
 		//******
 		// Items
+
+		universal_cure = Assets.getTexture("universal-cure");
 
 		tutorial_page_item = Assets.getTexture("item-tutorial-page");
 

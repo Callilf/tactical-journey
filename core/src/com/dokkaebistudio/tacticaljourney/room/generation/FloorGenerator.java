@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -122,10 +121,7 @@ public abstract class FloorGenerator {
 		
 		// 5 - Place mandatory rooms
 		List<Room> values = new ArrayList<>(roomsPerPosition.values());
-		
-		RandomXS128 seededRandomForShuffle = random.getSeededRandomForShuffle();
-		System.out.println("shuffle : " + seededRandomForShuffle.getState(0) + "-" + seededRandomForShuffle.getState(1));
-		Collections.shuffle(values, seededRandomForShuffle);
+		Collections.shuffle(values, random.getSeededRandomForShuffle());
 		for (Room r : values) {
 			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
 				r.type = RoomType.KEY_ROOM;

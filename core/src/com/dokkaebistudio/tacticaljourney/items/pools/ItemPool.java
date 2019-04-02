@@ -8,4 +8,7 @@ public abstract class ItemPool {
 
 	public abstract void removeItemFromPool(ItemEnum itemEnum);
 	
+	public abstract int getInitialSumOfChances();
+	public abstract void setInitialSumOfChances(int soc);
+	
 }

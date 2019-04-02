@@ -16,7 +16,8 @@ public class BasicShopItemPool extends ShopItemPool {
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
 	private static final List<PooledItemDescriptor> shopItemPool = new ArrayList<>();
-	
+	private static int initialSumOfChances = -1;
+
 	static {
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 2));
 		shopItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 4));
@@ -39,6 +40,23 @@ public class BasicShopItemPool extends ShopItemPool {
 		return shopItemPool;
 	}
 
+	
+	@Override
+	public int getInitialSumOfChances() {
+		if (initialSumOfChances == -1) {
+			initialSumOfChances = 0;
+			for (PooledItemDescriptor pid : getItemPool()) {
+				initialSumOfChances += pid.getChanceToDrop();
+			}
+		}
+		return initialSumOfChances;
+	}
+
+	@Override
+	public void setInitialSumOfChances(int soc) {
+		initialSumOfChances = soc;
+	}
+	
 	
 	@Override
 	public int getSumOfChances() {

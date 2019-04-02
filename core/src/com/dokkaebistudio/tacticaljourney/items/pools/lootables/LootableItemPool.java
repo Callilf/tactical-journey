@@ -20,7 +20,7 @@ public abstract class LootableItemPool extends ItemPool {
 	 */
 	public abstract List<PooledItemDescriptor> getItemPool();
 	public abstract int getSumOfChances();
-	public abstract int getInitialSumOfChances();
+
 	
 	/**
 	 * Randomly retrieve x item types. There can be duplicates.

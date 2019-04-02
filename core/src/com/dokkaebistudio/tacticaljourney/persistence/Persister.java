@@ -66,6 +66,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -150,6 +151,21 @@ public class Persister {
 
 			@Override
 			public void write(Kryo kryo, Output output, GameScreen gs) {
+				
+				// Save the current time
+				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
+				
+				// Save the random seed and the number of time nextInt has been called
+				String seed = RandomSingleton.getInstance().getSeed();
+				output.writeString(seed);
+				output.writeString(RandomSingleton.getInstance().getStateOfSeededRandom());
+				
+				// Save the Item Pools
+				for (ItemPool pool : ItemPoolSingleton.getInstance().getAllItemPools()) {
+					output.writeInt(pool.getInitialSumOfChances());
+				}
+				kryo.writeClassAndObject(output, ItemPoolSingleton.getInstance().getRemovedItems());
+
 				currentLevel = gs.activeFloor.getLevel();
 				
 				// Save the current floor
@@ -163,21 +179,27 @@ public class Persister {
 				
 				// Save the player
 				kryo.writeClassAndObject(output, gs.player);
-				
-				// Save the current time
-				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
-				
-				// Save the random seed and the number of time nextInt has been called
-				String seed = RandomSingleton.getInstance().getSeed();
-				output.writeString(seed);
-				output.writeString(RandomSingleton.getInstance().getStateOfSeededRandom());
-				
-				// Save the removed items from Item Pools
-				kryo.writeClassAndObject(output, ItemPoolSingleton.getInstance().getRemovedItems());
+
 			}
 
 			@Override
-			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {			
+			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {		
+				
+				// Restore the time
+				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
+				
+				// Init the random
+				RandomSingleton.createInstance(input.readString());
+				String seed = input.readString();
+				RandomSingleton.getInstance().restoreState(seed);
+								
+				// Restore the item pools
+				for (ItemPool pool : ItemPoolSingleton.getInstance().getAllItemPools()) {
+					pool.setInitialSumOfChances(input.readInt());
+				}
+				ItemPoolSingleton.getInstance().restoreRemoveditems((List<ItemEnum>) kryo.readClassAndObject(input));
+
+				
 				currentLevel = input.readInt();
 
 				// load floors
@@ -204,18 +226,7 @@ public class Persister {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gameScreen.player);
 				inventoryComponent.player = gameScreen.player;
 				
-				// Restore the time
-				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
-				
-				// Init the random
-				RandomSingleton.createInstance(input.readString());
-				String seed = input.readString();
-				RandomSingleton.getInstance().restoreState(seed);
-				
-				// Restore the item pools
-				ItemPoolSingleton.getInstance().restoreRemoveditems((List<ItemEnum>) kryo.readClassAndObject(input));
-				
-				
+
 				
 				// Restore the state of the active room
 				gameScreen.activeFloor.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);

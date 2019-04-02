@@ -50,6 +50,11 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 		}
 		return initialSumOfChances;
 	}
+
+	@Override
+	public void setInitialSumOfChances(int soc) {
+		initialSumOfChances = soc;
+	}
 	
 	@Override
 	public int getSumOfChances() {

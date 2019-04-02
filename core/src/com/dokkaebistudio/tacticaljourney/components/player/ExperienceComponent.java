@@ -201,6 +201,12 @@ public class ExperienceComponent implements Component,Poolable {
 				output.writeInt(object.nextLevelXp);
 				output.writeInt(object.choicesNumber);
 				output.writeInt(object.selectNumber);
+				
+				
+				// Save the state of the level up random
+				long seed0 = object.levelUpSeededRandom.getState(0);
+				long seed1 = object.levelUpSeededRandom.getState(1);
+				output.writeString(seed0 + "#" + seed1);
 			}
 
 			@Override
@@ -213,6 +219,10 @@ public class ExperienceComponent implements Component,Poolable {
 				compo.choicesNumber = input.readInt(); 
 				compo.selectNumber = input.readInt(); 
 				
+				String randomState = input.readString();
+				String[] split = randomState.split("#");
+				compo.levelUpSeededRandom = new RandomXS128();
+				compo.levelUpSeededRandom.setState(Long.valueOf(split[0]), Long.valueOf(split[1]));
 				return compo;
 			}
 		

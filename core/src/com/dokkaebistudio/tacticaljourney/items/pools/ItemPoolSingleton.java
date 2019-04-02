@@ -129,4 +129,9 @@ public class ItemPoolSingleton {
 			}
 		}
 	}
+	
+	
+	public List<ItemPool> getAllItemPools() {
+		return allItemPools;
+	}
 }

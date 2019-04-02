@@ -56,6 +56,11 @@ public class OldBonesItemPool extends LootableItemPool {
 	}
 
 	@Override
+	public void setInitialSumOfChances(int soc) {
+		initialSumOfChances = soc;
+	}
+	
+	@Override
 	public int getSumOfChances() {
 		int sumOfChances = 0;
 		for (PooledItemDescriptor pid : itemPool) {

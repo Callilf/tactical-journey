@@ -107,4 +107,16 @@ public abstract class EnemyItemPool extends ItemPool {
 			}
 		}
 	}
+	
+	
+	
+	// Not used at the moment, but will be used if enemies can drop unique items
+	
+	@Override
+	public int getInitialSumOfChances() {
+		return 0;
+	}
+
+	@Override
+	public void setInitialSumOfChances(int soc) {}
 }

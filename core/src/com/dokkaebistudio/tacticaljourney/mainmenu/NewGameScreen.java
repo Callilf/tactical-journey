@@ -24,11 +24,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -70,20 +72,8 @@ public class NewGameScreen extends ScreenAdapter {
 				
 		Table mainTable = new Table();
 		
-		seedField = new TextField("Enter seed", PopinService.textFieldStyle());
-		seedField.setOnlyFontChars(true);
-		seedField.setBlinkTime(0.5f);
-		seedField.addListener(new FocusListener() {
-			@Override
-			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-				if (focused) {
-					enteredSeed = true;
-					seedField.setText("");
-				}
-			}
-		});
-		
-		mainTable.add(seedField).width(500).padBottom(200);
+		Label newGameLabel = new Label("NEW GAME", PopinService.hudStyle());
+		mainTable.add(newGameLabel).padBottom(100);
 		mainTable.row();
 		
 
@@ -147,6 +137,41 @@ public class NewGameScreen extends ScreenAdapter {
 		mainTable.pack();
 		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
 		hudStage.addActor(mainTable);
+		
+		
+		Table seedTable = new Table();
+		
+		final TextButton seedBtn = new TextButton("Use seed", PopinService.checkedButtonStyle());
+		seedBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				seedField.setVisible(seedBtn.isChecked());
+				if (!seedBtn.isChecked()) {
+					seedField.setText("Enter seed");
+					enteredSeed = false;
+				}
+			}
+		});
+		seedTable.add(seedBtn).pad(10, 10, 10, 0);
+		
+		seedField = new TextField("Enter seed", PopinService.textFieldStyle());
+		seedField.setVisible(false);
+		seedField.setOnlyFontChars(true);
+		seedField.setBlinkTime(0.5f);
+		seedField.addListener(new FocusListener() {
+			@Override
+			public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+				if (focused) {
+					enteredSeed = true;
+					seedField.setText("");
+				}
+			}
+		});
+		
+		seedTable.add(seedField).width(500).padLeft(10);
+		seedTable.pack();
+		seedTable.setPosition(0, GameScreen.SCREEN_H - seedTable.getHeight());
+		hudStage.addActor(seedTable);
 	}
 
 	public void update () {}

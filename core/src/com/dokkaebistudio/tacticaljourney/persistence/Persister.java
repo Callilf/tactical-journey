@@ -101,29 +101,79 @@ public class Persister {
 	
 	private int currentLevel;
 
+	public Persister() {}
 	public Persister(GameScreen gs) {
 		this.gameScreen = gs;
 		this.engine = gs.engine;
 	}
 	
+	/**
+	 * Return true if there is a saved game.
+	 * @return true if there is a game save, false if not.
+	 */
+	public boolean hasSave() {
+		FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
+		FileHandle saveFile = Gdx.files.local("gamestate_1.bin");
+		return statsFile.exists() && saveFile.exists();
+	}
+	
+	public void deleteSave() {
+		FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
+		FileHandle saveFile = Gdx.files.local("gamestate_1.bin");
+		statsFile.delete();
+		saveFile.delete();
+	}
+	
 	
 	
 	public void saveGameState() {
+		
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
-		
+		// Save the game statistics first
+		GameStatistics statistics = GameStatistics.create(gameScreen);
+
 		try {
-			FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+			FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
+			if (statsFile.exists()) statsFile.delete();
+			Output output = new Output(new FileOutputStream(statsFile.file()));
+			kryo.writeObject(output, statistics);
+			output.close();
+		} catch (KryoException | IOException e) {
+			Gdx.app.error("SAVE", "Failed to save the game statistics", e);
+		}
+			
+		try {
+			FileHandle saveFile = Gdx.files.local("gamestate_1.bin");
 			if (saveFile.exists()) saveFile.delete();
 			Output output = new Output(new FileOutputStream(saveFile.file()));
 			kryo.writeObject(output, gameScreen);
 			output.close();
 		} catch (KryoException | IOException e) {
-			e.printStackTrace();
+			Gdx.app.error("SAVE", "Failed to save the game state", e);
 		}
 		
+	}
+	
+	
+	public GameStatistics loadGameStatistics() {
+		GameStatistics stats = null;
+		
+		Kryo kryo = new Kryo();
+		kryo.setReferences(false);
+		
+		try {
+			FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
+		    Input input = new Input(new FileInputStream(statsFile.file()));
+		    stats = kryo.readObject(input, GameStatistics.class);
+		    input.close();   
+		} catch (KryoException | IOException e ) {
+			Gdx.app.error("SAVE", "Failed to load the game statistics", e);
+		}
+		
+		return stats;
 	}
 	
 	public void loadGameState() {
@@ -132,12 +182,12 @@ public class Persister {
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		try {
-			FileHandle saveFile = Gdx.files.local("gamestateFred.bin");
+			FileHandle saveFile = Gdx.files.local("gamestate_1.bin");
 		    Input input = new Input(new FileInputStream(saveFile.file()));
 		    kryo.readObject(input, GameScreen.class);
 		    input.close();   
 		} catch (KryoException | IOException e ) {
-			e.printStackTrace();
+			Gdx.app.error("SAVE", "Failed to load the game state", e);
 		}
 	}
 	

@@ -24,20 +24,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class LoadGameScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
@@ -49,7 +52,10 @@ public class MainMenuScreen extends ScreenAdapter {
 	boolean enteredSeed = false;
 	TextField seedField;
 	
-	public MainMenuScreen (final TacticalJourney game) {
+	boolean enteredName = false;
+	TextField nameField;
+
+	public LoadGameScreen (final TacticalJourney game) {
 		this.game = game;
 
 		guiCam = new OrthographicCamera(GameScreen.SCREEN_W, GameScreen.SCREEN_H);
@@ -64,53 +70,100 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
-		boolean hasSave = new Persister().hasSave();
 				
 		Table mainTable = new Table();
+//		mainTable.setDebug(true);
 		
-		Image mainTitle = new Image(Assets.mainTitle.getRegion());
-		mainTable.add(mainTitle).padBottom(150);
+		// Main title
+
+		Label newGameLabel = new Label("LOAD GAME", PopinService.hudStyle());
+		mainTable.add(newGameLabel).padBottom(50);
+		mainTable.row();
+		
+		
+		// Display game infos
+
+		Table statsTable = new Table();
+		statsTable.left();
+		
+		GameStatistics stats = new Persister().loadGameStatistics();
+		
+		Label characterName = new Label("Name: " + stats.getCharacterName(), PopinService.hudStyle());
+		statsTable.add(characterName).left();
+		statsTable.row();
+		Label characterLevel = new Label("Level: " + stats.getCharacterLevel(), PopinService.hudStyle());
+		statsTable.add(characterLevel).left();
+		statsTable.row();
+		Label floor = new Label("Floor: " + stats.getFloorLevel(), PopinService.hudStyle());
+		statsTable.add(floor).left();
+		statsTable.row();
+		
+		Label gold = new Label("Money: [GOLDENROD]" + stats.getGold() + " gold coin(s)", PopinService.hudStyle());
+		statsTable.add(gold).left().padBottom(10);
+		statsTable.row();
+		
+		Label totalTime = new Label("Total time: " + String.format("%.1f", stats.getTotalTime()), PopinService.hudStyle());
+		statsTable.add(totalTime).left();
+		statsTable.row();
+		Label totalTurns = new Label("Total turns: " + stats.getTotalTurns(), PopinService.hudStyle());
+		statsTable.add(totalTurns).left().padBottom(10);
+		statsTable.row();
+		
+		mainTable.add(statsTable).width(500).padBottom(10);
 		mainTable.row();
 
+		// Load button
 		
 		Table buttonTable = new Table();
-		
-		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
-		start.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new NewGameScreen(game));
-			}
-		});
-		buttonTable.add(start).width(500).height(200).padBottom(5).padRight(50);
-		
 		
 		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
 		loadBtn.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new LoadGameScreen(game));
+				RandomSingleton.createInstance();
+				// Launch the game
+				game.setScreen(new GameScreen(game, false, null));
 			}
 		});
-		buttonTable.add(loadBtn).width(500).height(200).padBottom(5).padLeft(50);
-		loadBtn.setDisabled(!hasSave);
-		mainTable.add(buttonTable).padBottom(450);
+		buttonTable.add(loadBtn).width(500).height(200).padBottom(5);
+		mainTable.add(buttonTable).padBottom(5);
 		mainTable.row();
 		
+		
+		// Erase save
+        final TextButton removeSaveBtn = new TextButton("Erase save", PopinService.buttonStyle());
+        removeSaveBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	new Persister().deleteSave();
+				game.setScreen(new MainMenuScreen(game));
+            }
+        });
+        mainTable.add(removeSaveBtn).right().padBottom(300);
+		mainTable.row();
 
+		
+
+		// Back button
+		
+		TextButton backBtn = new TextButton("Back", PopinService.buttonStyle());
+		backBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {				
+				game.setScreen(new MainMenuScreen(game));
+			}
+		});
+		mainTable.add(backBtn).padBottom(50);
+		mainTable.row();
+
+		
 		mainTable.pack();
 		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
 		hudStage.addActor(mainTable);
 	}
 
-	public void update () {
-//		if (Gdx.input.justTouched()) {
-//			// touched screen, start the fucking game already
-//			game.setScreen(new GameScreen(game));
-//		}
-	}
+	public void update () {}
 
 	public void draw () {
 		GL20 gl = Gdx.gl;

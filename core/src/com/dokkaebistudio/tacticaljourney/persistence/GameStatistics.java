@@ -1,5 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.persistence;
 
+import java.util.Calendar;
+
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
@@ -33,6 +35,11 @@ public class GameStatistics {
 	private String killer;
 	
 	
+	private int day;
+	private int month;
+	private int year;
+
+	
 	
 	
 	public static GameStatistics create(GameScreen gamescreen) {
@@ -49,6 +56,11 @@ public class GameStatistics {
 		gameStatistics.setGold(Mappers.walletComponent.get(player).getAmount());
 		
 		gameStatistics.state = GameStatisticsState.IN_PROGRESS;
+		
+		Calendar cal = Calendar.getInstance();
+		gameStatistics.day = cal.get(Calendar.DATE);
+		gameStatistics.month = cal.get(Calendar.MONTH);
+		gameStatistics.year = cal.get(Calendar.YEAR);
 		
 		return gameStatistics;
 	}
@@ -119,7 +131,19 @@ public class GameStatistics {
 	public void setKiller(String killer) {
 		this.killer = killer;
 	}
- 
+
+	public int getDay() {
+		return day;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
 	
 	
 }

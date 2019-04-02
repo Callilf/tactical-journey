@@ -332,6 +332,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
 //			entityFactory.orbFactory.createVegetalOrb(new Vector2(6, 10), room);
 			

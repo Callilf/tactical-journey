@@ -51,6 +51,7 @@ public class Assets {
 	
 	public static RegionDescriptor grid1;
 	public static RegionDescriptor grid2;
+	public static RegionDescriptor grid3;
 	public static RegionDescriptor tile_ground;
 	public static RegionDescriptor heavy_wall;
 	public static RegionDescriptor wall;
@@ -400,6 +401,7 @@ public class Assets {
 
 		grid1 = Assets.getTexture("grid_world1");
 		grid2 = Assets.getTexture("grid_world2");
+		grid3 = Assets.getTexture("grid_world3");
 		tile_ground = Assets.getTexture("tile-test");
 		heavy_wall = Assets.getTexture("tile-heavy-wall");
 		wall = Assets.getTexture("tile-wall-test");

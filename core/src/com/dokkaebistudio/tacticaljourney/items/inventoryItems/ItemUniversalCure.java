@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -42,8 +43,10 @@ public class ItemUniversalCure extends AbstractItem {
 	@Override
 	public boolean pickUp(Entity picker, Entity item, Room room) {
 		super.pickUp(picker, item, room);
-		//TODO launch the end game
 		Journal.addEntry("[GREEN] You picked up the universal cure!!!!!");
+		
+		room.floor.getGameScreen().state = GameScreen.GAME_COMPLETED;
+		
 		return true;
 	}
 

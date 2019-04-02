@@ -24,7 +24,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -34,10 +34,9 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
-import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class HowToPlayScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
@@ -49,7 +48,10 @@ public class MainMenuScreen extends ScreenAdapter {
 	boolean enteredSeed = false;
 	TextField seedField;
 	
-	public MainMenuScreen (final TacticalJourney game) {
+	boolean enteredName = false;
+	TextField nameField;
+
+	public HowToPlayScreen (final TacticalJourney game) {
 		this.game = game;
 
 		guiCam = new OrthographicCamera(GameScreen.SCREEN_W, GameScreen.SCREEN_H);
@@ -64,81 +66,49 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
-		boolean hasSave = new Persister().hasSave();
 				
 		Table mainTable = new Table();
+//		mainTable.setDebug(true);
 		
-		Image mainTitle = new Image(Assets.mainTitle.getRegion());
-		mainTable.add(mainTitle).padBottom(150);
-		mainTable.row();
+		// Main title
 
-		
-		// New game and Load buttons
-		
-		Table buttonTable = new Table();
-		
-		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
-		start.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new NewGameScreen(game));
-			}
-		});
-		buttonTable.add(start).width(500).height(200).padBottom(5).padRight(25);
-		
-		
-		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
-		loadBtn.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new LoadGameScreen(game));
-			}
-		});
-		buttonTable.add(loadBtn).width(500).height(200).padBottom(5).padLeft(25);
-		loadBtn.setDisabled(!hasSave);
-		mainTable.add(buttonTable).padBottom(50);
+		Label newGameLabel = new Label("HOW TO PLAY", PopinService.hudStyle());
+		mainTable.add(newGameLabel).padBottom(50);
 		mainTable.row();
 		
 		
-		Table secondTable = new Table();
+		// Display game infos
+
+		Table statsTable = new Table();
+		statsTable.left();
 		
-		TextButton ranking = new TextButton("RANKING", PopinService.buttonStyle());
-		ranking.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new RankingScreen(game));
-			}
-		});
-		secondTable.add(ranking).width(500).height(200).padBottom(5).padRight(25);
+		Label characterName = new Label("In construction...", PopinService.hudStyle());
+		statsTable.add(characterName).left();
+		statsTable.row();
 		
-		
-		final TextButton howToPlay = new TextButton("HOW TO PLAY", PopinService.buttonStyle());
-		howToPlay.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new HowToPlayScreen(game));
-			}
-		});
-		secondTable.add(howToPlay).width(500).height(200).padBottom(5).padLeft(25);
-		mainTable.add(secondTable).padBottom(200);
+		mainTable.add(statsTable).width(500).padBottom(550);
 		mainTable.row();
 		
 
+		// Back button
+		
+		TextButton backBtn = new TextButton("Back", PopinService.buttonStyle());
+		backBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {				
+				game.setScreen(new MainMenuScreen(game));
+			}
+		});
+		mainTable.add(backBtn).padBottom(50);
+		mainTable.row();
+
+		
 		mainTable.pack();
 		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
 		hudStage.addActor(mainTable);
 	}
 
-	public void update () {
-//		if (Gdx.input.justTouched()) {
-//			// touched screen, start the fucking game already
-//			game.setScreen(new GameScreen(game));
-//		}
-	}
+	public void update () {}
 
 	public void draw () {
 		GL20 gl = Gdx.gl;

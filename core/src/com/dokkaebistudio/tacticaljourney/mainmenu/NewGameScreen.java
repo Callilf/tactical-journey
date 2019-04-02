@@ -184,7 +184,6 @@ public class NewGameScreen extends ScreenAdapter {
 		game.batcher.setProjectionMatrix(guiCam.combined);
 
 
-//		game.batcher.enableBlending();
 		game.batcher.begin();
 		game.batcher.draw(menuBackground, 0, 0, 1920, 1080);
 		game.batcher.end();	

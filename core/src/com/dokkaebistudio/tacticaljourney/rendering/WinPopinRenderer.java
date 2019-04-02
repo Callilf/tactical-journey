@@ -20,7 +20,7 @@ import com.dokkaebistudio.tacticaljourney.persistence.Rankings;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
-public class GameOverPopinRenderer implements Renderer {
+public class WinPopinRenderer implements Renderer {
 	    
 	public GameScreen gamescreen;
 	public Stage stage;
@@ -28,7 +28,7 @@ public class GameOverPopinRenderer implements Renderer {
 	boolean menuDisplayed = false;
     private Table table;    
             
-    public GameOverPopinRenderer(GameScreen gs, Stage s) {
+    public WinPopinRenderer(GameScreen gs, Stage s) {
     	this.gamescreen = gs;
         this.stage = s;
     }
@@ -38,7 +38,7 @@ public class GameOverPopinRenderer implements Renderer {
     @Override
     public void render(float deltaTime) {
     	
-    	if (gamescreen.state == GameScreen.GAME_OVER) {
+    	if (gamescreen.state == GameScreen.GAME_COMPLETED) {
     		RoomRenderer.showBlackFilter();
     		
     		if (!menuDisplayed) {
@@ -48,8 +48,7 @@ public class GameOverPopinRenderer implements Renderer {
 				
 				// Add game stats to rankings
 				GameStatistics gameStats = GameStatistics.create(this.gamescreen);
-				gameStats.setState(GameStatisticsState.LOST);
-				gameStats.setKiller(this.gamescreen.killerStr);
+				gameStats.setState(GameStatisticsState.WON);
 				Rankings.addGameToRankings(gameStats);
     		}
     		
@@ -85,12 +84,12 @@ public class GameOverPopinRenderer implements Renderer {
 			table.align(Align.top);
 			
 			// 1 - Title
-			Label title = new Label("GAME OVER", PopinService.hudStyle());
+			Label title = new Label("[GREEN]VICTORY", PopinService.hudStyle());
 			table.add(title).top().align(Align.top).pad(20, 0, 60, 0);
 			table.row();
 			
 			// 2 - Desc
-			Label desc = new Label("You got screwed hard.", PopinService.hudStyle());
+			Label desc = new Label("Congratulations! You managed to survive the dungeon and claim the universal cure.", PopinService.hudStyle());
 			table.add(desc).top().align(Align.left).pad(20, 0, 60, 0);
 			table.row();		
 			

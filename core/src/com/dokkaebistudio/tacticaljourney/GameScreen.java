@@ -56,6 +56,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.StatusPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.WinPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
@@ -93,6 +94,7 @@ import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 public class GameScreen extends ScreenAdapter {
 	public static final int GAME_RUNNING = 1;
 	public static final int GAME_PAUSED = 2;
+	public static final int GAME_COMPLETED = 3;
 	public static final int GAME_OVER = 4;
 
 	// dimensions
@@ -147,7 +149,10 @@ public class GameScreen extends ScreenAdapter {
 	private MapRenderer mapRenderer;
 	
 	public Entity player;
-
+	
+	/** The name of the entity that killed the player. */
+	public String killerStr;
+	
 	public GameScreen (TacticalJourney game, boolean newGame, String playerName) {
 		this.game = game;
 		
@@ -202,7 +207,9 @@ public class GameScreen extends ScreenAdapter {
 			floors.add(floor3);
 			Floor floor4 = new Floor(this, 4);
 			floors.add(floor4);
-	
+			Floor floor5 = new Floor(this, 5);
+			floors.add(floor5);
+
 			
 			player = entityFactory.playerFactory.createPlayer(playerName, new Vector2(11, 11), 5, floor1.getActiveRoom());
 		} else {
@@ -231,6 +238,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new StatusPopinRenderer(room, stage));
 		if (debugMode) { renderers.add(new DebugPopinRenderer(room, inventoryStage, player)); }
 		renderers.add(new LevelUpPopinRenderer(room, stage, player));
+		renderers.add(new WinPopinRenderer(this, menuStage));
 		renderers.add(new GameOverPopinRenderer(this, menuStage));
 		renderers.add(new MenuPopinRenderer(this, menuStage));
 
@@ -372,9 +380,6 @@ public class GameScreen extends ScreenAdapter {
 			engine.update(deltaTime);
 			
 			break;
-		case GAME_OVER:
-			
-			break;
 			default:
 		}
 	}
@@ -384,6 +389,7 @@ public class GameScreen extends ScreenAdapter {
 		switch (state) {
 		case GAME_RUNNING:
 		case GAME_PAUSED:
+		case GAME_COMPLETED:
 		case GAME_OVER:
 			
 			presentRunning(delta);

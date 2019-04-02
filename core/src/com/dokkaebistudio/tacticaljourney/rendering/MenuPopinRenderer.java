@@ -119,7 +119,7 @@ public class MenuPopinRenderer implements Renderer {
 			}
 			
 			
-			// 3 - Return to menu
+			// 3 - Save
 			saveBtn = new TextButton("Save", PopinService.buttonStyle());			
 			saveBtn.addListener(new ChangeListener() {
 				@Override

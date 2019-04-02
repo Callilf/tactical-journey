@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -130,6 +131,15 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 					if (healthCompo.getHp() <= 0) {
 						// Death of the player!
 						gameScreen.state = GameScreen.GAME_OVER;
+						
+						String killerString = "Unknown";
+						if (healthCompo.getAttacker() != null) {
+							InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(healthCompo.getAttacker());
+							if (inspectableComponent != null) {
+								killerString = inspectableComponent.getTitle();
+							}
+						}
+						gameScreen.killerStr = killerString;
 					}
 					
 				} else {

@@ -34,8 +34,12 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 
 public class MainMenuScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -131,6 +135,23 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainTable.pack();
 		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 0);
 		hudStage.addActor(mainTable);
+
+		
+		Table smallBtnsTable = new Table();
+		TextButton quit = new TextButton("EXIT GAME", PopinService.buttonStyle());
+		quit.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//Quit the game
+				dispose();
+	            Gdx.app.exit();;
+			}
+		});
+		smallBtnsTable.add(quit).pad(0,0,10,10);
+		smallBtnsTable.pack();
+		smallBtnsTable.setPosition(GameScreen.SCREEN_W - smallBtnsTable.getWidth(), 0);
+		hudStage.addActor(smallBtnsTable);
+		
 	}
 
 	public void update () {
@@ -170,5 +191,18 @@ public class MainMenuScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+	}
+	
+	@Override
+	public void dispose() {
+		Assets.getInstance().dispose();
+		hudStage.dispose();
+		game.dispose();
+		PopinService.dispose();
+		GameTimeSingleton.dispose();
+		RandomSingleton.dispose();
+		Journal.dispose();
+		AnimationSingleton.dispose();
+		super.dispose();
 	}
 }

@@ -76,7 +76,6 @@ public class RankingScreen extends ScreenAdapter {
 			mainTable.add(noGamesLabel).padBottom(700);
 			mainTable.row();
 		} else {
-
 			Table statsTable = new Table();
 			statsTable.top();
 //			statsTable.setDebug(true);
@@ -89,8 +88,9 @@ public class RankingScreen extends ScreenAdapter {
 				statsTable.row();
 			}
 			
-			
-			mainTable.add(scrollPane).width(1350).height(700).padBottom(50);
+			statsTable.pack();
+			scrollPane.layout();
+			mainTable.add(scrollPane).top().width(1350).maxHeight(700).padBottom(50);
 			mainTable.row();
 			
 		}
@@ -122,6 +122,7 @@ public class RankingScreen extends ScreenAdapter {
 		oneGameTable.setBackground(ninePatchDrawable);
 		
 		Label characterName = new Label("Name: " + gameStat.getCharacterName(), PopinService.hudStyle());
+		characterName.setWrap(true);
 		oneGameTable.add(characterName).left().width(300).pad(0, 10, 0, 10);
 		
 		Table part2 = new Table();
@@ -176,6 +177,7 @@ public class RankingScreen extends ScreenAdapter {
 		game.batcher.draw(menuBackground, 0, 0, 1920, 1080);
 		game.batcher.end();	
 		
+		hudStage.act();
 		hudStage.draw();
 	}
 

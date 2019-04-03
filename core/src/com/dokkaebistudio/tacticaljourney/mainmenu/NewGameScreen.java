@@ -30,13 +30,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.LoadingGameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
 public class NewGameScreen extends ScreenAdapter {
@@ -65,7 +65,7 @@ public class NewGameScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground.getRegion();
+		menuBackground = MenuAssets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
@@ -116,7 +116,7 @@ public class NewGameScreen extends ScreenAdapter {
 				}
 				
 				// Launch the game
-				game.setScreen(new GameScreen(game, true, playerName));
+				game.setScreen(new LoadingGameScreen(game, true, playerName));
 			}
 		});
 		buttonTable.add(start).width(500).height(200).padBottom(350);

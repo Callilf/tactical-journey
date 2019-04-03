@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
@@ -106,7 +107,7 @@ public class MapRenderer implements Renderer {
 		mapTable.setPosition(GameScreen.SCREEN_W - Assets.map_panel.getRegionWidth() - 5, GameScreen.SCREEN_H - Assets.map_panel.getRegionHeight() - 5);
 		mapTable.setTouchable(Touchable.childrenOnly);
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(444);
 		ninePatchDrawable.setMinHeight(68);
 		mapTable.setBackground(ninePatchDrawable);

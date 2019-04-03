@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics.GameStatisticsState;
@@ -79,7 +79,7 @@ public class GameOverPopinRenderer implements Renderer {
 			
 			// Place the popin and add the background texture
 			table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 			table.setBackground(ninePatchDrawable);
 			
 			table.align(Align.top);
@@ -114,7 +114,7 @@ public class GameOverPopinRenderer implements Renderer {
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					gamescreen.game.setScreen(new MainMenuScreen(gamescreen.game));					
+					gamescreen.backToMenu();
 				}
 			});
 			buttonTable.add(mainMenuBtn).pad(0, 20,0,20);

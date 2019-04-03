@@ -34,10 +34,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
@@ -58,7 +60,6 @@ import com.dokkaebistudio.tacticaljourney.rendering.StatusPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WinPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
-import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -441,19 +442,28 @@ public class GameScreen extends ScreenAdapter {
 		// TODO nothing yet
 	}
 	
-	@Override
-	public void dispose() {
+	public void backToMenu() {
+		this.game.setScreen(new MainMenuScreen(this.game));
+		quickDispose();
+	}
+	
+	public void quickDispose() {
 		Assets.getInstance().dispose();
 		stage.dispose();
 		hudStage.dispose();
 		fxStage.dispose();
 		miniMapStage.dispose();
-		game.dispose();
-		PopinService.dispose();
 		GameTimeSingleton.dispose();
 		RandomSingleton.dispose();
 		Journal.dispose();
 		AnimationSingleton.dispose();
+	}
+	
+	@Override
+	public void dispose() {
+		quickDispose();
+		SceneAssets.getInstance().dispose();
+		game.dispose();
 		super.dispose();
 	}
 }

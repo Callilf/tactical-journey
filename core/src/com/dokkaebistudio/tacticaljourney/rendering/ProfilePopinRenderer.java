@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -212,7 +213,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initProfileTable() {
 		profileTable = new Table();
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(500);
 		ninePatchDrawable.setMinHeight(680);
 		profileTable.setBackground(ninePatchDrawable);
@@ -312,7 +313,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initBlessingTable() {
 		blessingTable = new Table();
 
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(500);
 		ninePatchDrawable.setMinHeight(680);
 		blessingTable.setBackground(ninePatchDrawable);
@@ -358,7 +359,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	private void initCurseTable() {
 		curseTable = new Table();
 
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(500);
 		ninePatchDrawable.setMinHeight(680);
 		curseTable.setBackground(ninePatchDrawable);
@@ -391,7 +392,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		Table oneAlterationTable = new Table();
 		Table oneAlterationSubTable = new Table();
 
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
 		ninePatchDrawable.setMinWidth(455);
 		ninePatchDrawable.setMinHeight(102);
 		oneAlterationSubTable.setBackground(ninePatchDrawable);

@@ -1,0 +1,105 @@
+
+menu.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background-test-menu
+  rotate: false
+  xy: 2, 732
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+bombs
+  rotate: false
+  xy: 1543, 619
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+bow
+  rotate: false
+  xy: 1924, 1701
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+inspect
+  rotate: false
+  xy: 2, 2
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+inventory
+  rotate: false
+  xy: 1051, 117
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+main_title
+  rotate: false
+  xy: 2, 115
+  size: 1047, 113
+  orig: 1047, 113
+  offset: 0, 0
+  index: -1
+melee
+  rotate: false
+  xy: 1543, 506
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+popin
+  rotate: false
+  xy: 1628, 677
+  size: 54, 53
+  split: 17, 17, 17, 17
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+profile
+  rotate: false
+  xy: 1924, 1588
+  size: 83, 111
+  orig: 83, 111
+  offset: 0, 0
+  index: -1
+screen1
+  rotate: false
+  xy: 827, 230
+  size: 714, 500
+  orig: 714, 500
+  offset: 0, 0
+  index: -1
+screen3
+  rotate: false
+  xy: 2, 230
+  size: 823, 500
+  orig: 823, 500
+  offset: 0, 0
+  index: -1
+textfield_cursor
+  rotate: false
+  xy: 2009, 1788
+  size: 4, 24
+  orig: 4, 24
+  offset: 0, 0
+  index: -1
+
+menu2.png
+size: 1024,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+screen2
+  rotate: false
+  xy: 2, 2
+  size: 714, 500
+  orig: 714, 500
+  offset: 0, 0
+  index: -1

@@ -18,10 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -288,7 +287,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		mainPopin.setBackground(ninePatchDrawable);
 		
 		mainPopin.align(Align.top);
@@ -326,7 +325,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		choicePopin.setBackground(ninePatchDrawable);
 		
 		choicePopin.align(Align.top);
@@ -351,7 +350,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		bigPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		bigPopin.setBackground(ninePatchDrawable);
 		
 		bigPopin.align(Align.top);

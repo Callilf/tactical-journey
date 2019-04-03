@@ -1,7 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.mainmenu;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,13 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
-import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
-import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics.GameStatisticsState;
-import com.dokkaebistudio.tacticaljourney.persistence.Rankings;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 
 public class HowToPlayScreen extends ScreenAdapter {
@@ -53,7 +50,7 @@ public class HowToPlayScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground.getRegion();
+		menuBackground = MenuAssets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
@@ -69,7 +66,7 @@ public class HowToPlayScreen extends ScreenAdapter {
 				
 		Table htpTable = new Table();
 		htpTable.top();
-		htpTable.setBackground(new NinePatchDrawable(Assets.popinNinePatch));
+		htpTable.setBackground(new NinePatchDrawable(SceneAssets.popinNinePatch));
 		
 		ScrollPane scrollPane = new ScrollPane(htpTable);
 		
@@ -100,6 +97,11 @@ public class HowToPlayScreen extends ScreenAdapter {
 		htpTable.add(combatDescLabel).left().width(1200).padBottom(30);
 		htpTable.row();
 		
+		// Screen 1
+		Image screen1 = new Image(MenuAssets.screen1.getRegion());
+		htpTable.add(screen1).padBottom(30);
+		htpTable.row();
+		
 		Label combatDescLabel2 = new Label("To attack an enemy, just click on it when you are at range. The attack wheel will be displayed, click again to"
 				+ " stop the arrow. You will deal damages depending on the pointed color:\n"
 				+ " - [GREEN]Green[WHITE]: normal hit, the amount you deal is equal to your strength\n"
@@ -111,6 +113,11 @@ public class HowToPlayScreen extends ScreenAdapter {
 		htpTable.add(combatDescLabel2).left().width(1200).padBottom(30);
 		htpTable.row();
 
+		// Screen 2
+		Image screen2 = new Image(MenuAssets.screen2.getRegion());
+		htpTable.add(screen2).padBottom(30);
+		htpTable.row();
+		
 		Label combatDescLabel3 = new Label("Each time you kill an enemy you receive experience points. When you get enough points you can level up and gain rewards"
 				+ " such as stats up, healing or items. Once all enemies of a room are dead, the room becomes \"cleared\".\n"
 				+ " You can move freely in cleared rooms, the blue tiles are not displayed anymore.",
@@ -134,6 +141,11 @@ public class HowToPlayScreen extends ScreenAdapter {
 		hudLabel.setWrap(true);
 		htpTable.add(hudLabel).left().width(1200).padBottom(50);
 		htpTable.row();
+		
+		Image screen3 = new Image(MenuAssets.screen3.getRegion());
+		htpTable.add(screen3).padBottom(30);
+		htpTable.row();
+
 		
 		Label hudLabel2 = new Label("Inventory\n"
 				+ "The inventory allows you storing items. During your turn, you can open the inventory and click on a item to either use it or"

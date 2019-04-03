@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney.mainmenu;
+package com.dokkaebistudio.tacticaljourney;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -22,19 +22,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
-import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
-import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
-public class LoadingScreen extends ScreenAdapter {
+public class LoadingGameScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
+	boolean newGame;
+	String playerName;
 
 	Texture menuBackground;
 
-	public LoadingScreen(TacticalJourney game) {
+	public LoadingGameScreen(TacticalJourney game, boolean newGame, String playerName) {
 		this.game = game;
+		this.newGame = newGame;
+		this.playerName = playerName;
 
 		guiCam = new OrthographicCamera(1920, 1080);
 		guiCam.position.set(1920 / 2, 1080 / 2, 0);
@@ -42,19 +45,16 @@ public class LoadingScreen extends ScreenAdapter {
 
 	public int load(){
 	    // call asset manager loading each tick
-		boolean menuAssetsLoaded = MenuAssets.getInstance().loadAssets();
-		boolean sceneAssetsLoaded = SceneAssets.getInstance().loadAssets();
+		boolean loaded = Assets.getInstance().loadAssets();
 
-		if (menuAssetsLoaded && sceneAssetsLoaded) { // loading is finished !
-			MenuAssets.getInstance().initTextures();
-			SceneAssets.getInstance().initTextures();
-			
+		if (loaded) { // loading is finished !
+			Assets.getInstance().initTextures();
             // change screen
-			this.game.setScreen(new MainMenuScreen(this.game));
+			this.game.setScreen(new GameScreen(game, true, playerName));
 		}
 
 		// report progress
-		return (int)MenuAssets.getInstance().getLoadingProgress();
+		return (int)Assets.getInstance().getLoadingProgress();
 	}
 
 	public void draw(int progress) {
@@ -70,8 +70,8 @@ public class LoadingScreen extends ScreenAdapter {
 		String text = "LOADING - " + progress + "%";
 		GlyphLayout loadingLayout = new GlyphLayout();
 		// update layout. It is used to compute the real text height and width to aid positioning
-		loadingLayout.setText(SceneAssets.font.getFont(), text);
-		SceneAssets.font.getFont().draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
+		loadingLayout.setText(Assets.font.getFont(), text);
+		Assets.font.getFont().draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
 	}
 

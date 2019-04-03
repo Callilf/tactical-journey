@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -107,7 +107,7 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinHeight(200);
 		mainPopin.setBackground(ninePatchDrawable);
 		
@@ -115,7 +115,7 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		
 		// 1 - Title
 		Table speakerTable = new Table();
-		ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		speakerTable.setBackground(ninePatchDrawable);
 		speaker = new Label("Title", PopinService.hudStyle());
 		speakerTable.add(speaker);

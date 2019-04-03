@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -161,7 +162,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootTable.setTouchable(Touchable.enabled);
 		lootTable.addListener(new ClickListener() {});
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(653);
 		ninePatchDrawable.setMinHeight(746);
 		lootTable.setBackground(ninePatchDrawable);
@@ -223,7 +224,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		Table oneItem = new Table();
 //		oneItem.setDebug(true);
 
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
 		ninePatchDrawable.setMinWidth(600);
 		ninePatchDrawable.setMinHeight(100);
 		oneItem.setBackground(ninePatchDrawable);
@@ -290,7 +291,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 			selectedItemPopin.setBackground(ninePatchDrawable);
 			
 			selectedItemPopin.align(Align.top);
@@ -354,7 +355,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		debugTable.setTouchable(Touchable.enabled);
 		debugTable.addListener(new ClickListener() {});
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(653);
 		ninePatchDrawable.setMinHeight(746);
 		debugTable.setBackground(ninePatchDrawable);

@@ -1,0 +1,67 @@
+
+scenes.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button
+  rotate: false
+  xy: 170, 2
+  size: 54, 53
+  split: 17, 17, 17, 17
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+button_disabled
+  rotate: false
+  xy: 114, 2
+  size: 54, 53
+  split: 17, 17, 17, 17
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+button_pressed
+  rotate: false
+  xy: 58, 2
+  size: 54, 53
+  split: 17, 17, 17, 17
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+popin
+  rotate: false
+  xy: 282, 2
+  size: 54, 53
+  split: 17, 17, 17, 17
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+popin_inner
+  rotate: false
+  xy: 2, 2
+  size: 54, 53
+  split: 13, 13, 13, 13
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+popin_outer
+  rotate: false
+  xy: 226, 2
+  size: 54, 53
+  split: 13, 13, 13, 13
+  pad: 0, 0, 0, 0
+  orig: 54, 53
+  offset: 0, 0
+  index: -1
+textfield_cursor
+  rotate: false
+  xy: 338, 31
+  size: 4, 24
+  orig: 4, 24
+  offset: 0, 0
+  index: -1

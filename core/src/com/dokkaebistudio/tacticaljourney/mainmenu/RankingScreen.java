@@ -18,10 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics.GameStatisticsState;
 import com.dokkaebistudio.tacticaljourney.persistence.Rankings;
@@ -53,7 +54,7 @@ public class RankingScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground.getRegion();
+		menuBackground = MenuAssets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
@@ -118,7 +119,7 @@ public class RankingScreen extends ScreenAdapter {
 	
 	public Table createOneGameTable(GameStatistics gameStat) {
 		Table oneGameTable = new Table();
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		oneGameTable.setBackground(ninePatchDrawable);
 		
 		Label characterName = new Label("Name: " + gameStat.getCharacterName(), PopinService.hudStyle());

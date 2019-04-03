@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -214,7 +215,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		lootTable.setTouchable(Touchable.enabled);
 		lootTable.addListener(new ClickListener() {});
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(653);
 		ninePatchDrawable.setMinHeight(746);
 		lootTable.setBackground(ninePatchDrawable);
@@ -265,7 +266,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 //		oneItem.setDebug(true);
 
 		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
 		ninePatchDrawable.setMinWidth(600);
 		ninePatchDrawable.setMinHeight(100);
 		oneItem.setBackground(ninePatchDrawable);
@@ -359,7 +360,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		inventoryTable.setTouchable(Touchable.enabled);
 		inventoryTable.addListener(new ClickListener() {});
 			    		
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 		ninePatchDrawable.setMinWidth(653);
 		ninePatchDrawable.setMinHeight(746);
 		inventoryTable.setBackground(ninePatchDrawable);
@@ -404,7 +405,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 //		slot.setDebug(true);
 
 		//Background
-		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
 		ninePatchDrawable.setMinWidth(140);
 		ninePatchDrawable.setMinHeight(140);
 		slot.setBackground(ninePatchDrawable);
@@ -523,7 +524,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			
 			// Place the popin and add the background texture
 			selectedItemPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
-			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 			selectedItemPopin.setBackground(ninePatchDrawable);
 			
 			selectedItemPopin.align(Align.top);

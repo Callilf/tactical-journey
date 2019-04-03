@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
@@ -80,7 +80,7 @@ public class MenuPopinRenderer implements Renderer {
 			buttonTable.addListener(new ClickListener() {});
 			
 			// Place the popin and add the background texture
-			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 			ninePatchDrawable.setMinWidth(400);
 			buttonTable.setBackground(ninePatchDrawable);
 			
@@ -139,7 +139,7 @@ public class MenuPopinRenderer implements Renderer {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					closePopin();
-					gamescreen.game.setScreen(new MainMenuScreen(gamescreen.game));
+					gamescreen.backToMenu();
 				}
 			});
 			buttonTable.add(mainMenuBtn).minWidth(200).padBottom(20);
@@ -174,7 +174,7 @@ public class MenuPopinRenderer implements Renderer {
 			table.row();
 			
 			Table seedTable = new Table();
-			ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+			ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 			ninePatchDrawable.setMinWidth(400);
 			seedTable.setBackground(ninePatchDrawable);
 			Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());

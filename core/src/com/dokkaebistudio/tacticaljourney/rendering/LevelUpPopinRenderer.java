@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -85,7 +86,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		table.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
 	    		table.setTouchable(Touchable.childrenOnly);
 	    		
-	    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinNinePatch);
+	    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
 	    		ninePatchDrawable.setMinWidth(600);
 	    		ninePatchDrawable.setMinHeight(500);
 	    		table.setBackground(ninePatchDrawable);
@@ -144,7 +145,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 			Stack choiceGroup = new Stack();
 			
 			Table rewardTable = new Table();
-    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(Assets.popinInnerNinePatch);
+    		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
     		ninePatchDrawable.setMinWidth(200);
     		ninePatchDrawable.setMinHeight(80);
     		rewardTable.setBackground(ninePatchDrawable);
@@ -157,7 +158,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 			
 			final Table descTable = new Table();
-    		ninePatchDrawable = new NinePatchDrawable(Assets.popinOuterNinePatch);
+    		ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinOuterNinePatch);
     		ninePatchDrawable.setMinWidth(200);
     		ninePatchDrawable.setMinHeight(80);
     		descTable.setBackground(ninePatchDrawable);

@@ -94,18 +94,6 @@ public class Assets {
 	//**********
 	// Popins
 	
-	public static NinePatch popinNinePatch;
-	public static NinePatch popinInnerNinePatch;
-	public static NinePatch popinOuterNinePatch;
-	public static NinePatch buttonNinePatch;
-	public static NinePatch buttonPressedNinePatch;
-	public static NinePatch buttonDisabledNinePatch;
-	
-	public static RegionDescriptor popin_big_btn_up;
-	public static RegionDescriptor popin_big_btn_down;
-	public static RegionDescriptor popin_small_btn_up;
-	public static RegionDescriptor popin_small_btn_down;
-	
 	public static RegionDescriptor lvl_up_background;
 	public static RegionDescriptor lvl_up_choice_frame;
 	public static RegionDescriptor lvl_up_choice_desc_panel;
@@ -441,20 +429,6 @@ public class Assets {
 		
 		//**********
 		// Popins
-		
-		popinNinePatch = getNinePatch("popin", 17, 17, 17, 17);
-		popinInnerNinePatch = getNinePatch("popin_inner", 13, 13, 13, 13);
-		popinOuterNinePatch = getNinePatch("popin_outer", 13, 13, 13, 13);
-		buttonNinePatch = getNinePatch("button", 17, 17, 17, 17);
-		buttonPressedNinePatch = getNinePatch("button_pressed", 17, 17, 17, 17);
-		buttonDisabledNinePatch = getNinePatch("button_disabled", 17, 17, 17, 17);
-		
-		
-		popin_big_btn_up = Assets.getTexture("hud_inventory_item_popin_btn_up");
-		popin_big_btn_down = Assets.getTexture("hud_inventory_item_popin_btn_down");
-		popin_small_btn_up = Assets.getTexture("hud_lvl_up_choice_claim_btn");
-		popin_small_btn_down = Assets.getTexture("hud_lvl_up_choice_claim_btn_pushed");
-
 		
 		lvl_up_background = Assets.getTexture("hud_lvl_up_background");
 		lvl_up_choice_frame = Assets.getTexture("hud_lvl_up_choice_frame");

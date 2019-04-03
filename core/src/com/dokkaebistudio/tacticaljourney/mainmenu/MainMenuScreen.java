@@ -30,11 +30,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -64,7 +65,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground.getRegion();
+		menuBackground = MenuAssets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 		
@@ -72,7 +73,7 @@ public class MainMenuScreen extends ScreenAdapter {
 				
 		Table mainTable = new Table();
 		
-		Image mainTitle = new Image(Assets.mainTitle.getRegion());
+		Image mainTitle = new Image(MenuAssets.mainTitle.getRegion());
 		mainTable.add(mainTitle).padBottom(150);
 		mainTable.row();
 
@@ -154,12 +155,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 	}
 
-	public void update () {
-//		if (Gdx.input.justTouched()) {
-//			// touched screen, start the fucking game already
-//			game.setScreen(new GameScreen(game));
-//		}
-	}
+	public void update () {}
 
 	public void draw () {
 		GL20 gl = Gdx.gl;
@@ -195,7 +191,8 @@ public class MainMenuScreen extends ScreenAdapter {
 	
 	@Override
 	public void dispose() {
-		Assets.getInstance().dispose();
+		MenuAssets.getInstance().dispose();
+		SceneAssets.getInstance().dispose();
 		hudStage.dispose();
 		game.dispose();
 		PopinService.dispose();

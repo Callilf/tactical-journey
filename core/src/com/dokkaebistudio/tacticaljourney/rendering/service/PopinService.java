@@ -1,15 +1,13 @@
 package com.dokkaebistudio.tacticaljourney.rendering.service;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
 public class PopinService {
 
@@ -23,55 +21,33 @@ public class PopinService {
 	private LabelStyle smallTextStyle;
     private TextButtonStyle buttonStyle;
     private TextButtonStyle checkedButtonStyle;
-    private TextButtonStyle bigButtonStyle;
-    private TextButtonStyle smallButtonStyle;
-    private TextButtonStyle smallButtonCheckedStyle;
     
     private TextFieldStyle textFieldStyle;
 	
     
     private PopinService() {
-		hudStyle = new LabelStyle(Assets.font.getFont(), Color.WHITE);
-		smallTextStyle = new LabelStyle(Assets.smallFont.getFont(), Color.WHITE);
+		hudStyle = new LabelStyle(SceneAssets.font.getFont(), Color.WHITE);
+		smallTextStyle = new LabelStyle(SceneAssets.smallFont.getFont(), Color.WHITE);
 
 		
-		Drawable npBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
-		Drawable npBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
-		Drawable npBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
-		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, Assets.font.getFont());
+		Drawable npBtnUp = new NinePatchDrawable(SceneAssets.buttonNinePatch);
+		Drawable npBtnDown = new NinePatchDrawable(SceneAssets.buttonPressedNinePatch);
+		Drawable npBtnDisabled = new NinePatchDrawable(SceneAssets.buttonDisabledNinePatch);
+		buttonStyle = new TextButtonStyle(npBtnUp, npBtnDown, null, SceneAssets.font.getFont());
 		buttonStyle.disabled = npBtnDisabled;
 		
-		Drawable npCheckedBtnUp = new NinePatchDrawable(Assets.buttonNinePatch);
-		Drawable npCheckedBtnDown = new NinePatchDrawable(Assets.buttonPressedNinePatch);
-		Drawable npCheckedBtnDisabled = new NinePatchDrawable(Assets.buttonDisabledNinePatch);
-		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, Assets.font.getFont());
+		Drawable npCheckedBtnUp = new NinePatchDrawable(SceneAssets.buttonNinePatch);
+		Drawable npCheckedBtnDown = new NinePatchDrawable(SceneAssets.buttonPressedNinePatch);
+		Drawable npCheckedBtnDisabled = new NinePatchDrawable(SceneAssets.buttonDisabledNinePatch);
+		checkedButtonStyle = new TextButtonStyle(npCheckedBtnUp, npCheckedBtnDown, npCheckedBtnDown, SceneAssets.font.getFont());
 		checkedButtonStyle.disabled = npCheckedBtnDisabled;
-		
-		Drawable btnUp = new SpriteDrawable(new Sprite(Assets.popin_big_btn_up.getRegion()));
-		Drawable btnDown = new SpriteDrawable(new Sprite(Assets.popin_big_btn_down.getRegion()));
-		Sprite disableSprite = new Sprite(Assets.popin_big_btn_up.getRegion());
-		disableSprite.setAlpha(0.5f);
-		Drawable btnDisabled = new SpriteDrawable(disableSprite);
-		bigButtonStyle = new TextButtonStyle(btnUp, btnDown, null, Assets.font.getFont());
-		bigButtonStyle.disabled = btnDisabled;
 
-		Drawable sbtnUp = new SpriteDrawable(new Sprite(Assets.popin_small_btn_up.getRegion()));
-		Drawable sbtnDown = new SpriteDrawable(new Sprite(Assets.popin_small_btn_down.getRegion()));
-		Sprite sdisableSprite = new Sprite(Assets.popin_small_btn_up.getRegion());
-		sdisableSprite.setAlpha(0.5f);
-		Drawable sbtnDisabled = new SpriteDrawable(sdisableSprite);
-		smallButtonStyle = new TextButtonStyle(sbtnUp, sbtnDown, null, Assets.font.getFont());
-		smallButtonStyle.disabled = sbtnDisabled;	
-		
-		smallButtonCheckedStyle = new TextButtonStyle(sbtnUp, sbtnDown, sbtnDown, Assets.font.getFont());
-		smallButtonCheckedStyle.disabled = sbtnDisabled;	
-		
 		
 		textFieldStyle = new TextFieldStyle();
-		textFieldStyle.background = new NinePatchDrawable(Assets.popinNinePatch);
-		textFieldStyle.font = Assets.font.getFont();
+		textFieldStyle.background = new NinePatchDrawable(SceneAssets.popinNinePatch);
+		textFieldStyle.font = SceneAssets.font.getFont();
 		textFieldStyle.fontColor = Color.WHITE;
-		textFieldStyle.cursor = new TextureRegionDrawable(Assets.textfield_cursor.getRegion());
+		textFieldStyle.cursor = new TextureRegionDrawable(SceneAssets.textfield_cursor.getRegion());
 		textFieldStyle.cursor.setMinWidth(1f);
     }
     
@@ -96,21 +72,6 @@ public class PopinService {
     public static TextButtonStyle checkedButtonStyle() {
     	if (instance == null) instance = new PopinService();
     	return instance.checkedButtonStyle;
-    }
-    
-    public static TextButtonStyle bigButtonStyle() {
-    	if (instance == null) instance = new PopinService();
-    	return instance.bigButtonStyle;
-    }
-    
-    public static TextButtonStyle smallButtonStyle() {
-    	if (instance == null) instance = new PopinService();
-    	return instance.smallButtonStyle;
-    }
-    
-    public static TextButtonStyle smallButtonCheckedStyle() {
-    	if (instance == null) instance = new PopinService();
-    	return instance.smallButtonCheckedStyle;
     }
     
     public static TextFieldStyle textFieldStyle() {

@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.LoadingGameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -123,7 +124,7 @@ public class LoadGameScreen extends ScreenAdapter {
 			public void changed(ChangeEvent event, Actor actor) {
 				RandomSingleton.createInstance();
 				// Launch the game
-				game.setScreen(new GameScreen(game, false, null));
+				game.setScreen(new LoadingGameScreen(game, false, null));
 			}
 		});
 		buttonTable.add(loadBtn).width(500).height(200).padBottom(5);

@@ -38,6 +38,8 @@ public class AttackWheel {
 	/** The attack component used to call the wheel. */
 	private AttackComponent attackComponent;
 	
+	private int currentAccuracy;
+	
 	public AttackWheel() {
 		this.displayed = false;
 		
@@ -148,6 +150,16 @@ public class AttackWheel {
 
 	public void setWheelComponent(WheelComponent wheelComponent) {
 		this.wheelComponent = wheelComponent;
+	}
+
+
+	public int getCurrentAccuracy() {
+		return currentAccuracy;
+	}
+
+
+	public void setCurrentAccuracy(int currentAccuracy) {
+		this.currentAccuracy = currentAccuracy;
 	}
 
 //	public List<Sprite> getArcs() {

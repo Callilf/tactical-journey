@@ -229,7 +229,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(mapRenderer);
 		renderers.add(new JournalRenderer(journalStage));
 		renderers.add(new DialogRenderer(room, stage));
-		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer));
+		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer, hudStage));
 		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
 		renderers.add(new InspectPopinRenderer(room, stage, player));
 		renderers.add(new ItemPopinRenderer(room, stage, player));

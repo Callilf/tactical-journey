@@ -7,15 +7,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 public class WheelRenderer implements Renderer {
 	
-	public static final int WHEEL_X = GameScreen.SCREEN_W / 2;
-	public static final int WHEEL_Y = GameScreen.SCREEN_H/2;
+	public static final int WHEEL_X = GameScreen.SCREEN_W/2;
+	public static final int WHEEL_Y = 700;
 	
 	private static final Color HIT_COLOR = Color.GREEN;
 	private static final Color MISS_COLOR = Color.BLACK;
@@ -37,15 +47,62 @@ public class WheelRenderer implements Renderer {
 	/** The sprite renderer. */
 	private SpriteBatch batcher;
 	
-	public WheelRenderer (AttackWheel wheel, GameScreen gs, SpriteBatch sb, ShapeRenderer sr) {
+	/** The stage. */
+	private Stage stage;
+	
+	private boolean tableDisplayed = false;
+	private Table mainTable;
+	private Label accuracyLbl;
+	
+	public WheelRenderer (AttackWheel wheel, GameScreen gs, SpriteBatch sb, ShapeRenderer sr, Stage stage) {
 		this.wheel = wheel;
 		this.gameScreen = gs;
 		this.shapeRenderer = sr;
 		this.batcher = sb;
+		this.stage = stage;
+		
+		
+		mainTable = new Table();
+		mainTable.setBackground(new NinePatchDrawable(SceneAssets.popinNinePatch));
+		
+		accuracyLbl = new Label("Accuracy", PopinService.hudStyle());
+		mainTable.add(accuracyLbl).pad(10, 10, 10, 10);
+		mainTable.row();
+		
+		TextButton attack = new TextButton("ATTACK", PopinService.buttonStyle());
+		attack.addListener(new ClickListener() {			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				WheelSystem.attackButtonPressed = true;
+				return super.touchDown(event, x, y, pointer, button);
+			}
+			
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				super.touchUp(event, x, y, pointer, button);
+				WheelSystem.attackButtonReleased = true;
+				mainTable.remove();
+				tableDisplayed = false;
+			}
+			
+		});
+		mainTable.add(attack).width(300).height(150).pad(10, 10, 10, 10);
+		mainTable.row();
+		
+		mainTable.pack();
+		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 150);
 	}
 	
 	public void render(float deltaTime) {
 		if (wheel.isDisplayed()) {
+			if (!tableDisplayed) {
+				accuracyLbl.setText("Accuracy: " + wheel.getCurrentAccuracy());
+				
+				this.stage.addActor(mainTable);
+				tableDisplayed = true;
+			}
+			
+			
 			// first normalize sector values
 			int total = 0;
 			List<Float> normalizeRanges = new LinkedList<Float>();
@@ -103,7 +160,6 @@ public class WheelRenderer implements Renderer {
 			arrow.draw(batcher);
 			
 			batcher.end();
-			
 		} 
 	}
 

@@ -10,7 +10,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 
@@ -20,6 +19,10 @@ import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
  */
 public class WheelSystem extends EntitySystem implements RoomSystem {
 
+	public static boolean attackButtonPressed;
+	public static boolean attackButtonReleased;
+
+	
 	/** The attack wheel. */
     private final AttackWheel wheel;
     
@@ -69,6 +72,18 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 		        }
 		        
 		        
+		        // Compute current accuracy
+    			int accuracy = wheel.getAttackComponent().getAccuracy();
+    			Entity target = wheel.getAttackComponent().getTarget();
+    			if (target != null) {
+    				MoveComponent moveComponent = Mappers.moveComponent.get(target);
+    				if (moveComponent != null && moveComponent.isFrozen()) {
+    					// Frozen target, increase accuracy
+    					accuracy += 2;
+    				}
+    			}
+		        wheel.setCurrentAccuracy(accuracy);
+		        
 		        room.setNextState(RoomState.PLAYER_WHEEL_TURNING);
     			
     			break;
@@ -76,23 +91,15 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			
     		case PLAYER_WHEEL_TURNING:
     			
-    			if (InputSingleton.getInstance().leftClickJustPressed) {
+    			if (attackButtonPressed) {
+    				attackButtonPressed = false;
+    				
 	    			//Stop the spinning
 	    			room.setNextState(RoomState.PLAYER_WHEEL_NEEDLE_STOP);
 	    		} else {
 	    			
-	    			// Make the arrow spin
-	    			int accuracy = wheel.getAttackComponent().getAccuracy();
-	    			Entity target = wheel.getAttackComponent().getTarget();
-	    			if (target != null) {
-	    				MoveComponent moveComponent = Mappers.moveComponent.get(target);
-	    				if (moveComponent != null && moveComponent.isFrozen()) {
-	    					// Frozen target, increase accuracy
-	    					accuracy += 2;
-	    				}
-	    			}
-	    			
-	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.25f + (accuracy * 0.25f));
+	    			// Make the arrow spin	    			
+	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.25f + (wheel.getCurrentAccuracy() * 0.25f));
 	    		}
     			
     			break;
@@ -100,7 +107,9 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			
     		case PLAYER_WHEEL_NEEDLE_STOP:
     			
-    			if (InputSingleton.getInstance().leftClickJustReleased) {
+    			if (attackButtonReleased) {
+    				attackButtonReleased = false;
+    				
 	    			//Hide the wheel and perform the action
 		        	wheel.setDisplayed(false);
 		        	wheel.setPointedSector();

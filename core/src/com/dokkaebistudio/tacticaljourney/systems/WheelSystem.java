@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -79,7 +80,19 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 	    			//Stop the spinning
 	    			room.setNextState(RoomState.PLAYER_WHEEL_NEEDLE_STOP);
 	    		} else {
-	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.25f + (wheel.getAttackComponent().getAccuracy() * 0.25f));
+	    			
+	    			// Make the arrow spin
+	    			int accuracy = wheel.getAttackComponent().getAccuracy();
+	    			Entity target = wheel.getAttackComponent().getTarget();
+	    			if (target != null) {
+	    				MoveComponent moveComponent = Mappers.moveComponent.get(target);
+	    				if (moveComponent != null && moveComponent.isFrozen()) {
+	    					// Frozen target, increase accuracy
+	    					accuracy += 2;
+	    				}
+	    			}
+	    			
+	    			wheel.getArrow().setRotation(wheel.getArrow().getRotation() - 5.25f + (accuracy * 0.25f));
 	    		}
     			
     			break;

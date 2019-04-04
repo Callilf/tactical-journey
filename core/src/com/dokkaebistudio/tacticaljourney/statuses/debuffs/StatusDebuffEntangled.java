@@ -42,7 +42,7 @@ public class StatusDebuffEntangled extends Status {
 
 	@Override
 	public String description() {
-		return "Cannot move, but can still attack.";
+		return "Cannot move, but can still attack. When attacking entangled enemies, accuracy is increased by 2.";
 	}
 	
 	@Override

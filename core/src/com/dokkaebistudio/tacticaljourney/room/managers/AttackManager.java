@@ -82,6 +82,11 @@ public class AttackManager {
 				DropUtil.destroy(destructible, room);
 			}
 			
+			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
+			if (alterationReceiverComponent != null) {
+				alterationReceiverComponent.onAttackEmptyTile(attacker, targetedTile, room);
+			}
+			
 			return;
 		}
 		

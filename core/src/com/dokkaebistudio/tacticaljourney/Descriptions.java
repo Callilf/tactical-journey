@@ -229,5 +229,8 @@ public class Descriptions {
 	public static final String ITEM_PANGOLIN_SCALE_TITLE = "Pangolin scale";
 	public static final String ITEM_PANGOLIN_SCALE_DESCRIPTION = "A scale of the giant pangolin. It solid as a rock, but as you touch it, you can feel the despair of a mother who lost her childrens.";
 
+	public static final String ITEM_POWDER_FLASK_TITLE = "Powder flask";
+	public static final String ITEM_POWDER_FLASK_DESCRIPTION = "An antique flask of gun powder with old West designs. Grants the blessing of fire arrows and the Curse of heavy arrows while held in the inventory.";
+
 
 }

@@ -320,6 +320,7 @@ public class Assets {
 	public static RegionDescriptor memento_mori;
 	public static RegionDescriptor headband;
 	public static RegionDescriptor villanelle;
+	public static RegionDescriptor powder_flask;
 	
 	
 	// Boss items
@@ -355,6 +356,7 @@ public class Assets {
 	public static RegionDescriptor blessing_acceptance;
 	public static RegionDescriptor blessing_goat;
 	public static RegionDescriptor blessing_contract_killer;
+	public static RegionDescriptor blessing_fire_arrows;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -362,6 +364,7 @@ public class Assets {
 	public static RegionDescriptor curse_black_mamba;
 	public static RegionDescriptor curse_acceptance;
 	public static RegionDescriptor curse_pangolin_mother;
+	public static RegionDescriptor curse_heavy_arrows;
 
 	
 
@@ -648,6 +651,7 @@ public class Assets {
 		memento_mori = Assets.getTexture("item-infusable-memento-mori");
 		headband = Assets.getTexture("item-infusable-headband");
 		villanelle = Assets.getTexture("item-infusable-villanelle");
+		powder_flask = Assets.getTexture("item-infusable-powder-flask");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -677,6 +681,7 @@ public class Assets {
 		blessing_acceptance = Assets.getTexture("blessing-acceptance");
 		blessing_goat = Assets.getTexture("blessing-goat");
 		blessing_contract_killer = Assets.getTexture("blessing-bounty");
+		blessing_fire_arrows = Assets.getTexture("blessing-fire-arrow");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
@@ -684,6 +689,7 @@ public class Assets {
 		curse_black_mamba = Assets.getTexture("curse-black-mamba");
 		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
+		curse_heavy_arrows = Assets.getTexture("curse-heavy-arrow");
 
 		
 		

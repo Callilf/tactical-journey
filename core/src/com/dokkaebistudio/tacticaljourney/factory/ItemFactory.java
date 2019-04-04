@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPowderFlask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
@@ -236,6 +237,10 @@ public final class ItemFactory {
 			
 		case VILLANELLE:
 			item = createItemVillanelle(room, tilePos);
+			break;
+			
+		case POWDER_FLASK:
+			item = createItemPowderFlask(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -576,7 +581,14 @@ public final class ItemFactory {
 	public Entity createItemVillanelle(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos, Assets.villanelle, new ItemVillanelle(),
 				Descriptions.ITEM_VILLANELLE_TITLE, Descriptions.ITEM_VILLANELLE_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_HEADBAND.getFlag();
+		item.flags = EntityFlagEnum.ITEM_VILLANELLE.getFlag();
+		return item;
+	}
+	
+	public Entity createItemPowderFlask(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, Assets.powder_flask, new ItemPowderFlask(),
+				Descriptions.ITEM_POWDER_FLASK_TITLE, Descriptions.ITEM_POWDER_FLASK_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_POWDER_FLASK.getFlag();
 		return item;
 	}
 	

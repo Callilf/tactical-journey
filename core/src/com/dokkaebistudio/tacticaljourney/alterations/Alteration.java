@@ -4,9 +4,9 @@
 package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
@@ -38,6 +38,16 @@ public abstract class Alteration {
 	 * @param room the room
 	 */
 	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {};
+	
+	/**
+	 * Called when the blessed entity attacks an empty tile.
+	 * @param attacker the blessed entity
+	 * @param tile the tile attacked
+	 * @param room the room
+	 */
+	public void onAttackEmptyTile(Entity attacker, Tile tile, Room room) {};
+
+	
 	
 	/**
 	 * Called when the blessed entity kills a target.

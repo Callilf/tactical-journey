@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -45,7 +46,7 @@ public class BlessingOfCinders extends Blessing {
 	}
 
 	@Override
-	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		if (sector.hit == Hit.CRITICAL || sector.hit == Hit.HIT || sector.hit == Hit.GRAZE) {
 			
 			int chanceToProc = this.initialChanceToProc;

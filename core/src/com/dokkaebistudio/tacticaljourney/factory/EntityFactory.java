@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
@@ -500,7 +501,7 @@ public final class EntityFactory {
 	 * @return the text entity
 	 */
 	public Entity createText(Vector3 pos, String text, Room room) {
-		return createText(pos, text, Assets.font, room);
+		return createText(pos, text, SceneAssets.font, room);
 	}
 	
 	/**
@@ -563,7 +564,7 @@ public final class EntityFactory {
 		gridPositionComponent.zIndex = zIndex;
 		textTest.add(gridPositionComponent);
 		
-		TextComponent tc = new TextComponent(Assets.smallFont);
+		TextComponent tc = new TextComponent(SceneAssets.smallFont);
 		tc.setText(text);
 		textTest.add(tc);
 		
@@ -601,7 +602,7 @@ public final class EntityFactory {
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		textCompo.setFont(Assets.font);
+		textCompo.setFont(SceneAssets.font);
 		
 		String color = "";
 		switch(healthChange) {
@@ -654,7 +655,7 @@ public final class EntityFactory {
 		display.add(transfoCompo);
 		
 		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		textCompo.setFont(Assets.font);
+		textCompo.setFont(SceneAssets.font);
 		textCompo.setText("Exp+" + exp);
 		display.add(textCompo);
 		

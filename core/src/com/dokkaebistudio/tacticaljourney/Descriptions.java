@@ -142,7 +142,7 @@ public class Descriptions {
 	public static final String ITEM_KEY_DESCRIPTION = "The key to the lower floor.";
 
 	public static final String ITEM_ARROWS_TITLE = "Arrows";
-	public static final String ITEM_ARROWS_DESCRIPTION = "Arrows can be shot from a distance using your bow skill (down left of the screen). If there are too much arrows for your quiver, the remaining "
+	public static final String ITEM_ARROWS_DESCRIPTION = "Arrows can be shot from a distance using your bow skill. If there are too much arrows for your quiver, the remaining "
 			+ "arrows will stay on the ground.";
 
 	public static final String ITEM_BOMBS_TITLE = "Bombs";

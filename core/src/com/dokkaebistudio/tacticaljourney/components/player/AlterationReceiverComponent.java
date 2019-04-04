@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -75,21 +76,21 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	//*************
 	// Events
 	
-	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		for (Blessing b : blessings) {
-			b.onAttack(attacker, target, sector, room);
+			b.onAttack(attacker, target, sector, attackCompo, room);
 		}
 		for (Curse c : curses) {
-			c.onAttack(attacker, target, sector, room);
+			c.onAttack(attacker, target, sector, attackCompo, room);
 		}
 	}
 	
-	public void onAttackEmptyTile(Entity attacker, Tile tile, Room room) {
+	public void onAttackEmptyTile(Entity attacker, Tile tile, AttackComponent attackCompo, Room room) {
 		for (Blessing b : blessings) {
-			b.onAttackEmptyTile(attacker, tile, room);
+			b.onAttackEmptyTile(attacker, tile, attackCompo, room);
 		}
 		for (Curse c : curses) {
-			c.onAttackEmptyTile(attacker, tile, room);
+			c.onAttackEmptyTile(attacker, tile, attackCompo, room);
 		}
 	}
 	

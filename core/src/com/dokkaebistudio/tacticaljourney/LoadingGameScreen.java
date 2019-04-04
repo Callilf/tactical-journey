@@ -22,9 +22,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.Settings;
-import com.dokkaebistudio.tacticaljourney.TacticalJourney;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
 public class LoadingGameScreen extends ScreenAdapter {
 	TacticalJourney game;
@@ -70,8 +68,8 @@ public class LoadingGameScreen extends ScreenAdapter {
 		String text = "LOADING - " + progress + "%";
 		GlyphLayout loadingLayout = new GlyphLayout();
 		// update layout. It is used to compute the real text height and width to aid positioning
-		loadingLayout.setText(Assets.font.getFont(), text);
-		Assets.font.getFont().draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
+		loadingLayout.setText(SceneAssets.font.getFont(), text);
+		SceneAssets.font.getFont().draw(game.batcher, loadingLayout, 1920/2 - loadingLayout.width, 1080/2 - loadingLayout.height);
 		game.batcher.end();	
 	}
 

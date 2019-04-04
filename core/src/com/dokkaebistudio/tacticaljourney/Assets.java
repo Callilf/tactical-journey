@@ -18,7 +18,6 @@ package com.dokkaebistudio.tacticaljourney;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -29,7 +28,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 
 public class Assets {
@@ -366,10 +364,6 @@ public class Assets {
 	public static RegionDescriptor curse_pangolin_mother;
 	public static RegionDescriptor curse_heavy_arrows;
 
-	
-
-	public static FontDescriptor font;	
-	public static FontDescriptor smallFont;
 	public static RegionDescriptor textfield_cursor;
 
 	private static Assets instance;
@@ -706,12 +700,7 @@ public class Assets {
 		RegionDescriptor regionDescriptor = allSprites.get(name);
 		return regionDescriptor;
 	}
-	
-	public static FontDescriptor findFont(String name) {
-		if (font.getName().equals(name)) return font;
-		if (smallFont.getName().equals(name)) return smallFont;
-		return null;
-	}
+
 	
 
 	public static Assets getInstance() {
@@ -738,7 +727,6 @@ public class Assets {
 	private void registerAssets() {
 		// register the only texture atlas we have
 		registerTextureAtlas(atlas);
-		loadFont();
 	}
 
 	/**
@@ -810,22 +798,6 @@ public class Assets {
 	
 	private void registerFont(String file) {
 		this.manager.load(file, BitmapFont.class);
-	}
-
-	/**
-	 * Should be called as soon as possible to display loading info.
-	 */
-	public void loadFont() {
-		BitmapFont bmfont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		bmfont.getData().markupEnabled = true;
-		font = new FontDescriptor("font", bmfont);
-
-		
-		BitmapFont bmSmallFont  = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		bmSmallFont.getData().markupEnabled = true;
-		bmSmallFont.getData().setScale(0.8f);
-		smallFont = new FontDescriptor("smallfont", bmSmallFont);
-
 	}
 
 	public static void playSound (String sound) {

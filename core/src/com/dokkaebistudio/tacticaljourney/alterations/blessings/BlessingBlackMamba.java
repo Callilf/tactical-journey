@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -43,7 +44,7 @@ public class BlessingBlackMamba extends Blessing {
 	}
 
 	@Override
-	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		int chanceToProc = 0;
 		if (sector != null && sector.hit == Hit.HIT) chanceToProc = chanceToProcOnHit;
 		else if (sector != null && sector.hit == Hit.CRITICAL) chanceToProc = chanceToProcOnCrit;

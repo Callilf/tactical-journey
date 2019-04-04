@@ -84,7 +84,7 @@ public class AttackManager {
 			
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
 			if (alterationReceiverComponent != null) {
-				alterationReceiverComponent.onAttackEmptyTile(attacker, targetedTile, room);
+				alterationReceiverComponent.onAttackEmptyTile(attacker, targetedTile, attackCompo, room);
 			}
 			
 			return;
@@ -126,7 +126,7 @@ public class AttackManager {
 			damage = attackCompo.getStrength();
 		}
 		
-		applyDamage(attacker, target, damage, DamageType.NORMAL);
+		applyDamage(attacker, target, damage, DamageType.NORMAL, attackCompo);
 	}
 	
 	
@@ -135,8 +135,8 @@ public class AttackManager {
 	 * @param target the target entity
 	 * @param damage the amount of damage
 	 */
-	public void applyDamageWithoutAttacker(Entity target, int damage, DamageType damageType) {
-		this.applyDamage(null, target, damage, damageType);
+	public void applyDamageWithoutAttacker(Entity target, int damage, DamageType damageType, AttackComponent attackCompo) {
+		this.applyDamage(null, target, damage, damageType, attackCompo);
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class AttackManager {
 	 * @param target the target entity
 	 * @param damage the amount of damage
 	 */
-	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType) {
+	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType, AttackComponent attackCompo) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
 		if (healthComponent != null) {
 			healthComponent.hit(damage, target, attacker, damageType);
@@ -173,7 +173,7 @@ public class AttackManager {
 			}
 			alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
 			if (alterationReceiverComponent != null) {
-				alterationReceiverComponent.onAttack(attacker, target, this.lastPointedSector, room);
+				alterationReceiverComponent.onAttack(attacker, target, this.lastPointedSector, attackCompo, room);
 			}
 		}
 	}

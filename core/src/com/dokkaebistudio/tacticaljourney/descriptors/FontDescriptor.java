@@ -2,8 +2,7 @@ package com.dokkaebistudio.tacticaljourney.descriptors;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -49,7 +48,7 @@ public class FontDescriptor {
 			@Override
 			public FontDescriptor read(Kryo kryo, Input input, Class<FontDescriptor> type) {
 				String name = input.readString();
-				return Assets.findFont(name);
+				return SceneAssets.findFont(name);
 			}
 		
 		};

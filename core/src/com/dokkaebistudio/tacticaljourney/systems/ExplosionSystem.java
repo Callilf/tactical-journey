@@ -168,7 +168,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 
 			// Deal damage to any entity on the tile
 			if (target != null && explosive != target) {
-				room.attackManager.applyDamage(explosive, target, explosiveComponent.getDamage(), DamageType.EXPLOSION);
+				room.attackManager.applyDamage(explosive, target, explosiveComponent.getDamage(), DamageType.EXPLOSION, null);
 			}
 
 			// Destroy destructible entities

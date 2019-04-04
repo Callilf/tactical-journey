@@ -6,8 +6,10 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -39,7 +41,7 @@ public class BlessingOfFireArrows extends Blessing {
 	}
 
 	@Override
-	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		// Attacked an enemy
 		int chanceToProc = this.initialChanceToProc;
 		
@@ -51,9 +53,11 @@ public class BlessingOfFireArrows extends Blessing {
 	}
 	
 	@Override
-	public void onAttackEmptyTile(Entity attacker, Tile tile, Room room) {
-		// Attacked an empty tile
-		room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), attacker);
+	public void onAttackEmptyTile(Entity attacker, Tile tile, AttackComponent attackCompo, Room room) {
+		if (attackCompo != null && attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
+			// Attacked an empty tile
+			room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), attacker);
+		}
 	}
 	
 

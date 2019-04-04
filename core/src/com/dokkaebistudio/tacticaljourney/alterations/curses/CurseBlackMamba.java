@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -42,7 +43,7 @@ public class CurseBlackMamba extends Curse {
 	}
 
 	@Override
-	public void onAttack(Entity attacker, Entity target, Sector sector, Room room) {
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		if (sector != null && sector.hit == Hit.MISS) {
 			int randomValue = RandomSingleton.getInstance().getUnseededRandom().nextInt(100);
 			if (randomValue < chanceToProc) {

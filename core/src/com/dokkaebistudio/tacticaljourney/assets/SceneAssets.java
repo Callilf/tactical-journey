@@ -28,6 +28,8 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
@@ -184,16 +186,20 @@ public class SceneAssets {
 	 * Should be called as soon as possible to display loading info.
 	 */
 	public void loadFont() {
-		BitmapFont bmfont = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		bmfont.getData().markupEnabled = true;
-		font = new FontDescriptor("font", bmfont);
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/Acme-Regular.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 24;
+		BitmapFont font24 = generator.generateFont(parameter); // font size 12
+		font24.getData().markupEnabled = true;
+		font = new FontDescriptor("font", font24);
+		
+		parameter.size = 20;
+		BitmapFont font12 = generator.generateFont(parameter); // font size 12
+		font12.getData().markupEnabled = true;
+		smallFont = new FontDescriptor("font", font12);
 
 		
-		BitmapFont bmSmallFont  = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-		bmSmallFont.getData().markupEnabled = true;
-		bmSmallFont.getData().setScale(0.8f);
-		smallFont = new FontDescriptor("smallfont", bmSmallFont);
-
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
 	public static void playSound (String sound) {

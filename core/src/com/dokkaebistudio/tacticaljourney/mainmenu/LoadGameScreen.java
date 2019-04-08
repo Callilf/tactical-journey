@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.LoadingGameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -67,7 +68,7 @@ public class LoadGameScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 
 		// should be already loaded
-		menuBackground = Assets.menuBackground.getRegion();
+		menuBackground = MenuAssets.menuBackground.getRegion();
 		
 		Gdx.input.setInputProcessor(hudStage);
 		

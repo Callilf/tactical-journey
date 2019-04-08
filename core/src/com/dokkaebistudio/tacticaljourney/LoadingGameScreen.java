@@ -48,7 +48,7 @@ public class LoadingGameScreen extends ScreenAdapter {
 		if (loaded) { // loading is finished !
 			Assets.getInstance().initTextures();
             // change screen
-			this.game.setScreen(new GameScreen(game, true, playerName));
+			this.game.setScreen(new GameScreen(game, newGame, playerName));
 		}
 
 		// report progress

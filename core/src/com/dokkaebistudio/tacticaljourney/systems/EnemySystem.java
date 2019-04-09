@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class EnemySystem extends EntitySystem implements RoomSystem {
@@ -168,8 +169,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	    	    	moveCompo.selectCurrentMoveDestinationTile(enemyEntity);
 	    	    		
 	    	    	//Do the movement on screen
-	    	    	boolean movementFinished = movementHandler.performRealMovement(enemyEntity, room);
-	        		if (movementFinished) room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+	    	    	MovementProgressEnum movementProgress = movementHandler.performRealMovement(enemyEntity, room);
+	        		if (movementProgress == MovementProgressEnum.MOVEMENT_OVER) room.setNextState(RoomState.ENEMY_END_MOVEMENT);
         		} else {
         			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
         		}

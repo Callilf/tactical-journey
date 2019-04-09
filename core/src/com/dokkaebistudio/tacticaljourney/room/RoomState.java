@@ -16,6 +16,7 @@ public enum RoomState {
 	PLAYER_MOVE_DESTINATION_SELECTED,
 	PLAYER_MOVING,
 	PLAYER_END_MOVEMENT,
+	PLAYER_PAUSE_MOVEMENT,
 	
 	PLAYER_TARGETING_START,
 	PLAYER_TARGETING,
@@ -74,7 +75,8 @@ public enum RoomState {
 				|| this == RoomState.PLAYER_COMPUTE_MOVABLE_TILES 
 				|| this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
     			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED 
-    			|| this == RoomState.PLAYER_MOVING 
+    			|| this == RoomState.PLAYER_MOVING
+    			|| this == RoomState.PLAYER_PAUSE_MOVEMENT
     			|| this == RoomState.PLAYER_END_MOVEMENT
     			|| this == RoomState.PLAYER_TARGETING_START
     			|| this == RoomState.PLAYER_TARGETING

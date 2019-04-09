@@ -31,6 +31,7 @@ public class PersonalBelongingsItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.HEADBAND, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.VILLANELLE, 10, true));
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POWDER_FLASK, 10, true));
+		itemPool.add(new PooledItemDescriptor(ItemEnum.CAMO_BACKPACK, 10, true));
 	}
 		
 	

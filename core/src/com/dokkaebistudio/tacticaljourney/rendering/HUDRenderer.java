@@ -76,6 +76,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	public static Vector2 POS_FPS = new Vector2(5f, 130f);
 
+	public static Boolean isTargeting;
 
 
 	public Stage stage;
@@ -383,19 +384,23 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.setTouchable(Touchable.childrenOnly);
 			
 			endTurnBtn = new TextButton("END TURN\n(spacebar)", PopinService.checkedButtonStyle());
-			
-			endTurnBtn.addListener(new ChangeListener() {
+			endTurnBtn.addListener( new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-
+					endTurnBtn.setChecked(false);
 					if (room.getState().canEndTurn()) {
-						endTurnBtn.setChecked(false);
 						moveComponent.clearMovableTiles();
 						attackComponent.clearAttackableTiles();
 						room.turnManager.endPlayerTurn();
+					} else {
+						Boolean b = (Boolean) endTurnBtn.getUserObject();
+						if (b == true) {
+							// Cancel targeting
+							isTargeting = false;
+							deactivateSkill(player);
+						}
 					}
 				}
-
 			});
 			
 			// Add shortcut to activate the end turn button
@@ -428,7 +433,17 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			bottomLeftTable.pack();
 			stage.addActor(bottomLeftTable);
 		}
-
+		if (isTargeting != null) {
+			if (isTargeting) {
+				endTurnBtn.setUserObject(Boolean.TRUE);
+				endTurnBtn.setText("CANCEL\n(spacebar)");
+			} else {
+				endTurnBtn.setUserObject(Boolean.FALSE);
+				endTurnBtn.setText("END TURN\n(spacebar)");
+			}
+			isTargeting = null;
+		}
+		
 		// HEALTH
 		if (healthTable == null) {
 			healthTable = new Table();
@@ -818,9 +833,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		for (Button btn : allSkillButtons) {
 			btn.setDisabled(!room.getState().isSkillChangeAllowed());
-			if (room.getState() == RoomState.PLAYER_END_TURN) {
+			if (room.getState() == RoomState.PLAYER_END_TURN || room.getState() == RoomState.PLAYER_TARGETING_STOP) {
 				btn.setProgrammaticChangeEvents(false);
 				btn.setChecked(false);
+				isTargeting = false;
 			} else {
 				btn.setProgrammaticChangeEvents(true);
 			}

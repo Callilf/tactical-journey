@@ -69,28 +69,29 @@ public class WheelRenderer implements Renderer {
 		mainTable.add(accuracyLbl).pad(10, 10, 10, 10);
 		mainTable.row();
 		
-		TextButton attack = new TextButton("ATTACK", PopinService.buttonStyle());
-		attack.addListener(new ClickListener() {			
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				WheelSystem.attackButtonPressed = true;
-				return super.touchDown(event, x, y, pointer, button);
-			}
-			
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				super.touchUp(event, x, y, pointer, button);
-				WheelSystem.attackButtonReleased = true;
-				mainTable.remove();
-				tableDisplayed = false;
-			}
-			
-		});
-		mainTable.add(attack).width(300).height(150).pad(10, 10, 10, 10);
-		mainTable.row();
+		// Uncomment to add the ATTACK button
+//		TextButton attack = new TextButton("ATTACK", PopinService.buttonStyle());
+//		attack.addListener(new ClickListener() {			
+//			@Override
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				WheelSystem.attackButtonPressed = true;
+//				return super.touchDown(event, x, y, pointer, button);
+//			}
+//			
+//			@Override
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				super.touchUp(event, x, y, pointer, button);
+//				WheelSystem.attackButtonReleased = true;
+//				mainTable.remove();
+//				tableDisplayed = false;
+//			}
+//			
+//		});
+//		mainTable.add(attack).width(300).height(150).pad(10, 10, 10, 10);
+//		mainTable.row();
 		
 		mainTable.pack();
-		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 150);
+		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, 300);
 	}
 	
 	public void render(float deltaTime) {
@@ -160,7 +161,12 @@ public class WheelRenderer implements Renderer {
 			arrow.draw(batcher);
 			
 			batcher.end();
-		} 
+		} else {
+			if (tableDisplayed) {
+				tableDisplayed = false;
+				mainTable.remove();
+			}
+		}
 	}
 
 }

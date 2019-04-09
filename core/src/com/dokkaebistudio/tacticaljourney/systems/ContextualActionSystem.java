@@ -19,6 +19,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -76,6 +77,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 			// The player just arrived on a tile
 			checkForLootablesToDisplayPopin();
 			checkForExitToDisplayPopin();
+			checkForWormholeToDisplayPopin();
 			
 		} else if (room.getState().canEndTurn()) {
 			
@@ -89,6 +91,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 					// Touched the player, if there is a contextual action entity on this tile, display a popin
 					checkForLootablesToDisplayPopin();
 					checkForExitToDisplayPopin();
+					checkForWormholeToDisplayPopin();
 				}
 				
 			}
@@ -137,5 +140,19 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
+	/**
+	 * Check whether there is a wormhole to display the "Would you like to use it" popin.
+	 */
+	private void checkForWormholeToDisplayPopin() {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		if (playerComponent.isActionDoneAtThisFrame()) return;
+
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
+		Entity wormhole = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), WormholeComponent.class, room);
+		if (wormhole != null) {
+			playerComponent.setActionDoneAtThisFrame(true);
+			playerCompo.requestAction(PlayerActionEnum.WORMHOLE, wormhole);
+		}
+	}
 
 }

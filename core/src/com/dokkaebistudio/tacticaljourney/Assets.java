@@ -87,6 +87,7 @@ public class Assets {
 	public static Array<Sprite> slash_critical_animation;
 
 	public static Array<Sprite> explosion_animation;
+	public static Array<Sprite> portal_animation;
 
 	
 	//**********
@@ -302,6 +303,7 @@ public class Assets {
 	public static RegionDescriptor armor_piece_item;
 	
 	public static RegionDescriptor orb_container_item;
+	public static RegionDescriptor wormhole_shard_item;
 	
 	public static RegionDescriptor arrow_item;
 	public static RegionDescriptor bomb_item;
@@ -319,7 +321,8 @@ public class Assets {
 	public static RegionDescriptor headband;
 	public static RegionDescriptor villanelle;
 	public static RegionDescriptor powder_flask;
-	
+	public static RegionDescriptor camo_backpack;
+
 	
 	// Boss items
 	public static RegionDescriptor pangolin_scale;
@@ -355,6 +358,7 @@ public class Assets {
 	public static RegionDescriptor blessing_goat;
 	public static RegionDescriptor blessing_contract_killer;
 	public static RegionDescriptor blessing_fire_arrows;
+	public static RegionDescriptor blessing_looter;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -423,6 +427,7 @@ public class Assets {
 		slash_animation = Assets.getAnimation("anim_slash");
 		slash_critical_animation = Assets.getAnimation("anim_slash_crit");
 		explosion_animation = Assets.getAnimation("explosion");
+		portal_animation = Assets.getAnimation("portal");
 		
 		//**********
 		// Popins
@@ -629,6 +634,7 @@ public class Assets {
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
 		orb_container_item = Assets.getTexture("item-consumable-orb-container");
+		wormhole_shard_item = Assets.getTexture("item-consumable-wormhole-shard");
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
@@ -646,6 +652,7 @@ public class Assets {
 		headband = Assets.getTexture("item-infusable-headband");
 		villanelle = Assets.getTexture("item-infusable-villanelle");
 		powder_flask = Assets.getTexture("item-infusable-powder-flask");
+		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -676,6 +683,7 @@ public class Assets {
 		blessing_goat = Assets.getTexture("blessing-goat");
 		blessing_contract_killer = Assets.getTexture("blessing-bounty");
 		blessing_fire_arrows = Assets.getTexture("blessing-fire-arrow");
+		blessing_looter = Assets.getTexture("blessing-looter");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

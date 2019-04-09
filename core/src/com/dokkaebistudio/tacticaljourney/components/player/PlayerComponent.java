@@ -43,6 +43,7 @@ public class PlayerComponent implements Component {
 		NONE,
 		LOOT,
 		EXIT,
+		WORMHOLE,
 		PRAY,
 		RESTOCK_SHOP,
 		INFUSE,

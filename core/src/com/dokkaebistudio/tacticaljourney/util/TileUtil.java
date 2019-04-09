@@ -7,9 +7,14 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 
@@ -382,5 +387,36 @@ public final class TileUtil {
 		}
 		
 		return tiles;
+	}
+	
+	
+	/**
+	 * Return true if the given tile position has at least one entity with a contextual action on click.
+	 * @param x the x pixel pos
+	 * @param y the y pixel pos
+	 * @param room the room
+	 * @return true if the given tile position has at least one entity with a contextual action on click.
+	 */
+	public static boolean hasEntityWithContextualActionOnClick(int x, int y, Room room) {
+		boolean empty = true;
+		PoolableVector2 temp = TileUtil.convertPixelPosIntoGridPos(x, y);
+		
+		if (empty) {
+			empty &= TileUtil.getEntityWithComponentOnTile(temp, ItemComponent.class, room) == null;
+		}
+		if (empty) {
+			empty &= TileUtil.getEntityWithComponentOnTile(temp, LootableComponent.class, room) == null;
+		}
+		if (empty) {
+			empty &= TileUtil.getEntityWithComponentOnTile(temp, WormholeComponent.class, room) == null;
+		}
+		if (empty) {
+			empty &= TileUtil.getEntityWithComponentOnTile(temp, DoorComponent.class, room) == null;
+		}
+		if (empty) {
+			empty &= TileUtil.getEntityWithComponentOnTile(temp, ExitComponent.class, room) == null;
+		}
+
+		return !empty;
 	}
 }

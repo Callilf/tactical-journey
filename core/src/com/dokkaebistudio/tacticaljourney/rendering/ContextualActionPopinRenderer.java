@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
@@ -36,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	    
@@ -166,6 +170,16 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 					yesBtn.setDisabled(true);
 				}
 			}
+			break;
+			
+		case WORMHOLE:
+			WormholeComponent wormholeComponent = Mappers.wormholeComponent.get(actionEntity);
+			
+			title.setText("Wormhole");
+			desc.setText("Would you like to travel to the wormhole's destination?");
+			yesBtn.setText("Yes");
+			
+			updateWormholeListener(actionEntity, wormholeComponent);
 			break;
 			
 		case PRAY:
@@ -304,6 +318,22 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 				
 				exitComponent.open(exit);
 				room.turnManager.endPlayerTurn();
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
+	private void updateWormholeListener(final Entity wormhole, final WormholeComponent wormholeComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Vector2 destination = wormholeComponent.getDestination();
+				MovementHandler.placeEntity(player, destination, room);
+				room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 				closePopin();
 			}
 		};

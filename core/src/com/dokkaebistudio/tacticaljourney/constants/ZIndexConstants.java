@@ -25,6 +25,8 @@ public final class ZIndexConstants {
 	public static final int DESTINATION_TILE = 11;
 	public static final int WAYPOINT = 11;
 	
+	public static final int WORMHOLE = 6;
+	
 	// ITEMS
 	public static final int ITEM = 8;
 	public static final int BOMB = 9;

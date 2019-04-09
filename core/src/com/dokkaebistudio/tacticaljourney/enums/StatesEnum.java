@@ -10,6 +10,7 @@ public enum StatesEnum {
 	EXPLODING_THIS_TURN(1),
 	
 	EXPLOSION(0),
+	PORTAL(0),
 	
 	FIRE_LOOP(0),
 	

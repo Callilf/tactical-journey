@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -127,6 +128,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		tileSearchService.buildMoveTilesSet(skillEntity, room);
 		    		attackTileSearchService.buildAttackTilesSet(skillEntity, room, false, false);
 
+		    		HUDRenderer.isTargeting = true;
+		    		
 		    		room.setNextState(RoomState.PLAYER_TARGETING);
 	    		} else {
 	    			//Cannot attack because the skill has run out of ammos
@@ -397,6 +400,8 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 				room.setNextState(RoomState.PLAYER_WHEEL_START);
 			}
 		}
+		
+		HUDRenderer.isTargeting = false;
 	}
 	
 	private void clearAllEntityTiles(Entity player) {

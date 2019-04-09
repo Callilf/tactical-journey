@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -24,6 +25,8 @@ import com.esotericsoftware.kryo.io.Output;
  *
  */
 public class InventoryComponent implements Component, Poolable {
+	public final static int MAX_SLOTS = 16;
+	
 	/** The player. */
 	public Entity player;
 	
@@ -272,11 +275,34 @@ public class InventoryComponent implements Component, Poolable {
 	}
 	
 	
+	public void addSlot() {
+		this.numberOfSlots++;
+	}
+	
+	public void removeSlot(Room room) {
+		// Check if the slot is filled, if so, drop the content on the floor
+		if (slots.size() >= this.numberOfSlots) {
+			List<Entity> list = slots.get(this.numberOfSlots - 1);
+				if (list != null && !list.isEmpty()) {
+				List<Entity> clonedList = new ArrayList<>(list);
+				for (Entity currentItem : clonedList) {
+					ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
+					itemComponent.drop(player, currentItem, room);
+					room.getAddedItems().add(currentItem);
+				}
+			}
+		}
+		
+		// Reduce the number of slots
+		this.numberOfSlots--;
+	}
+	
+	
 	//*************************************
 	// Getters and Setters !
 	
 	public int getNumberOfSlots() {
-		return numberOfSlots;
+		return Math.min(numberOfSlots, MAX_SLOTS);
 	}
 
 	public void setNumberOfSlots(int numberOfSlots) {

@@ -87,3 +87,5 @@ build/
 hs_err_pid*
 android/assets/gamestateFred.bin
 android/assets/rankings.bin
+android/assets/gamestate_1.bin
+android/assets/gamestats_1.bin

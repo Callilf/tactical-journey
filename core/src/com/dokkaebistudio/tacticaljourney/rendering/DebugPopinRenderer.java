@@ -906,6 +906,19 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		});
 		optionsTable.add(statueRoom).padBottom(20);
 		optionsTable.row();
+		
+		TextButton giftRoom = new TextButton("Go to gift", PopinService.buttonStyle());
+		giftRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.GIFT_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(giftRoom).padBottom(20);
+		optionsTable.row();
 
 		TextButton keyRoom = new TextButton("Go to key", PopinService.buttonStyle());
 		keyRoom.addListener(new ChangeListener() {

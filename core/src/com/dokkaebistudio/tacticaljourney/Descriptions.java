@@ -30,6 +30,10 @@ public class Descriptions {
 
 	public static final String CRATE_TITLE = "Crate";
 	public static final String CRATE_DESCRIPTION = "A crate that doesn't look very solid. It would probably break if you hit it.";
+	
+	public static final String WORMHOLE_TITLE = "Wormhole";
+	public static final String WORMHOLE_DESCRIPTION = "A bend in space that allows you instant travel from one point to another.";
+
 
 	
 	// Neutrals
@@ -187,6 +191,9 @@ public class Descriptions {
 	public static final String ITEM_PEBBLE_TITLE = "Pebble";
 	public static final String ITEM_PEBBLE_DESCRIPTION = "A common pebble, nothing interesting about it. You could try throwing them at enemies to piss them off though.";
 
+	public static final String ITEM_WORMHOLE_SHARD_TITLE = "Wormhole shard";
+	public static final String ITEM_WORMHOLE_SHARD_DESCRIPTION = "An extraordinary shard of a wormhole that has been solidificated. It creates a portal if you throw it.";
+
 	public static final String ITEM_TUTORIAL_PAGE_TITLE = "Tutorial page";
 	public static final String ITEM_TUTORIAL_PAGE_DESCRIPTION = "A page of the missing Tutorial book.";
 
@@ -232,5 +239,7 @@ public class Descriptions {
 	public static final String ITEM_POWDER_FLASK_TITLE = "Powder flask";
 	public static final String ITEM_POWDER_FLASK_DESCRIPTION = "An antique flask of gun powder with old West designs. Grants the blessing of fire arrows and the Curse of heavy arrows while held in the inventory.";
 
+	public static final String ITEM_CAMO_BACKPACK_TITLE = "Camo Backpack";
+	public static final String ITEM_CAMO_BACKPACK_DESCRIPTION = "A wide backpack with a camo design. Grants the blessing of the looter and the Curse of slowness while held in the inventory.";
 
 }

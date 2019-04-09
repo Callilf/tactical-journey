@@ -7,18 +7,23 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -27,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -96,8 +102,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		switch (room.getState()) {
 
 		case PLAYER_TURN_INIT:	
+			moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
 			if (room.hasEnemies()) {
-				moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
 				moveCompo.setFreeMove(false);
 			} else {
 				moveCompo.setFreeMove(true);
@@ -107,6 +113,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
 //			ItemPoolSingleton instance = ItemPoolSingleton.getInstance();
+			
+			if (moveCompo.getSelectedTileFromPreviousTurn() != null) {
+				// Continue movement
+				room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
+				break;
+			}
 			
 			// clear the movable tile
 			moveCompo.clearMovableTiles();
@@ -158,14 +170,14 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		case PLAYER_MOVE_DESTINATION_SELECTED:
 			// Either click on confirm to move or click on another tile to change the
 			// destination
-			if (InputSingleton.getInstance().leftClickJustReleased) {
+			if (InputSingleton.getInstance().leftClickJustReleased || moveCompo.getSelectedTileFromPreviousTurn() != null) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 
-				if (TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedTile())) {
+				if (TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedTile()) || moveCompo.getSelectedTileFromPreviousTurn() != null) {
 					// Confirm movement is we click on the selected tile again
-
+					
 					// Initiate movement
 					movementHandler.initiateMovement(player);
 					room.setNextState(RoomState.PLAYER_MOVING);
@@ -195,30 +207,48 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		case PLAYER_MOVING:
 			if (moveCompo.moving) {
 				moveCompo.selectCurrentMoveDestinationTile(player);
+				
+				// handle the case where the player has no move remaining, but is in a cleared room
+				if (!room.hasEnemies() && moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
+					GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(player);
+					moveCompo.setEndTurnTile(TileUtil.getTileAtGridPos(gridPosCompo.coord(), room));
+					Vector2 selectedTile = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile()).coord();
+					moveCompo.setSelectedTileFromPreviousTurn(TileUtil.getTileAtGridPos(selectedTile, room));
+					room.setNextState(RoomState.PLAYER_PAUSE_MOVEMENT);
+				}
 	
+				
 				// Do the movement on screen
-				Boolean movementFinished = movementHandler.performRealMovement(player, room);
-				if (movementFinished == null)
+				MovementProgressEnum movementProgress = movementHandler.performRealMovement(player, room);
+				if (movementProgress == null)
 					return;
-				else if (movementFinished)
+				else if (movementProgress == MovementProgressEnum.MOVEMENT_OVER) {
+					moveCompo.clearSelectedTileFromPreviousTurn();
 					room.setNextState(RoomState.PLAYER_END_MOVEMENT);
+				} else if (movementProgress == MovementProgressEnum.TURN_OVER) {
+					room.setNextState(RoomState.PLAYER_PAUSE_MOVEMENT);
+				}
 				
 			} else {
 				room.setNextState(RoomState.PLAYER_END_MOVEMENT);
 			}
 
 			break;
+			
+		case PLAYER_PAUSE_MOVEMENT:
+			if (moveCompo.moving) {
+				MovementHandler.finishRealMovement(player, room);
+			}
+			if (moveCompo.isFrozen()) {
+				moveCompo.clearSelectedTileFromPreviousTurn();
+			}
+			
+			room.turnManager.endPlayerTurn();
+			break;
 
 		case PLAYER_END_MOVEMENT:
 			if (moveCompo.moving) {
 				MovementHandler.finishRealMovement(player, room);
-	
-				// Compute the cost of this move
-				if (room.hasEnemies()) {
-					int cost = computeCostOfMovement(player);
-					moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - cost);
-				}
-
 			}
 			moveCompo.clearMovableTiles();
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
@@ -306,20 +336,24 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	/**
 	 * Click on the player to end the turn if no move remaining
 	 */
-	private void handleClickOnPlayer(Entity player) {
-		if (moveCompo.getMoveRemaining() == 0) {
+	private void handleClickOnPlayer(Entity player) {		
+//		if (moveCompo.getMoveRemaining() <= 0) {
 			if (InputSingleton.getInstance().leftClickJustReleased) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 	
 				if (TileUtil.isPixelPosOnEntity(x, y, player)) {
+					
+					// Do not end the turn if there is any entity that launches a contextual action on this tile
+					if (TileUtil.hasEntityWithContextualActionOnClick(x, y, room)) return;
+					
 					moveCompo.clearMovableTiles();
 					attackCompo.clearAttackableTiles();
 					room.turnManager.endPlayerTurn();
 				}
 			}
-		}
+//		}
 	}
 	
 	

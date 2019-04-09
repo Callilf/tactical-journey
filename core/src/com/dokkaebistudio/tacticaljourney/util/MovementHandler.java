@@ -39,6 +39,13 @@ public class MovementHandler {
     public MovementHandler(PooledEngine engine) {
         this.engine = engine;
     }
+    
+    public enum MovementProgressEnum {
+    	NONE,
+    	IN_PROGRESS,
+    	MOVEMENT_OVER,
+    	TURN_OVER;
+    }
 	
 	
     
@@ -79,7 +86,7 @@ public class MovementHandler {
 	 * @param room the Room
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	public Boolean performRealMovement(Entity mover, Room room) {
+	public MovementProgressEnum performRealMovement(Entity mover, Room room) {
 		return performRealMovement(mover, room, null);
 	}
 	
@@ -90,8 +97,8 @@ public class MovementHandler {
 	 * @param room the Room
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	public Boolean performRealMovement(Entity mover, Room room, Integer moveSpeed) {
-		Boolean result = false;
+	public MovementProgressEnum performRealMovement(Entity mover, Room room, Integer moveSpeed) {
+		MovementProgressEnum result = MovementProgressEnum.IN_PROGRESS;
 		float xOffset = 0;
 		float yOffset = 0;
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(mover);
@@ -173,8 +180,11 @@ public class MovementHandler {
 	 * @param room the room.
 	 * @return true if the movement has ended, false if still in progress.
 	 */
-	private Boolean performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
+	private MovementProgressEnum performEndOfMovement(Entity mover, MoveComponent moveCompo, Room room) {
 		moveCompo.arrivedOnTile = true;
+		
+		int costOfMovementForTilePos = TileUtil.getCostOfMovementForTilePos(moveCompo.currentMoveDestinationTilePos, mover, room);
+		moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - costOfMovementForTilePos);
 		
 		Mappers.gridPositionComponent.get(mover).coord(mover, moveCompo.currentMoveDestinationTilePos, room);
 		for (Component c : mover.getComponents()) {
@@ -203,6 +213,7 @@ public class MovementHandler {
 			if (doorEntity != null) {
 				DoorComponent doorCompo = Mappers.doorComponent.get(doorEntity);
 				if (doorCompo != null && doorCompo.isOpened() && doorCompo.getTargetedRoom() != null) {
+					moveCompo.clearSelectedTileFromPreviousTurn();
 					//Change room !!!
 					finishRealMovement(mover, room);
 					moveCompo.clearMovableTiles();
@@ -212,11 +223,24 @@ public class MovementHandler {
 			}
 		}
 		
-		
-		
+
 		boolean movementOver = moveCompo.currentMoveDestinationIndex >= moveCompo.getWayPoints().size();
 		moveCompo.incrementCurrentMoveDestinationIndex();
-		return movementOver;
+		if (movementOver) {
+			return MovementProgressEnum.MOVEMENT_OVER;
+		}
+
+		if (moveCompo.getMoveRemaining() <= 0 && !room.hasEnemies() && !moveCompo.isFrozen()) {
+			moveCompo.setEndTurnTile(TileUtil.getTileAtGridPos(moveCompo.currentMoveDestinationTilePos, room));
+			Vector2 selectedTile = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile()).coord();
+			moveCompo.setSelectedTileFromPreviousTurn(TileUtil.getTileAtGridPos(selectedTile, room));
+			
+			moveCompo.removeFirstWaypoints(moveCompo.currentMoveDestinationIndex);
+			
+			return MovementProgressEnum.TURN_OVER;
+		}
+		
+		return MovementProgressEnum.IN_PROGRESS;
 	}
 	
 	
@@ -226,7 +250,17 @@ public class MovementHandler {
 		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		
-		if (moveCompo.getSelectedTile() != null) {
+		if (moveCompo.getEndTurnTile() != null) {
+			gridPositionComponent.coord(e, moveCompo.getEndTurnTile().getGridPos(), room);
+			
+			for (Component c : e.getComponents()) {
+				if (c instanceof MovableInterface) {
+					((MovableInterface) c).endMovement(moveCompo.getEndTurnTile().getGridPos());
+				}
+			}
+			moveCompo.setEndTurnTile(null);
+
+		} else if (moveCompo.getSelectedTile() != null) {
 			GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());
 			gridPositionComponent.coord(e, selectedTilePos.coord(), room);
 			
@@ -235,15 +269,17 @@ public class MovementHandler {
 					((MovableInterface) c).endMovement(selectedTilePos.coord());
 				}
 			}
+			
+			//TODO improve
+			if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
+				StateComponent stateComponent = Mappers.stateComponent.get(e);
+				stateComponent.set(StatesEnum.PLAYER_STANDING.getState());
+			}
 		}
 		
 		moveCompo.moving = false;
 		
-		//TODO improve
-		if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
-			StateComponent stateComponent = Mappers.stateComponent.get(e);
-			stateComponent.set(StatesEnum.PLAYER_STANDING.getState());
-		}
+
 	}
 	
     // Fluent movement END 

@@ -20,6 +20,8 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -153,12 +155,12 @@ public class StingerSubSystem extends EnemySubSystem {
     	    	moveCompo.selectCurrentMoveDestinationTile(enemy);
 	    		
     	    	//Do the movement on screen
-    	    	boolean movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);
-        		if (movementFinished) attackState = StingerAttackStates.END_CHARGE;
+    	    	MovementProgressEnum movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);
+        		if (movementFinished == MovementProgressEnum.MOVEMENT_OVER) attackState = StingerAttackStates.END_CHARGE;
 
     			break;
     		case END_CHARGE:
-    			enemySystem.getMovementHandler().finishRealMovement(enemy, room);
+    			MovementHandler.finishRealMovement(enemy, room);
     			attackState = StingerAttackStates.NONE;
     			
     			// Stinger animation

@@ -54,6 +54,12 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
 	
+	// Continuous move in empty rooms
+	
+	/** The selected tile for movement that was out of reach at the previous turn. */
+	private Tile selectedTileFromPreviousTurn;
+	private Tile endTurnTile;
+	
 	
 	// Fast attack
 	/** The attack tile that was selected and created the selected tile.
@@ -122,7 +128,6 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		this.currentMoveDestinationIndex++;	
 	}
 	
-	
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.
 	 */
@@ -143,15 +148,29 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	 * Clear the list of movable tiles and remove all entities associated to it.
 	 */
 	public void clearSelectedTile() {
-		if (this.selectedTile != null) {
-			room.removeEntity(this.selectedTile);
+		if (this.selectedTileFromPreviousTurn == null) {
+			if (this.selectedTile != null) {
+				room.removeEntity(this.selectedTile);
+			}
+			this.selectedTile = null;
+			
+			for (Entity e : wayPoints) {
+				room.removeEntity(e);
+			}
+			wayPoints.clear();
 		}
-		this.selectedTile = null;
-		
-		for (Entity e : wayPoints) {
-			room.removeEntity(e);
-		}
-		wayPoints.clear();
+	}
+	
+	public void removeFirstWaypoints(int numberOfWaypointsToRemove) {
+        for (int i=0; i<numberOfWaypointsToRemove ; i++) {
+        	Entity entity = this.getWayPoints().remove(0);
+        	room.removeEntity(entity);
+        }
+	}
+	
+	public void clearSelectedTileFromPreviousTurn() {
+		this.selectedTileFromPreviousTurn = null;
+		this.endTurnTile = null;
 	}
 	
 	
@@ -282,6 +301,22 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 			}
 		
 		};
+	}
+
+	public Tile getSelectedTileFromPreviousTurn() {
+		return selectedTileFromPreviousTurn;
+	}
+
+	public void setSelectedTileFromPreviousTurn(Tile selectedTileFromPreviousTurn) {
+		this.selectedTileFromPreviousTurn = selectedTileFromPreviousTurn;
+	}
+
+	public Tile getEndTurnTile() {
+		return endTurnTile;
+	}
+
+	public void setEndTurnTile(Tile endTurnTile) {
+		this.endTurnTile = endTurnTile;
 	}
 	
 }

@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -243,6 +244,12 @@ public abstract class RoomGenerator {
 			currentRoom.roomPattern = "data/rooms/statueRoom" + statueRoomNb + ".csv";
 
 			break;
+			
+		case GIFT_ROOM:
+			int giftRoomNbr = 1 + random.nextSeededInt(3);
+			currentRoom.roomPattern = "data/rooms/giftRoom" + giftRoomNbr + ".csv";
+
+			break;
 			default:
 				currentRoom.roomPattern = "data/rooms/room1.csv";
 		}
@@ -328,6 +335,11 @@ public abstract class RoomGenerator {
 			spawnPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
 			placeEnemies(room, random, spawnPositions, true);
+			break;
+			
+		case GIFT_ROOM:
+			List<PooledItemDescriptor> itemTypes = ItemPoolSingleton.getInstance().personalBelongings.getItemTypes(1);
+			entityFactory.itemFactory.createItem(itemTypes.get(0).getType(), room, possibleSpawns.get(0));
 			break;
 			
 		case START_FLOOR_ROOM:

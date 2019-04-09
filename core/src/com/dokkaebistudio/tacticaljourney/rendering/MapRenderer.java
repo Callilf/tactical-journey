@@ -289,14 +289,6 @@ public class MapRenderer implements Renderer {
 					case END_FLOOR_ROOM:
 						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_exit.getRegion()));
 						break;
-					case COMMON_ENEMY_ROOM:
-					case EMPTY_ROOM:
-						if (room.hasEnemies()) {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_enemy.getRegion()));
-						} else {
-							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room.getRegion()));
-						}
-						break;
 					case SHOP_ROOM:
 						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_shop.getRegion()));
 						break;
@@ -326,6 +318,16 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss_enemy.getRegion()));
 						} else {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss.getRegion()));
+						}
+						break;
+						
+					case COMMON_ENEMY_ROOM:
+					case EMPTY_ROOM:
+					default:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_enemy.getRegion()));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room.getRegion()));
 						}
 						break;
 					}

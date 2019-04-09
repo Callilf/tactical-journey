@@ -15,10 +15,18 @@ public enum RoomType {
 	EMPTY_ROOM("Room"),
 	COMMON_ENEMY_ROOM("Room"),
 	
+	// Mandatory rooms
+	
 	ITEM_ROOM("Item room"),
 	KEY_ROOM("Key room"),
 	SHOP_ROOM("Shop"),
 	STATUE_ROOM("Statue"),
+	
+	
+	// Optional rooms
+	
+	GIFT_ROOM("Gift room"),
+	
 	
 	
 	BOSS_ROOM("Boss room");

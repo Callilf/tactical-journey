@@ -120,32 +120,19 @@ public abstract class FloorGenerator {
 		
 		
 		// 5 - Place mandatory rooms
+		List<RoomType> specialRooms = fillSpecialRooms();
+		
 		List<Room> values = new ArrayList<>(roomsPerPosition.values());
 		Collections.shuffle(values, random.getSeededRandomForShuffle());
-		for (Room r : values) {
-			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-				r.type = RoomType.KEY_ROOM;
-				break;
+		for (RoomType type : specialRooms) {
+			for (Room r : values) {
+				if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
+					r.type = type;
+					break;
+				}
 			}
 		}
-		for (Room r : values) {
-			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-				r.type = RoomType.ITEM_ROOM;
-				break;
-			}
-		}
-		for (Room r : values) {
-			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-				r.type = RoomType.SHOP_ROOM;
-				break;
-			}
-		}
-		for (Room r : values) {
-			if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
-				r.type = RoomType.STATUE_ROOM;
-				break;
-			}
-		}
+		
 		
 		// 6 - Add corridors between rooms
 		addCorridors(rooms, roomsPerPosition);
@@ -159,6 +146,22 @@ public abstract class FloorGenerator {
 			r.create();
 		}
 
+	}
+	
+	protected List<RoomType> fillSpecialRooms() {
+		List<RoomType> specialRooms = new ArrayList<>();
+		
+		specialRooms.add(RoomType.KEY_ROOM);
+		specialRooms.add(RoomType.SHOP_ROOM);
+		specialRooms.add(RoomType.ITEM_ROOM);
+		specialRooms.add(RoomType.STATUE_ROOM);
+		
+		int randInt = RandomSingleton.getInstance().nextSeededInt(100);
+		if (randInt < 15) {
+			specialRooms.add(RoomType.GIFT_ROOM);
+		}
+		
+		return specialRooms;
 	}
 
 

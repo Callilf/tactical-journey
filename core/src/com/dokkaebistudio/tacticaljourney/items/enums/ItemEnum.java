@@ -30,6 +30,7 @@ public enum ItemEnum {
 	WEB_SACK(Descriptions.ITEM_WEB_SACK_TITLE, 1),
 	VENOM_GLAND(Descriptions.ITEM_VENOM_GLAND_TITLE, 1),
 	PEBBLE(Descriptions.ITEM_PEBBLE_TITLE, 1),
+	WORMHOLE_SHARD(Descriptions.ITEM_WORMHOLE_SHARD_TITLE, 1),
 	
 	
 	// Orbs
@@ -57,6 +58,7 @@ public enum ItemEnum {
 	HEADBAND(Descriptions.ITEM_HEADBAND_TITLE, 2),
 	VILLANELLE(Descriptions.ITEM_VILLANELLE_TITLE, 2),
 	POWDER_FLASK(Descriptions.ITEM_POWDER_FLASK_TITLE, 2),
+	CAMO_BACKPACK(Descriptions.ITEM_CAMO_BACKPACK_TITLE, 2),
 
 	
 	

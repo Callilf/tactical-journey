@@ -12,14 +12,18 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -332,7 +336,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	/**
 	 * Click on the player to end the turn if no move remaining
 	 */
-	private void handleClickOnPlayer(Entity player) {
+	private void handleClickOnPlayer(Entity player) {		
 //		if (moveCompo.getMoveRemaining() <= 0) {
 			if (InputSingleton.getInstance().leftClickJustReleased) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
@@ -340,6 +344,10 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				int y = (int) touchPoint.y;
 	
 				if (TileUtil.isPixelPosOnEntity(x, y, player)) {
+					
+					// Do not end the turn if there is any entity that launches a contextual action on this tile
+					if (TileUtil.hasEntityWithContextualActionOnClick(x, y, room)) return;
+					
 					moveCompo.clearMovableTiles();
 					attackCompo.clearAttackableTiles();
 					room.turnManager.endPlayerTurn();

@@ -25,7 +25,9 @@ public class WallItemPool extends EnemyItemPool {
 
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
-	static {}
+	static {
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.WORMHOLE_SHARD, 1));						
+	}
 	
 	
 	@Override

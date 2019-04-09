@@ -37,6 +37,8 @@ public class AdventurersSatchelItemPool extends LootableItemPool {
 		itemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 7));		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 7));		
 		itemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 7));		
+		
+		itemPool.add(new PooledItemDescriptor(ItemEnum.WORMHOLE_SHARD, 5));		
 	}
 	
 	

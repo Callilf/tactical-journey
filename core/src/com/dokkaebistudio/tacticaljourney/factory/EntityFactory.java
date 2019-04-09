@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -205,8 +206,8 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new WallItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 100);
-		dropRate.add(ItemPoolRarity.RARE, 0);
+		dropRate.add(ItemPoolRarity.COMMON, 98);
+		dropRate.add(ItemPoolRarity.RARE, 2);
 		lootRewardCompo.setDropRate(dropRate);
 		wallEntity.add(lootRewardCompo);
 				
@@ -870,7 +871,7 @@ public final class EntityFactory {
 		lootRewardCompo.setItemPool(new VaseItemPool());
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 50);
-		dropRate.add(ItemPoolRarity.RARE, 1);
+		dropRate.add(ItemPoolRarity.RARE, 5);
 		lootRewardCompo.setDropRate(dropRate);
 		vaseEntity.add(lootRewardCompo);
 				
@@ -943,6 +944,47 @@ public final class EntityFactory {
 
     	return dialogEntity;
 	}
+	
+	/**
+	 * Create a wormhole.
+	 * @param room the parent room
+	 * @param tilePos the position in tiles
+	 * @return the entity created
+	 */
+	public Entity createWormhole(Room room, Vector2 tilePos, Vector2 destination) {
+		Entity wormhole = engine.createEntity();
+		wormhole.flags = EntityFlagEnum.EXPLOSION_EFFECT.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.WORMHOLE_TITLE);
+		inspect.setDescription(Descriptions.WORMHOLE_DESCRIPTION);
+		wormhole.add(inspect);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(wormhole, tilePos, room);
+		gridPosition.zIndex = ZIndexConstants.WORMHOLE;
+		wormhole.add(gridPosition);
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		wormhole.add(spriteCompo);
+
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.addAnimation(StatesEnum.PORTAL.getState(), AnimationSingleton.getInstance().portal);
+		wormhole.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(0);
+		wormhole.add(stateCompo);		
+		
+		WormholeComponent wormholeCompo = engine.createComponent(WormholeComponent.class);
+		wormholeCompo.setDestination(destination);
+		wormhole.add(wormholeCompo);
+		
+		engine.addEntity(wormhole);
+		
+		return wormhole;
+	}
+	
 	
 	
 }

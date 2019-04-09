@@ -6,10 +6,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -125,6 +127,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     		
     		if (mainTable == null) {
     			mainTable = new Table();
+    			mainTable.setTouchable(Touchable.enabled);
+    			mainTable.addListener(new ClickListener() {});
     			initProfileTable();
     			initBlessingTable();
     			initCurseTable();

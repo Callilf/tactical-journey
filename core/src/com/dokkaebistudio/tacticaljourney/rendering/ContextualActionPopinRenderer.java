@@ -39,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	    
@@ -331,8 +332,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Vector2 destination = wormholeComponent.getDestination();
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
-				gridPositionComponent.coord(player, destination, room);
+				MovementHandler.placeEntity(player, destination, room);
 				room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 				closePopin();
 			}

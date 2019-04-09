@@ -10,14 +10,14 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
 
 /**
- * The alteration pool for the godess statue.
+ * The alteration pool for the goddess statue.
  * @author Callil
  *
  */
-public class GodessStatueAlterationPool extends AlterationPool {
+public class GoddessStatueAlterationPool extends AlterationPool {
 	
 	/**
-	 * This list contains the whole list of blessing that can be given by a godess statue.
+	 * This list contains the whole list of blessing that can be given by a goddess statue.
 	 */
 	private static final List<PooledAlterationDescriptor<BlessingsEnum>> blessingPool = new ArrayList<>();
 	
@@ -36,7 +36,7 @@ public class GodessStatueAlterationPool extends AlterationPool {
 	
 
 	/**
-	 * This list contains the whole list of blessing that can be given by a godess statue.
+	 * This list contains the whole list of blessing that can be given by a goddess statue.
 	 */
 	private static final List<PooledAlterationDescriptor<CursesEnum>> cursePool = new ArrayList<>();
 	

@@ -185,8 +185,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		case PRAY:
 			StatueComponent statueComponent = Mappers.statueComponent.get(actionEntity);
 			
-			title.setText("Statue of the godess");
-			desc.setText("A statue of the godess of Telure. You can feel a benevolent energy enveloping you when you get close enough. You can probably channel this energy is you pray for a while.");
+			title.setText("Statue of the goddess");
+			desc.setText("A statue of the goddess Huminodun. You can feel a benevolent energy enveloping you when you get close enough. You can probably channel this energy is you pray for a while.");
 			yesBtn.setText("Pray");
 			
 			updatePrayListener(actionEntity, statueComponent);

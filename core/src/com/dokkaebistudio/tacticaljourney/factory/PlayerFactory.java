@@ -10,7 +10,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
-import com.dokkaebistudio.tacticaljourney.alterations.pools.GodessStatueAlterationPool;
+import com.dokkaebistudio.tacticaljourney.alterations.pools.GoddessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -270,50 +270,50 @@ public final class PlayerFactory {
 	}
 	
 	/**
-	 * Create a godess statue.
+	 * Create a goddess statue.
 	 * @param pos the position
 	 * @param room the room
 	 * @return the statue entity
 	 */
-	public Entity createGodessStatue(Vector2 pos, Room room) {
-		Entity godessStatueEntity = engine.createEntity();
-		godessStatueEntity.flags = EntityFlagEnum.GODESS_STATUE.getFlag();
+	public Entity createGoddessStatue(Vector2 pos, Room room) {
+		Entity goddessStatueEntity = engine.createEntity();
+		goddessStatueEntity.flags = EntityFlagEnum.GODDESS_STATUE.getFlag();
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle("Godess Statue");
-		inspect.setDescription("A statue of a godess.");
-		godessStatueEntity.add(inspect);
+		inspect.setTitle("Goddess Statue");
+		inspect.setDescription("A statue of a goddess Huminodun.");
+		goddessStatueEntity.add(inspect);
 		
 		// Sprite
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.godess_statue);
-		godessStatueEntity.add(spriteCompo);
+		spriteCompo.setSprite(Assets.goddess_statue);
+		goddessStatueEntity.add(spriteCompo);
 		
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(godessStatueEntity, pos, room);
+		gridPosition.coord(goddessStatueEntity, pos, room);
 		gridPosition.zIndex = ZIndexConstants.STATUE;
-		godessStatueEntity.add(gridPosition);
+		goddessStatueEntity.add(gridPosition);
 		
 		StatueComponent statueComponent = engine.createComponent(StatueComponent.class);
-		statueComponent.setAlterationPool(new GodessStatueAlterationPool());
-		godessStatueEntity.add(statueComponent);
+		statueComponent.setAlterationPool(new GoddessStatueAlterationPool());
+		goddessStatueEntity.add(statueComponent);
 		
 		// Solid compo
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		godessStatueEntity.add(solidComponent);
+		goddessStatueEntity.add(solidComponent);
 		
 		BlockVisibilityComponent blockVisibilityCompo = engine.createComponent(BlockVisibilityComponent.class);
-		godessStatueEntity.add(blockVisibilityCompo);
+		goddessStatueEntity.add(blockVisibilityCompo);
 
 		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
-		destructible.setDestroyedTexture(Assets.godess_statue_broken);
+		destructible.setDestroyedTexture(Assets.goddess_statue_broken);
 		destructible.setRemove(false);
-		godessStatueEntity.add(destructible);		
+		goddessStatueEntity.add(destructible);		
 		
-		room.addNeutral(godessStatueEntity);
-		return godessStatueEntity;
+		room.addNeutral(goddessStatueEntity);
+		return goddessStatueEntity;
 	}
 	
 

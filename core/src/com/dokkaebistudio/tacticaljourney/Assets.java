@@ -43,8 +43,8 @@ public class Assets {
 	public static Array<Sprite> player_flying;
 	public static RegionDescriptor shopkeeper;
 	public static RegionDescriptor soulbender;
-	public static RegionDescriptor godess_statue;
-	public static RegionDescriptor godess_statue_broken;
+	public static RegionDescriptor goddess_statue;
+	public static RegionDescriptor goddess_statue_broken;
 	
 	
 	public static RegionDescriptor grid1;
@@ -385,8 +385,8 @@ public class Assets {
 		
 		shopkeeper = Assets.getTexture("shopkeeper");
 		soulbender = Assets.getTexture("soulbender");
-		godess_statue = Assets.getTexture("godess_statue");
-		godess_statue_broken = Assets.getTexture("godess_statue_broken");
+		goddess_statue = Assets.getTexture("godess_statue");
+		goddess_statue_broken = Assets.getTexture("godess_statue_broken");
 
 		grid1 = Assets.getTexture("grid_world1");
 		grid2 = Assets.getTexture("grid_world2");

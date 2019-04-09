@@ -328,7 +328,7 @@ public abstract class RoomGenerator {
 			break;
 			
 		case STATUE_ROOM:
-			entityFactory.playerFactory.createGodessStatue(new Vector2(11, 6), room);
+			entityFactory.playerFactory.createGoddessStatue(new Vector2(11, 6), room);
 			
 			if (possibleSpawns.size() == 0) return;
 			// Retrieve the spawn points and shuffle them
@@ -372,7 +372,7 @@ public abstract class RoomGenerator {
 //			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
 //			entityFactory.createExit(room, new Vector2(12, 4), false);
 
-//			entityFactory.playerFactory.createGodessStatue(new Vector2(12, 6), room);
+//			entityFactory.playerFactory.createGoddessStatue(new Vector2(12, 6), room);
 			
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
 //			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));

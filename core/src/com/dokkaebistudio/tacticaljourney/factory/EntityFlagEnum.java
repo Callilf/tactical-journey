@@ -4,7 +4,7 @@ public enum EntityFlagEnum {
 
 	PLAYER(1),
 	SHOPKEEPER(2),
-	GODESS_STATUE(3),
+	GODDESS_STATUE(3),
 	SOUL_BENDER(4),
 
 

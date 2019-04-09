@@ -10,17 +10,18 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 
 /**
- * This system's role is to upadte the attack wheel, considering
+ * This system's role is to update the attack wheel, considering
  * all entities that can affect the wheel (items, stats, weapon type etc.).
  */
 public class WheelSystem extends EntitySystem implements RoomSystem {
 
-	public static boolean attackButtonPressed;
-	public static boolean attackButtonReleased;
+//	public static boolean attackButtonPressed;
+//	public static boolean attackButtonReleased;
 
 	
 	/** The attack wheel. */
@@ -91,8 +92,8 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			
     		case PLAYER_WHEEL_TURNING:
     			
-    			if (attackButtonPressed) {
-    				attackButtonPressed = false;
+    			if (InputSingleton.getInstance().leftClickJustPressed) {
+//    				attackButtonPressed = false;
     				
 	    			//Stop the spinning
 	    			room.setNextState(RoomState.PLAYER_WHEEL_NEEDLE_STOP);
@@ -107,8 +108,8 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			
     		case PLAYER_WHEEL_NEEDLE_STOP:
     			
-    			if (attackButtonReleased) {
-    				attackButtonReleased = false;
+    			if (InputSingleton.getInstance().leftClickJustReleased) {
+//    				attackButtonReleased = false;
     				
 	    			//Hide the wheel and perform the action
 		        	wheel.setDisplayed(false);

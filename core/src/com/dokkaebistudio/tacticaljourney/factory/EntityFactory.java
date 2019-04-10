@@ -53,6 +53,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.Wall
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -209,6 +210,7 @@ public final class EntityFactory {
 		dropRate.add(ItemPoolRarity.COMMON, 98);
 		dropRate.add(ItemPoolRarity.RARE, 2);
 		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
 		wallEntity.add(lootRewardCompo);
 				
     	
@@ -873,6 +875,7 @@ public final class EntityFactory {
 		dropRate.add(ItemPoolRarity.COMMON, 50);
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
 		vaseEntity.add(lootRewardCompo);
 				
 		engine.addEntity(vaseEntity);
@@ -917,6 +920,7 @@ public final class EntityFactory {
 		dropRate.add(ItemPoolRarity.COMMON, 80);
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
 		crateEntity.add(lootRewardCompo);
 				
 		engine.addEntity(crateEntity);

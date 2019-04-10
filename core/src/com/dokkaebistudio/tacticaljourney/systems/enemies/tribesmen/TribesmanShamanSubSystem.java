@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
@@ -202,6 +204,10 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 		}
 		
 		temp.free();
+		
+		// Summoned tribesmen do not give XP or loot
+		tribesman.remove(LootRewardComponent.class);
+		tribesman.remove(ExpRewardComponent.class);
 		
 		Mappers.enemyComponent.get(tribesman).setAlerted(true);
 		return tribesman;

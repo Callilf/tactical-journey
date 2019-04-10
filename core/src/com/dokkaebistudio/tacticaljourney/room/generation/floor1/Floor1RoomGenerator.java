@@ -69,9 +69,6 @@ public class Floor1RoomGenerator extends RoomGenerator {
 				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
 				iterator.remove();
 			}
-			
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 		}
 	}
 }

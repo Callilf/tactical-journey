@@ -194,6 +194,9 @@ public class Descriptions {
 	public static final String ITEM_WORMHOLE_SHARD_TITLE = "Wormhole shard";
 	public static final String ITEM_WORMHOLE_SHARD_DESCRIPTION = "An extraordinary shard of a wormhole that has been solidificated. It creates a portal if you throw it.";
 
+	public static final String ITEM_DIVINE_CATALYST_TITLE = "Divine catalyst";
+	public static final String ITEM_DIVINE_CATALYST_DESCRIPTION = "This strange container was inside the statue. It seems to have some kind of divine powers. You can break it to receive a basic blessing, but you can probably find other ways to use it.";
+	
 	public static final String ITEM_TUTORIAL_PAGE_TITLE = "Tutorial page";
 	public static final String ITEM_TUTORIAL_PAGE_DESCRIPTION = "A page of the missing Tutorial book.";
 

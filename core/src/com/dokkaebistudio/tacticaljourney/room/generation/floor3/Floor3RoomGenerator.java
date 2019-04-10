@@ -131,9 +131,6 @@ public class Floor3RoomGenerator extends RoomGenerator {
 					iterator.remove();
 				}
 			}
-			
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 		}
 	}
 }

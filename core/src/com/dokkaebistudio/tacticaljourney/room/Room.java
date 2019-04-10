@@ -95,7 +95,7 @@ public class Room extends EntitySystem {
 	
 	
 	/** The entities to remove during this frame. */
-	private List<Entity> entitiesToRemove;
+	private Set<Entity> entitiesToRemove;
 
 	
 	
@@ -130,7 +130,7 @@ public class Room extends EntitySystem {
 		
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
-		this.entitiesToRemove = new ArrayList<>();
+		this.entitiesToRemove = new HashSet<>();
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
 		
@@ -234,6 +234,16 @@ public class Room extends EntitySystem {
 	 * @param e the entity
 	 */
 	public void removeEntity(Entity e) {
+		this.allEntities.removeValue(e, true);
+		this.entitiesToRemove.add(e);
+	}
+	
+	
+	/**
+	 * Remove an entity from the game.
+	 * @param e the entity
+	 */
+	private void removeEntityFromEngine(Entity e) {
 		GridPositionComponent posCompo = Mappers.gridPositionComponent.get(e);
 		if (posCompo != null) {
 			this.removeEntityAtPosition(e, posCompo.coord());
@@ -245,11 +255,8 @@ public class Room extends EntitySystem {
 			this.removeNeutral(e);
 		}
 		
-		this.allEntities.removeValue(e, true);		
-		this.entitiesToRemove.add(e);
+		engine.removeEntity(e);
 	}
-	
-	
 
 	
 	public void leaveRoom(Room nextRoom) {
@@ -266,9 +273,9 @@ public class Room extends EntitySystem {
 			gtSingleton.updateElapsedTime(deltaTime);
 		}
 		
-		// Remove entities that are no longer in the gmae
+		// Remove entities that are no longer in the game
 		for (Entity e : this.entitiesToRemove) {
-			engine.removeEntity(e);
+			removeEntityFromEngine(e);
 		}
 		this.entitiesToRemove.clear();
 		
@@ -543,8 +550,8 @@ public class Room extends EntitySystem {
 	 * @param neutral the neutral to remove
 	 */
 	public void removeNeutral(Entity neutral) {
-		this.removeEntity(neutral);
 		this.neutrals.remove(neutral);
+		this.removeEntity(neutral);
 	}
 
 	public List<Entity> getNeutrals() {

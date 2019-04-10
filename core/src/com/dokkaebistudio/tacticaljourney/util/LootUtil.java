@@ -52,14 +52,13 @@ public class LootUtil {
 		} else {
 			SpriteComponent spriteComponent = Mappers.spriteComponent.get(d);
 			spriteComponent.setSprite(destructibleComponent.getDestroyedTexture());
-			
-			// If it's a statue, set its "destroyed" status so that the statues delivers a curse
-			StatueComponent statueComponent = Mappers.statueComponent.get(d);
-			if (statueComponent != null) {
-				statueComponent.setJustDestroyed(true);
-				destructibleComponent.setRemove(true);
-				destructibleComponent.setDestroyedTexture(null);
-			}
+		}
+		
+		
+		// If it's a statue, set its "destroyed" status so that the statues delivers a curse
+		StatueComponent statueComponent = Mappers.statueComponent.get(d);
+		if (statueComponent != null) {
+			statueComponent.setJustDestroyed(true);
 		}
 	}
 	

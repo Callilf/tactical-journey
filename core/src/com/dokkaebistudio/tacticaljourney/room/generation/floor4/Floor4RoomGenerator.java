@@ -108,9 +108,6 @@ public class Floor4RoomGenerator extends RoomGenerator {
 				
 				EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
 				enemyComponent.setAlerted(true);
-				
-				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
-				lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 			}		
 			
 			// Close doors

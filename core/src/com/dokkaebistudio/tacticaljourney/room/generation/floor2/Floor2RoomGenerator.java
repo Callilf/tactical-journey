@@ -69,12 +69,8 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				
 				if (i == 0) {
 					mother = entityFactory.enemyFactory.createPangolinMother(room, iterator.next());
-					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(mother);
-					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 				} else {
 					Entity baby = entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
-					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(baby);
-					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 				}
 				
 			}

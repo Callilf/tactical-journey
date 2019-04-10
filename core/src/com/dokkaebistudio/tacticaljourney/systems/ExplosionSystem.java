@@ -32,7 +32,7 @@ import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.util.DropUtil;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -175,7 +175,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			Set<Entity> destructibles = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(),
 					DestructibleComponent.class, room);
 			for (Entity d : destructibles) {
-				DropUtil.destroy(d, room);
+				LootUtil.destroy(d, room);
 			}
 			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
 		}

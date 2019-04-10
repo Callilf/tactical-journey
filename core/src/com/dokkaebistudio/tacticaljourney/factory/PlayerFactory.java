@@ -24,6 +24,9 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -39,9 +42,11 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.StatueItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -273,9 +278,10 @@ public final class PlayerFactory {
 	 * Create a goddess statue.
 	 * @param pos the position
 	 * @param room the room
+	 * @param needsTwoExplosions whether the statue needs two explosions to drop it's loot or only one
 	 * @return the statue entity
 	 */
-	public Entity createGoddessStatue(Vector2 pos, Room room) {
+	public Entity createGoddessStatue(Vector2 pos, Room room, boolean needsTwoExplosions) {
 		Entity goddessStatueEntity = engine.createEntity();
 		goddessStatueEntity.flags = EntityFlagEnum.GODDESS_STATUE.getFlag();
 
@@ -308,9 +314,20 @@ public final class PlayerFactory {
 
 		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
-		destructible.setDestroyedTexture(Assets.goddess_statue_broken);
-		destructible.setRemove(false);
+		if (needsTwoExplosions) {
+			destructible.setDestroyedTexture(Assets.goddess_statue_broken);
+			destructible.setRemove(false);
+		}
 		goddessStatueEntity.add(destructible);		
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(new StatueItemPool());
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 98);
+		dropRate.add(ItemPoolRarity.RARE, 2);
+		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.entityFactory));
+		goddessStatueEntity.add(lootRewardCompo);
 		
 		room.addNeutral(goddessStatueEntity);
 		return goddessStatueEntity;

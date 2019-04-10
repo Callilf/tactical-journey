@@ -119,11 +119,20 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		for (Entity statue : statues) {
 			StatueComponent statueComponent = Mappers.statueComponent.get(statue);
 			if (statueComponent.wasJustDestroyed()) {
-				// Deliver the curse
-				playerAlterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_CURSE, statueComponent.getCurseToGive());
 				statueComponent.setJustDestroyed(false);
+
+				// Deliver the curse
+				if (statueComponent.getCurseToGive() != null) {
+					playerAlterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_CURSE, statueComponent.getCurseToGive());
+					statueComponent.setCurseToGive(null);
+				}
 				
-				statue.remove(BlockVisibilityComponent.class);
+				DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(statue);
+				if (!destructibleComponent.isRemove()) {
+					statue.remove(BlockVisibilityComponent.class);
+					destructibleComponent.setRemove(true);
+					destructibleComponent.setDestroyedTexture(null);
+				}
 			}
 		}
 		

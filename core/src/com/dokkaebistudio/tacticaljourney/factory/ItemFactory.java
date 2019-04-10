@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarmen
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
@@ -206,7 +207,9 @@ public final class ItemFactory {
 		case WORMHOLE_SHARD:
 			item = createItemWormholeShard(room, tilePos);
 			break;
-			
+		case DIVINE_CATALYST:
+			item = createItemDivineCatalyst(room, tilePos);
+			break;
 			
 			
 		case TOTEM_OF_KALAMAZOO:
@@ -505,6 +508,12 @@ public final class ItemFactory {
 	}
 	
 	
+	public Entity createItemDivineCatalyst(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,  new ItemDivineCatalyst());
+		item.flags = EntityFlagEnum.ITEM_DIVINE_CATALYST.getFlag();
+		return item;
+	}
+
 
 	//*********************
 	// Infusables 

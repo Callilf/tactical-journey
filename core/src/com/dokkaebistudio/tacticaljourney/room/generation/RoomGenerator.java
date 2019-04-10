@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.badlogic.ashley.core.Entity;
@@ -21,20 +20,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
-import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 /**
@@ -204,13 +198,7 @@ public abstract class RoomGenerator {
 			for (y = 0; y < GameScreen.GRID_H; y++) {
 				Vector2 pos = new Vector2(x, y);
 				groom.getTiles()[x][y] = new Tile(currentRoom, pos);
-				Entity terrain = entityFactory.createTerrain(currentRoom, pos, groom.getTileTypes()[x][y]);
-			
-				if (terrain != null && Mappers.lootRewardComponent.has(terrain)) {
-					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(terrain);
-					lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
-
-				}
+				entityFactory.createTerrain(currentRoom, pos, groom.getTileTypes()[x][y]);
 			}
 		}
 		
@@ -328,7 +316,8 @@ public abstract class RoomGenerator {
 			break;
 			
 		case STATUE_ROOM:
-			entityFactory.playerFactory.createGoddessStatue(new Vector2(11, 6), room);
+			boolean needsTwoExplosions = random.nextSeededInt(2) == 0;
+			entityFactory.playerFactory.createGoddessStatue(new Vector2(11, 6), room, needsTwoExplosions);
 			
 			if (possibleSpawns.size() == 0) return;
 			// Retrieve the spawn points and shuffle them
@@ -477,45 +466,14 @@ public abstract class RoomGenerator {
 			PoolableVector2 location = iterator.next();
 			
 			int nextInt = random.nextSeededInt(15);
-			Entity destructible = null;
 			
 			if (nextInt <= 2) {
-				destructible = entityFactory.createVase(room, location);
+				entityFactory.createVase(room, location);
 			} else if (nextInt <= 4) {
-				destructible = entityFactory.createAmmoCrate(room, location);
+				entityFactory.createAmmoCrate(room, location);
 			} else {
 				continue;
 			}
-	
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(destructible);
-			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 		}
-	}
-	
-	protected Entity generateEnemyLoot(EnemyItemPool itemPool, DropRate dropRate) {
-		RandomSingleton random = RandomSingleton.getInstance();
-		
-		float unit = (float) random.nextSeededInt(100);
-		float decimal = random.nextSeededFloat();
-		float randomValue = unit + decimal;
-		
-		int chance = 0;
-		ItemPoolRarity rarity = null;
-		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
-			if (randomValue >= chance && randomValue < chance + entry.getValue().intValue()) {
-				rarity = entry.getKey();
-				break;
-			}
-			chance += entry.getValue().intValue();
-		}
-		
-		if (rarity != null) {
-			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity);
-			PooledItemDescriptor itemType = itemTypes.get(0);
-			
-			return entityFactory.itemFactory.createItem(itemType.getType(), null, null);
-		}
-		
-		return null;
 	}
 }

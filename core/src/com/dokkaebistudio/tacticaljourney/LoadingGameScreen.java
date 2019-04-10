@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
 public class LoadingGameScreen extends ScreenAdapter {
@@ -42,6 +43,8 @@ public class LoadingGameScreen extends ScreenAdapter {
 	}
 
 	public int load(){
+		MenuAssets.getInstance().dispose();
+		
 	    // call asset manager loading each tick
 		boolean loaded = Assets.getInstance().loadAssets();
 

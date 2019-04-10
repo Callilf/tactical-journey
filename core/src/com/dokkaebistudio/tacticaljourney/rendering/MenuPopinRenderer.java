@@ -144,29 +144,6 @@ public class MenuPopinRenderer implements Renderer {
 			});
 			buttonTable.add(mainMenuBtn).minWidth(200).padBottom(20);
 			buttonTable.row();
-			
-			// 5 - Quit game
-			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
-			quitBtn.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					//Quit the game
-					gamescreen.dispose();
-		            Gdx.app.exit();;
-				}
-			});
-			
-//			stage.addListener(new InputListener() {
-//				@Override
-//				public boolean keyUp(InputEvent event, int keycode) {
-//					if (keycode == Input.Keys.ESCAPE) {
-//						gamescreen.state = GameScreen.GAME_RUNNING;
-//					}
-//					return super.keyUp(event, keycode);
-//				}
-//			});
-			
-			buttonTable.add(quitBtn).minWidth(200).padBottom(20);
 
 			// Place the popin properly
 			buttonTable.pack();

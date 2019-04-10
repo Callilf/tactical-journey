@@ -39,7 +39,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
+import com.dokkaebistudio.tacticaljourney.mainmenu.LoadingScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
@@ -443,12 +443,11 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	public void backToMenu() {
-		this.game.setScreen(new MainMenuScreen(this.game));
+		this.game.setScreen(new LoadingScreen(this.game));
 		quickDispose();
 	}
 	
 	public void quickDispose() {
-		Assets.getInstance().dispose();
 		stage.dispose();
 		hudStage.dispose();
 		fxStage.dispose();
@@ -457,6 +456,7 @@ public class GameScreen extends ScreenAdapter {
 		RandomSingleton.dispose();
 		Journal.dispose();
 		AnimationSingleton.dispose();
+		Assets.getInstance().dispose();
 	}
 	
 	@Override

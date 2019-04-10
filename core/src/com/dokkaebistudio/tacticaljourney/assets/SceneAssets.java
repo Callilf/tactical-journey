@@ -25,12 +25,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -137,26 +135,6 @@ public class SceneAssets {
 		RegionDescriptor regionDescriptor = new RegionDescriptor(file, region);
 		addSprite(regionDescriptor);
 		return regionDescriptor;
-	}
-	
-	@Deprecated
-	public static RegionDescriptor loadAndGetTexture(String file){
-		AtlasRegion region = getInstance().manager.get(atlas, TextureAtlas.class).findRegion(file);
-		region.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		RegionDescriptor regionDescriptor = new RegionDescriptor(file, region);
-		return regionDescriptor;
-	}
-	
-	public static Array<Sprite> getAnimation(String file){
-		Array<AtlasRegion> regions = getInstance().manager.get(atlas, TextureAtlas.class).findRegions(file);
-		
-		Array<Sprite> a = new Array<>();
-		for (AtlasRegion r : regions) {
-			r.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			a.add(new Sprite(r));
-		}
-		return a;
 	}
 	
 	public static NinePatch getNinePatch(String file, int left, int right, int top, int bottom){

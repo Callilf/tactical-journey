@@ -91,25 +91,13 @@ public class GameOverPopinRenderer implements Renderer {
 			
 			// 2 - Desc
 			Label desc = new Label("You got screwed hard.", PopinService.hudStyle());
-			table.add(desc).top().align(Align.left).pad(20, 0, 60, 0);
+			table.add(desc).top().align(Align.left).width(600).pad(20, 0, 60, 0);
 			table.row();		
 			
 			// 3 - Action buttons
 			Table buttonTable = new Table();
-			
-			// 3.1 - Quit button
-			final TextButton quitBtn = new TextButton("Quit game", PopinService.buttonStyle());			
-			quitBtn.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					//Quit the game
-					gamescreen.dispose();
-		            Gdx.app.exit();;
-				}
-			});
-			buttonTable.add(quitBtn).pad(0, 20,0,20);
 
-			// 3.2 - Main menu button
+			// 3.1 - Main menu button
 			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override

@@ -4,7 +4,12 @@
 package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingAccuracy;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBombmasterMight;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBowmasterAccuracy;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBowmasterMight;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBowmasterSteadiness;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingCelerity;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingRockThrower;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingStrength;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingVigor;
 
@@ -19,7 +24,12 @@ public abstract class Blessing extends Alteration {
 		VIGOR,
 		STRENGTH,
 		CELERITY,
-		ACCURACY;
+		ACCURACY,
+		BOWMASTER_MIGHT,
+		BOWMASTER_ACCURACY,
+		BOWMASTER_STEADYNESS,
+		BOMBMASTER_MIGHT,
+		PITCHER,
 	}
 	
 	
@@ -43,6 +53,20 @@ public abstract class Blessing extends Alteration {
 			break;
 		case ACCURACY:
 			result = new BlessingAccuracy();
+			break;
+		case BOWMASTER_MIGHT:
+			result = new BlessingBowmasterMight();
+			break;
+		case BOWMASTER_ACCURACY:
+			result = new BlessingBowmasterAccuracy();
+			break;
+		case BOWMASTER_STEADYNESS:
+			result = new BlessingBowmasterSteadiness();
+		case BOMBMASTER_MIGHT:
+			result = new BlessingBombmasterMight();
+			break;
+		case PITCHER:
+			result = new BlessingRockThrower();
 			break;
 			
 			default:

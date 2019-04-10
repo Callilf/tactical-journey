@@ -28,6 +28,11 @@ public class GoddessStatueAlterationPool extends AlterationPool {
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.STRENGTH, 10));
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.CELERITY, 10));
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.ACCURACY, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOWMASTER_MIGHT, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOWMASTER_ACCURACY, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOWMASTER_STEADYNESS, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOMBMASTER_MIGHT, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.PITCHER, 10));
 						
 		for (PooledAlterationDescriptor<BlessingsEnum> desc : blessingPool) {
 			blessingSumOfChances += desc.getChanceToDrop();

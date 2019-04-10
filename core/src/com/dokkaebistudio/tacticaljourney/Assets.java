@@ -345,6 +345,11 @@ public class Assets {
 	public static RegionDescriptor blessing_strength;
 	public static RegionDescriptor blessing_celerity;
 	public static RegionDescriptor blessing_accuracy;
+	public static RegionDescriptor blessing_bowmaster_might;
+	public static RegionDescriptor blessing_bowmaster_steadiness;
+	public static RegionDescriptor blessing_bowmaster_accuracy;
+	public static RegionDescriptor blessing_bombmaster_might;
+	public static RegionDescriptor blessing_rock_thrower;
 	public static RegionDescriptor blessing_of_kalamazoo;
 	public static RegionDescriptor blessing_of_vilma;
 	public static RegionDescriptor blessing_mithridatism;
@@ -671,6 +676,11 @@ public class Assets {
 		blessing_strength = Assets.getTexture("blessing-strength");
 		blessing_celerity = Assets.getTexture("blessing-celerity");
 		blessing_accuracy = Assets.getTexture("blessing-accuracy");
+		blessing_bowmaster_might = Assets.getTexture("blessing-bowmaster-might");
+		blessing_bowmaster_steadiness = Assets.getTexture("blessing-bowmaster-steadiness");
+		blessing_bowmaster_accuracy = Assets.getTexture("blessing-bowmaster-accuracy");
+		blessing_bombmaster_might = Assets.getTexture("blessing-bombmaster-might");
+		blessing_rock_thrower = Assets.getTexture("blessing-rock-thrower");
 		blessing_of_kalamazoo = Assets.getTexture("blessing-kalamazoo");
 		blessing_of_vilma = Assets.getTexture("blessing-vilma");
 		blessing_mithridatism = Assets.getTexture("blessing-mithridatism");

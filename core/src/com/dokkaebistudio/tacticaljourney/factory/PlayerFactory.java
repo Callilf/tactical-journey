@@ -366,12 +366,20 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		SoulbenderComponent soulbenderCompo = engine.createComponent(SoulbenderComponent.class);
+		soulbenderCompo.setPrice(10);
 		soulbenderCompo.addSpeech("Hello there ! I'm a soul bender.");
 		soulbenderCompo.addSpeech("I can infuse items' auras into your soul.");
 		soulbenderCompo.addSpeech("This allows you keeping the blessings provided by items permanently, and free an inventory slot.");
 		soulbenderCompo.addSpeech("The bad side is that it also keeps the curses provided by the item.");
 		soulbenderCompo.addSpeech("And also it's not free.");
+		soulbenderCompo.addSpeech("Come closer if you want to infuse an item!");
 		
+		soulbenderCompo.addAfterInfusionSpeech("I'm out of energy, I need some rest.");
+		soulbenderCompo.addAfterInfusionSpeech("I'm getting too old for this.");
+		soulbenderCompo.addAfterInfusionSpeech("If you get me something to restore my energy I could probably infuse another item for you.");
+		
+		soulbenderCompo.setDivineCatalystSpeech("You are carrying a very powerful item, I can feel it. Come closer and let me have a look.");
+		soulbenderCompo.setAfterCatalystSpeech("Thank you! I feel strong enough to infuse another item now.");
 		soulBenderEntity.add(soulbenderCompo);
 		
 		room.addNeutral(soulBenderEntity);

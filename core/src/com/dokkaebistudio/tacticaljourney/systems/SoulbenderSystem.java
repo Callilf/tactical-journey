@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -94,8 +95,25 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 						playerComponent.requestAction(PlayerActionEnum.INFUSE, soulbender);
 						
+					} else if(soulbenderComponent.hasInfused()) {
+						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+						if (inventoryComponent.contains(ItemDivineCatalyst.class)) {
+							// Player has a divine catalyst
+							if (distanceFromSoulbender == 1) {
+								PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+								playerComponent.requestAction(PlayerActionEnum.GIVE_CATALYST_SOULBENDER, soulbender);
+							} else {
+								// "You carry a powerful item" speech
+								room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getDivineCatalystSpeech(), true);
+							}
+						} else {
+							// No diving catalyst : "i'm tired" speech
+							room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getAfterInfusionSpeech(), true);
+						}
+					} else if (soulbenderComponent.isReceivedCatalyst()){
+						room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getAfterCatalystSpeech(), true);
 					} else {
-						room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getSpeech());
+						room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getSpeech(), true);
 					}
 				}
 				
@@ -124,12 +142,11 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 				
 				Journal.addEntry("[PINK]Infused the " + itemComponent.getItemLabel());
 				itemComponent.infuse(player, currentItem, room);
-				soulbenderComponent.setPrice(soulbenderComponent.getPrice() + 10);
+				soulbenderComponent.setHasInfused(true);
 				
 				playerInventoryCompo.setCurrentAction(null);
 			} else {
 				
-				// TEST
 				room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,"Come back when you've got enough gold coins.",  true);
 				playerInventoryCompo.setCurrentAction(null);
 			}

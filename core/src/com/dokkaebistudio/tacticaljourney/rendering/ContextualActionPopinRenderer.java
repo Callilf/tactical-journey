@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
@@ -32,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -219,6 +219,18 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			
 			updateInfuseListener(actionEntity, soulBenderComponent);
 			break;
+			
+		case GIVE_CATALYST_SOULBENDER:
+			soulBenderComponent = Mappers.soulbenderComponent.get(actionEntity);
+			
+			title.setText("Soulbender");
+			descStr = "You have a Divine catalyst! If I consume it, I can restore my energy and infuse another item for you.\n"
+					+ "Will you give it to me?";
+			desc.setText(descStr);
+			yesBtn.setText("Give");
+			
+			updateGiveCatalystSoulbenderListener(actionEntity, soulBenderComponent);
+			break;
 			default:
 		}
 	}
@@ -391,7 +403,27 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtn.addListener(yesBtnListener);
 	}
 	
-	
+	private void updateGiveCatalystSoulbenderListener(final Entity soulbender, final SoulbenderComponent soulbenderComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				//Open inventory popin to select the item to infuse.
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				int indexOfCatalyst = inventoryComponent.indexOf(ItemDivineCatalyst.class);
+				Entity catalyst = inventoryComponent.getAndRemove(indexOfCatalyst);
+				room.removeEntity(catalyst);
+				
+				soulbenderComponent.setHasInfused(false);
+				soulbenderComponent.setReceivedCatalyst(true);
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
 	
 	
 	

@@ -179,7 +179,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsTable.pack();
 		
 		//The scroll pane for the loot items
-		lootableItemsScroll = new ScrollPane(lootableItemsTable);
+		lootableItemsScroll = new ScrollPane(lootableItemsTable, PopinService.smallScrollStyle());
+		lootableItemsScroll.setFadeScrollBars(false);
 		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(530);
 		lootTable.row();
 		
@@ -372,7 +373,9 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.pack();
 		
 		//The scroll pane for the loot items
-		ScrollPane optionsScroll = new ScrollPane(optionsTable);
+		ScrollPane optionsScroll = new ScrollPane(optionsTable, PopinService.scrollStyle());
+		optionsScroll.setScrollbarsOnTop(true);
+		optionsScroll.setFadeScrollBars(false);
 		debugTable.add(optionsScroll).fill().expand().maxHeight(650);
 		debugTable.row();
 

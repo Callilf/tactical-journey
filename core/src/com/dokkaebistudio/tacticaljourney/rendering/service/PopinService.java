@@ -2,11 +2,13 @@ package com.dokkaebistudio.tacticaljourney.rendering.service;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
 public class PopinService {
@@ -23,6 +25,10 @@ public class PopinService {
     private TextButtonStyle checkedButtonStyle;
     
     private TextFieldStyle textFieldStyle;
+    
+    private ScrollPaneStyle scrollStyle;
+    private ScrollPaneStyle smallScrollStyle;
+    private ScrollPaneStyle bigScrollStyle;
 	
     
     private PopinService() {
@@ -49,6 +55,14 @@ public class PopinService {
 		textFieldStyle.fontColor = Color.WHITE;
 		textFieldStyle.cursor = new TextureRegionDrawable(SceneAssets.textfield_cursor.getRegion());
 		textFieldStyle.cursor.setMinWidth(1f);
+		
+		NinePatchDrawable knob = new NinePatchDrawable(SceneAssets.scrollbarKnob);
+		scrollStyle = new ScrollPaneStyle(null, null, knob, null, knob);
+		NinePatchDrawable smallKnob = new NinePatchDrawable(SceneAssets.scrollbarKnobSmall);
+		smallScrollStyle = new ScrollPaneStyle(null, null, smallKnob, null, smallKnob);
+		NinePatchDrawable bigKnob = new NinePatchDrawable(SceneAssets.scrollbarKnobBig);
+		bigScrollStyle = new ScrollPaneStyle(null, null, bigKnob, null, bigKnob);
+
     }
     
     
@@ -78,6 +92,19 @@ public class PopinService {
     	if (instance == null) instance = new PopinService();
 		return instance.textFieldStyle;
 	}
+    
+    public static ScrollPaneStyle scrollStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.scrollStyle;
+    }
+    public static ScrollPaneStyle smallScrollStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.smallScrollStyle;
+    }   
+    public static ScrollPaneStyle bigScrollStyle() {
+    	if (instance == null) instance = new PopinService();
+    	return instance.bigScrollStyle;
+    }
     
     public static void dispose() {
     	instance = null;

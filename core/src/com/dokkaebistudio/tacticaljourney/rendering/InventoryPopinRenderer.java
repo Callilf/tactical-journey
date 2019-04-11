@@ -77,6 +77,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     /** The inventory table. */
     private Table inventoryTable;
 //    private Label money;
+    private Table slotsTable;
+    private ScrollPane slotsScroll;
     private Table[] slots = new Table[96];
     private Image[] slotImages = new Image[96];
     private Label[] slotQuantities = new Label[96];
@@ -160,7 +162,26 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				title.setText("Inventory");
     			}
     			
-    			for(int i=0 ; i<slots.length ; i++) {
+    			// Fill the slots table
+    			float scrollY = slotsScroll.getScrollY();
+    			slotsTable.clear();
+    			slotsScroll.layout();
+    			int nbSlots = inventoryCompo.getNumberOfSlots();
+    			double nbRows = (int) Math.ceil((double)nbSlots / (double)4);
+    			int index = 0;
+    			for (int row = 0 ; row < nbRows ; row++) {
+    				for (int col=0 ; col<4 ; col++) {
+    					if (index >= nbSlots) break;
+    					slotsTable.add(slots[index]).pad(0, 5, 10, 5);
+    					index++;
+    				}
+    				slotsTable.row();
+    			}
+    			slotsTable.pack();
+    			slotsScroll.layout();
+    			slotsScroll.setScrollY(scrollY);
+    			
+    			for(int i=0 ; i<nbSlots ; i++) {
     				final Table slot = slots[i];
 					Image image = slotImages[i];
 					Label quantity = slotQuantities[i];
@@ -266,20 +287,19 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		// 2 - Inventory slots
 		inventoryDropButtons.clear();
-		Table slotsTable = new Table();
-		int index = 0;
-		for (int row = 0 ; row < 24 ; row++) {
-			for (int col=0 ; col<4 ; col++) {
-				Table slot = createSlot( index);
-				slotsTable.add(slot).pad(0, 5, 10, 5);
-				slots[index] = slot;
-				
-				index ++;
-			}
-			slotsTable.row();
+		slotsTable = new Table();
+		slotsTable.top();
+		for (int index = 0 ; index < 96 ; index++) {
+			Table slot = createSlot( index);
+			slots[index] = slot;
 		}
-		ScrollPane slotsScroll = new ScrollPane(slotsTable);
-		inventoryTable.add(slotsScroll).maxHeight(600);
+		slotsScroll = new ScrollPane(slotsTable, PopinService.scrollStyle());
+		slotsScroll.setFadeScrollBars(false);
+		slotsScroll.setScrollbarsOnTop(true);
+		slotsScroll.setScrollingDisabled(true, false);
+		slotsScroll.setScrollBarPositions(false, true);
+		slotsScroll.layout();
+		inventoryTable.add(slotsScroll).width(635).height(600);
 		inventoryTable.row();
 		
 		closeBtn = new TextButton("Close", PopinService.buttonStyle());

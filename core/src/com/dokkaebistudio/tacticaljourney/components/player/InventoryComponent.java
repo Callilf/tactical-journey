@@ -24,7 +24,7 @@ import com.esotericsoftware.kryo.io.Output;
  *
  */
 public class InventoryComponent implements Component, Poolable {
-	public final static int MAX_SLOTS = 16;
+	public final static int MAX_SLOTS = 96;
 	
 	/** The player. */
 	public Entity player;
@@ -37,11 +37,11 @@ public class InventoryComponent implements Component, Poolable {
 	private Integer turnsToWaitBeforeLooting;
 	
 	/** The number of slots in the inventory. */
-	private int numberOfSlots = 8;
+	private int numberOfSlots;
 	
 	/** The slots of the inventory. Each slot contains a list of entities to
 	 * handle stacked items. */
-	private List<List<Entity>> slots = new ArrayList<>();
+	private List<List<Entity>> slots = new ArrayList<>(96);
 	
 	/** Whether the player has the key to the next floor. */
 	private boolean hasKey = false;
@@ -74,7 +74,7 @@ public class InventoryComponent implements Component, Poolable {
 	
 	
 	public void init() {
-		for (int i=0 ; i<numberOfSlots ; i++) {
+		for (int i=0 ; i<MAX_SLOTS ; i++) {
 			ArrayList<Entity> arrayList = new ArrayList<>();
 			slots.add(arrayList);
 		}

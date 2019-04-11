@@ -32,8 +32,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	    
 	public Stage stage;
 	
-	private Entity player;
-	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent playerInventoryCompo;
 	private ItemComponent itemComponent;
@@ -58,9 +56,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     private ChangeListener useListener;
 
     
-    public ItemPopinRenderer(Room r, Stage s, Entity p) {
+    public ItemPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -74,7 +71,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (playerInventoryCompo == null) {
-    		playerInventoryCompo = Mappers.inventoryComponent.get(player);
+    		playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     	}
     	
     	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN) {

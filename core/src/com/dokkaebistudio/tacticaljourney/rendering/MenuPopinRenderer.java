@@ -16,7 +16,6 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
-import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -109,7 +108,7 @@ public class MenuPopinRenderer implements Renderer {
 				debugBtn.addListener(new ChangeListener() {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
-						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gamescreen.player);
+						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.DEBUG);
 						closePopin();
 					}

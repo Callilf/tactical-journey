@@ -24,7 +24,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -51,8 +50,6 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The stage. */
 	public Stage stage;
-	/** The player. */
-	private Entity player;
 	/** The current room. */
     private Room room;
 	
@@ -93,9 +90,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
      * @param s the stage to draw on
      * @param p the player
      */
-    public DebugPopinRenderer(Room r, Stage s, Entity p) {
+    public DebugPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -110,7 +106,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (inventoryCompo == null) {
-    		inventoryCompo = Mappers.inventoryComponent.get(player);
+    		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     	}    	
     	
     	// Check if the inventory is displayed
@@ -262,7 +258,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 				//add item in inventory and remove it from lootable entity
 				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type, null);
 				ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);
-				boolean pickedUp = clonedItemCompo.pickUp(player, clonedItem, room);
+				boolean pickedUp = clonedItemCompo.pickUp(GameScreen.player, clonedItem, room);
 				if (pickedUp) {
 					//TODO
 				} else {
@@ -443,7 +439,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		healthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.setHp(healthComponent.getHp() - 5);
 			}
 		});
@@ -452,7 +448,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		healthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.setHp(healthComponent.getHp() + 5);
 			}
 		});
@@ -466,7 +462,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		maxHealthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.increaseMaxHealth(-5);
 			}
 		});
@@ -475,7 +471,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		maxHealthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.increaseMaxHealth(5);
 			}
 		});
@@ -493,7 +489,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		armorDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.setArmor(healthComponent.getArmor() - 5);
 			}
 		});
@@ -502,7 +498,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		armorUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.setArmor(healthComponent.getArmor() + 5);
 			}
 		});
@@ -516,7 +512,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		maxArmorDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.increaseMaxArmor(-5);
 			}
 		});
@@ -525,7 +521,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		maxArmorUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.increaseMaxArmor(5);
 			}
 		});
@@ -544,7 +540,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		xpUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				ExperienceComponent xpCompo = Mappers.experienceComponent.get(player);
+				ExperienceComponent xpCompo = Mappers.experienceComponent.get(GameScreen.player);
 				xpCompo.earnXp(10);
 			}
 		});
@@ -553,7 +549,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		xpUpUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				ExperienceComponent xpCompo = Mappers.experienceComponent.get(player);
+				ExperienceComponent xpCompo = Mappers.experienceComponent.get(GameScreen.player);
 				xpCompo.earnXp(50);
 			}
 		});
@@ -572,7 +568,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		inventoryUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryCompo.removeSlot(room);
 			}
 		});
@@ -581,7 +577,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		inventoryDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryCompo.addSlot();
 			}
 		});
@@ -599,7 +595,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		karmaDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+				PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
 				playerComponent.increaseKarma(-1);
 			}
 		});
@@ -608,7 +604,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		karmaUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+				PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
 				playerComponent.increaseKarma(1);
 			}
 		});
@@ -621,7 +617,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		strengthDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.setStrength(attackComponent.getStrength() - 1);
 			}
 		});
@@ -630,7 +626,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		strengthUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.setStrength(attackComponent.getStrength() + 1);
 			}
 		});
@@ -643,7 +639,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		accuracyDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.increaseAccuracy(- 1);
 			}
 		});
@@ -652,7 +648,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		accuracyUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(player);
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.increaseAccuracy(1);
 			}
 		});
@@ -665,7 +661,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		moveDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				MoveComponent moveComponent = Mappers.moveComponent.get(player);
+				MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
 				moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() - 1);
 			}
 		});
@@ -674,7 +670,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		moveUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				MoveComponent moveComponent = Mappers.moveComponent.get(player);
+				MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
 				moveComponent.setMoveSpeed(moveComponent.getMoveSpeed() + 1);
 			}
 		});
@@ -693,7 +689,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowRangeDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
 			}
 		});
@@ -702,7 +698,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowRangeUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
 			}
 		});
@@ -715,7 +711,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowDamageDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.increaseStrength(- 1);
 			}
 		});
@@ -724,7 +720,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowDamageUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.increaseStrength(1);
 			}
 		});
@@ -737,7 +733,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowAccuracyDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.increaseAccuracy(- 1);
 			}
 		});
@@ -746,7 +742,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bowAccuracyUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillRange());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
 				attackComponent.increaseAccuracy(1);
 			}
 		});
@@ -766,7 +762,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombThrowRangeDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
 			}
 		});
@@ -775,7 +771,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombThrowRangeUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
 			}
 		});
@@ -788,7 +784,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombDamageDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.increaseStrength(- 1);
 			}
 		});
@@ -797,7 +793,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombDamageUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.increaseStrength(1);
 			}
 		});
@@ -810,7 +806,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombFuseDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setBombTurnsToExplode(attackComponent.getBombTurnsToExplode() - 1);
 			}
 		});
@@ -819,7 +815,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombFuseUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setBombTurnsToExplode(attackComponent.getBombTurnsToExplode() + 1);
 			}
 		});
@@ -832,7 +828,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombRadiusDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setBombRadius(attackComponent.getBombRadius() - 1);
 			}
 		});
@@ -841,7 +837,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		bombRadiusUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(player).getSkillBomb());
+				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
 				attackComponent.setBombRadius(attackComponent.getBombRadius() + 1);
 			}
 		});
@@ -861,7 +857,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		poisonResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.reduceResistance(DamageType.POISON, 50);
 			}
 		});
@@ -870,7 +866,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		poisonResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.addResistance(DamageType.POISON, 50);
 			}
 		});
@@ -884,7 +880,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		fireResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.reduceResistance(DamageType.FIRE, 10);
 			}
 		});
@@ -893,7 +889,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		fireResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.addResistance(DamageType.FIRE, 10);
 			}
 		});
@@ -907,7 +903,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		explosionResistDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.reduceResistance(DamageType.EXPLOSION, 10);
 			}
 		});
@@ -916,7 +912,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		explosionResistUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				HealthComponent healthComponent = Mappers.healthComponent.get(player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 				healthComponent.addResistance(DamageType.EXPLOSION, 10);
 			}
 		});

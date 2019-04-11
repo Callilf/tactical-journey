@@ -31,6 +31,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -290,7 +291,7 @@ public class Room extends EntitySystem {
 			Journal.addEntry("The " + this.type.title() + " has been cleared");
 			MapRenderer.requireRefresh();
 
-			Entity player = this.floor.getGameScreen().player;
+			Entity player = GameScreen.player;
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 			if (alterationReceiverComponent != null) {
 				alterationReceiverComponent.onRoomCleared(player, this);
@@ -309,7 +310,7 @@ public class Room extends EntitySystem {
 		// Update the room state
 		updateState();
 		
-		Mappers.playerComponent.get(this.floor.getGameScreen().player).setActionDoneAtThisFrame(false);
+		Mappers.playerComponent.get(GameScreen.player).setActionDoneAtThisFrame(false);
 	}
 	
 	

@@ -77,7 +77,7 @@ public class TurnSystem extends IteratingSystem implements RoomSystem {
 	 */
 	private void displayNewTurnLabel() {
 		final Label newTurnLabel = new Label("NEW TURN", PopinService.hudStyle());
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
 		newTurnLabel.setPosition(playerPos.getWorldPos().x, playerPos.getWorldPos().y + GameScreen.GRID_SIZE);
 		
 		Action finishAction = new Action(){

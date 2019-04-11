@@ -227,20 +227,20 @@ public class GameScreen extends ScreenAdapter {
 		
 		mapRenderer = new MapRenderer(miniMapStage, activeFloor);
 		renderers.add(new RoomRenderer(fxStage,game.batcher, room, guiCam));
-		renderers.add(new HUDRenderer(hudStage, player));
+		renderers.add(new HUDRenderer(hudStage));
 		renderers.add(mapRenderer);
 		renderers.add(new JournalRenderer(journalStage));
 		renderers.add(new DialogRenderer(room, stage));
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer, hudStage));
-		renderers.add(new ContextualActionPopinRenderer(room, stage, player));
-		renderers.add(new InspectPopinRenderer(room, stage, player));
-		renderers.add(new ItemPopinRenderer(room, stage, player));
-		renderers.add(new InventoryPopinRenderer(room, inventoryStage, player));
-		renderers.add(new LootPopinRenderer(room, inventoryStage, player));
-		renderers.add(new ProfilePopinRenderer(room, stage, player));
+		renderers.add(new ContextualActionPopinRenderer(room, stage));
+		renderers.add(new InspectPopinRenderer(room, stage));
+		renderers.add(new ItemPopinRenderer(room, stage));
+		renderers.add(new InventoryPopinRenderer(room, inventoryStage));
+		renderers.add(new LootPopinRenderer(room, inventoryStage));
+		renderers.add(new ProfilePopinRenderer(room, stage));
 		renderers.add(new StatusPopinRenderer(room, stage));
-		if (debugMode) { renderers.add(new DebugPopinRenderer(room, inventoryStage, player)); }
-		renderers.add(new LevelUpPopinRenderer(room, stage, player));
+		if (debugMode) { renderers.add(new DebugPopinRenderer(room, inventoryStage)); }
+		renderers.add(new LevelUpPopinRenderer(room, stage));
 		renderers.add(new WinPopinRenderer(this, menuStage));
 		renderers.add(new GameOverPopinRenderer(this, menuStage));
 		renderers.add(new MenuPopinRenderer(this, menuStage));
@@ -253,9 +253,9 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AnimationSystem(room));
 		engine.addSystem(new VisualEffectSystem(room));
 		engine.addSystem(new TurnSystem(room, fxStage));
-		engine.addSystem(new WheelSystem(attackWheel, player, room));
+		engine.addSystem(new WheelSystem(attackWheel, room));
 		engine.addSystem(new ExplosionSystem(room, fxStage));
-		engine.addSystem(new CreepSystem(this, room, fxStage, player));
+		engine.addSystem(new CreepSystem(this, room, fxStage));
 		engine.addSystem(new EnemySystem(room, fxStage));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));

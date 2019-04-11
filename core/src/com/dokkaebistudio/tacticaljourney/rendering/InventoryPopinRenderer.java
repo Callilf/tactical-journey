@@ -46,8 +46,6 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The stage. */
 	public Stage stage;
-	/** The player. */
-	private Entity player;
 	/** The current room. */
     private Room room;
 	
@@ -111,9 +109,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
      * @param s the stage to draw on
      * @param p the player
      */
-    public InventoryPopinRenderer(Room r, Stage s, Entity p) {
+    public InventoryPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -128,7 +125,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (inventoryCompo == null) {
-    		inventoryCompo = Mappers.inventoryComponent.get(player);
+    		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     	}
 
     	

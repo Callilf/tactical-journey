@@ -41,8 +41,6 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 	    
 	public Stage stage;
 	
-	private Entity player;
-	
 	/** The player component (kept in cache to prevent getting it at each frame). */
 	private PlayerComponent playerCompo;
 	
@@ -73,9 +71,8 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     
     private boolean needRefresh;
     
-    public InspectPopinRenderer(Room r, Stage s, Entity p) {
+    public InspectPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -89,7 +86,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (playerCompo == null) {
-    		playerCompo = Mappers.playerComponent.get(player);
+    		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     	}
     	
     	if (playerCompo.isInspectPopinRequested() || needRefresh) {

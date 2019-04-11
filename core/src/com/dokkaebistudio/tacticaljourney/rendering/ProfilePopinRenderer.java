@@ -1,6 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,8 +37,6 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	    
 	public Stage stage;
-	
-	private Entity player;
 	
 	/** The player component of the player (kept in cache to prevent getting it at each frame). */
 	private PlayerComponent playerCompo;
@@ -97,9 +94,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 
 
     
-    public ProfilePopinRenderer(Room r, Stage s, Entity p) {
+    public ProfilePopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -112,13 +108,13 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	public void render(float deltaTime) {
     	
     	if (playerCompo == null) {
-    		playerCompo = Mappers.playerComponent.get(player);
+    		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     	}
     	if (expCompo == null) {
-    		expCompo = Mappers.experienceComponent.get(player);
+    		expCompo = Mappers.experienceComponent.get(GameScreen.player);
     	}
     	if (alterationReceiverCompo == null) {
-    		alterationReceiverCompo = Mappers.alterationReceiverComponent.get(player);
+    		alterationReceiverCompo = Mappers.alterationReceiverComponent.get(GameScreen.player);
     	}
     	
     	if (playerCompo.isProfilePopinDisplayed() && room.getState() != RoomState.PROFILE_POPIN) {
@@ -180,10 +176,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     // PROFILE
 
 	private void refreshProfileTable() {
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(player);
-		MoveComponent moveComponent = Mappers.moveComponent.get(player);
-		AttackComponent attackComponent = Mappers.attackComponent.get(player);
-		HealthComponent healthComponent = Mappers.healthComponent.get(player);
+		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(GameScreen.player);
+		MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
+		AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
+		HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 
 		profileTitle.setText("Profile");
 		nameLbl.setText("Name: " + inspectableComponent.getTitle());

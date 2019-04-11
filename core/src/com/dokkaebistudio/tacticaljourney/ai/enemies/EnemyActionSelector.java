@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -234,11 +235,11 @@ public class EnemyActionSelector {
 		
 		//First check if can attack the player
 		Entity target = null;
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 		for (Tile attackTile : attackComponent.allAttackableTiles) {
 			if (attackTile.getGridPos().equals(playerPos.coord())) {
-				target = room.floor.getGameScreen().player;
+				target = GameScreen.player;
 			}
 		}
 
@@ -295,11 +296,11 @@ public class EnemyActionSelector {
 		//First check if can attack the player
 		Entity target = null;
 		int shortestDistance = -1;
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(room.floor.getGameScreen().player);
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 		for (Tile attackTile : attackComponent.allAttackableTiles) {
 			if (attackTile.getGridPos().equals(playerPos.coord())) {
-				target = room.floor.getGameScreen().player;
+				target = GameScreen.player;
 				shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
 			}
 		}

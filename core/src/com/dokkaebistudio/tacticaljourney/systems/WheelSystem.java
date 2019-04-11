@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
@@ -29,13 +30,11 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     
     /** The current room. */
     private Room room;
-    private Entity player;
 
-    public WheelSystem(AttackWheel attackWheel, Entity player, Room room) {
+    public WheelSystem(AttackWheel attackWheel, Room room) {
 		this.priority = 6;
 
         this.wheel = attackWheel;
-        this.player = player;
         this.room = room;
     }
     
@@ -58,7 +57,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     			wheel.getArrow().setRotation(nextInt);
     			
     			
-    			wheel.modifySectors(player, room);
+    			wheel.modifySectors(GameScreen.player, room);
     			
 		
 		        // get all entities that affect the wheel

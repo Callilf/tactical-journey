@@ -45,7 +45,7 @@ public class StingerSubSystem extends EnemySubSystem {
     	final AttackComponent attackCompo = Mappers.attackComponent.get(enemy);
     	GridPositionComponent enemyCurrentPos = Mappers.gridPositionComponent.get(enemy);
 
-		Entity playerEntity = room.floor.getGameScreen().player;
+		Entity playerEntity = GameScreen.player;
 		GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(playerEntity);
 
 		

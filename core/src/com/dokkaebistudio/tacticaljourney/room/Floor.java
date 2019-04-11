@@ -127,16 +127,16 @@ public class Floor {
 
 			//Place the player
 			if (newRoom.getNorthNeighbor() == oldRoom) {
-				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+				MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
 			} else if (newRoom.getSouthNeighbor() == oldRoom) {
-				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
+				MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
 			} else if (newRoom.getWestNeighbor() == oldRoom) {
-				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
+				MovementHandler.placeEntity(GameScreen.player, new Vector2(1, GameScreen.GRID_H/2), newRoom);
 			} else if (newRoom.getEastNeighbor() == oldRoom) {
-				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
+				MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W-2, GameScreen.GRID_H/2), newRoom);
 			} else {
 				// TP case
-				MovementHandler.placeEntity(this.gameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
+				MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
 			}
 		}
 		
@@ -144,10 +144,10 @@ public class Floor {
 	}
 	
 	public void removePlayerFromRoom(Room room) {
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(this.gameScreen.player);
-		room.removeEntityAtPosition(this.gameScreen.player, playerPos.coord());
+		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
+		room.removeEntityAtPosition(GameScreen.player, playerPos.coord());
 		
-		OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(this.gameScreen.player);
+		OrbCarrierComponent orbCarrierComponent = Mappers.orbCarrierComponent.get(GameScreen.player);
 		for (Entity orb : orbCarrierComponent.getOrbs()) {
 			GridPositionComponent orbPos = Mappers.gridPositionComponent.get(orb);
 			room.removeEntityAtPosition(orb, orbPos.coord());

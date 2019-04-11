@@ -38,7 +38,6 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    
 	public Stage stage;
 	
-	private Entity player;
 	/** The experience component of the player (kept in cache to prevent getting it at each frame). */
 	private ExperienceComponent expCompo;
 	
@@ -58,9 +57,8 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     /** The number of rewards selected. */
     private int selectedRewards = 0;
     
-    public LevelUpPopinRenderer(Room r, Stage s, Entity p) {
+    public LevelUpPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -73,7 +71,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	public void render(float deltaTime) {
     	
     	if (expCompo == null) {
-    		expCompo = Mappers.experienceComponent.get(player);
+    		expCompo = Mappers.experienceComponent.get(GameScreen.player);
     	}
     	
     	if (expCompo.isLevelUpPopinDisplayed()) {
@@ -95,7 +93,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		createPopinTop(expCompo, table);
 	        	
 	        	//CHOICES (choices description and claim button)
-	    		createChoices(player, expCompo.getChoicesNumber(), table);
+	    		createChoices(GameScreen.player, expCompo.getChoicesNumber(), table);
 	        	
 	        	// BOTTOM PART (continue button)
 	    		createPopinBottom(expCompo,table);

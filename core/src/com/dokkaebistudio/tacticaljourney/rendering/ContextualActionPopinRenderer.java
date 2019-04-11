@@ -45,8 +45,6 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	    
 	public Stage stage;
 	
-	private Entity player;
-	
 	/** The player component (kept in cache to prevent getting it at each frame). */
 	private PlayerComponent playerCompo;
 	
@@ -62,9 +60,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     private TextButton yesBtn;
     private ChangeListener yesBtnListener;
         
-    public ContextualActionPopinRenderer(Room r, Stage s, Entity p) {
+    public ContextualActionPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -78,7 +75,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (playerCompo == null) {
-    		playerCompo = Mappers.playerComponent.get(player);
+    		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     	}
     	
     	if (playerCompo.getRequestedAction() != PlayerActionEnum.NONE) {
@@ -163,7 +160,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 					yesBtn.removeListener(yesBtnListener);
 				}
 				
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				if (inventoryComponent.hasKey()) {
 					updateUnlockListener(actionEntity, exitComponent);
 				} else {
@@ -295,7 +292,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
 				inventoryComponent.setLootableEntity(lootable);
 				closePopin();
@@ -325,7 +322,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryComponent.removeKey();
 				
 				exitComponent.open(exit);
@@ -344,7 +341,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Vector2 destination = wormholeComponent.getDestination();
-				MovementHandler.placeEntity(player, destination, room);
+				MovementHandler.placeEntity(GameScreen.player, destination, room);
 				room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 				closePopin();
 			}
@@ -360,7 +357,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, statueComponent.getBlessingToGive());				
 				statueComponent.setHasBlessing(false);
 				room.turnManager.endPlayerTurn();
@@ -393,7 +390,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				
 				//Open inventory popin to select the item to infuse.
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INFUSION);
 				inventoryComponent.setSoulbender(soulbender);
 
@@ -412,7 +409,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			public void changed(ChangeEvent event, Actor actor) {
 				
 				//Open inventory popin to select the item to infuse.
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				int indexOfCatalyst = inventoryComponent.indexOf(ItemDivineCatalyst.class);
 				Entity catalyst = inventoryComponent.getAndRemove(indexOfCatalyst);
 				room.removeEntity(catalyst);

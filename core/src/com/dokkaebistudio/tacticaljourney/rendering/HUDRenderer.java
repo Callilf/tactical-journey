@@ -81,7 +81,6 @@ public class HUDRenderer implements Renderer, RoomSystem {
 
 	public Stage stage;
 	public Room room;
-	public Entity player;
 		
 	// Time and turns
 	private boolean debug = true;
@@ -158,9 +157,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private StatusReceiverComponent statusReceiverComponent;
 	
 	
-	public HUDRenderer(Stage s, Entity player) {
+	public HUDRenderer(Stage s) {
 		this.stage = s;
-		this.player = player;		
 	}
 	
 	@Override
@@ -278,8 +276,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	
 	private void displayMoney() {
-		if (walletComponent == null) walletComponent = Mappers.walletComponent.get(player);
-		if (inventoryComponent == null) inventoryComponent = Mappers.inventoryComponent.get(player);
+		if (walletComponent == null) walletComponent = Mappers.walletComponent.get(GameScreen.player);
+		if (inventoryComponent == null) inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 		
 		if (key == null) {
 			key = new Image(Assets.key_slot.getRegion());
@@ -315,7 +313,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	// Status effects
 	
 	private void displayStatuses() {
-		if (statusReceiverComponent == null) statusReceiverComponent = Mappers.statusReceiverComponent.get(player);
+		if (statusReceiverComponent == null) statusReceiverComponent = Mappers.statusReceiverComponent.get(GameScreen.player);
 		
 		if (statusTable == null) {
 			statusesMap = new HashMap<>();
@@ -372,10 +370,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	//
 
 	private void displayBottomLeftHud() {
-		if (healthComponent == null) healthComponent = Mappers.healthComponent.get(player);
-		if (experienceComponent == null) experienceComponent = Mappers.experienceComponent.get(player);
-		if (moveComponent == null) moveComponent = Mappers.moveComponent.get(player);
-		if (attackComponent == null) attackComponent = Mappers.attackComponent.get(player);
+		if (healthComponent == null) healthComponent = Mappers.healthComponent.get(GameScreen.player);
+		if (experienceComponent == null) experienceComponent = Mappers.experienceComponent.get(GameScreen.player);
+		if (moveComponent == null) moveComponent = Mappers.moveComponent.get(GameScreen.player);
+		if (attackComponent == null) attackComponent = Mappers.attackComponent.get(GameScreen.player);
 		
 		if (bottomLeftTable == null) {
 			bottomLeftTable = new Table();
@@ -397,7 +395,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 						if (b == true) {
 							// Cancel targeting
 							isTargeting = false;
-							deactivateSkill(player);
+							deactivateSkill(GameScreen.player);
 						}
 					}
 				}
@@ -501,8 +499,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		
 		// PROFILE and INVENTORY
-		final PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
+		final PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
+		final InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 
 		if (profileTable == null) {
 			profileTable = new Table();
@@ -673,7 +671,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 								}
 	
 							} else {
-								deactivateSkill(player);
+								deactivateSkill(GameScreen.player);
 							}
 						}
 					}
@@ -732,7 +730,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 								}
 	
 							} else {
-								deactivateSkill(player);
+								deactivateSkill(GameScreen.player);
 							}
 						} else {
 							rangeSkillButton.setChecked(!rangeSkillButton.isChecked());
@@ -792,7 +790,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 								}
 
 							} else {
-								deactivateSkill(player);
+								deactivateSkill(GameScreen.player);
 							}
 						} else {
 							bombSkillButton.setChecked(!bombSkillButton.isChecked());
@@ -847,8 +845,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private boolean activateSkill(Button button) {
 		boolean canActivate = false;
 
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
+		PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
+		AmmoCarrierComponent ammoCarrierComponent = Mappers.ammoCarrierComponent.get(GameScreen.player);
 		if (button == meleeSkillButton) {
 			SkillComponent skillComponent = Mappers.skillComponent.get(playerComponent.getSkillMelee());
 			if (ammoCarrierComponent.canUseAmmo(skillComponent.getType().getAmmosType(), skillComponent.getType().getNbOfAmmosPerAttack())) {
@@ -902,7 +900,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	
 	private void displayAmmos() {
-		if (ammoCarrierComponent == null) ammoCarrierComponent = Mappers.ammoCarrierComponent.get(player);
+		if (ammoCarrierComponent == null) ammoCarrierComponent = Mappers.ammoCarrierComponent.get(GameScreen.player);
 		
 		if (ammoArrowTable == null) {
 			ammoArrowTable = new Table();

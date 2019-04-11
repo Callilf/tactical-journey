@@ -24,20 +24,17 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
 	
 	/** The current room. */
     private Room room;
-    /** The player. */
-    private Entity player;
     
     /** The creeps of the current room that need updating. */
     private List<Entity> allCreepsOfCurrentRoom;
 
 
-    public CreepSystem(GameScreen gameScreen, Room r, Stage s, Entity player) {
+    public CreepSystem(GameScreen gameScreen, Room r, Stage s) {
 		this.priority = 21;
 
 		this.gameScreen = gameScreen;
         this.room = r;
         this.fxStage = s;
-        this.player = player;
 		this.allCreepsOfCurrentRoom = new ArrayList<>();
 
     }
@@ -52,10 +49,10 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
     	
     	if (room.getState() == RoomState.PLAYER_END_TURN) {
     		// Handle player stop position
-    		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(player);
+    		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
     		Set<Entity> creeps = TileUtil.getEntitiesWithComponentOnTile(playerPos.coord(), CreepComponent.class, room);
     		for (Entity creep : creeps) {
-    			Mappers.creepComponent.get(creep).onStop(player, creep, room);
+    			Mappers.creepComponent.get(creep).onStop(GameScreen.player, creep, room);
     		}
     		
         	// onEndTurn for enemy creep

@@ -48,8 +48,6 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The stage. */
 	public Stage stage;
-	/** The player. */
-	private Entity player;
 	/** The current room. */
     private Room room;
 	
@@ -112,11 +110,9 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
      * Constructor.
      * @param r the room
      * @param s the stage to draw on
-     * @param p the player
      */
-    public LootPopinRenderer(Room r, Stage s, Entity p) {
+    public LootPopinRenderer(Room r, Stage s) {
         this.room = r;
-        this.player = p;
         this.stage = s;
     }
     
@@ -131,7 +127,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (inventoryCompo == null) {
-    		inventoryCompo = Mappers.inventoryComponent.get(player);
+    		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     	}
     	
     	
@@ -300,7 +296,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					//add item in inventory and remove it from lootable entity
-					boolean pickedUp = itemComponent.pickUp(player, item, room);
+					boolean pickedUp = itemComponent.pickUp(GameScreen.player, item, room);
 					if (pickedUp) {
 						lootableCompo.getItems().remove(item);
 						inventoryCompo.setInventoryActionInProgress(true);
@@ -503,7 +499,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						//Loot mode, drop into the lootable
-						itemComponent.drop(player, item, null);
+						itemComponent.drop(GameScreen.player, item, null);
 						lootableCompo.getItems().add(item);
 						inventoryCompo.setInventoryActionInProgress(true);
 						room.turnManager.endPlayerTurn();
@@ -647,7 +643,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		boolean onStandBy = itemComponent.getItemType() instanceof ItemOrb;
 		
 		if (!onStandBy) {
-			onStandBy = !itemComponent.pickUp(player, item, room);
+			onStandBy = !itemComponent.pickUp(GameScreen.player, item, room);
 			if (!onStandBy) {
 				lootableCompo.getItems().remove(item);
 				inventoryCompo.setInventoryActionInProgress(true);
@@ -706,7 +702,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			Entity item = it.next();
 			ItemComponent itemComponent = Mappers.itemComponent.get(item);
 			if (itemComponent.getItemType() instanceof ItemOrb) {
-				itemComponent.pickUp(player, item, room);
+				itemComponent.pickUp(GameScreen.player, item, room);
 				it.remove();
 				refreshPopin();
 			}

@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
@@ -54,6 +55,8 @@ public class BlessingBlackMamba extends Blessing {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 			if (statusReceiverComponent != null) {
 				Journal.addEntry("Blessing of the black mamba inflicted [PURPLE]poison[]");
+				AlterationSystem.addAlterationProc(this);
+				
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, attacker));
 			}
 		}

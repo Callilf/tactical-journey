@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -44,6 +45,7 @@ public class BlessingOfKalamazoo extends Blessing {
 			healthComponent.restoreHealth(healAmount);
 			
 			Journal.addEntry("[GREEN]Blessing of Kalamazoo granted " + healAmount + " hp.");
+			AlterationSystem.addAlterationProc(this);
 		}
 	}
 

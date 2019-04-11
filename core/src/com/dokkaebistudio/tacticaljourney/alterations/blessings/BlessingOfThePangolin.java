@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -48,6 +49,7 @@ public class BlessingOfThePangolin extends Blessing {
 			healthComponent.restoreArmor(10);
 			
 			Journal.addEntry("[GREEN] Blessing of the pangolin restored 10 [CYAN]armor");
+			AlterationSystem.addAlterationProc(this);
 		}
 	}
 

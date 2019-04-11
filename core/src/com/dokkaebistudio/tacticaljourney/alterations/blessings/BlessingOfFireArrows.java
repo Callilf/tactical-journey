@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
@@ -48,6 +49,7 @@ public class BlessingOfFireArrows extends Blessing {
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < chanceToProc) {
+				AlterationSystem.addAlterationProc(this);
 				room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(target).coord(), attacker);
 			}
 		}

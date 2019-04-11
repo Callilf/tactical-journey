@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -52,6 +53,7 @@ public class BlessingOfAcceptance extends Blessing {
 				
 				EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
 				Journal.addEntry("[BLACK]Blessing of acceptance inflicted Death's door to " + enemyComponent.getType().title());
+				AlterationSystem.addAlterationProc(this);
 			}
 			
 		}

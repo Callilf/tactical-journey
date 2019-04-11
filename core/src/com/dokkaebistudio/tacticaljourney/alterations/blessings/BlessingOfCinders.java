@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
@@ -58,7 +59,8 @@ public class BlessingOfCinders extends Blessing {
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < chanceToProc) {
 				Journal.addEntry("Blessing of cinders inflicted [ORANGE]burning[] to " + Mappers.inspectableComponentMapper.get(target).getTitle());
-				
+				AlterationSystem.addAlterationProc(this);
+
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 				if (statusReceiverComponent != null) {
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(attacker));

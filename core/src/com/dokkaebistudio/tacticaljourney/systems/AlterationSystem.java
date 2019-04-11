@@ -21,8 +21,19 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
@@ -34,6 +45,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -49,12 +61,21 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 	
 	private List<Entity> statues = new ArrayList<>();
 	
+	public static List<Alteration> alterationProcImages = new ArrayList<>();
+	public Table alterationProcTable;
+
 	public AlterationSystem(Entity player, Room r, Stage stage) {
 		this.priority = 12;
 
 		this.fxStage = stage;
 		this.player = player;
 		this.room = r;
+		
+		this.alterationProcTable = new Table();
+//		this.alterationProcTable.setDebug(true);
+		this.alterationProcTable.left().top();
+		this.alterationProcTable.setPosition(10, 1000);
+		this.fxStage.addActor(this.alterationProcTable);
 	}
 	
 	
@@ -182,6 +203,13 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		}
 
 		
+		// Display alteration images on proc
+		for (int i=0 ; i < alterationProcImages.size() ; i++) {
+			Alteration alteration = alterationProcImages.get(i);
+			setActivateAnimation(alteration, fxStage);
+		}
+		alterationProcImages.clear();
+		
 	}
 
 
@@ -198,5 +226,56 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 			}
 		}
 	}
+	
+	
+	//**********************************
+	// Alteration proc animations
+	
+	
+	public static void addAlterationProc(Alteration alteration) {
+		alterationProcImages.add(alteration);
+	}
 
+	
+	private void setActivateAnimation(Alteration alteration, Stage fxStage) {
+		int index = alterationProcImages.indexOf(alteration);
+		final Table t = new Table();
+//		t.setDebug(true);
+		
+		Image alterationImg = new Image(alteration.texture().getRegion());
+		t.add(alterationImg).fill().expand().width(80).height(80).padRight(10);
+
+		Label alterationName = new Label(alteration.title(), PopinService.smallTextStyle());
+		alterationName.setWrap(true);
+		t.add(alterationName).width(300);
+		
+		t.pack();
+		alterationProcTable.add(t);
+		alterationProcTable.row();
+		
+		Action removeImageAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				  t.remove();
+				  return true;
+			  }
+		};
+	
+		alterationImg.setOrigin(Align.center);
+		ScaleToAction init = Actions.scaleTo(0, 0);
+		DelayAction delayInit = Actions.delay(index * 0.5f);
+		ScaleToAction appear = Actions.scaleTo(1, 1, 1f, Interpolation.elasticOut);
+		DelayAction delay = Actions.delay(3f);
+		AlphaAction disappearAlpha = Actions.alpha(0f, 1f);
+		alterationImg.addAction(Actions.sequence(init, delayInit, appear, delay, disappearAlpha, removeImageAction));
+		
+		
+		AlphaAction lblinit = Actions.alpha(0);
+		DelayAction lbldelayInit = Actions.delay(index * 0.5f);
+		AlphaAction lblappear = Actions.alpha(1, 1);
+		DelayAction lbldelay = Actions.delay(3f);
+		AlphaAction lbldisappearAlpha = Actions.alpha(0f, 1f);
+		alterationName.addAction(Actions.sequence(lblinit, lbldelayInit, lblappear, lbldelay, lbldisappearAlpha));
+	}
+	
 }

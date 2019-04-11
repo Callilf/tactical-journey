@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -51,6 +52,7 @@ public class CurseOfAcceptance extends Curse {
 				attackerStatusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				
 				Journal.addEntry("[PURPLE]Curse of acceptance inflicted [BLACK]Death's door[PURPLE] to you");
+				AlterationSystem.addAlterationProc(this);
 			}
 			
 		}

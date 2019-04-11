@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 
 /**
  * Blessing of celerity. Increase the entity's movement speed by 1.
@@ -40,6 +41,7 @@ public class BlessingContractKiller extends Blessing {
 		money.setTitle("extra gold coin(s)");
 		room.addRewards(money);
 		
+		AlterationSystem.addAlterationProc(this);
 		Journal.addEntry("[GOLDENROD]Blessing of the Contract Killer added " + money.getQuantity() + " extra gold coins to the reward.");
 	}
 

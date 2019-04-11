@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -76,9 +77,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     /** The inventory table. */
     private Table inventoryTable;
 //    private Label money;
-    private Table[] slots = new Table[16];
-    private Image[] slotImages = new Image[16];
-    private Label[] slotQuantities = new Label[16];
+    private Table slotsTable;
+    private ScrollPane slotsScroll;
+    private Table[] slots = new Table[96];
+    private Image[] slotImages = new Image[96];
+    private Label[] slotQuantities = new Label[96];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
     
@@ -159,13 +162,33 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				title.setText("Inventory");
     			}
     			
-    			for(int i=0 ; i<slots.length ; i++) {
+    			// Fill the slots table
+    			float scrollY = slotsScroll.getScrollY();
+    			slotsTable.clear();
+    			slotsScroll.layout();
+    			int nbSlots = inventoryCompo.getNumberOfSlots();
+    			double nbRows = (int) Math.ceil((double)nbSlots / (double)4);
+    			int index = 0;
+    			for (int row = 0 ; row < nbRows ; row++) {
+    				for (int col=0 ; col<4 ; col++) {
+    					if (index >= nbSlots) break;
+    					slotsTable.add(slots[index]).pad(0, 5, 10, 5);
+    					index++;
+    				}
+    				slotsTable.row();
+    			}
+    			slotsTable.pack();
+    			slotsScroll.layout();
+    			slotsScroll.setScrollY(scrollY);
+    			
+    			for(int i=0 ; i<nbSlots ; i++) {
     				final Table slot = slots[i];
 					Image image = slotImages[i];
 					Label quantity = slotQuantities[i];
     				final Entity item = inventoryCompo.get(i);
     				
     				slot.clearListeners();
+    				slot.setVisible(true);
     				image.addAction(Actions.alpha(1f));
     				if (item != null) {
     					// An item is present in this inventory slot
@@ -198,13 +221,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     					
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
-    			        if (!activeSlot) {
-	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled.getRegion());
-	    					image.setDrawable(texture);
-    			        } else {
-    			        	image.setDrawable(null);
-    			        }
+			        	image.setDrawable(null);
     			        quantity.setText("");
+    			        if (!activeSlot) {
+	    					slot.setVisible(false);
+    			        }
     				}
     			}
     			
@@ -266,19 +287,19 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		// 2 - Inventory slots
 		inventoryDropButtons.clear();
-		Table slotsTable = new Table();
-		int index = 0;
-		for (int row = 0 ; row < 4 ; row++) {
-			for (int col=0 ; col<4 ; col++) {
-				Table slot = createSlot( index);
-				slotsTable.add(slot).pad(0, 5, 10, 5);
-				slots[index] = slot;
-				
-				index ++;
-			}
-			slotsTable.row();
+		slotsTable = new Table();
+		slotsTable.top();
+		for (int index = 0 ; index < 96 ; index++) {
+			Table slot = createSlot( index);
+			slots[index] = slot;
 		}
-		inventoryTable.add(slotsTable);
+		slotsScroll = new ScrollPane(slotsTable, PopinService.scrollStyle());
+		slotsScroll.setFadeScrollBars(false);
+		slotsScroll.setScrollbarsOnTop(true);
+		slotsScroll.setScrollingDisabled(true, false);
+		slotsScroll.setScrollBarPositions(false, true);
+		slotsScroll.layout();
+		inventoryTable.add(slotsScroll).width(635).height(600);
 		inventoryTable.row();
 		
 		closeBtn = new TextButton("Close", PopinService.buttonStyle());

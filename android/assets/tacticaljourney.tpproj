@@ -107,7 +107,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:data/fonts/textfield_cursor.png,type:Input,regionName:null},{path:data/popins/button.9.png,type:Input,regionName:null},{path:data/popins/popin_outer.9.png,type:Input,regionName:null},{path:data/popins/button_disabled.9.png,type:Input,regionName:null},{path:data/popins/button_pressed.9.png,type:Input,regionName:null},{path:data/popins/popin.9.png,type:Input,regionName:null},{path:data/popins/popin_inner.9.png,type:Input,regionName:null}]
+inputFiles=[{path:data/fonts/textfield_cursor.png,type:Input,regionName:null},{path:data/popins/button.9.png,type:Input,regionName:null},{path:data/popins/popin_outer.9.png,type:Input,regionName:null},{path:data/popins/button_disabled.9.png,type:Input,regionName:null},{path:data/popins/button_pressed.9.png,type:Input,regionName:null},{path:data/popins/popin.9.png,type:Input,regionName:null},{path:data/popins/popin_inner.9.png,type:Input,regionName:null},{path:data/popins/scrollKnob.9.png,type:Input,regionName:null},{path:data/popins/scrollKnob_small.9.png,type:Input,regionName:null},{path:data/popins/scrollKnob_big.9.png,type:Input,regionName:null}]
 
 
 -PROJ-

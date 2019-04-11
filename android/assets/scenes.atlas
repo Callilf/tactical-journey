@@ -58,9 +58,36 @@ popin_outer
   orig: 54, 53
   offset: 0, 0
   index: -1
+scrollKnob
+  rotate: false
+  xy: 371, 34
+  size: 21, 21
+  split: 2, 2, 2, 2
+  pad: 0, 0, 0, 0
+  orig: 21, 21
+  offset: 0, 0
+  index: -1
+scrollKnob_big
+  rotate: false
+  xy: 338, 24
+  size: 31, 31
+  split: 5, 6, 6, 6
+  pad: 0, 0, 0, 0
+  orig: 31, 31
+  offset: 0, 0
+  index: -1
+scrollKnob_small
+  rotate: false
+  xy: 338, 13
+  size: 9, 9
+  split: 2, 2, 2, 2
+  pad: 0, 0, 0, 0
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
 textfield_cursor
   rotate: false
-  xy: 338, 31
+  xy: 394, 31
   size: 4, 24
   orig: 4, 24
   offset: 0, 0

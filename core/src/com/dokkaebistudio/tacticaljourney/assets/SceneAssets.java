@@ -39,12 +39,17 @@ public class SceneAssets {
 	public static HashMap<String, RegionDescriptor> allSprites;
 	
 	public static RegionDescriptor textfield_cursor;
+
 	public static NinePatch popinNinePatch;
 	public static NinePatch popinInnerNinePatch;
 	public static NinePatch popinOuterNinePatch;
 	public static NinePatch buttonNinePatch;
 	public static NinePatch buttonPressedNinePatch;
 	public static NinePatch buttonDisabledNinePatch;
+
+	public static NinePatch scrollbarKnobSmall;
+	public static NinePatch scrollbarKnob;
+	public static NinePatch scrollbarKnobBig;
 
 	public static FontDescriptor font;	
 	public static FontDescriptor smallFont;
@@ -55,7 +60,7 @@ public class SceneAssets {
 	
 	public void initTextures() {
 		allSprites = new HashMap<>();
-		textfield_cursor = SceneAssets.getTexture("textfield_cursor");
+		textfield_cursor = getTexture("textfield_cursor");
 		
 		popinNinePatch = getNinePatch("popin", 17, 17, 17, 17);
 		popinInnerNinePatch = getNinePatch("popin_inner", 13, 13, 13, 13);
@@ -63,6 +68,10 @@ public class SceneAssets {
 		buttonNinePatch = getNinePatch("button", 17, 17, 17, 17);
 		buttonPressedNinePatch = getNinePatch("button_pressed", 17, 17, 17, 17);
 		buttonDisabledNinePatch = getNinePatch("button_disabled", 17, 17, 17, 17);
+		scrollbarKnobSmall = getNinePatch("scrollKnob_small", 2, 2, 2, 2);
+		scrollbarKnob = getNinePatch("scrollKnob", 6, 6, 6, 6);
+		scrollbarKnobBig = getNinePatch("scrollKnob_big", 17, 17, 17, 17);
+
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

@@ -179,7 +179,8 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsTable.pack();
 		
 		//The scroll pane for the loot items
-		lootableItemsScroll = new ScrollPane(lootableItemsTable);
+		lootableItemsScroll = new ScrollPane(lootableItemsTable, PopinService.smallScrollStyle());
+		lootableItemsScroll.setFadeScrollBars(false);
 		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(530);
 		lootTable.row();
 		
@@ -372,7 +373,9 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.pack();
 		
 		//The scroll pane for the loot items
-		ScrollPane optionsScroll = new ScrollPane(optionsTable);
+		ScrollPane optionsScroll = new ScrollPane(optionsTable, PopinService.scrollStyle());
+		optionsScroll.setScrollbarsOnTop(true);
+		optionsScroll.setFadeScrollBars(false);
 		debugTable.add(optionsScroll).fill().expand().maxHeight(650);
 		debugTable.row();
 
@@ -538,6 +541,33 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(xpTable).padBottom(20);
 		optionsTable.row();
 		
+		
+		// inventory
+		Label inventoryLabel = new Label("Inventory", PopinService.hudStyle());
+		optionsTable.add(inventoryLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table inventoryTable = new Table();
+		TextButton inventoryUp = new TextButton("Slot -1", PopinService.buttonStyle());
+		inventoryUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				inventoryCompo.removeSlot(room);
+			}
+		});
+		inventoryTable.add(inventoryUp).padRight(20);
+		TextButton inventoryDown = new TextButton("Slot +1", PopinService.buttonStyle());
+		inventoryDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				inventoryCompo.addSlot();
+			}
+		});
+		inventoryTable.add(inventoryDown);
+		optionsTable.add(inventoryTable).padBottom(20);
+		optionsTable.row();
 		
 		// STATS
 		Label statsLabel = new Label("Stats", PopinService.hudStyle());

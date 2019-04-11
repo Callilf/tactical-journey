@@ -229,65 +229,71 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.add(profileTitle).expandX().pad(20, 0, 20, 0);
 		profileTable.row();
 		
+		Table profileInnerTable = new Table();
+		
 		nameLbl = new Label("Name", PopinService.hudStyle());
-		profileTable.add(nameLbl).expandX().left().pad(0, 20, 20, 20);
-		profileTable.row();
+		profileInnerTable.add(nameLbl).expandX().left().pad(0, 20, 20, 20);
+		profileInnerTable.row();
 
 		maxHpLbl = new Label("Max hp", PopinService.hudStyle());
-		profileTable.add(maxHpLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(maxHpLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		
 		maxArmorLbl = new Label("Max armor", PopinService.hudStyle());
-		profileTable.add(maxArmorLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(maxArmorLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		
 		moveLbl = new Label("Move", PopinService.hudStyle());
-		profileTable.add(moveLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(moveLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		
 		strengthLbl = new Label("Melee Strength", PopinService.hudStyle());
-		profileTable.add(strengthLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(strengthLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		
 		accuracyLbl = new Label("Melee accuracy", PopinService.hudStyle());
-		profileTable.add(accuracyLbl).expandX().left().pad(0, 20, 20, 20);
-		profileTable.row();
+		profileInnerTable.add(accuracyLbl).expandX().left().pad(0, 20, 20, 20);
+		profileInnerTable.row();
 		
 
 		
 		rangeDistLbl = new Label("Bow range", PopinService.hudStyle());
-		profileTable.add(rangeDistLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(rangeDistLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		rangeStrengthLbl = new Label("Bow damage", PopinService.hudStyle());
-		profileTable.add(rangeStrengthLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(rangeStrengthLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		rangeAccuracyLbl = new Label("Bow accuracy", PopinService.hudStyle());
-		profileTable.add(rangeAccuracyLbl).expandX().left().pad(0, 20, 20, 20);
-		profileTable.row();
+		profileInnerTable.add(rangeAccuracyLbl).expandX().left().pad(0, 20, 20, 20);
+		profileInnerTable.row();
 		
 		bombDistLbl = new Label("Bomb throw range", PopinService.hudStyle());
-		profileTable.add(bombDistLbl).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(bombDistLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		bombDmg = new Label("Bomb damage", PopinService.hudStyle());
-		profileTable.add(bombDmg).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(bombDmg).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		
 		bombDuration = new Label("Bomb fuse duration", PopinService.hudStyle());
-		profileTable.add(bombDuration).expandX().left().pad(0, 20, 0, 20);
-		profileTable.row();
+		profileInnerTable.add(bombDuration).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
 		bombRadius = new Label("Bomb radius", PopinService.hudStyle());
-		profileTable.add(bombRadius).expandX().left().pad(0, 20, 20, 20);
-		profileTable.row();
+		profileInnerTable.add(bombRadius).expandX().left().pad(0, 20, 20, 20);
+		profileInnerTable.row();
 		
 		poisonResist = new Label("Poison resistance", PopinService.hudStyle());
-		profileTable.add(poisonResist).expandX().left().pad(0,20,0,20);
-		profileTable.row();
+		profileInnerTable.add(poisonResist).expandX().left().pad(0,20,0,20);
+		profileInnerTable.row();
 		fireResist = new Label("Fire resistance", PopinService.hudStyle());
-		profileTable.add(fireResist).expandX().left().pad(0,20,0,20);
-		profileTable.row();
+		profileInnerTable.add(fireResist).expandX().left().pad(0,20,0,20);
+		profileInnerTable.row();
 		explosionResist = new Label("Explosion resistance", PopinService.hudStyle());
-		profileTable.add(explosionResist).expandX().left().pad(0,20,0,20);
-		profileTable.row();
+		profileInnerTable.add(explosionResist).expandX().left().pad(0,20,0,20);
+		profileInnerTable.row();
+		
+		ScrollPane scrollPane = new ScrollPane(profileInnerTable, PopinService.smallScrollStyle());
+		scrollPane.setFadeScrollBars(false);
+		profileTable.add(scrollPane).fill().expand().maxHeight(580).width(540);
 
 		mainTable.add(profileTable);
 	}
@@ -307,6 +313,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		}
 				
 		blessingList.pack();
+		System.out.println("Blessing: "+ blessingList.getWidth());
+
 		blessingScroll.layout();
 	}
 
@@ -334,8 +342,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		blessingList.top();
 		
 		//Scrollpane
-		blessingScroll = new ScrollPane(blessingList);
-		blessingTable.add(blessingScroll).fill().expand().maxHeight(580);
+		blessingScroll = new ScrollPane(blessingList, PopinService.smallScrollStyle());
+		blessingScroll.setFadeScrollBars(false);
+		blessingTable.add(blessingScroll).fill().expand().maxHeight(580).width(540);
 		
 		mainTable.add(blessingTable).pad(0, 5, 0, 5);
 	}
@@ -354,6 +363,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		}
 		
 		curseList.pack();
+		System.out.println("Curse: "+ curseList.getWidth());
 		curseScroll.layout();
 	}
 
@@ -380,8 +390,9 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseList.top();
 
 		// Scrollpane
-		curseScroll = new ScrollPane(curseList);
-		curseTable.add(curseScroll).fill().expand().maxHeight(580);
+		curseScroll = new ScrollPane(curseList, PopinService.smallScrollStyle());
+		curseScroll.setFadeScrollBars(false);
+		curseTable.add(curseScroll).fill().expand().maxHeight(580).width(540);
 
 		mainTable.add(curseTable);
 	}

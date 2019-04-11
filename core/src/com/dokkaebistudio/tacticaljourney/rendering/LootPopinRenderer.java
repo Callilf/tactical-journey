@@ -83,10 +83,12 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     
     /** The inventory table. */
     private Table inventoryTable;
-    private Table[] slots = new Table[16];
-    private Image[] slotImages = new Image[16];
-    private Label[] slotQuantities = new Label[16];
-    private TextButton[] slotDropBtns = new TextButton[16];
+    private Table slotsTable;
+    private ScrollPane slotsScroll;
+    private Table[] slots = new Table[96];
+    private Image[] slotImages = new Image[96];
+    private Label[] slotQuantities = new Label[96];
+    private TextButton[] slotDropBtns = new TextButton[96];
 
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
@@ -232,7 +234,8 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsTable.pack();
 		
 		//The scroll pane for the loot items
-		lootableItemsScroll = new ScrollPane(lootableItemsTable);
+		lootableItemsScroll = new ScrollPane(lootableItemsTable, PopinService.smallScrollStyle());
+		lootableItemsScroll.setFadeScrollBars(false);
 		lootTable.add(lootableItemsScroll).fill().expand().maxHeight(530);
 		lootTable.row();
 		
@@ -379,19 +382,19 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		
 		// 2 - Inventory slots
 		inventoryDropButtons.clear();
-		Table slotsTable = new Table();
-		int index = 0;
-		for (int row = 0 ; row < 4 ; row++) {
-			for (int col=0 ; col<4 ; col++) {
-				Table slot = createSlot( index);
-				slotsTable.add(slot).pad(0, 5, 10, 5);
-				slots[index] = slot;
-				
-				index ++;
-			}
-			slotsTable.row();
+		slotsTable = new Table();
+		slotsTable.top();
+		for (int index = 0 ; index < 96 ; index++) {
+			Table slot = createSlot( index);
+			slots[index] = slot;
 		}
-		inventoryTable.add(slotsTable);
+		slotsScroll = new ScrollPane(slotsTable, PopinService.scrollStyle());
+		slotsScroll.setFadeScrollBars(false);
+		slotsScroll.setScrollbarsOnTop(true);
+		slotsScroll.setScrollingDisabled(true, false);
+		slotsScroll.setScrollBarPositions(false, true);
+		slotsScroll.layout();
+		inventoryTable.add(slotsScroll).width(635).height(600);
 		
     	mainTable.add(inventoryTable);
 	}
@@ -442,7 +445,27 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 	
 	private void refreshInventory() {
-		for(int i=0 ; i<slots.length ; i++) {
+		
+		// Fill the slots table
+		float scrollY = slotsScroll.getScrollY();
+		slotsTable.clear();
+		slotsScroll.layout();
+		int nbSlots = inventoryCompo.getNumberOfSlots();
+		double nbRows = (int) Math.ceil((double)nbSlots / (double)4);
+		int index = 0;
+		for (int row = 0 ; row < nbRows ; row++) {
+			for (int col=0 ; col<4 ; col++) {
+				if (index >= nbSlots) break;
+				slotsTable.add(slots[index]).pad(0, 5, 10, 5);
+				index++;
+			}
+			slotsTable.row();
+		}
+		slotsTable.pack();
+		slotsScroll.layout();
+		slotsScroll.setScrollY(scrollY);
+		
+		for(int i=0 ; i < nbSlots ; i++) {
 			final Table slot = slots[i];
 			Image image = slotImages[i];
 			Label quantity = slotQuantities[i];
@@ -451,6 +474,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 			
 			image.clearListeners();
 			dropBtn.clearListeners();
+			slot.setVisible(true);
 			if (item != null) {
 
 				// An item is present in this inventory slot
@@ -490,14 +514,12 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 				
 			} else {
 		        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
-		        if (!activeSlot) {
-					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled.getRegion());
-					image.setDrawable(texture);
-		        } else {
-		        	image.setDrawable(null);
-		        }
-				quantity.setText("");
+	        	image.setDrawable(null);
+		        quantity.setText("");
 		        dropBtn.setVisible(false);
+		        if (!activeSlot) {
+					slot.setVisible(false);
+		        }
 			}
 			
 		}

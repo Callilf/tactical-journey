@@ -43,10 +43,9 @@ public class BlessingPhotosynthesis extends Blessing {
 
 	@Override
 	public void onRoomVisited(Entity entity, Room room) {
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
 		for (Entity e : room.getEnemies()) {
-			
-			if (unseededRandom.nextInt(100) < chanceToProc) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();
+			if (randomValue < chanceToProc) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(10));
 				

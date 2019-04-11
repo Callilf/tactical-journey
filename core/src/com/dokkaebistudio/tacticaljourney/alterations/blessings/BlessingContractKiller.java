@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 
@@ -38,6 +39,8 @@ public class BlessingContractKiller extends Blessing {
 		RoomRewardMoney money = new RoomRewardMoney(1 + RandomSingleton.getInstance().getUnseededRandom().nextInt(3));
 		money.setTitle("extra gold coin(s)");
 		room.addRewards(money);
+		
+		Journal.addEntry("[GOLDENROD]Blessing of the Contract Killer added " + money.getQuantity() + " extra gold coins to the reward.");
 	}
 
 }

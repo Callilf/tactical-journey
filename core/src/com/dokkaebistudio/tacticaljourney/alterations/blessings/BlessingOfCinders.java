@@ -4,7 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.alterations.blessings;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
@@ -14,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.Sta
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -55,9 +55,10 @@ public class BlessingOfCinders extends Blessing {
 				chanceToProc += this.oldCrownInInventoryAdd;
 			}
 			
-			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-			int chance = unseededRandom.nextInt(100);
-			if (chance < chanceToProc) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();
+			if (randomValue < chanceToProc) {
+				Journal.addEntry("Blessing of cinders inflicted [ORANGE]burning[] to " + Mappers.inspectableComponentMapper.get(target).getTitle());
+				
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 				if (statusReceiverComponent != null) {
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(attacker));

@@ -45,8 +45,8 @@ public class CurseOfAcceptance extends Curse {
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 		if (statusReceiverComponent != null && statusReceiverComponent.hasStatus(StatusDebuffDeathDoor.class)) {
 			
-			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-			if (unseededRandom.nextInt(100) < chanceToProc) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();			
+			if (randomValue > 100 - chanceToProc) {
 				StatusReceiverComponent attackerStatusReceiverComponent = Mappers.statusReceiverComponent.get(attacker);
 				attackerStatusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				

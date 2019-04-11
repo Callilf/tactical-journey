@@ -46,9 +46,8 @@ public class BlessingOfFireArrows extends Blessing {
 			// Attacked an enemy with the bow
 			int chanceToProc = this.initialChanceToProc;
 			
-			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-			int chance = unseededRandom.nextInt(100);
-			if (chance < chanceToProc) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();
+			if (randomValue < chanceToProc) {
 				room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(target).coord(), attacker);
 			}
 		}

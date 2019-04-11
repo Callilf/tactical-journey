@@ -4,6 +4,9 @@
 package com.dokkaebistudio.tacticaljourney.ai.random;
 
 import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * The Random Number Generator used for the whole game.
@@ -170,4 +173,38 @@ public class RandomSingleton {
 	public int getSeededNextCounter() {
 		return seededNextCounter;
 	}
+	
+	
+	
+	
+	/**
+	 * Return a random decimal number between 0 and 99.99999 computing using the unseeded random
+	 * and modified by the current karma of the player.
+	 * @param random the random to use
+	 * @return the random decimal number
+	 */
+	public static float getNextChanceWithKarma() {
+		return getNextChanceWithKarma(RandomSingleton.getInstance().unseededRandom);
+	}
+	
+	/**
+	 * Return a random decimal number between 0 and 99.99999 computing using the given random
+	 * and modified by the current karma of the player.
+	 * @param random the random to use
+	 * @return the random decimal number
+	 */
+	public static float getNextChanceWithKarma(RandomXS128 random) {
+		float unit = (float) random.nextInt(100);
+		float decimal = random.nextFloat();
+		float randomValue = unit + decimal;
+
+		// Apply player's karma
+		PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
+		randomValue -= playerComponent.getKarma();
+		if (randomValue < 0) randomValue = 0;
+		
+		return randomValue;
+	}
+	
+	
 }

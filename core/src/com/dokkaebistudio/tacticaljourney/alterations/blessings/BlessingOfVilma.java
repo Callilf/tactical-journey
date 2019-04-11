@@ -49,8 +49,8 @@ public class BlessingOfVilma extends Blessing {
 			chanceToProc += this.fataMorganaInInventoryAdd;
 		}
 		
-		int chance = RandomSingleton.getInstance().getUnseededRandom().nextInt(100);
-		if (chance < chanceToProc) {
+		float randomValue = RandomSingleton.getNextChanceWithKarma();
+		if (randomValue < chanceToProc) {
 			HealthComponent healthComponent = Mappers.healthComponent.get(attacker);
 			
 			if (healthComponent != null) {

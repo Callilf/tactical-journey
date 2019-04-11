@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -110,14 +111,7 @@ public class LootUtil {
 		EnemyItemPool itemPool = lootRewardComponent.getItemPool();
 		if (random == null || dropRate == null || itemPool == null) return null;
 		
-		float unit = (float) random.nextInt(100);
-		float decimal = random.nextFloat();
-		float randomValue = unit + decimal;
-		
-		// Apply player's karma
-		PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
-		randomValue -= playerComponent.getKarma();
-		if (randomValue < 0) randomValue = 0;
+		float randomValue = RandomSingleton.getNextChanceWithKarma(random);
 		
 		int chance = 0;
 		ItemPoolRarity rarity = null;

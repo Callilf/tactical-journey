@@ -45,8 +45,8 @@ public class CurseBlackMamba extends Curse {
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		if (sector != null && sector.hit == Hit.MISS) {
-			int randomValue = RandomSingleton.getInstance().getUnseededRandom().nextInt(100);
-			if (randomValue < chanceToProc) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();			
+			if (randomValue > 100 - chanceToProc) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(attacker);
 				if (statusReceiverComponent != null) {
 					Journal.addEntry("Curse of the black mamba [PURPLE]poisoned[] you");

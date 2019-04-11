@@ -49,7 +49,7 @@ public class BlessingBlackMamba extends Blessing {
 		if (sector != null && sector.hit == Hit.HIT) chanceToProc = chanceToProcOnHit;
 		else if (sector != null && sector.hit == Hit.CRITICAL) chanceToProc = chanceToProcOnCrit;
 		
-		int randomValue = RandomSingleton.getInstance().getUnseededRandom().nextInt(100);
+		float randomValue = RandomSingleton.getNextChanceWithKarma();
 		if (randomValue < chanceToProc) {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 			if (statusReceiverComponent != null) {

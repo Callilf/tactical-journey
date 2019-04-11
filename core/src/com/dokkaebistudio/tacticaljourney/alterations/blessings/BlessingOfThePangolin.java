@@ -41,10 +41,9 @@ public class BlessingOfThePangolin extends Blessing {
 	
 	@Override
 	public void onReceiveDamage(Entity user, Entity attacker, Room room) {
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-		int chance = unseededRandom.nextInt(100);
+		float randomValue = RandomSingleton.getNextChanceWithKarma();
 		
-		if (chance < initialChanceToProc) {
+		if (randomValue < initialChanceToProc) {
 			HealthComponent healthComponent = Mappers.healthComponent.get(user);
 			healthComponent.restoreArmor(10);
 			

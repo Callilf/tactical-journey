@@ -32,7 +32,8 @@ public class GoddessStatueAlterationPool extends AlterationPool {
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOWMASTER_ACCURACY, 10));
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOWMASTER_STEADYNESS, 10));
 		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.BOMBMASTER_MIGHT, 10));
-		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.PITCHER, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.ROCK_THROWER, 10));
+		blessingPool.add(new PooledAlterationDescriptor<BlessingsEnum>(BlessingsEnum.LUCK, 10));
 						
 		for (PooledAlterationDescriptor<BlessingsEnum> desc : blessingPool) {
 			blessingSumOfChances += desc.getChanceToDrop();
@@ -52,6 +53,7 @@ public class GoddessStatueAlterationPool extends AlterationPool {
 		cursePool.add(new PooledAlterationDescriptor<CursesEnum>(CursesEnum.WEAKNESS, 10));
 		cursePool.add(new PooledAlterationDescriptor<CursesEnum>(CursesEnum.SLOWNESS, 10));
 		cursePool.add(new PooledAlterationDescriptor<CursesEnum>(CursesEnum.TREMORS, 10));
+		cursePool.add(new PooledAlterationDescriptor<CursesEnum>(CursesEnum.BAD_LUCK, 10));
 						
 		for (PooledAlterationDescriptor<CursesEnum> desc : cursePool) {
 			curseSumOfChances += desc.getChanceToDrop();

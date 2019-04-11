@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingB
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBowmasterMight;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingBowmasterSteadiness;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingCelerity;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingLuck;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingRockThrower;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingStrength;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.basics.BlessingVigor;
@@ -29,7 +30,8 @@ public abstract class Blessing extends Alteration {
 		BOWMASTER_ACCURACY,
 		BOWMASTER_STEADYNESS,
 		BOMBMASTER_MIGHT,
-		PITCHER,
+		ROCK_THROWER,
+		LUCK,
 	}
 	
 	
@@ -65,8 +67,11 @@ public abstract class Blessing extends Alteration {
 		case BOMBMASTER_MIGHT:
 			result = new BlessingBombmasterMight();
 			break;
-		case PITCHER:
+		case ROCK_THROWER:
 			result = new BlessingRockThrower();
+			break;
+		case LUCK:
+			result = new BlessingLuck();
 			break;
 			
 			default:

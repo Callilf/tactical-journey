@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.curses;
+package com.dokkaebistudio.tacticaljourney.alterations.curses.basics;
 
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;

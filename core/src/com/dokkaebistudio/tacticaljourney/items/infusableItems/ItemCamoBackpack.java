@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfTheLooter;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseSlowness;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseSlowness;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 

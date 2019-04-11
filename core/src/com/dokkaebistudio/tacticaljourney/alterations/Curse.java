@@ -3,10 +3,11 @@
  */
 package com.dokkaebistudio.tacticaljourney.alterations;
 
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseFrailty;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseSlowness;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseTremors;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseWeakness;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseBadLuck;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseFrailty;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseSlowness;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseTremors;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseWeakness;
 
 /**
  * A curse, which is a negative alteration.
@@ -19,7 +20,8 @@ public abstract class Curse extends Alteration {
 		FRAILTY,
 		WEAKNESS,
 		SLOWNESS,
-		TREMORS;
+		TREMORS,
+		BAD_LUCK,
 	}
 	
 	/**
@@ -42,6 +44,9 @@ public abstract class Curse extends Alteration {
 			break;
 		case TREMORS:
 			result = new CurseTremors();
+			break;
+		case BAD_LUCK:
+			result = new CurseBadLuck();
 			break;
 			
 			default:

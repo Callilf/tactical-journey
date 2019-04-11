@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.curses;
+package com.dokkaebistudio.tacticaljourney.alterations.curses.basics;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;

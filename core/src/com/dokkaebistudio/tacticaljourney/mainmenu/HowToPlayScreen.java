@@ -68,7 +68,8 @@ public class HowToPlayScreen extends ScreenAdapter {
 		htpTable.top();
 		htpTable.setBackground(new NinePatchDrawable(SceneAssets.popinNinePatch));
 		
-		ScrollPane scrollPane = new ScrollPane(htpTable);
+		ScrollPane scrollPane = new ScrollPane(htpTable, PopinService.scrollStyle());
+		scrollPane.setFadeScrollBars(false);
 		
 		
 		Label presentationLabel = new Label("Presentation", PopinService.hudStyle());

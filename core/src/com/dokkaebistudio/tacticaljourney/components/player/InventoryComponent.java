@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -38,7 +37,7 @@ public class InventoryComponent implements Component, Poolable {
 	private Integer turnsToWaitBeforeLooting;
 	
 	/** The number of slots in the inventory. */
-	private int numberOfSlots;
+	private int numberOfSlots = 8;
 	
 	/** The slots of the inventory. Each slot contains a list of entities to
 	 * handle stacked items. */
@@ -75,7 +74,7 @@ public class InventoryComponent implements Component, Poolable {
 	
 	
 	public void init() {
-		for (int i=0 ; i<16 ; i++) {
+		for (int i=0 ; i<numberOfSlots ; i++) {
 			ArrayList<Entity> arrayList = new ArrayList<>();
 			slots.add(arrayList);
 		}
@@ -85,6 +84,7 @@ public class InventoryComponent implements Component, Poolable {
 	@Override
 	public void reset() {
 		player = null;
+		numberOfSlots = 8;
 //		slots = new Entity[16];
 		firstEmptySlot = 0;
 		hasKey = false;
@@ -208,6 +208,7 @@ public class InventoryComponent implements Component, Poolable {
 	 * @return the entity
 	 */
 	public Entity get(int slotIndex) {
+		if (slots.size() <= slotIndex) return null;
 		if (slots.get(slotIndex).isEmpty()) return null;
 		return slots.get(slotIndex).get(0);
 	}
@@ -280,6 +281,8 @@ public class InventoryComponent implements Component, Poolable {
 	}
 	
 	public void removeSlot(Room room) {
+		if (numberOfSlots == 0) return;
+		
 		// Check if the slot is filled, if so, drop the content on the floor
 		if (slots.size() >= this.numberOfSlots) {
 			List<Entity> list = slots.get(this.numberOfSlots - 1);

@@ -539,6 +539,33 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.row();
 		
 		
+		// inventory
+		Label inventoryLabel = new Label("Inventory", PopinService.hudStyle());
+		optionsTable.add(inventoryLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table inventoryTable = new Table();
+		TextButton inventoryUp = new TextButton("Slot -1", PopinService.buttonStyle());
+		inventoryUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				inventoryCompo.removeSlot(room);
+			}
+		});
+		inventoryTable.add(inventoryUp).padRight(20);
+		TextButton inventoryDown = new TextButton("Slot +1", PopinService.buttonStyle());
+		inventoryDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				InventoryComponent inventoryCompo = Mappers.inventoryComponent.get(player);
+				inventoryCompo.addSlot();
+			}
+		});
+		inventoryTable.add(inventoryDown);
+		optionsTable.add(inventoryTable).padBottom(20);
+		optionsTable.row();
+		
 		// STATS
 		Label statsLabel = new Label("Stats", PopinService.hudStyle());
 		optionsTable.add(statsLabel).padBottom(20);

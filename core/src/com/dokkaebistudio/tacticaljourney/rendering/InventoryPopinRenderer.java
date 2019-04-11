@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -76,9 +77,9 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     /** The inventory table. */
     private Table inventoryTable;
 //    private Label money;
-    private Table[] slots = new Table[16];
-    private Image[] slotImages = new Image[16];
-    private Label[] slotQuantities = new Label[16];
+    private Table[] slots = new Table[96];
+    private Image[] slotImages = new Image[96];
+    private Label[] slotQuantities = new Label[96];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
     
@@ -166,6 +167,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				final Entity item = inventoryCompo.get(i);
     				
     				slot.clearListeners();
+    				slot.setVisible(true);
     				image.addAction(Actions.alpha(1f));
     				if (item != null) {
     					// An item is present in this inventory slot
@@ -198,13 +200,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     					
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
-    			        if (!activeSlot) {
-	    					TextureRegionDrawable texture = new TextureRegionDrawable(Assets.inventory_slot_disabled.getRegion());
-	    					image.setDrawable(texture);
-    			        } else {
-    			        	image.setDrawable(null);
-    			        }
+			        	image.setDrawable(null);
     			        quantity.setText("");
+    			        if (!activeSlot) {
+	    					slot.setVisible(false);
+    			        }
     				}
     			}
     			
@@ -268,7 +268,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		inventoryDropButtons.clear();
 		Table slotsTable = new Table();
 		int index = 0;
-		for (int row = 0 ; row < 4 ; row++) {
+		for (int row = 0 ; row < 24 ; row++) {
 			for (int col=0 ; col<4 ; col++) {
 				Table slot = createSlot( index);
 				slotsTable.add(slot).pad(0, 5, 10, 5);
@@ -278,7 +278,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 			}
 			slotsTable.row();
 		}
-		inventoryTable.add(slotsTable);
+		ScrollPane slotsScroll = new ScrollPane(slotsTable);
+		inventoryTable.add(slotsScroll).maxHeight(600);
 		inventoryTable.row();
 		
 		closeBtn = new TextButton("Close", PopinService.buttonStyle());

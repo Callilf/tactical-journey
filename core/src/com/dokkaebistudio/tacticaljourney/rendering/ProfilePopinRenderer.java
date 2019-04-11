@@ -2,16 +2,20 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -181,7 +185,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 		HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
 
-		profileTitle.setText("Profile");
 		nameLbl.setText("Name: " + inspectableComponent.getTitle());
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
@@ -223,9 +226,23 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.align(Align.top);
 		
 		// TITLE
+		Table titleTable = new Table();
+		
 		profileTitle = new Label("Characteristics", PopinService.hudStyle());
-		profileTable.add(profileTitle).expandX().pad(20, 0, 20, 0);
+		titleTable.add(profileTitle).padRight(10);
+		
+		ImageButton btn = new ImageButton(new TextureRegionDrawable(SceneAssets.i_button.getRegion()));
+		btn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				CharacteristicsPopinRenderer.display = true;
+			}
+		});
+		titleTable.add(btn);
+		
+		profileTable.add(titleTable).expandX().pad(20, 0, 20, 0);
 		profileTable.row();
+		
 		
 		Table profileInnerTable = new Table();
 		

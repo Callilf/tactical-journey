@@ -39,6 +39,8 @@ public class SceneAssets {
 	public static HashMap<String, RegionDescriptor> allSprites;
 	
 	public static RegionDescriptor textfield_cursor;
+	public static RegionDescriptor i_button;
+
 
 	public static NinePatch popinNinePatch;
 	public static NinePatch popinInnerNinePatch;
@@ -61,6 +63,7 @@ public class SceneAssets {
 	public void initTextures() {
 		allSprites = new HashMap<>();
 		textfield_cursor = getTexture("textfield_cursor");
+		i_button = getTexture("i_button");
 		
 		popinNinePatch = getNinePatch("popin", 17, 17, 17, 17);
 		popinInnerNinePatch = getNinePatch("popin_inner", 13, 13, 13, 13);

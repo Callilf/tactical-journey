@@ -41,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.mainmenu.LoadingScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
+import com.dokkaebistudio.tacticaljourney.rendering.CharacteristicsPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ContextualActionPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DebugPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.DialogRenderer;
@@ -239,6 +240,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new LootPopinRenderer(room, inventoryStage));
 		renderers.add(new ProfilePopinRenderer(room, stage));
 		renderers.add(new StatusPopinRenderer(room, stage));
+		renderers.add(new CharacteristicsPopinRenderer(room, stage));
 		if (debugMode) { renderers.add(new DebugPopinRenderer(room, inventoryStage)); }
 		renderers.add(new LevelUpPopinRenderer(room, stage));
 		renderers.add(new WinPopinRenderer(this, menuStage));

@@ -61,6 +61,7 @@ public enum RoomState {
 	ITEM_POPIN,
 	CONTEXTUAL_ACTION_POPIN,
 	STATUS_POPIN,
+	CHARACTERISTICS_POPIN,
 	
 	DEBUG_POPIN;
 	
@@ -180,6 +181,7 @@ public enum RoomState {
 				|| this == RoomState.ITEM_POPIN
 				|| this == RoomState.CONTEXTUAL_ACTION_POPIN
 				|| this == RoomState.STATUS_POPIN
+				|| this == RoomState.CHARACTERISTICS_POPIN
 				|| this == RoomState.INSPECT_POPIN
 				
 				|| this == RoomState.DEBUG_POPIN;

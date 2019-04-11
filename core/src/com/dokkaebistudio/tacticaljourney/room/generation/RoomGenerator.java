@@ -259,7 +259,7 @@ public abstract class RoomGenerator {
 			
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 			
 			// Place a loot
 			placeLootable(90, room, random, spawnPositions);
@@ -272,7 +272,7 @@ public abstract class RoomGenerator {
 		case ITEM_ROOM:
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 
 			Vector2 lootPos = spawnPositions.get(0);
 			Entity belongings = entityFactory.lootableFactory.createPersonalBelongings(room, lootPos);
@@ -287,7 +287,7 @@ public abstract class RoomGenerator {
 			
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 			
 			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(0));
 			spawnPositions.remove(0);
@@ -322,7 +322,7 @@ public abstract class RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 			placeEnemies(room, random, spawnPositions, true);
 			break;
 			
@@ -354,7 +354,7 @@ public abstract class RoomGenerator {
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(2, 8));
 //			entityFactory.creepFactory.createVinesBush(room, new Vector2(12, 8));
 
-//			Entity enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
+//			entityFactory.enemyFactory.createStinger(room, new Vector2(14, 5), 3);			
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));
 
@@ -385,7 +385,14 @@ public abstract class RoomGenerator {
 //
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
-//			Entity enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5), 4);			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 6));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 7));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 8));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 9));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 10));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 11));			
+			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 4));			
 //			Entity enemy4 = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(11, 8));
 			
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
@@ -405,7 +412,7 @@ public abstract class RoomGenerator {
 			if (possibleSpawns.size() == 0) return;
 			
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 			
 			Vector2 pos = spawnPositions.get(0);
 			entityFactory.createExit(room, pos, false);

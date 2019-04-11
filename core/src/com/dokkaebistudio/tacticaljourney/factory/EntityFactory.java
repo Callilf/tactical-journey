@@ -53,7 +53,6 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.Wall
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
-import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -207,10 +206,10 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new WallItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 98);
 		dropRate.add(ItemPoolRarity.RARE, 2);
+		dropRate.add(ItemPoolRarity.COMMON, 90);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		wallEntity.add(lootRewardCompo);
 				
     	
@@ -872,10 +871,10 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new VaseItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 50);
 		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 50);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		vaseEntity.add(lootRewardCompo);
 				
 		engine.addEntity(vaseEntity);
@@ -917,10 +916,10 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 80);
 		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 80);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		crateEntity.add(lootRewardCompo);
 				
 		engine.addEntity(crateEntity);

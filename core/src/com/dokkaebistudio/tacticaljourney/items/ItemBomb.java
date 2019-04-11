@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -28,8 +29,8 @@ public class ItemBomb extends AbstractItem {
 		this.type = ItemEnum.AMMO_BOMB;
 	}
 	
-	public ItemBomb(boolean noRandom) {
-		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2, noRandom);
+	public ItemBomb(RandomXS128 randomToUse) {
+		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2, randomToUse);
 		this.type = ItemEnum.AMMO_BOMB;
 	}
 

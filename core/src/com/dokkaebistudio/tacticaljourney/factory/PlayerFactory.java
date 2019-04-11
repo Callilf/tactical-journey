@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GoddessStatueAlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -41,12 +42,12 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.StatueItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
-import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -110,6 +111,7 @@ public final class PlayerFactory {
 		
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+		playerComponent.setKarma(0);
 		playerEntity.add(playerComponent);
 		
 		// Humanoid
@@ -321,12 +323,12 @@ public final class PlayerFactory {
 		goddessStatueEntity.add(destructible);		
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new StatueItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().statue);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 98);
-		dropRate.add(ItemPoolRarity.RARE, 2);
+		dropRate.add(ItemPoolRarity.RARE, 98);
+		dropRate.add(ItemPoolRarity.COMMON, 2);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		goddessStatueEntity.add(lootRewardCompo);
 		
 		room.addNeutral(goddessStatueEntity);

@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -28,8 +29,8 @@ public class ItemMoney extends AbstractItem {
 		this.type = ItemEnum.MONEY;
 	}
 	
-	public ItemMoney(boolean noRandom) {
-		super("# gold coin[s]", Assets.money_item, true, false, 1, 5, noRandom);
+	public ItemMoney(RandomXS128 randomToUse) {
+		super("# gold coin[s]", Assets.money_item, true, false, 1, 5, randomToUse);
 		this.type = ItemEnum.MONEY;
 	}
 

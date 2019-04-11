@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -28,8 +29,8 @@ public class ItemArrow extends AbstractItem {
 		this.type = ItemEnum.AMMO_ARROW;
 	}
 	
-	public ItemArrow(boolean noRandom) {
-		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4, noRandom);
+	public ItemArrow(RandomXS128 randomToUse) {
+		super("# arrow[s]", Assets.arrow_item, false, false, 1, 4, randomToUse);
 		this.type = ItemEnum.AMMO_ARROW;
 	}
 	

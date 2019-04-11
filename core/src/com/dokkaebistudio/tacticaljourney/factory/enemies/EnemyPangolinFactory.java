@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -37,7 +38,6 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
-import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -141,10 +141,10 @@ public final class EnemyPangolinFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().pangolin);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		dropRate.add(ItemPoolRarity.RARE, 10);
+		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.enemyFactory.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
@@ -234,10 +234,10 @@ public final class EnemyPangolinFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().pangolinMatriarch);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 100 );
 		dropRate.add(ItemPoolRarity.RARE, 0);
+		dropRate.add(ItemPoolRarity.COMMON, 100 );
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.enemyFactory.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);

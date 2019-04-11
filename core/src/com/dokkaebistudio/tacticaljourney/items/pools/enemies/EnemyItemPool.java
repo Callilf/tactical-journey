@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
@@ -26,13 +26,12 @@ public abstract class EnemyItemPool extends ItemPool {
 	 * @param numberOfItemsToGet the number of items to retrieve
 	 * @return the list of item types randomly chosen
 	 */
-	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet, ItemPoolRarity rarity) {
+	public List<PooledItemDescriptor> getItemTypes(int numberOfItemsToGet, ItemPoolRarity rarity, RandomXS128 randomToUse) {
 		List<PooledItemDescriptor> result = new ArrayList<>();
 		
 		int sumOfChances = getSum(rarity);
 		if (sumOfChances == 0) return result;
 		
-		RandomSingleton random = RandomSingleton.getInstance();
 		int randomInt = 0;
 		
 		List<PooledItemDescriptor> itemsToRemoveFromAllPools = new ArrayList<>();
@@ -40,7 +39,7 @@ public abstract class EnemyItemPool extends ItemPool {
 		int chance = 0;
 		for (int i=0 ; i<numberOfItemsToGet ; i++) {
 			
-			randomInt = random.nextSeededInt(sumOfChances);
+			randomInt = randomToUse.nextInt(sumOfChances);
 			Iterator<PooledItemDescriptor> poolIterator = getPool(rarity).iterator();
 			while(poolIterator.hasNext()) {
 				PooledItemDescriptor pid = poolIterator.next();

@@ -123,7 +123,7 @@ public abstract class FloorGenerator {
 		List<RoomType> specialRooms = fillSpecialRooms();
 		
 		List<Room> values = new ArrayList<>(roomsPerPosition.values());
-		Collections.shuffle(values, random.getSeededRandomForShuffle());
+		Collections.shuffle(values, random.getNextSeededRandom());
 		for (RoomType type : specialRooms) {
 			for (Room r : values) {
 				if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
@@ -279,7 +279,7 @@ public abstract class FloorGenerator {
 			return;
 		}
 		
-		Collections.shuffle(possibleMove, random.getSeededRandomForShuffle());
+		Collections.shuffle(possibleMove, random.getNextSeededRandom());
 		
 		for (GenerationMoveEnum direction : possibleMove) {
 			int rand = random.nextSeededInt(100);

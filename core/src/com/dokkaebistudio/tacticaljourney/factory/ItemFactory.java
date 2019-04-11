@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.factory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
@@ -132,8 +133,8 @@ public final class ItemFactory {
 	public Entity createItem(ItemEnum type) {
 		return createItem(type, null, null);
 	}
-	public Entity createItem(ItemEnum type, boolean noRandom) {
-		return createItem(type, null, null, noRandom);
+	public Entity createItem(ItemEnum type, RandomXS128 randomToUse) {
+		return createItem(type, null, null, randomToUse);
 	}
 	
 	
@@ -145,7 +146,7 @@ public final class ItemFactory {
 	 * @return the item created
 	 */
 	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos) {
-		return createItem(type, room, tilePos, false);
+		return createItem(type, room, tilePos, null);
 	}
 	
 	/**
@@ -155,19 +156,19 @@ public final class ItemFactory {
 	 * @param tilePos the position
 	 * @return the item created
 	 */
-	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos, boolean noRandom) {
+	public Entity createItem(ItemEnum type, Room room, Vector2 tilePos, RandomXS128 randomToUse) {
 		Entity item = null;
 		
 		switch (type) {
 		case MONEY:
-			item = createItemMoney(room, tilePos, noRandom);
+			item = createItemMoney(room, tilePos, randomToUse);
 			break;
 			
 		case AMMO_ARROW:
-			item = createItemArrows(room, tilePos, noRandom);
+			item = createItemArrows(room, tilePos, randomToUse);
 			break;
 		case AMMO_BOMB:
-			item = createItemBombs(room, tilePos, noRandom);
+			item = createItemBombs(room, tilePos, randomToUse);
 			break;
 			
 		case ARMOR_LIGHT:
@@ -311,8 +312,8 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;
 	}
-	public Entity createItemMoney(Room room, Vector2 tilePos, boolean noRandom) {
-		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(noRandom),
+	public Entity createItemMoney(Room room, Vector2 tilePos, RandomXS128 randomToUse) {
+		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(randomToUse),
 				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;
@@ -343,8 +344,8 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
 		return item;
 	}
-	public Entity createItemArrows(Room room, Vector2 tilePos, boolean noRandom) {
-		Entity item = createItemBase(room, tilePos, Assets.arrow_item, new ItemArrow(noRandom),
+	public Entity createItemArrows(Room room, Vector2 tilePos, RandomXS128 randomToUse) {
+		Entity item = createItemBase(room, tilePos, Assets.arrow_item, new ItemArrow(randomToUse),
 				Descriptions.ITEM_ARROWS_TITLE, Descriptions.ITEM_ARROWS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_ARROWS.getFlag();
 		return item;
@@ -361,8 +362,8 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;
 	}
-	public Entity createItemBombs(Room room, Vector2 tilePos, boolean noRandom) {
-		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(noRandom),
+	public Entity createItemBombs(Room room, Vector2 tilePos, RandomXS128 randomToUse) {
+		Entity item = createItemBase(room, tilePos, Assets.bomb_item, new ItemBomb(randomToUse),
 				Descriptions.ITEM_BOMBS_TITLE, Descriptions.ITEM_BOMBS_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;

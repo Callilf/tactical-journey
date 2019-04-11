@@ -1,5 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
@@ -18,15 +19,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -37,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class DebugPopinRenderer implements Renderer, RoomSystem {
@@ -207,7 +212,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		lootableItemsTable.clear();
 		ItemEnum[] values = ItemEnum.values();
 		for (ItemEnum v : values) {
-			Entity item = room.entityFactory.itemFactory.createItem(v, true);
+			Entity item = room.entityFactory.itemFactory.createItem(v, null);
 			if (item == null) continue;
 			Table oneItem = createOneLootItem(item);
 			lootableItemsTable.add(oneItem).pad(0, 0, 10, 0).maxWidth(630);
@@ -255,7 +260,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//add item in inventory and remove it from lootable entity
-				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type, true);
+				Entity clonedItem = room.entityFactory.itemFactory.createItem(itemComponent.getItemType().type, null);
 				ItemComponent clonedItemCompo = Mappers.itemComponent.get(clonedItem);
 				boolean pickedUp = clonedItemCompo.pickUp(player, clonedItem, room);
 				if (pickedUp) {
@@ -411,6 +416,21 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		optionsTable.add(killAll).padBottom(20);
+		optionsTable.row();
+		
+		// Destroy all
+		TextButton destroyAll = new TextButton("Break all destructibles", PopinService.buttonStyle());
+		destroyAll.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Array<Entity> copy = new Array<>(room.getAllEntities());
+				Iterator<Entity> iterator = copy.iterator();
+				while(iterator.hasNext()) {
+					LootUtil.destroy(iterator.next(), room);
+				}
+			}
+		});
+		optionsTable.add(destroyAll).padBottom(20);
 		optionsTable.row();
 		
 		// HP
@@ -572,6 +592,28 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		// STATS
 		Label statsLabel = new Label("Stats", PopinService.hudStyle());
 		optionsTable.add(statsLabel).padBottom(20);
+		optionsTable.row();
+		
+		Table karmaTable = new Table();
+		TextButton karmaDown = new TextButton("Karma -1", PopinService.buttonStyle());
+		karmaDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+				playerComponent.increaseKarma(-1);
+			}
+		});
+		karmaTable.add(karmaDown).padRight(20);
+		TextButton karmaUp = new TextButton("Karma +1", PopinService.buttonStyle());
+		karmaUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+				playerComponent.increaseKarma(1);
+			}
+		});
+		karmaTable.add(karmaUp);
+		optionsTable.add(karmaTable).padBottom(20);
 		optionsTable.row();
 
 		Table strengthTable = new Table();

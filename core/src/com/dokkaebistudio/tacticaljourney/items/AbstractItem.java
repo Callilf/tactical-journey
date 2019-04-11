@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -92,15 +92,14 @@ public abstract class AbstractItem {
 	 * @param valMax
 	 */
 	protected AbstractItem(String label, RegionDescriptor texture, boolean instaPickUp, boolean goIntoInventory, Integer valMin, Integer valMax, 
-			boolean noRandom) {
+			RandomXS128 randomToUse) {
 		this(label, texture, instaPickUp, goIntoInventory);
-		if (noRandom) {
+		if (randomToUse == null) {
 			this.quantity = 1;
 		} else {
-			RandomSingleton random = RandomSingleton.getInstance();
 			int value = valMin;
 			if (valMax > valMin) {
-				value += random.nextSeededInt(valMax - valMin + 1);
+				value += randomToUse.nextInt(valMax - valMin + 1);
 			}
 			this.quantity = value;
 		}

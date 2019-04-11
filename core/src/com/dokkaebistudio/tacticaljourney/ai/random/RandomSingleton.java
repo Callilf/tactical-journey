@@ -113,8 +113,12 @@ public class RandomSingleton {
 		return getUnseededRandom().nextFloat();
 	}
 	
-	
-	public RandomXS128 getSeededRandomForShuffle() {
+	/**
+	 * Returns a new instance of RandomXS128 that is initialized with a seed based on
+	 * the current RandomSingleton seed and the nextInt.
+	 * @return a random.
+	 */
+	public RandomXS128 getNextSeededRandom() {
 		String[] split = seed.split("-");
 		Long l = new Long(split[0]);
 		RandomXS128 r = new RandomXS128(l, nextSeededInt(1000));
@@ -144,6 +148,19 @@ public class RandomSingleton {
 
 	public String getSeed() {
 		return seed;
+	}
+	
+	public Long[] getSeedArray() {
+		Long[] result = new Long[2];
+
+		String[] split = seed.split("-");
+		result[0] = new Long(split[0]);
+		if (split.length > 1) {
+			result[1] = new Long(split[1]);
+		} else {
+			result[1] = (long) 0;
+		}
+		return result;
 	}
 
 	public void setSeed(String seed) {

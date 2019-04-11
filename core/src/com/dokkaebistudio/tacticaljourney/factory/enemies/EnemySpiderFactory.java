@@ -5,11 +5,11 @@ package com.dokkaebistudio.tacticaljourney.factory.enemies;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -37,7 +37,6 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -129,10 +128,10 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().spider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 20);
 		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 20);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.enemyFactory.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
@@ -214,10 +213,10 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().webSpider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 60);
 		dropRate.add(ItemPoolRarity.RARE, 10);
+		dropRate.add(ItemPoolRarity.COMMON, 60);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.enemyFactory.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		CreepEmitterComponent creepEmitter = engine.createComponent(CreepEmitterComponent.class);
@@ -301,10 +300,10 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().venomSpider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 30);
 		dropRate.add(ItemPoolRarity.RARE, 10);
+		dropRate.add(ItemPoolRarity.COMMON, 30);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, this.enemyFactory.entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);

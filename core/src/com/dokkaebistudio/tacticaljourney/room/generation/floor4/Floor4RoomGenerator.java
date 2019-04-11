@@ -90,7 +90,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 
 			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
 			for (int i=0 ; i<2 ; i++) {

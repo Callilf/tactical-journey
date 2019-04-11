@@ -60,7 +60,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 
 			// BOSS FIGHT : Pangolin mother
 			spawnPositions = new ArrayList<>(possibleSpawns);
-			Collections.shuffle(spawnPositions, random.getSeededRandomForShuffle());
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 
 			Iterator<PoolableVector2> iterator = spawnPositions.iterator();
 			Entity mother = null;

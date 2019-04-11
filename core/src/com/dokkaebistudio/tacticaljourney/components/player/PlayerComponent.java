@@ -7,7 +7,6 @@ import java.util.List;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -30,13 +29,24 @@ public class PlayerComponent implements Component {
 	/** The throwing skill. */
 	private Entity skillThrow;
 	
+	
+	// Chance
+	/** The karma stat. Affects random for drop rate, blessing procs... */
+	private int karma;
+	
+	
+	
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
 	private boolean actionDoneAtThisFrame = false;
 	
 
+	public void increaseKarma(int amount) {
+		this.karma += amount;
+	}
 	
+	//**********************
 	// Action
 	
 	public enum PlayerActionEnum {
@@ -64,6 +74,7 @@ public class PlayerComponent implements Component {
 	}
 
 	
+	//************************
 	// inspect
 	
 	private boolean inspectPopinRequested = false;
@@ -166,7 +177,13 @@ public class PlayerComponent implements Component {
 		this.inspectPopinRequested = inspectPopinRequested;
 	}
 	
-	
+	public int getKarma() {
+		return karma;
+	}
+
+	public void setKarma(int karma) {
+		this.karma = karma;
+	}
 	
 	public static Serializer<PlayerComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<PlayerComponent>() {
@@ -177,6 +194,7 @@ public class PlayerComponent implements Component {
 				kryo.writeClassAndObject(output, object.skillRange);
 				kryo.writeClassAndObject(output, object.skillBomb);
 				kryo.writeClassAndObject(output, object.skillThrow);
+				output.writeInt(object.karma);
 			}
 
 			@Override
@@ -186,9 +204,11 @@ public class PlayerComponent implements Component {
 				compo.skillRange = (Entity) kryo.readClassAndObject(input);
 				compo.skillBomb = (Entity) kryo.readClassAndObject(input);
 				compo.skillThrow = (Entity) kryo.readClassAndObject(input);
+				compo.karma = input.readInt();
 				return compo;
 			}
 		
 		};
 	}
+
 }

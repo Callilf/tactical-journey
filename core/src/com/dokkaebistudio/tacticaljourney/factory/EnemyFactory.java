@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -168,10 +169,10 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().scorpion);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 50);
 		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.COMMON, 50);
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
@@ -267,10 +268,10 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().stinger);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.COMMON, 30 );
 		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDrop(LootUtil.generateLoot(lootRewardCompo.getItemPool(), dropRate, entityFactory));
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);

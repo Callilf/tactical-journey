@@ -19,14 +19,14 @@ public class StatueItemPool extends EnemyItemPool {
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
 	
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.DIVINE_CATALYST, 1));						
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PEBBLE, 1));						
 	}
 	
 
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.PEBBLE, 1));						
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.DIVINE_CATALYST, 1));						
 	}
 	
 	

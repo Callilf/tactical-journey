@@ -59,15 +59,8 @@ public class ExperienceComponent implements Component,Poolable {
 		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		nextLevelXp = experienceLevelEnum.getXpToNextLevel();
 		
-		String seed = RandomSingleton.getInstance().getSeed();
-		String[] split = seed.split("-");
-		Long l = new Long(split[0]);
-		if (split.length > 1) {
-			Long l2 = new Long(split[1]);
-			this.levelUpSeededRandom = new RandomXS128(l, l2);
-		} else {
-			this.levelUpSeededRandom = new RandomXS128(l, 0);
-		}
+		Long[] seed = RandomSingleton.getInstance().getSeedArray();
+		this.levelUpSeededRandom = new RandomXS128(seed[0], seed[1]);
 	}
 
 	

@@ -8,9 +8,7 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -19,7 +17,6 @@ import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -27,14 +24,12 @@ import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponen
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -145,11 +140,9 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 				} else {
 					// Death of any other entity than the player
 					
+					// Drop reward
 					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
-					if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
-						// Drop reward
-						dropItem(entity, lootRewardComponent);
-					}
+					LootUtil.dropItem(entity, lootRewardComponent, room);
 					
 					EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 					if (enemyComponent != null) {
@@ -228,32 +221,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 				Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
 			}
 		}
-	}
-
-    /**
-     * Drop an item on death.
-     * @param entity the entity that died and will drop the item
-     * @param lootRewardComponent the lootRewardComponent of the entity
-     */
-	private void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent) {
-		final Entity dropItem = lootRewardComponent.getDrop();
-		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
-
-		// Drop animation
-		Action finishDropAction = new Action(){
-		  @Override
-		  public boolean act(float delta){
-			itemComponent.drop(dropLocation, dropItem, room);
-			dropLocation.free();
-			
-			room.getAddedItems().add(dropItem);
-		    return true;
-		  }
-		};
-		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
-		fxStage.addActor(dropAnimationImage);
 	}
 
 	

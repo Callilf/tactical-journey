@@ -68,6 +68,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     private Label strengthLbl;
     private Label accuracyLbl;
 	private Label moveLbl;
+	private Label karmaLbl;
 	private Label rangeDistLbl;
 	private Label rangeStrengthLbl;
 	private Label rangeAccuracyLbl;
@@ -188,6 +189,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		nameLbl.setText("Name: " + inspectableComponent.getTitle());
 		maxHpLbl.setText("Max hp: " + healthComponent.getMaxHp());
 		maxArmorLbl.setText("Max armor: " + healthComponent.getMaxArmor());
+		karmaLbl.setText("Karma: " + playerCompo.getKarma());
 		moveLbl.setText("Move: " + moveComponent.getMoveSpeed());
 		strengthLbl.setText("Strength: " + attackComponent.getStrength());
 		accuracyLbl.setText("Melee accuracy: " + attackComponent.getAccuracy());
@@ -225,7 +227,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileTable.align(Align.top);
 		
 		// TITLE
-		profileTitle = new Label("Profile", PopinService.hudStyle());
+		profileTitle = new Label("Characteristics", PopinService.hudStyle());
 		profileTable.add(profileTitle).expandX().pad(20, 0, 20, 0);
 		profileTable.row();
 		
@@ -243,6 +245,10 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		profileInnerTable.add(maxArmorLbl).expandX().left().pad(0, 20, 0, 20);
 		profileInnerTable.row();
 		
+		karmaLbl = new Label("Karma", PopinService.hudStyle());
+		profileInnerTable.add(karmaLbl).expandX().left().pad(0, 20, 0, 20);
+		profileInnerTable.row();
+
 		moveLbl = new Label("Move", PopinService.hudStyle());
 		profileInnerTable.add(moveLbl).expandX().left().pad(0, 20, 0, 20);
 		profileInnerTable.row();
@@ -313,7 +319,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		}
 				
 		blessingList.pack();
-		System.out.println("Blessing: "+ blessingList.getWidth());
 
 		blessingScroll.layout();
 	}
@@ -363,7 +368,6 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		}
 		
 		curseList.pack();
-		System.out.println("Curse: "+ curseList.getWidth());
 		curseScroll.layout();
 	}
 

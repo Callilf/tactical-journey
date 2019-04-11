@@ -21,7 +21,7 @@ public class ScorpionItemPool extends EnemyItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 	}
 	
 
@@ -29,7 +29,7 @@ public class ScorpionItemPool extends EnemyItemPool {
 	
 	
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 5));

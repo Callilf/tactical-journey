@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -15,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
@@ -30,16 +32,15 @@ public class LootUtil {
 	 */
 	public static void destroy(Entity d, Room room) {
 		DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(d);
+		if (destructibleComponent == null) return;
+		
 		destructibleComponent.setDestroyed(true);
 
 		if (destructibleComponent.isRemove()) {
 			
 			// Drop loot
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(d);
-			if (lootRewardComponent != null && lootRewardComponent.getDrop() != null) {
-				// Drop reward
-				dropItem(d, lootRewardComponent, room);
-			}
+			dropItem(d, lootRewardComponent, room);
 			
 			room.removeEntity(d);
 
@@ -70,7 +71,11 @@ public class LootUtil {
      * @param lootRewardComponent the lootRewardComponent of the entity
      */
 	public static void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent, final Room room) {
-		final Entity dropItem = lootRewardComponent.getDrop();
+		if (lootRewardComponent == null) return;
+		
+		final Entity dropItem = generateLoot(entity, lootRewardComponent, room.entityFactory);
+		if (dropItem == null) return;
+		
 		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
 		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
@@ -88,21 +93,31 @@ public class LootUtil {
 		};
 		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
 		room.floor.getGameScreen().fxStage.addActor(dropAnimationImage);
+		
+		lootRewardComponent.setLatestItem(dropItem);
 	}
 	
 	/**
 	 * Generate enemy and destructible's loot.
-	 * @param itemPool the item pool to use
-	 * @param dropRate the drop rate
+	 * @param entity the entity that drops the loot
+	 * @param lootRewardComponent the loot reward compo of this entity
 	 * @param entityFactory the entity factory
-	 * @return the item to loot, it any
+	 * @return the item to loot, if any
 	 */
-	public static Entity generateLoot(EnemyItemPool itemPool, DropRate dropRate, EntityFactory entityFactory) {
-		RandomSingleton random = RandomSingleton.getInstance();
+	public static Entity generateLoot(Entity entity, LootRewardComponent lootRewardComponent, EntityFactory entityFactory) {
+		RandomXS128 random = lootRewardComponent.getDropSeededRandom();
+		DropRate dropRate = lootRewardComponent.getDropRate();
+		EnemyItemPool itemPool = lootRewardComponent.getItemPool();
+		if (random == null || dropRate == null || itemPool == null) return null;
 		
-		float unit = (float) random.nextSeededInt(100);
-		float decimal = random.nextSeededFloat();
+		float unit = (float) random.nextInt(100);
+		float decimal = random.nextFloat();
 		float randomValue = unit + decimal;
+		
+		// Apply player's karma
+		PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
+		randomValue -= playerComponent.getKarma();
+		if (randomValue < 0) randomValue = 0;
 		
 		int chance = 0;
 		ItemPoolRarity rarity = null;
@@ -115,10 +130,10 @@ public class LootUtil {
 		}
 		
 		if (rarity != null) {
-			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity);
+			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity, random);
 			PooledItemDescriptor itemType = itemTypes.get(0);
 			
-			return entityFactory.itemFactory.createItem(itemType.getType(), null, null);
+			return entityFactory.itemFactory.createItem(itemType.getType(), null, null, random);
 		}
 		
 		return null;

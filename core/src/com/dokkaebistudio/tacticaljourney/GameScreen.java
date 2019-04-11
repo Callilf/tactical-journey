@@ -149,7 +149,9 @@ public class GameScreen extends ScreenAdapter {
 	private List<Renderer> renderers = new ArrayList<>();
 	private MapRenderer mapRenderer;
 	
-	public Entity player;
+	/** The player. 
+	 * Static because there is only one player in this game. Every class have access to it. */
+	public static Entity player;
 	
 	/** The name of the entity that killed the player. */
 	public String killerStr;

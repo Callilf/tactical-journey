@@ -385,14 +385,14 @@ public abstract class RoomGenerator {
 //
 			
 //			entityFactory.createExit(this, new Vector2(16, 4));
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 6));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 7));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 8));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 9));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 10));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 11));			
-			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 4));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 5));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 6));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 7));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 8));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 9));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 10));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 11));			
+//			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 4));			
 //			Entity enemy4 = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(11, 8));
 			
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);

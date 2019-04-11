@@ -42,13 +42,15 @@ public class BlessingOfFireArrows extends Blessing {
 
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
-		// Attacked an enemy
-		int chanceToProc = this.initialChanceToProc;
-		
-		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-		int chance = unseededRandom.nextInt(100);
-		if (chance < chanceToProc) {
-			room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(target).coord(), attacker);
+		if (attackCompo != null && attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
+			// Attacked an enemy with the bow
+			int chanceToProc = this.initialChanceToProc;
+			
+			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
+			int chance = unseededRandom.nextInt(100);
+			if (chance < chanceToProc) {
+				room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(target).coord(), attacker);
+			}
 		}
 	}
 	

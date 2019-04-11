@@ -69,7 +69,7 @@ public class StatusPopinRenderer implements Renderer, RoomSystem {
 	    		stage.addListener(new InputListener() {
 					@Override
 					public boolean keyUp(InputEvent event, int keycode) {
-						if (room.getState() == RoomState.STATUS_POPIN && keycode == Input.Keys.ESCAPE) {
+						if (room.getState() == RoomState.STATUS_POPIN && (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK)) {
 							closePopin();
 							return true;
 						}

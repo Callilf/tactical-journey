@@ -67,7 +67,7 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 	    		stage.addListener(new InputListener() {
 					@Override
 					public boolean keyUp(InputEvent event, int keycode) {
-						if (room.getState() == RoomState.CHARACTERISTICS_POPIN && keycode == Input.Keys.ESCAPE) {
+						if (room.getState() == RoomState.CHARACTERISTICS_POPIN && (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK)) {
 							closePopin();
 							return true;
 						}
@@ -146,7 +146,7 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 		profileInnerTable.row();
 		
 		Label karmaLbl = new Label("Karma: A strange characteristic. The higher your karma is, the more likely you are to find items. "
-				+ "It also increases the chance of blessing effects to activate and reduce the chances of curses effects to happen", 
+				+ "It also increases the chance of blessing effects to activate and reduces the chances of curses effects to happen", 
 				PopinService.hudStyle());
 		karmaLbl.setWrap(true);
 		profileInnerTable.add(karmaLbl).width(960).left().pad(0, 20, 20, 20);

@@ -169,10 +169,10 @@ public class InputSingleton implements InputProcessor{
 			return true;
 		}
 		
-		if (keycode == Keys.BACK) {
-			gamescreen.state = GameScreen.GAME_PAUSED;
-			return false;
-		}
+//		if (keycode == Keys.BACK) {
+//			gamescreen.state = GameScreen.GAME_PAUSED;
+//			return false;
+//		}
 		
 //		if (keycode == Input.Keys.NUM_1) {
 //			skill1JustPressed = true;
@@ -192,7 +192,7 @@ public class InputSingleton implements InputProcessor{
 			return true;
 		}
 		
-		if (keycode == Input.Keys.ESCAPE) {
+		if (keycode == Input.Keys.ESCAPE || keycode == Keys.BACK) {
 			if (gamescreen.state == GameScreen.GAME_PAUSED) {
 				gamescreen.state = GameScreen.GAME_RUNNING;
 			} else if (gamescreen.state == GameScreen.GAME_RUNNING){

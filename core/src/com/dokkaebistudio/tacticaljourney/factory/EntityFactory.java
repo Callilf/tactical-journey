@@ -719,7 +719,7 @@ public final class EntityFactory {
 	}
 	
 	
-	public Entity createSkill(Room room, Entity parent, SkillEnum type, int skillNumber) {
+	public Entity createSkill(Entity parent, SkillEnum type, int skillNumber) {
 		GridPositionComponent parentPos = Mappers.gridPositionComponent.get(parent);
 		PlayerComponent playerComponent = Mappers.playerComponent.get(parent);
 		
@@ -736,13 +736,11 @@ public final class EntityFactory {
 		skillEntity.add(skillPosCompo);
 		
 		MoveComponent skillMoveComponent = engine.createComponent(MoveComponent.class);
-		skillMoveComponent.room = room;
 		skillMoveComponent.setMoveSpeed(0);
 		skillMoveComponent.setMoveRemaining(0);
 		skillEntity.add(skillMoveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.room = room;
 		attackComponent.setAttackType(type.getAttackType());
 		attackComponent.setRangeMin(type.getRangeMin());
 		attackComponent.setRangeMax(type.getRangeMax());

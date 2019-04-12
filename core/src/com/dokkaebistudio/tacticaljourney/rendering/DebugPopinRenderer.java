@@ -398,6 +398,17 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(fullMap).padBottom(20);
 		optionsTable.row();
 		
+		// Gold
+		TextButton rich = new TextButton("Get rich", PopinService.buttonStyle());
+		rich.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Mappers.walletComponent.get(GameScreen.player).setAmount(1000);
+			}
+		});
+		optionsTable.add(rich).padBottom(20);
+		optionsTable.row();
+		
 		// Kill all
 		TextButton killAll = new TextButton("Kill all enemies", PopinService.buttonStyle());
 		killAll.addListener(new ChangeListener() {

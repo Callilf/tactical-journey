@@ -71,7 +71,7 @@ public class Room extends EntitySystem {
 	public AttackManager attackManager;
 		
 	/** Whether the player has already entered this room or not. */
-	private boolean visited;
+	private RoomVisitedState visited;
 	
 	/** Whether this room has been cleared. */
 	private RoomClearedState cleared;
@@ -127,7 +127,7 @@ public class Room extends EntitySystem {
 		this.turnManager = new TurnManager(this);
 		this.attackManager = new AttackManager(this);
 		this.type = type;
-		this.visited = false;
+		this.visited = RoomVisitedState.NEVER_VISITED;
 		
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
@@ -283,6 +283,12 @@ public class Room extends EntitySystem {
 		if (this.getCleared() == RoomClearedState.JUST_CLEARED) {
 			this.cleared = RoomClearedState.CLEARED;
 		}	
+		
+		if (this.visited == RoomVisitedState.FIRST_ENTRANCE) {
+			this.visited = RoomVisitedState.FIRST_VISIT;
+		} else if (this.visited == RoomVisitedState.FIRST_VISIT) {
+			this.visited = RoomVisitedState.VISITED;
+		}
 		
 		// Check if room cleared
 		if (!this.isCleared() && this.enemies.isEmpty()) {
@@ -512,12 +518,15 @@ public class Room extends EntitySystem {
 
 
 	public boolean isVisited() {
+		return visited.isVisited();
+	}
+
+	public RoomVisitedState getVisited() {
 		return visited;
 	}
 
-
-	public void setVisited(boolean visited) {
-		this.visited = visited;
+	public void setVisited(RoomVisitedState visitedState) {
+		this.visited = visitedState;
 	}
 
 	public List<Entity> getAddedItems() {

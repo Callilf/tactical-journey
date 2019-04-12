@@ -63,6 +63,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.WinPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -201,6 +202,8 @@ public class GameScreen extends ScreenAdapter {
 		floors = new ArrayList<>();
 		
 		if (newGame) {
+			player = entityFactory.playerFactory.createPlayer(playerName);
+
 			Floor floor1 = new Floor(this, 1);
 			floor1.generate();
 			floors.add(floor1);
@@ -213,9 +216,8 @@ public class GameScreen extends ScreenAdapter {
 			floors.add(floor4);
 			Floor floor5 = new Floor(this, 5);
 			floors.add(floor5);
-
 			
-			player = entityFactory.playerFactory.createPlayer(playerName, new Vector2(11, 11), 5, floor1.getActiveRoom());
+			MovementHandler.placeEntity(player, new Vector2(11, 11), floor1.getActiveRoom());
 		} else {
 			Persister persister = new Persister(this);
 			persister.loadGameState();
@@ -312,11 +314,8 @@ public class GameScreen extends ScreenAdapter {
 		
 		
 		if (!newRoom.isVisited()) {
-			newRoom.setVisited(true);
-			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
-			alterationReceiverComponent.onRoomVisited(player, newRoom);
+			newRoom.setVisited(RoomVisitedState.FIRST_ENTRANCE);
 		}
-		
 		
 		//TODO : probably improve this code, especially if any other entity than the player can travel between rooms
 		//Set the player in the new room	

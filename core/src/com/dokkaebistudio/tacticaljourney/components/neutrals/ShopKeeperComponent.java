@@ -13,10 +13,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.shops.ShopItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -30,6 +33,8 @@ import com.esotericsoftware.kryo.io.Output;
  */
 public class ShopKeeperComponent implements Component, Poolable {
 	
+	public static final int MAX_NUMBER_OF_ITEMS_FOR_SALE = 9;
+	
 	private Vector2[] itemPositions = {new Vector2(9, 5), new Vector2(11, 5), new Vector2(13, 5), 
 			new Vector2(9, 7), new Vector2(13, 7), 
 			new Vector2(7, 5), new Vector2(7, 7), 
@@ -42,7 +47,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private boolean talking;
 	
 	/** The number of items for sale. Default is 3. */
-	private int numberOfItems = 3;
+	private int numberOfItems = 9;
 	
 	/** The items the shop keeper is selling. */
 //	private List<Entity> soldItems = new ArrayList<>();
@@ -55,8 +60,10 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private boolean requestRestock = false;
 	
 	/** The item pool. */
-	private ShopItemPool itemPool;
-	
+	private EnemyItemPool itemPool;
+	private DropRate dropRate;
+	private RandomXS128 dropSeededRandom;
+
 	
 	// Speeches 
 	private boolean firstSpeech = true;
@@ -76,12 +83,16 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.mainSpeeches.clear();
 	}
 	
+	public void increaseNumberOfItems(int amount) {
+		this.numberOfItems += amount;
+	}
+	
 	/**
 	 * Whether the shop keeper has already sold at least one item.
 	 * @return true if at leasto ne item sold, false otherwise.
 	 */
 	public boolean hasSoldItems() {
-		return soldItems.size() < numberOfItems;
+		return soldItems.size() < this.getNumberOfItems();
 	}
 	
 	/**
@@ -99,10 +110,8 @@ public class ShopKeeperComponent implements Component, Poolable {
 	 * @param entityFactory the entity factory
 	 */
 	public void stock(Room room) {
-		int numberOfItemsToGenerate = numberOfItems - soldItems.size();
+		int numberOfItemsToGenerate = this.getNumberOfItems() - soldItems.size();
 		
-		List<PooledItemDescriptor> itemTypes = this.itemPool.getItemTypes(numberOfItemsToGenerate);
-
 		for (int i=0 ; i<numberOfItemsToGenerate ; i++) {
 			Vector2 position = null;
 			for (Vector2 pos : itemPositions) {
@@ -112,8 +121,10 @@ public class ShopKeeperComponent implements Component, Poolable {
 				}
 			}
 			
+			ItemPoolRarity rarity = LootUtil.getRarity(RandomSingleton.getNextChanceWithKarma(dropSeededRandom), dropRate);
+			List<PooledItemDescriptor> itemTypes = this.itemPool.getItemTypes(1, rarity, dropSeededRandom);
 			
-			PooledItemDescriptor itemType = itemTypes.get(i);
+			PooledItemDescriptor itemType = itemTypes.get(0);
 			Entity item = room.entityFactory.itemFactory.createItem(itemType.getType(), room, position);
 			ItemComponent ic = Mappers.itemComponent.get(item);
 			ic.setPrice(itemType.getPrice());
@@ -201,6 +212,8 @@ public class ShopKeeperComponent implements Component, Poolable {
 	}
 
 	public int getNumberOfItems() {
+		if (numberOfItems < 0) return 0;
+		if (numberOfItems > MAX_NUMBER_OF_ITEMS_FOR_SALE) return MAX_NUMBER_OF_ITEMS_FOR_SALE;
 		return numberOfItems;
 	}
 
@@ -216,11 +229,11 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.requestRestock = requestRestock;
 	}
 
-	public ShopItemPool getItemPool() {
+	public EnemyItemPool getItemPool() {
 		return itemPool;
 	}
 
-	public void setItemPool(ShopItemPool itemPool) {
+	public void setItemPool(EnemyItemPool itemPool) {
 		this.itemPool = itemPool;
 	}
 	
@@ -238,7 +251,14 @@ public class ShopKeeperComponent implements Component, Poolable {
 				output.writeInt(object.restockNumber);
 				output.writeBoolean(object.firstSpeech);
 				kryo.writeClassAndObject(output, object.mainSpeeches);
-				output.writeString(object.itemPool.id);				
+				output.writeString(object.itemPool.id);			
+				kryo.writeClassAndObject(output, object.dropRate);
+				
+				// Save the state of the random
+				long seed0 = object.dropSeededRandom.getState(0);
+				long seed1 = object.dropSeededRandom.getState(1);
+				output.writeString(seed0 + "#" + seed1);
+
 			}
 
 			@Override
@@ -250,12 +270,34 @@ public class ShopKeeperComponent implements Component, Poolable {
 				compo.restockNumber = input.readInt();
 				compo.firstSpeech = input.readBoolean();
 				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
-				compo.itemPool = (ShopItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
-
+				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
+				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
+				
+				// Read the random state
+				String randomState = input.readString();
+				String[] split = randomState.split("#");
+				compo.dropSeededRandom = new RandomXS128();
+				compo.dropSeededRandom.setState(Long.valueOf(split[0]), Long.valueOf(split[1]));
 				return compo;
 			}
 		
 		};
+	}
+
+	public DropRate getDropRate() {
+		return dropRate;
+	}
+
+	public void setDropRate(DropRate dropRate) {
+		this.dropRate = dropRate;
+	}
+
+	public RandomXS128 getDropSeededRandom() {
+		return dropSeededRandom;
+	}
+
+	public void setDropSeededRandom(RandomXS128 dropSeededRandom) {
+		this.dropSeededRandom = dropSeededRandom;
 	}
 
 	

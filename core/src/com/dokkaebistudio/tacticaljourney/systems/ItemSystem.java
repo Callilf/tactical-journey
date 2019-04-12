@@ -282,7 +282,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			priceDisplayer.flags = EntityFlagEnum.TEXT_PRICE_DISPLAYER.getFlag();
 			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
 			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(priceDisplayer);
-			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + GameScreen.GRID_SIZE/2 - textComponent.getWidth()/2,
+			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + GameScreen.GRID_SIZE - textComponent.getWidth(),
 					displayerPosCompo.getAbsolutePos().y + GameScreen.GRID_SIZE);
 			
 			textComponent.setText("[GOLD]" + textComponent.getText());

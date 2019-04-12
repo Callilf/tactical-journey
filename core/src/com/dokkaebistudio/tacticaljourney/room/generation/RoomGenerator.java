@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -29,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 /**
@@ -296,22 +298,13 @@ public abstract class RoomGenerator {
 			break;
 			
 		case SHOP_ROOM:
-			Entity shopKeeper = entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
+			entityFactory.playerFactory.createShopkeeper(new Vector2(11, 7), room);
 			
-			entityFactory.createSpriteOnTile(new Vector2(9, 5), 
-					ZIndexConstants.TILE, 
-					Assets.shop_item_background, 
-					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-			
-			entityFactory.createSpriteOnTile(new Vector2(11, 5), 
-					ZIndexConstants.TILE, 
-					Assets.shop_item_background, 
-					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
-
-			entityFactory.createSpriteOnTile(new Vector2(13, 5), 
-					ZIndexConstants.TILE, 
-					Assets.shop_item_background, 
-					EntityFlagEnum.SHOP_ITEM_BACKGROUND, room);
+			Entity carpet = entityFactory.createSpriteOnTile(new Vector2(11,5), 
+					ZIndexConstants.TILE,
+					Assets.shopkeeper_carpet, 
+					EntityFlagEnum.SHOP_CARPET, room);
+			Mappers.gridPositionComponent.get(carpet).overlap = 0;
 			
 			break;
 			

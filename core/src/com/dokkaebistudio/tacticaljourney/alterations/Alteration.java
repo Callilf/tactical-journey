@@ -69,6 +69,9 @@ public abstract class Alteration {
 	
 	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {}
 	
+	/** Called when computing the number of items the shop should sell. */
+	public int onShopNumberOfItems(Entity entity, Entity shopkeeper, Room room) { return 0; };
+	
 	
 	
 	// getters and setters

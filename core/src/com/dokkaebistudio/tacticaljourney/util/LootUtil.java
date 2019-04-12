@@ -112,16 +112,7 @@ public class LootUtil {
 		if (random == null || dropRate == null || itemPool == null) return null;
 		
 		float randomValue = RandomSingleton.getNextChanceWithKarma(random);
-		
-		int chance = 0;
-		ItemPoolRarity rarity = null;
-		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
-			if (randomValue >= chance && randomValue < chance + entry.getValue().intValue()) {
-				rarity = entry.getKey();
-				break;
-			}
-			chance += entry.getValue().intValue();
-		}
+		ItemPoolRarity rarity = getRarity(randomValue, dropRate);
 		
 		if (rarity != null) {
 			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity, random);
@@ -132,5 +123,22 @@ public class LootUtil {
 		
 		return null;
 	}
+
+
+
+	public static ItemPoolRarity getRarity(float randomValue, DropRate dropRate) {
+		int chance = 0;
+		ItemPoolRarity rarity = null;
+		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
+			if (randomValue >= chance && randomValue < chance + entry.getValue().intValue()) {
+				rarity = entry.getKey();
+				break;
+			}
+			chance += entry.getValue().intValue();
+		}
+		return rarity;
+	}
+	
+	
 	
 }

@@ -73,6 +73,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomClearedState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
@@ -375,7 +376,7 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.getRewards());
 					kryo.writeClassAndObject(output, roomToSave.grid);
 					output.writeString(roomToSave.getCleared().name());
-					output.writeBoolean(roomToSave.isVisited());
+					output.writeString(roomToSave.getVisited().name());
 					
 					output.writeInt(roomToSave.getAllEntities().size);
 					for (Entity e : roomToSave.getAllEntities()) {
@@ -429,7 +430,7 @@ public class Persister {
 				}
 				
 				loadedRoom.setCleared(RoomClearedState.valueOf(input.readString()));
-				loadedRoom.setVisited(input.readBoolean());
+				loadedRoom.setVisited(RoomVisitedState.valueOf(input.readString()));
 				
 				// All entities
 				int entityNb = input.readInt();

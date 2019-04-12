@@ -42,9 +42,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.StatueItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -80,7 +78,7 @@ public final class PlayerFactory {
 	 * @param moveSpeed the speed
 	 * @return the player entity
 	 */
-	public Entity createPlayer(String name, Vector2 pos, int moveSpeed, Room room) {
+	public Entity createPlayer(String name) {
 		Entity playerEntity = engine.createEntity();
 		playerEntity.flags = EntityFlagEnum.PLAYER.getFlag();
 		
@@ -105,7 +103,6 @@ public final class PlayerFactory {
 		
 		// Grid position
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(playerEntity, pos, room);
 		gridPosition.zIndex = ZIndexConstants.PLAYER;
 		playerEntity.add(gridPosition);
 		
@@ -120,13 +117,11 @@ public final class PlayerFactory {
 		
 		// Move compo
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
-		moveComponent.room = room;
-		moveComponent.setMoveSpeed(moveSpeed);
+		moveComponent.setMoveSpeed(5);
 		playerEntity.add(moveComponent);
 		
 		// Attack compo
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.room = room;
 		attackComponent.setRangeMax(1);
 		attackComponent.setStrength(5);
 		attackComponent.setAccuracy(1);
@@ -170,7 +165,6 @@ public final class PlayerFactory {
 		
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
-		healthComponent.room = room;
 		healthComponent.setMaxHp(50);
 		healthComponent.setHp(50);
 		healthComponent.setMaxArmor(30);
@@ -205,10 +199,10 @@ public final class PlayerFactory {
 //		playerEntity.add(flyCompo);
 		
 		//Skills
-		entityFactory.createSkill(room,playerEntity, SkillEnum.SLASH, 1 );
-		entityFactory.createSkill(room,playerEntity, SkillEnum.BOW, 2);
-		entityFactory.createSkill(room,playerEntity, SkillEnum.BOMB, 3);
-		entityFactory.createSkill(room,playerEntity, SkillEnum.THROW, 4);
+		entityFactory.createSkill(playerEntity, SkillEnum.SLASH, 1 );
+		entityFactory.createSkill(playerEntity, SkillEnum.BOW, 2);
+		entityFactory.createSkill(playerEntity, SkillEnum.BOMB, 3);
+		entityFactory.createSkill(playerEntity, SkillEnum.THROW, 4);
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
@@ -263,7 +257,11 @@ public final class PlayerFactory {
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
 		shopKeeperCompo.setItemPool(ItemPoolSingleton.getInstance().basicShopItemPool);
-		shopKeeperCompo.stock(room);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 10);
+		dropRate.add(ItemPoolRarity.COMMON, 90);
+		shopKeeperCompo.setDropRate(dropRate);
+		shopKeeperCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		shopKeeperCompo.addSpeech("Hey!\nI'm the shop keeper.");
 		shopKeeperCompo.addSpeech("It's good to see a new face around here!");
 		shopKeeperCompo.addSpeech("We cut and slice, it makes us feel so very nice.");

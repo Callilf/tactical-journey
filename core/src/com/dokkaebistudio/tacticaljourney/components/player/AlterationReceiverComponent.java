@@ -152,6 +152,18 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 	
 	
+	public int onShopNumberOfItems(Entity entity, Entity shopkeeper, Room room) {
+		int result = 0;
+		for (Blessing b : blessings) {
+			result += b.onShopNumberOfItems(entity, shopkeeper, room);
+		}
+		for (Curse c : curses) {
+			result += c.onShopNumberOfItems(entity, shopkeeper, room);
+		}
+		return result;
+	}
+	
+	
 	
 	//*************
 	// Animations

@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
@@ -32,6 +31,7 @@ public class GridPositionComponent implements Component, Poolable {
 
     
     public int zIndex = 0;
+    public int overlap = 1;
     
     /** Whether the gridPositionComponent is inactive, meaning that the entity has no real
      * effect on the room at the moment. For example, if an item is in the inventory, it's gridPosCompo
@@ -46,6 +46,7 @@ public class GridPositionComponent implements Component, Poolable {
     	hasAbsolutePos = false;
     	absolutePos.set(-100,-100);
     	zIndex = 0;
+    	overlap = 1;
     }
     
     
@@ -120,6 +121,7 @@ public class GridPositionComponent implements Component, Poolable {
 			@Override
 			public void write(Kryo kryo, Output output, GridPositionComponent object) {
 				output.writeInt(object.zIndex);
+				output.writeInt(object.overlap);
 				output.writeInt(object.room != null ? object.room.getIndex() : -1);
 				
 				// Coord
@@ -140,6 +142,7 @@ public class GridPositionComponent implements Component, Poolable {
 				GridPositionComponent gridPosCompo = engine.createComponent(GridPositionComponent.class);
 
 				gridPosCompo.zIndex = input.readInt(); 
+				gridPosCompo.overlap = input.readInt(); 
 						
 				int roomIndex = input.readInt();
 				if (roomIndex != -1) {

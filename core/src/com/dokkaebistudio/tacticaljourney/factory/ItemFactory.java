@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHeadband;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMerchantMask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
@@ -263,6 +264,10 @@ public final class ItemFactory {
 			
 		case CAMO_BACKPACK:
 			item = createItemCamoBackpack(room, tilePos);
+			break;
+			
+		case MERCHANT_MASK:
+			item = createItemMerchantMask(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -605,6 +610,12 @@ public final class ItemFactory {
 	public Entity createItemCamoBackpack(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos,new ItemCamoBackpack());
 		item.flags = EntityFlagEnum.ITEM_CAMO_BACKPACK.getFlag();
+		return item;
+	}
+	
+	public Entity createItemMerchantMask(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,new ItemMerchantMask());
+		item.flags = EntityFlagEnum.ITEM_MERCHANT_MASK.getFlag();
 		return item;
 	}
 	

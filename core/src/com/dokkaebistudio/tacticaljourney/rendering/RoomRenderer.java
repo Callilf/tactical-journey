@@ -56,14 +56,15 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		this.comparator = new Comparator<Entity>() {
 			@Override
 			public int compare(Entity entityA, Entity entityB) {
-				GridPositionComponent gridPositionComponentA = Mappers.gridPositionComponent.get(entityA);
-				GridPositionComponent gridPositionComponentB = Mappers.gridPositionComponent.get(entityB);
-				if (gridPositionComponentA == null && gridPositionComponentB == null) return 0;
-				else if (gridPositionComponentA == null) return -1;
-				else if (gridPositionComponentB == null) return 1;
+				GridPositionComponent gpcA = Mappers.gridPositionComponent.get(entityA);
+				GridPositionComponent gpcB = Mappers.gridPositionComponent.get(entityB);
+				if (gpcA == null && gpcB == null) return 0;
+				else if (gpcA == null) return -1;
+				else if (gpcB == null) return 1;
 				
+				// This complex computation ensure that big sprites on lower tiles appear in front of sprites on further tiles
 				return (int) Math.signum(
-						(gridPositionComponentA.zIndex + (GameScreen.SCREEN_H - gridPositionComponentA.coord().y)*5) - (gridPositionComponentB.zIndex + (GameScreen.SCREEN_H - gridPositionComponentB.coord().y)*5)
+						(gpcA.zIndex + (GameScreen.SCREEN_H - gpcA.coord().y)*5*gpcA.overlap) - (gpcB.zIndex + (GameScreen.SCREEN_H - gpcB.coord().y)*5*gpcB.overlap)
 						);
 			}
 		};

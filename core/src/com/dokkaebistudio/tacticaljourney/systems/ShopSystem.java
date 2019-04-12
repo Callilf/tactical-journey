@@ -33,9 +33,11 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.ShopUtil;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ShopSystem extends EntitySystem implements RoomSystem {	
@@ -110,6 +112,14 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 		// Shop restock
 		for (Entity shopKeeper : shopKeepers) {
 			ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
+			
+			// First stock
+			if (room.getVisited() == RoomVisitedState.FIRST_VISIT) {
+				shopKeeperComponent.setNumberOfItems(ShopUtil.getNumberOfItemsInShop(shopKeeper, room));
+				shopKeeperComponent.stock( room);
+			}
+			
+			// Restock
 			if (shopKeeperComponent.isRequestRestock()) {
 				WalletComponent walletComponent = Mappers.walletComponent.get(player);
 				
@@ -157,12 +167,10 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, currentItem);
 				
 				// TEST
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
 				room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,"Good choice !",  true);
 			} else {
 				
 				// TEST
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
 				room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,"Come back when you've got enough gold coins.",  true);
 				playerInventoryCompo.setCurrentAction(null);
 			}
@@ -179,11 +187,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 	 */
 	private void fillShopKeepers() {
 		shopKeepers.clear();
-		for (Entity e : room.getNeutrals()) {
-			if (Mappers.shopKeeperComponent.has(e)) {
-				shopKeepers.add(e);
-			}
-		}
+		ShopUtil.findShopKeeper(room, shopKeepers);
 	}
 
 }

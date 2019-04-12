@@ -31,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 
 /**
  * This class allows rendering the map of the current floor.
@@ -278,7 +279,7 @@ public class MapRenderer implements Renderer {
 				Image playerImage = (Image) children.get(1);
 				
 				if (FULL_MAP) {
-					room.setVisited(true);
+					room.setVisited(RoomVisitedState.FIRST_ENTRANCE);
 				}
 				
 				if (room.isVisited()) {

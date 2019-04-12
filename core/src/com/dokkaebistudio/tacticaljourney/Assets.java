@@ -41,6 +41,8 @@ public class Assets {
 	public static Array<Sprite> player_running;
 	public static Array<Sprite> player_flying;
 	public static RegionDescriptor shopkeeper;
+	public static RegionDescriptor shopkeeper_carpet;
+
 	public static RegionDescriptor soulbender;
 	public static RegionDescriptor goddess_statue;
 	public static RegionDescriptor goddess_statue_broken;
@@ -120,7 +122,7 @@ public class Assets {
 	public static RegionDescriptor inventory_lootable_item_background;
 
 	public static RegionDescriptor dialog_background;
-	public static RegionDescriptor shop_item_background;	
+//	public static RegionDescriptor shop_item_background;	
 	
 	public static RegionDescriptor btn_skill_attack;
 	public static RegionDescriptor btn_skill_attack_pushed;
@@ -322,6 +324,7 @@ public class Assets {
 	public static RegionDescriptor villanelle;
 	public static RegionDescriptor powder_flask;
 	public static RegionDescriptor camo_backpack;
+	public static RegionDescriptor merchant_mask;
 
 	
 	// Boss items
@@ -365,6 +368,7 @@ public class Assets {
 	public static RegionDescriptor blessing_contract_killer;
 	public static RegionDescriptor blessing_fire_arrows;
 	public static RegionDescriptor blessing_looter;
+	public static RegionDescriptor blessing_mask_merchant;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -391,6 +395,7 @@ public class Assets {
 		player_flying = Assets.getAnimation("player_flight");
 		
 		shopkeeper = Assets.getTexture("shopkeeper");
+		shopkeeper_carpet = Assets.getTexture("shopkeeper_carpet");
 		soulbender = Assets.getTexture("soulbender");
 		goddess_statue = Assets.getTexture("godess_statue");
 		goddess_statue_broken = Assets.getTexture("godess_statue_broken");
@@ -468,7 +473,7 @@ public class Assets {
 		inventory_lootable_item_background = Assets.getTexture("hud_lootable_item_background");
 
 		dialog_background = Assets.getTexture("dialog_background");
-		shop_item_background = Assets.getTexture("shop-item-background");
+//		shop_item_background = Assets.getTexture("shop-item-background");
 		
 		btn_skill_attack = Assets.getTexture("btn-skill-slash");
 		btn_skill_attack_pushed = Assets.getTexture("btn-skill-slash-pushed");
@@ -661,6 +666,7 @@ public class Assets {
 		villanelle = Assets.getTexture("item-infusable-villanelle");
 		powder_flask = Assets.getTexture("item-infusable-powder-flask");
 		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
+		merchant_mask = Assets.getTexture("item-infusable-merchant-mask");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -698,6 +704,7 @@ public class Assets {
 		blessing_contract_killer = Assets.getTexture("blessing-bounty");
 		blessing_fire_arrows = Assets.getTexture("blessing-fire-arrow");
 		blessing_looter = Assets.getTexture("blessing-looter");
+		blessing_mask_merchant = Assets.getTexture("blessing-mask-merchant");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

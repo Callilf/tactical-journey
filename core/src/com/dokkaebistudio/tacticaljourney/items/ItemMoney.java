@@ -99,11 +99,12 @@ public class ItemMoney extends AbstractItem {
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
-		itemComponent.setQuantityPickedUp(itemComponent.getQuantity());
-		itemComponent.setQuantity(0);
-
+		
 		WalletComponent walletComponent = Mappers.walletComponent.get(user);
 		walletComponent.receive(itemComponent.getQuantity());
+
+		itemComponent.setQuantityPickedUp(itemComponent.getQuantity());
+		itemComponent.setQuantity(0);
 		
 		Journal.addEntry("You picked up [GOLDENROD]" + itemComponent.getQuantity() + " gold coins.");
 

@@ -327,6 +327,8 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.destructibleFactory.createGoldenVase(room,  new Vector2(12,10));
+
 //			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
 //			entityFactory.orbFactory.createVegetalOrb(new Vector2(6, 10), room);
@@ -393,7 +395,7 @@ public abstract class RoomGenerator {
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);
 //			lootRewardComponent.setDrop( generateEnemyLoot(100f));
 			
-//			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(12, 10));
+//			Entity enemy3 = entityFactory.enemyFactory.createSpider(room, new Vector2(3, 10));
 //			entityFactory.enemyFactory.createSpiderWeb(	room, new Vector2(14, 5), 3);
 			
 //			entityFactory.creepFactory.createFire(room, new Vector2(15, 6), null);
@@ -469,9 +471,14 @@ public abstract class RoomGenerator {
 			int nextInt = random.nextSeededInt(15);
 			
 			if (nextInt <= 2) {
-				entityFactory.createVase(room, location);
+				int vaseRandom = random.nextSeededInt(100);
+				if (vaseRandom == 0) {
+					entityFactory.destructibleFactory.createGoldenVase(room, location);
+				} else {
+					entityFactory.destructibleFactory.createVase(room, location);
+				}
 			} else if (nextInt <= 4) {
-				entityFactory.createAmmoCrate(room, location);
+				entityFactory.destructibleFactory.createAmmoCrate(room, location);
 			} else {
 				continue;
 			}

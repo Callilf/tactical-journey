@@ -7,10 +7,10 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public class VaseItemPool extends ItemPool {
+public class GoldenVaseItemPool extends ItemPool {
 	
-	public VaseItemPool() {
-		this.id = "Vase";
+	public GoldenVaseItemPool() {
+		this.id = "GoldenVase";
 	}
 	
 	/**
@@ -19,7 +19,6 @@ public class VaseItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
 	
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY, 19));		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_MEDIUM, 1));						
 	}
 	
@@ -27,9 +26,7 @@ public class VaseItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.WORMHOLE_SHARD, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_BIG, 1));
 	}
 	
 	

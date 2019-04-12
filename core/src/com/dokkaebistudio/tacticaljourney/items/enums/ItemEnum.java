@@ -5,6 +5,8 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 public enum ItemEnum {
 
 	MONEY(Descriptions.ITEM_MONEY_TITLE,1),
+	MONEY_MEDIUM(Descriptions.ITEM_MONEY_TITLE,1),
+	MONEY_BIG(Descriptions.ITEM_MONEY_TITLE,1),
 	
 	// Ammos
 	AMMO_ARROW(Descriptions.ITEM_ARROWS_TITLE, 1),

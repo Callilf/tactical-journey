@@ -78,6 +78,9 @@ public final class EntityFactory {
 	/** The enemy factory. */
 	public ItemFactory itemFactory;
 	
+	/** The destructible factory. */
+	public DestructibleFactory destructibleFactory;
+	
 	/** The creep factory. */
 	public CreepFactory creepFactory;
 	
@@ -103,6 +106,7 @@ public final class EntityFactory {
 		this.lootableFactory = new LootableFactory(e, this);
 		this.effectFactory = new EffectFactory( e, this);
 		this.orbFactory = new OrbFactory(e, this);
+		this.destructibleFactory = new DestructibleFactory(e, this);
 	}
 
 	
@@ -828,100 +832,6 @@ public final class EntityFactory {
 		}
 		
 		return skillEntity;
-	}
-	
-	
-	/**
-	 * Create a vase.
-	 * @param pos the position
-	 * @param moveSpeed the speed
-	 * @return the enemy entity
-	 */
-	public Entity createVase(Room room, Vector2 pos) {
-		Entity vaseEntity = engine.createEntity();
-		vaseEntity.flags = EntityFlagEnum.DESTRUCTIBLE_VASE.getFlag();
-
-		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle(Descriptions.VASE_TITLE);
-		inspect.setDescription(Descriptions.VASE_DESCRIPTION);
-		vaseEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		int nextInt = RandomSingleton.getInstance().nextSeededInt(2);
-		spriteCompo.setSprite(nextInt == 0 ? Assets.destructible_vase : Assets.destructible_vase_big);
-		vaseEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(vaseEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.DESTRUCTIBLE;
-		vaseEntity.add(gridPosition);
-		
-		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		vaseEntity.add(solidComponent);
-    	BlockVisibilityComponent blockVisibilityComponent = engine.createComponent(BlockVisibilityComponent.class);
-    	vaseEntity.add(blockVisibilityComponent);
-
-		
-		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
-		destructibleComponent.setDestroyedTexture(nextInt == 0 ? Assets.destructible_vase_destroyed : Assets.destructible_vase_big_destroyed);
-		vaseEntity.add(destructibleComponent);
-				
-		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new VaseItemPool());
-		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 50);
-		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
-		vaseEntity.add(lootRewardCompo);
-				
-		engine.addEntity(vaseEntity);
-		return vaseEntity;
-	}
-	
-	/**
-	 * Create an ammo crate.
-	 * @param pos the position
-	 * @param moveSpeed the speed
-	 * @return the enemy entity
-	 */
-	public Entity createAmmoCrate(Room room, Vector2 pos) {
-		Entity crateEntity = engine.createEntity();
-		crateEntity.flags = EntityFlagEnum.DESTRUCTIBLE_AMMO_CRATE.getFlag();
-
-		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle(Descriptions.CRATE_TITLE);
-		inspect.setDescription(Descriptions.CRATE_DESCRIPTION);
-		crateEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.destructible_ammo_crate);
-		crateEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(crateEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.DESTRUCTIBLE;
-		crateEntity.add(gridPosition);
-		
-		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
-		crateEntity.add(solidComponent);
-		
-		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
-		destructibleComponent.setDestroyedTexture(Assets.destructible_ammo_crate_destroyed);
-		destructibleComponent.setDestroyableWithWeapon(true);
-		crateEntity.add(destructibleComponent);
-				
-		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
-		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 80);
-		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
-		crateEntity.add(lootRewardCompo);
-				
-		engine.addEntity(crateEntity);
-		return crateEntity;
 	}
 	
 	

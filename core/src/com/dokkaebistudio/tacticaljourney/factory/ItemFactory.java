@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.items.ItemKey;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
+import com.dokkaebistudio.tacticaljourney.items.ItemMoney.MoneyAmountEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemCamoBackpack;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
@@ -162,7 +163,10 @@ public final class ItemFactory {
 		
 		switch (type) {
 		case MONEY:
-			item = createItemMoney(room, tilePos, randomToUse);
+			item = createItemMoney(room, tilePos, MoneyAmountEnum.SMALL, randomToUse);
+			break;
+		case MONEY_MEDIUM:
+			item = createItemMoney(room, tilePos, MoneyAmountEnum.MEDIUM, randomToUse);
 			break;
 			
 		case AMMO_ARROW:
@@ -319,6 +323,12 @@ public final class ItemFactory {
 	}
 	public Entity createItemMoney(Room room, Vector2 tilePos, RandomXS128 randomToUse) {
 		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(randomToUse),
+				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
+		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
+		return item;
+	}
+	public Entity createItemMoney(Room room, Vector2 tilePos, MoneyAmountEnum amount, RandomXS128 randomToUse) {
+		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(amount,randomToUse),
 				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
 		return item;

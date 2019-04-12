@@ -199,6 +199,7 @@ public class Assets {
 	// Destructibles
 	
 	public static RegionDescriptor destructible_vase;
+	public static RegionDescriptor destructible_golden_vase;
 	public static RegionDescriptor destructible_vase_destroyed;
 	public static RegionDescriptor destructible_vase_big;
 	public static RegionDescriptor destructible_vase_big_destroyed;
@@ -292,6 +293,7 @@ public class Assets {
 
 	public static RegionDescriptor tutorial_page_item;
 	public static RegionDescriptor money_item;
+	public static RegionDescriptor money_medium_item;
 	public static RegionDescriptor health_up_item;
 	public static RegionDescriptor regen_potion_item;
 	public static RegionDescriptor wing_potion_item;
@@ -544,6 +546,7 @@ public class Assets {
 		// Destructibles
 		
 		destructible_vase = Assets.getTexture("vase");
+		destructible_golden_vase = Assets.getTexture("golden_vase");
 		destructible_vase_destroyed = Assets.getTexture("vase_destroyed");
 		destructible_vase_big = Assets.getTexture("vase_big");
 		destructible_vase_big_destroyed = Assets.getTexture("vase_big_destroyed");
@@ -636,6 +639,7 @@ public class Assets {
 		tutorial_page_item = Assets.getTexture("item-tutorial-page");
 
 		money_item = Assets.getTexture("item-money");
+		money_medium_item = Assets.getTexture("item-money-medium");
 		health_up_item = Assets.getTexture("item-consumable-health-up");
 		regen_potion_item = Assets.getTexture("item-consumable-regen-potion");
 		wing_potion_item = Assets.getTexture("item-consumable-wing-potion");

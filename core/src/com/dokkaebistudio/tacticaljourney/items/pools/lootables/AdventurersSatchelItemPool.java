@@ -38,7 +38,8 @@ public class AdventurersSatchelItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 12));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_MEDIUM, 3));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10));
 
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 5));	
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 7));

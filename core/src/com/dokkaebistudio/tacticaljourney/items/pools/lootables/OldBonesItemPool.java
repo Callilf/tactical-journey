@@ -25,11 +25,11 @@ public class OldBonesItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 20));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 20));
 		
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 15));
 
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 13));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 15));
 		
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 5));
 
 	}
 	
@@ -37,8 +37,9 @@ public class OldBonesItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_MEDIUM, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 3));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ENERGY_ORB, 2));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 2));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 2));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 2));

@@ -95,7 +95,7 @@ public abstract class AbstractItem {
 			RandomXS128 randomToUse) {
 		this(label, texture, instaPickUp, goIntoInventory);
 		if (randomToUse == null) {
-			this.quantity = 1;
+			this.quantity = valMin;
 		} else {
 			int value = valMin;
 			if (valMax > valMin) {

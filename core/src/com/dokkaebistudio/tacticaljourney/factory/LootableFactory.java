@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -241,9 +242,12 @@ public final class LootableFactory {
 			ItemPoolRarity rarity = LootUtil.getRarity(randomValue, lootableComponent.getDropRate());
 			if (rarity == null) continue;
 			
-			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(1, rarity, RandomSingleton.getInstance().getNextSeededRandom());
+			//TODO save the random in the lootable compo
+			RandomXS128 nextSeededRandom = RandomSingleton.getInstance().getNextSeededRandom();
+			
+			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(1, rarity, nextSeededRandom);
 			for (PooledItemDescriptor pid : itemTypes) {
-				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
+				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null, nextSeededRandom);
 				lootableComponent.getItems().add(item);
 			}
 		}

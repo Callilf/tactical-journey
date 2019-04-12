@@ -65,7 +65,7 @@ public class BlessingMaskMerchant extends Blessing {
 			shopKeeperComponent.increaseNumberOfItems(2);
 		}
 
-		if (shopKeepers.isEmpty()) {
+		if (!shopKeepers.isEmpty()) {
 			Journal.addEntry("Blessing of the Mask Merchant affected already visited shops on this floor.");
 			AlterationSystem.addAlterationProc(this);
 		}

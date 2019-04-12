@@ -256,6 +256,7 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
+		shopKeeperCompo.setNumberOfItems(3);
 		shopKeeperCompo.setItemPool(ItemPoolSingleton.getInstance().basicShopItemPool);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 10);

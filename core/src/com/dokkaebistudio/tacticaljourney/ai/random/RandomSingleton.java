@@ -177,6 +177,9 @@ public class RandomSingleton {
 	
 	
 	
+	//********************************************
+	// Useful methods
+	
 	/**
 	 * Return a random decimal number between 0 and 99.99999 computing using the unseeded random
 	 * and modified by the current karma of the player.
@@ -204,6 +207,15 @@ public class RandomSingleton {
 		if (randomValue < 0) randomValue = 0;
 		
 		return randomValue;
+	}
+	
+	/**
+	 * Clone a random.
+	 * @param random the random to clone
+	 * @return a new {@link RandomXS128} instance with the same seed and state.
+	 */
+	public static RandomXS128 cloneRandom(RandomXS128 random) {
+		return new RandomXS128(random.getState(0), random.getState(1));
 	}
 	
 	

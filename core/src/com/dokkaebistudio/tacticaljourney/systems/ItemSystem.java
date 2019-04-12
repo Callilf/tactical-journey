@@ -16,6 +16,7 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
@@ -39,7 +40,9 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -229,8 +232,14 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 		}		
 	
 		
-		
-		
+		// Fill the content of lootables
+		if (room.getVisited() == RoomVisitedState.FIRST_VISIT) {
+			List<Entity> lootableEntities = new ArrayList<>();
+			LootUtil.findLootables(room, lootableEntities);
+			for (Entity l : lootableEntities) {
+				LootUtil.fillLootable(Mappers.lootableComponent.get(l), room.entityFactory);
+			}
+		}
 		
 	
 		// Display items quantities

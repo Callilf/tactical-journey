@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -125,6 +126,8 @@ public class LootUtil {
 
 
 	public static ItemPoolRarity getRarity(float randomValue, DropRate dropRate) {
+		if (dropRate == null) return null;
+		
 		int chance = 0;
 		ItemPoolRarity rarity = null;
 		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
@@ -138,5 +141,39 @@ public class LootUtil {
 	}
 	
 	
+	/**
+	 * Fill the content of a lootable.
+	 * @param lootableComponent the lootable component
+	 * @param entityFactory the entity factory
+	 */
+	public static void fillLootable(LootableComponent lootableComponent, EntityFactory entityFactory) {
+		if (lootableComponent == null || entityFactory == null) return;
+		
+		for(int i=0 ; i<lootableComponent.getMaxNumberOfItems() ; i++) {
+			RandomXS128 seededRandom = lootableComponent.getSeededRandom();
+			if (seededRandom == null) continue;
+			
+			float randomValue = RandomSingleton.getNextChanceWithKarma(seededRandom);
+			ItemPoolRarity rarity = LootUtil.getRarity(randomValue, lootableComponent.getDropRate());
+			if (rarity == null) continue;
+			
+			RandomXS128 clonedRandom = RandomSingleton.cloneRandom(seededRandom);
+			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(1, rarity, clonedRandom);
+			for (PooledItemDescriptor pid : itemTypes) {
+				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null, clonedRandom);
+				lootableComponent.getItems().add(item);
+			}
+		}
+	}
+	
+	
+	public static List<Entity> findLootables(Room room, List<Entity> listToPopulate) {
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.lootableComponent.has(e)) {
+				listToPopulate.add(e);
+			}
+		}
+		return listToPopulate;
+	}
 	
 }

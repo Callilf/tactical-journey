@@ -81,9 +81,9 @@ public final class LootableFactory {
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		dropRate.add(ItemPoolRarity.COMMON, 50);
 		lootComponent.setDropRate(dropRate);
+		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(2);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	this.fillLootable(lootComponent);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -125,9 +125,9 @@ public final class LootableFactory {
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		dropRate.add(ItemPoolRarity.COMMON, 70);
 		lootComponent.setDropRate(dropRate);
+		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	this.fillLootable(lootComponent);
     	remainsEntity.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -169,9 +169,9 @@ public final class LootableFactory {
 		dropRate.add(ItemPoolRarity.RARE, 0);
 		dropRate.add(ItemPoolRarity.COMMON, 100);
 		lootComponent.setDropRate(dropRate);
+		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(1);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	this.fillLootable(lootComponent);
     	lootable.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -219,9 +219,9 @@ public final class LootableFactory {
 		dropRate.add(ItemPoolRarity.RARE, 2);
 		dropRate.add(ItemPoolRarity.COMMON, 70);
 		lootComponent.setDropRate(dropRate);
+		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
-    	this.fillLootable(lootComponent);
     	lootable.add(lootComponent);
     	
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
@@ -232,24 +232,4 @@ public final class LootableFactory {
     	return lootable;
 	}
 	
-	
-	//******************
-	// Fill lootable
-	
-	private void fillLootable(LootableComponent lootableComponent) {				
-		for(int i=0 ; i<lootableComponent.getMaxNumberOfItems() ; i++) {
-			float randomValue = RandomSingleton.getNextChanceWithKarma();
-			ItemPoolRarity rarity = LootUtil.getRarity(randomValue, lootableComponent.getDropRate());
-			if (rarity == null) continue;
-			
-			//TODO save the random in the lootable compo
-			RandomXS128 nextSeededRandom = RandomSingleton.getInstance().getNextSeededRandom();
-			
-			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(1, rarity, nextSeededRandom);
-			for (PooledItemDescriptor pid : itemTypes) {
-				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null, nextSeededRandom);
-				lootableComponent.getItems().add(item);
-			}
-		}
-	}
 }

@@ -6,12 +6,12 @@ import java.util.List;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -31,6 +31,7 @@ public class LootableComponent implements Component, Poolable {
 	/** The item pool from where the random items are chosen. */
 	private ItemPool itemPool;
 	private DropRate dropRate;
+	private RandomXS128 seededRandom;
 		
 	/** The maximum number of items in this lootable. */
 	private int maxNumberOfItems;
@@ -156,6 +157,13 @@ public class LootableComponent implements Component, Poolable {
 	}
 	
 	
+	public void setSeededRandom(RandomXS128 seededRandom) {
+		this.seededRandom = seededRandom;
+	}
+	
+	public RandomXS128 getSeededRandom() {
+		return seededRandom;
+	}
 	
 	
 	public static Serializer<LootableComponent> getSerializer(final PooledEngine engine) {
@@ -169,7 +177,11 @@ public class LootableComponent implements Component, Poolable {
 				output.writeString(object.lootableState.name());
 				output.writeString(object.itemPool.id);	
 				kryo.writeClassAndObject(output, object.dropRate);
-
+				
+				// Save the state of the random
+				long seed0 = object.seededRandom.getState(0);
+				long seed1 = object.seededRandom.getState(1);
+				output.writeString(seed0 + "#" + seed1);
 			}
 
 			@Override
@@ -180,9 +192,15 @@ public class LootableComponent implements Component, Poolable {
 				compo.maxNumberOfItems = input.readInt(); 
 				compo.items = (List<Entity>) kryo.readClassAndObject(input);
 				compo.lootableState = LootableStateEnum.valueOf(input.readString()); 
-				compo.itemPool = (LootableItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
+				compo.itemPool = (ItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				
+				// Read the random state
+				String randomState = input.readString();
+				String[] split = randomState.split("#");
+				compo.seededRandom = new RandomXS128();
+				compo.seededRandom.setState(Long.valueOf(split[0]), Long.valueOf(split[1]));
+
 				return compo;
 			}
 		

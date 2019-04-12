@@ -146,7 +146,7 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 		profileInnerTable.row();
 		
 		Label karmaLbl = new Label("Karma: A strange characteristic. The higher your karma is, the more likely you are to find items. "
-				+ "It also increases the chance of blessing effects to activate and reduces the chances of curses effects to happen", 
+				+ "It also increases the chance of blessing effects to activate and reduces the chance of curses effects to happen", 
 				PopinService.hudStyle());
 		karmaLbl.setWrap(true);
 		profileInnerTable.add(karmaLbl).width(960).left().pad(0, 20, 20, 20);

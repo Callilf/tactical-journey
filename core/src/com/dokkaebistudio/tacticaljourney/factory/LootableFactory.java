@@ -15,6 +15,8 @@ import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
@@ -22,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 
 /**
  * Factory used to create presets of entities.
@@ -73,6 +76,10 @@ public final class LootableFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().oldBones);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 50);
+		lootComponent.setDropRate(dropRate);
     	lootComponent.setMaxNumberOfItems(2);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -113,7 +120,10 @@ public final class LootableFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().satchel);
-    	lootComponent.setMinNumberOfItems(1);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 70);
+		lootComponent.setDropRate(dropRate);
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -154,7 +164,10 @@ public final class LootableFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.PERSONAL_BELONGINGS);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
-    	lootComponent.setMinNumberOfItems(1);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 0);
+		dropRate.add(ItemPoolRarity.COMMON, 100);
+		lootComponent.setDropRate(dropRate);
     	lootComponent.setMaxNumberOfItems(1);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -201,7 +214,10 @@ public final class LootableFactory {
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.ORB_BAG);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().orbBag);
-    	lootComponent.setMinNumberOfItems(0);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 2);
+		dropRate.add(ItemPoolRarity.COMMON, 70);
+		lootComponent.setDropRate(dropRate);
     	lootComponent.setMaxNumberOfItems(3);
     	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
     	this.fillLootable(lootComponent);
@@ -219,12 +235,13 @@ public final class LootableFactory {
 	//******************
 	// Fill lootable
 	
-	private void fillLootable(LootableComponent lootableComponent) {		
-		RandomSingleton random = RandomSingleton.getInstance();
-		
-		int nbLoot = lootableComponent.getMinNumberOfItems() + random.nextSeededInt(lootableComponent.getMaxNumberOfItems() - lootableComponent.getMinNumberOfItems() + 1);
-		if (nbLoot > 0) {
-			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(nbLoot);
+	private void fillLootable(LootableComponent lootableComponent) {				
+		for(int i=0 ; i<lootableComponent.getMaxNumberOfItems() ; i++) {
+			float randomValue = RandomSingleton.getNextChanceWithKarma();
+			ItemPoolRarity rarity = LootUtil.getRarity(randomValue, lootableComponent.getDropRate());
+			if (rarity == null) continue;
+			
+			List<PooledItemDescriptor> itemTypes = lootableComponent.getItemPool().getItemTypes(1, rarity, RandomSingleton.getInstance().getNextSeededRandom());
 			for (PooledItemDescriptor pid : itemTypes) {
 				Entity item = entityFactory.itemFactory.createItem(pid.getType(), null, null);
 				lootableComponent.getItems().add(item);

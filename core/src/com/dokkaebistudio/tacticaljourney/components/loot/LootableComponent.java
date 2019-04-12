@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.LootableItemPool;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -28,11 +29,9 @@ public class LootableComponent implements Component, Poolable {
 	private LootableEnum type;
 	
 	/** The item pool from where the random items are chosen. */
-	private LootableItemPool itemPool;
-	
-	/** The minimum number of items in this lootable. */
-	private int minNumberOfItems;
-	
+	private ItemPool itemPool;
+	private DropRate dropRate;
+		
 	/** The maximum number of items in this lootable. */
 	private int maxNumberOfItems;
 	
@@ -132,11 +131,11 @@ public class LootableComponent implements Component, Poolable {
 		this.standByItems = standByItems;
 	}
 
-	public LootableItemPool getItemPool() {
+	public ItemPool getItemPool() {
 		return itemPool;
 	}
 
-	public void setItemPool(LootableItemPool itemPool) {
+	public void setItemPool(ItemPool itemPool) {
 		this.itemPool = itemPool;
 	}
 
@@ -147,15 +146,15 @@ public class LootableComponent implements Component, Poolable {
 	public void setMaxNumberOfItems(int maxNumberOfItems) {
 		this.maxNumberOfItems = maxNumberOfItems;
 	}
-
-	public int getMinNumberOfItems() {
-		return minNumberOfItems;
+	
+	public DropRate getDropRate() {
+		return dropRate;
 	}
 
-	public void setMinNumberOfItems(int minNumberOfItems) {
-		this.minNumberOfItems = minNumberOfItems;
+	public void setDropRate(DropRate dropRate) {
+		this.dropRate = dropRate;
 	}
-
+	
 	
 	
 	
@@ -165,11 +164,11 @@ public class LootableComponent implements Component, Poolable {
 			@Override
 			public void write(Kryo kryo, Output output, LootableComponent object) {
 				output.writeString(object.type.name());
-				output.writeInt(object.minNumberOfItems);
 				output.writeInt(object.maxNumberOfItems);
 				kryo.writeClassAndObject(output, object.items);
 				output.writeString(object.lootableState.name());
-				output.writeString(object.itemPool.id);				
+				output.writeString(object.itemPool.id);	
+				kryo.writeClassAndObject(output, object.dropRate);
 
 			}
 
@@ -178,16 +177,17 @@ public class LootableComponent implements Component, Poolable {
 				LootableComponent compo = engine.createComponent(LootableComponent.class);
 
 				compo.type = LootableEnum.valueOf(input.readString()); 
-				compo.minNumberOfItems = input.readInt(); 
 				compo.maxNumberOfItems = input.readInt(); 
 				compo.items = (List<Entity>) kryo.readClassAndObject(input);
 				compo.lootableState = LootableStateEnum.valueOf(input.readString()); 
 				compo.itemPool = (LootableItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
+				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				
 				return compo;
 			}
 		
 		};
 	}
-	
+
+
 }

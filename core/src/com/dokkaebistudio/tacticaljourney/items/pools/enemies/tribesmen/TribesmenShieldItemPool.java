@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 
-public class TribesmenShieldItemPool extends EnemyItemPool {
+public class TribesmenShieldItemPool extends ItemPool {
 	
 	public TribesmenShieldItemPool() {
 		this.id = "TribesmanShield";

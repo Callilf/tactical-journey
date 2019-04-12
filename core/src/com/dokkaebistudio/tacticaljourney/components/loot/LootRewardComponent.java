@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -26,7 +26,7 @@ public class LootRewardComponent implements Component, Poolable {
 	private DropRate dropRate;
 	
 	/** The pool of items that can drop. */
-	private EnemyItemPool itemPool;
+	private ItemPool itemPool;
 	
 	/** The random used to compute the drop item. */
 	private RandomXS128 dropSeededRandom;
@@ -62,12 +62,12 @@ public class LootRewardComponent implements Component, Poolable {
 	}
 
 
-	public EnemyItemPool getItemPool() {
+	public ItemPool getItemPool() {
 		return itemPool;
 	}
 
 
-	public void setItemPool(EnemyItemPool itemPool) {
+	public void setItemPool(ItemPool itemPool) {
 		this.itemPool = itemPool;
 	}
 	
@@ -106,7 +106,7 @@ public class LootRewardComponent implements Component, Poolable {
 				}
 
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
-				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
+				compo.itemPool = (ItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				
 				// Read the random state
 				String randomState = input.readString();

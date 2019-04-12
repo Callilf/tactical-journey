@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public class PangolinMotherItemPool extends EnemyItemPool {
+public class PangolinMotherItemPool extends ItemPool {
 	
 	public PangolinMotherItemPool() {
 		this.id = "PangolinMom";

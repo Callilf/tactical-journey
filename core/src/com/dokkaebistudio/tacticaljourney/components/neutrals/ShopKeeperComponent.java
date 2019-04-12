@@ -15,9 +15,9 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -60,7 +60,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private boolean requestRestock = false;
 	
 	/** The item pool. */
-	private EnemyItemPool itemPool;
+	private ItemPool itemPool;
 	private DropRate dropRate;
 	private RandomXS128 dropSeededRandom;
 
@@ -229,11 +229,11 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.requestRestock = requestRestock;
 	}
 
-	public EnemyItemPool getItemPool() {
+	public ItemPool getItemPool() {
 		return itemPool;
 	}
 
-	public void setItemPool(EnemyItemPool itemPool) {
+	public void setItemPool(ItemPool itemPool) {
 		this.itemPool = itemPool;
 	}
 	
@@ -270,7 +270,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 				compo.restockNumber = input.readInt();
 				compo.firstSpeech = input.readBoolean();
 				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
-				compo.itemPool = (EnemyItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
+				compo.itemPool = (ItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				
 				// Read the random state

@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -320,7 +320,8 @@ public abstract class RoomGenerator {
 			break;
 			
 		case GIFT_ROOM:
-			List<PooledItemDescriptor> itemTypes = ItemPoolSingleton.getInstance().personalBelongings.getItemTypes(1);
+			List<PooledItemDescriptor> itemTypes = ItemPoolSingleton.getInstance().personalBelongings.getItemTypes(1, ItemPoolRarity.COMMON, 
+					RandomSingleton.getInstance().getNextSeededRandom());
 			entityFactory.itemFactory.createItem(itemTypes.get(0).getType(), room, possibleSpawns.get(0));
 			break;
 			

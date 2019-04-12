@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public class WebSpiderItemPool extends EnemyItemPool {
+public class WebSpiderItemPool extends ItemPool {
 	
 	public WebSpiderItemPool() {
 		this.id = "WebSpider";

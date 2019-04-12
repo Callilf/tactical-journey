@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
@@ -52,7 +53,7 @@ public class LevelUpAlterationRewardReceiveInfusable extends AbstractLevelUpAlte
 	@Override
 	public void computeValue() {
 		PersonalBelongingsItemPool itemPool = ItemPoolSingleton.getInstance().personalBelongings;
-		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, false, this.random);
+		List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, ItemPoolRarity.COMMON, this.random, true);
 		PooledItemDescriptor pooledItemDescriptor = itemTypes.get(0);
 		
 		item = pooledItemDescriptor.getType();

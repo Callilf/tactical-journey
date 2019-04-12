@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -17,11 +16,10 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.EnemyItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 public class LootUtil {
@@ -108,7 +106,7 @@ public class LootUtil {
 	public static Entity generateLoot(Entity entity, LootRewardComponent lootRewardComponent, EntityFactory entityFactory) {
 		RandomXS128 random = lootRewardComponent.getDropSeededRandom();
 		DropRate dropRate = lootRewardComponent.getDropRate();
-		EnemyItemPool itemPool = lootRewardComponent.getItemPool();
+		ItemPool itemPool = lootRewardComponent.getItemPool();
 		if (random == null || dropRate == null || itemPool == null) return null;
 		
 		float randomValue = RandomSingleton.getNextChanceWithKarma(random);

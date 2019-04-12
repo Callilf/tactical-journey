@@ -181,11 +181,13 @@ public class SceneAssets {
 		parameter.size = 24;
 		BitmapFont font24 = generator.generateFont(parameter); // font size 12
 		font24.getData().markupEnabled = true;
+		font24.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		font = new FontDescriptor("font", font24);
 		
 		parameter.size = 20;
 		BitmapFont font12 = generator.generateFont(parameter); // font size 12
 		font12.getData().markupEnabled = true;
+		font12.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		smallFont = new FontDescriptor("font", font12);
 
 		

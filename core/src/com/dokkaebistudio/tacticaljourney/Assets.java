@@ -22,7 +22,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -818,10 +817,6 @@ public class Assets {
 	}
 	public static Sound getSound(String file){
 		return getInstance().manager.get(file);
-	}
-	
-	private void registerFont(String file) {
-		this.manager.load(file, BitmapFont.class);
 	}
 
 	public static void playSound (String sound) {

@@ -286,6 +286,10 @@ public class Room extends EntitySystem {
 		
 		if (this.visited == RoomVisitedState.FIRST_ENTRANCE) {
 			this.visited = RoomVisitedState.FIRST_VISIT;
+			
+			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+			alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
+			
 		} else if (this.visited == RoomVisitedState.FIRST_VISIT) {
 			this.visited = RoomVisitedState.VISITED;
 		}

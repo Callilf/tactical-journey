@@ -233,7 +233,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 	
 		
 		// Fill the content of lootables
-		if (room.getVisited() == RoomVisitedState.FIRST_VISIT) {
+		if (room.getVisited() == RoomVisitedState.FIRST_ENTRANCE) {
 			List<Entity> lootableEntities = new ArrayList<>();
 			LootUtil.findLootables(room, lootableEntities);
 			for (Entity l : lootableEntities) {

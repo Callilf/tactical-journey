@@ -114,7 +114,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 			ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
 			
 			// First stock
-			if (room.getVisited() == RoomVisitedState.FIRST_VISIT) {
+			if (room.getVisited() == RoomVisitedState.FIRST_ENTRANCE) {
 				shopKeeperComponent.setNumberOfItems(ShopUtil.getNumberOfItemsInShop(shopKeeper, room));
 				shopKeeperComponent.stock( room);
 			}

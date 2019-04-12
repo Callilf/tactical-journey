@@ -72,6 +72,7 @@ public class Room extends EntitySystem {
 		
 	/** Whether the player has already entered this room or not. */
 	private RoomVisitedState visited;
+	private boolean justEntered;
 	
 	/** Whether this room has been cleared. */
 	private RoomClearedState cleared;
@@ -274,26 +275,35 @@ public class Room extends EntitySystem {
 			gtSingleton.updateElapsedTime(deltaTime);
 		}
 		
+		
 		// Remove entities that are no longer in the game
 		for (Entity e : this.entitiesToRemove) {
 			removeEntityFromEngine(e);
 		}
 		this.entitiesToRemove.clear();
 		
+
+		// Update the visited status
+		if (this.visited == RoomVisitedState.FIRST_ENTRANCE || this.visited == RoomVisitedState.ENTRANCE) {
+			this.visited = RoomVisitedState.VISITED;
+		} else if (this.justEntered) {
+			if (!this.visited.isVisited()) {
+				this.visited = RoomVisitedState.FIRST_ENTRANCE;
+				
+				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+				alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
+			} else {
+				this.visited = RoomVisitedState.ENTRANCE;
+			}
+			this.justEntered = false;
+		}
+
+		
+		
+		// Update cleared status
 		if (this.getCleared() == RoomClearedState.JUST_CLEARED) {
 			this.cleared = RoomClearedState.CLEARED;
 		}	
-		
-		if (this.visited == RoomVisitedState.FIRST_ENTRANCE) {
-			this.visited = RoomVisitedState.FIRST_VISIT;
-			
-			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
-			alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
-			
-		} else if (this.visited == RoomVisitedState.FIRST_VISIT) {
-			this.visited = RoomVisitedState.VISITED;
-		}
-		
 		// Check if room cleared
 		if (!this.isCleared() && this.enemies.isEmpty()) {
 			this.setCleared(RoomClearedState.JUST_CLEARED);
@@ -317,8 +327,10 @@ public class Room extends EntitySystem {
 			}
 		}
 
+		
 		// Update the room state
 		updateState();
+		
 		
 		Mappers.playerComponent.get(GameScreen.player).setActionDoneAtThisFrame(false);
 	}
@@ -633,6 +645,14 @@ public class Room extends EntitySystem {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public boolean isJustEntered() {
+		return justEntered;
+	}
+
+	public void setJustEntered(boolean justEntered) {
+		this.justEntered = justEntered;
 	}
 
 	

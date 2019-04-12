@@ -313,9 +313,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(newRoom);
 		
 		
-		if (!newRoom.isVisited()) {
-			newRoom.setVisited(RoomVisitedState.FIRST_ENTRANCE);
-		}
+		newRoom.setJustEntered(true);
 		
 		//TODO : probably improve this code, especially if any other entity than the player can travel between rooms
 		//Set the player in the new room	

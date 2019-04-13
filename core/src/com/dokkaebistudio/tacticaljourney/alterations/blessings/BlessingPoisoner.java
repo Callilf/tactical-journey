@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
@@ -45,6 +46,8 @@ public class BlessingPoisoner extends Blessing {
 		Sector oldSector = sectors.remove(index);
 		Sector newSector = new Sector(oldSector.range, Hit.POISON);
 		sectors.add(index, newSector);
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 
 }

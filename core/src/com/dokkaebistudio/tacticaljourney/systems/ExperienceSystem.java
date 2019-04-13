@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -50,6 +51,9 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     	// Display level up popin
     	if (expCompo.getNumberOfNewLevelReached() > 0 && !expCompo.isLevelUpPopinDisplayed()) {
     		expCompo.setLevelUpPopinDisplayed(true);
+    		
+    		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+    		alterationReceiverComponent.onLevelUp(player, room);
     	}
     	    
     }

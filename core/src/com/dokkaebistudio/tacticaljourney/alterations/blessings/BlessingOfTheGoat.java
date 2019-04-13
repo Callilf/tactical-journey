@@ -9,7 +9,10 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
 /**
  * Blessing of the goat.
@@ -76,7 +79,11 @@ public class BlessingOfTheGoat extends Blessing {
 				rangeAttackCompo.increaseAccuracy(-3);
 			}
 		}
-
+	}
+	
+	@Override
+	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
+		AlterationSystem.addAlterationProc(this);
 	}
 
 }

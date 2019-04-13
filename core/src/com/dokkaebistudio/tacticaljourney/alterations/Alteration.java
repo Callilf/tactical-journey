@@ -72,6 +72,9 @@ public abstract class Alteration {
 	/** Called when computing the number of items the shop should sell. */
 	public int onShopNumberOfItems(Entity entity, Entity shopkeeper, Room room) { return 0; };
 	
+	/** Called when the level up popin pops up. */
+	public void onLevelUp(Entity entity, Room room) {}
+
 	
 	
 	// getters and setters

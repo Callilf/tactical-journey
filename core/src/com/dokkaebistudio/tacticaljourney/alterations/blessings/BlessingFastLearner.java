@@ -8,6 +8,9 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -44,4 +47,9 @@ public class BlessingFastLearner extends Blessing {
 		experienceComponent.setSelectNumber(experienceComponent.getSelectNumber() - 1);
 	}
 
+	@Override
+	public void onLevelUp(Entity entity, Room room) {
+		Journal.addEntry("Blessing of the fast learner granted you an additional level up reward");
+		AlterationSystem.addAlterationProc(this);
+	}
 }

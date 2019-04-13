@@ -163,6 +163,14 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		return result;
 	}
 	
+	public void onLevelUp(Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onLevelUp(entity, room);
+		}
+		for (Curse c : curses) {
+			c.onLevelUp(entity, room);
+		}
+	}
 	
 	
 	//*************

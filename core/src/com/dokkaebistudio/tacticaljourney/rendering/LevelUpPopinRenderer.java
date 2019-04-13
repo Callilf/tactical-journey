@@ -57,6 +57,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
     /** The number of rewards selected. */
     private int selectedRewards = 0;
     
+    
+    /** The selected item popin. */
+    private Table confirmationPopin;
+    private boolean confirmationPopinDisplayed = false;
+
+    
     public LevelUpPopinRenderer(Room r, Stage s) {
         this.room = r;
         this.stage = s;
@@ -96,7 +102,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	    		createChoices(GameScreen.player, expCompo.getChoicesNumber(), table);
 	        	
 	        	// BOTTOM PART (continue button)
-	    		createPopinBottom(expCompo,table);
+	    		createPopinBottom(table);
 	        	
 	        	table.pack();
 	        	table.setPosition(table.getX() - table.getWidth()/2, table.getY() - table.getHeight()/2 + 100);
@@ -228,7 +234,7 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	
 	
 
-	private void createPopinBottom(final ExperienceComponent expCompo, Table table) {
+	private void createPopinBottom(Table table) {
 		Table popinBottom = new Table();
 		table.add(popinBottom).fillX().uniformX();
 		
@@ -237,8 +243,12 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				// Close the popin and unpause the game
-				closePopin(expCompo);
+				if ("Skip".equals(continueButton.getText().toString())) {
+					displayConfirmationPopin();
+				} else {
+					// Close the popin and unpause the game
+					closePopin();
+				}
 			}
 		});
 		popinBottom.add(continueButton).pad(10, 0, 20, 0);
@@ -246,10 +256,86 @@ public class LevelUpPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+	
+	
+	//*********************************
+	// Confirmation popin
+	
+	
+	/**
+	 * Display the popin of the selected item with it's title, description and possible actions.
+	 * @param item the item selected
+	 * @param slot the slot on which the item was
+	 */
+	private void displayConfirmationPopin() {
+		if (confirmationPopin == null) {
+			confirmationPopin = new Table();
+	
+			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
+			confirmationPopin.setTouchable(Touchable.enabled);
+			confirmationPopin.addListener(new ClickListener() {});
+			
+			// Place the popin and add the background texture
+			confirmationPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
+			confirmationPopin.setBackground(ninePatchDrawable);
+			
+			confirmationPopin.align(Align.top);
+			
+			// Title
+			Label itemTitle = new Label("Are you sure you want to skip?", PopinService.hudStyle());
+			confirmationPopin.add(itemTitle).top().align(Align.top).pad(20, 0, 20, 0);
+			confirmationPopin.row().align(Align.center);
+			
+			// Action buttons
+			Table buttonTable = new Table();
+			
+			// Cancel button
+			final TextButton closeBtn = new TextButton("Cancel",PopinService.buttonStyle());			
+			closeBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					hideSelectedItemPopin();
+				}
+			});
+			buttonTable.add(closeBtn).pad(0, 20,0,20);
+	
+			// Yes button
+			final TextButton yesBtn = new TextButton("Yes",PopinService.buttonStyle());	
+			yesBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					closePopin();
+				}
+			});
+			buttonTable.add(yesBtn).pad(0, 20,0,20);
+			
+			confirmationPopin.add(buttonTable).pad(20, 0, 20, 0);
+			
+		}
+		
+		// Place the popin properly
+		confirmationPopin.pack();
+		confirmationPopin.setPosition(GameScreen.SCREEN_W/2 - confirmationPopin.getWidth()/2, GameScreen.SCREEN_H/2 - confirmationPopin.getHeight()/2);
+	
+		confirmationPopinDisplayed = true;
+		this.stage.addActor(confirmationPopin);
+
+	}
+		
+
+	
+	private void hideSelectedItemPopin() {
+		confirmationPopin.remove();
+		confirmationPopinDisplayed = false;
+	}
+	
 	/**
 	 * Close the level up popin and unpause the game.
 	 */
-	private void closePopin(ExperienceComponent expCompo) {
+	private void closePopin() {
+		if (confirmationPopinDisplayed) hideSelectedItemPopin();
+
 		stage.clear();
 		table = null;
 		room.setNextState(room.getLastInGameState());

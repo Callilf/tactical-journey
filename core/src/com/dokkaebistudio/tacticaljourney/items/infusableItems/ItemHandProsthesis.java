@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.Shurikenjutsu;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingShurikenjutsu;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -20,7 +20,7 @@ public class ItemHandProsthesis extends AbstractInfusableItem {
 	public ItemHandProsthesis() {
 		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
 		
-		Shurikenjutsu blessing = new Shurikenjutsu();
+		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
 		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}

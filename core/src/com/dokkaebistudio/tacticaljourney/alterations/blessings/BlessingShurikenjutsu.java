@@ -28,9 +28,9 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  * @author Callil
  *
  */
-public class Shurikenjutsu extends Blessing {
+public class BlessingShurikenjutsu extends Blessing {
 
-	private int chanceToProc = 100;
+	private int chanceToProc = 30;
 
 	@Override
 	public String title() {

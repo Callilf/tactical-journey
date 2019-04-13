@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.Gold
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * Factory used to create visual effects.
@@ -123,7 +124,7 @@ public final class DestructibleFactory {
 		Entity vaseEntity = createDestructibleBase(room, pos, EntityFlagEnum.DESTRUCTIBLE_VASE,
 					Descriptions.VASE_TITLE, Descriptions.VASE_DESCRIPTION, 
 					Assets.destructible_golden_vase, Assets.destructible_vase_destroyed);
-			
+		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new GoldenVaseItemPool());
 		DropRate dropRate = new DropRate();
@@ -146,7 +147,10 @@ public final class DestructibleFactory {
 		Entity crateEntity = createDestructibleBase(room, pos, EntityFlagEnum.DESTRUCTIBLE_AMMO_CRATE,
 				Descriptions.CRATE_TITLE, Descriptions.CRATE_DESCRIPTION, 
 				Assets.destructible_ammo_crate, Assets.destructible_ammo_crate_destroyed);
-	
+		
+		DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(crateEntity);
+		destructibleComponent.setDestroyableWithWeapon(true);	
+
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
 		DropRate dropRate = new DropRate();

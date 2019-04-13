@@ -72,6 +72,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private int bombRadius;
 	private int bombTurnsToExplode;
 	
+	// End turn
+	private boolean doNotConsumeTurn;
 	
 	// Animations
 	private AttackAnimation attackAnimation;
@@ -143,6 +145,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.active = true;
 		this.accuracy = 1;
 		this.realAccuracy = 1;
+		this.doNotConsumeTurn = false;
 	}
 	
 	/**
@@ -452,7 +455,13 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
 	}
 	
-	
+	public boolean isDoNotConsumeTurn() {
+		return doNotConsumeTurn;
+	}
+
+	public void setDoNotConsumeTurn(boolean doNotConsumeTurn) {
+		this.doNotConsumeTurn = doNotConsumeTurn;
+	}
 	
 	
 	
@@ -488,6 +497,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.bombRadius);
 				output.writeInt(object.bombTurnsToExplode);
 
+				output.writeBoolean(object.doNotConsumeTurn);
+				
 				// Skill
 				output.writeInt(object.skillNumber);
 				
@@ -523,6 +534,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				compo.bombRadius = input.readInt();
 				compo.bombTurnsToExplode = input.readInt();
 				
+				compo.doNotConsumeTurn = input.readBoolean();
+				
 				compo.skillNumber = input.readInt();
 				
 				// Animation
@@ -540,4 +553,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		
 		};
 	}
+
+
 }

@@ -191,6 +191,9 @@ public class Descriptions {
 	public static final String ITEM_PEBBLE_TITLE = "Pebble";
 	public static final String ITEM_PEBBLE_DESCRIPTION = "A common pebble, nothing interesting about it. You could try throwing them at enemies to piss them off though.";
 
+	public static final String ITEM_SHURIKEN_TITLE = "Shuriken";
+	public static final String ITEM_SHURIKEN_DESCRIPTION = "A shinobi range weapon. Deals 5 damages when thrown to an enemy.";	
+	
 	public static final String ITEM_WORMHOLE_SHARD_TITLE = "Wormhole shard";
 	public static final String ITEM_WORMHOLE_SHARD_DESCRIPTION = "An extraordinary shard of a wormhole that has been solidificated. It creates a portal if you throw it.";
 
@@ -247,5 +250,9 @@ public class Descriptions {
 
 	public static final String ITEM_MERCHANT_MASK_TITLE = "Merchant mask";
 	public static final String ITEM_MERCHANT_MASK_DESCRIPTION = "A creepy mask that belongs to a merchant specialized in masks trading. Grants the blessing of the mask merchant while held in the inventory.";
+	
+	public static final String ITEM_HAND_PROSTHESIS_TITLE = "Hand prosthesis";
+	public static final String ITEM_HAND_PROSTHESIS_DESCRIPTION = "A prosthetic hand that once belonged to a shinobi. Grants the shurikenjutsu blessing while held in the inventory.";
 
+	
 }

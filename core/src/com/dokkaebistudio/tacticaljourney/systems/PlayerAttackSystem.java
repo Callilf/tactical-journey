@@ -302,10 +302,18 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 		itemComponent.onThrow(targetedGridPosition, player, thrownEntity, room);		
 		
-		
-		room.turnManager.endPlayerTurn();
-	}
+		if (skillAttackCompo.isDoNotConsumeTurn()) {
+			skillAttackCompo.setDoNotConsumeTurn(false);
+			stopSkillUse(Mappers.playerComponent.get(player), 
+					skillEntity, 
+					Mappers.moveComponent.get(player), 
+					Mappers.attackComponent.get(player));
 
+			room.setNextState(RoomState.PLAYER_TURN_INIT);
+		} else {
+			room.turnManager.endPlayerTurn();
+		}
+	}
 	
 	/**
 	 * Finish the attack. This is called after the wheel and the attack animation has been played.

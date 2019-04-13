@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemCamoBackpack;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHandProsthesis;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHeadband;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMerchantMask;
@@ -46,6 +47,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemShuriken;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemUniversalCure;
@@ -217,6 +219,10 @@ public final class ItemFactory {
 			item = createItemDivineCatalyst(room, tilePos);
 			break;
 			
+		case SHURIKEN:
+			item = createItemShuriken(room, tilePos);
+			break;
+			
 			
 		case TOTEM_OF_KALAMAZOO:
 			item = createItemTotemOfKalamazoo(room, tilePos);
@@ -272,6 +278,10 @@ public final class ItemFactory {
 			
 		case MERCHANT_MASK:
 			item = createItemMerchantMask(room, tilePos);
+			break;
+			
+		case HAND_PROSTHESIS:
+			item = createItemHandProsthesis(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -517,16 +527,28 @@ public final class ItemFactory {
 		return item;
 	}
 
+
+	
+	
+	public Entity createItemDivineCatalyst(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,  new ItemDivineCatalyst());
+		item.flags = EntityFlagEnum.ITEM_DIVINE_CATALYST.getFlag();
+		return item;
+	}
+	
+	
+	//********
+	// Throw items
+	
 	public Entity createItemPebble(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos,  new ItemPebble());
 		item.flags = EntityFlagEnum.ITEM_PEBBLE.getFlag();
 		return item;
 	}
 	
-	
-	public Entity createItemDivineCatalyst(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemDivineCatalyst());
-		item.flags = EntityFlagEnum.ITEM_DIVINE_CATALYST.getFlag();
+	public Entity createItemShuriken(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,  new ItemShuriken());
+		item.flags = EntityFlagEnum.ITEM_SHURIKEN.getFlag();
 		return item;
 	}
 
@@ -626,6 +648,12 @@ public final class ItemFactory {
 	public Entity createItemMerchantMask(Room room, Vector2 tilePos) {
 		Entity item = createItemBase(room, tilePos,new ItemMerchantMask());
 		item.flags = EntityFlagEnum.ITEM_MERCHANT_MASK.getFlag();
+		return item;
+	}
+	
+	public Entity createItemHandProsthesis(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,new ItemHandProsthesis());
+		item.flags = EntityFlagEnum.ITEM_HAND_PROSTHESIS.getFlag();
 		return item;
 	}
 	

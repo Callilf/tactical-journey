@@ -21,6 +21,7 @@ public class AmmoCrateItemPool extends ItemPool {
 	static {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 2));						
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 2));						
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 1));						
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PEBBLE, 1));						
 	}
 	

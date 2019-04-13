@@ -301,6 +301,7 @@ public class Assets {
 	public static RegionDescriptor web_sack_item;
 	public static RegionDescriptor venom_gland_item;
 	public static RegionDescriptor pebble_item;
+	public static RegionDescriptor shuriken_item;
 	
 	public static RegionDescriptor armor_up_item;
 	public static RegionDescriptor armor_piece_item;
@@ -327,6 +328,7 @@ public class Assets {
 	public static RegionDescriptor powder_flask;
 	public static RegionDescriptor camo_backpack;
 	public static RegionDescriptor merchant_mask;
+	public static RegionDescriptor hand_prothesis;
 
 	
 	// Boss items
@@ -371,6 +373,7 @@ public class Assets {
 	public static RegionDescriptor blessing_fire_arrows;
 	public static RegionDescriptor blessing_looter;
 	public static RegionDescriptor blessing_mask_merchant;
+	public static RegionDescriptor blessing_shurikenjutsu;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -647,6 +650,7 @@ public class Assets {
 		web_sack_item = Assets.getTexture("item-web-sack");
 		venom_gland_item = Assets.getTexture("item-consumable-venom-gland");
 		pebble_item = Assets.getTexture("item-consumable-pebble");
+		shuriken_item = Assets.getTexture("item-consumable-shuriken");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
 		orb_container_item = Assets.getTexture("item-consumable-orb-container");
@@ -671,6 +675,7 @@ public class Assets {
 		powder_flask = Assets.getTexture("item-infusable-powder-flask");
 		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
 		merchant_mask = Assets.getTexture("item-infusable-merchant-mask");
+		hand_prothesis = Assets.getTexture("item-infusable-hand-prosthesis");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -709,6 +714,7 @@ public class Assets {
 		blessing_fire_arrows = Assets.getTexture("blessing-fire-arrow");
 		blessing_looter = Assets.getTexture("blessing-looter");
 		blessing_mask_merchant = Assets.getTexture("blessing-mask-merchant");
+		blessing_shurikenjutsu = Assets.getTexture("blessing-shurikenjutsu");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

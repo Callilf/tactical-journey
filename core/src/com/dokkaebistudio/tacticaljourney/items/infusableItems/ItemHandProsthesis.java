@@ -6,28 +6,28 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingContractKiller;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.Shurikenjutsu;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
- * An infusable item that grants the blessing of the poisoner, ie poison sector on the wheel.
+ * An infusable item that grants the blessing of the goat.
  * @author Callil
  *
  */
-public class ItemVillanelle extends AbstractInfusableItem {
+public class ItemHandProsthesis extends AbstractInfusableItem {
 	
-	public ItemVillanelle() {
-		super(ItemEnum.VILLANELLE, Assets.villanelle, false, true);
+	public ItemHandProsthesis() {
+		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
 		
-		BlessingContractKiller blessing = new BlessingContractKiller();
+		Shurikenjutsu blessing = new Shurikenjutsu();
 		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	
 	@Override
 	public String getDescription() {
-		return Descriptions.ITEM_VILLANELLE_DESCRIPTION;	
+		return Descriptions.ITEM_HAND_PROSTHESIS_DESCRIPTION;	
 	}
 	
 	@Override
@@ -37,4 +37,5 @@ public class ItemVillanelle extends AbstractInfusableItem {
 	
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {return true;}
+
 }

@@ -28,6 +28,9 @@ public enum ItemEnum {
 	
 	ORB_CONTAINER(Descriptions.ITEM_ORB_CONTAINER_TITLE, 1),
 	
+	// Throw
+	SHURIKEN(Descriptions.ITEM_SHURIKEN_TITLE, 1),
+	
 	// Misc
 	WEB_SACK(Descriptions.ITEM_WEB_SACK_TITLE, 1),
 	VENOM_GLAND(Descriptions.ITEM_VENOM_GLAND_TITLE, 1),
@@ -63,6 +66,7 @@ public enum ItemEnum {
 	POWDER_FLASK(Descriptions.ITEM_POWDER_FLASK_TITLE, 2),
 	CAMO_BACKPACK(Descriptions.ITEM_CAMO_BACKPACK_TITLE, 2),
 	MERCHANT_MASK(Descriptions.ITEM_MERCHANT_MASK_TITLE, 2),
+	HAND_PROSTHESIS(Descriptions.ITEM_HAND_PROSTHESIS_TITLE, 2),
 
 	
 	

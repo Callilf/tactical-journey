@@ -86,6 +86,7 @@ public class AttackAnimation {
 
 			
 		} else {
+			// Range
 			attackImage = new AnimatedImage(anim, true, null);
 			Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(startGridPos);
 			attackImage.setPosition(playerPixelPos.x, playerPixelPos.y);

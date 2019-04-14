@@ -72,7 +72,6 @@ public class Room extends EntitySystem {
 		
 	/** Whether the player has already entered this room or not. */
 	private RoomVisitedState visited;
-	private boolean justEntered;
 	
 	/** Whether this room has been cleared. */
 	private RoomClearedState cleared;
@@ -286,7 +285,7 @@ public class Room extends EntitySystem {
 		// Update the visited status
 		if (this.visited == RoomVisitedState.FIRST_ENTRANCE || this.visited == RoomVisitedState.ENTRANCE) {
 			this.visited = RoomVisitedState.VISITED;
-		} else if (this.justEntered) {
+		} else if (this.visited == RoomVisitedState.JUST_ENTERED) {
 			if (!this.visited.isVisited()) {
 				this.visited = RoomVisitedState.FIRST_ENTRANCE;
 				
@@ -295,7 +294,6 @@ public class Room extends EntitySystem {
 			} else {
 				this.visited = RoomVisitedState.ENTRANCE;
 			}
-			this.justEntered = false;
 		}
 
 		
@@ -645,16 +643,6 @@ public class Room extends EntitySystem {
 
 	public void setIndex(int index) {
 		this.index = index;
-	}
-
-	public boolean isJustEntered() {
-		return justEntered;
-	}
-
-	public void setJustEntered(boolean justEntered) {
-		this.justEntered = justEntered;
-	}
-
-	
+	}	
 	
 }

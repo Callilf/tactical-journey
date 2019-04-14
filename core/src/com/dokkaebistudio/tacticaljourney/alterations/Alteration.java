@@ -62,7 +62,13 @@ public abstract class Alteration {
 	 */
 	public void onKill(Entity attacker, Entity target, Room room) {};
 	
+	/** Called when the entity receives an attack, before the damages are applied. 
+	 * @return true if the attack is really received, false if the attack has to abort */
+	public boolean onReceiveAttack(Entity user, Entity attacker, Room room) { return true; };
+	
+	/** Called when receiving damages. */
 	public void onReceiveDamage(Entity user, Entity attacker, Room room) {};
+	
 	public void onDeath(Entity user, Entity attacker, Room room) {};
 	
 	/** Called when the player enters a room for the first time. */

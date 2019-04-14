@@ -253,6 +253,9 @@ public class Descriptions {
 	
 	public static final String ITEM_HAND_PROSTHESIS_TITLE = "Hand prosthesis";
 	public static final String ITEM_HAND_PROSTHESIS_DESCRIPTION = "A prosthetic hand that once belonged to a shinobi. Grants the shurikenjutsu blessing while held in the inventory.";
+	
+	public static final String ITEM_SHINOBI_SHOE_TITLE = "Shinobi shoe";
+	public static final String ITEM_SHINOBI_SHOE_DESCRIPTION = "A left shoe that once belonged to a shinobi. The right shoe is missing. Grants the kawarimi blessing while held in the inventory.";
 
 	
 }

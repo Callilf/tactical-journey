@@ -329,6 +329,7 @@ public class Assets {
 	public static RegionDescriptor camo_backpack;
 	public static RegionDescriptor merchant_mask;
 	public static RegionDescriptor hand_prothesis;
+	public static RegionDescriptor shinobi_shoe;
 
 	
 	// Boss items
@@ -374,6 +375,7 @@ public class Assets {
 	public static RegionDescriptor blessing_looter;
 	public static RegionDescriptor blessing_mask_merchant;
 	public static RegionDescriptor blessing_shurikenjutsu;
+	public static RegionDescriptor blessing_kawarimi;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -676,6 +678,7 @@ public class Assets {
 		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
 		merchant_mask = Assets.getTexture("item-infusable-merchant-mask");
 		hand_prothesis = Assets.getTexture("item-infusable-hand-prosthesis");
+		shinobi_shoe = Assets.getTexture("item-infusable-shinobi-shoe");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -715,6 +718,7 @@ public class Assets {
 		blessing_looter = Assets.getTexture("blessing-looter");
 		blessing_mask_merchant = Assets.getTexture("blessing-mask-merchant");
 		blessing_shurikenjutsu = Assets.getTexture("blessing-shurikenjutsu");
+		blessing_kawarimi = Assets.getTexture("blessing-kawarimi");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

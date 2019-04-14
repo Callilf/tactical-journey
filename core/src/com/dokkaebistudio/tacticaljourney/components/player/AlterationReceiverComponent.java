@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
@@ -23,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
@@ -103,6 +101,17 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		for (Curse c : curses) {
 			c.onKill(attacker, target, room);
 		}
+	}
+	
+	public boolean onReceiveAttack(Entity user, Entity attacker, Room room) {
+		boolean result = true;
+		for (Blessing b : blessings) {
+			result &= b.onReceiveAttack(user, attacker, room);
+		}
+		for (Curse c : curses) {
+			result &= c.onReceiveAttack(user, attacker, room);
+		}
+		return result;
 	}
 	
 	public void onReceiveDamage(Entity user, Entity attacker, Room room) {

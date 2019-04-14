@@ -123,7 +123,15 @@ public class AttackManager {
 			damage = attackCompo.getStrength();
 		}
 		
-		applyDamage(attacker, target, damage, DamageType.NORMAL, attackCompo);
+		boolean processAttack = true;
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
+		if (alterationReceiverComponent != null) {
+			processAttack = alterationReceiverComponent.onReceiveAttack(target, attacker, room);
+		}
+		
+		if (processAttack) {
+			applyDamage(attacker, target, damage, DamageType.NORMAL, attackCompo);
+		}
 	}
 	
 	

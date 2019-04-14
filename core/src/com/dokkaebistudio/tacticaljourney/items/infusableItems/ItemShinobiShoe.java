@@ -6,28 +6,28 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingShurikenjutsu;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingKawarimi;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
- * An infusable item that grants the Shurikenjutsu blessing.
+ * An infusable item that grants the Kawarimi blessing.
  * @author Callil
  *
  */
-public class ItemHandProsthesis extends AbstractInfusableItem {
+public class ItemShinobiShoe extends AbstractInfusableItem {
 	
-	public ItemHandProsthesis() {
-		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
+	public ItemShinobiShoe() {
+		super(ItemEnum.SHINOBI_SHOE, Assets.shinobi_shoe, false, true);
 		
-		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
-		blessing.setItemSprite(this.getTexture());
-		blessings.add(blessing);
+		BlessingKawarimi blessing2 = new BlessingKawarimi();
+		blessing2.setItemSprite(this.getTexture());
+		blessings.add(blessing2);
 	}
 	
 	@Override
 	public String getDescription() {
-		return Descriptions.ITEM_HAND_PROSTHESIS_DESCRIPTION;	
+		return Descriptions.ITEM_SHINOBI_SHOE_DESCRIPTION;	
 	}
 	
 	@Override

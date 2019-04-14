@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
@@ -253,6 +254,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		if (skillEntity != null) {
     			stopSkillUse(playerCompo, skillEntity, moveCompo, attackCompo);
     		}
+    		
+			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+			alterationReceiverComponent.onPlayerTurnEnds(player, room);
+
     		break;
     		
     	default:
@@ -303,7 +308,6 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		itemComponent.onThrow(targetedGridPosition, player, thrownEntity, room);		
 		
 		if (skillAttackCompo.isDoNotConsumeTurn()) {
-			skillAttackCompo.setDoNotConsumeTurn(false);
 			stopSkillUse(Mappers.playerComponent.get(player), 
 					skillEntity, 
 					Mappers.moveComponent.get(player), 

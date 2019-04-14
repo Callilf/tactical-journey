@@ -89,9 +89,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    		case HIT:	    			
 						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
 								offsetTimes.size() * -20, room);
-		
-	    				// Alert the enemy if the player attacked it or if the enemy attacked the played when it was close enough
-		    			alertEnemy(entity, healthCompo);
 	
 		    			break;
 		    		case RESISTANT:
@@ -202,26 +199,6 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    	}
     	}
     }
-
-
-    /**
-     * Switch the alert state of an enemy if the player attacked it or it the enemy came close enough to
-     * the player to attack it.
-     * @param entity the entity that received damage
-     * @param healthCompo the health component
-     */
-	private void alertEnemy(final Entity entity, HealthComponent healthCompo) {
-		if (healthCompo.getAttacker() != null) {
-			// Alert the enemy the player just attacked
-			if ((Mappers.enemyComponent.has(entity) && Mappers.playerComponent.has(healthCompo.getAttacker()))) {
-				Mappers.enemyComponent.get(entity).setAlerted(true);
-			}
-			// Alert the enemy that attacked the player
-			if (Mappers.playerComponent.has(entity) && Mappers.enemyComponent.has(healthCompo.getAttacker())) {
-				Mappers.enemyComponent.get(healthCompo.getAttacker()).setAlerted(true);
-			}
-		}
-	}
 
 	
 	//********************************

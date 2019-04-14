@@ -4,8 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -16,7 +14,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
@@ -139,6 +136,9 @@ public class AttackManager {
 		this.applyDamage(null, target, damage, damageType, attackCompo);
 	}
 	
+	
+	
+	
 	/**
 	 * 'attacker' deals 'damage' damages to 'target'
 	 * @param attacker the attacker entity
@@ -146,6 +146,16 @@ public class AttackManager {
 	 * @param damage the amount of damage
 	 */
 	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType, AttackComponent attackCompo) {
+		applyDamage(attacker, target, damage, damageType, attackCompo, false);
+	}
+	
+	/**
+	 * 'attacker' deals 'damage' damages to 'target'
+	 * @param attacker the attacker entity
+	 * @param target the target entity
+	 * @param damage the amount of damage
+	 */
+	public void applyDamage(Entity attacker, Entity target, int damage, DamageType damageType, AttackComponent attackCompo, boolean doNotAlertTarget) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(target);
 		if (healthComponent != null) {
 			healthComponent.hit(damage, target, attacker, damageType);
@@ -164,6 +174,10 @@ public class AttackManager {
 			for (Status status : statusReceiverComponent.getStatuses()) {
 				status.onReceiveDamage(target, attacker, room);
 			}
+		}
+		
+		if (!doNotAlertTarget && !attackCompo.isDoNotAlertTarget()) {
+			alertEnemy(attacker, target);
 		}
 		
 		if (attacker != null) {
@@ -189,5 +203,25 @@ public class AttackManager {
 		return ammoCarrierComponent.canUseAmmo(attackCompo.getAmmoType(), attackCompo.getAmmosUsedPerAttack());
 	}
 
+	
+
+    /**
+     * Switch the alert state of an enemy if the player attacked it or it the enemy came close enough to
+     * the player to attack it.
+     * @param entity the entity that received damage
+     * @param healthCompo the health component
+     */
+	private void alertEnemy(Entity target, Entity attacker) {
+		if (attacker != null) {
+			// Alert the enemy the player just attacked
+			if ((Mappers.enemyComponent.has(target) && Mappers.playerComponent.has(attacker))) {
+				Mappers.enemyComponent.get(target).setAlerted(true);
+			}
+			// Alert the enemy that attacked the player
+			if (Mappers.playerComponent.has(target) && Mappers.enemyComponent.has(attacker)) {
+				Mappers.enemyComponent.get(attacker).setAlerted(true);
+			}
+		}
+	}
 	
 }

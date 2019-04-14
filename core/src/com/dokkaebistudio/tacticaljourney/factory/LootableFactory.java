@@ -166,7 +166,7 @@ public final class LootableFactory {
     	lootComponent.setType(LootableEnum.PERSONAL_BELONGINGS);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 0);
+//		dropRate.add(ItemPoolRarity.RARE, 0);
 		dropRate.add(ItemPoolRarity.COMMON, 100);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());

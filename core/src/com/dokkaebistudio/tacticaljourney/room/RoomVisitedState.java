@@ -9,13 +9,12 @@ package com.dokkaebistudio.tacticaljourney.room;
  */
 public enum RoomVisitedState {
 	NEVER_VISITED,
-	JUST_ENTERED,
 	FIRST_ENTRANCE,
 	ENTRANCE,
 	VISITED;
 	
 	public boolean isVisited() {
-		return this == JUST_ENTERED || this == FIRST_ENTRANCE || this == ENTRANCE || this == RoomVisitedState.VISITED;
+		return this == FIRST_ENTRANCE || this == ENTRANCE || this == RoomVisitedState.VISITED;
 	}
 	
 	public boolean justEntered() {

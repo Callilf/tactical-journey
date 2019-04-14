@@ -32,6 +32,10 @@ public abstract class Alteration {
 	public void onRemove(Entity entity) {};
 	
 	
+	public void onPlayerTurnStarts(Entity entity, Room room) {};
+	public void onPlayerTurnEnds(Entity entity, Room room) {};
+	
+	
 	/**
 	 * Called when the blessed entity attacks.
 	 * @param attacker the blessed entity

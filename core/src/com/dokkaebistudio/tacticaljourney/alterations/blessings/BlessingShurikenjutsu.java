@@ -30,7 +30,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  */
 public class BlessingShurikenjutsu extends Blessing {
 
-	private int chanceToProc = 30;
+	private int chanceToProc = 100;
 
 	@Override
 	public String title() {
@@ -39,7 +39,7 @@ public class BlessingShurikenjutsu extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On new room entrance, chance to throw a shuriken to a random enemy.";
+		return "On new room entrance, chance to throw a shuriken to a random enemy. This shuriken does not alert enemies.";
 	}
 	
 	@Override
@@ -68,6 +68,7 @@ public class BlessingShurikenjutsu extends Blessing {
 				attackComponent.setThrownEntity(shuriken);
 				attackComponent.setTargetedTile(TileUtil.getTileAtGridPos(enemyPos.coord(), room));
 				attackComponent.setDoNotConsumeTurn(true);
+				attackComponent.setDoNotAlertTarget(true);
 				
 				room.setNextState(RoomState.PLAYER_THROWING);
 				
@@ -83,6 +84,13 @@ public class BlessingShurikenjutsu extends Blessing {
 			}
 		}
 		
+	}
+	
+	@Override
+	public void onPlayerTurnStarts(Entity entity, Room room) {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(entity);
+		Mappers.attackComponent.get(playerComponent.getSkillThrow()).setDoNotAlertTarget(false);
+		Mappers.attackComponent.get(playerComponent.getSkillThrow()).setDoNotConsumeTurn(false);
 	}
 
 }

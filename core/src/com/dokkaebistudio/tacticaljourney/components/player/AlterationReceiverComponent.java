@@ -173,6 +173,24 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 	
 	
+	public void onPlayerTurnStarts(Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onPlayerTurnStarts(entity, room);
+		}
+		for (Curse c : curses) {
+			c.onPlayerTurnStarts(entity, room);
+		}
+	}
+	public void onPlayerTurnEnds(Entity entity, Room room) {
+		for (Blessing b : blessings) {
+			b.onPlayerTurnEnds(entity, room);
+		}
+		for (Curse c : curses) {
+			c.onPlayerTurnEnds(entity, room);
+		}
+	}	
+	
+	
 	//*************
 	// Animations
 	

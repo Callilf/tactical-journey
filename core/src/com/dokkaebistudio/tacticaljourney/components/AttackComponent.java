@@ -74,6 +74,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	
 	// End turn
 	private boolean doNotConsumeTurn;
+	private boolean doNotAlertTarget;
 	
 	// Animations
 	private AttackAnimation attackAnimation;
@@ -146,6 +147,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.accuracy = 1;
 		this.realAccuracy = 1;
 		this.doNotConsumeTurn = false;
+		this.doNotAlertTarget = false;
 	}
 	
 	/**
@@ -463,6 +465,13 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.doNotConsumeTurn = doNotConsumeTurn;
 	}
 	
+	public boolean isDoNotAlertTarget() {
+		return doNotAlertTarget;
+	}
+
+	public void setDoNotAlertTarget(boolean doNotAlertTarget) {
+		this.doNotAlertTarget = doNotAlertTarget;
+	}
 	
 	
 	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine) {
@@ -498,6 +507,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.bombTurnsToExplode);
 
 				output.writeBoolean(object.doNotConsumeTurn);
+				output.writeBoolean(object.doNotAlertTarget);
 				
 				// Skill
 				output.writeInt(object.skillNumber);
@@ -535,6 +545,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				compo.bombTurnsToExplode = input.readInt();
 				
 				compo.doNotConsumeTurn = input.readBoolean();
+				compo.doNotAlertTarget = input.readBoolean();
 				
 				compo.skillNumber = input.readInt();
 				
@@ -553,6 +564,5 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		
 		};
 	}
-
 
 }

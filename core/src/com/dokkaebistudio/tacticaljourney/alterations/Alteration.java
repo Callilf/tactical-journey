@@ -6,6 +6,7 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
@@ -24,6 +25,12 @@ public abstract class Alteration {
 	public abstract String title();
 	public abstract String description();
 	public abstract RegionDescriptor texture();
+	
+	
+	
+	
+	
+	// Receive / remove
 
 	/** Called when this alteration is received by an entity. */
 	public void onReceive(Entity entity) {};
@@ -32,9 +39,13 @@ public abstract class Alteration {
 	public void onRemove(Entity entity) {};
 	
 	
+	// Turns
+	
 	public void onPlayerTurnStarts(Entity entity, Room room) {};
 	public void onPlayerTurnEnds(Entity entity, Room room) {};
 	
+	
+	// Combat
 	
 	/**
 	 * Called when the blessed entity attacks.
@@ -51,8 +62,6 @@ public abstract class Alteration {
 	 * @param room the room
 	 */
 	public void onAttackEmptyTile(Entity attacker, Tile tile, AttackComponent attackCompo, Room room) {};
-
-	
 	
 	/**
 	 * Called when the blessed entity kills a target.
@@ -71,11 +80,22 @@ public abstract class Alteration {
 	
 	public void onDeath(Entity user, Entity attacker, Room room) {};
 	
+	
+	// Room and floor
+	
+	
 	/** Called when the player enters a room for the first time. */
 	public void onRoomVisited(Entity entity, Room room) {};
 	
 	/** Called when a room has been cleared. */
 	public void onRoomCleared(Entity entity, Room room) {};
+	
+	/** Called when the player enters a floor for the first time. */
+	public void onFloorVisited(Entity entity, Floor floor, Room room) {};
+	
+	
+	
+	// Misc
 	
 	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {}
 	

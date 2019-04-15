@@ -339,11 +339,11 @@ public class Assets {
 	
 	
 	
-	
+	// Vfx
 	
 	public static Array<Sprite> arrow;
 	public static Array<Sprite> bomb_animation;
-
+	public static RegionDescriptor kawarimi_log;
 	
 	//**************************
 	// Alterations
@@ -385,8 +385,6 @@ public class Assets {
 	public static RegionDescriptor curse_acceptance;
 	public static RegionDescriptor curse_pangolin_mother;
 	public static RegionDescriptor curse_heavy_arrows;
-
-	public static RegionDescriptor textfield_cursor;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -688,6 +686,12 @@ public class Assets {
 		bomb_animation = Assets.getAnimation("bomb");
 
 		
+		//********
+		// Vfx
+		
+		kawarimi_log = Assets.getTexture("kawarimi_log");
+
+		
 		//*****************
 		// Alterations
 		
@@ -728,11 +732,6 @@ public class Assets {
 		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 		curse_heavy_arrows = Assets.getTexture("curse-heavy-arrow");
-
-		
-		
-		
-		textfield_cursor = Assets.getTexture("textfield_cursor");
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

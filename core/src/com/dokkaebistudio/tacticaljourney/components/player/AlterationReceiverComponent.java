@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -149,6 +150,16 @@ public class AlterationReceiverComponent implements Component, Poolable {
 			c.onRoomCleared(entity, room);
 		}
 	}
+	
+	public void onFloorVisited(Entity entity, Floor floor, Room room) {
+		for (Blessing b : blessings) {
+			b.onFloorVisited(entity, floor, room);
+		}
+		for (Curse c : curses) {
+			c.onFloorVisited(entity, floor, room);
+		}
+	}
+	
 	
 	
 	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {

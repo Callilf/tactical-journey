@@ -13,6 +13,13 @@ public class AnimatedImage extends Image {
     private boolean loop;
     private Action finishAction;
 
+    
+    public AnimatedImage(Animation<Sprite> animation, boolean loop) {
+        super(animation.getKeyFrame(0));
+        this.animation = animation;
+        this.loop = loop;
+    }
+    
     public AnimatedImage(Animation<Sprite> animation, boolean loop, Action finishAction) {
         super(animation.getKeyFrame(0));
         this.animation = animation;
@@ -38,4 +45,8 @@ public class AnimatedImage extends Image {
     		}
     	}
     }
+    
+    public void setFinishAction(Action finishAction) {
+		this.finishAction = finishAction;
+	}
 }

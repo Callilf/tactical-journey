@@ -63,7 +63,6 @@ import com.dokkaebistudio.tacticaljourney.rendering.WinPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -119,7 +118,7 @@ public class GameScreen extends ScreenAdapter {
 	public OrthographicCamera guiCam;
 	public Stage stage;
 	public Stage inventoryStage;
-	public Stage fxStage;
+	public static Stage fxStage;
 	public Stage foregroundFxStage;
 
 	
@@ -348,7 +347,7 @@ public class GameScreen extends ScreenAdapter {
 		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
 
 		PoolableVector2 tempPos = PoolableVector2.create(11,6);
-		MovementHandler.placeEntity(this.player, tempPos, newActiveRoom);
+		MovementHandler.placeEntity(player, tempPos, newActiveRoom);
 		tempPos.free();
 		
 		// Update the map
@@ -359,6 +358,11 @@ public class GameScreen extends ScreenAdapter {
 			for (Entity e : r.getAllEntities()) {
 				engine.removeEntity(e);
 			}
+		}
+		
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
+		if (alterationReceiverComponent != null) {
+			alterationReceiverComponent.onFloorVisited(player, newFloor, newActiveRoom);
 		}
 		
 		this.activeFloor = newFloor;

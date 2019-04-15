@@ -80,7 +80,7 @@ public class AnimationSingleton {
 		createAnimation(bomb_slow);
 		bomb_fast = new Animation<Sprite>(0.1f, Assets.bomb_animation, PlayMode.LOOP);
 		createAnimation(bomb_fast);
-		explosion = new Animation<Sprite>(0.1f, Assets.explosion_animation, PlayMode.NORMAL);
+		explosion = new Animation<Sprite>(0.07f, Assets.explosion_animation, PlayMode.NORMAL);
 		createAnimation(explosion);
 		
 		fire = new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP);

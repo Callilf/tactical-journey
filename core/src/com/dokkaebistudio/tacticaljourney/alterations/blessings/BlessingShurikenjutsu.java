@@ -30,7 +30,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  */
 public class BlessingShurikenjutsu extends Blessing {
 
-	private int chanceToProc = 50;
+	private int chanceToProc = 33;
 
 	@Override
 	public String title() {

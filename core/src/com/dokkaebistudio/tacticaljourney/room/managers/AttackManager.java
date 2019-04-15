@@ -87,6 +87,11 @@ public class AttackManager {
 			return;
 		}
 		
+		
+		if (!attackCompo.isDoNotAlertTarget()) {
+			alertEnemy(attacker, target);
+		}
+		
 		int damage = 0;
 		
 		//Compute damage

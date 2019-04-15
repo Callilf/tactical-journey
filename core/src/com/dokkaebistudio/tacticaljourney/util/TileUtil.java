@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
+import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -166,6 +167,23 @@ public final class TileUtil {
 		gridPos.free();
 		
 		return e;
+	}
+	
+	/**
+	 * Return true if the "walker" entity can go on the tile at the given grid position.
+	 * @param walker the walking entity
+	 * @param gridPos the grid position of the tile to test
+	 * @param room the room
+	 * @return true if the entity can go on this tile, false if not
+	 */
+	public static boolean isTileWalkableForEntity(Entity walker, Vector2 gridPos, Room room) {
+		Tile tile = getTileAtGridPos(gridPos, room);
+		if (!tile.isWalkable(walker)) return false;
+		
+		Entity solid = getEntityWithComponentOnTile(gridPos, SolidComponent.class, room);
+		if (solid != null) return false;
+		
+		return true;
 	}
 	
 	

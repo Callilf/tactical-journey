@@ -61,15 +61,27 @@ public class BlessingKawarimi extends Blessing {
 		return Assets.blessing_kawarimi;
 	}
 	
+	@Override
+	public void onReceive(Entity entity) {
+		Room room = Mappers.gridPositionComponent.get(entity).room;
+		if (!activationForRoom.containsKey(room.getIndex())) {
+			activationForRoom.put(room.getIndex(), false);
+		}
+	}
+	
 
 	@Override
 	public void onRoomVisited(Entity entity, Room room) {
-		activationForRoom.put(room.getIndex(), false);
+		if (!activationForRoom.containsKey(room.getIndex())) {
+			activationForRoom.put(room.getIndex(), false);
+		}
 	}
 	
 	@Override
 	public boolean onReceiveAttack(Entity user, Entity attacker, Room room) {
 		if (!activationForRoom.get(room.getIndex())) {
+			// Switch to activated even if it doesn't proc, so that it won't proc on nother attack in the same room.
+			activationForRoom.put(room.getIndex(), true);
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < chanceToProc) {
@@ -101,10 +113,7 @@ public class BlessingKawarimi extends Blessing {
 
 //					room.entityFactory.effectFactory.createExplosionEffect(	room, gridPositionComponent.coord());
 				}
-				
-				
-				activationForRoom.put(room.getIndex(), true);
-				
+								
 				// Cancel the enemy attack
 				return false;
 			}

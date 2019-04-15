@@ -43,7 +43,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.VisualEffectComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
@@ -582,8 +581,6 @@ public class Persister {
 		kryo.register(SpriteComponent.class, SpriteComponent.getSerializer(engine));
 		kryo.register(AnimationComponent.class, AnimationComponent.getSerializer(engine));
 		kryo.register(StateComponent.class, StateComponent.getSerializer(engine));
-		kryo.register(VisualEffectComponent.class, VisualEffectComponent.getSerializer(engine));
-
 		
 		kryo.register(ParentEntityComponent.class, ParentEntityComponent.getSerializer(engine));
 		kryo.register(GridPositionComponent.class, GridPositionComponent.getSerializer(engine, loadedRooms));

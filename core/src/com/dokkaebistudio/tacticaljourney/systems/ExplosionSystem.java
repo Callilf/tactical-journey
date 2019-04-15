@@ -22,7 +22,10 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.ExplosionTileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
@@ -32,8 +35,11 @@ import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ExplosionSystem extends EntitySystem implements RoomSystem {	
@@ -177,11 +183,33 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			for (Entity d : destructibles) {
 				LootUtil.destroy(d, room);
 			}
-			room.entityFactory.effectFactory.createExplosionEffect(room, gridPositionComponent.coord());
+			
+			createExplosionEffect(gridPositionComponent.coord());
 		}
 		room.removeEntity(explosive);
 
 
+	}
+	
+	
+	/**
+	 * Explosion effect.
+	 * @param gridPos the tile pos
+	 */
+	private void createExplosionEffect(Vector2 gridPos) {
+		final AnimatedImage smokeAnim = new AnimatedImage(AnimationSingleton.getInstance().explosion, false);
+		Action smokeAnimFinishAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			smokeAnim.remove();
+		    return true;
+		  }
+		};
+		smokeAnim.setFinishAction(smokeAnimFinishAction);
+		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		smokeAnim.setPosition(pixelPos.x, pixelPos.y);
+		pixelPos.free();
+		GameScreen.fxStage.addActor(smokeAnim);
 	}
 
 }

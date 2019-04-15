@@ -89,10 +89,7 @@ public final class EntityFactory {
 
 	/** The orb factory. */
 	public OrbFactory orbFactory;
-	
-	/** The factory for visual effects. */
-	public EffectFactory effectFactory;
-	
+		
 	/**
 	 * Constructor.
 	 * @param e the engine
@@ -104,7 +101,6 @@ public final class EntityFactory {
 		this.itemFactory = new ItemFactory(e, this);
 		this.creepFactory = new CreepFactory(e, this);
 		this.lootableFactory = new LootableFactory(e, this);
-		this.effectFactory = new EffectFactory( e, this);
 		this.orbFactory = new OrbFactory(e, this);
 		this.destructibleFactory = new DestructibleFactory(e, this);
 	}

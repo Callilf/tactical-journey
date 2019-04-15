@@ -27,7 +27,7 @@ public class BlessingFastLearner extends Blessing {
 	
 	@Override
 	public String description() {
-		return "When [GOLD]leveling up[], allow to choose an additional reward";
+		return "When [GOLD]leveling up[], allows choosing an additional reward";
 	}
 	
 	@Override

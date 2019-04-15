@@ -56,6 +56,8 @@ public class BlessingOfTheGoat extends Blessing {
 				rangeAttackCompo.increaseAccuracy(3);
 			}
 		}
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 	
 
@@ -79,11 +81,6 @@ public class BlessingOfTheGoat extends Blessing {
 				rangeAttackCompo.increaseAccuracy(-3);
 			}
 		}
-	}
-	
-	@Override
-	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
-		AlterationSystem.addAlterationProc(this);
 	}
 
 }

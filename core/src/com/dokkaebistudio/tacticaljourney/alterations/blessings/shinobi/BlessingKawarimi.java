@@ -84,6 +84,10 @@ public class BlessingKawarimi extends Blessing {
 	
 	@Override
 	public boolean onReceiveAttack(Entity user, Entity attacker, Room room) {
+		if (!activationForRoom.containsKey(room.getIndex())) {
+			activationForRoom.put(room.getIndex(), true);
+		}
+		
 		if (!activationForRoom.get(room.getIndex())) {
 			// Switch to activated even if it doesn't proc, so that it won't proc on nother attack in the same room.
 			activationForRoom.put(room.getIndex(), true);

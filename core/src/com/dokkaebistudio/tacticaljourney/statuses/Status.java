@@ -73,15 +73,21 @@ public abstract class Status {
 	// Movements
 	
 	public void performMovement(float xOffset, float yOffset) {
-		animation.setPosition(animation.getX() + xOffset, animation.getY() + yOffset);
+		if (animation != null) {
+			animation.setPosition(animation.getX() + xOffset, animation.getY() + yOffset);
+		}
 	}
 	
 	public void endMovement(Vector2 finalPos) {
-		animation.setPosition(finalPos.x, finalPos.y);
+		if (animation != null) {
+			animation.setPosition(finalPos.x, finalPos.y);
+		}
 	}
 	
 	public void place(Vector2 tilePos) {
-		animation.setPosition(tilePos.x, tilePos.y);
+		if (animation != null) {
+			animation.setPosition(tilePos.x, tilePos.y);
+		}
 	}
 	
 	

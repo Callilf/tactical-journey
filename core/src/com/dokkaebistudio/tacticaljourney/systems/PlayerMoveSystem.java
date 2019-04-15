@@ -100,11 +100,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 		case PLAYER_TURN_INIT:	
 			moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
-			if (room.hasEnemies()) {
-				moveCompo.setFreeMove(false);
-			} else {
-				moveCompo.setFreeMove(true);
-			}
 			
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 			alterationReceiverComponent.onPlayerTurnStarts(player, room);
@@ -113,7 +108,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			break;
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
-//			ItemPoolSingleton instance = ItemPoolSingleton.getInstance();
+			if (room.hasEnemies()) {
+				moveCompo.setFreeMove(false);
+			} else {
+				moveCompo.setFreeMove(true);
+			}
 			
 			if (moveCompo.getSelectedTileFromPreviousTurn() != null) {
 				// Continue movement

@@ -189,7 +189,7 @@ public class AttackManager {
 			}
 		}
 		
-		if (!doNotAlertTarget && !attackCompo.isDoNotAlertTarget()) {
+		if (!doNotAlertTarget && (attackCompo == null || !attackCompo.isDoNotAlertTarget())) {
 			alertEnemy(attacker, target);
 		}
 		

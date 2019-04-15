@@ -329,7 +329,8 @@ public class Assets {
 	public static RegionDescriptor camo_backpack;
 	public static RegionDescriptor merchant_mask;
 	public static RegionDescriptor hand_prothesis;
-	public static RegionDescriptor jikatabi;
+	public static RegionDescriptor left_jikatabi;
+	public static RegionDescriptor right_jikatabi;
 
 	
 	// Boss items
@@ -344,6 +345,7 @@ public class Assets {
 	public static Array<Sprite> arrow;
 	public static Array<Sprite> bomb_animation;
 	public static RegionDescriptor kawarimi_log;
+	public static RegionDescriptor projectile_kunai;
 	
 	//**************************
 	// Alterations
@@ -376,6 +378,7 @@ public class Assets {
 	public static RegionDescriptor blessing_mask_merchant;
 	public static RegionDescriptor blessing_shurikenjutsu;
 	public static RegionDescriptor blessing_kawarimi;
+	public static RegionDescriptor blessing_hangeki;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -677,7 +680,8 @@ public class Assets {
 		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
 		merchant_mask = Assets.getTexture("item-infusable-merchant-mask");
 		hand_prothesis = Assets.getTexture("item-infusable-hand-prosthesis");
-		jikatabi = Assets.getTexture("item-infusable-shinobi-shoe");
+		left_jikatabi = Assets.getTexture("item-infusable-left-jikatabi");
+		right_jikatabi = Assets.getTexture("item-infusable-right-jikatabi");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -691,6 +695,7 @@ public class Assets {
 		// Vfx
 		
 		kawarimi_log = Assets.getTexture("kawarimi_log");
+		projectile_kunai = Assets.getTexture("kunai");
 
 		
 		//*****************
@@ -724,6 +729,7 @@ public class Assets {
 		blessing_mask_merchant = Assets.getTexture("blessing-mask-merchant");
 		blessing_shurikenjutsu = Assets.getTexture("blessing-shurikenjutsu");
 		blessing_kawarimi = Assets.getTexture("blessing-kawarimi");
+		blessing_hangeki = Assets.getTexture("blessing-hangeki");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

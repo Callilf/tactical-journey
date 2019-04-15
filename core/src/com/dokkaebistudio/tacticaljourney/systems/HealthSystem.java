@@ -178,7 +178,12 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						}
 					}
 					
-					room.removeEnemy(entity);					
+					room.removeEnemy(entity);		
+					
+					// If it was the player's turn, recompute movable tiles after the entity has been removed
+					if (room.getState().canEndTurn()) {
+						room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+					}
 				}
 			
 	    	}

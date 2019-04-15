@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.blessings;
+package com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi;
 
 import java.util.ArrayList;
 import java.util.Collections;

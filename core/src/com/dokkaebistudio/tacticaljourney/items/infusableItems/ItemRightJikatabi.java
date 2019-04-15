@@ -6,24 +6,24 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingShurikenjutsu;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingHangeki;
 import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseShinobi;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 /**
- * An infusable item that grants the Shurikenjutsu blessing.
+ * An infusable item that grants the Kawarimi blessing.
  * @author Callil
  *
  */
-public class ItemHandProsthesis extends AbstractInfusableItem {
+public class ItemRightJikatabi extends AbstractInfusableItem {
 	
-	public ItemHandProsthesis() {
-		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
+	public ItemRightJikatabi() {
+		super(ItemEnum.RIGHT_JIKATABI, Assets.right_jikatabi, false, true);
 		
-		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
-		blessing.setItemSprite(this.getTexture());
-		blessings.add(blessing);
+		BlessingHangeki blessing2 = new BlessingHangeki();
+		blessing2.setItemSprite(this.getTexture());
+		blessings.add(blessing2);
 		CurseShinobi curse = new CurseShinobi();
 		curse.setItemSprite(this.getTexture());
 		curses.add(curse);
@@ -31,7 +31,7 @@ public class ItemHandProsthesis extends AbstractInfusableItem {
 	
 	@Override
 	public String getDescription() {
-		return Descriptions.ITEM_HAND_PROSTHESIS_DESCRIPTION;	
+		return Descriptions.ITEM_RIGHT_JIKATABI_DESCRIPTION;	
 	}
 	
 	@Override

@@ -254,8 +254,11 @@ public class Descriptions {
 	public static final String ITEM_HAND_PROSTHESIS_TITLE = "Hand prosthesis";
 	public static final String ITEM_HAND_PROSTHESIS_DESCRIPTION = "A prosthetic hand that once belonged to a shinobi. Grants the Shurikenjutsu blessing and the Curse of the shinobi while held in the inventory.";
 	
-	public static final String ITEM_JIKATABI_TITLE = "Jikatabi";
-	public static final String ITEM_JIKATABI_DESCRIPTION = "A left shoe that once belonged to a shinobi. The right shoe is missing. Grants the Kawarimi no jutsu blessing and the Curse of the shinobi while held in the inventory.";
+	public static final String ITEM_LEFT_JIKATABI_TITLE = "Left Jikatabi";
+	public static final String ITEM_LEFT_JIKATABI_DESCRIPTION = "The left piece of a jikatabi pair that once belonged to a shinobi. Grants the Kawarimi no jutsu blessing and the Curse of the shinobi while held in the inventory.";
+	
+	public static final String ITEM_RIGHT_JIKATABI_TITLE = "Right Jikatabi";
+	public static final String ITEM_RIGHT_JIKATABI_DESCRIPTION = "The right piece of a jikatabi pair that once belonged to a shinobi. Grants the Hangeki blessing and the Curse of the shinobi while held in the inventory.";
 
 	
 }

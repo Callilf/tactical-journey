@@ -29,6 +29,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHandProsthesis;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHeadband;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemLeftJikatabi;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMementoMori;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMerchantMask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
@@ -36,7 +37,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPowderFlask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
-import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemJikatabi;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRightJikatabi;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
@@ -285,8 +286,12 @@ public final class ItemFactory {
 			item = createItemHandProsthesis(room, tilePos);
 			break;
 			
-		case JIKATABI:
-			item = createItemShinobiShoe(room, tilePos);
+		case LEFT_JIKATABI:
+			item = createItemLeftJikatabi(room, tilePos);
+			break;
+			
+		case RIGHT_JIKATABI:
+			item = createItemRightJikatabi(room, tilePos);
 			break;
 			
 		case PANGOLIN_SCALE:
@@ -662,8 +667,14 @@ public final class ItemFactory {
 		return item;
 	}
 	
-	public Entity createItemShinobiShoe(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemJikatabi());
+	public Entity createItemLeftJikatabi(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,new ItemLeftJikatabi());
+		item.flags = EntityFlagEnum.ITEM_SHINOBI_SHOE.getFlag();
+		return item;
+	}
+	
+	public Entity createItemRightJikatabi(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos,new ItemRightJikatabi());
 		item.flags = EntityFlagEnum.ITEM_SHINOBI_SHOE.getFlag();
 		return item;
 	}

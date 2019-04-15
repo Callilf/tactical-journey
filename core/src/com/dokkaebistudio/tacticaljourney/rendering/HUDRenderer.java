@@ -392,7 +392,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 						room.turnManager.endPlayerTurn();
 					} else {
 						Boolean b = (Boolean) endTurnBtn.getUserObject();
-						if (b == true) {
+						if (b != null && b.booleanValue() == true) {
 							// Cancel targeting
 							isTargeting = false;
 							deactivateSkill(GameScreen.player);

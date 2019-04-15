@@ -4,7 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
@@ -42,12 +41,17 @@ public class CurseOfAcceptance extends Curse {
 	}
 	
 	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProc;
+	}
+	
+	@Override
 	public void onKill(Entity attacker, Entity target, Room room) {
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 		if (statusReceiverComponent != null && statusReceiverComponent.hasStatus(StatusDebuffDeathDoor.class)) {
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();			
-			if (randomValue > 100 - chanceToProc) {
+			if (randomValue > 100 - getCurrentProcChance(attacker)) {
 				StatusReceiverComponent attackerStatusReceiverComponent = Mappers.statusReceiverComponent.get(attacker);
 				attackerStatusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				

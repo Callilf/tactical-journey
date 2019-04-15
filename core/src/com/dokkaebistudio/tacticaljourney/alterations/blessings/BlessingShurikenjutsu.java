@@ -46,6 +46,11 @@ public class BlessingShurikenjutsu extends Blessing {
 	public RegionDescriptor texture() {
 		return Assets.blessing_shurikenjutsu;
 	}
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProc;
+	}
 
 	@Override
 	public void onRoomVisited(Entity entity, Room room) {
@@ -55,7 +60,7 @@ public class BlessingShurikenjutsu extends Blessing {
 		int numberToThrow = 1;
 		int numberThrown = 0;
 		float randomValue = RandomSingleton.getNextChanceWithKarma();
-		if (randomValue < chanceToProc) {
+		if (randomValue < getCurrentProcChance(entity)) {
 			List<Entity> enemies = new ArrayList<>(room.getEnemies());
 			Collections.shuffle(enemies, RandomSingleton.getInstance().getUnseededRandom());
 			

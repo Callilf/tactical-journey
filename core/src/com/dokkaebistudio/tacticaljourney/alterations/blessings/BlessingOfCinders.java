@@ -38,26 +38,32 @@ public class BlessingOfCinders extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On successful melee attack, chance to inflict the [ORANGE]burning[] status effect.";
+		return "On successful melee attack, chance to inflict the [ORANGE]burning[] status effect. Chance increased while holding the Old crown";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.blessing_cinders;
 	}
+	
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		int chanceToProc = this.initialChanceToProc;
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
+		if (inventoryComponent.contains(ItemOldCrown.class)) {
+			chanceToProc += this.oldCrownInInventoryAdd;
+		}
+		
+		return chanceToProc;
+	}
 
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
-		if (sector.hit == Hit.CRITICAL || sector.hit == Hit.HIT || sector.hit == Hit.GRAZE) {
-			
-			int chanceToProc = this.initialChanceToProc;
-			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(attacker);
-			if (inventoryComponent.contains(ItemOldCrown.class)) {
-				chanceToProc += this.oldCrownInInventoryAdd;
-			}
+		if (sector == null || sector.hit == Hit.CRITICAL || sector.hit == Hit.HIT || sector.hit == Hit.GRAZE) {
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
-			if (randomValue < chanceToProc) {
+			if (randomValue < getCurrentProcChance(attacker)) {
 				Journal.addEntry("Blessing of cinders inflicted [ORANGE]burning[] to " + Mappers.inspectableComponentMapper.get(target).getTitle());
 				AlterationSystem.addAlterationProc(this);
 

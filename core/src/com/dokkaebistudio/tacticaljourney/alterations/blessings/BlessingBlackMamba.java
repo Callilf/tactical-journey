@@ -36,18 +36,23 @@ public class BlessingBlackMamba extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On successful attack, chance of inflicting the [PURPLE]poison[] status effect. 100% chance on critical.";
+		return "On successful attack, chance of inflicting the [PURPLE]poison[] status effect. [YELLOW]100[]% chance on critical.";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.blessing_black_mamba;
 	}
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProcOnHit;
+	}
 
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		int chanceToProc = 0;
-		if (sector != null && sector.hit == Hit.HIT) chanceToProc = chanceToProcOnHit;
+		if (sector != null && sector.hit == Hit.HIT) getCurrentProcChance(attacker);
 		else if (sector != null && sector.hit == Hit.CRITICAL) chanceToProc = chanceToProcOnCrit;
 		
 		float randomValue = RandomSingleton.getNextChanceWithKarma();

@@ -62,6 +62,11 @@ public class BlessingKawarimi extends Blessing {
 	}
 	
 	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProc;
+	}
+	
+	@Override
 	public void onReceive(Entity entity) {
 		Room room = Mappers.gridPositionComponent.get(entity).room;
 		if (!activationForRoom.containsKey(room.getIndex())) {
@@ -84,7 +89,7 @@ public class BlessingKawarimi extends Blessing {
 			activationForRoom.put(room.getIndex(), true);
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
-			if (randomValue < chanceToProc) {
+			if (randomValue < getCurrentProcChance(user)) {
 
 				Journal.addEntry("Kawarimi activated and evaded the attack.");
 				AlterationSystem.addAlterationProc(this);

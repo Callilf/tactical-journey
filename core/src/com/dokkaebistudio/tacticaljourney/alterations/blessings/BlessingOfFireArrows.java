@@ -33,22 +33,25 @@ public class BlessingOfFireArrows extends Blessing {
 	
 	@Override
 	public String description() {
-		return "Arrows fired on an empty tile create fire. Arrows fired on an enemy have a small chance to create fire and inflict the [ORANGE]burning[] status effect.";
+		return "Arrows fired on an empty tile have [YELLOW]100%[] chance of creating fire. "
+				+ "Arrows fired on an enemy have a small chance to create fire and inflict the [ORANGE]burning[] status effect.";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.blessing_fire_arrows;
 	}
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return initialChanceToProc;
+	}
 
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
-		if (attackCompo != null && attackCompo.getAttackType() == AttackTypeEnum.RANGE) {
-			// Attacked an enemy with the bow
-			int chanceToProc = this.initialChanceToProc;
-			
+		if (attackCompo != null && attackCompo.getAttackType() == AttackTypeEnum.RANGE) {			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
-			if (randomValue < chanceToProc) {
+			if (randomValue < getCurrentProcChance(attacker)) {
 				AlterationSystem.addAlterationProc(this);
 				room.entityFactory.creepFactory.createFire(room, Mappers.gridPositionComponent.get(target).coord(), attacker);
 			}

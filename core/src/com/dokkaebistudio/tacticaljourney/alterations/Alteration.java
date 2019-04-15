@@ -26,7 +26,7 @@ public abstract class Alteration {
 	public abstract String description();
 	public abstract RegionDescriptor texture();
 	
-	
+	public Integer getCurrentProcChance(Entity user) { return null; }
 	
 	
 	

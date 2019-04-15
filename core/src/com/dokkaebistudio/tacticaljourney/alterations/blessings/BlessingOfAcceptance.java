@@ -11,7 +11,9 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
@@ -41,13 +43,18 @@ public class BlessingOfAcceptance extends Blessing {
 	public RegionDescriptor texture() {
 		return Assets.blessing_acceptance;
 	}
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProc;
+	}
 
 	@Override
 	public void onRoomVisited(Entity entity, Room room) {
 		for (Entity e : room.getEnemies()) {
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
-			if (randomValue < chanceToProc) {
+			if (randomValue < getCurrentProcChance(entity)) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				

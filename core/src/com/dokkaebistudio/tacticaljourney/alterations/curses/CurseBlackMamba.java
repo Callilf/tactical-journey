@@ -42,12 +42,17 @@ public class CurseBlackMamba extends Curse {
 	public RegionDescriptor texture() {
 		return Assets.curse_black_mamba;
 	}
-
+	
+	@Override
+	public Integer getCurrentProcChance(Entity user) {
+		return chanceToProc;
+	}
+	
 	@Override
 	public void onAttack(Entity attacker, Entity target, Sector sector, AttackComponent attackCompo, Room room) {
 		if (sector != null && sector.hit == Hit.MISS) {
 			float randomValue = RandomSingleton.getNextChanceWithKarma();			
-			if (randomValue > 100 - chanceToProc) {
+			if (randomValue > 100 - getCurrentProcChance(attacker)) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(attacker);
 				if (statusReceiverComponent != null) {
 					Journal.addEntry("Curse of the black mamba [PURPLE]poisoned[] you");

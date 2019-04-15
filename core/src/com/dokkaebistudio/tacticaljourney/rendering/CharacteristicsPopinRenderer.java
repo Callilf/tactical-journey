@@ -127,44 +127,44 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 		// 2 - Explanations
 		Table profileInnerTable = new Table();
 		
-		Label nameLbl = new Label("Name: The character's name", 
+		Label nameLbl = new Label("[GOLDENROD]Name[]: The character's name", 
 				PopinService.hudStyle());
 		nameLbl.setWrap(true);
 		profileInnerTable.add(nameLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 
-		Label maxHpLbl = new Label("Max hp: The maximum number of hp. Even if you heal, you cannot have more hp", 
+		Label maxHpLbl = new Label("[GOLDENROD]Max hp[]: The maximum number of hp. Even if you heal, you cannot have more hp", 
 				PopinService.hudStyle());
 		maxHpLbl.setWrap(true);
 		profileInnerTable.add(maxHpLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label maxArmorLbl = new Label("Max armor: The maximum number of armor points. If you use an armor item while being at full armor, it will be wasted", 
+		Label maxArmorLbl = new Label("[GOLDENROD]Max armor[]: The maximum number of armor points. If you use an armor item while being at full armor, it will be wasted", 
 				PopinService.hudStyle());
 		maxArmorLbl.setWrap(true);
 		profileInnerTable.add(maxArmorLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label karmaLbl = new Label("Karma: A strange characteristic. The higher your karma is, the more likely you are to find items. "
+		Label karmaLbl = new Label("[GOLDENROD]Karma[]: A strange characteristic. The higher your karma is, the more likely you are to find items. "
 				+ "It also increases the chance of blessing effects to activate and reduces the chance of curses effects to happen", 
 				PopinService.hudStyle());
 		karmaLbl.setWrap(true);
 		profileInnerTable.add(karmaLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 
-		Label moveLbl = new Label("Move: The number of tiles you can move during one turn", 
+		Label moveLbl = new Label("[GOLDENROD]Move[]: The number of tiles you can move during one turn", 
 				PopinService.hudStyle());
 		moveLbl.setWrap(true);
 		profileInnerTable.add(moveLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label strengthLbl = new Label("Melee Strength: The base amount of damage you deal with the melee attack", 
+		Label strengthLbl = new Label("[GOLDENROD]Melee Strength[]: The base amount of damage you deal with the melee attack", 
 				PopinService.hudStyle());
 		strengthLbl.setWrap(true);
 		profileInnerTable.add(strengthLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label accuracyLbl = new Label("Melee accuracy: Affects the wheel's arrow spinning velocity when using the melee attack."
+		Label accuracyLbl = new Label("[GOLDENROD]Melee accuracy[]: Affects the wheel's arrow spinning velocity when using the melee attack."
 				+ " The higher the accuracy is, the slower the arrow will spin", 
 				PopinService.hudStyle());
 		accuracyLbl.setWrap(true);
@@ -173,38 +173,38 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 		
 
 		
-		Label rangeDistLbl = new Label("Bow range: The min-max range at which you can attack with the bow", PopinService.hudStyle());
+		Label rangeDistLbl = new Label("[GOLDENROD]Bow range[]: The min-max range at which you can attack with the bow", PopinService.hudStyle());
 		rangeDistLbl.setWrap(true);
 		profileInnerTable.add(rangeDistLbl).width(960).left().pad(0, 20, 20, 20);		profileInnerTable.row();
-		Label rangeStrengthLbl = new Label("Bow damage: The base amount of damage you deal with the bow", PopinService.hudStyle());
+		Label rangeStrengthLbl = new Label("[GOLDENROD]Bow damage[]: The base amount of damage you deal with the bow", PopinService.hudStyle());
 		rangeStrengthLbl.setWrap(true);
 		profileInnerTable.add(rangeStrengthLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
-		Label rangeAccuracyLbl = new Label("Bow accuracy: Affects the wheel's arrow spinning velocity when using the bow."
+		Label rangeAccuracyLbl = new Label("[GOLDENROD]Bow accuracy[]: Affects the wheel's arrow spinning velocity when using the bow."
 				+ " The higher the accuracy is, the slower the arrow will spin", PopinService.hudStyle());
 		rangeAccuracyLbl.setWrap(true);
 		profileInnerTable.add(rangeAccuracyLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label bombDistLbl = new Label("Bomb throw range: The maximum number of tiles where you can throw a bomb", PopinService.hudStyle());
+		Label bombDistLbl = new Label("[GOLDENROD]Bomb throw range[]: The maximum number of tiles where you can throw a bomb", PopinService.hudStyle());
 		bombDistLbl.setWrap(true);
 		profileInnerTable.add(bombDistLbl).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
-		Label bombDmg = new Label("Bomb damage: The base amount of damage you deal with bombs", PopinService.hudStyle());
+		Label bombDmg = new Label("[GOLDENROD]Bomb damage[]: The base amount of damage you deal with bombs", PopinService.hudStyle());
 		bombDmg.setWrap(true);
 		profileInnerTable.add(bombDmg).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label bombDuration = new Label("Bomb fuse duration: The number of turns the bombs take to explode", PopinService.hudStyle());
+		Label bombDuration = new Label("[GOLDENROD]Bomb fuse duration[]: The number of turns the bombs take to explode", PopinService.hudStyle());
 		bombDuration.setWrap(true);
 		profileInnerTable.add(bombDuration).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
-		Label bombRadius = new Label("Bomb radius: The range of the blast of your bombs, in number of tiles", PopinService.hudStyle());
+		Label bombRadius = new Label("[GOLDENROD]Bomb radius[]: The range of the blast of your bombs, in number of tiles", PopinService.hudStyle());
 		bombRadius.setWrap(true);
 		profileInnerTable.add(bombRadius).width(960).left().pad(0, 20, 20, 20);
 		profileInnerTable.row();
 		
-		Label resist = new Label("XXX resistance: The pourcentage of resistance to a given type of damage."
+		Label resist = new Label("[GOLDENROD]XXX resistance[]: The pourcentage of resistance to a given type of damage."
 				+ " When at 100 or above, you are immune to this kind of damage", 
 				PopinService.hudStyle());
 		resist.setWrap(true);
@@ -216,7 +216,7 @@ public class CharacteristicsPopinRenderer implements Renderer, RoomSystem {
 		
 		ScrollPane scrollPane = new ScrollPane(profileInnerTable, PopinService.scrollStyle());
 		scrollPane.setFadeScrollBars(false);
-		mainPopin.add(scrollPane).fill().expand().maxHeight(800).width(1100);
+		mainPopin.add(scrollPane).fill().expand().maxHeight(400).width(1100);
 		mainPopin.row();
 		
 		// 3 - Action buttons

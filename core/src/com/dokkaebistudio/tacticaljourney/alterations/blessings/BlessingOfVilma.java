@@ -33,25 +33,29 @@ public class BlessingOfVilma extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On kill, chance to [GREEN]restore hp[] based on the damages of the final blow";
+		return "On kill, chance to [GREEN]restore hp[] based on the damages of the final blow. Chance increased while holding the Fata Morgana";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.blessing_of_vilma;
 	}
-
 	
 	@Override
-	public void onKill(Entity attacker, Entity target, Room room) {
+	public Integer getCurrentProcChance(Entity user) {
 		int chanceToProc = this.initialChanceToProc;
-		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(attacker);
+		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
 		if (inventoryComponent.contains(ItemFataMorgana.class)) {
 			chanceToProc += this.fataMorganaInInventoryAdd;
 		}
-		
+		return chanceToProc;
+	}
+
+	
+	@Override
+	public void onKill(Entity attacker, Entity target, Room room) {		
 		float randomValue = RandomSingleton.getNextChanceWithKarma();
-		if (randomValue < chanceToProc) {
+		if (randomValue < getCurrentProcChance(attacker)) {
 			HealthComponent healthComponent = Mappers.healthComponent.get(attacker);
 			
 			if (healthComponent != null) {

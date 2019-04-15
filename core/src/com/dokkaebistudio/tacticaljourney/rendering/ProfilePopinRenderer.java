@@ -456,6 +456,14 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		desc.setWrap(true);
 		oneAlterationSubTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
 		
+		if (alteration.getCurrentProcChance(GameScreen.player) != null) {
+			oneAlterationSubTable.row();
+			Label chance = new Label("Current chance: [YELLOW]" + alteration.getCurrentProcChance(GameScreen.player) + "%", PopinService.smallTextStyle());
+			chance.setAlignment(Align.left);
+			chance.setWidth(Assets.profile_alteration_background.getRegionWidth() - 10);
+			oneAlterationSubTable.add(chance).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
+		}
+		
 		oneAlterationSubTable.pack();
 		
 		oneAlterationTable.add(oneAlterationSubTable).pad(15, 0, 0, 15);

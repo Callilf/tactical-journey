@@ -78,6 +78,7 @@ import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.esotericsoftware.kryo.Kryo;
@@ -271,12 +272,12 @@ public class Persister {
 				gameScreen.player = (Entity) kryo.readClassAndObject(input);
 				
 						
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(gameScreen.player);
+				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
 				MovementHandler.placeEntity(gameScreen.player, gridPositionComponent.coord(), gameScreen.activeFloor.getActiveRoom());
-				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(gameScreen.player);
-				inventoryComponent.player = gameScreen.player;
-				
-
+				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
+				inventoryComponent.player = GameScreen.player;
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(GameScreen.player);
+				statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
 				
 				// Restore the state of the active room
 				gameScreen.activeFloor.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
@@ -562,8 +563,9 @@ public class Persister {
 		
 		
 		// Misc serializers
+		
 		kryo.register(Tile.class, Tile.getSerializer(engine));
-
+		kryo.register(AnimatedImage.class, AnimatedImage.getSerializer(engine));
 		
 		
 		// Component serializers

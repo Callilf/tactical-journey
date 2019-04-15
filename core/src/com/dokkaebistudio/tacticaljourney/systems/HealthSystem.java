@@ -134,61 +134,70 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						gameScreen.killerStr = killerString;
 					}
 					
+			    	healthCompo.setAttacker(null);
+			    	
 				} else {
 					// Death of any other entity than the player
+					GridPositionComponent entityPos = Mappers.gridPositionComponent.get(entity);
+					if (entityPos.room == room) {
+						// Do not handle entities outside the current room
 					
-					// Drop reward
-					LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
-					LootUtil.dropItem(entity, lootRewardComponent, room);
-					
-					EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
-					if (enemyComponent != null) {
-						Journal.addEntry(enemyComponent.getType().title() + " died");
-						// An enemy died
-						enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
-					}
-					
-		    		// Get XP
-		    		if (healthCompo.getAttacker() != null) {
-						ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
-						ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
-						if (expCompo != null && expRewardCompo != null) {
-							expCompo.earnXp(expRewardCompo.getExpGain());
+						// Drop reward
+						LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
+						LootUtil.dropItem(entity, lootRewardComponent, room);
+						
+						EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
+						if (enemyComponent != null) {
+							Journal.addEntry(enemyComponent.getType().title() + " died");
+							// An enemy died
+							enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
 						}
-		    		}
-					
-					
-					// Alteration events
-					AlterationReceiverComponent deadEntityAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(entity);
-					if (deadEntityAlterationReceiverCompo != null) {
-						deadEntityAlterationReceiverCompo.onDeath(entity, healthCompo.getAttacker(), room);
-					}
-					AlterationReceiverComponent attackerAlterationReceiverCompo = null;
-					if (healthCompo.getAttacker() != null) {
-						attackerAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(healthCompo.getAttacker());
-						if (attackerAlterationReceiverCompo != null) {
-							attackerAlterationReceiverCompo.onKill(healthCompo.getAttacker(), entity, room);
+						
+			    		// Get XP
+			    		if (healthCompo.getAttacker() != null) {
+							ExperienceComponent expCompo = getExperienceComponent(healthCompo.getAttacker());
+							ExpRewardComponent expRewardCompo = Mappers.expRewardComponent.get(entity);
+							if (expCompo != null && expRewardCompo != null) {
+								expCompo.earnXp(expRewardCompo.getExpGain());
+							}
+			    		}
+						
+						
+						// Alteration events
+						AlterationReceiverComponent deadEntityAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(entity);
+						if (deadEntityAlterationReceiverCompo != null) {
+							deadEntityAlterationReceiverCompo.onDeath(entity, healthCompo.getAttacker(), room);
 						}
-					}
-					
-					StatusReceiverComponent deadEntityStatusReceiverCompo = Mappers.statusReceiverComponent.get(entity);
-					if (deadEntityStatusReceiverCompo != null) {
-						for (Status status : deadEntityStatusReceiverCompo.getStatuses()) {
-							status.onDeath(entity, room);
+						AlterationReceiverComponent attackerAlterationReceiverCompo = null;
+						if (healthCompo.getAttacker() != null) {
+							attackerAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(healthCompo.getAttacker());
+							if (attackerAlterationReceiverCompo != null) {
+								attackerAlterationReceiverCompo.onKill(healthCompo.getAttacker(), entity, room);
+							}
 						}
+						
+						StatusReceiverComponent deadEntityStatusReceiverCompo = Mappers.statusReceiverComponent.get(entity);
+						if (deadEntityStatusReceiverCompo != null) {
+							for (Status status : deadEntityStatusReceiverCompo.getStatuses()) {
+								status.onDeath(entity, room);
+							}
+						}
+						
+						room.removeEnemy(entity);		
+						
+						// If it was the player's turn, recompute movable tiles after the entity has been removed
+						if (room.getState().canEndTurn()) {
+							room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+						}
+					
+				    	healthCompo.setAttacker(null);
+
 					}
 					
-					room.removeEnemy(entity);		
-					
-					// If it was the player's turn, recompute movable tiles after the entity has been removed
-					if (room.getState().canEndTurn()) {
-						room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
-					}
 				}
 			
 	    	}
 
-	    	healthCompo.setAttacker(null);
     	}
     	    
     	

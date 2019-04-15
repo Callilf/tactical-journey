@@ -4,14 +4,20 @@
 package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * The entity is poisoned.
@@ -63,6 +69,13 @@ public class StatusDebuffPoison extends Status {
 			healthComponent.healthChangeMap.put(HealthChangeEnum.RESISTANT, "POISON IMMUNITY");
 			return false;
 		}
+		
+		animation = new AnimatedImage(AnimationSingleton.getInstance().poisoned, true);
+		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(entity).coord());
+		animation.setPosition(animPos.x, animPos.y);
+		animPos.free();
+		GameScreen.fxStage.addActor(animation);
+		
 		return true;
 	}
 	
@@ -72,7 +85,15 @@ public class StatusDebuffPoison extends Status {
 		healthComponent.hitThroughArmor(2, entity, parent, DamageType.POISON);
 	}
 
+	@Override
+	public void onRemove(Entity entity, Room room) {
+		animation.remove();
+	}
 	
+	@Override
+	public void onDeath(Entity entity, Room room) {
+		animation.remove();
+	}
 	
 	
 	//********************

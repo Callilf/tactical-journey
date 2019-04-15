@@ -114,12 +114,12 @@ public class Floor {
 		if (oldRoom != null) {
 			for (Entity e : oldRoom.getEnemies()) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-				statusReceiverComponent.hideStatusTable();
+				if (statusReceiverComponent != null) statusReceiverComponent.hideStatusTable();
 			}
 		}
 		for (Entity e : newRoom.getEnemies()) {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-			statusReceiverComponent.displayStatusTable(gameScreen.fxStage);
+			if (statusReceiverComponent != null) statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
 		}
 		
 		if (oldRoom != null) {

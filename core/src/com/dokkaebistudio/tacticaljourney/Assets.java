@@ -257,6 +257,7 @@ public class Assets {
 	
 	public static RegionDescriptor status_poison;
 	public static RegionDescriptor status_poison_full;
+	public static Array<Sprite> poisoned_animation;	
 	public static RegionDescriptor status_regen;
 	public static RegionDescriptor status_regen_full;
 	public static RegionDescriptor status_flight;
@@ -267,6 +268,7 @@ public class Assets {
 	public static RegionDescriptor status_entangled_full;
 	public static RegionDescriptor status_death_door;
 	public static RegionDescriptor status_death_door_full;
+
 
 	
 	//*********
@@ -610,6 +612,7 @@ public class Assets {
 		
 		status_poison = Assets.getTexture("poison");
 		status_poison_full = Assets.getTexture("poison_full");
+		poisoned_animation = Assets.getAnimation("poisoned");
 		status_regen = Assets.getTexture("regen");
 		status_regen_full = Assets.getTexture("regen_full");
 		status_flight = Assets.getTexture("flight");

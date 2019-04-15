@@ -161,11 +161,23 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		if (statusTable != null && statuses.size() > 0) {
 			fxStage.addActor(statusTable);
 		}
+		
+		for (Status status : statuses) {
+			if (status.getAnimation() != null) {
+				fxStage.addActor(status.getAnimation());
+			}
+		}
 	}
 	
 	public void hideStatusTable() {
 		if (statusTable != null && statuses.size() > 0) {
 			statusTable.remove();
+		}
+		
+		for (Status status : statuses) {
+			if (status.getAnimation() != null) {
+				status.getAnimation().remove();
+			}
 		}
 	}
 	
@@ -275,26 +287,38 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 		if (statusTable != null) {
 			statusTable.setPosition(statusTable.getX() + xOffset, statusTable.getY() + yOffset);
 		}
+		
+		for (Status status : statuses) {
+			status.performMovement(xOffset, yOffset);
+		}
 	}
 
 
 
 	@Override
 	public void endMovement(Vector2 finalPos) {
+		PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
 		if (statusTable != null) {
-			PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
 			statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
-			newPixelPos.free();
 		}
+		
+		for (Status status : statuses) {
+			status.endMovement(newPixelPos);
+		}
+		newPixelPos.free();
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
+		PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
 		if (statusTable != null) {
-			PoolableVector2 newPixelPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
 			statusTable.setPosition(newPixelPos.x, newPixelPos.y + GameScreen.GRID_SIZE - 20);
-			newPixelPos.free();
 		}
+		
+		for (Status status : statuses) {
+			status.place(newPixelPos);
+		}
+		newPixelPos.free();
 	}
 	
 	

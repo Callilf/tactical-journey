@@ -64,6 +64,10 @@ public class AnimationSingleton {
 	public Animation<Sprite> web_projectile;
 	public Animation<Sprite> pebble_projectile;
 	
+	
+	// Status effects
+	public Animation<Sprite> poisoned;
+	
 
 	private void init() {
 		animationsCount = 0;
@@ -149,6 +153,12 @@ public class AnimationSingleton {
 		createAnimation(web_projectile);
 		pebble_projectile = new Animation<>(0.1f, Assets.projectile_pebble);
 		createAnimation(pebble_projectile);
+		
+		
+		// Status effects
+		
+		poisoned = new Animation<>(0.09f, Assets.poisoned_animation, PlayMode.LOOP);
+		createAnimation(poisoned);
 
 	}
 

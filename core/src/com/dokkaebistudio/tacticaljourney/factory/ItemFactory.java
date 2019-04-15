@@ -88,7 +88,7 @@ public final class ItemFactory {
 	}
 	
 	
-	public Entity createItemBase(Room room, Vector2 tilePos, AbstractItem itemType) {
+	public Entity createItemBase(Room room, Vector2 tilePos, AbstractItem itemType, EntityFlagEnum flag) {
 		return createItemBase(room, tilePos, itemType.getTexture(), 
 				itemType, itemType.getLabel(), itemType.getDescription());
 	}
@@ -166,13 +166,13 @@ public final class ItemFactory {
 		Entity item = null;
 		
 		switch (type) {
+		
 		case MONEY:
 			item = createItemMoney(room, tilePos, MoneyAmountEnum.SMALL, randomToUse);
 			break;
 		case MONEY_MEDIUM:
 			item = createItemMoney(room, tilePos, MoneyAmountEnum.MEDIUM, randomToUse);
 			break;
-			
 		case AMMO_ARROW:
 			item = createItemArrows(room, tilePos, randomToUse);
 			break;
@@ -180,147 +180,170 @@ public final class ItemFactory {
 			item = createItemBombs(room, tilePos, randomToUse);
 			break;
 			
+		//***********************
+		// Inventory items
+			
 		case ARMOR_LIGHT:
-			item = createItemLightArmor(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemLightArmor(), EntityFlagEnum.ITEM_ARMOR_UP);
 			break;
 		case ARMOR_PIECE:
-			item = createItemArmorPiece(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemArmorPiece(), EntityFlagEnum.ITEM_ARMOR_PIECE);
 			break;
-			
 		case POTION_FIRE:
-			item = createItemFirePotion(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemFirePotion(), EntityFlagEnum.ITEM_FIRE_POTION);
 			break;
 		case POTION_SMALL_HEALTH:
-			item = createItemHealthUp(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemSmallHealthPotion(), EntityFlagEnum.ITEM_HEALTH_UP);
 			break;
 		case POTION_REGEN:
-			item = createItemRegenPotion(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemRegenPotion(), EntityFlagEnum.ITEM_REGEN_POTION);
 			break;
 		case POTION_WING:
-			item = createItemWingPotion(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemWingPotion(), EntityFlagEnum.ITEM_WING_POTION);
 			break;
-			
 		case ORB_CONTAINER:
-			item = createItemOrbContainer(room, tilePos);
-			break;
-
-			
-		case WEB_SACK:
-			item = createItemWebSack(room, tilePos);
-			break;
-		case VENOM_GLAND:
-			item = createItemVenomGland(room, tilePos);
-			break;
-		case PEBBLE:
-			item = createItemPebble(room, tilePos);
-			break;
-		case WORMHOLE_SHARD:
-			item = createItemWormholeShard(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbContainer(), EntityFlagEnum.ITEM_ORB_CONTAINER);
 			break;
 		case DIVINE_CATALYST:
-			item = createItemDivineCatalyst(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemDivineCatalyst(), EntityFlagEnum.ITEM_DIVINE_CATALYST);
+			break;
+		case UNIVERSAL_CURE:
+			item = createItemBase(room, tilePos, new ItemUniversalCure(), EntityFlagEnum.ITEM_UNIVERSAL_CURE);
 			break;
 			
+			
+		//*************
+		// Throwing items
+			
+		case WEB_SACK:
+			item = createItemBase(room, tilePos,  new ItemWebSack(), EntityFlagEnum.ITEM_WEB_SACK);
+			break;
+		case VENOM_GLAND:
+			item = createItemBase(room, tilePos,  new ItemVenomGland(), EntityFlagEnum.ITEM_VENOM_GLAND);
+			break;
+		case PEBBLE:
+			item = createItemBase(room, tilePos,  new ItemPebble(), EntityFlagEnum.ITEM_PEBBLE);
+			break;
+		case WORMHOLE_SHARD:
+			item = createItemBase(room, tilePos,  new ItemWormholeShard(), EntityFlagEnum.ITEM_WORMHOLE_SHARD);
+			break;
 		case SHURIKEN:
-			item = createItemShuriken(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemShuriken(), EntityFlagEnum.ITEM_SHURIKEN);
 			break;
 			
+			
+			
+		//******************
+		// Infusables
 			
 		case TOTEM_OF_KALAMAZOO:
-			item = createItemTotemOfKalamazoo(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemTotemOfKalamazoo(), EntityFlagEnum.ITEM_INFUSABLE);
+			
+			FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+			flammable.setPropagate(true);
+			flammable.setDestroyed(false);
+			item.add(flammable);
+			
 			break;
 			
 		case FATA_MORGANA:
-			item = createItemFataMorgana(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemFataMorgana(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case MITHRIDATIUM:
-			item = createItemMithridatium(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemMithridatium(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 
 		case NURSE_EYE_PATCH:
-			item = createItemNurseEyePatch(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemNurseEyePatch(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 
 		case VEGETAL_GARMENT:
-			item = createItemVegetalGarment(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemVegetalGarment(), EntityFlagEnum.ITEM_INFUSABLE);
+			
+			flammable = engine.createComponent(FlammableComponent.class);
+			flammable.setPropagate(true);
+			flammable.setDestroyed(true);
+			item.add(flammable);
+			
 			break;
 			
 		case RAM_SKULL:
-			item = createItemRamSkull(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemRamSkull(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case COLORFUL_TIE:
-			item = createItemColorfulTie(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemColorfulTie(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case OLD_CROWN:
-			item = createItemOldCrown(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOldCrown(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case MEMENTO_MORI:
-			item = createItemMementoMori(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemMementoMori(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case HEADBAND:
-			item = createItemHeadband(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemHeadband(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case VILLANELLE:
-			item = createItemVillanelle(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemVillanelle(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case POWDER_FLASK:
-			item = createItemPowderFlask(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemPowderFlask(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case CAMO_BACKPACK:
-			item = createItemCamoBackpack(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemCamoBackpack(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case MERCHANT_MASK:
-			item = createItemMerchantMask(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemMerchantMask(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case HAND_PROSTHESIS:
-			item = createItemHandProsthesis(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemHandProsthesis(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case LEFT_JIKATABI:
-			item = createItemLeftJikatabi(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemLeftJikatabi(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case RIGHT_JIKATABI:
-			item = createItemRightJikatabi(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemRightJikatabi(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case PANGOLIN_SCALE:
-			item = createItemPangolinScale(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemPangolinScale(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 			
 			
 			
 			
-			
+		//*****************
+		// Orbs
 			
 		case ENERGY_ORB:
-			item = createItemEnergyOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbEnergy(), EntityFlagEnum.ITEM_ORB);
 			break;
 		case VEGETAL_ORB:
-			item = createItemVegetalOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbVegetal(), EntityFlagEnum.ITEM_ORB);
 			break;
 		case POISON_ORB:
-			item = createItemPoisonOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbPoison(), EntityFlagEnum.ITEM_ORB);
 			break;
 		case FIRE_ORB:
-			item = createItemFireOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbFire(), EntityFlagEnum.ITEM_ORB);
 			break;
 		case DEATH_ORB:
-			item = createItemDeathOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbDeath(), EntityFlagEnum.ITEM_ORB);
 			break;
 		case VOID_ORB:
-			item = createItemVoidOrb(room, tilePos);
+			item = createItemBase(room, tilePos,  new ItemOrbVoid(), EntityFlagEnum.ITEM_ORB);
 			break;
 			default:
 				System.out.println("Item type " + type.name() + " not handled in ItemFactory.");
@@ -351,20 +374,6 @@ public final class ItemFactory {
 		Entity item = createItemBase(room, tilePos, Assets.money_item, new ItemMoney(amount,randomToUse),
 				Descriptions.ITEM_MONEY_TITLE, Descriptions.ITEM_MONEY_DESCRIPTION);
 		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create the key to next floor.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemKey(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemKey());
-		item.flags = EntityFlagEnum.ITEM_MONEY.getFlag();
-		
-		item.remove(DestructibleComponent.class);
-		
 		return item;
 	}
 	
@@ -403,85 +412,7 @@ public final class ItemFactory {
 		item.flags = EntityFlagEnum.ITEM_BOMBS.getFlag();
 		return item;
 	}
-	
-	
-	public Entity createUniversalCure(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemUniversalCure());
-		item.flags = EntityFlagEnum.UNIVERSAL_CURE.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a health potion.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemHealthUp(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemSmallHealthPotion());
-		item.flags = EntityFlagEnum.ITEM_HEALTH_UP.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a regen potion.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemRegenPotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemRegenPotion());
-		item.flags = EntityFlagEnum.ITEM_REGEN_POTION.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a wing potion.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemWingPotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemWingPotion());
-		item.flags = EntityFlagEnum.ITEM_WING_POTION.getFlag();
-		return item;
-	}
-	
-	public Entity createItemOrbContainer(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemOrbContainer());
-		item.flags = EntityFlagEnum.ITEM_ORB_CONTAINER.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a fire potion.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemFirePotion(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemFirePotion());
-		item.flags = EntityFlagEnum.ITEM_FIRE_POTION.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a light armor.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemLightArmor(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemLightArmor());
-		item.flags = EntityFlagEnum.ITEM_ARMOR_UP.getFlag();
-		return item;
-	}
-	
-	/**
-	 * Create a piece of armor.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemArmorPiece(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemArmorPiece());
-		item.flags = EntityFlagEnum.ITEM_ARMOR_PIECE.getFlag();
-		return item;
-	}
+
 	
 	/**
 	 * Create a tutorial page.
@@ -503,236 +434,15 @@ public final class ItemFactory {
 	}
 	
 	/**
-	 * Create a sack of web.
+	 * Create the key to next floor.
 	 * @param tilePos the position in tiles
 	 * @return the entity created
 	 */
-	public Entity createItemWebSack(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemWebSack());
-		item.flags = EntityFlagEnum.ITEM_WEB_SACK.getFlag();
-		
-		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
-		flammable.setPropagate(true);
-		flammable.setDestroyed(true);
-		flammable.setDestroyedTexture(Assets.web_sack_item);
-		item.add(flammable);
+	public Entity createItemKey(Room room, Vector2 tilePos) {
+		Entity item = createItemBase(room, tilePos, new ItemKey(), EntityFlagEnum.ITEM_MONEY);		
+		item.remove(DestructibleComponent.class);
 		
 		return item;
 	}
 	
-	/**
-	 * Create a sack of web.
-	 * @param tilePos the position in tiles
-	 * @return the entity created
-	 */
-	public Entity createItemVenomGland(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemVenomGland());
-		item.flags = EntityFlagEnum.ITEM_VENOM_GLAND.getFlag();
-		return item;
-	}
-	
-	public Entity createItemWormholeShard(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemWormholeShard());
-		item.flags = EntityFlagEnum.ITEM_WORMHOLE_SHARD.getFlag();
-		return item;
-	}
-
-
-	
-	
-	public Entity createItemDivineCatalyst(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemDivineCatalyst());
-		item.flags = EntityFlagEnum.ITEM_DIVINE_CATALYST.getFlag();
-		return item;
-	}
-	
-	
-	//********
-	// Throw items
-	
-	public Entity createItemPebble(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemPebble());
-		item.flags = EntityFlagEnum.ITEM_PEBBLE.getFlag();
-		return item;
-	}
-	
-	public Entity createItemShuriken(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemShuriken());
-		item.flags = EntityFlagEnum.ITEM_SHURIKEN.getFlag();
-		return item;
-	}
-
-
-	//*********************
-	// Infusables 
-	
-	public Entity createItemTotemOfKalamazoo(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,  new ItemTotemOfKalamazoo());
-		item.flags = EntityFlagEnum.ITEM_TOTEM_OF_KALAMAZOO.getFlag();
-		
-		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
-		flammable.setPropagate(true);
-		flammable.setDestroyed(false);
-		item.add(flammable);
-		
-		return item;
-	}
-	
-
-	public Entity createItemFataMorgana(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemFataMorgana());
-		item.flags = EntityFlagEnum.ITEM_FATA_MORGANA.getFlag();
-		return item;
-	}
-	
-
-	public Entity createItemMithridatium(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemMithridatium());
-		item.flags = EntityFlagEnum.ITEM_MITHRIDATIUM.getFlag();
-		return item;
-	}
-	
-	
-
-	public Entity createItemNurseEyePatch(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemNurseEyePatch());
-		item.flags = EntityFlagEnum.ITEM_NURSE_EYE_PATCH.getFlag();
-		return item;
-	}
-	
-
-	public Entity createItemVegetalGarment(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemVegetalGarment());
-		item.flags = EntityFlagEnum.ITEM_VEGETAL_GARMENT.getFlag();
-		return item;
-	}
-	
-	public Entity createItemRamSkull(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemRamSkull());
-		item.flags = EntityFlagEnum.ITEM_RAM_SKULL.getFlag();
-		return item;
-	}
-	
-	public Entity createItemColorfulTie(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemColorfulTie());
-		item.flags = EntityFlagEnum.ITEM_COLORFUL_TIE.getFlag();
-		return item;
-	}
-	
-	public Entity createItemOldCrown(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemOldCrown());
-		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
-		return item;
-	}
-	
-	public Entity createItemMementoMori(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemMementoMori());
-		item.flags = EntityFlagEnum.ITEM_OLD_CROWN.getFlag();
-		return item;
-	}
-	
-	public Entity createItemHeadband(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemHeadband());
-		item.flags = EntityFlagEnum.ITEM_HEADBAND.getFlag();
-		return item;
-	}
-	
-	public Entity createItemVillanelle(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemVillanelle());
-		item.flags = EntityFlagEnum.ITEM_VILLANELLE.getFlag();
-		return item;
-	}
-	
-	public Entity createItemPowderFlask(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, new ItemPowderFlask());
-		item.flags = EntityFlagEnum.ITEM_POWDER_FLASK.getFlag();
-		return item;
-	}
-	
-	public Entity createItemCamoBackpack(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemCamoBackpack());
-		item.flags = EntityFlagEnum.ITEM_CAMO_BACKPACK.getFlag();
-		return item;
-	}
-	
-	public Entity createItemMerchantMask(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemMerchantMask());
-		item.flags = EntityFlagEnum.ITEM_MERCHANT_MASK.getFlag();
-		return item;
-	}
-	
-	public Entity createItemHandProsthesis(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemHandProsthesis());
-		item.flags = EntityFlagEnum.ITEM_HAND_PROSTHESIS.getFlag();
-		return item;
-	}
-	
-	public Entity createItemLeftJikatabi(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemLeftJikatabi());
-		item.flags = EntityFlagEnum.ITEM_SHINOBI_SHOE.getFlag();
-		return item;
-	}
-	
-	public Entity createItemRightJikatabi(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemRightJikatabi());
-		item.flags = EntityFlagEnum.ITEM_SHINOBI_SHOE.getFlag();
-		return item;
-	}
-	
-	public Entity createItemPangolinScale(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemPangolinScale());
-		item.flags = EntityFlagEnum.ITEM_PANGOLIN_SCALE.getFlag();
-		return item;
-	}
-	
-	
-	
-	
-	
-	
-	//************
-	// Orbs
-	
-	public Entity createItemEnergyOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.energy_orb_item, new ItemOrbEnergy(),
-				Descriptions.ORB_ENERGY_TITLE, Descriptions.ORB_ENERGY_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	public Entity createItemVegetalOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.vegetal_orb_item, new ItemOrbVegetal(),
-				Descriptions.ORB_VEGETAL_TITLE, Descriptions.ORB_VEGETAL_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	public Entity createItemPoisonOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.poison_orb_item, new ItemOrbPoison(),
-				Descriptions.ORB_POISON_TITLE, Descriptions.ORB_POISON_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	public Entity createItemFireOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.fire_orb_item, new ItemOrbFire(),
-				Descriptions.ORB_FIRE_TITLE, Descriptions.ORB_FIRE_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	
-	public Entity createItemDeathOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.death_orb_item, new ItemOrbDeath(),
-				Descriptions.ORB_DEATH_TITLE, Descriptions.ORB_DEATH_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
-	
-	public Entity createItemVoidOrb(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos, Assets.void_orb_item, new ItemOrbVoid(),
-				Descriptions.ORB_VOID_TITLE, Descriptions.ORB_VOID_DESCRIPTION);
-		item.flags = EntityFlagEnum.ITEM_ORB.getFlag();
-		return item;
-	}
 }

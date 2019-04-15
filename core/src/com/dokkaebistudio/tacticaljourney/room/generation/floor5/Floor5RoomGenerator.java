@@ -10,6 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
@@ -47,7 +48,7 @@ public class Floor5RoomGenerator extends RoomGenerator {
 		switch(room.type) {
 		case START_FLOOR_ROOM:
 
-			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
+			entityFactory.itemFactory.createItem(ItemEnum.UNIVERSAL_CURE, room, new Vector2(12,10));
 			
 			default:
 			break;

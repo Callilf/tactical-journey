@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
+import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -457,8 +458,15 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		oneAlterationSubTable.add(desc).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
 		
 		if (alteration.getCurrentProcChance(GameScreen.player) != null) {
+			int procChance = alteration.getCurrentProcChance(GameScreen.player);
+			if (alteration instanceof Blessing) {
+				procChance += playerCompo.getKarma();
+			} else {
+				procChance -= playerCompo.getKarma();
+			}
+			
 			oneAlterationSubTable.row();
-			Label chance = new Label("Current chance: [YELLOW]" + alteration.getCurrentProcChance(GameScreen.player) + "%", PopinService.smallTextStyle());
+			Label chance = new Label("Current chance: [YELLOW]" + procChance + "%", PopinService.smallTextStyle());
 			chance.setAlignment(Align.left);
 			chance.setWidth(Assets.profile_alteration_background.getRegionWidth() - 10);
 			oneAlterationSubTable.add(chance).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);

@@ -34,6 +34,8 @@ public class PersonalBelongingsItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POWDER_FLASK, 10, true));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.CAMO_BACKPACK, 10, true));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.MERCHANT_MASK, 10, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.HAND_PROSTHESIS, 10, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.JIKATABI, 10, true));
 	}
 	
 

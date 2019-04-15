@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingShurikenjutsu;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseShinobi;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -23,6 +24,9 @@ public class ItemHandProsthesis extends AbstractInfusableItem {
 		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
 		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
+		CurseShinobi curse = new CurseShinobi();
+		curse.setItemSprite(this.getTexture());
+		curses.add(curse);
 	}
 	
 	@Override

@@ -48,7 +48,7 @@ public class BlessingKawarimi extends Blessing {
 
 	@Override
 	public String title() {
-		return "Kawarimi";
+		return "Kawarimi no jutsu";
 	}
 	
 	@Override

@@ -8,6 +8,8 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -39,6 +41,8 @@ public class CurseWeakness extends Curse {
 		if (attackCompo != null) {
 			attackCompo.setStrength(attackCompo.getStrength() - 1);
 		}
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 
 	@Override

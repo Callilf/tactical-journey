@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -42,6 +43,8 @@ public class BlessingBowmasterMight extends Blessing {
 				rangeAttackCompo.increaseRangeMax(1);
 			}
 		}
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 	
 

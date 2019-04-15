@@ -1,36 +1,39 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.alterations.blessings.basics;
+package com.dokkaebistudio.tacticaljourney.alterations.curses;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of vigor. Increase the entity's max HP by 10.
+ * Curse of heavy arrows. Range - 1.
  * @author Callil
  *
  */
-public class BlessingVigor extends Blessing {
-	
+public class CurseShinobi extends Curse {
+
 	@Override
 	public String title() {
-		return "Blessing of vigor";
+		return "Curse of the shinobi";
 	}
 	
 	@Override
 	public String description() {
-		return "Increase max HP by 10";
+		return "Reduce max armor by 10. Shinobi are swift warriors that cannot perform their art properly while wearing an armor.";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
-		return Assets.blessing_vigor;
+		return Assets.curse_shinobi;
 	}
 
 	@Override
@@ -38,10 +41,11 @@ public class BlessingVigor extends Blessing {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		
 		if (healthComponent != null) {
-			healthComponent.setMaxHp(healthComponent.getMaxHp() + 10);
+			healthComponent.increaseMaxArmor(-10);
+			
+			Journal.addEntry("[PURPLE]Curse of the shinobi reduced your max armor by 10");
+			AlterationSystem.addAlterationProc(this);
 		}
-		
-		AlterationSystem.addAlterationProc(this);
 	}
 
 	@Override
@@ -49,12 +53,8 @@ public class BlessingVigor extends Blessing {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		
 		if (healthComponent != null) {
-			healthComponent.setMaxHp(healthComponent.getMaxHp() - 10);
-			if (healthComponent.getHp() > healthComponent.getMaxHp()) {
-				healthComponent.setHp(healthComponent.getMaxHp());
-			}
+			healthComponent.increaseMaxArmor(10);
 		}
-
 	}
 
 }

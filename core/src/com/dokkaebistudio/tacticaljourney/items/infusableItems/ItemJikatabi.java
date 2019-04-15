@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingKawarimi;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseShinobi;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -15,19 +16,22 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
  * @author Callil
  *
  */
-public class ItemShinobiShoe extends AbstractInfusableItem {
+public class ItemJikatabi extends AbstractInfusableItem {
 	
-	public ItemShinobiShoe() {
-		super(ItemEnum.SHINOBI_SHOE, Assets.shinobi_shoe, false, true);
+	public ItemJikatabi() {
+		super(ItemEnum.JIKATABI, Assets.jikatabi, false, true);
 		
 		BlessingKawarimi blessing2 = new BlessingKawarimi();
 		blessing2.setItemSprite(this.getTexture());
 		blessings.add(blessing2);
+		CurseShinobi curse = new CurseShinobi();
+		curse.setItemSprite(this.getTexture());
+		curses.add(curse);
 	}
 	
 	@Override
 	public String getDescription() {
-		return Descriptions.ITEM_SHINOBI_SHOE_DESCRIPTION;	
+		return Descriptions.ITEM_JIKATABI_DESCRIPTION;	
 	}
 	
 	@Override

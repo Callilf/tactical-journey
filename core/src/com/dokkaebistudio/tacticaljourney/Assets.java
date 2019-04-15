@@ -329,7 +329,7 @@ public class Assets {
 	public static RegionDescriptor camo_backpack;
 	public static RegionDescriptor merchant_mask;
 	public static RegionDescriptor hand_prothesis;
-	public static RegionDescriptor shinobi_shoe;
+	public static RegionDescriptor jikatabi;
 
 	
 	// Boss items
@@ -385,6 +385,7 @@ public class Assets {
 	public static RegionDescriptor curse_acceptance;
 	public static RegionDescriptor curse_pangolin_mother;
 	public static RegionDescriptor curse_heavy_arrows;
+	public static RegionDescriptor curse_shinobi;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -676,7 +677,7 @@ public class Assets {
 		camo_backpack = Assets.getTexture("item-infusable-camo-backpack");
 		merchant_mask = Assets.getTexture("item-infusable-merchant-mask");
 		hand_prothesis = Assets.getTexture("item-infusable-hand-prosthesis");
-		shinobi_shoe = Assets.getTexture("item-infusable-shinobi-shoe");
+		jikatabi = Assets.getTexture("item-infusable-shinobi-shoe");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -732,6 +733,7 @@ public class Assets {
 		curse_acceptance = Assets.getTexture("curse-acceptance");
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 		curse_heavy_arrows = Assets.getTexture("curse-heavy-arrow");
+		curse_shinobi = Assets.getTexture("curse-shinobi");
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

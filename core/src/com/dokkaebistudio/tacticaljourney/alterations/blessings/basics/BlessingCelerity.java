@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -39,6 +40,8 @@ public class BlessingCelerity extends Blessing {
 		if (moveCompo != null) {
 			moveCompo.increaseMoveSpeed(1);
 		}
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 
 	@Override

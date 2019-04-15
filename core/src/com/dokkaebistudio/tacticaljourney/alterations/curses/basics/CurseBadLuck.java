@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
@@ -38,6 +39,8 @@ public class CurseBadLuck extends Curse {
 		if (playerComponent != null) {
 			playerComponent.increaseKarma(-2);
 		}
+		
+		AlterationSystem.addAlterationProc(this);
 	}
 
 	@Override

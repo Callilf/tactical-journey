@@ -252,10 +252,10 @@ public class Descriptions {
 	public static final String ITEM_MERCHANT_MASK_DESCRIPTION = "A creepy mask that belongs to a merchant specialized in masks trading. Grants the blessing of the mask merchant while held in the inventory.";
 	
 	public static final String ITEM_HAND_PROSTHESIS_TITLE = "Hand prosthesis";
-	public static final String ITEM_HAND_PROSTHESIS_DESCRIPTION = "A prosthetic hand that once belonged to a shinobi. Grants the shurikenjutsu blessing while held in the inventory.";
+	public static final String ITEM_HAND_PROSTHESIS_DESCRIPTION = "A prosthetic hand that once belonged to a shinobi. Grants the Shurikenjutsu blessing and the Curse of the shinobi while held in the inventory.";
 	
-	public static final String ITEM_SHINOBI_SHOE_TITLE = "Shinobi shoe";
-	public static final String ITEM_SHINOBI_SHOE_DESCRIPTION = "A left shoe that once belonged to a shinobi. The right shoe is missing. Grants the kawarimi blessing while held in the inventory.";
+	public static final String ITEM_JIKATABI_TITLE = "Jikatabi";
+	public static final String ITEM_JIKATABI_DESCRIPTION = "A left shoe that once belonged to a shinobi. The right shoe is missing. Grants the Kawarimi no jutsu blessing and the Curse of the shinobi while held in the inventory.";
 
 	
 }

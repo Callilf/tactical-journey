@@ -36,7 +36,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPowderFlask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
-import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemShinobiShoe;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemJikatabi;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
@@ -285,7 +285,7 @@ public final class ItemFactory {
 			item = createItemHandProsthesis(room, tilePos);
 			break;
 			
-		case SHINOBI_SHOE:
+		case JIKATABI:
 			item = createItemShinobiShoe(room, tilePos);
 			break;
 			
@@ -663,7 +663,7 @@ public final class ItemFactory {
 	}
 	
 	public Entity createItemShinobiShoe(Room room, Vector2 tilePos) {
-		Entity item = createItemBase(room, tilePos,new ItemShinobiShoe());
+		Entity item = createItemBase(room, tilePos,new ItemJikatabi());
 		item.flags = EntityFlagEnum.ITEM_SHINOBI_SHOE.getFlag();
 		return item;
 	}

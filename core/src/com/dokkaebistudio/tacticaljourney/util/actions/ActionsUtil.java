@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.util;
+package com.dokkaebistudio.tacticaljourney.util.actions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;

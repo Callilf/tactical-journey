@@ -12,9 +12,9 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.util.ActionsUtil;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.util.actions.ActionsUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 

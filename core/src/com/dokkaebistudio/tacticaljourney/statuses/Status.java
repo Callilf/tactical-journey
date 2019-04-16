@@ -5,6 +5,7 @@ package com.dokkaebistudio.tacticaljourney.statuses;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
@@ -20,7 +21,7 @@ public abstract class Status {
 	private Integer duration;
 	
 	/** The status effect animation. */
-	protected AnimatedImage animation;
+	protected Image animation;
 	
 	public abstract String title();
 	public abstract String description();
@@ -102,10 +103,10 @@ public abstract class Status {
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
-	public AnimatedImage getAnimation() {
+	public Image getAnimation() {
 		return animation;
 	}
-	public void setAnimation(AnimatedImage animation) {
+	public void setAnimation(Image animation) {
 		this.animation = animation;
 	};
 

@@ -6,14 +6,20 @@ package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * The entity is burning.
@@ -58,6 +64,24 @@ public class StatusDebuffBurning extends Status {
 		return Assets.status_burning_full;
 	}
 	
+	
+	@Override
+	public boolean onReceive(Entity entity, Room room) {
+		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
+		int resistance = healthComponent.getResistance(DamageType.FIRE);
+		if (resistance == 100) {
+			healthComponent.healthChangeMap.put(HealthChangeEnum.RESISTANT, "FIRE IMMUNITY");
+			return false;
+		}
+		
+		animation = new AnimatedImage(AnimationSingleton.getInstance().burning, true);
+		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(entity).coord());
+		animation.setPosition(animPos.x, animPos.y);
+		animPos.free();
+		GameScreen.fxStage.addActor(animation);
+		return true;
+	}
+	
 	@Override
 	public void onStartTurn(Entity entity, Room room) {
 		RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
@@ -72,6 +96,18 @@ public class StatusDebuffBurning extends Status {
 	public void onEndTurn(Entity entity, Room room) {
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		healthComponent.hit(3, entity, parent, DamageType.FIRE);
+	}
+	
+	
+
+	@Override
+	public void onRemove(Entity entity, Room room) {
+		animation.remove();
+	}
+	
+	@Override
+	public void onDeath(Entity entity, Room room) {
+		animation.remove();
 	}
 	
 	

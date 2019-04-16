@@ -12,9 +12,12 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
@@ -76,7 +79,9 @@ import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -550,6 +555,25 @@ public class Persister {
 	
 	
 	
+	
+	public static Serializer<Image> getImageSerializer(final PooledEngine engine) {
+		return new Serializer<Image>() {
+
+			@Override
+			public void write(Kryo kryo, Output output, Image object) {
+				System.out.println("Image");
+			}
+
+			@Override
+			public Image read(Kryo kryo, Input input, Class<Image> type) {
+				return null;
+			}
+		
+		};
+	}
+	
+	
+	
 	public void registerSerializers(Kryo kryo, Floor currentFloor, List<Floor> floors) {
 		
 		// general serializers
@@ -560,12 +584,14 @@ public class Persister {
 		kryo.register(PooledEntity.class, getEntitySerializer());
 		kryo.register(RegionDescriptor.class, RegionDescriptor.getSerializer(engine));
 		kryo.register(FontDescriptor.class, FontDescriptor.getSerializer(engine));
-		
+		kryo.register(Image.class, getImageSerializer(engine));
+
 		
 		// Misc serializers
 		
 		kryo.register(Tile.class, Tile.getSerializer(engine));
 		kryo.register(AnimatedImage.class, AnimatedImage.getSerializer(engine));
+		kryo.register(StatusDebuffDeathDoor.class, StatusDebuffDeathDoor.getStatusDebuffDeathDoorSerializer(engine));
 		
 		
 		// Component serializers

@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -65,8 +66,19 @@ public class ItemFirePotion extends AbstractItem {
 			inventoryComponent.remove(item);
 		}
 		
+		// Burning status on entities
+		Set<Entity> entities = TileUtil.getEntitiesWithComponentOnTile(thrownPosition, StatusReceiverComponent.class, room);
+		for (Entity entity : entities) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
+			if (statusReceiverComponent != null) {
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffBurning(thrower));
+			}
+		}
+		
+		// Create a fire on the tile
 		room.entityFactory.creepFactory.createFire(room, thrownPosition, thrower);
 		
+		// Create fires on adjacent tiles
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
 		for (Tile tile : adjacentTiles) {
 			if (tile.isThrowable(thrower)) {

@@ -67,6 +67,7 @@ public class AnimationSingleton {
 	
 	// Status effects
 	public Animation<Sprite> poisoned;
+	public Animation<Sprite> burning;
 	
 
 	private void init() {
@@ -159,6 +160,8 @@ public class AnimationSingleton {
 		
 		poisoned = new Animation<>(0.09f, Assets.poisoned_animation, PlayMode.LOOP);
 		createAnimation(poisoned);
+		burning = new Animation<>(0.07f, Assets.burning_animation, PlayMode.LOOP);
+		createAnimation(burning);
 
 	}
 

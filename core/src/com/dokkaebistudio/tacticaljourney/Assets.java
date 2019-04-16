@@ -264,10 +264,12 @@ public class Assets {
 	public static RegionDescriptor status_flight_full;
 	public static RegionDescriptor status_burning;
 	public static RegionDescriptor status_burning_full;
+	public static Array<Sprite> burning_animation;	
 	public static RegionDescriptor status_entangled;
 	public static RegionDescriptor status_entangled_full;
 	public static RegionDescriptor status_death_door;
 	public static RegionDescriptor status_death_door_full;
+	public static RegionDescriptor death_door_animation;
 
 
 	
@@ -619,10 +621,12 @@ public class Assets {
 		status_flight_full = Assets.getTexture("flight_full");
 		status_burning = Assets.getTexture("burning");
 		status_burning_full = Assets.getTexture("burning_full");
+		burning_animation = Assets.getAnimation("burning_animation");
 		status_entangled = Assets.getTexture("entangled");
 		status_entangled_full = Assets.getTexture("entangled_full");
 		status_death_door = Assets.getTexture("death_door");
 		status_death_door_full = Assets.getTexture("death_door_full");
+		death_door_animation = Assets.getTexture("death_door_animation");
 
 		
 		//*************

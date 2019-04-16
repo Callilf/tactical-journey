@@ -260,6 +260,7 @@ public class Assets {
 	public static Array<Sprite> poisoned_animation;	
 	public static RegionDescriptor status_regen;
 	public static RegionDescriptor status_regen_full;
+	public static Array<Sprite> heal_animation;
 	public static RegionDescriptor status_flight;
 	public static RegionDescriptor status_flight_full;
 	public static RegionDescriptor status_burning;
@@ -617,6 +618,7 @@ public class Assets {
 		poisoned_animation = Assets.getAnimation("poisoned");
 		status_regen = Assets.getTexture("regen");
 		status_regen_full = Assets.getTexture("regen_full");
+		heal_animation = Assets.getAnimation("healing");
 		status_flight = Assets.getTexture("flight");
 		status_flight_full = Assets.getTexture("flight_full");
 		status_burning = Assets.getTexture("burning");

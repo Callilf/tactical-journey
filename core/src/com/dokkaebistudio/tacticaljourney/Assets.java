@@ -351,6 +351,7 @@ public class Assets {
 	public static Array<Sprite> bomb_animation;
 	public static RegionDescriptor kawarimi_log;
 	public static RegionDescriptor projectile_kunai;
+	public static Array<Sprite> smoke_bomb_animation;
 	
 	//**************************
 	// Alterations
@@ -696,15 +697,16 @@ public class Assets {
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
 		
 		
-		arrow = Assets.getAnimation("arrow");
-		bomb_animation = Assets.getAnimation("bomb");
 
 		
 		//********
 		// Vfx
 		
+		arrow = Assets.getAnimation("arrow");
+		bomb_animation = Assets.getAnimation("bomb");
 		kawarimi_log = Assets.getTexture("kawarimi_log");
 		projectile_kunai = Assets.getTexture("kunai");
+		smoke_bomb_animation = Assets.getAnimation("smokebomb_anim");
 
 		
 		//*****************

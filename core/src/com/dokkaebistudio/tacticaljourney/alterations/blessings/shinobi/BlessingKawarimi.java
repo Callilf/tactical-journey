@@ -95,34 +95,29 @@ public class BlessingKawarimi extends Blessing {
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < getCurrentProcChance(user)) {
 
+				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(user);
+				List<Vector2> possibleMoves = getPossibleMoves(user, gridPositionComponent, room);
+				if (possibleMoves.isEmpty()) {
+					// No tile available to move
+					Journal.addEntry("Kawarimi activated but could not avoid the attack since there are no adjacent tile to move to.");
+					AlterationSystem.addAlterationProc(this);
+					return true;
+				}
+				
+				
 				Journal.addEntry("Kawarimi activated and evaded the attack.");
 				AlterationSystem.addAlterationProc(this);
-				
-				
-				// Move the player
-				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(user);
-				
-				
+								
+				// Effect on the previous tile : smoke + log
 				createLogEffect(gridPositionComponent.coord());
 				createSmokeEffect(gridPositionComponent.coord());
 				
-//				room.entityFactory.effectFactory.createExplosionEffect(	room, gridPositionComponent.coord());
-	
-				List<Vector2> possibleMoves = getPossibleMoves(user, gridPositionComponent, room);
-				if (!possibleMoves.isEmpty()) {
-					Collections.shuffle(possibleMoves,  RandomSingleton.getInstance().getUnseededRandom());
-					Vector2 newPlace = possibleMoves.get(0);
-					MovementHandler.placeEntity(user, newPlace, room);
-					createSmokeEffect(newPlace);
+				// Select the new tile + add smoke
+				Collections.shuffle(possibleMoves,  RandomSingleton.getInstance().getUnseededRandom());
+				Vector2 newPlace = possibleMoves.get(0);
+				MovementHandler.placeEntity(user, newPlace, room);
+				createSmokeEffect(newPlace);
 
-//					room.entityFactory.effectFactory.createExplosionEffect(	room, newPlace);			
-				} else {
-					// No place to move, stay on the same tile
-					createSmokeEffect(gridPositionComponent.coord());
-
-//					room.entityFactory.effectFactory.createExplosionEffect(	room, gridPositionComponent.coord());
-				}
-								
 				// Cancel the enemy attack
 				return false;
 			}
@@ -163,7 +158,7 @@ public class BlessingKawarimi extends Blessing {
 		log.setOrigin(Align.center);
 		ScaleToAction init = Actions.scaleTo(0, 0);
 		DelayAction delayInit = Actions.delay( 0.1f);
-		ScaleToAction appear = Actions.scaleTo(1, 1, 0.7f, Interpolation.elasticOut);
+		ScaleToAction appear = Actions.scaleTo(0.8f, 0.8f, 0.7f, Interpolation.elasticOut);
 		AlphaAction disappearAlpha = Actions.alpha(0f, 0.7f);
 		log.addAction(Actions.sequence(init, delayInit, appear, disappearAlpha, removeImageAction));
 		
@@ -175,7 +170,7 @@ public class BlessingKawarimi extends Blessing {
 	 * @param gridPos the tile pos
 	 */
 	private void createSmokeEffect(Vector2 gridPos) {
-		final AnimatedImage smokeAnim = new AnimatedImage(AnimationSingleton.getInstance().explosion, false);
+		final AnimatedImage smokeAnim = new AnimatedImage(AnimationSingleton.getInstance().smoke_bomb, false);
 		Action smokeAnimFinishAction = new Action(){
 		  @Override
 		  public boolean act(float delta){
@@ -184,9 +179,12 @@ public class BlessingKawarimi extends Blessing {
 		  }
 		};
 		smokeAnim.setFinishAction(smokeAnimFinishAction);
+		
 		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
-		smokeAnim.setPosition(pixelPos.x, pixelPos.y);
+		smokeAnim.setPosition(pixelPos.x + GameScreen.GRID_SIZE/2 - smokeAnim.getWidth()/2, pixelPos.y + GameScreen.GRID_SIZE/2 - smokeAnim.getHeight()/2);
 		pixelPos.free();
+		
+		
 		GameScreen.fxStage.addActor(smokeAnim);
 	}
 

@@ -63,6 +63,7 @@ public class AnimationSingleton {
 	public Animation<Sprite> bomb;
 	public Animation<Sprite> web_projectile;
 	public Animation<Sprite> pebble_projectile;
+	public Animation<Sprite> smoke_bomb;
 	
 	
 	// Status effects
@@ -155,6 +156,8 @@ public class AnimationSingleton {
 		createAnimation(web_projectile);
 		pebble_projectile = new Animation<>(0.1f, Assets.projectile_pebble);
 		createAnimation(pebble_projectile);
+		smoke_bomb = new Animation<>(0.08f, Assets.smoke_bomb_animation);
+		createAnimation(smoke_bomb);
 		
 		
 		// Status effects

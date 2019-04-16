@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -26,10 +27,14 @@ import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -89,10 +94,10 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    		case HIT:	    			
 						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
 								offsetTimes.size() * -20, room);
-	
+						
 		    			break;
+		    		case HEALED:						
 		    		case RESISTANT:
-		    		case HEALED:
 		    		case ARMOR:
 						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
 								offsetTimes.size() * -20, room);

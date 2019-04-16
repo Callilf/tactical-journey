@@ -4,6 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.statuses.buffs;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -61,6 +63,9 @@ public class StatusBuffRegen extends Status {
 	public boolean onReceive(Entity entity, Room room) {
 
 		animation = new AnimatedImage(AnimationSingleton.getInstance().healing, true);
+		animation.setOrigin(Align.center);
+		animation.addAction(Actions.scaleTo(1.3f, 1.3f));
+		
 		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(entity).coord());
 		animation.setPosition(animPos.x, animPos.y);
 		animPos.free();

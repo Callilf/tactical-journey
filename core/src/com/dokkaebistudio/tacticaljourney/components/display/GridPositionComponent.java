@@ -54,6 +54,7 @@ public class GridPositionComponent implements Component, Poolable {
     	absolutePos.set(-100,-100);
     	zIndex = 0;
     	overlap = 1;
+    	orbitSpeed = 0;
     }
     
     

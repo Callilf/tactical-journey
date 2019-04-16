@@ -105,7 +105,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 			GridPositionComponent gridPosComponent = Mappers.gridPositionComponent.get(entity);
 			if (gridPosComponent == null) continue;
 			
-			if (gridPosComponent.hasAbsolutePos()) {		
+			if (gridPosComponent.hasAbsolutePos()) {
 				// use transform component for drawing position
 				
 				
@@ -146,6 +146,9 @@ public class RoomRenderer implements Renderer, RoomSystem {
 					}
 					sprite.setPosition(realPos.x + GameScreen.GRID_SIZE/2 - sprite.getWidth()/2, realPos.y);
 
+					if (gridPosComponent.getOrbitSpeed() != 0) {
+						handleOrbit(sprite, gridPosComponent);
+					}
 
 					if (!spriteCompo.hide) {
 						sprite.draw(batch);
@@ -164,6 +167,14 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		stage.act(deltaTime);
 		stage.draw();
 
+	}
+
+	private void handleOrbit(Sprite sprite, GridPositionComponent gridPosComponent) {
+		  gridPosComponent.setOrbitCurrentPercentage((gridPosComponent.getOrbitCurrentPercentage() + gridPosComponent.getOrbitSpeed()) % 1);
+		  
+		  float angle = (float)(Math.PI*2*gridPosComponent.getOrbitCurrentPercentage());
+		  sprite.setPosition(sprite.getX() + gridPosComponent.getOrbitRadius()*(float)Math.cos(angle), 
+				  sprite.getY() + gridPosComponent.getOrbitRadius()*(float)Math.sin(angle));
 	}
 	
 	public static void showBlackFilter() {

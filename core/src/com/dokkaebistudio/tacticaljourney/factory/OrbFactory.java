@@ -72,6 +72,8 @@ public final class OrbFactory {
 		if (pos != null) {
 			gridPosition.coord(orb, pos, room);
 		}
+		gridPosition.setOrbitSpeed(0.01f);
+		gridPosition.setOrbitRadius(10);
 		gridPosition.zIndex = ZIndexConstants.ORB;
 		orb.add(gridPosition);
 				

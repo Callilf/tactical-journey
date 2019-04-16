@@ -40,6 +40,13 @@ public class GridPositionComponent implements Component, Poolable {
     private boolean inactive;
     
     
+    // Orbit
+	private int orbitRadius;
+	private float orbitSpeed;
+	private float orbitCurrentPercentage;
+    
+    
+    
     @Override
     public void reset() {
     	coord.set(-100,-100);
@@ -114,6 +121,38 @@ public class GridPositionComponent implements Component, Poolable {
 		return inactive;
 	}
 	
+
+	public int getOrbitRadius() {
+		return orbitRadius;
+	}
+
+
+	public void setOrbitRadius(int orbitRadius) {
+		this.orbitRadius = orbitRadius;
+	}
+
+
+	public float getOrbitSpeed() {
+		return orbitSpeed;
+	}
+
+
+	public void setOrbitSpeed(float orbitSpeed) {
+		this.orbitSpeed = orbitSpeed;
+	}
+
+
+	public float getOrbitCurrentPercentage() {
+		return orbitCurrentPercentage;
+	}
+
+
+	public void setOrbitCurrentPercentage(float orbitCurrentPercentage) {
+		this.orbitCurrentPercentage = orbitCurrentPercentage;
+	}
+
+
+
 	
 	public static Serializer<GridPositionComponent> getSerializer(final PooledEngine engine,  final Map<Integer, Room> loadedRooms) {
 		return new Serializer<GridPositionComponent>() {
@@ -135,6 +174,11 @@ public class GridPositionComponent implements Component, Poolable {
 				
 				// Inactive
 				output.writeBoolean(object.inactive);
+				
+				// Orbit
+				output.writeInt(object.orbitRadius);
+				output.writeFloat(object.orbitSpeed);
+
 			}
 
 			@Override
@@ -158,11 +202,15 @@ public class GridPositionComponent implements Component, Poolable {
 				gridPosCompo.hasAbsolutePos = input.readBoolean();
 
 				gridPosCompo.inactive = input.readBoolean();
+				
+				// Orbit
+				gridPosCompo.orbitRadius = input.readInt();
+				gridPosCompo.orbitSpeed = input.readFloat();
+				
 				return gridPosCompo;
 			}
 		
 		};
 	}
-	
-    
+
 }

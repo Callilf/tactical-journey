@@ -6,6 +6,7 @@ public enum EntityFlagEnum {
 	SHOPKEEPER(2),
 	GODDESS_STATUE(3),
 	SOUL_BENDER(4),
+	ALTAR(5),
 
 
 	ENEMY_SPIDER(30),

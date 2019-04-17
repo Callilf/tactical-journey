@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -119,6 +120,9 @@ public class Floor {
 				
 				StatueComponent statueCompo = Mappers.statueComponent.get(e);
 				if (statueCompo != null && statueCompo.getHolyAura() != null) statueCompo.getHolyAura().remove();
+				ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(e);
+				if (chaliceCompo != null && chaliceCompo.getAura() != null) chaliceCompo.getAura().remove();
+
 			}
 		}
 		for (Entity e : newRoom.getAllEntities()) {
@@ -127,6 +131,9 @@ public class Floor {
 			
 			StatueComponent statueCompo = Mappers.statueComponent.get(e);
 			if (statueCompo != null && statueCompo.getHolyAura() != null) GameScreen.fxStage.addActor(statueCompo.getHolyAura());
+			ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(e);
+			if (chaliceCompo != null && chaliceCompo.getAura() != null) GameScreen.fxStage.addActor(chaliceCompo.getAura());
+
 		}
 		
 		if (oldRoom != null) {

@@ -172,7 +172,7 @@ public class AnimationSingleton {
 		createAnimation(healing);
 		
 		
-		holy = new Animation<>(0.12f, Assets.holy_animation, PlayMode.LOOP);
+		holy = new Animation<>(0.1f, Assets.holy_animation, PlayMode.LOOP);
 		createAnimation(holy);
 
 	}

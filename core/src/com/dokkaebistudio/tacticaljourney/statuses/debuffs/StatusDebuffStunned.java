@@ -96,6 +96,16 @@ public class StatusDebuffStunned extends Status {
 		}
 	}
 	
+	@Override
+	public void onRemove(Entity entity, Room room) {
+		animation.remove();
+	}
+	
+	@Override
+	public void onDeath(Entity entity, Room room) {
+		animation.remove();
+	}
+	
 	
 	private void createStunnedAnimation(PoolableVector2 animPos) {
 		animation = new Image(Assets.stunned_animation.getRegion());
@@ -115,6 +125,9 @@ public class StatusDebuffStunned extends Status {
 
 		GameScreen.fxStage.addActor(animation);
 	}
+	
+	
+	
 	
 	
 	

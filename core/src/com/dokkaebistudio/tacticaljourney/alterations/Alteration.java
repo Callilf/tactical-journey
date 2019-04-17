@@ -19,7 +19,10 @@ import com.dokkaebistudio.tacticaljourney.wheel.Sector;
  */
 public abstract class Alteration {
 	
-	private RegionDescriptor itemSprite;
+	/** The id of the entity representing the item linked to this alteration. 
+	 * Null if the alteration has been infused. */
+	private Integer itemEntityId;
+	
 	private boolean infused;
 	
 	public abstract String title();
@@ -109,18 +112,19 @@ public abstract class Alteration {
 	
 	// getters and setters
 	
-	public RegionDescriptor getItemSprite() {
-		return itemSprite;
-	}
-	public void setItemSprite(RegionDescriptor itemSprite) {
-		this.itemSprite = itemSprite;
-	}
 	public boolean isInfused() {
 		return infused;
 	}
 	public void setInfused(boolean infused) {
 		this.infused = infused;
-	};
+	}
+	
+	public Integer getItemEntityId() {
+		return itemEntityId;
+	}
+	public void setItemEntityId(Integer itemEntityId) {
+		this.itemEntityId = itemEntityId;
+	}
 
 	
 	

@@ -22,10 +22,8 @@ public class ItemHandProsthesis extends AbstractInfusableItem {
 		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
 		
 		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		CurseShinobi curse = new CurseShinobi();
-		curse.setItemSprite(this.getTexture());
 		curses.add(curse);
 	}
 	

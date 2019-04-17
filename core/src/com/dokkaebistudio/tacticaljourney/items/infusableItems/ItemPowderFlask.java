@@ -22,11 +22,9 @@ public class ItemPowderFlask extends AbstractInfusableItem {
 		super(ItemEnum.POWDER_FLASK, Assets.powder_flask, false, true);
 		
 		BlessingOfFireArrows blessing = new BlessingOfFireArrows();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		
 		CurseHeavyArrows c = new CurseHeavyArrows();
-		c.setItemSprite(this.getTexture());
 		curses.add(c);
 	}
 	

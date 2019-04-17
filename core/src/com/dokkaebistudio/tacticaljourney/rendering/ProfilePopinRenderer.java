@@ -1,5 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -442,7 +444,12 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		curseTitle.setWidth(350);
 		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
 		
-		RegionDescriptor itemSprite = alteration.getItemSprite();
+		RegionDescriptor itemSprite = null;
+		if (alteration.getItemEntityId() != null) {
+			Entity itemEntity = Mappers.inventoryComponent.get(GameScreen.player).findItemByEntityId(alteration.getItemEntityId());
+//			PublicEntity itemEntity = GameScreen.engine.findEntityById(alteration.getItemEntityId());
+			itemSprite = Mappers.itemComponent.get(itemEntity).getItemType().getTexture();
+		}
 		if (itemSprite == null || alteration.isInfused()) itemSprite = Assets.item_infused_icon;
 		Image itemImage = new Image(itemSprite.getRegion());
 		upTable.add(itemImage).right().top().pad(-40, -20, -20, -40);

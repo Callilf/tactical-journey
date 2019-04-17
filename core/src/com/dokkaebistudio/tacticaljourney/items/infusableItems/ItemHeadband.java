@@ -21,7 +21,6 @@ public class ItemHeadband extends AbstractInfusableItem {
 		super(ItemEnum.HEADBAND, Assets.headband, false, true);
 		
 		BlessingOfTheGoat blessing = new BlessingOfTheGoat();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

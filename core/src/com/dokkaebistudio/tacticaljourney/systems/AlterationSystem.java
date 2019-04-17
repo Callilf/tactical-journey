@@ -202,6 +202,13 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 					playerAlterationReceiverCompo.removeCurse(player, curse, fxStage, removeCount);
 					removeCount ++;
 					
+					Journal.addEntry("[PURPLE]Removed curse: " + curse.title());
+					break;
+				case LIFT_CURSE:
+					curse = (Curse) currentAlteration;
+					playerAlterationReceiverCompo.liftCurse(player, curse, fxStage, removeCount);
+					removeCount ++;
+					
 					Journal.addEntry("[GREEN]Lifted curse: " + curse.title());
 					break;
 				

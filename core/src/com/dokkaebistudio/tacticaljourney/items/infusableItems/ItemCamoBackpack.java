@@ -22,11 +22,9 @@ public class ItemCamoBackpack extends AbstractInfusableItem {
 		super(ItemEnum.CAMO_BACKPACK, Assets.camo_backpack, false, true);
 		
 		BlessingOfTheLooter blessing = new BlessingOfTheLooter();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		
 		CurseSlowness c = new CurseSlowness();
-		c.setItemSprite(this.getTexture());
 		curses.add(c);
 	}
 	

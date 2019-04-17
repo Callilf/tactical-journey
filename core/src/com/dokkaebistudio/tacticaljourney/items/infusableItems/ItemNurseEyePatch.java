@@ -22,11 +22,9 @@ public class ItemNurseEyePatch extends AbstractInfusableItem {
 		super(ItemEnum.NURSE_EYE_PATCH, Assets.nurse_eye_patch, false, true);
 		
 		BlessingBlackMamba blessing = new BlessingBlackMamba();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		
 		CurseBlackMamba c = new CurseBlackMamba();
-		c.setItemSprite(this.getTexture());
 		curses.add(c);
 	}
 	

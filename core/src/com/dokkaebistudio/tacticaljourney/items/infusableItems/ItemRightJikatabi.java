@@ -22,10 +22,8 @@ public class ItemRightJikatabi extends AbstractInfusableItem {
 		super(ItemEnum.RIGHT_JIKATABI, Assets.right_jikatabi, false, true);
 		
 		BlessingHangeki blessing2 = new BlessingHangeki();
-		blessing2.setItemSprite(this.getTexture());
 		blessings.add(blessing2);
 		CurseShinobi curse = new CurseShinobi();
-		curse.setItemSprite(this.getTexture());
 		curses.add(curse);
 	}
 	

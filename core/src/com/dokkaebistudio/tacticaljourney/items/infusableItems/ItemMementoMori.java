@@ -22,11 +22,9 @@ public class ItemMementoMori extends AbstractInfusableItem {
 		super(ItemEnum.MEMENTO_MORI, Assets.memento_mori, false, true);
 		
 		BlessingOfAcceptance blessing = new BlessingOfAcceptance();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		
 		CurseOfAcceptance c = new CurseOfAcceptance();
-		c.setItemSprite(this.getTexture());
 		curses.add(c);
 	}
 	

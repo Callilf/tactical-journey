@@ -46,7 +46,8 @@ public class Assets {
 	public static RegionDescriptor soulbender;
 	public static RegionDescriptor goddess_statue;
 	public static RegionDescriptor goddess_statue_broken;
-	
+	public static RegionDescriptor altar;
+
 	
 	public static RegionDescriptor grid1;
 	public static RegionDescriptor grid2;
@@ -419,6 +420,7 @@ public class Assets {
 		soulbender = Assets.getTexture("soulbender");
 		goddess_statue = Assets.getTexture("godess_statue");
 		goddess_statue_broken = Assets.getTexture("godess_statue_broken");
+		altar = Assets.getTexture("altar");
 
 		grid1 = Assets.getTexture("grid_world1");
 		grid2 = Assets.getTexture("grid_world2");

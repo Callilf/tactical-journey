@@ -21,7 +21,6 @@ public class ItemVegetalGarment extends AbstractInfusableItem {
 		super(ItemEnum.VEGETAL_GARMENT, Assets.vegetal_garment, false, true);
 		
 		BlessingPhotosynthesis blessing = new BlessingPhotosynthesis();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

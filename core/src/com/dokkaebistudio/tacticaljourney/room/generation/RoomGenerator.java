@@ -327,7 +327,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-//			entityFactory.destructibleFactory.createGoldenVase(room,  new Vector2(12,10));
+			entityFactory.playerFactory.createChalice(new Vector2(11,6), room);
 
 //			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);

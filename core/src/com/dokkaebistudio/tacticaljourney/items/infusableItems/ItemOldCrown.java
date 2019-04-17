@@ -21,7 +21,6 @@ public class ItemOldCrown extends AbstractInfusableItem {
 		super(ItemEnum.OLD_CROWN, Assets.old_crown, false, true);
 		
 		BlessingOfCinders blessing = new BlessingOfCinders();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

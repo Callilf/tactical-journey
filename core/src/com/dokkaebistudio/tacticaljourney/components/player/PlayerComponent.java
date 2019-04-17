@@ -55,6 +55,7 @@ public class PlayerComponent implements Component {
 		EXIT,
 		WORMHOLE,
 		PRAY,
+		DRINK_CHALICE,
 		RESTOCK_SHOP,
 		INFUSE,
 		GIVE_CATALYST_SOULBENDER,

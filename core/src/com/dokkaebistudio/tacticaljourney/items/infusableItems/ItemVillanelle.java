@@ -21,7 +21,6 @@ public class ItemVillanelle extends AbstractInfusableItem {
 		super(ItemEnum.VILLANELLE, Assets.villanelle, false, true);
 		
 		BlessingContractKiller blessing = new BlessingContractKiller();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

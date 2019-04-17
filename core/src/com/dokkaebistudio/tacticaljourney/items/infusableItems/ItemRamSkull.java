@@ -21,7 +21,6 @@ public class ItemRamSkull extends AbstractInfusableItem {
 		super(ItemEnum.RAM_SKULL, Assets.ram_skull, false, true);
 		
 		BlessingPoisoner blessing = new BlessingPoisoner();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

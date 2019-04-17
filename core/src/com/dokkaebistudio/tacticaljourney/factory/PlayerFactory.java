@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -332,6 +333,48 @@ public final class PlayerFactory {
 		
 		room.addNeutral(goddessStatueEntity);
 		return goddessStatueEntity;
+	}
+	
+	/**
+	 * Create a chalice on an altar.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the statue entity
+	 */
+	public Entity createChalice(Vector2 pos, Room room) {
+		Entity chaliceEntity = engine.createEntity();
+		chaliceEntity.flags = EntityFlagEnum.ALTAR.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Chalice");
+		inspect.setDescription("A chalice filled with an exotic concoction.");
+		chaliceEntity.add(inspect);
+		
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(Assets.altar);
+		chaliceEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(chaliceEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.STATUE;
+		chaliceEntity.add(gridPosition);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		chaliceEntity.add(solidComponent);
+		
+		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
+		destructible.setDestroyedTexture(Assets.wall_destroyed);
+		chaliceEntity.add(destructible);		
+		
+		ChaliceComponent chaliceComponent = engine.createComponent(ChaliceComponent.class);
+		chaliceComponent.setFilled(true);
+		chaliceEntity.add(chaliceComponent);
+		
+		room.addNeutral(chaliceEntity);
+		return chaliceEntity;
 	}
 	
 

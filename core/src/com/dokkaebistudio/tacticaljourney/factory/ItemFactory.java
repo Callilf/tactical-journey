@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -90,12 +91,14 @@ public final class ItemFactory {
 	
 	
 	public Entity createItemBase(Room room, Vector2 tilePos, AbstractItem itemType, EntityFlagEnum flag) {
-		return createItemBase(room, tilePos, itemType.getTexture(), 
+		Entity item = createItemBase(room, tilePos, itemType.getTexture(), 
 				itemType, itemType.getLabel(), itemType.getDescription());
+		item.flags = flag.getFlag();
+		return item;
 	}
 	
 	public Entity createItemBase(Room room, Vector2 tilePos, RegionDescriptor texture, AbstractItem itemType, String title, String desc) {
-		Entity item = engine.createEntity();
+		PublicEntity item = (PublicEntity) engine.createEntity();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(title);
@@ -118,7 +121,7 @@ public final class ItemFactory {
 		item.add(gridPosition);
 		
 		ItemComponent itemCompo = engine.createComponent(ItemComponent.class);
-		itemCompo.setItemType(itemType);
+		itemCompo.setItemType(itemType, item);
 		item.add(itemCompo);
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);

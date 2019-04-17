@@ -21,7 +21,6 @@ public class ItemTotemOfKalamazoo extends AbstractInfusableItem {
 		super(ItemEnum.TOTEM_OF_KALAMAZOO, Assets.totem_of_kalamazoo, false, true);
 		
 		BlessingOfKalamazoo blessing = new BlessingOfKalamazoo();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

@@ -25,7 +25,6 @@ public class ItemMithridatium extends AbstractInfusableItem {
 		super(ItemEnum.MITHRIDATIUM, Assets.mithridatium, false, true);
 		
 		BlessingMithridatism blessing = new BlessingMithridatism();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

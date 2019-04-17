@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -250,8 +251,12 @@ public class ItemComponent implements Component, Poolable {
 		return itemType;
 	}
 
-	public void setItemType(AbstractItem itemType) {
+	public void setItemType(AbstractItem itemType, PublicEntity itemEntity) {
 		this.itemType = itemType;
+		if (this.itemType instanceof AbstractInfusableItem) {
+			AbstractInfusableItem infusableItem = (AbstractInfusableItem) this.itemType;
+			infusableItem.setItemEntity(itemEntity);
+		}
 	}
 
 	public Integer getQuantity() {

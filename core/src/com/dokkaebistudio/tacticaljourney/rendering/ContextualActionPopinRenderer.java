@@ -3,17 +3,12 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,14 +19,12 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
@@ -46,8 +39,6 @@ import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	    
@@ -197,6 +188,15 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			updatePrayListener(actionEntity, statueComponent);
 			break;
 			
+		case DRINK_CHALICE:
+			ChaliceComponent chaliceComponent = Mappers.chaliceComponent.get(actionEntity);
+			
+			title.setText("Chalice");
+			desc.setText("A chalice filled with an exotic concoction. The smell is very strong and drinking it might not be a pleasant experience.");
+			yesBtn.setText("Drink");
+			
+			updateDrinkChaliceListener(actionEntity, chaliceComponent);
+			break;
 		case RESTOCK_SHOP:
 			ShopKeeperComponent shopKeeperCompo = Mappers.shopKeeperComponent.get(actionEntity);
 			
@@ -372,6 +372,22 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		};
 		yesBtn.addListener(yesBtnListener);
 	}
+	
+	private void updateDrinkChaliceListener(final Entity statue, final ChaliceComponent chaliceComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {				
+				chaliceComponent.drink();
+				room.turnManager.endPlayerTurn();
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
+	
 	
 	private void updateRestockListener(final ShopKeeperComponent shopKeeperCompo) {
 		if (yesBtnListener != null) {

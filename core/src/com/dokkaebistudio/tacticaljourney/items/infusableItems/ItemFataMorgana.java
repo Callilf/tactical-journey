@@ -21,7 +21,6 @@ public class ItemFataMorgana extends AbstractInfusableItem {
 		super(ItemEnum.FATA_MORGANA, Assets.fata_morgana, false, true);
 		
 		BlessingOfVilma blessing = new BlessingOfVilma();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

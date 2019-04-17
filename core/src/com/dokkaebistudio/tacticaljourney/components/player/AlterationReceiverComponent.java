@@ -22,11 +22,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -70,7 +74,8 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		RECEIVE_BLESSING,
 		REMOVE_BLESSING,
 		RECEIVE_CURSE,
-		REMOVE_CURSE;
+		REMOVE_CURSE,
+		LIFT_CURSE;
 	}
 	
 	
@@ -310,7 +315,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 	}
 	
 	public void removeCurse(Entity entity, Curse curse, Stage fxStage, int offset) {
-		curse.onRemove(entity);
+		curse.onRemove(entity);		
 		curses.remove(curse);
 		
 		if (fxStage != null) {
@@ -325,6 +330,26 @@ public class AlterationReceiverComponent implements Component, Poolable {
 				removeCurse(entity, curse, fxStage, offset);
 				break;
 			}
+		}
+	}
+	
+	
+	public void liftCurse(Entity entity, Curse curse, Stage fxStage, int offset) {
+		curse.onRemove(entity);
+		
+		if (curse.getItemEntityId() != null) {
+			Entity itemEntity = Mappers.inventoryComponent.get(GameScreen.player).findItemByEntityId(curse.getItemEntityId());
+			
+			ItemComponent itemComponent = Mappers.itemComponent.get(itemEntity);
+			AbstractInfusableItem infusableItem = (AbstractInfusableItem) itemComponent.getItemType();
+			infusableItem.removeCurse(curse);
+		}
+		
+		curses.remove(curse);
+		
+		if (fxStage != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
+			this.setRemoveAnimation(curse.texture().getRegion(), gridPositionComponent.coord(), fxStage, offset);
 		}
 	}
 	

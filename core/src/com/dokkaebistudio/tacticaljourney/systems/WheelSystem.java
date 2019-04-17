@@ -7,11 +7,13 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelModifierComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 
@@ -79,6 +81,10 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
     				MoveComponent moveComponent = Mappers.moveComponent.get(target);
     				if (moveComponent != null && moveComponent.isFrozen()) {
     					// Frozen target, increase accuracy
+    					accuracy += 2;
+    				}
+    				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
+    				if (statusReceiverComponent != null && statusReceiverComponent.hasStatus(StatusDebuffStunned.class)) {
     					accuracy += 2;
     				}
     			}

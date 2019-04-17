@@ -271,6 +271,9 @@ public class Assets {
 	public static RegionDescriptor status_death_door;
 	public static RegionDescriptor status_death_door_full;
 	public static RegionDescriptor death_door_animation;
+	public static RegionDescriptor status_stunned;
+	public static RegionDescriptor status_stunned_full;
+	public static RegionDescriptor stunned_animation;
 
 
 	
@@ -631,6 +634,9 @@ public class Assets {
 		status_death_door = Assets.getTexture("death_door");
 		status_death_door_full = Assets.getTexture("death_door_full");
 		death_door_animation = Assets.getTexture("death_door_animation");
+		status_stunned = Assets.getTexture("stunned");
+		status_stunned_full = Assets.getTexture("stunned_full");
+		stunned_animation = Assets.getTexture("stunned_animation");
 
 		
 		//*************

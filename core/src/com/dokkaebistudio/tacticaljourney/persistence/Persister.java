@@ -16,7 +16,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -79,9 +78,9 @@ import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
-import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffDeathDoor;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -592,6 +591,7 @@ public class Persister {
 		kryo.register(Tile.class, Tile.getSerializer(engine));
 		kryo.register(AnimatedImage.class, AnimatedImage.getSerializer(engine));
 		kryo.register(StatusDebuffDeathDoor.class, StatusDebuffDeathDoor.getStatusDebuffDeathDoorSerializer(engine));
+		kryo.register(StatusDebuffStunned.class, StatusDebuffStunned.getStatusDebuffStunnedSerializer(engine));
 		
 		
 		// Component serializers

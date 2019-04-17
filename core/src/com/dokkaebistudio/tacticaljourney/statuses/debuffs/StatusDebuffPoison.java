@@ -4,7 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;

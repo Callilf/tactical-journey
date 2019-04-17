@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -27,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
@@ -445,17 +447,6 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 	}
 
 	private void displayEnemyTiles(Entity player, Entity attackableEntity) {
-		// There is an enemy at this location, display it's tiles
-		MoveComponent enemyMoveCompo = Mappers.moveComponent.get(attackableEntity);
-		if (enemyMoveCompo != null) {
-			enemyHighlighted = attackableEntity;
-			enemyMoveCompo.showMovableTiles();
-		}
-		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
-		if (enemyAttackCompo != null) {
-			enemyHighlighted = attackableEntity;
-			enemyAttackCompo.showAttackableTiles();
-		}
 		// Hide the player's tiles
 		MoveComponent playerMoveComponent = Mappers.moveComponent.get(player);
 		if (playerMoveComponent != null) {
@@ -464,6 +455,22 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		AttackComponent playerAttackComponent = Mappers.attackComponent.get(player);
 		if (playerAttackComponent != null) {
 			playerAttackComponent.hideAttackableTiles();
+		}
+		
+		enemyHighlighted = attackableEntity;
+
+		
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(attackableEntity);
+		if (statusReceiverComponent != null && statusReceiverComponent.hasStatus(StatusDebuffStunned.class)) return;
+		
+		// There is an enemy at this location, display it's tiles
+		MoveComponent enemyMoveCompo = Mappers.moveComponent.get(attackableEntity);
+		if (enemyMoveCompo != null) {
+			enemyMoveCompo.showMovableTiles();
+		}
+		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
+		if (enemyAttackCompo != null) {
+			enemyAttackCompo.showAttackableTiles();
 		}
 	}
 	

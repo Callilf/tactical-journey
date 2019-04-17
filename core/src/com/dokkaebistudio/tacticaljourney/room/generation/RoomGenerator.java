@@ -331,7 +331,7 @@ public abstract class RoomGenerator {
 
 //			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
-//			entityFactory.orbFactory.createDeathOrb(new Vector2(11, 10), room);
+			entityFactory.orbFactory.createDeathOrb(new Vector2(11, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);

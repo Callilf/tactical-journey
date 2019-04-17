@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -12,12 +14,16 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -54,6 +60,24 @@ public class ItemSmokebomb extends AbstractItem {
 		GridPositionComponent userPos = Mappers.gridPositionComponent.get(user);
 		
 		createSmokeEffect(userPos.coord());
+		
+		// All enemies become unalerted
+		for(Entity enemy : room.getEnemies()) {
+			Mappers.enemyComponent.get(enemy).setAlerted(false);
+		}
+		
+		// Adjacent enemies are stunned
+		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(userPos.coord(), room);
+		for (Tile adjacentTile : adjacentTiles) {
+			Entity enemy = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), EnemyComponent.class, room);
+			if (enemy != null) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(enemy);
+				if (statusReceiverComponent != null) {
+					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(1));
+				}
+			}
+		}
+
 		return true;
 	}
 	
@@ -64,14 +88,13 @@ public class ItemSmokebomb extends AbstractItem {
 		createSmokeEffect(thrownPosition);
 		room.removeEntity(item);
 
-//		Entity enemy = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
-//		if (enemy != null) {
-//			EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-//			Journal.addEntry(enemyComponent.getType().title() + " looks mad at you");
-//	
-//			enemyComponent.setAlerted(true);
-//			room.removeEntity(item);
-//		}
+		Entity enemy = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
+		if (enemy != null) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(enemy);
+			if (statusReceiverComponent != null) {
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(2));
+			}
+		}
 	}
 	
 	

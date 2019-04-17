@@ -12,12 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
+import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -28,53 +28,77 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * The entity dies in one shot.
+ * The entity is stuck on the current tile.
  * @author Callil
  *
  */
-public class StatusDebuffDeathDoor extends Status {
+public class StatusDebuffStunned extends Status {
 	
 	private ActionMoveCircular actionCircle;
+
+	public StatusDebuffStunned() {}
 	
-	public StatusDebuffDeathDoor() {}
-	
-	public StatusDebuffDeathDoor(int duration) {
+	public StatusDebuffStunned(int duration) {
 		this.setDuration(duration);
 	}
 	
 	
 	@Override
 	public String title() {
-		return "[BLACK]At death's door[]";
-	}
-	
-	@Override
-	public String description() {
-		return "Die in one hit, no matter how much damage that hit does.";
+		return "[YELLOW]Stunned[]";
 	}
 
 	@Override
+	public String description() {
+		return "Cannot either move nor attack. When attacking stunned enemies, accuracy is increased by 2";
+	}
+	
+	@Override
 	public RegionDescriptor texture() {
-		return Assets.status_death_door;
+		return Assets.status_stunned;
 	}
 	@Override
 	public RegionDescriptor fullTexture() {
-		return Assets.status_death_door_full;
+		return Assets.status_stunned_full;
 	}
-	
 	
 	@Override
 	public boolean onReceive(Entity entity, Room room) {
-		// TODO : handle immunity
+		
+		boolean isPlayer = Mappers.playerComponent.has(entity);
+		if (isPlayer && room.getState().isPlayerTurn()) {
+			room.turnManager.endPlayerTurn();
+		}
+			
+		boolean isEnemy = Mappers.enemyComponent.has(entity);
+		if (isEnemy && room.getState().isEnemyTurn() && EnemySystem.enemyCurrentyPlaying == entity) {
+			// Finish this enemy turn since it's dead
+			room.setNextState(RoomState.ENEMY_TURN_INIT);
+		}	
 		
 		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(entity).coord());
-		createSkullAnimation(animPos);
+		createStunnedAnimation(animPos);
 		
 		return true;
 	}
 
-	private void createSkullAnimation(PoolableVector2 animPos) {
-		animation = new Image(Assets.death_door_animation.getRegion());
+	
+	@Override
+	public void onStartTurn(Entity entity, Room room) {
+		boolean isPlayer = Mappers.playerComponent.has(entity);
+		if (isPlayer) {
+			room.turnManager.endPlayerTurn();
+		}
+			
+		EnemyComponent enemyCompo = Mappers.enemyComponent.get(entity);
+		if (enemyCompo != null) {
+			enemyCompo.setTurnOver(true);
+		}
+	}
+	
+	
+	private void createStunnedAnimation(PoolableVector2 animPos) {
+		animation = new Image(Assets.stunned_animation.getRegion());
 		animation.setPosition(animPos.x + 10, animPos.y);
 	
 		animation.setOrigin(Align.center);
@@ -82,9 +106,9 @@ public class StatusDebuffDeathDoor extends Status {
 		animation.addAction(Actions.scaleTo(0.5f, 0.5f));
 		
 		actionCircle = ActionMoveCircular.actionEllipse(animPos.x, animPos.y + GameScreen.GRID_SIZE/2, 
-				GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE/4, 1, false, 3f);
+				GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE/4, 1, false, 2f);
 
-		SequenceAction scale = Actions.sequence(Actions.scaleTo(0.25f, 0.25f, 1.5f), Actions.scaleTo(0.5f, 0.5f, 1.5f));
+		SequenceAction scale = Actions.sequence(Actions.scaleTo(0.25f, 0.25f, 1f), Actions.scaleTo(0.5f, 0.5f, 1f));
 		
 		animation.addAction(Actions.forever(Actions.parallel(actionCircle, scale)));
 		animPos.free();
@@ -92,28 +116,6 @@ public class StatusDebuffDeathDoor extends Status {
 		GameScreen.fxStage.addActor(animation);
 	}
 	
-	@Override
-	public void onReceiveDamage(Entity entity, Entity attacker, Room room) {
-		
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
-		Journal.addEntry(inspectableComponent.getTitle() + " received damage at [BLACK]death's door[]");
-		
-		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
-		healthComponent.setHp(0);
-	}
-	
-	
-	
-
-	@Override
-	public void onRemove(Entity entity, Room room) {
-		animation.remove();
-	}
-	
-	@Override
-	public void onDeath(Entity entity, Room room) {
-		animation.remove();
-	}
 	
 	
 	//********************
@@ -142,29 +144,27 @@ public class StatusDebuffDeathDoor extends Status {
 	
 	
 	
-	
-	public static Serializer<StatusDebuffDeathDoor> getStatusDebuffDeathDoorSerializer(final PooledEngine engine) {
-		return new Serializer<StatusDebuffDeathDoor>() {
+	public static Serializer<StatusDebuffStunned> getStatusDebuffStunnedSerializer(final PooledEngine engine) {
+		return new Serializer<StatusDebuffStunned>() {
 
 			@Override
-			public void write(Kryo kryo, Output output, StatusDebuffDeathDoor object) {
+			public void write(Kryo kryo, Output output, StatusDebuffStunned object) {
 				output.writeInt(object.getDuration());
 				output.writeFloat(object.actionCircle.getPosition().x);
 				output.writeFloat(object.actionCircle.getPosition().y - GameScreen.GRID_SIZE/2);
 			}
 
 			@Override
-			public StatusDebuffDeathDoor read(Kryo kryo, Input input, Class<StatusDebuffDeathDoor> type) {
-				StatusDebuffDeathDoor statusDebuffDeathDoor = new StatusDebuffDeathDoor(input.readInt());
+			public StatusDebuffStunned read(Kryo kryo, Input input, Class<StatusDebuffStunned> type) {
+				StatusDebuffStunned statusDebuffDeathDoor = new StatusDebuffStunned(input.readInt());
 				
 				PoolableVector2 pos = PoolableVector2.create(input.readFloat(), input.readFloat());
-				statusDebuffDeathDoor.createSkullAnimation(pos);
+				statusDebuffDeathDoor.createStunnedAnimation(pos);
 
 				return statusDebuffDeathDoor;
 			}
 		
 		};
 	}
-	
 	
 }

@@ -196,7 +196,8 @@ public class Descriptions {
 	
 	public static final String ITEM_SMOKE_BOMB_TITLE = "Smoke bomb";
 	public static final String ITEM_SMOKE_BOMB_DESCRIPTION = "A shinobi tool used to quickly escape the opponents vision. "
-			+ "Upon use, all enemies in the room will become unalerted, and close enemies will be staggered for 1 turn.";	
+			+ "Upon use, all enemies in the room will become unalerted, and close enemies will be stunned for 1 turn. "
+			+ "It can also be thrown on an enemy to stun it for 2 turns.";	
 	
 	public static final String ITEM_WORMHOLE_SHARD_TITLE = "Wormhole shard";
 	public static final String ITEM_WORMHOLE_SHARD_DESCRIPTION = "An extraordinary shard of a wormhole that has been solidificated. It creates a portal if you throw it.";

@@ -4,12 +4,25 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.AlterationPool;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -37,6 +50,9 @@ public class StatueComponent implements Component, Poolable {
 	/** The pool of alterations that can be given. */
 	private AlterationPool alterationPool;
 	
+	/** The holy aura the statue has when the blessing hasn't been received yet. */
+	private AnimatedImage holyAura;
+	
 
 	
 	@Override
@@ -45,6 +61,29 @@ public class StatueComponent implements Component, Poolable {
 		this.setJustDestroyed(false);
 		setBlessingToGive(null);
 		setCurseToGive(null);
+		setHolyAura(null);
+	}
+	
+	
+	public void pray() {
+		this.setHasBlessing(false);
+
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
+		PoolableVector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
+		
+		ScaleToAction scale = Actions.scaleTo(0f, 0f, 2f);
+		MoveToAction move = Actions.moveTo(playerPixelPos.x, playerPixelPos.y, 2f, Interpolation.pow5);
+		this.getHolyAura().addAction(Actions.sequence(Actions.parallel(scale, move), new Action() {
+			@Override
+			public boolean act(float delta) {
+				removeHolyAura();
+				
+				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, getBlessingToGive());		
+
+				return true;
+			}
+		}));
 	}
 	
 	//*********************************
@@ -97,6 +136,23 @@ public class StatueComponent implements Component, Poolable {
 		this.curseToGive = curseToGive;
 	}
 
+	public AnimatedImage getHolyAura() {
+		return holyAura;
+	}
+
+	public void setHolyAura(AnimatedImage holyAura) {
+		this.holyAura = holyAura;
+		if (holyAura != null) {
+			GameScreen.fxStage.addActor(holyAura);
+		}
+	}
+	
+	public void removeHolyAura() {
+		if (this.holyAura != null) {
+			this.holyAura.remove();
+			this.holyAura = null;
+		}
+	}
 	
 	
 	public static Serializer<StatueComponent> getSerializer(final PooledEngine engine) {
@@ -107,6 +163,7 @@ public class StatueComponent implements Component, Poolable {
 				output.writeBoolean(object.hasBlessing);
 				kryo.writeClassAndObject(output, object.blessingToGive);
 				kryo.writeClassAndObject(output, object.curseToGive);
+				kryo.writeClassAndObject(output, object.holyAura);
 			}
 
 			@Override
@@ -115,10 +172,12 @@ public class StatueComponent implements Component, Poolable {
 				compo.hasBlessing = input.readBoolean();
 				compo.blessingToGive = (Blessing) kryo.readClassAndObject(input);
 				compo.curseToGive = (Curse) kryo.readClassAndObject(input);
-
+				compo.setHolyAura((AnimatedImage) kryo.readClassAndObject(input));
 				return compo;
 			}
 		
 		};
 	}
+
+
 }

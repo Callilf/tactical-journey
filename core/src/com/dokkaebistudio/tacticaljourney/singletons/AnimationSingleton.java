@@ -71,6 +71,8 @@ public class AnimationSingleton {
 	public Animation<Sprite> burning;
 	public Animation<Sprite> healing;
 	
+	public Animation<Sprite> holy;
+	
 
 	private void init() {
 		animationsCount = 0;
@@ -168,6 +170,10 @@ public class AnimationSingleton {
 		createAnimation(burning);
 		healing = new Animation<>(0.07f, Assets.heal_animation, PlayMode.LOOP);
 		createAnimation(healing);
+		
+		
+		holy = new Animation<>(0.12f, Assets.holy_animation, PlayMode.LOOP);
+		createAnimation(holy);
 
 	}
 

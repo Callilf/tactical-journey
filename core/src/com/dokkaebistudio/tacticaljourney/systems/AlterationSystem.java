@@ -29,11 +29,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
@@ -47,7 +47,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.Play
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -139,8 +141,15 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		fillStatues();
 		for (Entity statue : statues) {
 			StatueComponent statueComponent = Mappers.statueComponent.get(statue);
+			
+			if (statueComponent.isHasBlessing() && statueComponent.getHolyAura() == null) {
+				AnimatedImage aura = createHolyAura(statue);
+				statueComponent.setHolyAura(aura);
+			}
+			
 			if (statueComponent.wasJustDestroyed()) {
 				statueComponent.setJustDestroyed(false);
+				statueComponent.removeHolyAura();
 
 				// Deliver the curse
 				if (statueComponent.getCurseToGive() != null) {
@@ -213,7 +222,6 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 	}
 
 
-
 	/**
 	 * Fills the list of statues of the room. Empty list if no statues.
 	 * @param room the room
@@ -227,6 +235,17 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 		}
 	}
 	
+	
+	private AnimatedImage createHolyAura(Entity statue) {
+		AnimatedImage aura = new AnimatedImage(AnimationSingleton.getInstance().holy, true);
+		aura.setOrigin(Align.center);
+		aura.addAction(Actions.scaleTo(1.5f, 1.5f));
+		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(statue).coord());
+		aura.setPosition(animPos.x + GameScreen.GRID_SIZE/2 - aura.getWidth()/2, animPos.y + GameScreen.GRID_SIZE);
+		animPos.free();
+		return aura;
+	}
+
 	
 	//**********************************
 	// Alteration proc animations

@@ -275,6 +275,7 @@ public class Assets {
 	public static RegionDescriptor status_stunned_full;
 	public static RegionDescriptor stunned_animation;
 
+	public static Array<Sprite> holy_animation;	
 
 	
 	//*********
@@ -637,6 +638,9 @@ public class Assets {
 		status_stunned = Assets.getTexture("stunned");
 		status_stunned_full = Assets.getTexture("stunned_full");
 		stunned_animation = Assets.getTexture("stunned_animation");
+
+		
+		holy_animation = Assets.getAnimation("holy_aura");
 
 		
 		//*************

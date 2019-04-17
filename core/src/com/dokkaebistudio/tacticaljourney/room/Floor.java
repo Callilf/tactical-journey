@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -112,14 +113,20 @@ public class Floor {
 		
 		//TODO maybe move this
 		if (oldRoom != null) {
-			for (Entity e : oldRoom.getEnemies()) {
+			for (Entity e : oldRoom.getAllEntities()) {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				if (statusReceiverComponent != null) statusReceiverComponent.hideStatusTable();
+				
+				StatueComponent statueCompo = Mappers.statueComponent.get(e);
+				if (statueCompo != null && statueCompo.getHolyAura() != null) statueCompo.getHolyAura().remove();
 			}
 		}
-		for (Entity e : newRoom.getEnemies()) {
+		for (Entity e : newRoom.getAllEntities()) {
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 			if (statusReceiverComponent != null) statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
+			
+			StatueComponent statueCompo = Mappers.statueComponent.get(e);
+			if (statueCompo != null && statueCompo.getHolyAura() != null) GameScreen.fxStage.addActor(statueCompo.getHolyAura());
 		}
 		
 		if (oldRoom != null) {

@@ -25,7 +25,6 @@ public class ItemColorfulTie extends AbstractInfusableItem {
 		super(ItemEnum.COLORFUL_TIE, Assets.colorful_tie, false, true);
 		
 		BlessingFastLearner blessingFastLearner = new BlessingFastLearner();
-		blessingFastLearner.setItemSprite(this.getTexture());
 		blessings.add(blessingFastLearner);
 	}
 	

@@ -8,8 +8,10 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
@@ -33,6 +35,21 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 		super(itemType, texture, instaPickUp, goIntoInventory);
 	}
 	
+	public void setItemEntity(PublicEntity itemEntity) {
+		for (Alteration a : blessings) {
+			a.setItemEntityId((int) itemEntity.id);
+		}
+		for (Alteration a : curses) {
+			a.setItemEntityId((int) itemEntity.id);
+		}
+	}
+	
+	public void removeBlessing(Blessing b) {
+		blessings.remove(b);
+	}
+	public void removeCurse(Curse c) {
+		curses.remove(c);
+	}
 	
 	@Override
 	public boolean pickUp(Entity picker, Entity item, Room room) {
@@ -63,14 +80,13 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 	
 		if (dropped) {
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(dropper);
-			
-			for (Blessing b : blessings) {
-				if (alterationReceiverComponent != null) {
+			for (Blessing b : alterationReceiverComponent.getBlessings()) {
+				if (b.getItemEntityId() != null && b.getItemEntityId() == ((PublicEntity)item).id) {
 					alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_BLESSING, b);
 				}
 			}
-			for (Curse c : curses) {
-				if (alterationReceiverComponent != null) {
+			for (Curse c : alterationReceiverComponent.getCurses()) {
+				if (c.getItemEntityId() != null && c.getItemEntityId() == ((PublicEntity)item).id) {
 					alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, c);
 				}
 			}
@@ -84,13 +100,13 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 		super.onThrow(thrownPosition, thrower, item, room);
 		
 		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(thrower);
-		for (Blessing b : blessings) {
-			if (alterationReceiverComponent != null) {
+		for (Blessing b : alterationReceiverComponent.getBlessings()) {
+			if (b.getItemEntityId() != null && b.getItemEntityId() == ((PublicEntity)item).id) {
 				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_BLESSING, b);
 			}
 		}
-		for (Curse c : curses) {
-			if (alterationReceiverComponent != null) {
+		for (Curse c : alterationReceiverComponent.getCurses()) {
+			if (c.getItemEntityId() != null &&  c.getItemEntityId() == ((PublicEntity)item).id) {
 				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, c);
 			}
 		}

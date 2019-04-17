@@ -141,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
 	Rectangle resumeBounds;
 	Rectangle quitBounds;
 	
-	public PublicPooledEngine engine;	
+	public static PublicPooledEngine engine;	
 	public int state;
 	
 	AttackWheel attackWheel = new AttackWheel();

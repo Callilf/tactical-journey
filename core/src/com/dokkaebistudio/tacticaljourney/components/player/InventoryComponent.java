@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
@@ -300,6 +301,17 @@ public class InventoryComponent implements Component, Poolable {
 		this.numberOfSlots--;
 	}
 	
+	
+	public Entity findItemByEntityId(int id) {
+		for (int i=0 ; i<firstEmptySlot ; i++) {
+			if (slots.get(i).isEmpty()) continue;
+			
+			for (Entity e : slots.get(i)) {
+				if ( ((PublicEntity)e).id == id ) return e;
+			}
+		}
+		return null;
+	}
 	
 	//*************************************
 	// Getters and Setters !

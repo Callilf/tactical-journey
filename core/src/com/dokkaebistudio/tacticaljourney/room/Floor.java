@@ -115,6 +115,7 @@ public class Floor {
 		//TODO maybe move this
 		if (oldRoom != null) {
 			for (Entity e : oldRoom.getAllEntities()) {
+				if (e == GameScreen.player) continue;
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				if (statusReceiverComponent != null) statusReceiverComponent.hideStatusTable();
 				
@@ -126,6 +127,7 @@ public class Floor {
 			}
 		}
 		for (Entity e : newRoom.getAllEntities()) {
+			if (e == GameScreen.player) continue;
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 			if (statusReceiverComponent != null) statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
 			

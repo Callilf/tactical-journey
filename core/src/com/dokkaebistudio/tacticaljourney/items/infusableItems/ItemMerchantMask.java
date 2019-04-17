@@ -21,7 +21,6 @@ public class ItemMerchantMask extends AbstractInfusableItem {
 		super(ItemEnum.MERCHANT_MASK, Assets.merchant_mask, false, true);
 		
 		BlessingMaskMerchant blessing = new BlessingMaskMerchant();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 	}
 	

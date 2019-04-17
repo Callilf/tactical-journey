@@ -23,11 +23,9 @@ public class ItemPangolinScale extends AbstractInfusableItem {
 		super(ItemEnum.PANGOLIN_SCALE, Assets.pangolin_scale, false, true);
 		
 		BlessingOfThePangolin blessing = new BlessingOfThePangolin();
-		blessing.setItemSprite(this.getTexture());
 		blessings.add(blessing);
 		
 		CurseOfPangolinMother c = new CurseOfPangolinMother();
-		c.setItemSprite(this.getTexture());
 		curses.add(c);
 	}
 	

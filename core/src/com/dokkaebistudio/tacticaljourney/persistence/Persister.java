@@ -206,7 +206,7 @@ public class Persister {
 
 			@Override
 			public void write(Kryo kryo, Output output, GameScreen gs) {
-				
+								
 				// Save the current time
 				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
 				
@@ -235,6 +235,7 @@ public class Persister {
 				// Save the player
 				kryo.writeClassAndObject(output, gs.player);
 
+				output.writeLong(GameScreen.engine.entityCounter);
 			}
 
 			@Override
@@ -287,6 +288,10 @@ public class Persister {
 				gameScreen.activeFloor.getActiveRoom().forceState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 				if (!gameScreen.activeFloor.getActiveRoom().hasEnemies()) Mappers.moveComponent.get(gameScreen.player).setFreeMove(true);
 
+				
+				long entityCounter = input.readLong();
+				GameScreen.engine.entityCounter = entityCounter;
+				
 				return null;
 			}
 			
@@ -526,6 +531,7 @@ public class Persister {
 				// Otherwise, load it
 				PooledEntity loadedEntity = (PooledEntity) engine.createEntity();
 				loadedEntity.flags = input.readInt();
+				loadedEntity.id = entityId;
 				loadedEntities.put(entityId, loadedEntity);
 				
 				int componentNumber = input.readInt();

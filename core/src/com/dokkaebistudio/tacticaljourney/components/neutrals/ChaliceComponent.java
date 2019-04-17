@@ -1,7 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Interpolation;
@@ -12,16 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
-import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
-import com.dokkaebistudio.tacticaljourney.alterations.pools.AlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -72,7 +65,7 @@ public class ChaliceComponent implements Component, Poolable {
 					int curseIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(alterationReceiverComponent.getCurses().size());
 					Curse curse = alterationReceiverComponent.getCurses().get(curseIndex);
 					
-					alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, curse);
+					alterationReceiverComponent.requestAction(AlterationActionEnum.LIFT_CURSE, curse);
 					Journal.addEntry("[YELLOW]A holy fluid runs through your body. You feel that a burden has been lifted.");
 				}
 

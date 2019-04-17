@@ -22,10 +22,8 @@ public class ItemLeftJikatabi extends AbstractInfusableItem {
 		super(ItemEnum.LEFT_JIKATABI, Assets.left_jikatabi, false, true);
 		
 		BlessingKawarimi blessing2 = new BlessingKawarimi();
-		blessing2.setItemSprite(this.getTexture());
 		blessings.add(blessing2);
 		CurseShinobi curse = new CurseShinobi();
-		curse.setItemSprite(this.getTexture());
 		curses.add(curse);
 	}
 	

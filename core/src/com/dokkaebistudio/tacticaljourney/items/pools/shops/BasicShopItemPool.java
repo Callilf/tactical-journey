@@ -24,6 +24,9 @@ public class BasicShopItemPool extends ItemPool {
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 8));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 20));
+		
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 5, 8));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 5, 10));
 
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10, 8));

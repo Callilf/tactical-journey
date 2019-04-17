@@ -26,6 +26,8 @@ public class TribesmenSpearItemPool extends ItemPool {
 	
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 5));
 	}
 	
 

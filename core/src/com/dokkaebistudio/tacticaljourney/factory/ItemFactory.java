@@ -51,6 +51,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemShuriken;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmokebomb;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemTutorialPage;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemUniversalCure;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemVenomGland;
@@ -230,7 +231,9 @@ public final class ItemFactory {
 		case SHURIKEN:
 			item = createItemBase(room, tilePos,  new ItemShuriken(), EntityFlagEnum.ITEM_SHURIKEN);
 			break;
-			
+		case SMOKE_BOMB:
+			item = createItemBase(room, tilePos,  new ItemSmokebomb(), EntityFlagEnum.ITEM_SHURIKEN);
+			break;
 			
 			
 		//******************

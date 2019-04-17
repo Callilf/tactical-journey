@@ -37,6 +37,8 @@ public class OldBonesItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 10));
+
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_MEDIUM, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 3));

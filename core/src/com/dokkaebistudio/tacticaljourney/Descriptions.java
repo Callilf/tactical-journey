@@ -194,6 +194,10 @@ public class Descriptions {
 	public static final String ITEM_SHURIKEN_TITLE = "Shuriken";
 	public static final String ITEM_SHURIKEN_DESCRIPTION = "A shinobi range weapon. Deals 5 damages when thrown to an enemy.";	
 	
+	public static final String ITEM_SMOKE_BOMB_TITLE = "Smoke bomb";
+	public static final String ITEM_SMOKE_BOMB_DESCRIPTION = "A shinobi tool used to quickly escape the opponents vision. "
+			+ "Upon use, all enemies in the room will become unalerted, and close enemies will be staggered for 1 turn.";	
+	
 	public static final String ITEM_WORMHOLE_SHARD_TITLE = "Wormhole shard";
 	public static final String ITEM_WORMHOLE_SHARD_DESCRIPTION = "An extraordinary shard of a wormhole that has been solidificated. It creates a portal if you throw it.";
 

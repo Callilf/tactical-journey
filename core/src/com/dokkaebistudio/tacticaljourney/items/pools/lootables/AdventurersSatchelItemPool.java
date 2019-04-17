@@ -24,7 +24,8 @@ public class AdventurersSatchelItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 20));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 20));
 		
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 20));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 15));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 10));
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 15));
 

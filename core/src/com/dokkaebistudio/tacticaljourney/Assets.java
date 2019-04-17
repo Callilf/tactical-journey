@@ -307,6 +307,7 @@ public class Assets {
 	public static RegionDescriptor venom_gland_item;
 	public static RegionDescriptor pebble_item;
 	public static RegionDescriptor shuriken_item;
+	public static RegionDescriptor smoke_bomb_item;
 	
 	public static RegionDescriptor armor_up_item;
 	public static RegionDescriptor armor_piece_item;
@@ -665,6 +666,7 @@ public class Assets {
 		venom_gland_item = Assets.getTexture("item-consumable-venom-gland");
 		pebble_item = Assets.getTexture("item-consumable-pebble");
 		shuriken_item = Assets.getTexture("item-consumable-shuriken");
+		smoke_bomb_item = Assets.getTexture("item-consumable-smoke-bomb");
 		armor_up_item = Assets.getTexture("item-consumable-armor-up");
 		armor_piece_item = Assets.getTexture("item-consumable-armor-piece");
 		orb_container_item = Assets.getTexture("item-consumable-orb-container");

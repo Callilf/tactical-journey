@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -72,7 +73,10 @@ public final class OrbFactory {
 		if (pos != null) {
 			gridPosition.coord(orb, pos, room);
 		}
-		gridPosition.setOrbitSpeed(0.01f);
+		
+		int nextInt = RandomSingleton.getInstance().getUnseededRandom().nextInt(11);
+		float speedModifier = (float)nextInt / 1000;
+		gridPosition.setOrbitSpeed(0.005f + speedModifier);
 		gridPosition.setOrbitRadius(10);
 		gridPosition.zIndex = ZIndexConstants.ORB;
 		orb.add(gridPosition);

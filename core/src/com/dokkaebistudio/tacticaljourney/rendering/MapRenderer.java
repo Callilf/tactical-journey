@@ -261,13 +261,21 @@ public class MapRenderer implements Renderer {
 	 * Build the table of rooms and corridors.
 	 */
 	private void buildRooms() {
+		Array<Cell> cells = roomsTable.getCells();
+		for (int y=0 ; y<(yRange*2) ; y++) {
+			for (int x=0 ; x<(xRange*2) ; x++) {
+				Cell c = findCell(x, y, cells);
+				if (c != null && c.getActor() instanceof Image) {
+					Image corridorImg = (Image) c.getActor();
+					corridorImg.setVisible(false);
+				}
+			}
+		}
 
 		for (Entry<Vector2, Room> entry : floor.getRoomPositions().entrySet()) {
 			Vector2 coord = entry.getKey();
 			int tableX = (int) ((coord.x + Math.abs(minX)) * 2);
 			int tableY = (int) (((yRange - (coord.y + Math.abs(minY))) * 2) - 2);
-			
-			Array<Cell> cells = roomsTable.getCells();
 			
 			Cell c = findCell(tableX, tableY, cells);
 					
@@ -278,11 +286,9 @@ public class MapRenderer implements Renderer {
 				Image roomImage = (Image) children.get(0);
 				Image playerImage = (Image) children.get(1);
 				
-				if (FULL_MAP) {
-					room.setVisited(RoomVisitedState.FIRST_ENTRANCE);
-				}
-				
-				if (room.isVisited()) {
+				if (room.isVisited() || FULL_MAP) {
+					roomImage.setVisible(true);
+
 					switch(room.type) {
 					case START_FLOOR_ROOM:
 						roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_start.getRegion()));
@@ -312,6 +318,20 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item_enemy.getRegion()));
 						} else {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_item.getRegion()));
+						}
+						break;
+					case GIFT_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_gift_enemy.getRegion()));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_gift.getRegion()));
+						}
+						break;
+					case CHALICE_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_chalice_enemy.getRegion()));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_chalice.getRegion()));
 						}
 						break;
 					case BOSS_ROOM:
@@ -347,6 +367,7 @@ public class MapRenderer implements Renderer {
 
 					
 				} else {
+					roomImage.setVisible(true);
 					if( (room.getSouthNeighbor() != null && room.getSouthNeighbor().isVisited())
 							|| (room.getNorthNeighbor() != null && room.getNorthNeighbor().isVisited())
 							|| (room.getWestNeighbor() != null && room.getWestNeighbor().isVisited())
@@ -362,6 +383,9 @@ public class MapRenderer implements Renderer {
 							// Draw corridor
 							drawEastCorridor(tableX, tableY, cells, room);
 						}
+					} else {
+						// Room too far and unvisited, do not display it
+						roomImage.setVisible(false);
 					}
 				}
 				
@@ -420,6 +444,7 @@ public class MapRenderer implements Renderer {
 		if (room.getSouthNeighbor() != null) {
 			Cell result = findCell(tableX, tableY + 1, cells);
 			Image corridorImg = (Image) result.getActor();
+			corridorImg.setVisible(true);
 			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor.getRegion()));
 			result.setActor(corridorImg);
 			result.width(Assets.map_corridor.getRegionWidth());
@@ -432,6 +457,7 @@ public class MapRenderer implements Renderer {
 		if (room.getEastNeighbor() != null) {
 			Cell result = findCell(tableX + 1, tableY, cells);
 			Image corridorImg = (Image) result.getActor();
+			corridorImg.setVisible(true);
 			corridorImg.setDrawable(new TextureRegionDrawable(Assets.map_corridor.getRegion()));
 			result.setActor(corridorImg);
 		}

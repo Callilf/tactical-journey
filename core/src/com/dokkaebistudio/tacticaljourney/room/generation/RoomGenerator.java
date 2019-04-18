@@ -232,14 +232,14 @@ public abstract class RoomGenerator {
 		case STATUE_ROOM:
 			int statueRoomNb = 1 + random.nextSeededInt(2);
 			currentRoom.roomPattern = "data/rooms/statueRoom" + statueRoomNb + ".csv";
-
 			break;
 			
 		case GIFT_ROOM:
 			int giftRoomNbr = 1 + random.nextSeededInt(3);
 			currentRoom.roomPattern = "data/rooms/giftRoom" + giftRoomNbr + ".csv";
-
 			break;
+			
+		case CHALICE_ROOM:
 			default:
 				currentRoom.roomPattern = "data/rooms/room1.csv";
 		}
@@ -325,9 +325,19 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItem(itemTypes.get(0).getType(), room, possibleSpawns.get(0));
 			break;
 			
+		case CHALICE_ROOM:
+
+			entityFactory.playerFactory.createChalice(new Vector2(11,6), room);
+			
+			if (possibleSpawns.size() == 0) return;
+			// Retrieve the spawn points and shuffle them
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
+			placeEnemies(room, random, spawnPositions, true);
+			break;
+			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.playerFactory.createChalice(new Vector2(11,6), room);
 
 //			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);

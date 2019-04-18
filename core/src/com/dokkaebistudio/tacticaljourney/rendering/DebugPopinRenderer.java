@@ -387,12 +387,20 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		// Add all options here
 		
 		// Mapping
-		TextButton fullMap = new TextButton("Show full map", PopinService.buttonStyle());
+		final TextButton fullMap = new TextButton("Show full map", PopinService.buttonStyle());
 		fullMap.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				MapRenderer.FULL_MAP = true;
-				MapRenderer.requireRefresh();
+				if ("Show full map".equals(fullMap.getText().toString())) {
+					MapRenderer.FULL_MAP = true;
+					MapRenderer.requireRefresh();
+					fullMap.setText("Hide full map");
+				} else {
+					MapRenderer.FULL_MAP = false;
+					MapRenderer.requireRefresh();
+					fullMap.setText("Show full map");
+
+				}
 			}
 		});
 		optionsTable.add(fullMap).padBottom(20);
@@ -985,19 +993,6 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		});
 		optionsTable.add(statueRoom).padBottom(20);
 		optionsTable.row();
-		
-		TextButton giftRoom = new TextButton("Go to gift", PopinService.buttonStyle());
-		giftRoom.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				List<Room> rooms = room.floor.getRooms(RoomType.GIFT_ROOM);
-				if (!rooms.isEmpty()) {
-					room.floor.enterRoom(rooms.get(0));
-				}
-			}
-		});
-		optionsTable.add(giftRoom).padBottom(20);
-		optionsTable.row();
 
 		TextButton keyRoom = new TextButton("Go to key", PopinService.buttonStyle());
 		keyRoom.addListener(new ChangeListener() {
@@ -1023,6 +1018,32 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			}
 		});
 		optionsTable.add(exitRoom).padBottom(20);
+		optionsTable.row();
+		
+		TextButton giftRoom = new TextButton("Go to gift", PopinService.buttonStyle());
+		giftRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.GIFT_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(giftRoom).padBottom(20);
+		optionsTable.row();
+		
+		TextButton chaliceRoom = new TextButton("Go to chalice", PopinService.buttonStyle());
+		chaliceRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.CHALICE_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(chaliceRoom).padBottom(20);
 		optionsTable.row();
 
 		

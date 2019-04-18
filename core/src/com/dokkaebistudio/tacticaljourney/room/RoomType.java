@@ -26,6 +26,7 @@ public enum RoomType {
 	// Optional rooms
 	
 	GIFT_ROOM("Gift room"),
+	CHALICE_ROOM("Chalice room"),
 	
 	
 	

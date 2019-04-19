@@ -18,30 +18,31 @@ package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 public class StateComponent implements Component {
-	private int state = 0;
+	private StatesEnum state = null;
 	public float time = 0.0f;
 	
 	/** Prevents standing or moving animations to replace the current animation. */
 	private boolean keepCurrentAnimation;
 	
-	public int get() {
+	public StatesEnum get() {
 		return state;
 	}
 	
-	public void set(int newState) {
-		this.state = newState;
+	public void set(StatesEnum state) {
+		this.state = state != null ? state : StatesEnum.STANDING;
 		this.time = 0.0f;
 		this.keepCurrentAnimation = false;
 	}
 	
-	public void set(int newState, boolean keepCurrentAnim) {
-		this.state = newState;
+	public void set(StatesEnum state, boolean keepCurrentAnim) {
+		this.state = state != null ? state : StatesEnum.STANDING;
 		this.time = 0.0f;
 		this.keepCurrentAnimation = keepCurrentAnim;
 	}
@@ -60,14 +61,14 @@ public class StateComponent implements Component {
 
 			@Override
 			public void write(Kryo kryo, Output output, StateComponent object) {
-				output.writeInt(object.state);
+				output.writeString(object.state.name());
 				output.writeBoolean(object.keepCurrentAnimation);
 			}
 
 			@Override
 			public StateComponent read(Kryo kryo, Input input, Class<StateComponent> type) {
 				StateComponent compo = engine.createComponent(StateComponent.class);
-				compo.state = input.readInt();
+				compo.state = StatesEnum.valueOf(input.readString());
 				compo.keepCurrentAnimation = input.readBoolean();
 				return compo;
 			}

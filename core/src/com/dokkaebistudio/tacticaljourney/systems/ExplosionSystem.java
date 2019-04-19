@@ -100,7 +100,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 					StateComponent stateComponent = Mappers.stateComponent.get(explosive);
 					stateComponent.set(
 							explosiveComponent.getExplosionTurn() == room.turnManager.getTurn() ? 
-									StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
+									StatesEnum.EXPLODING_THIS_TURN : StatesEnum.EXPLODING_IN_SEVERAL_TURNS);
 					
 					// Compute the explosion tiles
 					computeExplosionTilesToDisplayToPlayer(explosive);
@@ -125,7 +125,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 			StateComponent stateComponent = Mappers.stateComponent.get(explosive);
 			stateComponent.set(
 					explosiveComponent.getExplosionTurn() == room.turnManager.getTurn() ? 
-							StatesEnum.EXPLODING_THIS_TURN.getState() : StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState());
+							StatesEnum.EXPLODING_THIS_TURN : StatesEnum.EXPLODING_IN_SEVERAL_TURNS);
 
 		}
 	}

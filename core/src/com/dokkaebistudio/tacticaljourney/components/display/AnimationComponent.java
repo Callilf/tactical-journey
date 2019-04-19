@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -39,18 +40,19 @@ public class AnimationComponent implements Component, Poolable {
 	}
 	
 	
-	public void addAnimation(int state, Animation<Sprite> anim) {
+	public void addAnimation(StatesEnum state, Animation<Sprite> anim) {
 		int index = AnimationSingleton.getInstance().getIndex(anim);
 		if (index == -1) {
 			System.out.println("EPIC FAIL in animation component");
 		} else {
-			animationsIndexes.put(state, AnimationSingleton.getInstance().getIndex(anim));
+			animationsIndexes.put(state != null ? state.getState() : 0, AnimationSingleton.getInstance().getIndex(anim));
 		}
 	}
 	
-	public Animation<Sprite> getAnimation(int state) {
-		if (animationsIndexes.containsKey(state)) {
-			return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(state));
+	public Animation<Sprite> getAnimation(StatesEnum state) {
+		int s = state != null ? state.getState() : 0;
+		if (animationsIndexes.containsKey(s)) {
+			return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(s));
 		} else {
 			return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(0));
 		}

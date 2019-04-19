@@ -145,7 +145,7 @@ public class StingerSubSystem extends EnemySubSystem {
     			
     			// Stinger animation
     			StateComponent stateComponent = Mappers.stateComponent.get(enemy);
-    			stateComponent.set(StatesEnum.STINGER_ATTACK.getState(), true);
+    			stateComponent.set(StatesEnum.STINGER_ATTACK, true);
     			
     			enemySystem.getMovementHandler().initiateMovement(enemy);
     			attackState = StingerAttackStates.CHARGE;
@@ -165,7 +165,7 @@ public class StingerSubSystem extends EnemySubSystem {
     			
     			// Stinger animation
     			stateComponent = Mappers.stateComponent.get(enemy);
-    			stateComponent.set(StatesEnum.FLY_STANDING.getState());
+    			stateComponent.set(StatesEnum.FLY_STANDING);
     			
 				attackCompo.setTarget(playerEntity);
 				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(playerPosition.coord(), room));

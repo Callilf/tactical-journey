@@ -73,9 +73,9 @@ public class MovementHandler {
 		StateComponent stateComponent = Mappers.stateComponent.get(e);
 		if (stateComponent != null && !stateComponent.isKeepCurrentAnimation()) {	
 			if (Mappers.flyComponent.has(e)) {
-				stateComponent.set(StatesEnum.FLY_MOVING.getState());			
+				stateComponent.set(StatesEnum.FLY_MOVING);			
 			} else {
-				stateComponent.set(StatesEnum.MOVING.getState());
+				stateComponent.set(StatesEnum.MOVING);
 			}
 		}
 		
@@ -278,9 +278,9 @@ public class MovementHandler {
 			StateComponent stateComponent = Mappers.stateComponent.get(e);
 			if (stateComponent != null && !stateComponent.isKeepCurrentAnimation()) {
 				if (Mappers.flyComponent.has(e)) {
-					stateComponent.set(StatesEnum.FLY_STANDING.getState());			
+					stateComponent.set(StatesEnum.FLY_STANDING);			
 				} else {
-					stateComponent.set(StatesEnum.STANDING.getState());
+					stateComponent.set(StatesEnum.STANDING);
 				}
 			}
 			

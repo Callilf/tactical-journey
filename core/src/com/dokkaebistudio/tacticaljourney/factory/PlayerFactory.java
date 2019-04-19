@@ -93,14 +93,14 @@ public final class PlayerFactory {
 		playerEntity.add(spriteCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.STANDING.getState() );
+		stateCompo.set(StatesEnum.STANDING);
 		playerEntity.add(stateCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().player_standing);
-		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().player_running);
-		animCompo.addAnimation(StatesEnum.FLY_STANDING.getState(), AnimationSingleton.getInstance().player_flying);
-		animCompo.addAnimation(StatesEnum.FLY_MOVING.getState(), AnimationSingleton.getInstance().player_flying);
+		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().player_standing);
+		animCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().player_running);
+		animCompo.addAnimation(StatesEnum.FLY_STANDING, AnimationSingleton.getInstance().player_flying);
+		animCompo.addAnimation(StatesEnum.FLY_MOVING, AnimationSingleton.getInstance().player_flying);
 		playerEntity.add(animCompo);
 		
 		// Grid position

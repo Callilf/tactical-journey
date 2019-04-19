@@ -58,7 +58,7 @@ public class StatusBuffFlight extends Status {
 		
 		if (Mappers.playerComponent.has(entity)) {
 			StateComponent stateComponent = Mappers.stateComponent.get(entity);
-			stateComponent.set(StatesEnum.FLY_STANDING.getState());
+			stateComponent.set(StatesEnum.FLY_STANDING);
 		}
 		return true;
 	}
@@ -70,7 +70,7 @@ public class StatusBuffFlight extends Status {
 		
 		if (Mappers.playerComponent.has(entity)) {
 			StateComponent stateComponent = Mappers.stateComponent.get(entity);
-			stateComponent.set(StatesEnum.STANDING.getState());
+			stateComponent.set(StatesEnum.STANDING);
 		}
 	}
 	

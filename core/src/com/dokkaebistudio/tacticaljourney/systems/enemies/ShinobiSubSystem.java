@@ -27,25 +27,18 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
-    	MoveComponent moveCompo = Mappers.moveComponent.get(enemy);
-    	final AttackComponent attackCompo = Mappers.attackComponent.get(enemy);
-    	GridPositionComponent enemyCurrentPos = Mappers.gridPositionComponent.get(enemy);
-
-		Entity playerEntity = GameScreen.player;
-		GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(playerEntity);
-
 		
 		switch(room.getState()) {
 		
 		case ENEMY_TURN_INIT:
 			if (isSleeping) {
-				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING);
 			}
 			break;
 
     	case ENEMY_MOVE_TILES_DISPLAYED:
     		if (isSleeping) {
-        		Vector2 playerPos = Mappers.gridPositionComponent.get(playerEntity).coord();
+        		Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
         		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
         			if (t.getGridPos().equals(playerPos)) {
         				// Sees the player

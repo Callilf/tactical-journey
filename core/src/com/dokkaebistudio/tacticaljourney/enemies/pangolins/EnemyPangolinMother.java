@@ -28,8 +28,8 @@ public class EnemyPangolinMother extends Enemy {
 	 */
 	public void enrage(Entity entity) {
 		AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
-		animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
-		animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
+		animationComponent.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherEnragedStand);
+		animationComponent.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherEnragedStand);
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 		enemyComponent.setAlerted(true);
@@ -40,8 +40,8 @@ public class EnemyPangolinMother extends Enemy {
 	
 	public void cry(Entity entity, Room room) {
 		AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
-		animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
-		animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
+		animationComponent.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherCrying);
+		animationComponent.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherCrying);
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(entity);
 		attackComponent.setActive(false);
@@ -88,8 +88,8 @@ public class EnemyPangolinMother extends Enemy {
 			if (room.turnManager.getTurn() == this.cryingEndTurn) {
 				crying = false;
 				AnimationComponent animationComponent = Mappers.animationComponent.get(enemy);
-				animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
-				animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+				animationComponent.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherStand);
+				animationComponent.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherStand);
 				
 				AttackComponent attackComponent = Mappers.attackComponent.get(enemy);
 				attackComponent.setActive(true);

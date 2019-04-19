@@ -80,7 +80,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningTotem = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 				
@@ -92,7 +92,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningOrb = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 			} else if (summoningEnemy) {
@@ -101,7 +101,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningEnemy = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 
@@ -112,7 +112,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				if (totem == null) {
 					// No totem, summon one
 					summoningTotem = true;
-					Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState());
+					Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 					
 		    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 					return true;
@@ -129,7 +129,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 					
 					if (choice == 0) {
 						summoningEnemy = true;
-						Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState());
+						Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 						
 			    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 						return true;
@@ -140,7 +140,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 						if (orbCarrierComponent.getOrbs().size() < 4) {
 							// Orb slot available
 							summoningOrb = true;
-							Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState());
+							Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 							
 				    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 							return true;

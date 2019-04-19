@@ -204,13 +204,13 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.FLY_STANDING.getState(), AnimationSingleton.getInstance().stingerFly);
-		animationCompo.addAnimation(StatesEnum.FLY_MOVING.getState(), AnimationSingleton.getInstance().stingerFly);
-		animationCompo.addAnimation(StatesEnum.STINGER_ATTACK.getState(), AnimationSingleton.getInstance().stingerAttack);
+		animationCompo.addAnimation(StatesEnum.FLY_STANDING, AnimationSingleton.getInstance().stingerFly);
+		animationCompo.addAnimation(StatesEnum.FLY_MOVING, AnimationSingleton.getInstance().stingerFly);
+		animationCompo.addAnimation(StatesEnum.STINGER_ATTACK, AnimationSingleton.getInstance().stingerAttack);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.FLY_STANDING.getState() );
+		stateCompo.set(StatesEnum.FLY_STANDING);
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -305,13 +305,13 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().shinobiStand);
-		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().shinobiRun);
-		animationCompo.addAnimation(StatesEnum.SHINOBI_SLEEPING.getState(), AnimationSingleton.getInstance().shinobiSleep);
+		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().shinobiStand);
+		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().shinobiRun);
+		animationCompo.addAnimation(StatesEnum.SHINOBI_SLEEPING, AnimationSingleton.getInstance().shinobiSleep);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.SHINOBI_SLEEPING.getState() );
+		stateCompo.set(StatesEnum.SHINOBI_SLEEPING );
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

@@ -217,11 +217,11 @@ public final class CreepFactory {
 		creepEntity.add(creepCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.FIRE_LOOP.getState(), AnimationSingleton.getInstance().fire);
+		animationCompo.addAnimation(StatesEnum.FIRE_LOOP, AnimationSingleton.getInstance().fire);
 		creepEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.FIRE_LOOP.getState() );
+		stateCompo.set(StatesEnum.FIRE_LOOP);
 		creepEntity.add(stateCompo);
 		
 		if (parentEntity != null) {

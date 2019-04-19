@@ -47,8 +47,6 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -701,12 +699,12 @@ public final class EntityFactory {
 		bomb.add(explosionCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState(), AnimationSingleton.getInstance().bomb_slow);
-		animationCompo.addAnimation(StatesEnum.EXPLODING_THIS_TURN.getState(), AnimationSingleton.getInstance().bomb_fast);
+		animationCompo.addAnimation(StatesEnum.EXPLODING_IN_SEVERAL_TURNS, AnimationSingleton.getInstance().bomb_slow);
+		animationCompo.addAnimation(StatesEnum.EXPLODING_THIS_TURN, AnimationSingleton.getInstance().bomb_fast);
 		bomb.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_IN_SEVERAL_TURNS.getState() : StatesEnum.EXPLODING_THIS_TURN.getState());
+		stateCompo.set(explosionCompo.getTurnsToExplode() > 0 ? StatesEnum.EXPLODING_IN_SEVERAL_TURNS : StatesEnum.EXPLODING_THIS_TURN);
 		bomb.add(stateCompo);
 		
 		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
@@ -876,11 +874,11 @@ public final class EntityFactory {
 		wormhole.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.PORTAL.getState(), AnimationSingleton.getInstance().portal);
+		animationCompo.addAnimation(StatesEnum.PORTAL, AnimationSingleton.getInstance().portal);
 		wormhole.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(0);
+		stateCompo.set(null);
 		wormhole.add(stateCompo);		
 		
 		WormholeComponent wormholeCompo = engine.createComponent(WormholeComponent.class);

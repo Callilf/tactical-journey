@@ -82,12 +82,12 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
-		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinBabyStand);
+		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinBabyStand);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.STANDING.getState() );
+		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -172,12 +172,12 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
-		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherStand);
+		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherStand);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.STANDING.getState() );
+		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

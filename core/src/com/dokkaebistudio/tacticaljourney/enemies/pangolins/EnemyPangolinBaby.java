@@ -38,8 +38,8 @@ public class EnemyPangolinBaby extends Enemy {
 			
 			
 			AnimationComponent animationCompo = Mappers.animationComponent.get(enemy);
-			animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
-			animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
+			animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinBabyRolled);
+			animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinBabyRolling);
 			
 			HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
 			healthComponent.restoreArmor(20);
@@ -74,8 +74,8 @@ public class EnemyPangolinBaby extends Enemy {
 			if (room.turnManager.getTurn() == this.turnRolledEnd) {
 				rolled = false;
 				AnimationComponent animationCompo = Mappers.animationComponent.get(enemy);
-				animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
-				animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+				animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinBabyStand);
+				animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinBabyStand);
 				
 				HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
 				if (healthComponent.getArmor() > 0) {

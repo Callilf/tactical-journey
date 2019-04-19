@@ -100,13 +100,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				
 		switch (room.getState()) {
 
-		case PLAYER_TURN_INIT:	
+		case PLAYER_TURN_INIT:
 			moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
-			
+			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 			alterationReceiverComponent.onPlayerTurnStarts(player, room);
 			
-			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 			break;
 
 		case PLAYER_COMPUTE_MOVABLE_TILES:
@@ -255,6 +255,12 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			moveCompo.clearMovableTiles();
 			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 
+			break;
+			
+			
+		case PLAYER_STUNNED:
+			handleRightClickOnEnemies(player);
+			handleClickOnPlayer(player);
 			break;
 
 		default:

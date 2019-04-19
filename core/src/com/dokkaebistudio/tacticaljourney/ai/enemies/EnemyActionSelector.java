@@ -305,17 +305,6 @@ public class EnemyActionSelector {
 			}
 		}
 		
-//		int shortestDistance = -1;
-//		for (Entity p : allPlayers) {
-//			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-//			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-//			if (target == null || distance < shortestDistance) {
-//				shortestDistance = distance;
-//				target = p;
-//			}
-//		}
-		
-		
 		if (shortestDistance == attackComponent.getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {

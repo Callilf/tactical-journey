@@ -22,7 +22,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;

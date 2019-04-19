@@ -31,6 +31,8 @@ public enum RoomState {
 	
 	PLAYER_THROWING,
 	
+	PLAYER_STUNNED,
+	
 	PLAYER_END_TURN,
 	
 	
@@ -88,6 +90,7 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_WHEEL_FINISHED
     			|| this == RoomState.PLAYER_ATTACK_ANIMATION
     			|| this == RoomState.PLAYER_THROWING
+    			|| this == RoomState.PLAYER_STUNNED
     			|| this == RoomState.PLAYER_END_TURN;
 	}
 	
@@ -128,6 +131,7 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_WHEEL_FINISHED
     			|| this == RoomState.PLAYER_ATTACK_ANIMATION
     			|| this == RoomState.PLAYER_THROWING
+    			|| this == RoomState.PLAYER_STUNNED
     			|| this == RoomState.PLAYER_END_TURN
 				|| this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
 				|| this == RoomState.ENEMY_TURN_INIT 
@@ -151,13 +155,26 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_WHEEL_NEEDLE_STOP;
 	}
 	
+	
+	/**
+	 * Whether the player can open its inventory or not.
+	 * @return true if the player can open the inventory.
+	 */
+	public boolean canOpenInventory() {
+		return this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
+    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+    			
+	}
+	
 	/**
 	 * Whether the player can end his turn or not.
 	 * @return true if the turn can be ended manually.
 	 */
 	public boolean canEndTurn() {
 		return this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
-    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
+    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED
+    			|| this == RoomState.PLAYER_STUNNED;
+    			
 	}
 	
 	

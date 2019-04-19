@@ -12,7 +12,6 @@ import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface
 import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
@@ -100,6 +99,10 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 	
 	public void onAttack(Entity enemy, Entity target, Room room) {
 		this.type.onAttack(enemy, target, room);
+	}
+	
+	public boolean onReceiveAttack(Entity enemy, Entity attacker, Room room) {
+		return this.type.onReceiveAttack(enemy, attacker, room);
 	}
 	
 	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {

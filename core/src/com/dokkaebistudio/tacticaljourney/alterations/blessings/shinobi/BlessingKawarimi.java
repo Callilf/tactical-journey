@@ -23,12 +23,15 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -92,6 +95,15 @@ public class BlessingKawarimi extends Blessing {
 			// Switch to activated even if it doesn't proc, so that it won't proc on nother attack in the same room.
 			activationForRoom.put(room.getIndex(), true);
 			
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
+			if (statusReceiverComponent.hasAtLeastOneStatus(StatusDebuffEntangled.class, StatusDebuffStunned.class)) {
+				// If immobilized, do not evade
+				Journal.addEntry("Kawarimi activated but could not avoid the attack since " 
+						+ Mappers.inspectableComponentMapper.get(user).getTitle() 
+						+ " is immobilized by a status effect.");
+				return true;
+			}
+			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < getCurrentProcChance(user)) {
 
@@ -141,7 +153,7 @@ public class BlessingKawarimi extends Blessing {
 	 * Log effect when evading.
 	 * @param gridPos the tile pos
 	 */
-	private void createLogEffect(Vector2 gridPos) {
+	public static void createLogEffect(Vector2 gridPos) {
 		final Image log = new Image(Assets.kawarimi_log.getRegion());
 		Action removeImageAction = new Action(){
 		  @Override
@@ -169,7 +181,7 @@ public class BlessingKawarimi extends Blessing {
 	 * Smoke effect when evading.
 	 * @param gridPos the tile pos
 	 */
-	private void createSmokeEffect(Vector2 gridPos) {
+	public static void createSmokeEffect(Vector2 gridPos) {
 		final AnimatedImage smokeAnim = new AnimatedImage(AnimationSingleton.getInstance().smoke_bomb, false);
 		Action smokeAnimFinishAction = new Action(){
 		  @Override
@@ -195,7 +207,7 @@ public class BlessingKawarimi extends Blessing {
 	 * @param room the room
 	 * @return a list of positions
 	 */
-	private List<Vector2> getPossibleMoves(Entity mover, GridPositionComponent gridPositionComponent, Room room) {
+	public static List<Vector2> getPossibleMoves(Entity mover, GridPositionComponent gridPositionComponent, Room room) {
 		List<Vector2> possibleMoves = new ArrayList<>();
 		PoolableVector2 temp = PoolableVector2.create(gridPositionComponent.coord());
 		temp.x += 1;

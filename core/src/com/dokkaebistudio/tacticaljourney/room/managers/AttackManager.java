@@ -131,7 +131,12 @@ public class AttackManager {
 		boolean processAttack = true;
 		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
 		if (alterationReceiverComponent != null) {
-			processAttack = alterationReceiverComponent.onReceiveAttack(target, attacker, room);
+			processAttack &= alterationReceiverComponent.onReceiveAttack(target, attacker, room);
+		}
+		
+		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
+		if (enemyComponent != null) {
+			processAttack &= enemyComponent.onReceiveAttack(target, attacker, room);
 		}
 		
 		if (processAttack) {

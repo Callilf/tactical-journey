@@ -557,7 +557,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					} else {
-						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INVENTORY);
+						if (room.getState().canOpenInventory()) {
+							inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INVENTORY);
+						}
 					}
 				}
 			});

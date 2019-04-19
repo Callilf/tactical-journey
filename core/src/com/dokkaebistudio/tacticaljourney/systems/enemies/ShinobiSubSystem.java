@@ -11,8 +11,12 @@ import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -24,9 +28,13 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class ShinobiSubSystem extends EnemySubSystem {
 	
 	private boolean isSleeping = true;
+	private EnemyShinobi enemyShinobi;
 	
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
+		if (enemyShinobi == null) {
+			enemyShinobi = (EnemyShinobi) Mappers.enemyComponent.get(enemy).getType();
+		}
 		
 		switch(room.getState()) {
 		
@@ -37,8 +45,9 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			break;
 
     	case ENEMY_MOVE_TILES_DISPLAYED:
+    		Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
+
     		if (isSleeping) {
-        		Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
         		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
         			if (t.getGridPos().equals(playerPos)) {
         				// Sees the player
@@ -52,6 +61,21 @@ public class ShinobiSubSystem extends EnemySubSystem {
     			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
     			return true;
     		}
+    		
+    		if (!enemyShinobi.isSmokeBombUsed() &&
+    				TileUtil.getDistanceBetweenTiles(playerPos, Mappers.gridPositionComponent.get(enemy).coord()) == 1) {
+    			// Close range and still has smoke bomb
+    			enemyShinobi.setSmokeBombUsed(true);
+    			
+    			Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+    			ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
+    			itemComponent.use(enemy, smokeBomb, room);
+    			room.removeEntity(smokeBomb);
+    			Journal.addEntry(Mappers.inspectableComponentMapper.get(enemy).getTitle() + " used a smoke bomb.");
+    			
+    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+    		}
+    		
     		break;
     		
     	case ENEMY_ATTACK:

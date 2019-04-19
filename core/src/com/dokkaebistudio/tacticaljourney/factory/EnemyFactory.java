@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -319,6 +320,9 @@ public final class EnemyFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
+
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyShinobi());
@@ -352,7 +356,7 @@ public final class EnemyFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(8);
+		healthComponent.setMaxHp(22);
 		healthComponent.setHp(22);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);

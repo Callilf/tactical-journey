@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
@@ -87,11 +88,13 @@ public class StatusDebuffStunned extends Status {
 	public void onStartTurn(Entity entity, Room room) {
 		boolean isPlayer = Mappers.playerComponent.has(entity);
 		if (isPlayer) {
-			room.turnManager.endPlayerTurn();
+			Journal.addEntry("You are [YELLOW]stunned[] and cannot play this turn.");
+			room.setNextState(RoomState.PLAYER_STUNNED);
 		}
 			
 		EnemyComponent enemyCompo = Mappers.enemyComponent.get(entity);
 		if (enemyCompo != null) {
+			Journal.addEntry(Mappers.inspectableComponentMapper.get(entity).getTitle() + "is [YELLOW]stunned[] and cannot play this turn.");
 			enemyCompo.setTurnOver(true);
 		}
 	}
@@ -125,10 +128,6 @@ public class StatusDebuffStunned extends Status {
 
 		GameScreen.fxStage.addActor(animation);
 	}
-	
-	
-	
-	
 	
 	
 	//********************

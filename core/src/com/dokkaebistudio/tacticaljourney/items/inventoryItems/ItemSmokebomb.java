@@ -19,7 +19,6 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.Sta
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
-import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -63,15 +62,16 @@ public class ItemSmokebomb extends AbstractItem {
 		
 		// All enemies become unalerted
 		for(Entity enemy : room.getEnemies()) {
+			if (enemy == user) continue;
 			Mappers.enemyComponent.get(enemy).setAlerted(false);
 		}
 		
 		// Adjacent enemies are stunned
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(userPos.coord(), room);
 		for (Tile adjacentTile : adjacentTiles) {
-			Entity enemy = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), EnemyComponent.class, room);
-			if (enemy != null) {
-				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(enemy);
+			Entity entity = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), StatusReceiverComponent.class, room);
+			if (entity != null && entity != user) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
 				if (statusReceiverComponent != null) {
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(1));
 				}

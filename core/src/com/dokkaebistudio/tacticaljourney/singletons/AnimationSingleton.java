@@ -56,6 +56,10 @@ public class AnimationSingleton {
 	public Animation<Sprite> tribesmenShamanStand;
 	public Animation<Sprite> tribesmenShamanSummoning;
 
+	public Animation<Sprite> shinobiStand;
+	public Animation<Sprite> shinobiRun;
+	public Animation<Sprite> shinobiSleep;
+
 	
 	public Animation<Sprite> attack_slash;
 	public Animation<Sprite> attack_slash_critical;
@@ -63,6 +67,7 @@ public class AnimationSingleton {
 	public Animation<Sprite> bomb;
 	public Animation<Sprite> web_projectile;
 	public Animation<Sprite> pebble_projectile;
+	public Animation<Sprite> shuriken_projectile;
 	public Animation<Sprite> smoke_bomb;
 	
 	
@@ -144,6 +149,12 @@ public class AnimationSingleton {
 		tribesmenShamanSummoning = new Animation<Sprite>(0.15f, Assets.boss_shaman_summoning, PlayMode.LOOP_PINGPONG);
 		createAnimation(tribesmenShamanSummoning);
 		
+		shinobiStand = new Animation<Sprite>(0.3f, Assets.boss_shinobi_stand, PlayMode.LOOP_PINGPONG);
+		createAnimation(shinobiStand);
+		shinobiRun = new Animation<Sprite>(0.15f, Assets.boss_shinobi_run, PlayMode.LOOP);
+		createAnimation(shinobiRun);
+		shinobiSleep = new Animation<Sprite>(0.15f, Assets.boss_shinobi_sleep, PlayMode.LOOP);
+		createAnimation(shinobiSleep);
 		
 		
 		attack_slash = new Animation<>(0.03f, Assets.slash_animation);
@@ -158,6 +169,8 @@ public class AnimationSingleton {
 		createAnimation(web_projectile);
 		pebble_projectile = new Animation<>(0.1f, Assets.projectile_pebble);
 		createAnimation(pebble_projectile);
+		shuriken_projectile = new Animation<>(0.1f, Assets.projectile_shuriken);
+		createAnimation(shuriken_projectile);
 		smoke_bomb = new Animation<>(0.08f, Assets.smoke_bomb_animation);
 		createAnimation(smoke_bomb);
 		

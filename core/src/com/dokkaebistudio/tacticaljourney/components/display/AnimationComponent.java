@@ -49,7 +49,11 @@ public class AnimationComponent implements Component, Poolable {
 	}
 	
 	public Animation<Sprite> getAnimation(int state) {
-		return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(state));
+		if (animationsIndexes.containsKey(state)) {
+			return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(state));
+		} else {
+			return AnimationSingleton.getInstance().getAnimation(animationsIndexes.get(0));
+		}
 	}
 	
 	

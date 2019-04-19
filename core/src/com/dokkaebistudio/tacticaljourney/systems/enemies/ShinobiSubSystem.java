@@ -11,8 +11,6 @@ import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -20,24 +18,12 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
-import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class StingerSubSystem extends EnemySubSystem {
+public class ShinobiSubSystem extends EnemySubSystem {
 	
-	
-	private enum StingerAttackStates {
-		NONE,
-		INIT_CHARGE,
-		CHARGE,
-		END_CHARGE;
-	}
-	
-	private boolean canCharge = false;
-	private int chargeDistance = 0;
-	private StingerAttackStates attackState = StingerAttackStates.NONE;
+	private boolean isSleeping = true;
 	
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
@@ -52,131 +38,31 @@ public class StingerSubSystem extends EnemySubSystem {
 		switch(room.getState()) {
 		
 		case ENEMY_TURN_INIT:
-			attackCompo.setAdditionnalStrength(0);
+			if (isSleeping) {
+				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING.getState());
+			}
 			break;
 
-    	case ENEMY_MOVE_TILES_DISPLAYED :
-    		
-    		// First check whether the stinger in aligned with the player horizontally or vertically    		
-    		if (canChargePlayer(enemy, moveCompo, attackCompo, room)) {
-    			// Aligned
-    			canCharge = true;
-    			chargeDistance = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), enemyCurrentPos.coord());
-        		room.setNextState(RoomState.ENEMY_ATTACK);
-        		return true;
-    		} else {
-	    		return false;
+    	case ENEMY_MOVE_TILES_DISPLAYED:
+    		if (isSleeping) {
+        		Vector2 playerPos = Mappers.gridPositionComponent.get(playerEntity).coord();
+        		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
+        			if (t.getGridPos().equals(playerPos)) {
+        				// Sees the player
+        				isSleeping = false;
+        				break;
+        			}
+        		}
     		}
+    			
+    		if (isSleeping) {
+    			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+    			return true;
+    		}
+    		break;
     		
     	case ENEMY_ATTACK:
-    		
-    		if (canCharge) {
-    			attackState = StingerAttackStates.INIT_CHARGE;
-    			canCharge = false;
-    		}
-    		
-    		if (attackState == StingerAttackStates.NONE) {
-    			return false;
-    		}
-    		
-    		
-    		switch(attackState) {
-    		case INIT_CHARGE:
-    			PoolableVector2 chargeLocation = PoolableVector2.create(0, 0);
-    			if (enemyCurrentPos.coord().x == playerPosition.coord().x) {
-    				// Vertical charge
-    				if (enemyCurrentPos.coord().y < playerPosition.coord().y) {
-    					chargeLocation.x = playerPosition.coord().x;
-    					chargeLocation.y = playerPosition.coord().y - 1;
-    					
-    					int i = (int) enemyCurrentPos.coord().y;
-    					while (i < playerPosition.coord().y - 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
-    						moveCompo.getWayPoints().add(wp);
-    						i++;
-    					}
-    				} else {
-    					chargeLocation.x = playerPosition.coord().x;
-    					chargeLocation.y = playerPosition.coord().y + 1;
-    					
-    					int i = (int) enemyCurrentPos.coord().y;
-    					while (i > playerPosition.coord().y + 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
-    						moveCompo.getWayPoints().add(wp);
-    						i--;
-    					}
-    				}
-    			} else {
-    				// Horizontal charge
-    				if (enemyCurrentPos.coord().x < playerPosition.coord().x) {
-    					// To the right
-    					SpriteComponent spriteComponent = Mappers.spriteComponent.get(enemy);
-    					spriteComponent.flipX = false;
-
-    					chargeLocation.x = playerPosition.coord().x - 1;
-    					chargeLocation.y = playerPosition.coord().y;
-    					
-    					int i = (int) enemyCurrentPos.coord().x;
-    					while (i < playerPosition.coord().x - 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
-    						moveCompo.getWayPoints().add(wp);
-    						i++;
-    					}
-    				} else {
-    					// To the left
-    					SpriteComponent spriteComponent = Mappers.spriteComponent.get(enemy);
-    					spriteComponent.flipX = true;
-
-    					chargeLocation.x = playerPosition.coord().x + 1;
-    					chargeLocation.y = playerPosition.coord().y;
-    					
-    					int i = (int) enemyCurrentPos.coord().x;
-    					while (i > playerPosition.coord().x + 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
-    						moveCompo.getWayPoints().add(wp);
-    						i--;
-    					}
-    				}
-    			}
-    			
-    			Entity destinationTileEntity = room.entityFactory.createDestinationTile(chargeLocation, room);
-    			moveCompo.setSelectedTile(destinationTileEntity);
-    			moveCompo.hideMovementEntities();
-    			
-    			// Stinger animation
-    			StateComponent stateComponent = Mappers.stateComponent.get(enemy);
-    			stateComponent.set(StatesEnum.STINGER_ATTACK.getState(), true);
-    			
-    			enemySystem.getMovementHandler().initiateMovement(enemy);
-    			attackState = StingerAttackStates.CHARGE;
-    			
     			break;
-    		case CHARGE:
-    	    	moveCompo.selectCurrentMoveDestinationTile(enemy);
-	    		
-    	    	//Do the movement on screen
-    	    	MovementProgressEnum movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);
-        		if (movementFinished == MovementProgressEnum.MOVEMENT_OVER) attackState = StingerAttackStates.END_CHARGE;
-
-    			break;
-    		case END_CHARGE:
-    			MovementHandler.finishRealMovement(enemy, room);
-    			attackState = StingerAttackStates.NONE;
-    			
-    			// Stinger animation
-    			stateComponent = Mappers.stateComponent.get(enemy);
-    			stateComponent.set(StatesEnum.FLY_STANDING.getState());
-    			
-				attackCompo.setTarget(playerEntity);
-				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(playerPosition.coord(), room));
-				
-				attackCompo.setAdditionnalStrength(chargeDistance);
-				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
-    			
-    			default:
-    		}
-    		return true;
-    		
     		
     	default:
     	}

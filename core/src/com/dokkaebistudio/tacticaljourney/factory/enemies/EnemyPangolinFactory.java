@@ -36,7 +36,6 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinBabySubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
@@ -83,13 +82,12 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_STAND.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_ROLLED.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_BABY_ROLLING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
+		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.PANGOLIN_BABY_STAND.getState() );
+		stateCompo.set(StatesEnum.STANDING.getState() );
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -100,7 +98,6 @@ public final class EnemyPangolinFactory {
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyPangolinBaby(mother));
-		enemyComponent.setSubSystem(new PangolinBabySubSystem());
 		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
@@ -175,13 +172,12 @@ public final class EnemyPangolinFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
-		animationCompo.addAnimation(StatesEnum.PANGOLIN_MOTHER_CRYING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
+		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.PANGOLIN_MOTHER_STAND.getState() );
+		stateCompo.set(StatesEnum.STANDING.getState() );
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

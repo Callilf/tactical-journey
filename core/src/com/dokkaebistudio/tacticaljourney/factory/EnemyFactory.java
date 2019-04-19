@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarit
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enemies.EnemyScorpion;
+import com.dokkaebistudio.tacticaljourney.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.enemies.EnemyStinger;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
@@ -38,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.systems.enemies.ShinobiSubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
@@ -202,12 +204,13 @@ public final class EnemyFactory {
 		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
-		animationCompo.addAnimation(StatesEnum.STINGER_FLY.getState(), AnimationSingleton.getInstance().stingerFly);
+		animationCompo.addAnimation(StatesEnum.FLY_STANDING.getState(), AnimationSingleton.getInstance().stingerFly);
+		animationCompo.addAnimation(StatesEnum.FLY_MOVING.getState(), AnimationSingleton.getInstance().stingerFly);
 		animationCompo.addAnimation(StatesEnum.STINGER_ATTACK.getState(), AnimationSingleton.getInstance().stingerAttack);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.STINGER_FLY.getState() );
+		stateCompo.set(StatesEnum.FLY_STANDING.getState() );
 		enemyEntity.add(stateCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -263,6 +266,99 @@ public final class EnemyFactory {
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
 		expRewardCompo.setExpGain(4);
+		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().stinger);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.COMMON, 30 );
+		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+		enemyEntity.add(lootRewardCompo);
+		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
+	
+	
+	/**
+	 * Create a shinobi.
+	 * @param pos the position
+	 * @return the enemy entity
+	 */
+	public Entity createShinobi(Room room, Vector2 pos) {
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_SHINOBI.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_SHINOBI_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_SHINOBI_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		enemyEntity.add(spriteCompo);
+
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().shinobiStand);
+		animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().shinobiRun);
+		animationCompo.addAnimation(StatesEnum.SHINOBI_SLEEPING.getState(), AnimationSingleton.getInstance().shinobiSleep);
+		enemyEntity.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.SHINOBI_SLEEPING.getState() );
+		enemyEntity.add(stateCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.room = room;
+		enemyComponent.setType(new EnemyShinobi());
+		enemyComponent.setSubSystem(new ShinobiSubSystem());
+		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
+		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		enemyComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(enemyComponent);
+		
+//		Persister p = new Persister(engine);
+//		p.save(enemyComponent);
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.setMoveSpeed(5);
+		enemyEntity.add(moveComponent);
+				
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		attackComponent.setAttackType(AttackTypeEnum.RANGE);
+		attackComponent.setRangeMax(5);
+		attackComponent.setStrength(5);
+		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().shuriken_projectile,  false);
+		attackComponent.setAttackAnimation(attackAnimation);
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setMaxHp(8);
+		healthComponent.setHp(22);
+		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
+		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(30);
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);

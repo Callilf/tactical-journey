@@ -3,11 +3,12 @@ package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class EnemyPangolinMother extends Enemy {
@@ -26,8 +27,9 @@ public class EnemyPangolinMother extends Enemy {
 	 * @param entity
 	 */
 	public void enrage(Entity entity) {
-		StateComponent stateComponent = Mappers.stateComponent.get(entity);
-		stateComponent.set(StatesEnum.PANGOLIN_MOTHER_ENRAGED_STAND.getState());
+		AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
+		animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
+		animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherEnragedStand);
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 		enemyComponent.setAlerted(true);
@@ -37,8 +39,9 @@ public class EnemyPangolinMother extends Enemy {
 	}
 	
 	public void cry(Entity entity, Room room) {
-		StateComponent stateComponent = Mappers.stateComponent.get(entity);
-		stateComponent.set(StatesEnum.PANGOLIN_MOTHER_CRYING.getState());
+		AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
+		animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
+		animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherCrying);
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(entity);
 		attackComponent.setActive(false);
@@ -84,8 +87,9 @@ public class EnemyPangolinMother extends Enemy {
 		if (crying) {
 			if (room.turnManager.getTurn() == this.cryingEndTurn) {
 				crying = false;
-				StateComponent stateComponent = Mappers.stateComponent.get(enemy);
-				stateComponent.set(StatesEnum.PANGOLIN_MOTHER_STAND.getState());
+				AnimationComponent animationComponent = Mappers.animationComponent.get(enemy);
+				animationComponent.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
+				animationComponent.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinMotherStand);
 				
 				AttackComponent attackComponent = Mappers.attackComponent.get(enemy);
 				attackComponent.setActive(true);

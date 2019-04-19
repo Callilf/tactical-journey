@@ -80,7 +80,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningTotem = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 				
@@ -92,7 +92,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningOrb = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 			} else if (summoningEnemy) {
@@ -101,7 +101,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				
 				summoningEnemy = false;
 				recovering = true;
-				Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState());
+				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING.getState());
 	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;
 

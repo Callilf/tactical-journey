@@ -69,12 +69,16 @@ public class MovementHandler {
 			}
 		}
 		
-		
-		//TODO improve
-		if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
-			StateComponent stateComponent = Mappers.stateComponent.get(e);
-			stateComponent.set(StatesEnum.PLAYER_RUNNING.getState());
+
+		StateComponent stateComponent = Mappers.stateComponent.get(e);
+		if (stateComponent != null && !stateComponent.isKeepCurrentAnimation()) {	
+			if (Mappers.flyComponent.has(e)) {
+				stateComponent.set(StatesEnum.FLY_MOVING.getState());			
+			} else {
+				stateComponent.set(StatesEnum.MOVING.getState());
+			}
 		}
+		
 	}
 	
 	
@@ -269,12 +273,17 @@ public class MovementHandler {
 					((MovableInterface) c).endMovement(selectedTilePos.coord());
 				}
 			}
+		
 			
-			//TODO improve
-			if (Mappers.playerComponent.has(e) && !Mappers.flyComponent.has(e)) {
-				StateComponent stateComponent = Mappers.stateComponent.get(e);
-				stateComponent.set(StatesEnum.PLAYER_STANDING.getState());
+			StateComponent stateComponent = Mappers.stateComponent.get(e);
+			if (stateComponent != null && !stateComponent.isKeepCurrentAnimation()) {
+				if (Mappers.flyComponent.has(e)) {
+					stateComponent.set(StatesEnum.FLY_STANDING.getState());			
+				} else {
+					stateComponent.set(StatesEnum.STANDING.getState());
+				}
 			}
+			
 		}
 		
 		moveCompo.moving = false;

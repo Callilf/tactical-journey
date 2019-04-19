@@ -135,7 +135,10 @@ public class Descriptions {
 	public static final String ENEMY_TRIBESMAN_TOTEM_TITLE = "Totem of war";
 	public static final String ENEMY_TRIBESMAN_TOTEM_DESCRIPTION = "A totem manipulated by the Shaman. It cannot be attacked.";
 
-	
+	public static final String ENEMY_SHINOBI_TITLE = "Fallen shinobi";
+	public static final String ENEMY_SHINOBI_DESCRIPTION = "A ancient shinobi that died in the dungeon but was brought back from the dead to serve as a defender. Even though he did not survive "
+			+ "the dungeon, his various skills make him a formidable foe.";
+
 	
 	// Items
 	

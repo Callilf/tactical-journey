@@ -91,11 +91,12 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.TRIBESMEN_SPEAR_STAND.getState(), AnimationSingleton.getInstance().tribesmenSpearStand);
+		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().tribesmenSpearStand);
+		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().tribesmenSpearStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.TRIBESMEN_SPEAR_STAND.getState());
+		stateCompo.set(StatesEnum.STANDING.getState());
 		enemyEntity.add(stateCompo);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -181,11 +182,12 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.TRIBESMEN_SHIELD_STAND.getState(), AnimationSingleton.getInstance().tribesmenShieldStand);
+		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().tribesmenShieldStand);
+		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().tribesmenShieldStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.TRIBESMEN_SHIELD_STAND.getState());
+		stateCompo.set(StatesEnum.STANDING.getState());
 		enemyEntity.add(stateCompo);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -273,11 +275,12 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.TRIBESMEN_SCOUT_STAND.getState(), AnimationSingleton.getInstance().tribesmenScoutStand);
+		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().tribesmenScoutStand);
+		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().tribesmenScoutStand);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.TRIBESMEN_SCOUT_STAND.getState());
+		stateCompo.set(StatesEnum.STANDING.getState());
 		enemyEntity.add(stateCompo);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -367,12 +370,13 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState(), AnimationSingleton.getInstance().tribesmenShamanStand);
+		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().tribesmenShamanStand);
+		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().tribesmenShamanStand);
 		animCompo.addAnimation(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING.getState(), AnimationSingleton.getInstance().tribesmenShamanSummoning);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.TRIBESMEN_SHAMAN_STAND.getState());
+		stateCompo.set(StatesEnum.STANDING.getState());
 		enemyEntity.add(stateCompo);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
@@ -460,11 +464,14 @@ public final class EnemyTribesmenFactory {
 		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
-		animCompo.addAnimation(StatesEnum.TRIBESMEN_TOTEM.getState(), AnimationSingleton.getInstance().tribesmenTotem);
+		animCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().tribesmenTotem);
+		animCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().tribesmenTotem);
+		animCompo.addAnimation(StatesEnum.FLY_STANDING.getState(), AnimationSingleton.getInstance().tribesmenTotem);
+		animCompo.addAnimation(StatesEnum.FLY_MOVING.getState(), AnimationSingleton.getInstance().tribesmenTotem);
 		enemyEntity.add(animCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
-		stateCompo.set(StatesEnum.TRIBESMEN_TOTEM.getState());
+		stateCompo.set(StatesEnum.STANDING.getState());
 		enemyEntity.add(stateCompo);
 		
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);

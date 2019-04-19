@@ -3,11 +3,12 @@ package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class EnemyPangolinBaby extends Enemy {
@@ -35,8 +36,10 @@ public class EnemyPangolinBaby extends Enemy {
 			rolled = true;
 			turnRolledEnd = room.turnManager.getTurn() + 2;
 			
-			StateComponent stateComponent = Mappers.stateComponent.get(enemy);
-			stateComponent.set(StatesEnum.PANGOLIN_BABY_ROLLED.getState());
+			
+			AnimationComponent animationCompo = Mappers.animationComponent.get(enemy);
+			animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyRolled);
+			animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyRolling);
 			
 			HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
 			healthComponent.restoreArmor(20);
@@ -70,8 +73,9 @@ public class EnemyPangolinBaby extends Enemy {
 		if (rolled) {
 			if (room.turnManager.getTurn() == this.turnRolledEnd) {
 				rolled = false;
-				StateComponent stateComponent = Mappers.stateComponent.get(enemy);
-				stateComponent.set(StatesEnum.PANGOLIN_BABY_STAND.getState());
+				AnimationComponent animationCompo = Mappers.animationComponent.get(enemy);
+				animationCompo.addAnimation(StatesEnum.STANDING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
+				animationCompo.addAnimation(StatesEnum.MOVING.getState(), AnimationSingleton.getInstance().pangolinBabyStand);
 				
 				HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
 				if (healthComponent.getArmor() > 0) {

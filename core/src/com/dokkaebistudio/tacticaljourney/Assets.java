@@ -190,6 +190,7 @@ public class Assets {
 	public static RegionDescriptor projectile_bomb;
 	public static Array<Sprite> projectile_web;
 	public static Array<Sprite> projectile_pebble;
+	public static Array<Sprite> projectile_shuriken;
 
 	
 	//********
@@ -233,7 +234,7 @@ public class Assets {
 	public static Array<Sprite> enemy_tribesman_scout;
 	public static Array<Sprite> enemy_tribesman_totem;
 
-	
+
 	//************
 	// Bosses
 	
@@ -244,7 +245,10 @@ public class Assets {
 	public static Array<Sprite> boss_shaman;
 	public static Array<Sprite> boss_shaman_summoning;
 
-	
+	public static Array<Sprite> boss_shinobi_stand;
+	public static Array<Sprite> boss_shinobi_run;
+	public static Array<Sprite> boss_shinobi_sleep;
+
 	//*************
 	// Containers
 	
@@ -560,6 +564,7 @@ public class Assets {
 		projectile_bomb = Assets.getTexture("bomb");
 		projectile_web = Assets.getAnimation("projectile-web");
 		projectile_pebble = Assets.getAnimation("item-consumable-pebble");
+		projectile_shuriken = Assets.getAnimation("item-consumable-shuriken");
 
 		
 		//********
@@ -612,6 +617,10 @@ public class Assets {
 		
 		boss_shaman = Assets.getAnimation("tribesman_shaman");
 		boss_shaman_summoning = Assets.getAnimation("tribesman_shaman_summon");
+		
+		boss_shinobi_stand = Assets.getAnimation("shinobi_stand");
+		boss_shinobi_run = Assets.getAnimation("shinobi_run");
+		boss_shinobi_sleep = Assets.getAnimation("shinobi_sleep");
 
 		
 		//*************

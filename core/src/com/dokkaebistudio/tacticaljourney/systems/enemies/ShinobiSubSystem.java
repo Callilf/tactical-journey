@@ -79,8 +79,17 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		break;
     		
     	case ENEMY_ATTACK:
-    			break;
+    		if (!isSleeping) {
+    			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_THROWING);
+    		}
+    		break;
     		
+    	case ENEMY_ATTACK_FINISH:
+    		if (!isSleeping) {
+    			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
+    		}
+			break;
+			
     	default:
     	}
 		

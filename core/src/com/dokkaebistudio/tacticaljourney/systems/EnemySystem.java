@@ -216,6 +216,9 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 	            				attacked = true;
 	            				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
 	            				
+	            				// Orient the sprite so that it looks towards its target
+	            				Mappers.spriteComponent.get(enemyEntity).orientSprite(enemyEntity, attTilePos.coord());
+	            				
 	            				if (Mappers.playerComponent.has(target)) {
 	            					// Prioritize attacks on the player
 	            					break;

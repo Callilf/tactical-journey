@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
@@ -190,6 +191,9 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			};
 			
 			if (!wheelAttackComponent.getAttackAnimation().isPlaying()) {
+				// Orient the sprite so that it looks towards its target
+				Mappers.spriteComponent.get(GameScreen.player).orientSprite(GameScreen.player, targetedTile.getGridPos());
+
 				boolean hasAnim = wheelAttackComponent.setAttackImage(attackerCurrentPos.coord(), 
 						targetedTile, 
 						wheel.getPointedSector(),
@@ -212,6 +216,10 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 
 	    		if (!skillAttackCompo.getAttackAnimation().isPlaying()) {
 		    		targetedTile = skillAttackCompo.getTargetedTile();
+		    		
+					// Orient the sprite so that it looks towards its target
+					Mappers.spriteComponent.get(GameScreen.player).orientSprite(GameScreen.player, targetedTile.getGridPos());
+		    		
 		    		final Vector2 targetedPosition = targetedTile.getGridPos();
 		    		
 		    		Action finishThrowAction = null;

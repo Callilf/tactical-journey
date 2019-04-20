@@ -17,12 +17,14 @@
 package com.dokkaebistudio.tacticaljourney.components.display;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -75,6 +77,21 @@ public class SpriteComponent implements Component, Poolable {
 	}
 	
 	
+	/**
+	 * Orient the sprite of entity that contains this spritecomponent to the correct direction.
+	 * ie. set flipX = true or false depending on the location of the target
+	 * @param entity the entity that has this sprite component
+	 * @param targetPos the position of the tile the entity should look to
+	 */
+	public void orientSprite(Entity entity, Vector2 targetPos) {
+		GridPositionComponent entityPos = Mappers.gridPositionComponent.get(entity);
+		// Orient the enemy sprite in the right direction
+		if (targetPos.x < entityPos.coord().x) {
+			Mappers.spriteComponent.get(entity).flipX = true;
+		} else if (targetPos.x > entityPos.coord().x) {
+			Mappers.spriteComponent.get(entity).flipX = false;
+		}
+	}
 	
 
 	public Sprite getSprite() {

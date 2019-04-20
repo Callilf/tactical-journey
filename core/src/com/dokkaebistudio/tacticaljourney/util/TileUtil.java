@@ -28,6 +28,15 @@ public final class TileUtil {
 
 	private TileUtil() {}
 	
+	public static List<Tile> getAllTiles(Room room) {
+		List<Tile> allTiles = new ArrayList<>();
+		for (Tile[] x : room.grid) {
+			for (Tile y : x) {
+				allTiles.add(y);
+			}
+		}
+		return allTiles;
+	}
 	
 	/**
 	 * Convert a grid position for ex (5,4) into pixel position (450,664).

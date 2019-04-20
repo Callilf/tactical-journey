@@ -310,6 +310,7 @@ public final class EnemyFactory {
 		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().shinobiRun);
 		animationCompo.addAnimation(StatesEnum.SHINOBI_SLEEPING, AnimationSingleton.getInstance().shinobiSleep);
 		animationCompo.addAnimation(StatesEnum.SHINOBI_THROWING, AnimationSingleton.getInstance().shinobiThrow);
+		animationCompo.addAnimation(StatesEnum.SHINOBI_CLONING, AnimationSingleton.getInstance().shinobiClone);
 		enemyEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

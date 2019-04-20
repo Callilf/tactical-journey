@@ -18,6 +18,7 @@ public enum StatesEnum {
 	
 	SHINOBI_SLEEPING(100),
 	SHINOBI_THROWING(101),
+	SHINOBI_CLONING(102),
 	
 	PORTAL(0);
 

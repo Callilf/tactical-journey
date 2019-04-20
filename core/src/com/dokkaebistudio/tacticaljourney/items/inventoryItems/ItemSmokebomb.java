@@ -69,9 +69,9 @@ public class ItemSmokebomb extends AbstractItem {
 		// Adjacent enemies are stunned
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(userPos.coord(), room);
 		for (Tile adjacentTile : adjacentTiles) {
-			Entity entity = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), StatusReceiverComponent.class, room);
-			if (entity != null && entity != user) {
-				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
+			Entity stunnableEntity = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), StatusReceiverComponent.class, room);
+			if (stunnableEntity != null && stunnableEntity != user) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity);
 				if (statusReceiverComponent != null) {
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(1));
 				}
@@ -88,9 +88,9 @@ public class ItemSmokebomb extends AbstractItem {
 		createSmokeEffect(thrownPosition);
 		room.removeEntity(item);
 
-		Entity enemy = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
-		if (enemy != null) {
-			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(enemy);
+		Entity stunnableEntity = TileUtil.getEntityWithComponentOnTile(thrownPosition, StatusReceiverComponent.class, room);
+		if (stunnableEntity != null) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity);
 			if (statusReceiverComponent != null) {
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(2));
 			}

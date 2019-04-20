@@ -1,18 +1,23 @@
 package com.dokkaebistudio.tacticaljourney.systems.enemies;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
+import com.badlogic.gdx.ai.pfa.GraphPath;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
+import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
-import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -22,19 +27,27 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 public class ShinobiSubSystem extends EnemySubSystem {
 	
 	private boolean isSleeping = true;
 	private EnemyShinobi enemyShinobi;
+	private boolean firstTimeAtLessThan10HP;
+	
+	private AttackComponent throwAttackCompo;
+	private boolean throwSmokeBomb;
+	private Vector2 fleeTile = null;
+	private Tile fleeNextTile;
+	private boolean fleeTileReached = false;
 	
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
 		if (enemyShinobi == null) {
 			enemyShinobi = (EnemyShinobi) Mappers.enemyComponent.get(enemy).getType();
 		}
+		final Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
 		
 		switch(room.getState()) {
 		
@@ -42,10 +55,43 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			if (isSleeping) {
 				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING);
 			}
+			
+			if (!firstTimeAtLessThan10HP && Mappers.healthComponent.get(enemy).getHp() <= 10) {
+				firstTimeAtLessThan10HP = true;
+				throwSmokeBomb = true;
+			}
+			
+			if (fleeTile != null) {
+				
+				Tile startTile = room.getTileAtGridPosition(Mappers.gridPositionComponent.get(enemy).coord());
+				RoomGraph roomGraph = new RoomGraph(enemy, TileUtil.getAllTiles(room));
+				IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);
+				GraphPath<Tile> path = new DefaultGraphPath<Tile>();
+				indexedAStarPathFinder.searchNodePath(startTile, TileUtil.getTileAtGridPos(fleeTile, room), new RoomHeuristic(), path);
+
+				if (path.getCount() == 0) {
+					fleeTile = null;
+				} else {
+					MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
+					int totalCost = 0;
+					Iterator<Tile> iterator = path.iterator();
+					while(iterator.hasNext()) {
+						Tile next = iterator.next();
+						totalCost += TileUtil.getCostOfMovementForTilePos(next.getGridPos(), enemy, room);
+						
+						if (totalCost <= moveComponent.getMoveSpeed()) {
+							fleeNextTile = next;
+						}
+						if (totalCost > moveComponent.getMoveSpeed()) break;
+					}
+				}
+				
+				
+			}
+			
 			break;
 
     	case ENEMY_MOVE_TILES_DISPLAYED:
-    		Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
 
     		if (isSleeping) {
         		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
@@ -65,14 +111,43 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		if (!enemyShinobi.isSmokeBombUsed() &&
     				TileUtil.getDistanceBetweenTiles(playerPos, Mappers.gridPositionComponent.get(enemy).coord()) == 1) {
     			// Close range and still has smoke bomb
-    			enemyShinobi.setSmokeBombUsed(true);
-    			
-    			Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
-    			ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
-    			itemComponent.use(enemy, smokeBomb, room);
-    			room.removeEntity(smokeBomb);
-    			Journal.addEntry(Mappers.inspectableComponentMapper.get(enemy).getTitle() + " used a smoke bomb.");
-    			
+    			useSmokeBomb(enemy, enemySystem, room);
+    		}
+    		
+    		if (fleeNextTile != null) {
+    			MoveComponent moveComponent = Mappers.moveComponent.get(enemy);
+    			for (Entity tile : moveComponent.movableTiles) {
+    				if (Mappers.gridPositionComponent.get(tile).coord().equals(fleeNextTile.getGridPos())) {
+	            		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
+	    		    	//Clicked on this tile !!
+	    				//Create an entity to show that this tile is selected as the destination
+	    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
+	    				moveComponent.setSelectedTile(destinationTileEntity);
+	    					
+	    				//Display the way to go to this point
+	    				List<Entity> waypoints = enemySystem.getTileSearchService().buildWaypointList(enemy, moveComponent, Mappers.gridPositionComponent.get(enemy), 
+	    						destinationPos, room);
+	    				moveComponent.setWayPoints(waypoints);
+	    				moveComponent.hideMovementEntities();
+	            		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
+	            		
+	            		if (fleeNextTile.getGridPos().equals(fleeTile)) {
+	            			fleeNextTile = null;
+	            			fleeTile = null;
+	            			fleeTileReached = true;
+	            			
+	            			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
+	            			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+
+	            			break;
+	            		}
+    				}
+    			}
+    			return true;
+    		}
+    		
+    		if (fleeTileReached) {
+    			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
     			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
     		}
     		
@@ -82,6 +157,13 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		if (!isSleeping) {
     			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_THROWING);
     		}
+    		
+    		if (throwSmokeBomb) {
+    			throwSmokeBomb(playerPos, enemy, room);
+    			return true;
+    		}
+    		
+    		
     		break;
     		
     	case ENEMY_ATTACK_FINISH:
@@ -94,168 +176,64 @@ public class ShinobiSubSystem extends EnemySubSystem {
     	}
 		
 		return false;
+	}
+
+
+	
+	// Utils
+
+
+	private void useSmokeBomb(final Entity enemy, final EnemySystem enemySystem, final Room room) {
+		enemyShinobi.setSmokeBombUsed(true);
+		
+		Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+		ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
+		itemComponent.use(enemy, smokeBomb, room);
+		room.removeEntity(smokeBomb);
+		Journal.addEntry(Mappers.inspectableComponentMapper.get(enemy).getTitle() + " used a smoke bomb.");
+		
+		enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+	}
+
+
+
+
+	private void throwSmokeBomb(final Vector2 thrownPosition, final Entity thrower, final Room room) {
+		if (throwAttackCompo == null) {
+			throwAttackCompo = room.engine.createComponent(AttackComponent.class);
+			throwAttackCompo.setAttackAnimation(new AttackAnimation(null, null, false));
+			
+			GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
+			Tile playerTile = TileUtil.getTileAtGridPos(thrownPosition, room);
+			
+			final Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+			throwAttackCompo.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
+			
+			Action finishThrowAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				throwSmokeBomb = false;
+				
+				throwAttackCompo.clearAttackImage();
+				fleeTile = new Vector2(3,6);
+				
+				ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
+				itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);
+				room.removeEntity(smokeBomb);
+				Journal.addEntry(Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
+				
+				room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+				return true;
+			  }
+			};
+			
+			throwAttackCompo.setAttackImage(enemyPos.coord(), 
+					playerTile, 
+					null,
+					GameScreen.fxStage,
+					finishThrowAction);
+			
+		}
 	}	
-	
-	
-	
-	
-	@Override
-	public boolean computeMovableTilesToDisplayToPlayer(EnemySystem system, Entity enemyEntity, Room room) {
-		MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
-    	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
-    	
-		//clear the movable tile
-		moveCompo.clearMovableTiles();
-		if (attackCompo != null) attackCompo.clearAttackableTiles();
-		
-		moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
-    		
-    	//Build the movable tiles list
-		system.getTileSearchService().buildMoveTilesSet(enemyEntity, room);
-		if (attackCompo != null) system.getAttackTileSearchService().buildAttackTilesSet(enemyEntity, room, false, true);
-		
-		if (!moveCompo.isFrozen()) {
-			// Add the horizontal and vertical lines
-			Set<Entity> additionnalAttackableTiles = new HashSet<>();
-			PoolableVector2 temp = PoolableVector2.create(0, 0);
-			GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
-			int i = (int) enemyPos.coord().x - 1;
-			while (i >= 0) {
-				// left
-				temp.set(i, enemyPos.coord().y);
-				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-					break;
-				}
-				i--;
-			}
-			
-			i = (int) enemyPos.coord().x + 1;
-			while (i < GameScreen.GRID_W) {
-				// right
-				temp.set(i, enemyPos.coord().y);
-				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-					break;
-				}
-				i++;
-			}
-			
-			i = (int) enemyPos.coord().y - 1;
-			while (i >= 0) {
-				// down
-				temp.set(enemyPos.coord().x, i);
-				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-					break;
-				}
-				i--;
-			}
-			
-			i = (int) enemyPos.coord().y + 1;
-			while (i < GameScreen.GRID_H) {
-				// up
-				temp.set(enemyPos.coord().x, i);
-				if (!checkTile(temp, additionnalAttackableTiles, moveCompo, attackCompo, room)) {
-					break;
-				}
-				i++;
-			}
-			temp.free();	
-		
-			attackCompo.attackableTiles.addAll(additionnalAttackableTiles);
-		}
 
-		moveCompo.hideMovableTiles();
-		attackCompo.hideAttackableTiles();		
-		return true;
-	}
-
-
-
-
-	private boolean checkTile(PoolableVector2 position, Set<Entity> additionnalAttackableTiles, MoveComponent moveCompo,
-			AttackComponent attackCompo, Room room) {
-		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
-		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
-		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
-		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
-			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room, false));
-		}
-		return solid == null && blockVision == null;
-	}
-	
-	
-	private boolean canChargePlayer(Entity enemyEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		if (moveCompo.getMoveSpeed() == 0) return false;
-		
-		// Add the horizontal and vertical lines
-		PoolableVector2 temp = PoolableVector2.create(0, 0);
-		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
-		int i = (int) enemyPos.coord().x - 1;
-		while (i >= 0) {
-			// left
-			temp.set(i, enemyPos.coord().y);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
-			}
-			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
-				break;
-			}
-			i--;
-		}
-		
-		i = (int) enemyPos.coord().x + 1;
-		while (i < GameScreen.GRID_W) {
-			// right
-			temp.set(i, enemyPos.coord().y);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
-			}
-			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
-				break;
-			}
-			i++;
-		}
-		
-		i = (int) enemyPos.coord().y - 1;
-		while (i >= 0) {
-			// down
-			temp.set(enemyPos.coord().x, i);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
-			}
-			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
-				break;
-			}
-			i--;
-		}
-		
-		i = (int) enemyPos.coord().y + 1;
-		while (i < GameScreen.GRID_H) {
-			// up
-			temp.set(enemyPos.coord().x, i);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
-			}
-			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
-				break;
-			}
-			i++;
-		}
-		temp.free();
-		
-		return false;
-	}
-	
-	private boolean checkTileForSolid(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
-		if (solid != null) return true;
-		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
-		return blockVision != null;
-	}
-	private boolean checkTileForPlayer(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		Entity player = TileUtil.getEntityWithComponentOnTile(position, PlayerComponent.class, room);
-		return player != null;
-	}
-
-
-	
 }

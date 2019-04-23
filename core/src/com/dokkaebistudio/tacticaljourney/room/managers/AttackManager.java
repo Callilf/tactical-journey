@@ -181,7 +181,7 @@ public class AttackManager {
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
 		if (enemyComponent != null) {
-			enemyComponent.onReceiveDamage(target, attacker, room);
+			enemyComponent.onReceiveDamage(damage, target, attacker, room);
 		}
 		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
 		if (alterationReceiverComponent != null) {
@@ -233,11 +233,11 @@ public class AttackManager {
 		if (attacker != null) {
 			// Alert the enemy the player just attacked
 			if ((Mappers.enemyComponent.has(target) && Mappers.playerComponent.has(attacker))) {
-				Mappers.enemyComponent.get(target).setAlerted(true);
+				Mappers.enemyComponent.get(target).setAlerted(true, target);
 			}
 			// Alert the enemy that attacked the player
 			if (Mappers.playerComponent.has(target) && Mappers.enemyComponent.has(attacker)) {
-				Mappers.enemyComponent.get(attacker).setAlerted(true);
+				Mappers.enemyComponent.get(attacker).setAlerted(true, attacker);
 			}
 		}
 	}

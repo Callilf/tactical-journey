@@ -209,7 +209,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 		tribesman.remove(LootRewardComponent.class);
 		tribesman.remove(ExpRewardComponent.class);
 		
-		Mappers.enemyComponent.get(tribesman).setAlerted(true);
+		Mappers.enemyComponent.get(tribesman).setAlerted(true, tribesman);
 		return tribesman;
 	}
 }

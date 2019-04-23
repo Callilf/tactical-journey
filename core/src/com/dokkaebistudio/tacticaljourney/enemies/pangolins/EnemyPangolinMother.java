@@ -32,7 +32,7 @@ public class EnemyPangolinMother extends Enemy {
 		animationComponent.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherEnragedStand);
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
-		enemyComponent.setAlerted(true);
+		enemyComponent.setAlerted(true, entity);
 		
 		MoveComponent moveCompo = Mappers.moveComponent.get(entity);
 		moveCompo.setMoveSpeed(4);
@@ -55,14 +55,14 @@ public class EnemyPangolinMother extends Enemy {
 	
 	
 	@Override
-	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {
 
 		// Alert all babies when receiving a hit
 		for(Entity e : room.getEnemies()) {
 			EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
 			Enemy type = enemyComponent.getType();
 			if (type != null && type.getClass().equals(EnemyPangolinBaby.class)) {
-				enemyComponent.setAlerted(true);
+				enemyComponent.setAlerted(true, e);
 			}
 		}
 		

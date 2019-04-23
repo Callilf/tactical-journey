@@ -14,7 +14,9 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingKawarimi;
 import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -32,7 +34,11 @@ import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 public class ShinobiSubSystem extends EnemySubSystem {
 	
-	private boolean isSleeping = true;
+	private static final Vector2 LEFT_CLONE_TILE = new Vector2(3, 6);
+	private static final Vector2 RIGHT_CLONE_TILE = new Vector2(19, 6);
+	private static final Vector2 UP_CLONE_TILE = new Vector2(11, 10);
+	private static final Vector2 DOWN_CLONE_TILE = new Vector2(11, 2);
+	
 	private EnemyShinobi enemyShinobi;
 	private boolean firstTimeAtLessThan10HP;
 	
@@ -52,7 +58,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 		switch(room.getState()) {
 		
 		case ENEMY_TURN_INIT:
-			if (isSleeping) {
+			if (enemyShinobi.isSleeping()) {
 				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING);
 			}
 			
@@ -93,25 +99,19 @@ public class ShinobiSubSystem extends EnemySubSystem {
 
     	case ENEMY_MOVE_TILES_DISPLAYED:
 
-    		if (isSleeping) {
+    		if (enemyShinobi.isSleeping()) {
         		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
         			if (t.getGridPos().equals(playerPos)) {
         				// Sees the player
-        				isSleeping = false;
+        				enemyShinobi.setSleeping(false);
         				break;
         			}
         		}
     		}
     			
-    		if (isSleeping) {
+    		if (enemyShinobi.isSleeping()) {
     			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
     			return true;
-    		}
-    		
-    		if (!enemyShinobi.isSmokeBombUsed() &&
-    				TileUtil.getDistanceBetweenTiles(playerPos, Mappers.gridPositionComponent.get(enemy).coord()) == 1) {
-    			// Close range and still has smoke bomb
-    			useSmokeBomb(enemy, enemySystem, room);
     		}
     		
     		if (fleeNextTile != null) {
@@ -130,36 +130,69 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	    				moveComponent.setWayPoints(waypoints);
 	    				moveComponent.hideMovementEntities();
 	            		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
-	            		
-	            		if (fleeNextTile.getGridPos().equals(fleeTile)) {
-	            			fleeNextTile = null;
-	            			fleeTile = null;
-	            			fleeTileReached = true;
-	            			
-	            			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
-	            			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
 
-	            			break;
-	            		}
     				}
     			}
     			return true;
     		}
     		
     		if (fleeTileReached) {
-    			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
+    			fleeTileReached = false;
+    			
+    			// Clone
+    			List<Entity> clones = new ArrayList<>();
+    			BlessingKawarimi.createSmokeEffect(UP_CLONE_TILE);
+    			clones.add(room.entityFactory.enemyFactory.createShinobi(room, UP_CLONE_TILE, true));
+    			BlessingKawarimi.createSmokeEffect(DOWN_CLONE_TILE);
+    			clones.add(room.entityFactory.enemyFactory.createShinobi(room, DOWN_CLONE_TILE, true));
+    			if (LEFT_CLONE_TILE.equals(Mappers.gridPositionComponent.get(enemy).coord())) {
+        			BlessingKawarimi.createSmokeEffect(RIGHT_CLONE_TILE);
+        			clones.add(room.entityFactory.enemyFactory.createShinobi(room, RIGHT_CLONE_TILE, true));
+    			} else {
+        			BlessingKawarimi.createSmokeEffect(LEFT_CLONE_TILE);
+        			clones.add(room.entityFactory.enemyFactory.createShinobi(room, LEFT_CLONE_TILE, true));
+    			}
+    			
+    			// Clones have HP depending on the remaining hp of the shinobi
+    			HealthComponent healthComponent = Mappers.healthComponent.get(enemy);
+    			for (Entity e : clones) {
+    				HealthComponent cloneHealthCompo = Mappers.healthComponent.get(e);
+    				cloneHealthCompo.setMaxHp(healthComponent.getHp());
+    				cloneHealthCompo.setHp(healthComponent.getHp());
+    			}
+    			
+    			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
     			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+    			return true;
     		}
     		
     		break;
     		
+    	case ENEMY_END_MOVEMENT:
+    		
+    		if (fleeNextTile != null && fleeNextTile.getGridPos().equals(fleeTile)) {
+    			fleeNextTile = null;
+    			fleeTile = null;
+    			fleeTileReached = true;
+    			
+    			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
+    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+    			return true;
+    		}
+    		break;
+    		
     	case ENEMY_ATTACK:
-    		if (!isSleeping) {
+    		if (!enemyShinobi.isSleeping()) {
     			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_THROWING);
     		}
     		
+    		if (enemyShinobi.getReceivedFirstDamage() != null && enemyShinobi.getReceivedFirstDamage()) {
+    			throwFirstSmokeBomb(playerPos, enemy, room);
+    			return true;
+    		}
+    		
     		if (throwSmokeBomb) {
-    			throwSmokeBomb(playerPos, enemy, room);
+    			throwSmokeBombAndFlee(playerPos, enemy, room);
     			return true;
     		}
     		
@@ -167,7 +200,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		break;
     		
     	case ENEMY_ATTACK_FINISH:
-    		if (!isSleeping) {
+    		if (!enemyShinobi.isSleeping()) {
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
     		}
 			break;
@@ -182,28 +215,65 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	
 	// Utils
 
-
-	private void useSmokeBomb(final Entity enemy, final EnemySystem enemySystem, final Room room) {
-		enemyShinobi.setSmokeBombUsed(true);
-		
-		Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
-		ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
-		itemComponent.use(enemy, smokeBomb, room);
-		room.removeEntity(smokeBomb);
-		Journal.addEntry(Mappers.inspectableComponentMapper.get(enemy).getTitle() + " used a smoke bomb.");
-		
-		enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
-	}
-
-
-
-
-	private void throwSmokeBomb(final Vector2 thrownPosition, final Entity thrower, final Room room) {
+	
+	private void throwFirstSmokeBomb(final Vector2 thrownPosition, final Entity thrower, final Room room) {
 		if (throwAttackCompo == null) {
+			final GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
+			if (TileUtil.getDistanceBetweenTiles(enemyPos.coord(), thrownPosition) > 5) {
+				// Too far, cannot throw smoke bomb
+				enemyShinobi.setReceivedFirstDamage(false);
+				return;
+			}
+			
 			throwAttackCompo = room.engine.createComponent(AttackComponent.class);
 			throwAttackCompo.setAttackAnimation(new AttackAnimation(null, null, false));
 			
-			GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
+			Tile playerTile = TileUtil.getTileAtGridPos(thrownPosition, room);
+			
+			final Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+			throwAttackCompo.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
+			
+			Action finishThrowAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+					enemyShinobi.setReceivedFirstDamage(false);
+
+					throwAttackCompo.clearAttackImage();
+					throwAttackCompo = null;
+
+					ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
+					itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);
+					room.removeEntity(smokeBomb);
+					Journal.addEntry(
+							Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
+
+					room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+					return true;
+			  }
+			};
+			
+			throwAttackCompo.setAttackImage(enemyPos.coord(), 
+					playerTile, 
+					null,
+					GameScreen.fxStage,
+					finishThrowAction);
+			
+		}
+	}	
+
+
+	private void throwSmokeBombAndFlee(final Vector2 thrownPosition, final Entity thrower, final Room room) {
+		if (throwAttackCompo == null) {
+			final GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
+			if (TileUtil.getDistanceBetweenTiles(enemyPos.coord(), thrownPosition) > 5) {
+				// Too far, cannot throw smoke bomb
+				throwSmokeBomb = false;
+				return;
+			}
+			
+			throwAttackCompo = room.engine.createComponent(AttackComponent.class);
+			throwAttackCompo.setAttackAnimation(new AttackAnimation(null, null, false));
+			
 			Tile playerTile = TileUtil.getTileAtGridPos(thrownPosition, room);
 			
 			final Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
@@ -215,7 +285,14 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				throwSmokeBomb = false;
 				
 				throwAttackCompo.clearAttackImage();
-				fleeTile = new Vector2(3,6);
+				
+				int leftDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), LEFT_CLONE_TILE);
+				int rightDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), RIGHT_CLONE_TILE);
+				if (leftDistance >= rightDistance) {
+					fleeTile = RIGHT_CLONE_TILE;
+				} else {
+					fleeTile = LEFT_CLONE_TILE;
+				}
 				
 				ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
 				itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);

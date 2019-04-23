@@ -22,7 +22,9 @@ public abstract class Enemy {
 	
 	public void onAttack(Entity enemy, Entity target, Room room) {}
 	public boolean onReceiveAttack(Entity enemy, Entity attacker, Room room) { return true; }
-	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {}
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {}
 	public void onDeath(Entity enemy, Entity attacker, Room room) {}
+	
+	public void onAlerted(Entity enemy, Entity player, Room room) {}
 	
 }

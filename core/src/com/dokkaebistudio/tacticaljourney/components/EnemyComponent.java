@@ -74,7 +74,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 			room.removeEntity(alertedDisplayer);		
 		}
 		alertedDisplayer = null;
-		setAlerted(false);
+		setAlerted(false, null);
 		type = null;
 		subSystem = null;
 		turnOver = false;
@@ -105,8 +105,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		return this.type.onReceiveAttack(enemy, attacker, room);
 	}
 	
-	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
-		this.type.onReceiveDamage(enemy, attacker, room);
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {
+		this.type.onReceiveDamage(damage, enemy, attacker, room);
 	}
 	
 	public void onDeath(Entity enemy, Entity attacker, Room room) {
@@ -131,8 +131,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 			
 			//Add the tranfo component to the entity to perform real movement on screen
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE/2 - textCompo.getWidth()/2;
-			startPos.y = startPos.y + GameScreen.GRID_SIZE;
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
+			startPos.y = startPos.y + textCompo.getHeight();
 			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
 			gridPositionComponent.coord(currentPos);
 		}
@@ -158,8 +158,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
 			
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE/2 - textCompo.getWidth()/2;
-			startPos.y = startPos.y + GameScreen.GRID_SIZE;
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
+			startPos.y = startPos.y + textCompo.getHeight();
 			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
 			gridPositionComponent.coord(finalPos);
 		}
@@ -172,8 +172,8 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
 			
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE/2 - textCompo.getWidth()/2;
-			startPos.y = startPos.y + GameScreen.GRID_SIZE;
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
+			startPos.y = startPos.y + textCompo.getHeight();
 			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
 			gridPositionComponent.coord(tilePos);
 		}
@@ -212,7 +212,12 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 		return alerted;
 	}
 
-	public void setAlerted(boolean alerted) {
+	public void setAlerted(boolean alerted, Entity enemy) {
+		if (!this.alerted && alerted && enemy != null) {
+			//First time alerted
+			this.type.onAlerted(enemy, GameScreen.player, room);
+		}
+		
 		this.alerted = alerted;
 		if (alertedDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(alertedDisplayer);
@@ -304,7 +309,7 @@ public class EnemyComponent implements Component, Poolable, MovableInterface, Ro
 				compo.alertedMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
 				
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
-				compo.setAlerted(input.readBoolean());
+				compo.setAlerted(input.readBoolean(), null);
 //				engine.addEntity(compo.alertedDisplayer);
 				
 				return compo;

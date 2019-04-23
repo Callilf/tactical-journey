@@ -18,8 +18,10 @@ import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
 public class EnemyShinobi extends Enemy {
 	
+	private boolean sleeping = true;
 	private boolean kawarimiActivated = false;
 	private boolean smokeBombUsed = false;
+	private Boolean receivedFirstDamage;
 
 	@Override
 	public String title() {
@@ -64,9 +66,28 @@ public class EnemyShinobi extends Enemy {
 		// Cancel the enemy attack
 		return false;
 	}
+	
+	@Override
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {
+		if (damage > 0 && receivedFirstDamage == null) {
+			receivedFirstDamage = true;
+		}
+	}
+	
+	
+	
+	@Override
+	public void onAlerted(Entity enemy, Entity player, Room room) {
+		sleeping = false;
+	}
+	
 
 	public boolean isKawarimiActivated() {
 		return kawarimiActivated;
+	}
+	
+	public void setKawarimiActivated(boolean kawarimiActivated) {
+		this.kawarimiActivated = kawarimiActivated;
 	}
 
 	public boolean isSmokeBombUsed() {
@@ -75,5 +96,29 @@ public class EnemyShinobi extends Enemy {
 
 	public void setSmokeBombUsed(boolean smokeBombUsed) {
 		this.smokeBombUsed = smokeBombUsed;
+	}
+
+
+
+	public Boolean getReceivedFirstDamage() {
+		return receivedFirstDamage;
+	}
+
+
+
+	public void setReceivedFirstDamage(Boolean receivedFirstDamage) {
+		this.receivedFirstDamage = receivedFirstDamage;
+	}
+
+
+
+	public boolean isSleeping() {
+		return sleeping;
+	}
+
+
+
+	public void setSleeping(boolean sleeping) {
+		this.sleeping = sleeping;
 	}
 }

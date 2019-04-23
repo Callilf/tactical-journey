@@ -7,6 +7,7 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ShinobiItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
@@ -66,6 +67,7 @@ public class ItemPoolSingleton {
 	public StingerItemPool stinger = new StingerItemPool();
 	public PangolinItemPool pangolin = new PangolinItemPool();
 	public PangolinMotherItemPool pangolinMatriarch = new PangolinMotherItemPool();
+	public ShinobiItemPool shinobi = new ShinobiItemPool();
 	
 	public TribesmenSpearItemPool tribesmanSpear = new TribesmenSpearItemPool();
 	public TribesmenShieldItemPool tribesManShield = new TribesmenShieldItemPool();
@@ -98,9 +100,13 @@ public class ItemPoolSingleton {
 		allItemPools.add(stinger);
 		allItemPools.add(pangolin);
 		allItemPools.add(pangolinMatriarch);
+		
 		allItemPools.add(tribesmanSpear);
 		allItemPools.add(tribesManShield);
 		allItemPools.add(tribesmanScout);
+		
+		allItemPools.add(shinobi);
+
 		
 	}
 	

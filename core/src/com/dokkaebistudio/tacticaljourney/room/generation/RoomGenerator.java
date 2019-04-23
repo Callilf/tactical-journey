@@ -240,6 +240,7 @@ public abstract class RoomGenerator {
 			break;
 			
 		case CHALICE_ROOM:
+		case MINI_BOSS_ROOM:
 			default:
 				currentRoom.roomPattern = "data/rooms/room1.csv";
 		}
@@ -336,9 +337,15 @@ public abstract class RoomGenerator {
 			placeEnemies(room, random, spawnPositions, true);
 			break;
 			
+		case MINI_BOSS_ROOM:
+			
+			entityFactory.enemyFactory.createShinobi(room, new Vector2(11, 6), false);
+			break;
+			
 		case START_FLOOR_ROOM:
 			
-
+//			entityFactory.enemyFactory.createStinger(room, new Vector2(20,11));
+//			entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(5,11), null);
 //			entityFactory.itemFactory.createUniversalCure(room, new Vector2(12,10));
 //			entityFactory.playerFactory.createSoulbender(new Vector2(12,10), room);
 //			entityFactory.orbFactory.createDeathOrb(new Vector2(11, 10), room);

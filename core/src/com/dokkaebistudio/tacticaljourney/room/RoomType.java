@@ -27,6 +27,7 @@ public enum RoomType {
 	
 	GIFT_ROOM("Gift room"),
 	CHALICE_ROOM("Chalice room"),
+	MINI_BOSS_ROOM("Mini-boss room"),
 	
 	
 	

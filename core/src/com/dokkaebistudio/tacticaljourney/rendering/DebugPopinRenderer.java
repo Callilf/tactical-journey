@@ -1045,6 +1045,19 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		});
 		optionsTable.add(chaliceRoom).padBottom(20);
 		optionsTable.row();
+		
+		TextButton miniBossRoom = new TextButton("Go to mini boss", PopinService.buttonStyle());
+		miniBossRoom.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				List<Room> rooms = room.floor.getRooms(RoomType.MINI_BOSS_ROOM);
+				if (!rooms.isEmpty()) {
+					room.floor.enterRoom(rooms.get(0));
+				}
+			}
+		});
+		optionsTable.add(miniBossRoom).padBottom(20);
+		optionsTable.row();
 
 		
 		

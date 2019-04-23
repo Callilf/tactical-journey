@@ -138,7 +138,7 @@ public final class EnemyFactory {
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		enemyComponent.setAlertedDisplayer(alertedDisplayer);
-		enemyComponent.setAlerted(true);
+		enemyComponent.setAlerted(true, enemyEntity);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -292,7 +292,7 @@ public final class EnemyFactory {
 	 * @param pos the position
 	 * @return the enemy entity
 	 */
-	public Entity createShinobi(Room room, Vector2 pos) {
+	public Entity createShinobi(Room room, Vector2 pos, boolean clone) {
 		Entity enemyEntity = engine.createEntity();
 		enemyEntity.flags = EntityFlagEnum.ENEMY_SHINOBI.getFlag();
 		
@@ -327,9 +327,14 @@ public final class EnemyFactory {
 
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
 		enemyComponent.room = room;
-		enemyComponent.setType(new EnemyShinobi());
-		enemyComponent.setSubSystem(new ShinobiSubSystem());
-		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
+		EnemyShinobi enemyShinobi = new EnemyShinobi();
+		if (clone) {
+			enemyShinobi.setSmokeBombUsed(true);
+			enemyShinobi.setKawarimiActivated(true);
+		}
+		enemyComponent.setType(enemyShinobi);
+		enemyComponent.setSubSystem(clone ? null : new ShinobiSubSystem());
+		enemyComponent.setFaction(EnemyFactionEnum.SHINOBI);
 		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
@@ -358,23 +363,26 @@ public final class EnemyFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(22);
-		healthComponent.setHp(22);
+		healthComponent.setMaxHp(25);
+		healthComponent.setHp(25);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
-		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
-		expRewardCompo.setExpGain(30);
-		enemyEntity.add(expRewardCompo);
+		if (!clone) {
+			ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+			expRewardCompo.setExpGain(30);
+			enemyEntity.add(expRewardCompo);
+		}
 		
-		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().stinger);
-		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 20);
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
-		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
-		enemyEntity.add(lootRewardCompo);
+		if (!clone) {
+			LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+			lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().shinobi);
+			DropRate dropRate = new DropRate();
+			dropRate.add(ItemPoolRarity.COMMON, 100);
+			lootRewardCompo.setDropRate(dropRate);
+			lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+			enemyEntity.add(lootRewardCompo);
+		}
 		
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		enemyEntity.add(statusReceiverCompo);

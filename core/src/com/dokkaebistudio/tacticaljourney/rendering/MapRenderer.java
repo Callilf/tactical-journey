@@ -31,7 +31,6 @@ import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 
 /**
  * This class allows rendering the map of the current floor.
@@ -342,6 +341,7 @@ public class MapRenderer implements Renderer {
 						}
 						break;
 						
+					case MINI_BOSS_ROOM:
 					case COMMON_ENEMY_ROOM:
 					case EMPTY_ROOM:
 					default:

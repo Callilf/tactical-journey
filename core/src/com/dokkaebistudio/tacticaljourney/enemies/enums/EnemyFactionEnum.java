@@ -4,5 +4,6 @@ public enum EnemyFactionEnum {
 	SPIDERS,
 	PANGOLINS,
 	TRIBESMEN,
-	SOLITARY;
+	SOLITARY,
+	SHINOBI;
 }

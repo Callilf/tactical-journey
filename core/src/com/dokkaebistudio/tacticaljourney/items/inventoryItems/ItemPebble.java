@@ -55,7 +55,7 @@ public class ItemPebble extends AbstractItem {
 			EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
 			Journal.addEntry(enemyComponent.getType().title() + " looks mad at you");
 	
-			enemyComponent.setAlerted(true);
+			enemyComponent.setAlerted(true, enemy);
 			room.removeEntity(item);
 		}
 	}

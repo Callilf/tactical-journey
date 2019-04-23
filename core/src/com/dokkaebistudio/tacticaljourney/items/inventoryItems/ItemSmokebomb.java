@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -63,7 +62,7 @@ public class ItemSmokebomb extends AbstractItem {
 		// All enemies become unalerted
 		for(Entity enemy : room.getEnemies()) {
 			if (enemy == user) continue;
-			Mappers.enemyComponent.get(enemy).setAlerted(false);
+			Mappers.enemyComponent.get(enemy).setAlerted(false, enemy);
 		}
 		
 		// Adjacent enemies are stunned

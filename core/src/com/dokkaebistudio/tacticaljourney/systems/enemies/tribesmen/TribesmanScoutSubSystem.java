@@ -80,7 +80,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 						Journal.addEntry("[RED]" + scoutType.title() + " alerted " + ec.getType().title() + " of your presence.");
 						
 						if (ec.getFaction() == EnemyFactionEnum.TRIBESMEN) {
-							ec.setAlerted(true);
+							ec.setAlerted(true, friendToAlert);
 						}
 					}
 					
@@ -102,7 +102,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 								if (player != null) {
 									
 									// The scout sees the player, set it's alert status to TRUE
-		            				enemyComponent.setAlerted(true);
+		            				enemyComponent.setAlerted(true, enemy);
 		            				break;
 								}
 	    	    			}

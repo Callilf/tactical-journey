@@ -31,8 +31,8 @@ public class EnemyPangolinBaby extends Enemy {
 	}
 	
 	@Override
-	public void onReceiveDamage(Entity enemy, Entity attacker, Room room) {
-		if (!rolled) {
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {		
+		if (!rolled && damage > 0) {
 			rolled = true;
 			turnRolledEnd = room.turnManager.getTurn() + 2;
 			

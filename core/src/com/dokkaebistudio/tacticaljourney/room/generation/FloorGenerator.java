@@ -164,6 +164,10 @@ public abstract class FloorGenerator {
 		if (randInt < 33) {
 			specialRooms.add(RoomType.CHALICE_ROOM);
 		}
+		randInt = RandomSingleton.getInstance().nextSeededInt(100);
+		if (randInt < 100) {
+			specialRooms.add(RoomType.MINI_BOSS_ROOM);
+		}
 		
 		return specialRooms;
 	}

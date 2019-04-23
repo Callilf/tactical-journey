@@ -36,7 +36,7 @@ public class CreepWeb extends Creep {
 			for(Entity e : room.getEnemies()) {
 				EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
 				if (enemyComponent != null && enemyComponent.getFaction() == EnemyFactionEnum.SPIDERS) {
-					enemyComponent.setAlerted(true);
+					enemyComponent.setAlerted(true, e);
 				}
 			}
 		}

@@ -84,7 +84,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			temp.set(11, 2);
 			Entity shaman = room.entityFactory.enemyFactory.createTribesmenShaman(room, temp);
-			Mappers.enemyComponent.get(shaman).setAlerted(true);
+			Mappers.enemyComponent.get(shaman).setAlerted(true, shaman);
 
 			temp.free();
 			
@@ -107,7 +107,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 				}
 				
 				EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-				enemyComponent.setAlerted(true);
+				enemyComponent.setAlerted(true, enemy);
 			}		
 			
 			// Close doors

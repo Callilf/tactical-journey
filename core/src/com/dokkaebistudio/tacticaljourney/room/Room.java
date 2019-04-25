@@ -292,6 +292,10 @@ public class Room extends EntitySystem {
 				
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
 				alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
+				
+				for (Entity enemy : this.getEnemies()) {
+					Mappers.enemyComponent.get(enemy).onRoomVisited(enemy, this);
+				}
 			} else {
 				this.visited = RoomVisitedState.ENTRANCE;
 			}

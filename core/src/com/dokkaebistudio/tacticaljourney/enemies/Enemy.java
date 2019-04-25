@@ -13,6 +13,13 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 public abstract class Enemy {
 	
 	public abstract String title();
+	
+	/**
+	 * Called when the player enter the room for the first time.
+	 * @param enemy the enemy entity
+	 * @param room the room where this enemy is
+	 */
+	public void onRoomVisited(Entity enemy, Room room) {}
 
 	public void onStartTurn(Entity enemy, Room room) {}
 	public void onEndTurn(Entity enemy, Room room) {}

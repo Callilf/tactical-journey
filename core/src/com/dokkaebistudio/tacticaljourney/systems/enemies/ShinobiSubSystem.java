@@ -34,10 +34,10 @@ import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 public class ShinobiSubSystem extends EnemySubSystem {
 	
-	private static final Vector2 LEFT_CLONE_TILE = new Vector2(3, 6);
-	private static final Vector2 RIGHT_CLONE_TILE = new Vector2(19, 6);
-	private static final Vector2 UP_CLONE_TILE = new Vector2(11, 10);
-	private static final Vector2 DOWN_CLONE_TILE = new Vector2(11, 2);
+	public static final Vector2 LEFT_CLONE_TILE = new Vector2(3, 6);
+	public static final Vector2 RIGHT_CLONE_TILE = new Vector2(19, 6);
+	public static final Vector2 UP_CLONE_TILE = new Vector2(11, 10);
+	public static final Vector2 DOWN_CLONE_TILE = new Vector2(11, 2);
 	
 	private EnemyShinobi enemyShinobi;
 	private boolean firstTimeAtLessThan10HP;
@@ -159,6 +159,8 @@ public class ShinobiSubSystem extends EnemySubSystem {
     				HealthComponent cloneHealthCompo = Mappers.healthComponent.get(e);
     				cloneHealthCompo.setMaxHp(healthComponent.getHp());
     				cloneHealthCompo.setHp(healthComponent.getHp());
+    				
+    				Mappers.spriteComponent.get(e).orientSprite(e, playerPos);
     			}
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);

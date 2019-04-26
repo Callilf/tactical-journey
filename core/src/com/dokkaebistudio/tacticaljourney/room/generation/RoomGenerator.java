@@ -344,7 +344,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.enemyFactory.createShinobi(room, new Vector2(20,11), false);
+//			entityFactory.enemyFactory.createShinobi(room, new Vector2(20,11), false);
 //			entityFactory.orbFactory.createDeathOrb(new Vector2(11, 10), room);
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));

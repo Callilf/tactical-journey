@@ -54,6 +54,8 @@ public class Room extends EntitySystem {
 	public Floor floor;
 	private int index;
 	
+	private boolean onExitPath;
+	
 	public String roomPattern;
 	public RoomType type;
 	
@@ -657,6 +659,14 @@ public class Room extends EntitySystem {
 
 	public void setJustEntered(boolean justEntered) {
 		this.justEntered = justEntered;
+	}
+
+	public boolean isOnExitPath() {
+		return onExitPath;
+	}
+
+	public void setOnExitPath(boolean onExitPath) {
+		this.onExitPath = onExitPath;
 	}
 
 	

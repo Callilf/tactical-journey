@@ -333,6 +333,13 @@ public class MapRenderer implements Renderer {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_chalice.getRegion()));
 						}
 						break;
+					case MINI_BOSS_ROOM:
+						if (room.hasEnemies()) {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_mini_boss_enemy.getRegion()));
+						} else {
+							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_mini_boss.getRegion()));
+						}
+						break;
 					case BOSS_ROOM:
 						if (room.hasEnemies()) {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_boss_enemy.getRegion()));
@@ -341,7 +348,6 @@ public class MapRenderer implements Renderer {
 						}
 						break;
 						
-					case MINI_BOSS_ROOM:
 					case COMMON_ENEMY_ROOM:
 					case EMPTY_ROOM:
 					default:

@@ -171,6 +171,8 @@ public class Assets {
 	public static RegionDescriptor map_room_gift_enemy;
 	public static RegionDescriptor map_room_chalice;
 	public static RegionDescriptor map_room_chalice_enemy;
+	public static RegionDescriptor map_room_mini_boss;
+	public static RegionDescriptor map_room_mini_boss_enemy;
 	public static RegionDescriptor map_room_boss;
 	public static RegionDescriptor map_room_boss_enemy;
 	public static RegionDescriptor map_room_start;
@@ -549,6 +551,8 @@ public class Assets {
 		map_room_gift_enemy = Assets.getTexture("map_room_gift_enemy");
 		map_room_chalice = Assets.getTexture("map_room_chalice");
 		map_room_chalice_enemy = Assets.getTexture("map_room_chalice_enemy");
+		map_room_mini_boss = Assets.getTexture("map_room_mini_boss");
+		map_room_mini_boss_enemy = Assets.getTexture("map_room_mini_boss_enemy");
 		map_room_boss = Assets.getTexture("map_room_boss");
 		map_room_boss_enemy = Assets.getTexture("map_room_boss_enemy");
 		map_room_start = Assets.getTexture("map_room_start");

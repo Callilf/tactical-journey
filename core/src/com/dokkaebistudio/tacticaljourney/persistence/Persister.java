@@ -21,7 +21,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
@@ -36,6 +35,8 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -598,6 +599,7 @@ public class Persister {
 		kryo.register(AnimatedImage.class, AnimatedImage.getSerializer(engine));
 		kryo.register(StatusDebuffDeathDoor.class, StatusDebuffDeathDoor.getStatusDebuffDeathDoorSerializer(engine));
 		kryo.register(StatusDebuffStunned.class, StatusDebuffStunned.getStatusDebuffStunnedSerializer(engine));
+		kryo.register(AttackSkill.class, AttackSkill.getSerializer(engine));
 		
 		
 		// Component serializers

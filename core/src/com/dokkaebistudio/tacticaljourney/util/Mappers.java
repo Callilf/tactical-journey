@@ -4,7 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
@@ -20,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;

@@ -247,6 +247,7 @@ public class Assets {
 
 	public static Array<Sprite> boss_shinobi_stand;
 	public static Array<Sprite> boss_shinobi_run;
+	public static Array<Sprite> boss_shinobi_attack;
 	public static Array<Sprite> boss_shinobi_sleep;
 	public static Array<Sprite> boss_shinobi_throw;
 	public static Array<Sprite> boss_shinobi_clone;
@@ -622,6 +623,7 @@ public class Assets {
 		
 		boss_shinobi_stand = Assets.getAnimation("shinobi_stand");
 		boss_shinobi_run = Assets.getAnimation("shinobi_run");
+		boss_shinobi_attack = Assets.getAnimation("shinobi_attack");
 		boss_shinobi_sleep = Assets.getAnimation("shinobi_sleep");
 		boss_shinobi_throw = Assets.getAnimation("shinobi_throw");
 		boss_shinobi_clone = Assets.getAnimation("shinobi_clone");

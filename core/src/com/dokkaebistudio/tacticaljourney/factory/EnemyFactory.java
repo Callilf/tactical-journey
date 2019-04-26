@@ -10,7 +10,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
@@ -19,6 +18,8 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -148,11 +149,15 @@ public final class EnemyFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(10);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMax(1);
+		as.setStrength(10);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -248,11 +253,15 @@ public final class EnemyFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(6);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMax(1);
+		as.setStrength(6);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -308,6 +317,7 @@ public final class EnemyFactory {
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().shinobiStand);
 		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().shinobiRun);
+		animationCompo.addAnimation(StatesEnum.SHINOBI_ATTACKING, AnimationSingleton.getInstance().shinobiAttack);
 		animationCompo.addAnimation(StatesEnum.SHINOBI_SLEEPING, AnimationSingleton.getInstance().shinobiSleep);
 		animationCompo.addAnimation(StatesEnum.SHINOBI_THROWING, AnimationSingleton.getInstance().shinobiThrow);
 		animationCompo.addAnimation(StatesEnum.SHINOBI_CLONING, AnimationSingleton.getInstance().shinobiClone);
@@ -351,11 +361,37 @@ public final class EnemyFactory {
 				
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.RANGE);
-		attackComponent.setRangeMax(5);
-		attackComponent.setStrength(5);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().shuriken_projectile,  false);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill meleeSkill = new AttackSkill();
+		meleeSkill.setRangeMax(1);
+		meleeSkill.setStrength(8);
+		meleeSkill.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		meleeSkill.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(meleeSkill);
+		
+		AttackSkill rangeSkill = new AttackSkill();
+		rangeSkill.setRangeMin(2);
+		rangeSkill.setRangeMax(5);
+		rangeSkill.setStrength(5);
+		rangeSkill.setAttackType(AttackTypeEnum.RANGE);
+		AttackAnimation rangeAttackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().shuriken_projectile, false);
+		rangeSkill.setAttackAnimation(rangeAttackAnimation);
+		attackComponent.getSkills().add(rangeSkill);
+		
+		
+		AttackSkill throwSkill = new AttackSkill();
+		throwSkill.setActive(false);
+		throwSkill.setRangeMin(2);
+		throwSkill.setRangeMax(5);
+		throwSkill.setStrength(0);
+		throwSkill.setAttackType(AttackTypeEnum.THROW);
+		AttackAnimation throwAttackAnimation = new AttackAnimation(null, null, false);
+		throwSkill.setAttackAnimation(throwAttackAnimation);
+		attackComponent.getSkills().add(throwSkill);
+		
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

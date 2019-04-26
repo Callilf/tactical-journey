@@ -21,11 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -212,7 +212,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			
 			AttackComponent attackComponent = Mappers.attackComponent.get(entity);
 			if (attackComponent != null) {
-				sb.append("Strength: " + attackComponent.getStrength());
+				sb.append("Strength: " + attackComponent.getActiveSkill().getStrength());
 				sb.append("  -  ");
 			}
 			

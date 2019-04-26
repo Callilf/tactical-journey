@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.ai.enemies.EnemyActionSelector;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -247,8 +247,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 				};
         		
 				
-				if (!attackCompo.getAttackAnimation().isPlaying()) {
-					boolean hasAnim = attackCompo.setAttackImage(enemyCurrentPos.coord(), 
+				if (!attackCompo.getActiveSkill().getAttackAnimation().isPlaying()) {
+					boolean hasAnim = attackCompo.getActiveSkill().setAttackImage(enemyCurrentPos.coord(), 
 							attackCompo.getTargetedTile(), 
 							null,
 							fxStage,
@@ -290,7 +290,8 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 
 	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo, EnemyComponent enemyComponent) {
     	attackCompo.clearAttackableTiles();
-		attackCompo.clearAttackImage();
+		attackCompo.getActiveSkill().clearAttackImage();
+		attackCompo.setActiveSkill(null);
 		
     	enemyComponent.onEndTurn(enemyEntity, room);
 

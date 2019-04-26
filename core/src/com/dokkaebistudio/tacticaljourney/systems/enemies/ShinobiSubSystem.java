@@ -12,11 +12,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingKawarimi;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -42,16 +43,34 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	private EnemyShinobi enemyShinobi;
 	private boolean firstTimeAtLessThan10HP;
 	
-	private AttackComponent throwAttackCompo;
+	private AttackSkill meleeSkill;
+	private AttackSkill rangeSkill;
+	private AttackSkill throwSkill;
 	private boolean throwSmokeBomb;
 	private Vector2 fleeTile = null;
 	private Tile fleeNextTile;
 	private boolean fleeTileReached = false;
 	
+	private Entity smokeBomb;
+	
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
 		if (enemyShinobi == null) {
 			enemyShinobi = (EnemyShinobi) Mappers.enemyComponent.get(enemy).getType();
+			for (AttackSkill as : Mappers.attackComponent.get(enemy).getSkills()) {
+				switch(as.getAttackType()) {
+				case MELEE:
+					meleeSkill = as;
+					break;
+				case RANGE:
+					rangeSkill = as;
+					break;
+				case THROW:
+					throwSkill = as;
+					break;
+					default:
+				}
+			}
 		}
 		final Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
 		
@@ -65,6 +84,18 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			if (!firstTimeAtLessThan10HP && Mappers.healthComponent.get(enemy).getHp() <= 10) {
 				firstTimeAtLessThan10HP = true;
 				throwSmokeBomb = true;
+				
+				Mappers.attackComponent.get(enemy).clearAttackableTiles();
+				meleeSkill.setActive(false);
+				rangeSkill.setActive(false);
+				throwSkill.setActive(true);
+			}
+			
+			if (enemyShinobi.getReceivedFirstDamage() != null && enemyShinobi.getReceivedFirstDamage()) {
+				Mappers.attackComponent.get(enemy).clearAttackableTiles();
+				meleeSkill.setActive(false);
+				rangeSkill.setActive(false);
+				throwSkill.setActive(true);
 			}
 			
 			if (fleeTile != null) {
@@ -161,6 +192,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     				cloneHealthCompo.setHp(healthComponent.getHp());
     				
     				Mappers.spriteComponent.get(e).orientSprite(e, playerPos);
+    				Mappers.enemyComponent.get(e).setAlerted(true, e);
     			}
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
@@ -185,7 +217,12 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		
     	case ENEMY_ATTACK:
     		if (!enemyShinobi.isSleeping()) {
-    			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_THROWING);
+    			AttackSkill activeSkill = Mappers.attackComponent.get(enemy).getActiveSkill();
+    			if (activeSkill.getAttackType() == AttackTypeEnum.MELEE) {
+    				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_ATTACKING);
+    			} else {
+    				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_THROWING);
+    			}
     		}
     		
     		if (enemyShinobi.getReceivedFirstDamage() != null && enemyShinobi.getReceivedFirstDamage()) {
@@ -219,7 +256,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 
 	
 	private void throwFirstSmokeBomb(final Vector2 thrownPosition, final Entity thrower, final Room room) {
-		if (throwAttackCompo == null) {
+		if (smokeBomb == null) {
 			final GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
 			if (TileUtil.getDistanceBetweenTiles(enemyPos.coord(), thrownPosition) > 5) {
 				// Too far, cannot throw smoke bomb
@@ -227,25 +264,31 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				return;
 			}
 			
-			throwAttackCompo = room.engine.createComponent(AttackComponent.class);
-			throwAttackCompo.setAttackAnimation(new AttackAnimation(null, null, false));
+			throwSkill.setActive(true);
+			throwSkill.setAttackAnimation(new AttackAnimation(null, null, false));
 			
 			Tile playerTile = TileUtil.getTileAtGridPos(thrownPosition, room);
-			
-			final Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
-			throwAttackCompo.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
+			Mappers.spriteComponent.get(thrower).orientSprite(thrower, playerTile.getGridPos());
+
+			smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+			throwSkill.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
 			
 			Action finishThrowAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
 					enemyShinobi.setReceivedFirstDamage(false);
 
-					throwAttackCompo.clearAttackImage();
-					throwAttackCompo = null;
+					throwSkill.clearAttackImage();
+					throwSkill.setActive(false);
+					
+					meleeSkill.setActive(true);
+					rangeSkill.setActive(true);
+
 
 					ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
 					itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);
 					room.removeEntity(smokeBomb);
+					smokeBomb = null;
 					Journal.addEntry(
 							Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
 
@@ -254,7 +297,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			  }
 			};
 			
-			throwAttackCompo.setAttackImage(enemyPos.coord(), 
+			throwSkill.setAttackImage(enemyPos.coord(), 
 					playerTile, 
 					null,
 					GameScreen.fxStage,
@@ -265,7 +308,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 
 
 	private void throwSmokeBombAndFlee(final Vector2 thrownPosition, final Entity thrower, final Room room) {
-		if (throwAttackCompo == null) {
+		if (smokeBomb == null) {
 			final GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(thrower);
 			if (TileUtil.getDistanceBetweenTiles(enemyPos.coord(), thrownPosition) > 5) {
 				// Too far, cannot throw smoke bomb
@@ -273,21 +316,27 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				return;
 			}
 			
-			throwAttackCompo = room.engine.createComponent(AttackComponent.class);
-			throwAttackCompo.setAttackAnimation(new AttackAnimation(null, null, false));
+			throwSkill.setActive(true);
+			throwSkill.setAttackAnimation(new AttackAnimation(null, null, false));
 			
 			Tile playerTile = TileUtil.getTileAtGridPos(thrownPosition, room);
-			
-			final Entity smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
-			throwAttackCompo.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
+			Mappers.spriteComponent.get(thrower).orientSprite(thrower, playerTile.getGridPos());
+
+			smokeBomb = room.entityFactory.itemFactory.createItem(ItemEnum.SMOKE_BOMB);
+			throwSkill.getAttackAnimation().setAttackAnim(Assets.smoke_bomb_item.getRegion());
 			
 			Action finishThrowAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
 				throwSmokeBomb = false;
 				
-				throwAttackCompo.clearAttackImage();
+				throwSkill.clearAttackImage();
+				throwSkill.setActive(false);
 				
+				meleeSkill.setActive(true);
+				rangeSkill.setActive(true);
+
+
 				int leftDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), LEFT_CLONE_TILE);
 				int rightDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), RIGHT_CLONE_TILE);
 				if (leftDistance >= rightDistance) {
@@ -299,6 +348,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);
 				itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);
 				room.removeEntity(smokeBomb);
+				smokeBomb = null;
 				Journal.addEntry(Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
 				
 				room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
@@ -306,7 +356,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			  }
 			};
 			
-			throwAttackCompo.setAttackImage(enemyPos.coord(), 
+			throwSkill.setAttackImage(enemyPos.coord(), 
 					playerTile, 
 					null,
 					GameScreen.fxStage,

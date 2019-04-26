@@ -43,27 +43,10 @@ public class ExplosionTileSearchService extends TileSearchService {
 		Set<Tile> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.EXPLOSION, checkType, (int)tile.getGridPos().x, (int)tile.getGridPos().y, null, room, explosiveComponent.getRadius(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
-		
 		//Obstacles post process
 		obstaclesPostProcess(tile.getGridPos(), attackableTiles);
-		
-		
-//		//Range Postprocess : remove tiles that cannot be attacked
-//		if (attackCompo.getRangeMin() > 1) {
-//			Iterator<Entity> it = attackableTiles.iterator();
-//			while (it.hasNext()) {
-//				Entity currentAttackableTile = it.next();
-//				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(currentAttackableTile);
-//				//Remove tiles that are too close
-//				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord, tilePos.coord) < attackCompo.getRangeMin()) {
-//					it.remove();
-//				}
-//			}
-//		}
 
 		explosiveComponent.allAttackableTiles = attackableTiles;
-
-		
 
 		//Create entities for each attackable tiles to display them
 		for (Tile tileCoord : explosiveComponent.allAttackableTiles) {

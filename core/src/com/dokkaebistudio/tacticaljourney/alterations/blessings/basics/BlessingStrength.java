@@ -6,7 +6,7 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings.basics;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -38,7 +38,7 @@ public class BlessingStrength extends Blessing {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		
 		if (attackCompo != null) {
-			attackCompo.setStrength(attackCompo.getStrength() + 1);
+			attackCompo.increaseStrength(1);
 		}
 		
 		AlterationSystem.addAlterationProc(this);
@@ -49,7 +49,7 @@ public class BlessingStrength extends Blessing {
 		AttackComponent attackCompo = Mappers.attackComponent.get(entity);
 		
 		if (attackCompo != null) {
-			attackCompo.setStrength(attackCompo.getStrength() - 1);
+			attackCompo.increaseStrength(-1);
 		}
 	}
 

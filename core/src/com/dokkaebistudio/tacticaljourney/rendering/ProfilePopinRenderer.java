@@ -23,9 +23,9 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -201,7 +201,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		rangeAccuracyLbl.setText("Bow accuracy: " + rangeAttackCompo.getAccuracy());
 
 		AttackComponent bombAttackCompo = Mappers.attackComponent.get(playerCompo.getSkillBomb());
-		bombDistLbl.setText("Bomb throw range: " + bombAttackCompo.getRangeMax());
+		bombDistLbl.setText("Bomb throw range: " + bombAttackCompo.getActiveSkill().getRangeMax());
 		bombDmg.setText("Bomb damage: " + bombAttackCompo.getStrength());
 		bombDuration.setText("Bomb fuse duration: " + bombAttackCompo.getBombTurnsToExplode() + " turns" );
 		bombRadius.setText("Bomb radius: " + bombAttackCompo.getBombRadius());

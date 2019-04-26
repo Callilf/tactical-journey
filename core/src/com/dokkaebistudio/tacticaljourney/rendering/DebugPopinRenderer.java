@@ -23,8 +23,8 @@ import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -637,7 +637,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
-				attackComponent.setStrength(attackComponent.getStrength() - 1);
+				attackComponent.increaseStrength(- 1);
 			}
 		});
 		strengthTable.add(strengthDown).padRight(20);
@@ -646,7 +646,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
-				attackComponent.setStrength(attackComponent.getStrength() + 1);
+				attackComponent.increaseStrength(1);
 			}
 		});
 		strengthTable.add(strengthUp);
@@ -709,7 +709,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
-				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
+				attackComponent.increaseRangeMax(-1);
 			}
 		});
 		bowRangeTable.add(bowRangeDown).padRight(20);
@@ -718,7 +718,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillRange());
-				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
+				attackComponent.increaseRangeMax(1);
 			}
 		});
 		bowRangeTable.add(bowRangeUp);
@@ -782,7 +782,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
-				attackComponent.setRangeMax(attackComponent.getRangeMax() - 1);
+				attackComponent.increaseRangeMax(-1);
 			}
 		});
 		bombThrowRangeTable.add(bombThrowRangeDown).padRight(20);
@@ -791,7 +791,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(Mappers.playerComponent.get(GameScreen.player).getSkillBomb());
-				attackComponent.setRangeMax(attackComponent.getRangeMax() + 1);
+				attackComponent.increaseRangeMax(1);
 			}
 		});
 		bombThrowRangeTable.add(bombThrowRangeUp);

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -190,11 +190,11 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 			  }
 			};
 			
-			if (!wheelAttackComponent.getAttackAnimation().isPlaying()) {
+			if (!wheelAttackComponent.getActiveSkill().getAttackAnimation().isPlaying()) {
 				// Orient the sprite so that it looks towards its target
 				Mappers.spriteComponent.get(GameScreen.player).orientSprite(GameScreen.player, targetedTile.getGridPos());
 
-				boolean hasAnim = wheelAttackComponent.setAttackImage(attackerCurrentPos.coord(), 
+				boolean hasAnim = wheelAttackComponent.getActiveSkill().setAttackImage(attackerCurrentPos.coord(), 
 						targetedTile, 
 						wheel.getPointedSector(),
 						stage,
@@ -214,7 +214,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		if (skillEntity != null) {
 	    		final AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
 
-	    		if (!skillAttackCompo.getAttackAnimation().isPlaying()) {
+	    		if (!skillAttackCompo.getActiveSkill().getAttackAnimation().isPlaying()) {
 		    		targetedTile = skillAttackCompo.getTargetedTile();
 		    		
 					// Orient the sprite so that it looks towards its target
@@ -225,7 +225,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		    		Action finishThrowAction = null;
 		    		if (skillAttackCompo.getThrownEntity() != null) {
 		    			ItemComponent itemComponent = Mappers.itemComponent.get(skillAttackCompo.getThrownEntity());
-		    			skillAttackCompo.getAttackAnimation().setAttackAnim(itemComponent.getItemImageName().getRegion());
+		    			skillAttackCompo.getActiveSkill().getAttackAnimation().setAttackAnim(itemComponent.getItemImageName().getRegion());
 		    			// Throw item from inventory
 		    			finishThrowAction = new Action(){
 							  @Override
@@ -245,7 +245,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 						};
 		    		}
 					
-					skillAttackCompo.setAttackImage(attackerCurrentPos.coord(), 
+					skillAttackCompo.getActiveSkill().setAttackImage(attackerCurrentPos.coord(), 
 							targetedTile, 
 							null,
 							stage,
@@ -284,7 +284,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
      */
 	private void finishBombThrow(final Entity player, final Entity skillEntity, Vector2 targetedGridPosition) {		
 		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-		skillAttackCompo.clearAttackImage();
+		skillAttackCompo.getActiveSkill().clearAttackImage();
 		
 		Entity bomb = room.entityFactory.createBomb(room, targetedGridPosition, player,
 				skillAttackCompo.getBombRadius(), skillAttackCompo.getBombTurnsToExplode(), skillAttackCompo.getStrength());
@@ -307,7 +307,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
      */
 	private void finishItemThrow(final Entity player, final Entity skillEntity, Vector2 targetedGridPosition) {		
 		AttackComponent skillAttackCompo = Mappers.attackComponent.get(skillEntity);
-		skillAttackCompo.clearAttackImage();
+		skillAttackCompo.getActiveSkill().clearAttackImage();
 		
 		Entity thrownEntity = skillAttackCompo.getThrownEntity();
 		ItemComponent itemComponent = Mappers.itemComponent.get(thrownEntity);
@@ -341,7 +341,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		
 		//TODO : remove this or move it elsewhere
 		wheelAttackCompo.clearAttackableTiles();
-		wheelAttackCompo.clearAttackImage();
+		wheelAttackCompo.getActiveSkill().clearAttackImage();
 		wheel.setAttackComponent(null);
 		
 		room.turnManager.endPlayerTurn();

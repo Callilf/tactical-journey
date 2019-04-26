@@ -6,7 +6,8 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
@@ -41,6 +42,7 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
 		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		 AttackSkill mainSkill = attackCompo.getSkills().get(0);
 		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
 		 
 		 if (!attackCompo.isActive()) return null;
@@ -48,7 +50,7 @@ public class AttackTileSearchService extends TileSearchService {
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
 		
-		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+		if (mainSkill.getAttackType() == AttackTypeEnum.THROW) {
 			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
 			attackableTiles.add(tileAtGridPos);
 		}
@@ -60,7 +62,7 @@ public class AttackTileSearchService extends TileSearchService {
 		for (Tile t : moveTiles) {			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
-			Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, attackCompo.getRangeMax(), 1);
+			Set<Tile> foundAttTiles = check4ContiguousTiles(mainSkill.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, mainSkill.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
 
@@ -71,12 +73,12 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		
 		//Range Postprocess : remove tiles that cannot be attacked
-		if (attackCompo.getRangeMin() > 1) {
+		if (mainSkill.getRangeMin() > 1) {
 			Iterator<Tile> it = attackableTiles.iterator();
 			while (it.hasNext()) {
 				Tile currentAttackableTile = it.next();
 				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
+				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < mainSkill.getRangeMin()) {
 					it.remove();
 				}
 			}
@@ -105,51 +107,61 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		currentEntity = attackerEntity;
 		
-		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
-		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
-		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
-		 
-		 if (!attackCompo.isActive() || attackCompo.getRangeMax() == 0) return null;
+		MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
+		AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
 
+		GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
+
+		if (!attackCompo.isActive()) return null;
+		
+		
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
-		
-		Set<Entity> moveTiles = moveCompo.movableTiles;
-		if (moveTiles.isEmpty()) {
-			moveTiles.add(room.entityFactory.createMovableTile(attackerPosCompo.coord(), room));
-		}
-		for (Entity t : moveTiles) {
-			Vector2 tilePos = Mappers.gridPositionComponent.get(t).coord();
-			visitedTilesWithRemainingMove.put(TileUtil.getTileAtGridPos(tilePos, room), 0);
-			Set<Tile> searchedTiles = this.searchAttackEntitiesFromOnePosition(t, attackerEntity, room, onlyAttackableEntities);
-			attackableTiles.addAll(searchedTiles);
-		}
-		attackableTiles.removeAll(moveCompo.allWalkableTiles);
-		
-		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
-			Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
-			attackableTiles.add(tileAtGridPos);
-		}
 
-		if (!ignoreObstacles) {
-			//Obstacles post process
-			obstaclesPostProcess(attackerPosCompo, attackableTiles);
-		}
-		
-		
-		//Range Postprocess : remove tiles that cannot be attacked
-		if (attackCompo.getRangeMin() > 1) {
-			Iterator<Tile> it = attackableTiles.iterator();
-			while (it.hasNext()) {
-				Tile currentAttackableTile = it.next();
-				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
-					it.remove();
+		for (AttackSkill attackSkill : attackCompo.getSkills()) {
+			if (!attackSkill.isActive()) continue;
+			
+			Set<Tile> currentSkillAttackableTiles = new HashSet<>();
+
+			Set<Entity> moveTiles = moveCompo.movableTiles;
+			if (moveTiles.isEmpty()) {
+				moveTiles.add(room.entityFactory.createMovableTile(attackerPosCompo.coord(), room));
+			}
+			for (Entity t : moveTiles) {
+				Vector2 tilePos = Mappers.gridPositionComponent.get(t).coord();
+				visitedTilesWithRemainingMove.put(TileUtil.getTileAtGridPos(tilePos, room), 0);
+				Set<Tile> searchedTiles = this.searchAttackEntitiesFromOnePosition(t, attackSkill, room, onlyAttackableEntities);
+				currentSkillAttackableTiles.addAll(searchedTiles);
+			}
+			currentSkillAttackableTiles.removeAll(moveCompo.allWalkableTiles);
+			
+			if (attackSkill.getAttackType() == AttackTypeEnum.THROW) {
+				Tile tileAtGridPos = TileUtil.getTileAtGridPos(attackerPosCompo.coord(), room);
+				currentSkillAttackableTiles.add(tileAtGridPos);
+			}
+	
+			if (!ignoreObstacles) {
+				//Obstacles post process
+				obstaclesPostProcess(attackerPosCompo, currentSkillAttackableTiles);
+			}
+			
+			
+			//Range Postprocess : remove tiles that cannot be attacked
+			if (attackSkill.getRangeMin() > 1) {
+				Iterator<Tile> it = currentSkillAttackableTiles.iterator();
+				while (it.hasNext()) {
+					Tile currentAttackableTile = it.next();
+					//Remove tiles that are too close
+					if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackSkill.getRangeMin()) {
+						it.remove();
+					}
 				}
 			}
+			
+			attackableTiles.addAll(currentSkillAttackableTiles);
 		}
 		
-//		System.out.println("New Search att tiles : " + (System.currentTimeMillis() - time));
+//		System.out.println("aaa");
 		return attackableTiles;
 	}
 	
@@ -186,26 +198,25 @@ public class AttackTileSearchService extends TileSearchService {
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, Entity attackerEntity, Room room, boolean onlyAttackableEntities) {
+	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, AttackSkill attackSkill, Room room, boolean onlyAttackableEntities) {
 		attackableTilesPerDistance.clear();
 		visitedTilesWithRemainingMove.clear();
 		obstacles.clear();
 		
 		GridPositionComponent posCompo = Mappers.gridPositionComponent.get(tileFromWhereToAttack);
-		AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
-		 
-		if (!attackCompo.isActive()) return null;
+		
+		if (!attackSkill.isActive()) return null;
 
 		//Search all attackable tiles for each movable tile
 		Set<Tile> attackableTiles = new HashSet<>();
 		
-		if (attackCompo.getAttackType() == AttackTypeEnum.THROW) {
+		if (attackSkill.getAttackType() == AttackTypeEnum.THROW) {
 			Tile tileAtGridPos = TileUtil.getTileAtGridPos(posCompo.coord(), room);
 			attackableTiles.add(tileAtGridPos);
 		}
 		
 		CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
-		Set<Tile> foundAttTiles = check4ContiguousTiles(attackCompo.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackCompo.getRangeMax(), 1);
+		Set<Tile> foundAttTiles = check4ContiguousTiles(attackSkill.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackSkill.getRangeMax(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		//Obstacles post process
@@ -213,12 +224,12 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		
 		//Range Postprocess : remove tiles that cannot be attacked
-		if (attackCompo.getRangeMin() > 1) {
+		if (attackSkill.getRangeMin() > 1) {
 			Iterator<Tile> it = attackableTiles.iterator();
 			while (it.hasNext()) {
 				Tile currentAttackableTile = it.next();
 				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(posCompo.coord(), currentAttackableTile.getGridPos()) < attackCompo.getRangeMin()) {
+				if (TileUtil.getDistanceBetweenTiles(posCompo.coord(), currentAttackableTile.getGridPos()) < attackSkill.getRangeMin()) {
 					it.remove();
 				}
 			}

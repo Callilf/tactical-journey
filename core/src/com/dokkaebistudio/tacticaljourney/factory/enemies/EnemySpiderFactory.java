@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -87,14 +88,17 @@ public final class EnemySpiderFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemySpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -176,14 +180,17 @@ public final class EnemySpiderFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyWebSpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -269,14 +276,17 @@ public final class EnemySpiderFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyVenomSpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

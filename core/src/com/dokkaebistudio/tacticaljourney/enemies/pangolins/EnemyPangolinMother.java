@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -26,13 +27,13 @@ public class EnemyPangolinMother extends Enemy {
 	 * Becomes alerted and the textures changes to the enraged texture.
 	 * @param entity
 	 */
-	public void enrage(Entity entity) {
+	public void enrage(Entity entity, Entity attacker) {
 		AnimationComponent animationComponent = Mappers.animationComponent.get(entity);
 		animationComponent.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherEnragedStand);
 		animationComponent.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().pangolinMotherEnragedStand);
 		
-		EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
-		enemyComponent.setAlerted(true, entity);
+		AIComponent aiComponent = Mappers.aiComponent.get(entity);
+		aiComponent.setAlerted(true, entity, attacker);
 		
 		MoveComponent moveCompo = Mappers.moveComponent.get(entity);
 		moveCompo.setMoveSpeed(4);
@@ -62,7 +63,7 @@ public class EnemyPangolinMother extends Enemy {
 			EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
 			Enemy type = enemyComponent.getType();
 			if (type != null && type.getClass().equals(EnemyPangolinBaby.class)) {
-				enemyComponent.setAlerted(true, e);
+				Mappers.aiComponent.get(e).setAlerted(true, e, attacker);
 			}
 		}
 		

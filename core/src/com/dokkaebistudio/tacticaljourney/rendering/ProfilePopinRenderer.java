@@ -182,7 +182,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
     // PROFILE
 
 	private void refreshProfileTable() {
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(GameScreen.player);
+		InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(GameScreen.player);
 		MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
 		AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 		HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);

@@ -192,7 +192,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     				cloneHealthCompo.setHp(healthComponent.getHp());
     				
     				Mappers.spriteComponent.get(e).orientSprite(e, playerPos);
-    				Mappers.enemyComponent.get(e).setAlerted(true, e);
+    				Mappers.aiComponent.get(e).setAlerted(true, e, GameScreen.player);
     			}
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
@@ -290,7 +290,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 					room.removeEntity(smokeBomb);
 					smokeBomb = null;
 					Journal.addEntry(
-							Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
+							Mappers.inspectableComponent.get(thrower).getTitle() + " threw a smoke bomb.");
 
 					room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 					return true;
@@ -349,7 +349,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				itemComponent.onThrow(thrownPosition, thrower, smokeBomb, room);
 				room.removeEntity(smokeBomb);
 				smokeBomb = null;
-				Journal.addEntry(Mappers.inspectableComponentMapper.get(thrower).getTitle() + " threw a smoke bomb.");
+				Journal.addEntry(Mappers.inspectableComponent.get(thrower).getTitle() + " threw a smoke bomb.");
 				
 				room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
 				return true;

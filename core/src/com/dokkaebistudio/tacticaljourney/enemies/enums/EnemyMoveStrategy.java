@@ -2,7 +2,7 @@ package com.dokkaebistudio.tacticaljourney.enemies.enums;
 
 public enum EnemyMoveStrategy {
 	STANDING_STILL,
-	MOVE_TOWARD_PLAYER,
+	MOVE_TOWARDS_TARGET,
 	TRIBESMAN_SCOUT_STRATEGY,
 	MOVE_RANDOMLY,
 	MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE,

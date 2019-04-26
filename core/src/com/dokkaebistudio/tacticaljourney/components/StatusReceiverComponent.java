@@ -182,7 +182,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 	
 	public void removeStatus(Entity entity, Status status, Room room) {
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
+		InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(entity);
 		if (inspectableComponent != null) {
 			Journal.addEntry(inspectableComponent.getTitle() + " no longer have the " + status.title() + " status effect");
 		}

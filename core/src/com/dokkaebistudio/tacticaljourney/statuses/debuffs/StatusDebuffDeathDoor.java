@@ -95,7 +95,7 @@ public class StatusDebuffDeathDoor extends Status {
 	@Override
 	public void onReceiveDamage(Entity entity, Entity attacker, Room room) {
 		
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
+		InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(entity);
 		Journal.addEntry(inspectableComponent.getTitle() + " received damage at [BLACK]death's door[]");
 		
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);

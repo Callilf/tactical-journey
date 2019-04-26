@@ -8,9 +8,9 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
@@ -27,14 +28,10 @@ import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
-import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -131,7 +128,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						
 						String killerString = "Unknown";
 						if (healthCompo.getAttacker() != null) {
-							InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(healthCompo.getAttacker());
+							InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(healthCompo.getAttacker());
 							if (inspectableComponent != null) {
 								killerString = inspectableComponent.getTitle();
 							}
@@ -142,6 +139,8 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 			    	healthCompo.setAttacker(null);
 			    	
 				} else {
+					Journal.addEntry(Mappers.inspectableComponent.get(entity).getTitle() + " died");
+
 					// Death of any other entity than the player
 					GridPositionComponent entityPos = Mappers.gridPositionComponent.get(entity);
 					if (entityPos.room == room) {
@@ -153,9 +152,25 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						
 						EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 						if (enemyComponent != null) {
-							Journal.addEntry(enemyComponent.getType().title() + " died");
 							// An enemy died
 							enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
+							
+							for(Entity ally : room.getAllies()) {
+								AIComponent aiComponent = Mappers.aiComponent.get(ally);
+								if (aiComponent != null && aiComponent.getTarget() == entity) {
+									aiComponent.setTarget(null);
+								}
+							}
+						}
+						
+						AllyComponent allyComponent = Mappers.allyComponent.get(entity);
+						if (allyComponent != null) {							
+							for(Entity enemy : room.getEnemies()) {
+								AIComponent aiComponent = Mappers.aiComponent.get(enemy);
+								if (aiComponent != null && aiComponent.getTarget() == entity) {
+									aiComponent.setTarget(null);
+								}
+							}
 						}
 						
 			    		// Get XP
@@ -188,7 +203,11 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 							}
 						}
 						
-						room.removeEnemy(entity);		
+						if (enemyComponent != null) {
+							room.removeEnemy(entity);
+						} else {
+							room.removeAlly(entity);
+						}
 						
 						// If it was the player's turn, recompute movable tiles after the entity has been removed
 						if (room.getState().canEndTurn()) {

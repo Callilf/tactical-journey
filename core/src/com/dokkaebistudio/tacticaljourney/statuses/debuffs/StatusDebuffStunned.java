@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -92,10 +93,10 @@ public class StatusDebuffStunned extends Status {
 			room.setNextState(RoomState.PLAYER_STUNNED);
 		}
 			
-		EnemyComponent enemyCompo = Mappers.enemyComponent.get(entity);
-		if (enemyCompo != null) {
-			Journal.addEntry(Mappers.inspectableComponentMapper.get(entity).getTitle() + "is [YELLOW]stunned[] and cannot play this turn.");
-			enemyCompo.setTurnOver(true);
+		AIComponent aiCompo = Mappers.aiComponent.get(entity);
+		if (aiCompo != null) {
+			Journal.addEntry(Mappers.inspectableComponent.get(entity).getTitle() + "is [YELLOW]stunned[] and cannot play this turn.");
+			aiCompo.setTurnOver(true);
 		}
 	}
 	

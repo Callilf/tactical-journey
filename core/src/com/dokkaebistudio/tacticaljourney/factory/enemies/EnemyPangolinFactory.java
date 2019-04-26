@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -96,14 +97,17 @@ public final class EnemyPangolinFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyPangolinBaby(mother));
 		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -192,15 +196,18 @@ public final class EnemyPangolinFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
-		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
-		enemyComponent.setType(new EnemyPangolinMother());
-		enemyComponent.setSubSystem(new PangolinMotherSubSystem());
-		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setSubSystem(new PangolinMotherSubSystem());
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.setType(new EnemyPangolinMother());
+		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

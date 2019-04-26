@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
@@ -54,6 +55,7 @@ import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponen
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -395,6 +397,7 @@ public class Persister {
 					
 					kryo.writeClassAndObject(output, roomToSave.getEntitiesAtPosition());
 					
+					kryo.writeClassAndObject(output, roomToSave.getAllies());
 					kryo.writeClassAndObject(output, roomToSave.getEnemies());
 					kryo.writeClassAndObject(output, roomToSave.getNeutrals());
 					kryo.writeClassAndObject(output, roomToSave.getDoors());
@@ -458,6 +461,7 @@ public class Persister {
 				
 				loadedRoom.getEntitiesAtPosition().putAll( (Map<? extends Vector2, ? extends Set<Entity>>) kryo.readClassAndObject(input));
 				
+				loadedRoom.getAllies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getEnemies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getNeutrals().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getDoors().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
@@ -605,7 +609,9 @@ public class Persister {
 		// Component serializers
 		
 		kryo.register(PlayerComponent.class, PlayerComponent.getSerializer(engine));
+		kryo.register(AllyComponent.class, AllyComponent.getSerializer(engine));
 		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine));
+		kryo.register(AIComponent.class, AIComponent.getSerializer(engine));
 
 		kryo.register(ShopKeeperComponent.class, ShopKeeperComponent.getSerializer(engine));
 		kryo.register(SoulbenderComponent.class, SoulbenderComponent.getSerializer(engine));

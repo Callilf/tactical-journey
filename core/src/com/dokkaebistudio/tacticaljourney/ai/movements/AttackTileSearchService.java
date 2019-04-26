@@ -26,24 +26,24 @@ public class AttackTileSearchService extends TileSearchService {
 	/**
 	 * NOT USED ANYMORE.
 	 * Compute the tiles where attack is possible in a fast way but not very accurate.
-	 * @param attackerEntity the attacker
+	 * @param attacker the attacker
 	 * @param room the current room
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> oldSearchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+	public Set<Tile> oldSearchAttackTiles(Entity attacker, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
 		long time = System.currentTimeMillis();
 
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
 		
-		currentEntity = attackerEntity;
+		currentEntity = attacker;
 		
-		 MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
-		 AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		 MoveComponent moveCompo = Mappers.moveComponent.get(attacker);
+		 AttackComponent attackCompo = Mappers.attackComponent.get(attacker);
 		 AttackSkill mainSkill = attackCompo.getSkills().get(0);
-		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
+		 GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attacker);
 		 
 		 if (!attackCompo.isActive()) return null;
 
@@ -62,7 +62,7 @@ public class AttackTileSearchService extends TileSearchService {
 		for (Tile t : moveTiles) {			
 			CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
 			
-			Set<Tile> foundAttTiles = check4ContiguousTiles(mainSkill.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, mainSkill.getRangeMax(), 1);
+			Set<Tile> foundAttTiles = check4ContiguousTiles(attacker, mainSkill.getAttackType(), checkType, (int)t.getGridPos().x, (int)t.getGridPos().y, moveCompo.allWalkableTiles, room, mainSkill.getRangeMax(), 1);
 			attackableTiles.addAll(foundAttTiles);
 		}
 
@@ -94,23 +94,23 @@ public class AttackTileSearchService extends TileSearchService {
 	 * Compute the tiles where attack is possible by computing attack tiles in real time for each movable tile.
 	 * This is time consuming but it's very accurate.
 	 * WARN: If the perfs are not good enough, we might need to go back to the oldSearchAttackTiles method...
-	 * @param attackerEntity the attacker
+	 * @param attacker the attacker
 	 * @param room the current room
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> searchAttackTiles(Entity attackerEntity, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
+	public Set<Tile> searchAttackTiles(Entity attacker, Room room, boolean onlyAttackableEntities, boolean ignoreObstacles) {
 		long time = System.currentTimeMillis();
 		visitedTilesWithRemainingMove.clear();
 		attackableTilesPerDistance.clear();
 		obstacles.clear();
 		
-		currentEntity = attackerEntity;
+		currentEntity = attacker;
 		
-		MoveComponent moveCompo = Mappers.moveComponent.get(attackerEntity);
-		AttackComponent attackCompo = Mappers.attackComponent.get(attackerEntity);
+		MoveComponent moveCompo = Mappers.moveComponent.get(attacker);
+		AttackComponent attackCompo = Mappers.attackComponent.get(attacker);
 
-		GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attackerEntity);
+		GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(attacker);
 
 		if (!attackCompo.isActive()) return null;
 		
@@ -130,7 +130,7 @@ public class AttackTileSearchService extends TileSearchService {
 			for (Entity t : moveTiles) {
 				Vector2 tilePos = Mappers.gridPositionComponent.get(t).coord();
 				visitedTilesWithRemainingMove.put(TileUtil.getTileAtGridPos(tilePos, room), 0);
-				Set<Tile> searchedTiles = this.searchAttackEntitiesFromOnePosition(t, attackSkill, room, onlyAttackableEntities);
+				Set<Tile> searchedTiles = this.searchAttackEntitiesFromOnePosition(attacker, t, attackSkill, room, onlyAttackableEntities);
 				currentSkillAttackableTiles.addAll(searchedTiles);
 			}
 			currentSkillAttackableTiles.removeAll(moveCompo.allWalkableTiles);
@@ -198,7 +198,7 @@ public class AttackTileSearchService extends TileSearchService {
 	 * @param onlyAttackableEntities whether we should check for each tile that there is something to attack or not
 	 * This boolean is used to know whether we are computing attackable tiles for display to the player or during the enemy turn.
 	 */
-	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity tileFromWhereToAttack, AttackSkill attackSkill, Room room, boolean onlyAttackableEntities) {
+	public Set<Tile> searchAttackEntitiesFromOnePosition(Entity attacker, Entity tileFromWhereToAttack, AttackSkill attackSkill, Room room, boolean onlyAttackableEntities) {
 		attackableTilesPerDistance.clear();
 		visitedTilesWithRemainingMove.clear();
 		obstacles.clear();
@@ -216,7 +216,7 @@ public class AttackTileSearchService extends TileSearchService {
 		}
 		
 		CheckTypeEnum checkType = onlyAttackableEntities ? CheckTypeEnum.ATTACK : CheckTypeEnum.ATTACK_FOR_DISPLAY;
-		Set<Tile> foundAttTiles = check4ContiguousTiles(attackSkill.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackSkill.getRangeMax(), 1);
+		Set<Tile> foundAttTiles = check4ContiguousTiles(attacker, attackSkill.getAttackType(), checkType, (int)posCompo.coord().x, (int)posCompo.coord().y, null, room, attackSkill.getRangeMax(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		//Obstacles post process

@@ -36,6 +36,18 @@ public enum RoomState {
 	PLAYER_END_TURN,
 	
 	
+	ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
+	ALLY_TURN_INIT,
+	ALLY_COMPUTE_MOVABLE_TILES,
+	ALLY_MOVE_TILES_DISPLAYED,
+	ALLY_MOVE_DESTINATION_SELECTED,
+	ALLY_MOVING,
+	ALLY_END_MOVEMENT,
+	ALLY_ATTACK,
+	ALLY_ATTACK_ANIMATION,
+	ALLY_ATTACK_FINISH,
+	ALLY_END_TURN,
+	
 	ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
 	ENEMY_TURN_INIT,
 	ENEMY_COMPUTE_MOVABLE_TILES,
@@ -46,7 +58,6 @@ public enum RoomState {
 	ENEMY_ATTACK,
 	ENEMY_ATTACK_ANIMATION,
 	ENEMY_ATTACK_FINISH,
-	
 	ENEMY_END_TURN,
 	
 	
@@ -92,6 +103,23 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_THROWING
     			|| this == RoomState.PLAYER_STUNNED
     			|| this == RoomState.PLAYER_END_TURN;
+	}
+	
+	/**
+	 * Return true if it's the allies' turn, false otherwise.
+	 * @return true if it's the allies' turn, false otherwise.
+	 */
+	public boolean isAllyTurn() {
+		return this == RoomState.ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
+				|| this == RoomState.ALLY_TURN_INIT 
+				|| this == RoomState.ALLY_COMPUTE_MOVABLE_TILES 
+				|| this == RoomState.ALLY_MOVE_TILES_DISPLAYED
+    			|| this == RoomState.ALLY_MOVE_DESTINATION_SELECTED 
+    			|| this == RoomState.ALLY_MOVING 
+    			|| this == RoomState.ALLY_END_MOVEMENT
+    			|| this == RoomState.ALLY_ATTACK
+				|| this == RoomState.ALLY_ATTACK_ANIMATION
+				|| this == RoomState.ALLY_ATTACK_FINISH;
 	}
 	
 	/**

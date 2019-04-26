@@ -7,6 +7,7 @@ public enum EntityFlagEnum {
 	GODDESS_STATUE(3),
 	SOUL_BENDER(4),
 	ALTAR(5),
+	
 
 
 	ENEMY_SPIDER(30),
@@ -24,6 +25,8 @@ public enum EntityFlagEnum {
 	ENEMY_TRIBESMEN_TOTEM(41),
 	
 	ENEMY_SHINOBI(42),
+	
+	ALLY_CLONE(70),
 
 	TILE(100),
 	WALL(101),

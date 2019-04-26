@@ -60,6 +60,9 @@ public class TurnSystem extends IteratingSystem implements RoomSystem {
 		
 		switch(room.getState()) {
 		case PLAYER_END_TURN:
+			room.setNextState(RoomState.ALLY_TURN_INIT);
+			break;
+		case ALLY_END_TURN:
 			room.setNextState(RoomState.ENEMY_TURN_INIT);
 			break;
 		case ENEMY_END_TURN:

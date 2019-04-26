@@ -232,12 +232,12 @@ public class AttackManager {
 	private void alertEnemy(Entity target, Entity attacker) {
 		if (attacker != null) {
 			// Alert the enemy the player just attacked
-			if ((Mappers.enemyComponent.has(target) && Mappers.playerComponent.has(attacker))) {
-				Mappers.enemyComponent.get(target).setAlerted(true, target);
+			if ((Mappers.aiComponent.has(target) && Mappers.allyComponent.has(attacker))) {
+				Mappers.aiComponent.get(target).setAlerted(true, target, attacker);
 			}
 			// Alert the enemy that attacked the player
-			if (Mappers.playerComponent.has(target) && Mappers.enemyComponent.has(attacker)) {
-				Mappers.enemyComponent.get(attacker).setAlerted(true, attacker);
+			if (Mappers.allyComponent.has(target) && Mappers.aiComponent.has(attacker)) {
+				Mappers.aiComponent.get(attacker).setAlerted(true, attacker, target);
 			}
 		}
 	}

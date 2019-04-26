@@ -267,6 +267,9 @@ public class Descriptions {
 	
 	public static final String ITEM_RIGHT_JIKATABI_TITLE = "Right Jikatabi";
 	public static final String ITEM_RIGHT_JIKATABI_DESCRIPTION = "The right piece of a jikatabi pair that once belonged to a shinobi. Grants the Hangeki blessing and the Curse of the shinobi while held in the inventory.";
+	
+	public static final String ITEM_SHINOBI_HEADBAND_TITLE = "Shinobi headband";
+	public static final String ITEM_SHINOBI_HEADBAND_DESCRIPTION = "A headband that once belonged to a shinobi. Grants the Bunshin no jutsu blessing and the Curse of the shinobi while held in the inventory.";
 
 	
 }

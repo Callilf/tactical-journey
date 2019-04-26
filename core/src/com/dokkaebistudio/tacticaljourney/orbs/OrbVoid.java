@@ -27,7 +27,7 @@ public class OrbVoid extends Orb {
 	
 	@Override
 	public boolean onContactWithAnotherOrb(Entity user, Entity orb, Entity targetedOrb, Room room) {
-		Journal.addEntry("Void has consumed " + Mappers.inspectableComponentMapper.get(targetedOrb).getTitle());
+		Journal.addEntry("Void has consumed " + Mappers.inspectableComponent.get(targetedOrb).getTitle());
 		Entity parent = Mappers.orbComponent.get(targetedOrb).getParent();
 		if (parent != null) {
 			// This orb is linked to an entity

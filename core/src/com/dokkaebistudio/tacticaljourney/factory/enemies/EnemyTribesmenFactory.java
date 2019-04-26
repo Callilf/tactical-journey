@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -105,14 +106,17 @@ public final class EnemyTribesmenFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyTribesmanSpear());
 		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -202,14 +206,17 @@ public final class EnemyTribesmenFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setType(new EnemyTribesmanSpear());
 		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -301,15 +308,18 @@ public final class EnemyTribesmenFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setSubSystem(new TribesmanScoutSubSystem());
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
-		enemyComponent.setSubSystem(new TribesmanScoutSubSystem());
 		enemyComponent.setType(new EnemyTribesmanScout());
 		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.TRIBESMAN_SCOUT_STRATEGY);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -403,15 +413,18 @@ public final class EnemyTribesmenFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setSubSystem(new TribesmanShamanSubSystem());
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.STANDING_STILL);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.STANDING_STILL);
+		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
-		enemyComponent.setSubSystem(new TribesmanShamanSubSystem());
 		enemyComponent.setType(new EnemyTribesmanShaman());
 		enemyComponent.setFaction(EnemyFactionEnum.TRIBESMEN);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.STANDING_STILL);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.STANDING_STILL);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		enemyComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
@@ -504,13 +517,16 @@ public final class EnemyTribesmenFactory {
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
 		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		enemyEntity.add(aiComponent);
+		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.room = room;
 		enemyComponent.setCanActivateOrbs(false);
 		enemyComponent.setType(new EnemyTribesmanTotem());
 		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
-		enemyComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
-		enemyComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARD_PLAYER);
 		enemyEntity.add(enemyComponent);
 		
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);

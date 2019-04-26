@@ -46,7 +46,7 @@ public class GameStatistics {
 		GameStatistics gameStatistics = new GameStatistics();
 		
 		Entity player = gamescreen.player;
-		gameStatistics.setCharacterName(Mappers.inspectableComponentMapper.get(player).getTitle());
+		gameStatistics.setCharacterName(Mappers.inspectableComponent.get(player).getTitle());
 		gameStatistics.setCharacterLevel(Mappers.experienceComponent.get(player).getLevel());
 		gameStatistics.setFloorLevel(gamescreen.activeFloor.getLevel());
 		

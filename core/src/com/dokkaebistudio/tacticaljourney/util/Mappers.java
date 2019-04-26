@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
@@ -38,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponen
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
@@ -58,7 +60,10 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 public final class Mappers {
 
 	public final static ComponentMapper<PlayerComponent> playerComponent = ComponentMapper.getFor(PlayerComponent.class);
+	public final static ComponentMapper<AllyComponent> allyComponent = ComponentMapper.getFor(AllyComponent.class);
 	public final static ComponentMapper<EnemyComponent> enemyComponent = ComponentMapper.getFor(EnemyComponent.class);
+	public final static ComponentMapper<AIComponent> aiComponent = ComponentMapper.getFor(AIComponent.class);
+	
 	public final static ComponentMapper<ShopKeeperComponent> shopKeeperComponent = ComponentMapper.getFor(ShopKeeperComponent.class);
 	public final static ComponentMapper<SoulbenderComponent> soulbenderComponent = ComponentMapper.getFor(SoulbenderComponent.class);
 	public final static ComponentMapper<StatueComponent> statueComponent = ComponentMapper.getFor(StatueComponent.class);
@@ -101,10 +106,10 @@ public final class Mappers {
 	public final static ComponentMapper<DamageDisplayComponent> damageDisplayCompoM = ComponentMapper.getFor(DamageDisplayComponent.class);
 	public final static ComponentMapper<DialogComponent> dialogComponent = ComponentMapper.getFor(DialogComponent.class);
 
-	public final static ComponentMapper<WheelModifierComponent> wheelModifierComponentMapper = ComponentMapper.getFor(WheelModifierComponent.class);
+	public final static ComponentMapper<WheelModifierComponent> wheelModifierComponent = ComponentMapper.getFor(WheelModifierComponent.class);
 	public final static ComponentMapper<WheelComponent> wheelComponentMapper = ComponentMapper.getFor(WheelComponent.class);
 	
-	public final static ComponentMapper<InspectableComponent> inspectableComponentMapper = ComponentMapper.getFor(InspectableComponent.class);
+	public final static ComponentMapper<InspectableComponent> inspectableComponent = ComponentMapper.getFor(InspectableComponent.class);
 	
 	public final static ComponentMapper<SolidComponent> solidComponent = ComponentMapper.getFor(SolidComponent.class);
 	public final static ComponentMapper<ChasmComponent> chasmComponent = ComponentMapper.getFor(ChasmComponent.class);

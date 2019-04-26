@@ -47,6 +47,7 @@ import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.systems.AllySystem;
 import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -85,6 +86,9 @@ public class Room extends EntitySystem {
 	
 	/** For each tile, gives the list of entities. */
 	private Map<Vector2,Set<Entity>> entitiesAtPositions;
+	
+	/** The allies entities of this room (includes the player). */
+	private List<Entity> allies;
 	
 	/** The enemy entities of this room. */
 	private List<Entity> enemies;
@@ -138,6 +142,7 @@ public class Room extends EntitySystem {
 		this.addedItems = new ArrayList<>();
 		this.removedItems = new ArrayList<>();
 		
+		this.allies = new ArrayList<>();
 		this.enemies = new ArrayList<>();
 		this.neutrals = new ArrayList<>();
 		this.doors = new ArrayList<>();
@@ -460,6 +465,32 @@ public class Room extends EntitySystem {
 		return this.enemies;
 	}
 	
+	/**
+	 * Add an ally in the room.
+	 * @param ally the ally to add
+	 */
+	public void addAlly(Entity ally) {
+		this.addEntity(ally);
+		this.allies.add(ally);
+	}
+	
+	/**
+	 * Remove an ally from the room.
+	 * @param ally the ally to remove
+	 */
+	public void removeAlly(Entity ally) {
+		this.allies.remove(ally);
+		this.removeEntity(ally);
+		
+		if (state.isEnemyTurn() && AllySystem.allyCurrentyPlaying == ally) {
+			// Finish this ally turn since it's dead
+			this.setNextState(RoomState.ALLY_TURN_INIT);
+		}
+	}
+	
+	public List<Entity> getAllies() {
+		return allies;
+	}
 	
 	public void addDoor(Entity d) {
 		this.doors.add(d);

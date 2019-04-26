@@ -2,6 +2,7 @@ package com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -75,7 +76,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 			if (summoningTotem) {
 				PoolableVector2 temp = PoolableVector2.create(11,  6);
 				totem = room.entityFactory.enemyFactory.createTribesmenTotem(room, temp);
-				Mappers.enemyComponent.get(totem).setTurnOver(true);
+				Mappers.aiComponent.get(totem).setTurnOver(true);
 				temp.free();
 				
 				summoningTotem = false;
@@ -97,7 +98,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				return true;
 			} else if (summoningEnemy) {
 				Entity generateTribesman = generateTribesman(room);
-				Mappers.enemyComponent.get(generateTribesman).setTurnOver(true);
+				Mappers.aiComponent.get(generateTribesman).setTurnOver(true);
 				
 				summoningEnemy = false;
 				recovering = true;
@@ -209,7 +210,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 		tribesman.remove(LootRewardComponent.class);
 		tribesman.remove(ExpRewardComponent.class);
 		
-		Mappers.enemyComponent.get(tribesman).setAlerted(true, tribesman);
+		Mappers.aiComponent.get(tribesman).setAlerted(true, tribesman, GameScreen.player);
 		return tribesman;
 	}
 }

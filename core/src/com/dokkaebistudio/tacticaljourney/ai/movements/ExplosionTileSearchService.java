@@ -40,7 +40,7 @@ public class ExplosionTileSearchService extends TileSearchService {
 			
 		CheckTypeEnum checkType = CheckTypeEnum.ATTACK_FOR_DISPLAY;
 		visitedTilesWithRemainingMove.put(tile, 0);
-		Set<Tile> foundAttTiles = check4ContiguousTiles(AttackTypeEnum.EXPLOSION, checkType, (int)tile.getGridPos().x, (int)tile.getGridPos().y, null, room, explosiveComponent.getRadius(), 1);
+		Set<Tile> foundAttTiles = check4ContiguousTiles(explosive, AttackTypeEnum.EXPLOSION, checkType, (int)tile.getGridPos().x, (int)tile.getGridPos().y, null, room, explosiveComponent.getRadius(), 1);
 		attackableTiles.addAll(foundAttTiles);
 
 		//Obstacles post process

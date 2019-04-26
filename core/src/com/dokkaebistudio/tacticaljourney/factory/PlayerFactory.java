@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GoddessStatueAlterationPool;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -34,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponen
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
@@ -42,6 +44,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
@@ -108,6 +111,9 @@ public final class PlayerFactory {
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.zIndex = ZIndexConstants.PLAYER;
 		playerEntity.add(gridPosition);
+		
+		AllyComponent allyComponent = engine.createComponent(AllyComponent.class);
+		playerEntity.add(allyComponent);
 		
 		// Player compo
 		PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
@@ -211,6 +217,120 @@ public final class PlayerFactory {
 
 		engine.addEntity(playerEntity);
 		return playerEntity;
+	}
+	
+	/**
+	 * Create a clone of the player.
+	 * @param pos the position
+	 * @return the clone entity
+	 */
+	public Entity createPlayerClone(Room room, Vector2 position) {
+		Entity cloneEntity = engine.createEntity();
+		cloneEntity.flags = EntityFlagEnum.ALLY_CLONE.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Clone");
+		inspect.setDescription("A clone of yourselft.");
+		cloneEntity.add(inspect);
+		
+		// Player anim
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		cloneEntity.add(spriteCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.STANDING);
+		cloneEntity.add(stateCompo);
+		
+		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
+		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().player_standing);
+		animCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().player_running);
+		animCompo.addAnimation(StatesEnum.FLY_STANDING, AnimationSingleton.getInstance().player_flying);
+		animCompo.addAnimation(StatesEnum.FLY_MOVING, AnimationSingleton.getInstance().player_flying);
+		cloneEntity.add(animCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.zIndex = ZIndexConstants.PLAYER;
+		gridPosition.coord(cloneEntity, position, room);
+		cloneEntity.add(gridPosition);
+		
+		AllyComponent allyComponent = engine.createComponent(AllyComponent.class);
+		cloneEntity.add(allyComponent);
+		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		Entity alertedDisplayer = this.entityFactory.createTextOnTile(position, "", ZIndexConstants.HEALTH_DISPLAYER, room);
+		aiComponent.setAlertedDisplayer(alertedDisplayer);
+		cloneEntity.add(aiComponent);
+		
+		// Humanoid
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		cloneEntity.add(humanoidCompo);
+		
+		// Move compo
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.setMoveSpeed(5);
+		cloneEntity.add(moveComponent);
+		
+		// Attack compo
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMax(1);
+		as.setStrength(5);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash,
+				AnimationSingleton.getInstance().attack_slash_critical, true);
+		as.setAttackAnimation(attackAnimation);
+		
+		attackComponent.getSkills().add(as);
+		attackComponent.setAccuracy(1);
+		cloneEntity.add(attackComponent);
+		
+		// Ammo carrier
+		AmmoCarrierComponent ammoCarrierCompo = engine.createComponent(AmmoCarrierComponent.class);
+		ammoCarrierCompo.setArrows(0);
+		ammoCarrierCompo.setMaxArrows(10);
+		ammoCarrierCompo.setBombs(0);
+		ammoCarrierCompo.setMaxBombs(5);
+		cloneEntity.add(ammoCarrierCompo);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		cloneEntity.add(solidComponent);
+		
+		// Health compo
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setMaxHp(10);
+		healthComponent.setHp(10);
+		healthComponent.setMaxArmor(0);
+		healthComponent.setArmor(0);
+		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(position, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
+		cloneEntity.add(healthComponent);
+		
+		// Alteration receiver compo
+		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
+		BlessingOfCalishka initialBlessing = new BlessingOfCalishka();
+		initialBlessing.setInfused(true);
+		alterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_BLESSING, initialBlessing);
+		cloneEntity.add(alterationReceiverCompo);
+		
+		// Statuses
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		cloneEntity.add(statusReceiverCompo);
+		
+		// Orb carrier
+		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
+		cloneEntity.add(orbCarrierCompo);
+
+		room.addAlly(cloneEntity);
+		return cloneEntity;
 	}
 	
 	

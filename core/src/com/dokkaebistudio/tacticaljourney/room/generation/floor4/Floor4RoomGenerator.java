@@ -11,12 +11,10 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -84,7 +82,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			temp.set(11, 2);
 			Entity shaman = room.entityFactory.enemyFactory.createTribesmenShaman(room, temp);
-			Mappers.enemyComponent.get(shaman).setAlerted(true, shaman);
+			Mappers.aiComponent.get(shaman).setAlerted(true, shaman, GameScreen.player);
 
 			temp.free();
 			
@@ -106,8 +104,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 					enemy = entityFactory.enemyFactory.createTribesmenScout(room, iterator.next());
 				}
 				
-				EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-				enemyComponent.setAlerted(true, enemy);
+				Mappers.aiComponent.get(enemy).setAlerted(true, enemy, GameScreen.player);
 			}		
 			
 			// Close doors

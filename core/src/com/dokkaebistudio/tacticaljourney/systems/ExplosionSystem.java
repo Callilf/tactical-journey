@@ -170,7 +170,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 		ExplosiveComponent explosiveComponent = Mappers.explosiveComponent.get(explosive);
 		for (Entity attackableTile : explosiveComponent.attackableTiles) {
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(attackableTile);
-			Entity target = TileUtil.getAttackableEntityOnTile(gridPositionComponent.coord(), room);
+			Entity target = TileUtil.getAttackableEntityOnTile(explosive, gridPositionComponent.coord(), room);
 
 			// Deal damage to any entity on the tile
 			if (target != null && explosive != target) {

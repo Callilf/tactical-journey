@@ -13,7 +13,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -37,6 +37,7 @@ public class StingerSubSystem extends EnemySubSystem {
 	
 	private boolean canCharge = false;
 	private int chargeDistance = 0;
+	private Entity chargeTarget;
 	private StingerAttackStates attackState = StingerAttackStates.NONE;
 	
 	@Override
@@ -58,10 +59,12 @@ public class StingerSubSystem extends EnemySubSystem {
     	case ENEMY_MOVE_TILES_DISPLAYED :
     		
     		// First check whether the stinger in aligned with the player horizontally or vertically    		
-    		if (canChargePlayer(enemy, moveCompo, attackCompo, room)) {
+    		chargeTarget = canChargePlayer(enemy, moveCompo, attackCompo, room);
+    		if (chargeTarget != null) {
     			// Aligned
     			canCharge = true;
-    			chargeDistance = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), enemyCurrentPos.coord());
+    			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(chargeTarget);
+    			chargeDistance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), enemyCurrentPos.coord());
         		room.setNextState(RoomState.ENEMY_ATTACK);
         		return true;
     		} else {
@@ -79,28 +82,29 @@ public class StingerSubSystem extends EnemySubSystem {
     			return false;
     		}
     		
-    		
+			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(chargeTarget);
+
     		switch(attackState) {
     		case INIT_CHARGE:
     			PoolableVector2 chargeLocation = PoolableVector2.create(0, 0);
-    			if (enemyCurrentPos.coord().x == playerPosition.coord().x) {
+    			if (enemyCurrentPos.coord().x == targetPos.coord().x) {
     				// Vertical charge
-    				if (enemyCurrentPos.coord().y < playerPosition.coord().y) {
-    					chargeLocation.x = playerPosition.coord().x;
-    					chargeLocation.y = playerPosition.coord().y - 1;
+    				if (enemyCurrentPos.coord().y < targetPos.coord().y) {
+    					chargeLocation.x = targetPos.coord().x;
+    					chargeLocation.y = targetPos.coord().y - 1;
     					
     					int i = (int) enemyCurrentPos.coord().y;
-    					while (i < playerPosition.coord().y - 1) {
+    					while (i < targetPos.coord().y - 1) {
     						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
     						moveCompo.getWayPoints().add(wp);
     						i++;
     					}
     				} else {
-    					chargeLocation.x = playerPosition.coord().x;
-    					chargeLocation.y = playerPosition.coord().y + 1;
+    					chargeLocation.x = targetPos.coord().x;
+    					chargeLocation.y = targetPos.coord().y + 1;
     					
     					int i = (int) enemyCurrentPos.coord().y;
-    					while (i > playerPosition.coord().y + 1) {
+    					while (i > targetPos.coord().y + 1) {
     						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
     						moveCompo.getWayPoints().add(wp);
     						i--;
@@ -108,16 +112,16 @@ public class StingerSubSystem extends EnemySubSystem {
     				}
     			} else {
     				// Horizontal charge
-    				if (enemyCurrentPos.coord().x < playerPosition.coord().x) {
+    				if (enemyCurrentPos.coord().x < targetPos.coord().x) {
     					// To the right
     					SpriteComponent spriteComponent = Mappers.spriteComponent.get(enemy);
     					spriteComponent.flipX = false;
 
-    					chargeLocation.x = playerPosition.coord().x - 1;
-    					chargeLocation.y = playerPosition.coord().y;
+    					chargeLocation.x = targetPos.coord().x - 1;
+    					chargeLocation.y = targetPos.coord().y;
     					
     					int i = (int) enemyCurrentPos.coord().x;
-    					while (i < playerPosition.coord().x - 1) {
+    					while (i < targetPos.coord().x - 1) {
     						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
     						moveCompo.getWayPoints().add(wp);
     						i++;
@@ -127,11 +131,11 @@ public class StingerSubSystem extends EnemySubSystem {
     					SpriteComponent spriteComponent = Mappers.spriteComponent.get(enemy);
     					spriteComponent.flipX = true;
 
-    					chargeLocation.x = playerPosition.coord().x + 1;
-    					chargeLocation.y = playerPosition.coord().y;
+    					chargeLocation.x = targetPos.coord().x + 1;
+    					chargeLocation.y = targetPos.coord().y;
     					
     					int i = (int) enemyCurrentPos.coord().x;
-    					while (i > playerPosition.coord().x + 1) {
+    					while (i > targetPos.coord().x + 1) {
     						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
     						moveCompo.getWayPoints().add(wp);
     						i--;
@@ -167,8 +171,8 @@ public class StingerSubSystem extends EnemySubSystem {
     			stateComponent = Mappers.stateComponent.get(enemy);
     			stateComponent.set(StatesEnum.FLY_STANDING);
     			
-				attackCompo.setTarget(playerEntity);
-				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(playerPosition.coord(), room));
+				attackCompo.setTarget(chargeTarget);
+				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(targetPos.coord(), room));
 				
 				attackCompo.setAdditionnalStrength(chargeDistance);
 				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
@@ -271,8 +275,8 @@ public class StingerSubSystem extends EnemySubSystem {
 	}
 	
 	
-	private boolean canChargePlayer(Entity enemyEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		if (moveCompo.getMoveSpeed() == 0) return false;
+	private Entity canChargePlayer(Entity enemyEntity, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+		if (moveCompo.getMoveSpeed() == 0) return null;
 		
 		// Add the horizontal and vertical lines
 		PoolableVector2 temp = PoolableVector2.create(0, 0);
@@ -281,8 +285,9 @@ public class StingerSubSystem extends EnemySubSystem {
 		while (i >= 0) {
 			// left
 			temp.set(i, enemyPos.coord().y);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
+			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target != null) {
+				return target;
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -294,8 +299,9 @@ public class StingerSubSystem extends EnemySubSystem {
 		while (i < GameScreen.GRID_W) {
 			// right
 			temp.set(i, enemyPos.coord().y);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
+			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target != null) {
+				return target;
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -307,8 +313,9 @@ public class StingerSubSystem extends EnemySubSystem {
 		while (i >= 0) {
 			// down
 			temp.set(enemyPos.coord().x, i);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
+			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target != null) {
+				return target;
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -320,8 +327,9 @@ public class StingerSubSystem extends EnemySubSystem {
 		while (i < GameScreen.GRID_H) {
 			// up
 			temp.set(enemyPos.coord().x, i);
-			if (checkTileForPlayer(temp, moveCompo, attackCompo, room)) {
-				return true;
+			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target != null) {
+				return target;
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -330,7 +338,7 @@ public class StingerSubSystem extends EnemySubSystem {
 		}
 		temp.free();
 		
-		return false;
+		return null;
 	}
 	
 	private boolean checkTileForSolid(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
@@ -339,9 +347,9 @@ public class StingerSubSystem extends EnemySubSystem {
 		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
 		return blockVision != null;
 	}
-	private boolean checkTileForPlayer(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		Entity player = TileUtil.getEntityWithComponentOnTile(position, PlayerComponent.class, room);
-		return player != null;
+	private Entity checkTileForAlly(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+		Entity ally = TileUtil.getEntityWithComponentOnTile(position, AllyComponent.class, room);
+		return ally;
 	}
 
 

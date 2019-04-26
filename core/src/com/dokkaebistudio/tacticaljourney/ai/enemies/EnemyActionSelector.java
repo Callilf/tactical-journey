@@ -10,16 +10,16 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
@@ -40,14 +40,14 @@ public class EnemyActionSelector {
     	Entity selectedTile = null;
     	MoveComponent moveComponent = Mappers.moveComponent.get(enemyEntity);
     	GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
-    	EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemyEntity);
+    	AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
     	
-    	EnemyMoveStrategy moveStrategy = enemyComponent.isAlerted() ? enemyComponent.getAlertedMoveStrategy() : enemyComponent.getBasicMoveStrategy();
+    	EnemyMoveStrategy moveStrategy = aiComponent.isAlerted() ? aiComponent.getAlertedMoveStrategy() : aiComponent.getBasicMoveStrategy();
     	    	
     	switch (moveStrategy) {
-    	case MOVE_TOWARD_PLAYER :
+    	case MOVE_TOWARDS_TARGET :
 	    	//Strategy 1 : move toward the player(s)
-	    	selectedTile = moveTowardPlayerStrategy(enemyEntity, room, moveComponent, enemyPos);
+	    	selectedTile = moveTowardsTargetStrategy(enemyEntity, room, moveComponent, enemyPos);
 	    	break;
 	    	
     	case TRIBESMAN_SCOUT_STRATEGY:
@@ -102,34 +102,50 @@ public class EnemyActionSelector {
 	 * @param enemyPos the enemy position
 	 * @return the selected tile. Null if no move needed
 	 */
-	private static Entity moveTowardPlayerStrategy(Entity enemyEntity, Room room,
+	private static Entity moveTowardsTargetStrategy(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
-		Family family = Family.all(PlayerComponent.class, GridPositionComponent.class).get();
-		ImmutableArray<Entity> allPlayers = room.engine.getEntitiesFor(family);
-		
-		//First find the closest target
 		int shortestDistance = -1;
 		Entity target = null;
-		for (Entity p : allPlayers) {
-			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-			int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-			if (target == null || distance < shortestDistance) {
-				shortestDistance = distance;
-				target = p;
+
+		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
+		if (aiComponent.getTarget() == null) {
+			ImmutableArray<Entity> allTargets = null;
+			if (Mappers.enemyComponent.has(enemyEntity)) {
+				Family family = Family.all(AllyComponent.class, GridPositionComponent.class).get();
+				allTargets = room.engine.getEntitiesFor(family);
+			} else {
+				Family family = Family.all(EnemyComponent.class, GridPositionComponent.class).get();
+				allTargets = room.engine.getEntitiesFor(family);
 			}
+			
+			//First find the closest target
+			for (Entity p : allTargets) {
+				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+				if (target == null || distance < shortestDistance) {
+					shortestDistance = distance;
+					target = p;
+				}
+			}
+			
+		} else {
+			target = aiComponent.getTarget();
+			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
+			
 		}
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 
 		if (shortestDistance == attackComponent.getActiveSkill().getRangeMax()) {
-			//Already facing the player, don't need to move.
+			//Already facing the target, don't need to move.
 		} else {
 			if (target != null) {
 				selectedTile = getSelectedTileForMaxDamage(enemyEntity, target, room);
 
 				if (selectedTile == null) {
-					// No enemy in range, just move without attacking
+					// No target in range, just move without attacking
 					GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
 					shortestDistance = -1;
 					
@@ -174,16 +190,17 @@ public class EnemyActionSelector {
 		for(Entity e : room.getEnemies()) {
 			if (e == enemyEntity) continue;
 			EnemyComponent ec = Mappers.enemyComponent.get(e);
+			AIComponent aic = Mappers.aiComponent.get(e);
 			if (ec != null 
 					&& ec.getFaction() == currentEnemyCompo.getFaction() 
 					&& !(ec.getType() instanceof EnemyTribesmanShaman)
-					&& (!unalertedFriends || (unalertedFriends && !ec.isAlerted()) )) {
+					&& (!unalertedFriends || (unalertedFriends && !aic.isAlerted()) )) {
 				friends.add(e);
 			}
 		}
 		if (friends.size() == 0) {
 			// No other members of this faction
-			return moveTowardPlayerStrategy(enemyEntity, room, moveComponent, enemyPos);
+			return moveTowardsTargetStrategy(enemyEntity, room, moveComponent, enemyPos);
 		} 
 		
 		//First find the closest target
@@ -232,17 +249,36 @@ public class EnemyActionSelector {
 	private static Entity moveRandomlyButAttackFromRangeIfPossible(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, AttackComponent attackCompo, GridPositionComponent enemyPos, AttackTileSearchService atss) {
 		Entity selectedTile = null;
-		
-		//First check if can attack the player
+		int shortestDistance = -1;
 		Entity target = null;
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
-		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
-		for (Tile attackTile : attackComponent.allAttackableTiles) {
-			if (attackTile.getGridPos().equals(playerPos.coord())) {
-				target = GameScreen.player;
-			}
-		}
 
+		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
+		if (aiComponent.getTarget() == null) {
+			ImmutableArray<Entity> allTargets = null;
+			if (Mappers.enemyComponent.has(enemyEntity)) {
+				Family family = Family.all(AllyComponent.class, GridPositionComponent.class).get();
+				allTargets = room.engine.getEntitiesFor(family);
+			} else {
+				Family family = Family.all(EnemyComponent.class, GridPositionComponent.class).get();
+				allTargets = room.engine.getEntitiesFor(family);
+			}
+			
+			//First find the closest target
+			for (Entity p : allTargets) {
+				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+				if (target == null || distance < shortestDistance) {
+					shortestDistance = distance;
+					target = p;
+				}
+			}
+			
+		} else {
+			target = aiComponent.getTarget();
+			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
+			
+		}
 
 		if (target != null) {
 			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
@@ -256,7 +292,7 @@ public class EnemyActionSelector {
 	    				continue;
 	    			}
 	    			
-					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, attackComponent.getActiveSkill(), room, true);
+					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(enemyEntity, t, attackCompo.getActiveSkill(), room, true);
 					if (!searchAttackTiles.isEmpty()) {
 		    			selectedTile = t;
 		    			selectedDistance = distance;
@@ -292,19 +328,36 @@ public class EnemyActionSelector {
 	private static Entity moveRandomlyButAttackIfPossible(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
-		
-		//First check if can attack the player
-		Entity target = null;
 		int shortestDistance = -1;
-		GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
-		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
-		for (Tile attackTile : attackComponent.allAttackableTiles) {
-			if (attackTile.getGridPos().equals(playerPos.coord())) {
-				target = GameScreen.player;
-				shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+		Entity target = null;
+
+		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
+		if (aiComponent.getTarget() == null) {
+			List<Entity> allTargets = null;
+			if (Mappers.enemyComponent.has(enemyEntity)) {
+				allTargets = room.getAllies();
+			} else {
+				allTargets = room.getEnemies();
 			}
+			
+			//First find the closest target
+			for (Entity p : allTargets) {
+				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+				if (target == null || distance < shortestDistance) {
+					shortestDistance = distance;
+					target = p;
+				}
+			}
+			
+		} else {
+			target = aiComponent.getTarget();
+			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
+			
 		}
 		
+		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 		if (shortestDistance == attackComponent.getActiveSkill().getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {

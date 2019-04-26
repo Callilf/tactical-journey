@@ -407,7 +407,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
 		if (isThrow) {
 			room.setNextState(RoomState.PLAYER_THROWING);
 		} else {
-			Entity target = TileUtil.getAttackableEntityOnTile(targetedTileGridPositionComponent.coord(), room);
+			Entity target = TileUtil.getAttackableEntityOnTile(GameScreen.player, targetedTileGridPositionComponent.coord(), room);
 			attackCompo.setTarget(target);
 			wheel.setAttackComponent(attackCompo);
 			wheel.setWheelComponent(wheelCompo);

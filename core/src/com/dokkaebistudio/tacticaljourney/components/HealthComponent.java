@@ -326,7 +326,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void reset() {
 		resitanceMap.clear();
 		if (hpDisplayer != null) {
-			room.removeEntity(hpDisplayer);		
+			room.removeEntity(hpDisplayer);
 		}
 		hpDisplayer = null;
 		this.clearModified();

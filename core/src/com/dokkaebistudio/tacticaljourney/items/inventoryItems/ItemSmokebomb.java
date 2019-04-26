@@ -62,7 +62,7 @@ public class ItemSmokebomb extends AbstractItem {
 		// All enemies become unalerted
 		for(Entity enemy : room.getEnemies()) {
 			if (enemy == user) continue;
-			Mappers.enemyComponent.get(enemy).setAlerted(false, enemy);
+			Mappers.aiComponent.get(enemy).setAlerted(false, enemy, user);
 		}
 		
 		// Adjacent enemies are stunned

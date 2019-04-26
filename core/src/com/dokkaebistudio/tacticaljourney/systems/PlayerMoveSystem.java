@@ -9,6 +9,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -137,7 +138,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				moveCompo.hideMovableTiles();
 			}
 
-			room.setNextState(RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER);
+			room.setNextState(RoomState.ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER);
 			break;
 
 		case PLAYER_MOVE_TILES_DISPLAYED:
@@ -187,7 +188,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 					// Confirm movement by clicking on an attack tile
 //					moveCompo.setFastAttack(true);
 					GridPositionComponent attackTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedAttackTile());
-					moveCompo.setFastAttackTarget(TileUtil.getAttackableEntityOnTile(attackTilePos.coord(), room));
+					moveCompo.setFastAttackTarget(TileUtil.getAttackableEntityOnTile(GameScreen.player, attackTilePos.coord(), room));
 					
 					// Initiate movement
 					movementHandler.initiateMovement(player);

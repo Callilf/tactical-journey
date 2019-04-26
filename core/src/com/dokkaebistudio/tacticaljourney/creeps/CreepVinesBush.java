@@ -47,7 +47,7 @@ public class CreepVinesBush extends Creep {
 			// Entangle
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
 			if (statusReceiverComponent != null) {
-				Journal.addEntry("[FOREST]Vines surged from the bush and entangled " + Mappers.inspectableComponentMapper.get(walker).getTitle());
+				Journal.addEntry("[FOREST]Vines surged from the bush and entangled " + Mappers.inspectableComponent.get(walker).getTitle());
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(3));
 			}
 			

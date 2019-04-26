@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -153,7 +153,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 				choicePopinSubTable.clear();
 				
 				for (final Entity e : playerCompo.getInspectedEntities()) {
-					InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(e);
+					InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(e);
 					
 					final TextButton btn = new TextButton(inspectableComponent.getTitle(),PopinService.buttonStyle());			
 					// Close listener
@@ -185,14 +185,14 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 
 	private void updateContentForEntity(Entity entity) {
 
-		InspectableComponent inspectableComponent = Mappers.inspectableComponentMapper.get(entity);
+		InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(entity);
 		if (inspectableComponent.isBigPopup()) {
 			// BIG popup mode : inspecting an enemy
 			bigPopin.setVisible(true);
 
 			bigTitle.setText(inspectableComponent.getTitle());
-			EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
-			if (enemyComponent != null && enemyComponent.isAlerted()) {
+			AIComponent aiComponent = Mappers.aiComponent.get(entity);
+			if (aiComponent != null && aiComponent.isAlerted()) {
 				bigTitle.setText(bigTitle.getText() + " ([SCARLET]alerted![])");
 			}
 				

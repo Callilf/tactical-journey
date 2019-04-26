@@ -99,7 +99,7 @@ public class BlessingKawarimi extends Blessing {
 			if (statusReceiverComponent.hasAtLeastOneStatus(StatusDebuffEntangled.class, StatusDebuffStunned.class)) {
 				// If immobilized, do not evade
 				Journal.addEntry("Kawarimi activated but could not avoid the attack since " 
-						+ Mappers.inspectableComponentMapper.get(user).getTitle() 
+						+ Mappers.inspectableComponent.get(user).getTitle() 
 						+ " is immobilized by a status effect.");
 				return true;
 			}

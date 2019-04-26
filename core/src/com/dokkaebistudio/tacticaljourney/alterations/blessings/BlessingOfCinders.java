@@ -64,7 +64,7 @@ public class BlessingOfCinders extends Blessing {
 			
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < getCurrentProcChance(attacker)) {
-				Journal.addEntry("Blessing of cinders inflicted [ORANGE]burning[] to " + Mappers.inspectableComponentMapper.get(target).getTitle());
+				Journal.addEntry("Blessing of cinders inflicted [ORANGE]burning[] to " + Mappers.inspectableComponent.get(target).getTitle());
 				AlterationSystem.addAlterationProc(this);
 
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);

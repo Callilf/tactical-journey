@@ -52,7 +52,7 @@ public class EnemyPangolinBaby extends Enemy {
 		if (mother != null) {
 			EnemyComponent motherEnemyCompo = Mappers.enemyComponent.get(mother);
 			EnemyPangolinMother motherType = (EnemyPangolinMother)motherEnemyCompo.getType();
-			motherType.enrage(mother);
+			motherType.enrage(mother, attacker);
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -243,6 +244,25 @@ public final class TileUtil {
 	
 	
 	/**
+	 * Return the ally entity standing on the tile at the given position.
+	 * @param position the position
+	 * @param engine the engine
+	 * @return The entity standing at this position, null if no entity there.
+	 */
+	public static Entity getAllyEntityOnTile(Vector2 position, Room room) {
+		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(position);
+		if (entitiesAtPosition != null) {
+			for (Entity e : entitiesAtPosition) {
+				if (Mappers.allyComponent.get(e) != null) {
+					return e;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Return the enemy entity standing on the tile at the given position.
 	 * @param position the position
 	 * @param engine the engine
@@ -267,11 +287,20 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Entity getAttackableEntityOnTile(Vector2 position, Room room) {
+	public static Entity getAttackableEntityOnTile(Entity attacker, Vector2 position, Room room) {
+		ComponentMapper<?> cmToUse = null;
+		if (Mappers.allyComponent.has(attacker)) {
+			cmToUse = Mappers.enemyComponent;
+		} else if (Mappers.enemyComponent.has(attacker)) {
+			cmToUse = Mappers.allyComponent;
+		} else {
+			cmToUse = Mappers.healthComponent;
+		}
+		
 		Set<Entity> entitiesAtPosition = room.getEntitiesAtPosition(position);
 		if (entitiesAtPosition != null) {
 			for (Entity e : entitiesAtPosition) {
-				if (Mappers.healthComponent.get(e) != null) {
+				if (cmToUse.get(e) != null) {
 					return e;
 				}
 			}

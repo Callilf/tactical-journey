@@ -45,6 +45,10 @@ public class TurnManager {
 		this.room.setNextState(RoomState.PLAYER_END_TURN);
 	}
 	
+	public void endAllyTurn() {
+		this.room.setNextState(RoomState.ALLY_END_TURN);
+	}
+	
 	public void endEnemyTurn() {
 		this.room.setNextState(RoomState.ENEMY_END_TURN);
 	}

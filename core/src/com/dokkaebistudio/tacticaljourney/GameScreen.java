@@ -66,6 +66,7 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
+import com.dokkaebistudio.tacticaljourney.systems.AllySystem;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ChaliceSystem;
@@ -259,6 +260,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new ExplosionSystem(room, fxStage));
 		engine.addSystem(new CreepSystem(this, room, fxStage));
 		engine.addSystem(new EnemySystem(room, fxStage));
+		engine.addSystem(new AllySystem(room, fxStage));
 		engine.addSystem(new PlayerAttackSystem(fxStage,room, attackWheel));
 		engine.addSystem(new PlayerMoveSystem(room));
 		engine.addSystem(new ItemSystem(	player, room, foregroundFxStage));
@@ -310,6 +312,9 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.removeSystem(oldRoom);
 		engine.addSystem(newRoom);
+		
+		if (oldRoom != null) oldRoom.getAllies().remove(GameScreen.player);
+		newRoom.getAllies().add(GameScreen.player);
 		
 		
 		newRoom.setJustEntered(true);

@@ -66,7 +66,7 @@ public class WheelSystem extends EntitySystem implements RoomSystem {
 		        ImmutableArray<Entity> modifiers = getEngine().getEntitiesFor(Family.all(WheelModifierComponent.class).get());
 		        WheelModifierComponent modifier;
 		        for (Entity e: modifiers) {
-		            modifier = Mappers.wheelModifierComponentMapper.get(e);
+		            modifier = Mappers.wheelModifierComponent.get(e);
 		            // TODO modifiy the wheel
 		            if (modifier.removeCriticalSectors) {
 		                // TODO ...

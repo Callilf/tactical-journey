@@ -93,6 +93,7 @@ public abstract class FloorGenerator {
 			
 			// Create the room
 			Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, chooseRoomType());
+			currentRoom.setOnExitPath(true);
 			roomsPerPosition.put(new Vector2(currX, currY), currentRoom);
 			positionsPerRoom.put(currentRoom, new Vector2(currX, currY));
 
@@ -126,6 +127,14 @@ public abstract class FloorGenerator {
 		Collections.shuffle(values, random.getNextSeededRandom());
 		for (RoomType type : specialRooms) {
 			for (Room r : values) {
+				
+				if (r.getNumberOfNeighbors() > type.getMaxNeighbors() 
+						|| r.getNumberOfNeighbors() < type.getMinNeighbors()
+						|| (!type.isCanBeOnExitPath() && r.isOnExitPath())) {
+					// Uneligible room
+					continue;
+				}
+				
 				if (r.type == RoomType.EMPTY_ROOM || r.type == RoomType.COMMON_ENEMY_ROOM) {
 					r.type = type;
 					break;
@@ -165,7 +174,7 @@ public abstract class FloorGenerator {
 			specialRooms.add(RoomType.CHALICE_ROOM);
 		}
 		randInt = RandomSingleton.getInstance().nextSeededInt(100);
-		if (randInt < 100) {
+		if (randInt < 33) {
 			specialRooms.add(RoomType.MINI_BOSS_ROOM);
 		}
 		

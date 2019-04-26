@@ -4,13 +4,17 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -25,7 +29,7 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 	private Room room;
 	private Entity player;
 	
-	private Label clickAnywhereLabel;
+	private Table clickAnywhereTable;
 	
 	private static InspectModeActionEnum requestedAction = InspectModeActionEnum.NONE;
 	
@@ -43,9 +47,18 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 		this.player = player;
 		this.room = r;
 		
-		this.clickAnywhereLabel = new Label("Click on anything to inspect it", PopinService.hudStyle());
-		clickAnywhereLabel.setPosition(GameScreen.SCREEN_W/2 - clickAnywhereLabel.getWidth()/2, 
-				GameScreen.SCREEN_H/2 - clickAnywhereLabel.getHeight()/2 + GameScreen.BOTTOM_MENU_HEIGHT);
+		this.clickAnywhereTable = new Table();
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinOuterNinePatch);
+		this.clickAnywhereTable.setBackground(ninePatchDrawable);
+		
+		Label l = new Label("Click on anything to inspect it", PopinService.hudStyle());
+		this.clickAnywhereTable.add(l).pad(5, 5, 5, 5);
+		this.clickAnywhereTable.pack();
+		
+		this.clickAnywhereTable.setPosition(GameScreen.SCREEN_W/2 - this.clickAnywhereTable.getWidth()/2, 
+				GameScreen.SCREEN_H/2 - this.clickAnywhereTable.getHeight()/2 + GameScreen.BOTTOM_MENU_HEIGHT);
+
+		this.clickAnywhereTable.addAction(Actions.alpha(0.7f));
 
 	}
 	
@@ -62,7 +75,7 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 			room.setNextState(RoomState.INSPECT_MODE_INIT);
 			requestedAction = InspectModeActionEnum.NONE;
 		} else if (requestedAction == InspectModeActionEnum.DEACTIVATE) {
-			clickAnywhereLabel.remove();
+			clickAnywhereTable.remove();
 			room.setNextState(room.getLastInGameState());
 			requestedAction = InspectModeActionEnum.NONE;
 		}
@@ -70,7 +83,7 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 		if (room.getState() == RoomState.INSPECT_MODE_INIT) {
 		
 			// Click anywhere to inspect
-			fxStage.addActor(clickAnywhereLabel);
+			fxStage.addActor(clickAnywhereTable);
 			room.setNextState(RoomState.INSPECT_MODE);
 			
 		} else if (room.getState() == RoomState.INSPECT_MODE) {
@@ -84,7 +97,7 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 				PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 				playerComponent.addInspectedEntities(inspectableEntities);
 				
-				clickAnywhereLabel.remove();
+				clickAnywhereTable.remove();
 			}
 			
 		

@@ -12,7 +12,6 @@ import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.GoddessStatueAlterationPool;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -20,6 +19,8 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -124,16 +125,18 @@ public final class PlayerFactory {
 		
 		// Attack compo
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(5);
-		attackComponent.setAccuracy(1);
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
 		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMax(1);
+		as.setStrength(5);
+		as.setAttackType(AttackTypeEnum.MELEE);
 		AttackAnimation attackAnimation = new AttackAnimation(
 				AnimationSingleton.getInstance().attack_slash,
 				AnimationSingleton.getInstance().attack_slash_critical, true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		as.setAttackAnimation(attackAnimation);
 		
+		attackComponent.getSkills().add(as);
+		attackComponent.setAccuracy(1);
 		playerEntity.add(attackComponent);
 		
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
@@ -251,9 +254,16 @@ public final class PlayerFactory {
 		// Attack compo
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(10);
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
+		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMax(1);
+		as.setStrength(10);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash,
+				AnimationSingleton.getInstance().attack_slash_critical, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
 		shopKeeperEntity.add(attackComponent);
 		
 		// Shop keeper component

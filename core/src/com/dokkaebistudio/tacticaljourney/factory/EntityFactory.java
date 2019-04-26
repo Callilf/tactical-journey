@@ -14,7 +14,6 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
@@ -25,6 +24,8 @@ import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
@@ -739,10 +740,14 @@ public final class EntityFactory {
 		skillEntity.add(skillMoveComponent);
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
-		attackComponent.setAttackType(type.getAttackType());
-		attackComponent.setRangeMin(type.getRangeMin());
-		attackComponent.setRangeMax(type.getRangeMax());
-		attackComponent.setStrength(type.getStrength());
+		
+		AttackSkill as = new AttackSkill();
+		as.setRangeMin(type.getRangeMin());
+		as.setRangeMax(type.getRangeMax());
+		as.setStrength(type.getStrength());
+		as.setAttackType(type.getAttackType());
+		attackComponent.getSkills().add(as);
+		
 		attackComponent.setAmmoType(type.getAmmosType());
 		attackComponent.setAmmosUsedPerAttack(type.getNbOfAmmosPerAttack());
 		attackComponent.setSkillNumber(skillNumber);
@@ -776,7 +781,7 @@ public final class EntityFactory {
 			
 			AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, 
 					AnimationSingleton.getInstance().attack_slash_critical, true);
-			attackComponent.setAttackAnimation(attackAnimation);
+			as.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
 			break;
 		case 2:
@@ -801,8 +806,9 @@ public final class EntityFactory {
 
 			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().arrow, 
 					AnimationSingleton.getInstance().arrow, true);
-			attackComponent.setAttackAnimation(attackAnimation);
+			as.setAttackAnimation(attackAnimation);
 			attackComponent.setAccuracy(1);
+			attackComponent.setStrengthDifferential(true);
 
 			break;
 		case 3:
@@ -810,13 +816,13 @@ public final class EntityFactory {
 			
 			attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().bomb, 
 					AnimationSingleton.getInstance().bomb, false);
-			attackComponent.setAttackAnimation(attackAnimation);
+			as.setAttackAnimation(attackAnimation);
 
 			break;
 		case 4:
 			playerComponent.setSkillThrow(skillEntity);
 			
-			attackComponent.setAttackAnimation(
+			as.setAttackAnimation(
 					new AttackAnimation(null, null, false));
 
 			break;

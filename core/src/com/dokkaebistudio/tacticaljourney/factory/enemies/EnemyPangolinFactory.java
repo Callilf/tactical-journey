@@ -9,13 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -112,11 +113,17 @@ public final class EnemyPangolinFactory {
 				
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(9);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setName("Headbutt");
+		as.setRangeMax(1);
+		as.setStrength(9);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
+	
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -203,11 +210,17 @@ public final class EnemyPangolinFactory {
 				
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(12);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setName("Headbutt");
+		as.setRangeMax(1);
+		as.setStrength(12);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
+
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

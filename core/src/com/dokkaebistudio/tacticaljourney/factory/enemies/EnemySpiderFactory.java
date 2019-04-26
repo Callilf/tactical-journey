@@ -10,13 +10,14 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -103,11 +104,17 @@ public final class EnemySpiderFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(5);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash, true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setName("Bite");
+		as.setRangeMax(1);
+		as.setStrength(5);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
+		
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -186,13 +193,18 @@ public final class EnemySpiderFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.RANGE);
-		attackComponent.setRangeMin(2);
-		attackComponent.setRangeMax(3);
-		attackComponent.setStrength(3);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().web_projectile, true);
-		attackComponent.setAttackAnimation(attackAnimation);
-
+		
+		AttackSkill as = new AttackSkill();
+		as.setName("Web throw");
+		as.setRangeMin(2);
+		as.setRangeMax(3);
+		as.setStrength(3);
+		as.setAttackType(AttackTypeEnum.RANGE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().web_projectile, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
+		
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
@@ -274,11 +286,16 @@ public final class EnemySpiderFactory {
 		
 		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
 		attackComponent.room = room;
-		attackComponent.setAttackType(AttackTypeEnum.MELEE);
-		attackComponent.setRangeMax(1);
-		attackComponent.setStrength(5);
-		AttackAnimation attackAnimation = new AttackAnimation(AnimationSingleton.getInstance().attack_slash,  true);
-		attackComponent.setAttackAnimation(attackAnimation);
+		
+		AttackSkill as = new AttackSkill();
+		as.setName("Venomous bite");
+		as.setRangeMax(1);
+		as.setStrength(5);
+		as.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		as.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(as);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

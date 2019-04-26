@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -518,7 +518,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			if (spriteComponent.containsPoint(x, y)) {
 				int distance = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord(), destinationPos.coord());
-				if (distance > attackCompo.getRangeMax()) {
+				if (distance > attackCompo.getMainSkill().getRangeMax()) {
 					
 					//Select a tile close enough to attack
 					for (Entity movableTile : moveCompo.movableTiles) {
@@ -526,7 +526,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 						// TODO improve the tile selection later
 						GridPositionComponent movableTilePos = Mappers.gridPositionComponent.get(movableTile);
 						int dist = TileUtil.getDistanceBetweenTiles(movableTilePos.coord(), destinationPos.coord());
-						if (dist >= attackCompo.getRangeMin() && dist <= attackCompo.getRangeMax()) {
+						if (dist >= attackCompo.getMainSkill().getRangeMin() && dist <= attackCompo.getMainSkill().getRangeMax()) {
 							// Select this tile
 							moveCompo.setSelectedAttackTile(tile);
 							return selectTileAndBuildWaypoints(moverEntity, movableTilePos);

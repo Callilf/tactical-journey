@@ -13,8 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
@@ -121,31 +122,30 @@ public class EnemyActionSelector {
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 
-		if (shortestDistance == attackComponent.getRangeMax()) {
+		if (shortestDistance == attackComponent.getActiveSkill().getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {
 			if (target != null) {
-				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-				shortestDistance = -1;
-				
-		    	for (Entity t : moveComponent.movableTiles) {
-		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
-		    		if (selectedTile == null 
-		    				|| (shortestDistance > attackComponent.getRangeMax() && distance < shortestDistance)
-		    				|| (shortestDistance <= attackComponent.getRangeMax() && distance > shortestDistance)) {
-		    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
-		    				continue;
-		    			}
-		    			
-		    			selectedTile = t;
-		    			shortestDistance = distance;
-		    		}
-		    		
-		    		if (shortestDistance == attackComponent.getRangeMax()) {
-		    			break;
-		    		}
-		    	}
+				selectedTile = getSelectedTileForMaxDamage(enemyEntity, target, room);
+
+				if (selectedTile == null) {
+					// No enemy in range, just move without attacking
+					GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+					shortestDistance = -1;
+					
+			    	for (Entity t : moveComponent.movableTiles) {
+			    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+			    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
+			    		if (selectedTile == null || distance < shortestDistance) {
+			    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
+			    				continue;
+			    			}
+			    			
+			    			selectedTile = t;
+			    			shortestDistance = distance;
+			    		}
+			    	}
+				}
 			} else {
 				//No target, move randomly
 				selectedTile = moveRandomly(enemyEntity, room, moveComponent);				
@@ -256,7 +256,7 @@ public class EnemyActionSelector {
 	    				continue;
 	    			}
 	    			
-					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, enemyEntity, room, true);
+					Set<Tile> searchAttackTiles = atss.searchAttackEntitiesFromOnePosition(t, attackComponent.getActiveSkill(), room, true);
 					if (!searchAttackTiles.isEmpty()) {
 		    			selectedTile = t;
 		    			selectedDistance = distance;
@@ -305,28 +305,11 @@ public class EnemyActionSelector {
 			}
 		}
 		
-		if (shortestDistance == attackComponent.getRangeMax()) {
+		if (shortestDistance == attackComponent.getActiveSkill().getRangeMax()) {
 			//Already facing the player, don't need to move.
 		} else {
 			if (target != null) {
-				GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-				
-				int currentDistance = -1;
-		    	for (Entity t : moveComponent.movableTiles) {
-		    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
-		    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
-		    		if (distance >= attackComponent.getRangeMin() && distance <= attackComponent.getRangeMax()) {
-		    			if (getOrbHeuristic(tilePos.coord(), enemyEntity, room) > 0) {
-		    				continue;
-		    			}
-		    			
-		    			if (distance > currentDistance) {
-		    				selectedTile = t;
-		    				currentDistance = distance;
-		    			}
-		    			if (distance == attackComponent.getRangeMax()) break;
-		    		}
-		    	}
+				selectedTile = getSelectedTileForMaxDamage(enemyEntity, target, room);
 		    	
 		    	if (selectedTile == null) {
 		    		//No target in range, move randomly
@@ -354,4 +337,43 @@ public class EnemyActionSelector {
 		}
 		return 0;
 	}
+	
+	
+	
+	public static Entity getSelectedTileForMaxDamage(Entity attacker, Entity target, Room room) {
+		Entity selectedTile = null;
+		
+		MoveComponent moveComponent = Mappers.moveComponent.get(attacker);
+		AttackComponent attackComponent = Mappers.attackComponent.get(attacker);
+		GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+		
+		int currentDistance = -1;
+		for (AttackSkill as : attackComponent.getSkills()) {
+			if (!as.isActive()) continue;
+
+	    	for (Entity t : moveComponent.movableTiles) {
+	    		GridPositionComponent tilePos = Mappers.gridPositionComponent.get(t);
+	    		int distance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), tilePos.coord());
+    		
+	    		if (distance >= as.getRangeMin() && distance <= as.getRangeMax()) {
+	    			if (getOrbHeuristic(tilePos.coord(), attacker, room) > 0) {
+	    				continue;
+	    			}
+	    			
+	    			if (distance > currentDistance) {
+	    				selectedTile = t;
+	    				attackComponent.setActiveSkill(as);
+	    				currentDistance = distance;
+	    			}
+	    			if (distance == as.getRangeMax()) break;
+	    		
+	    		}
+	    	}
+	    	
+			if (selectedTile != null) break;
+		}
+		
+    	return selectedTile;
+	}
+	
 }

@@ -18,6 +18,9 @@ public class AttackSkill {
 	
 	/** Whether this component is active or not. */
 	private boolean active = true;
+	
+	/** The attack name, displayed in the inspect popin. */
+	private String name;
 
 	/** The type of attack (MELEE, RANGE, THROW...). */
 	private AttackTypeEnum attackType;
@@ -130,7 +133,14 @@ public class AttackSkill {
 		this.attackAnimation = attackAnimation;
 	}
 	
-	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	
 	
 	public static Serializer<AttackSkill> getSerializer(final PooledEngine engine) {
@@ -140,6 +150,7 @@ public class AttackSkill {
 			public void write(Kryo kryo, Output output, AttackSkill object) {
 				
 				output.writeBoolean(object.active);
+                output.writeString(object.name);
                 output.writeString(object.attackType.name());
 
                 // Range
@@ -162,7 +173,7 @@ public class AttackSkill {
 			public AttackSkill read(Kryo kryo, Input input, Class<AttackSkill> type) {
 				AttackSkill as = new AttackSkill();
 				as.active = input.readBoolean();
-				
+				as.name = input.readString();
 				as.attackType = AttackTypeEnum.valueOf(input.readString());
                 
 				as.rangeMin = input.readInt();

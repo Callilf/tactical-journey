@@ -131,7 +131,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         			attackTileSearchService.buildAttackTilesSet(enemyEntity, room, true, false);
         		}
         		moveCompo.hideMovableTiles();
-        		attackCompo.hideAttackableTiles();
+        		if (attackCompo != null) attackCompo.hideAttackableTiles();
         		room.setNextState(RoomState.ENEMY_MOVE_TILES_DISPLAYED);
         		
         		break;

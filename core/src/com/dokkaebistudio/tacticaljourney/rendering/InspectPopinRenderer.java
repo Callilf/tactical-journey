@@ -1,8 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -26,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -62,10 +60,9 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
     private Table bigPopin;
     private Label bigTitle;
     private Label bigDesc;
+    private Table bigAttackTable;
     private Label bigStats;
 	private Table statusTable;
-	private Map<Status, Table> statusesMap;
-
         
     
     
@@ -201,6 +198,7 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 				
 			bigDesc.setText(inspectableComponent.getDescription());
 			
+			
 			StringBuilder sb = new StringBuilder();
 			HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 			if (healthComponent != null) {
@@ -209,29 +207,43 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 				sb.append("Armor: " + healthComponent.getArmorColor() + healthComponent.getArmor() + "[]/" + healthComponent.getMaxArmor());
 				sb.append("\n");
 			}
-			
-			AttackComponent attackComponent = Mappers.attackComponent.get(entity);
-			if (attackComponent != null) {
-				sb.append("Strength: " + attackComponent.getActiveSkill().getStrength());
-				sb.append("  -  ");
-			}
-			
 			MoveComponent moveComponent = Mappers.moveComponent.get(entity);
 			if (moveComponent != null) {
 				sb.append("Move: " + moveComponent.getMoveSpeed());
-				sb.append("  -  ");
 			}
-			
-			if (attackComponent != null) {
-				if (attackComponent.getRangeMin() != attackComponent.getRangeMax()) {
-					sb.append("Range: " + attackComponent.getRangeMin() + "-" + attackComponent.getRangeMax());
-				} else {
-					sb.append("Range: " + attackComponent.getRangeMin());
-				}
-				sb.append("\n");
-			}
-			
 			bigStats.setText(sb.toString());
+
+			
+			
+			// TODO : all attack skills
+			bigAttackTable.clear();
+			AttackComponent attackComponent = Mappers.attackComponent.get(entity);
+			if (attackComponent != null) {
+				for (AttackSkill as : attackComponent.getSkills()) {
+					if (as.getName() == null) continue;
+					Table skillTable = new Table();
+					
+					Label attackName = new Label(as.getName() + " | ", PopinService.hudStyle());
+					skillTable.add(attackName).left().align(Align.center).pad(5, 5, 5, 0);
+					
+					Label attackStrength = new Label("Damage: " + as.getStrength() + " | ", PopinService.hudStyle());
+					skillTable.add(attackStrength).left().align(Align.left).pad(5, 5, 5, 0);
+
+					Label attackRange = new Label("Range", PopinService.hudStyle());
+					if (as.getRangeMin() != as.getRangeMax()) {
+						attackRange.setText("Range: " + as.getRangeMin() + "-" + as.getRangeMax());
+					} else {
+						attackRange.setText("Range: " + as.getRangeMin());
+					}
+					skillTable.add(attackRange).left().align(Align.left).pad(5, 5, 5, 0);
+					
+					bigAttackTable.add(skillTable).left().padBottom(5);
+					bigAttackTable.row();
+				}
+			}
+
+			
+			
 			
 			statusTable.clear();
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
@@ -369,14 +381,18 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 		bigPopin.add(bigStats).growY().width(900).left().pad(20, 20, 0, 20);
 		bigPopin.row();
 		
-		// 4 - Status effects
-		statusesMap = new HashMap<>();
+		// 4 - Attack skills
+		bigAttackTable = new Table();
+		bigPopin.add(bigAttackTable).growY().width(900).left().pad(0, 20, 0, 20);
+		bigPopin.row();
+		
+		// 5 - Status effects
 		statusTable = new Table();
 		bigPopin.add(statusTable).growY().width(900).left().pad(20, 20, 0, 20);
 		bigPopin.row();
 
 		
-		// 5 - Action buttons
+		// 6 - Action buttons
 		Table buttonTable = new Table();
 		final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
 		// Close listener

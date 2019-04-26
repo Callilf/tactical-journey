@@ -115,6 +115,7 @@ public final class EnemyPangolinFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Headbutt");
 		as.setRangeMax(1);
 		as.setStrength(9);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -211,6 +212,7 @@ public final class EnemyPangolinFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Headbutt");
 		as.setRangeMax(1);
 		as.setStrength(12);
 		as.setAttackType(AttackTypeEnum.MELEE);

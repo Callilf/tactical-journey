@@ -106,6 +106,7 @@ public final class EnemySpiderFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Bite");
 		as.setRangeMax(1);
 		as.setStrength(5);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -194,6 +195,7 @@ public final class EnemySpiderFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Web throw");
 		as.setRangeMin(2);
 		as.setRangeMax(3);
 		as.setStrength(3);
@@ -286,6 +288,7 @@ public final class EnemySpiderFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Venomous bite");
 		as.setRangeMax(1);
 		as.setStrength(5);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -293,6 +296,7 @@ public final class EnemySpiderFactory {
 				AnimationSingleton.getInstance().attack_slash, true);
 		as.setAttackAnimation(attackAnimation);
 		attackComponent.getSkills().add(as);
+		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
 		enemyEntity.add(solidComponent);

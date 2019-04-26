@@ -151,6 +151,7 @@ public final class EnemyFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Sting");
 		as.setRangeMax(1);
 		as.setStrength(10);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -255,6 +256,7 @@ public final class EnemyFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Stinger charge");
 		as.setRangeMax(1);
 		as.setStrength(6);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -363,6 +365,7 @@ public final class EnemyFactory {
 		attackComponent.room = room;
 		
 		AttackSkill meleeSkill = new AttackSkill();
+		meleeSkill.setName("Katana slash");
 		meleeSkill.setRangeMax(1);
 		meleeSkill.setStrength(8);
 		meleeSkill.setAttackType(AttackTypeEnum.MELEE);
@@ -372,6 +375,7 @@ public final class EnemyFactory {
 		attackComponent.getSkills().add(meleeSkill);
 		
 		AttackSkill rangeSkill = new AttackSkill();
+		rangeSkill.setName("Shuriken throw");
 		rangeSkill.setRangeMin(2);
 		rangeSkill.setRangeMax(5);
 		rangeSkill.setStrength(5);
@@ -383,6 +387,7 @@ public final class EnemyFactory {
 		
 		
 		AttackSkill throwSkill = new AttackSkill();
+		throwSkill.setName("Smokebomb throw");
 		throwSkill.setActive(false);
 		throwSkill.setRangeMin(2);
 		throwSkill.setRangeMax(5);

@@ -162,8 +162,9 @@ public enum RoomState {
 	 */
 	public boolean canOpenInventory() {
 		return this == RoomState.PLAYER_MOVE_TILES_DISPLAYED
-    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED;
-    			
+    			|| this == RoomState.PLAYER_MOVE_DESTINATION_SELECTED
+    			|| this == RoomState.INSPECT_MODE
+    			|| this == RoomState.PROFILE_POPIN;
 	}
 	
 	/**

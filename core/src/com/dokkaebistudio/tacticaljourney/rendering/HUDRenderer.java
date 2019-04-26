@@ -519,6 +519,9 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				public void changed(ChangeEvent event, Actor actor) {
 					inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
+					if (playerComponent.isProfilePopinDisplayed()) {
+						InspectSystem.requestAction(InspectModeActionEnum.DEACTIVATE);
+					}
 				}
 			});
 			// P to open profile
@@ -559,6 +562,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 					} else {
 						if (room.getState().canOpenInventory()) {
 							inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.INVENTORY);
+							InspectSystem.requestAction(InspectModeActionEnum.DEACTIVATE);
 						}
 					}
 				}
@@ -594,6 +598,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (inspectBtn.isChecked()) {
+						playerComponent.setProfilePopinDisplayed(false);
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 						InspectSystem.requestAction(InspectModeActionEnum.ACTIVATE);
 					} else {
 						InspectSystem.requestAction(InspectModeActionEnum.DEACTIVATE);

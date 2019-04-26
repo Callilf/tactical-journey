@@ -124,6 +124,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Thrust");
 		as.setRangeMax(2);
 		as.setStrength(7);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -220,6 +221,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Shield bash");
 		as.setRangeMax(1);
 		as.setStrength(6);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -319,6 +321,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Rock throw");
 		as.setRangeMax(3);
 		as.setStrength(3);
 		as.setAttackType(AttackTypeEnum.RANGE);
@@ -420,6 +423,7 @@ public final class EnemyTribesmenFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
+		as.setName("Rock throw");
 		as.setRangeMax(3);
 		as.setStrength(3);
 		as.setAttackType(AttackTypeEnum.RANGE);

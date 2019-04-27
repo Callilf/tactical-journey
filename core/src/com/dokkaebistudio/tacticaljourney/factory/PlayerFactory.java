@@ -41,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
@@ -224,7 +225,7 @@ public final class PlayerFactory {
 	 * @param pos the position
 	 * @return the clone entity
 	 */
-	public Entity createPlayerClone(Room room, Vector2 position) {
+	public Entity createPlayerClone(Room room, Vector2 position, Entity parent) {
 		Entity cloneEntity = engine.createEntity();
 		cloneEntity.flags = EntityFlagEnum.ALLY_CLONE.getFlag();
 		
@@ -328,7 +329,13 @@ public final class PlayerFactory {
 		// Orb carrier
 		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
 		cloneEntity.add(orbCarrierCompo);
-
+		
+		if (parent != null) {
+			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+			parentCompo.setParent(parent);
+			cloneEntity.add(parentCompo);
+		}
+		
 		room.addAlly(cloneEntity);
 		return cloneEntity;
 	}

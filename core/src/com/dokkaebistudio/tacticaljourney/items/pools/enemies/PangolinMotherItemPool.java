@@ -19,7 +19,7 @@ public class PangolinMotherItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
 		
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PANGOLIN_SCALE, 1));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PANGOLIN_SCALE, 1, true));
 	}
 	
 

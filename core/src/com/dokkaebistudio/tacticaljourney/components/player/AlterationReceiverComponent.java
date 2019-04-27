@@ -353,6 +353,34 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		}
 	}
 	
+	/**
+	 * Checks whether the entity has the given blessing.
+	 * @param blessingClass the blessing class to test
+	 * @return true if the entity has this blessing
+	 */
+	public Blessing getBlessing(Class blessingClass) {
+		for (Blessing b : this.blessings) {
+			if (b.getClass().equals(blessingClass)) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Checks whether the entity has the given curse.
+	 * @param curseClass the blessing class to test
+	 * @return true if the entity has this curse
+	 */
+	public boolean hasCurse(Class curseClass) {
+		for (Curse c : this.curses) {
+			if (c.getClass().equals(curseClass)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void sort() {
 		Collections.sort(blessings, comparator);
 		Collections.sort(curses, comparator);

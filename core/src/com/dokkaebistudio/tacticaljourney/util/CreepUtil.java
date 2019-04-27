@@ -16,7 +16,16 @@ import com.dokkaebistudio.tacticaljourney.room.Tile;
  * @author Callil
  *
  */
-public class FireUtil {
+public class CreepUtil {
+	
+	public static boolean canSpawnWeb(Vector2 pos, Room room) {
+		boolean canSpawnWeb = true;
+
+		Tile tile = TileUtil.getTileAtGridPos(pos, room);
+		canSpawnWeb = tile.isThrowable(null);
+		
+		return canSpawnWeb;
+	}
 
 	public static boolean canCatchFire(Vector2 pos, Room room) {
 		boolean canCatchFire = true;

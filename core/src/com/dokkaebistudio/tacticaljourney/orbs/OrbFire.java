@@ -12,7 +12,7 @@ import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
-import com.dokkaebistudio.tacticaljourney.util.FireUtil;
+import com.dokkaebistudio.tacticaljourney.util.CreepUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
@@ -124,7 +124,7 @@ public class OrbFire extends Orb {
 	}
 
 	private boolean addOneFire(PoolableVector2 pos, Room room, Entity user) {
-		if (FireUtil.canCatchFire(pos, room)) {
+		if (CreepUtil.canCatchFire(pos, room)) {
 			room.entityFactory.creepFactory.createFire(room, pos, user);
 			pos.free();
 			return true;

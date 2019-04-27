@@ -18,7 +18,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffBurning;
-import com.dokkaebistudio.tacticaljourney.util.FireUtil;
+import com.dokkaebistudio.tacticaljourney.util.CreepUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -82,7 +82,7 @@ public class ItemFirePotion extends AbstractItem {
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
 		for (Tile tile : adjacentTiles) {
 			if (tile.isThrowable(thrower)) {
-				boolean canCatchFire = FireUtil.canCatchFire(tile.getGridPos(), room);
+				boolean canCatchFire = CreepUtil.canCatchFire(tile.getGridPos(), room);
 				if (canCatchFire) {
 					room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), thrower);
 				}

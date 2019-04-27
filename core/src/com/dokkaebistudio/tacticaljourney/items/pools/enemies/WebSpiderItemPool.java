@@ -36,6 +36,8 @@ public class WebSpiderItemPool extends ItemPool {
 
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10));
+		
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SILKY_BEARD, 1, true));	
 	}
 	
 	

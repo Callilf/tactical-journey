@@ -8,6 +8,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -63,7 +64,7 @@ public class BlessingBunshin extends Blessing {
 			for (Tile t : adjacentTiles) {
 				if (t.isWalkable(entity) && TileUtil.getSolidEntityOnTile(t.getGridPos(), room) == null) {
 					BlessingKawarimi.createSmokeEffect(t.getGridPos());
-					Entity clone = room.entityFactory.playerFactory.createPlayerClone(room, t.getGridPos());
+					Entity clone = room.entityFactory.playerFactory.createPlayerClone(room, t.getGridPos(), GameScreen.player);
 					
 					
 					AIComponent aiComponent = Mappers.aiComponent.get(clone);

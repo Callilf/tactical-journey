@@ -10,9 +10,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
@@ -122,6 +122,8 @@ public class CreepFire extends Creep {
 	
 	@Override
 	public void onAppear(Entity creep, Room room) {
+		super.onAppear(creep, room);
+		
 		ParentEntityComponent parentEntityCompo = Mappers.parentEntityComponent.get(creep);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(creep);
@@ -146,7 +148,7 @@ public class CreepFire extends Creep {
 				
 				Image destroyedTexture = flammableComponent.getDestroyedTexture(gridPositionComponent.getWorldPos());
 				if (destroyedTexture != null) {
-					room.floor.getGameScreen().fxStage.addActor(destroyedTexture);
+					GameScreen.fxStage.addActor(destroyedTexture);
 				}
 				
 				room.removeEntity(flammable);

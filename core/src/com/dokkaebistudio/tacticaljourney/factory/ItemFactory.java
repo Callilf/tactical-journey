@@ -40,6 +40,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPowderFlask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRightJikatabi;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemShinobiHeadband;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemSilkyBeard;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
@@ -325,6 +326,10 @@ public final class ItemFactory {
 			
 		case SHINOBI_HEADBAND:
 			item = createItemBase(room, tilePos,  new ItemShinobiHeadband(), EntityFlagEnum.ITEM_INFUSABLE);
+			break;
+			
+		case SILKY_BEARD:
+			item = createItemBase(room, tilePos,  new ItemSilkyBeard(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 		case PANGOLIN_SCALE:

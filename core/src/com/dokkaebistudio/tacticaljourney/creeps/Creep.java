@@ -3,9 +3,15 @@
  */
 package com.dokkaebistudio.tacticaljourney.creeps;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * @author Callil
@@ -55,7 +61,18 @@ public abstract class Creep {
 	public void onEndTurn(Entity creep, Room room) {};
 	
 	/** Called when the creep is added to the game. */
-	public void onAppear(Entity creep, Room room) {};
+	public void onAppear(Entity creep, Room room) {
+		
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(creep);
+		Set<Entity> entitiesWithComponentOnTile = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), CreepComponent.class, room);
+		for (Entity c : entitiesWithComponentOnTile) {
+			if (creep == c) continue;
+			
+			//Remove previous creeps
+			room.removeEntity(c);
+		}
+		
+	};
 	
 	/** Called when the creep disappears from the game. */
 	public void onDisappear(Entity creep, Room room) {};

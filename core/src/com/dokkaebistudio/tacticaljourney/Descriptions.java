@@ -270,6 +270,9 @@ public class Descriptions {
 	
 	public static final String ITEM_SHINOBI_HEADBAND_TITLE = "Shinobi headband";
 	public static final String ITEM_SHINOBI_HEADBAND_DESCRIPTION = "A headband that once belonged to a shinobi. Grants the Bunshin no jutsu blessing and the Curse of the shinobi while held in the inventory.";
+	
+	public static final String ITEM_SILKY_BEARD_TITLE = "Silky beard";
+	public static final String ITEM_SILKY_BEARD_DESCRIPTION = "A beard of an peculiar boy that once lived inside a spider. Or is it the beard of the spider that once ate a young boy ? Grants the blessing of the indegistible while held in the inventory.";
 
 	
 }

@@ -14,7 +14,6 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -290,7 +289,9 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 				gridPositionComponent.coord(eastOrb, (int)finalPos.x + 1, (int)finalPos.y, this.room);
 			}
 			
-			OrbUtil.checkContact(orb, this.room);
+			if (this.room != null) {
+				OrbUtil.checkContact(orb, this.room);
+			}
 		}
 	}
 	

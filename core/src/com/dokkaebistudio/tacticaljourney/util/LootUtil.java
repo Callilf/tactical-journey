@@ -115,9 +115,10 @@ public class LootUtil {
 		
 		if (rarity != null) {
 			List<PooledItemDescriptor> itemTypes = itemPool.getItemTypes(1, rarity, random);
-			PooledItemDescriptor itemType = itemTypes.get(0);
-			
-			return entityFactory.itemFactory.createItem(itemType.getType(), null, null, random);
+			if (!itemTypes.isEmpty()) {
+				PooledItemDescriptor itemType = itemTypes.get(0);
+				return entityFactory.itemFactory.createItem(itemType.getType(), null, null, random);
+			}
 		}
 		
 		return null;

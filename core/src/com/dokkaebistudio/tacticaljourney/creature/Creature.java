@@ -48,7 +48,7 @@ public abstract class Creature {
 		Mappers.aiComponent.get(creature).setAlerted(false, creature, null);
 	}
 	
-	public void onAlerted(Entity creature, Entity player, Room room) {}
+	public void onAlerted(Entity creature, Entity target, Room room) {}
 	
 	
 	public void onRoomCleared(Entity creature, Room room) {}

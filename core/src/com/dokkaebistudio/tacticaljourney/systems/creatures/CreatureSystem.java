@@ -199,11 +199,13 @@ public abstract class CreatureSystem extends EntitySystem implements RoomSystem 
         		if (moveCompo.moving) {
 	        		MovementHandler.finishRealMovement(creatureEntity, room);
 	    	    	moveCompo.clearMovableTiles();
-	
-	        		if (attackCompo != null) attackCompo.clearAttackableTiles();
-	        		if (attackCompo != null) attackTileSearchService.buildAttackTilesSet(creatureEntity, room, true, false);
         		}
         		moveCompo.clearMovableTiles();
+        		if (attackCompo != null) {
+        			attackCompo.clearAttackableTiles();
+        			attackTileSearchService.buildAttackTilesSet(creatureEntity, room, true, false);
+        		}
+
 
     	    	room.setCreatureState(RoomCreatureState.ATTACK);
 

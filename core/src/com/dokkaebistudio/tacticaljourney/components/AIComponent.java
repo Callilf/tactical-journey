@@ -219,7 +219,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	public void setAlerted(boolean alerted, Entity enemy, Entity target) {
 		if (!this.alerted && alerted && enemy != null) {
 			//First time alerted
-			this.type.onAlerted(enemy, GameScreen.player, room);
+			this.type.onAlerted(enemy, target, room);
 		}
 		
 		this.alerted = alerted;

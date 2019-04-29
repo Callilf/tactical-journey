@@ -99,7 +99,7 @@ public class EnemyShinobi extends Creature {
 	
 	
 	@Override
-	public void onAlerted(Entity enemy, Entity player, Room room) {
+	public void onAlerted(Entity enemy, Entity target, Room room) {
 		sleeping = false;
 	}
 	

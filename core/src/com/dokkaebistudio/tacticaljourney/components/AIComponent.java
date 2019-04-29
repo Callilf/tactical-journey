@@ -4,13 +4,14 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
@@ -49,7 +50,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	private boolean alerted = false;
 	
 	/** The displayer that shows the the alerted state. */
-	private Entity alertedDisplayer;
+	private Label alertedMarker = new Label("", PopinService.hudStyle());
 	
 	/** The target this enemy is focusing on. */
 	private Entity target;
@@ -65,10 +66,10 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	
 	@Override
 	public void reset() {
-		if (alertedDisplayer != null) {
-			room.removeEntity(alertedDisplayer);		
+		if (alertedMarker != null) {
+			alertedMarker.setText("");
+			alertedMarker.remove();		
 		}
-		alertedDisplayer = null;
 		setAlerted(false, null, null);
 		subSystem = null;
 		turnOver = false;
@@ -77,13 +78,14 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	
 	
 	public void showMarker(Entity ally) {
-//		GameScreen.fxStage.addActor(marker);
-//		this.place(Mappers.gridPositionComponent.get(ally).coord());
+		GameScreen.fxStage.addActor(alertedMarker);
+		this.place(Mappers.gridPositionComponent.get(ally).coord());
 	}
 	
 	public void hideMarker() {
-//		marker.remove();
+		alertedMarker.remove();
 	}
+	
 	
 	
 	
@@ -92,17 +94,12 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void initiateMovement(Vector2 currentPos) {
-		
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
-			//Add the tranfo component to the entity to perform real movement on screen
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(currentPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 
@@ -110,10 +107,9 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
-		if (alertedDisplayer != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			gridPositionComponent.absolutePos((int)(gridPositionComponent.getAbsolutePos().x + xOffset), 
-					(int)(gridPositionComponent.getAbsolutePos().y + yOffset));
+		if (alertedMarker != null) {
+			alertedMarker.layout();
+			alertedMarker.setPosition(alertedMarker.getX() + xOffset, alertedMarker.getY() + yOffset);
 		}
 	}
 
@@ -121,29 +117,23 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void endMovement(Vector2 finalPos) {
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(finalPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(tilePos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 	
@@ -241,28 +231,22 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 			this.target = target;
 		}
 		
-		if (alertedDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			if (textComponent != null && gridPositionComponent != null) {
-				String color = "[WHITE]";
-				if (this.target != GameScreen.player) {
-					color = "[GREEN]";
-				}
-				
-				textComponent.setText(this.alerted ? color + "!!" : "");
-				
-				this.place(gridPositionComponent.coord());
+		if (alertedMarker != null) {
+			String color = "[WHITE]";
+			if (this.target != GameScreen.player) {
+				color = "[GREEN]";
+			}
+			
+			alertedMarker.setText(this.alerted ? color + "!!" : "");
+			alertedMarker.layout();
+			if (enemy != null) {
+				this.place(Mappers.gridPositionComponent.get(enemy).coord());
 			}
 		}
 	}
 
-	public Entity getAlertedDisplayer() {
-		return alertedDisplayer;
-	}
-
-	public void setAlertedDisplayer(Entity alertedDisplayer) {
-		this.alertedDisplayer = alertedDisplayer;
+	public Label getAlertedMarker() {
+		return alertedMarker;
 	}
 
 	public CreatureSubSystem getSubSystem() {
@@ -312,7 +296,6 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				output.writeString(object.basicMoveStrategy.name());
 				output.writeString(object.alertedMoveStrategy.name());
 
-				kryo.writeClassAndObject(output, object.alertedDisplayer);
 				kryo.writeClassAndObject(output, object.target);
 				output.writeBoolean(object.alerted);
 			}
@@ -329,10 +312,8 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				compo.basicMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				compo.alertedMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				
-				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
 				compo.target = (Entity) kryo.readClassAndObject(input);
 				compo.setAlerted(input.readBoolean(), null, compo.target);
-//				engine.addEntity(compo.alertedDisplayer);
 				
 				return compo;
 			}

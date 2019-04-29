@@ -266,8 +266,6 @@ public final class PlayerFactory {
 		aiComponent.setType(new AllyClone());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.entityFactory.createTextOnTile(position, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		cloneEntity.add(aiComponent);
 		
 		// Humanoid

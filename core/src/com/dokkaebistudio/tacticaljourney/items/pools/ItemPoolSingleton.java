@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.Ammo
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.GoldenVaseItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.StatueItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VineBushItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenScoutItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.tribesmen.TribesmenShieldItemPool;
@@ -58,6 +59,7 @@ public class ItemPoolSingleton {
 	public GoldenVaseItemPool goldenVase = new GoldenVaseItemPool();
 	public WallItemPool wall = new WallItemPool();
 	public StatueItemPool statue = new StatueItemPool();
+	public VineBushItemPool vineBush = new VineBushItemPool();
 	
 	// ENEMIES
 	public SpiderItemPool spider = new SpiderItemPool();
@@ -91,6 +93,7 @@ public class ItemPoolSingleton {
 		allItemPools.add(goldenVase);
 		allItemPools.add(wall);
 		allItemPools.add(statue);
+		allItemPools.add(vineBush);
 		
 		// Enemies
 		allItemPools.add(spider);

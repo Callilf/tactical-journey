@@ -48,7 +48,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
@@ -203,7 +203,7 @@ public final class EntityFactory {
     	wallEntity.add(destructibleCompo);
     	
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new WallItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().wall);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 2);
 		dropRate.add(ItemPoolRarity.COMMON, 90);

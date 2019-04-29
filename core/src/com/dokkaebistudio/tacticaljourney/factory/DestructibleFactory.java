@@ -20,9 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarit
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.GoldenVaseItemPool;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -98,7 +96,7 @@ public final class DestructibleFactory {
 			
 			
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new VaseItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().vase);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		dropRate.add(ItemPoolRarity.COMMON, 50);
@@ -121,7 +119,7 @@ public final class DestructibleFactory {
 					Assets.destructible_golden_vase, Assets.destructible_vase_destroyed);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new GoldenVaseItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().goldenVase);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 10);
 		dropRate.add(ItemPoolRarity.COMMON, 90);
@@ -147,7 +145,7 @@ public final class DestructibleFactory {
 		destructibleComponent.setDestroyableWithWeapon(true);	
 
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(new AmmoCrateItemPool());
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().ammoCrate);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 5);
 		dropRate.add(ItemPoolRarity.COMMON, 80);

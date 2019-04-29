@@ -12,11 +12,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
@@ -118,6 +120,10 @@ public class Floor {
 				if (e == GameScreen.player) continue;
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				if (statusReceiverComponent != null) statusReceiverComponent.hideStatusTable();
+				AIComponent aiComponent = Mappers.aiComponent.get(e);
+				if (aiComponent != null) aiComponent.hideMarker();
+				AllyComponent allyComponent = Mappers.allyComponent.get(e);
+				if (allyComponent != null) allyComponent.hideMarker();
 				
 				StatueComponent statueCompo = Mappers.statueComponent.get(e);
 				if (statueCompo != null && statueCompo.getHolyAura() != null) statueCompo.getHolyAura().remove();
@@ -130,7 +136,11 @@ public class Floor {
 			if (e == GameScreen.player) continue;
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 			if (statusReceiverComponent != null) statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
-			
+			AIComponent aiComponent = Mappers.aiComponent.get(e);
+			if (aiComponent != null) aiComponent.showMarker(e);
+			AllyComponent allyComponent = Mappers.allyComponent.get(e);
+			if (allyComponent != null) allyComponent.showMarker(e);
+
 			StatueComponent statueCompo = Mappers.statueComponent.get(e);
 			if (statueCompo != null && statueCompo.getHolyAura() != null) GameScreen.fxStage.addActor(statueCompo.getHolyAura());
 			ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(e);

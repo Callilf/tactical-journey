@@ -76,6 +76,17 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	
 	
 	
+	public void showMarker(Entity ally) {
+//		GameScreen.fxStage.addActor(marker);
+//		this.place(Mappers.gridPositionComponent.get(ally).coord());
+	}
+	
+	public void hideMarker() {
+//		marker.remove();
+	}
+	
+	
+	
 	//**************************************
 	// Movement
 

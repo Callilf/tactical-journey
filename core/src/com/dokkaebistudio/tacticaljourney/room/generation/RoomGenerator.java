@@ -344,7 +344,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.playerFactory.createPlayerClone(room, new Vector2(11,10), GameScreen.player);
+//			entityFactory.playerFactory.createPlayerClone(room, new Vector2(11,10), GameScreen.player);
 //			entityFactory.creepFactory.createFire(room, new Vector2(11,10), null);
 //			entityFactory.creepFactory.createPoison(room, new Vector2(11,11), null);
 //			entityFactory.enemyFactory.createSpider(room, new Vector2(15,6));

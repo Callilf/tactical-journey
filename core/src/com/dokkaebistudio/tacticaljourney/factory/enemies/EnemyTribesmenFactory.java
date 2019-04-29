@@ -145,8 +145,6 @@ public final class EnemyTribesmenFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(13);
 		healthComponent.setHp(13);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -241,7 +239,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(13);
 		healthComponent.setHp(13);
 		healthComponent.setMaxArmor(7);
@@ -342,7 +339,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		healthComponent.setMaxArmor(0);
@@ -445,7 +441,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(5);
 		healthComponent.setMaxArmor(0);

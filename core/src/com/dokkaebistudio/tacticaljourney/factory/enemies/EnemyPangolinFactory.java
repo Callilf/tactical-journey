@@ -137,7 +137,6 @@ public final class EnemyPangolinFactory {
 		healthComponent.setMaxHp(12);
 		healthComponent.setHp(12);
 		healthComponent.setMaxArmor(20);
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -232,7 +231,6 @@ public final class EnemyPangolinFactory {
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
 		healthComponent.addResistance(DamageType.EXPLOSION, 75);
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(20);
 		healthComponent.setHp(20);
 		healthComponent.setMaxArmor(50);

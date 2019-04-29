@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -22,17 +23,18 @@ import com.esotericsoftware.kryo.io.Output;
  * @author Callil
  *
  */
-public class AllyComponent implements Component, Poolable, MovableInterface {
+public class AllyComponent implements Component, Poolable, MovableInterface, MarkerInterface {
 
 	private Image marker = new Image(Assets.ally_marker.getRegion());
 	
 	
-	
+	@Override
 	public void showMarker(Entity ally) {
 		GameScreen.fxStage.addActor(marker);
 		this.place(Mappers.gridPositionComponent.get(ally).coord());
 	}
 	
+	@Override
 	public void hideMarker() {
 		marker.remove();
 	}

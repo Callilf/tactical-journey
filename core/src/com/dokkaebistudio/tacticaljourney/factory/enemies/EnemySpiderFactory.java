@@ -127,8 +127,6 @@ public final class EnemySpiderFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -218,8 +216,6 @@ public final class EnemySpiderFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(5);
 		healthComponent.setHp(5);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -312,7 +308,6 @@ public final class EnemySpiderFactory {
 		healthComponent.setHp(10);
 		healthComponent.addResistance(DamageType.POISON, 100);
 		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);

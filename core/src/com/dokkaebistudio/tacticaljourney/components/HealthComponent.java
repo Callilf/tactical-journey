@@ -7,13 +7,15 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -28,7 +30,7 @@ import com.esotericsoftware.kryo.io.Output;
  * @author Callil
  *
  */
-public class HealthComponent implements Component, Poolable, MovableInterface, RoomSystem {
+public class HealthComponent implements Component, Poolable, MovableInterface, MarkerInterface, RoomSystem {
 		
 	/** The room.*/
 	public Room room;
@@ -44,7 +46,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	private int hp;
 		
 	/** The displayer that shows the amount of HP beside the entity (for enemies). */
-	private Entity hpDisplayer;
+	private Label hpDisplayer = new Label("", PopinService.hudStyle());
 
 	
 	//*************
@@ -76,6 +78,18 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	/** Whether the entity has been hit or healed at this frame. */
 	public Map<HealthChangeEnum, String> healthChangeMap = new HashMap<>();
+	
+	
+	@Override
+	public void showMarker(Entity ally) {
+		GameScreen.fxStage.addActor(hpDisplayer);
+		this.place(Mappers.gridPositionComponent.get(ally).coord());
+	}
+	
+	@Override
+	public void hideMarker() {
+		hpDisplayer.remove();
+	}
 	
 	
 	//****************
@@ -311,9 +325,11 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void reset() {
 		resitanceMap.clear();
 		if (hpDisplayer != null) {
-			room.removeEntity(hpDisplayer);
+			hpDisplayer.setText("");
+			hpDisplayer.remove();		
+		} else {
+			hpDisplayer = new Label("", PopinService.hudStyle());
 		}
-		hpDisplayer = null;
 		this.clearModified();
 		this.receivedDamageLastTurn = false;
 		this.latestAttackDamage = 0;
@@ -323,21 +339,16 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	
 	
 	
-	
 	//**************************************
 	// Movement
 
 	@Override
 	public void initiateMovement(Vector2 currentPos) {
-		
 		if (hpDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(hpDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			
-			//Add the tranfo component to the entity to perform real movement on screen
+			hpDisplayer.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
+			startPos.y = startPos.y + hpDisplayer.getGlyphLayout().height - 10;
+			hpDisplayer.setPosition(startPos.x, startPos.y);
 		}
 	}
 
@@ -346,9 +357,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
 		if (hpDisplayer != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			gridPositionComponent.absolutePos((int)(gridPositionComponent.getAbsolutePos().x + xOffset), 
-					(int)(gridPositionComponent.getAbsolutePos().y + yOffset));
+			hpDisplayer.layout();
+			hpDisplayer.setPosition(hpDisplayer.getX() + xOffset, hpDisplayer.getY() + yOffset);
 		}
 	}
 
@@ -357,20 +367,23 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	@Override
 	public void endMovement(Vector2 finalPos) {
 		if (hpDisplayer != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			gridPositionComponent.coord(finalPos);
+			hpDisplayer.layout();
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
+			startPos.y = startPos.y + hpDisplayer.getGlyphLayout().height - 10;
+			hpDisplayer.setPosition(startPos.x, startPos.y);
 		}
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
 		if (hpDisplayer != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(hpDisplayer);
-			gridPositionComponent.coord(tilePos);
+			hpDisplayer.layout();
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+			startPos.y = startPos.y + hpDisplayer.getGlyphLayout().height - 10;
+			hpDisplayer.setPosition(startPos.x, startPos.y);
 		}
 	}
-	
-	
+
 	
 	
 	//*************************
@@ -383,13 +396,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void setHp(int hp) {
 		this.hp = hp;
 		if (hpDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
-			if (textComponent != null) {
-				textComponent.setText(String.valueOf(this.hp));
-				
-				if (this.armor > 0) {
-					textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
-				}
+			hpDisplayer.setText(String.valueOf(this.hp));
+			
+			if (this.armor > 0) {
+				hpDisplayer.setText(hpDisplayer.getText() + " + [CYAN]" + this.armor);
 			}
 		}
 	}
@@ -403,23 +413,20 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 	public void setArmor(int armor) {
 		this.armor = armor;
 		if (hpDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(hpDisplayer);
-			if (textComponent != null) {
-				textComponent.setText(String.valueOf(this.hp));
-				
-				if (this.armor > 0) {
-					textComponent.setText(textComponent.getText() + " + [CYAN]" + this.armor);
-				}
+			hpDisplayer.setText(String.valueOf(this.hp));
+			
+			if (this.armor > 0) {
+				hpDisplayer.setText(hpDisplayer.getText() + " + [CYAN]" + this.armor);
 			}
 		}
 	}
 
-	public Entity getHpDisplayer() {
+	public Label getHpDisplayer() {
 		return hpDisplayer;
 	}
-
-	public void setHpDisplayer(Entity hpDisplayer) {
-		this.hpDisplayer = hpDisplayer;
+	
+	public void removeHpDisplayer() {
+		hpDisplayer = null;
 	}
 
 	public int getMaxHp() {
@@ -482,7 +489,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			@Override
 			public void write(Kryo kryo, Output output, HealthComponent object) {
 				
-				kryo.writeClassAndObject(output, object.hpDisplayer);
 				output.writeInt(object.maxHp);
 				output.writeInt(object.hp);
 
@@ -498,7 +504,6 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 			public HealthComponent read(Kryo kryo, Input input, Class<HealthComponent> type) {
 				HealthComponent compo = engine.createComponent(HealthComponent.class);
 				
-				compo.hpDisplayer = (Entity) kryo.readClassAndObject(input);
 				compo.setMaxHp(input.readInt());
 				compo.setHp(input.readInt());
 

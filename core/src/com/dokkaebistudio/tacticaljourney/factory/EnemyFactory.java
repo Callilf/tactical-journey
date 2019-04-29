@@ -34,8 +34,8 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyScorpion;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -171,7 +171,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -278,7 +277,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(8);
 		healthComponent.setHp(8);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -412,7 +410,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(25);
 		healthComponent.setHp(25);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		if (!clone) {

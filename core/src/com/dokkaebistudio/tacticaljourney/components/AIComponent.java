@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
@@ -22,7 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class AIComponent implements Component, Poolable, MovableInterface, RoomSystem {
+public class AIComponent implements Component, Poolable, MovableInterface, MarkerInterface, RoomSystem {
 	
 	/** The room.*/
 	public Room room;
@@ -76,12 +76,13 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	}
 	
 	
-	
+	@Override
 	public void showMarker(Entity ally) {
 		GameScreen.fxStage.addActor(alertedMarker);
 		this.place(Mappers.gridPositionComponent.get(ally).coord());
 	}
 	
+	@Override
 	public void hideMarker() {
 		alertedMarker.remove();
 	}

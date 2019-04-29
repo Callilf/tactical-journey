@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -12,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -29,7 +31,7 @@ import com.esotericsoftware.kryo.io.Output;
  * @author Callil
  *
  */
-public class ChaliceComponent implements Component, Poolable {
+public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 	/** Whether this chalice is filled or empty. */
 	private boolean filled;
 	
@@ -42,6 +44,20 @@ public class ChaliceComponent implements Component, Poolable {
 	public void reset() {
 		setAura(null);
 		setFilled(true);
+	}
+	
+	@Override
+	public void showMarker(Entity e) {
+		if (this.getAura() != null) {
+			GameScreen.fxStage.addActor(this.getAura());
+		}
+	}
+	
+	@Override
+	public void hideMarker() {
+		if (this.getAura() != null) {
+			this.getAura().remove();
+		}
 	}
 	
 	

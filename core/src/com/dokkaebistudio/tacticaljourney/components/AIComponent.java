@@ -313,8 +313,8 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				output.writeString(object.alertedMoveStrategy.name());
 
 				kryo.writeClassAndObject(output, object.alertedDisplayer);
-				output.writeBoolean(object.alerted);
 				kryo.writeClassAndObject(output, object.target);
+				output.writeBoolean(object.alerted);
 			}
 
 			@Override
@@ -330,8 +330,8 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				compo.alertedMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
-				compo.setAlerted(input.readBoolean(), null, null);
 				compo.target = (Entity) kryo.readClassAndObject(input);
+				compo.setAlerted(input.readBoolean(), null, compo.target);
 //				engine.addEntity(compo.alertedDisplayer);
 				
 				return compo;

@@ -250,8 +250,8 @@ public class Persister {
 				
 				// Partial load of the player so that entities that reference it won't crash
 				GameScreen.player = (PublicEntity) engine.createEntity();
-				GameScreen.player.id = input.readLong();
-				loadedEntities.put(GameScreen.player.id, (PooledEntity) GameScreen.player);
+				((PublicEntity)GameScreen.player).id = input.readLong();
+				loadedEntities.put(((PublicEntity)GameScreen.player).id, (PooledEntity) GameScreen.player);
 				
 				// Restore the time
 				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
@@ -286,7 +286,7 @@ public class Persister {
 				}
 				
 				// Real load of the player
-				loadedEntities.remove(GameScreen.player.id);
+				loadedEntities.remove(((PublicEntity)GameScreen.player).id);
 				GameScreen.player = (PublicEntity) kryo.readClassAndObject(input);
 				
 						
@@ -545,7 +545,7 @@ public class Persister {
 				
 				// Otherwise, load it
 				PooledEntity loadedEntity = null;
-				if (entityId == GameScreen.player.id) {
+				if (entityId == ((PublicEntity)GameScreen.player).id) {
 					// if it's the player, use the already created entity
 					loadedEntity = (PooledEntity) GameScreen.player;
 				} else {

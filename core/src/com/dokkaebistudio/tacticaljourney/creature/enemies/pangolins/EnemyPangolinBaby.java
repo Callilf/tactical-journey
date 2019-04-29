@@ -1,17 +1,17 @@
-package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class EnemyPangolinBaby extends Enemy {
+public class EnemyPangolinBaby extends Creature {
 
 	private boolean rolled = false;
 	private int turnRolledEnd = 0;
@@ -50,8 +50,8 @@ public class EnemyPangolinBaby extends Enemy {
 		
 		
 		if (mother != null) {
-			EnemyComponent motherEnemyCompo = Mappers.enemyComponent.get(mother);
-			EnemyPangolinMother motherType = (EnemyPangolinMother)motherEnemyCompo.getType();
+			AIComponent motherAICompo = Mappers.aiComponent.get(mother);
+			EnemyPangolinMother motherType = (EnemyPangolinMother) motherAICompo.getType();
 			motherType.enrage(mother, attacker);
 		}
 	}
@@ -60,8 +60,8 @@ public class EnemyPangolinBaby extends Enemy {
 	@Override
 	public void onDeath(Entity enemy, Entity attacker, Room room) {
 		if (mother != null) {
-			EnemyComponent motherEnemyCompo = Mappers.enemyComponent.get(mother);
-			EnemyPangolinMother motherType = (EnemyPangolinMother)motherEnemyCompo.getType();
+			AIComponent motherAICompo = Mappers.aiComponent.get(mother);
+			EnemyPangolinMother motherType = (EnemyPangolinMother) motherAICompo.getType();
 			motherType.cry(mother, room);
 		}
 	}

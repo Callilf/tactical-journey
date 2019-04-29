@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.enemies.spiders;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.spiders;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
@@ -6,13 +6,13 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class EnemyVenomSpider extends Enemy {
+public class EnemyVenomSpider extends Creature {
 	
 	private int poisonChance = 33;
 	

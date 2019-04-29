@@ -91,8 +91,8 @@ public class AllySystem extends EntitySystem implements RoomSystem {
     			continue;
     		}
     		
-    		final AIComponent aiComponent = Mappers.aiComponent.get(allyEntity);
-    		if (aiComponent.isTurnOver()) {
+    		final AIComponent aiCompo = Mappers.aiComponent.get(allyEntity);
+    		if (aiCompo.isTurnOver()) {
     			allyFinishedCount ++;
     			continue;
     		}
@@ -116,6 +116,7 @@ public class AllySystem extends EntitySystem implements RoomSystem {
         	case ALLY_TURN_INIT :
             	
             	moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
+            	aiCompo.onStartTurn(allyEntity, room);
             	room.setNextState(RoomState.ALLY_COMPUTE_MOVABLE_TILES);
         		
         	case ALLY_COMPUTE_MOVABLE_TILES :
@@ -256,7 +257,7 @@ public class AllySystem extends EntitySystem implements RoomSystem {
         		break;
         		
         	case ALLY_ATTACK_FINISH:
-	    		finishOneAllyTurn(allyEntity, attackCompo);
+	    		finishOneAllyTurn(allyEntity, attackCompo, aiCompo);
 	    		break;
 	    		
         	default:
@@ -281,10 +282,12 @@ public class AllySystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
-	public void finishOneAllyTurn(Entity allyEntity, AttackComponent attackCompo) {
+	public void finishOneAllyTurn(Entity allyEntity, AttackComponent attackCompo, AIComponent aiCompo) {
     	attackCompo.clearAttackableTiles();
 		attackCompo.getActiveSkill().clearAttackImage();
 		attackCompo.setActiveSkill(null);
+
+		aiCompo.onEndTurn(allyEntity, room);
 
 		allyFinishedCount ++;
 		Mappers.aiComponent.get(allyEntity).setTurnOver(true);

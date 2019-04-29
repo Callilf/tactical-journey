@@ -9,7 +9,8 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
@@ -25,16 +26,19 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	/** The room.*/
 	public Room room;
 	
+	/** The type of enemy. */
+	private Creature type;
+
 	private EnemySubSystem subSystem;
 	
 	/** Whether this enemy's turn is over or not. */
 	private boolean turnOver;
 	
 	/** The movement pattern of this enemy when not alerted. */
-	private EnemyMoveStrategy basicMoveStrategy;
+	private AIMoveStrategy basicMoveStrategy;
 	
 	/** The movement pattern of this enemy when alerted. */
-	private EnemyMoveStrategy alertedMoveStrategy;
+	private AIMoveStrategy alertedMoveStrategy;
 
 	
 	
@@ -135,21 +139,76 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	
 	
 	
+	
+	//************************
+	// Events
+
+	public void onRoomVisited(Entity enemy, Room room) {
+		this.type.onRoomVisited(enemy, room);
+	}
+	
+	public void onStartTurn(Entity enemy, Room room) {
+		this.type.onStartTurn(enemy, room);
+	}
+	
+	public void onEndTurn(Entity enemy, Room room) {
+		this.type.onEndTurn(enemy, room);
+	}
+	
+	
+	
+	public void onAttack(Entity enemy, Entity target, Room room) {
+		this.type.onAttack(enemy, target, room);
+	}
+	
+	public boolean onReceiveAttack(Entity enemy, Entity attacker, Room room) {
+		return this.type.onReceiveAttack(enemy, attacker, room);
+	}
+	
+	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {
+		this.type.onReceiveDamage(damage, enemy, attacker, room);
+	}
+	
+	
+	public void onKill(Entity enemy, Entity target, Room room) {
+		this.type.onKill(enemy, target, room);
+	}
+	
+	public void onDeath(Entity enemy, Entity attacker, Room room) {
+		this.type.onDeath(enemy, attacker, room);
+	}
+	
+	public void onLoseTarget(Entity enemy, Room room) {
+		this.type.onLoseTarget(enemy, room);
+	}
+	
+	public void onRoomCleared(Entity enemy, Room room) {
+		this.type.onRoomCleared(enemy, room);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// Getters and Setters
 
-	public EnemyMoveStrategy getBasicMoveStrategy() {
+	public AIMoveStrategy getBasicMoveStrategy() {
 		return basicMoveStrategy;
 	}
 
-	public void setBasicMoveStrategy(EnemyMoveStrategy moveStrategy) {
+	public void setBasicMoveStrategy(AIMoveStrategy moveStrategy) {
 		this.basicMoveStrategy = moveStrategy;
 	}
 
-	public EnemyMoveStrategy getAlertedMoveStrategy() {
+	public AIMoveStrategy getAlertedMoveStrategy() {
 		return alertedMoveStrategy != null ? alertedMoveStrategy : basicMoveStrategy;
 	}
 
-	public void setAlertedMoveStrategy(EnemyMoveStrategy alertedMoveStrategy) {
+	public void setAlertedMoveStrategy(AIMoveStrategy alertedMoveStrategy) {
 		this.alertedMoveStrategy = alertedMoveStrategy;
 	}
 
@@ -160,17 +219,17 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	public void setAlerted(boolean alerted, Entity enemy, Entity target) {
 		if (!this.alerted && alerted && enemy != null) {
 			//First time alerted
-			EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-			if (enemyComponent != null) {
-				enemyComponent.getType().onAlerted(enemy, GameScreen.player, room);
-			}
-		}
-		
-		if (target != null) {
-			this.target = target;
+			this.type.onAlerted(enemy, GameScreen.player, room);
 		}
 		
 		this.alerted = alerted;
+
+		if (!this.alerted) {
+			this.target = null;
+		} else if (target != null) {
+			this.target = target;
+		}
+		
 		if (alertedDisplayer != null) {
 			TextComponent textComponent = Mappers.textComponent.get(alertedDisplayer);
 			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
@@ -218,7 +277,14 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	public void setTarget(Entity target) {
 		this.target = target;
 	}
-	
+
+	public Creature getType() {
+		return type;
+	}
+
+	public void setType(Creature type) {
+		this.type = type;
+	}
 	
 	
 	public static Serializer<AIComponent> getSerializer(final PooledEngine engine) {
@@ -227,6 +293,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 			@Override
 			public void write(Kryo kryo, Output output, AIComponent object) {
 				
+				kryo.writeClassAndObject(output, object.type);
 				kryo.writeClassAndObject(output, object.subSystem);
 				
 				output.writeBoolean(object.turnOver);
@@ -243,12 +310,13 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 			public AIComponent read(Kryo kryo, Input input, Class<AIComponent> type) {
 				AIComponent compo = engine.createComponent(AIComponent.class);
 				
+				compo.type = (Creature) kryo.readClassAndObject(input);
 				compo.subSystem = (EnemySubSystem) kryo.readClassAndObject(input);
 				
 				compo.turnOver = input.readBoolean();
 				
-				compo.basicMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
-				compo.alertedMoveStrategy = EnemyMoveStrategy.valueOf(input.readString());
+				compo.basicMoveStrategy = AIMoveStrategy.valueOf(input.readString());
+				compo.alertedMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				
 				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
 				compo.setAlerted(input.readBoolean(), null, null);
@@ -260,5 +328,6 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 		
 		};
 	}
+
 
 }

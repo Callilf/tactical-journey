@@ -94,6 +94,11 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	
 	@Override
 	public void reset() {
+		for (Status s : statuses) {
+			if (s.getAnimation() != null) {
+				s.getAnimation().remove();
+			}
+		}
 		statuses.clear();
 		iconsMap.clear();
 		

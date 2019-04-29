@@ -4,8 +4,8 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
@@ -114,10 +114,7 @@ public class AttackManager {
 				// Inflict poison
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(target);
 				if (statusReceiverComponent != null) {
-					EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
-					if (enemyComponent != null) {
-						Journal.addEntry("[GRAY]You inflicted [PURPLE]poison[GRAY] to " + enemyComponent.getType().title());
-					}
+					Journal.addEntry("[GRAY]You inflicted [PURPLE]poison[GRAY] to " + Journal.getLabel(target));
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffPoison(5, attacker));
 				}
 				return;
@@ -134,9 +131,9 @@ public class AttackManager {
 			processAttack &= alterationReceiverComponent.onReceiveAttack(target, attacker, room);
 		}
 		
-		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
-		if (enemyComponent != null) {
-			processAttack &= enemyComponent.onReceiveAttack(target, attacker, room);
+		AIComponent aiCompo = Mappers.aiComponent.get(target);
+		if (aiCompo != null) {
+			processAttack &= aiCompo.onReceiveAttack(target, attacker, room);
 		}
 		
 		if (processAttack) {
@@ -179,9 +176,9 @@ public class AttackManager {
 			healthComponent.hit(damage, target, attacker, damageType);
 		}
 		
-		EnemyComponent enemyComponent = Mappers.enemyComponent.get(target);
-		if (enemyComponent != null) {
-			enemyComponent.onReceiveDamage(damage, target, attacker, room);
+		AIComponent aiCompo = Mappers.aiComponent.get(target);
+		if (aiCompo != null) {
+			aiCompo.onReceiveDamage(damage, target, attacker, room);
 		}
 		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(target);
 		if (alterationReceiverComponent != null) {
@@ -199,9 +196,9 @@ public class AttackManager {
 		}
 		
 		if (attacker != null) {
-			enemyComponent = Mappers.enemyComponent.get(attacker);
-			if (enemyComponent != null) {
-				enemyComponent.onAttack(attacker, target, room);
+			aiCompo = Mappers.aiComponent.get(attacker);
+			if (aiCompo != null) {
+				aiCompo.onAttack(attacker, target, room);
 			}
 			alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
 			if (alterationReceiverComponent != null) {
@@ -231,13 +228,15 @@ public class AttackManager {
      */
 	private void alertEnemy(Entity target, Entity attacker) {
 		if (attacker != null) {
-			// Alert the enemy the player just attacked
-			if ((Mappers.aiComponent.has(target) && Mappers.allyComponent.has(attacker))) {
-				Mappers.aiComponent.get(target).setAlerted(true, target, attacker);
-			}
-			// Alert the enemy that attacked the player
-			if (Mappers.allyComponent.has(target) && Mappers.aiComponent.has(attacker)) {
-				Mappers.aiComponent.get(attacker).setAlerted(true, attacker, target);
+			// Fight between allies and enemies. Alert both sides
+			if ((Mappers.enemyComponent.has(target) && Mappers.allyComponent.has(attacker)) ||
+					Mappers.allyComponent.has(target) && Mappers.enemyComponent.has(attacker)) {
+				if (Mappers.aiComponent.has(attacker)) {
+					Mappers.aiComponent.get(attacker).setAlerted(true, attacker, target);
+				}
+				if (Mappers.aiComponent.has(target)) {
+					Mappers.aiComponent.get(target).setAlerted(true, target, attacker);
+				}
 			}
 		}
 	}

@@ -6,8 +6,8 @@ import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -25,7 +25,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
 		AIComponent aiComponent = Mappers.aiComponent.get(enemy);
-		EnemyTribesmanScout scoutType = (EnemyTribesmanScout) enemyComponent.getType();
+		EnemyTribesmanScout scoutType = (EnemyTribesmanScout) aiComponent.getType();
 
 		
 		switch(room.getState()) {
@@ -81,7 +81,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 						EnemyComponent ec = Mappers.enemyComponent.get(friendToAlert);
 						AIComponent aic = Mappers.aiComponent.get(friendToAlert);
 
-						Journal.addEntry("[RED]" + scoutType.title() + " alerted " + ec.getType().title() + " of your presence.");
+						Journal.addEntry("[RED]" + Journal.getLabel(enemy) + " alerted " + Journal.getLabel(friendToAlert) + " of your presence.");
 						
 						if (ec.getFaction() == EnemyFactionEnum.TRIBESMEN) {
 							aic.setAlerted(true, friendToAlert, aiComponent.getTarget());

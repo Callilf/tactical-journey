@@ -1,16 +1,17 @@
 /**
  * 
  */
-package com.dokkaebistudio.tacticaljourney.enemies;
+package com.dokkaebistudio.tacticaljourney.creature;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
  * @author Callil
  *
  */
-public abstract class Enemy {
+public abstract class Creature {
 	
 	public abstract String title();
 	
@@ -29,9 +30,27 @@ public abstract class Enemy {
 	
 	public void onAttack(Entity enemy, Entity target, Room room) {}
 	public boolean onReceiveAttack(Entity enemy, Entity attacker, Room room) { return true; }
-	public void onReceiveDamage(int damage, Entity enemy, Entity attacker, Room room) {}
+	public void onReceiveDamage(int damage, Entity creature, Entity attacker, Room room) {
+		Mappers.aiComponent.get(creature).setAlerted(false, creature, attacker);
+	}
+	
+	public void onKill(Entity enemy, Entity target, Room room) {}
+
 	public void onDeath(Entity enemy, Entity attacker, Room room) {}
+		
+	
+	/**
+	 * Called when the previous target is removed from the game.
+	 * @param creature the creature.
+	 * @param room the room
+	 */
+	public void onLoseTarget(Entity creature, Room room) {
+		Mappers.aiComponent.get(creature).setAlerted(false, creature, null);
+	}
 	
 	public void onAlerted(Entity enemy, Entity player, Room room) {}
 	
+	
+	public void onRoomCleared(Entity creature, Room room) {}
+
 }

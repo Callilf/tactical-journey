@@ -27,12 +27,13 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemySpider;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemyVenomSpider;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemySpider;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyVenomSpider;
-import com.dokkaebistudio.tacticaljourney.enemies.spiders.EnemyWebSpider;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -90,14 +91,14 @@ public final class EnemySpiderFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setType(new EnemySpider());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemySpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
 		enemyEntity.add(enemyComponent);
 		
@@ -182,14 +183,14 @@ public final class EnemySpiderFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
+		aiComponent.setType(new EnemyWebSpider());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyWebSpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
 		enemyEntity.add(enemyComponent);
 		
@@ -278,14 +279,14 @@ public final class EnemySpiderFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setType(new EnemyVenomSpider());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyVenomSpider());
 		enemyComponent.setFaction(EnemyFactionEnum.SPIDERS);
 		enemyEntity.add(enemyComponent);
 		

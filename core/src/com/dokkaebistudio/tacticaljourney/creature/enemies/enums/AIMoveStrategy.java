@@ -1,6 +1,6 @@
-package com.dokkaebistudio.tacticaljourney.enemies.enums;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.enums;
 
-public enum EnemyMoveStrategy {
+public enum AIMoveStrategy {
 	STANDING_STILL,
 	MOVE_TOWARDS_TARGET,
 	TRIBESMAN_SCOUT_STRATEGY,

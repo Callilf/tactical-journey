@@ -58,8 +58,7 @@ public class BlessingOfAcceptance extends Blessing {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				
-				EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
-				Journal.addEntry("[BLACK]Blessing of acceptance inflicted Death's door to " + enemyComponent.getType().title());
+				Journal.addEntry("[BLACK]Blessing of acceptance inflicted Death's door to " + Journal.getLabel(e));
 				AlterationSystem.addAlterationProc(this);
 			}
 			

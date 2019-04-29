@@ -149,29 +149,32 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						// Drop reward
 						LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(entity);
 						LootUtil.dropItem(entity, lootRewardComponent, room);
-						
+
+
 						EnemyComponent enemyComponent = Mappers.enemyComponent.get(entity);
 						if (enemyComponent != null) {
 							// An enemy died
-							enemyComponent.onDeath(entity, healthCompo.getAttacker(), room);
-							
 							for(Entity ally : room.getAllies()) {
 								AIComponent aiComponent = Mappers.aiComponent.get(ally);
 								if (aiComponent != null && aiComponent.getTarget() == entity) {
-									aiComponent.setTarget(null);
+									aiComponent.onLoseTarget(ally, room);
 								}
 							}
 						}
 						
 						AllyComponent allyComponent = Mappers.allyComponent.get(entity);
-						if (allyComponent != null) {							
+						if (allyComponent != null) {
+							// An ally died
 							for(Entity enemy : room.getEnemies()) {
 								AIComponent aiComponent = Mappers.aiComponent.get(enemy);
 								if (aiComponent != null && aiComponent.getTarget() == entity) {
-									aiComponent.setTarget(null);
+									aiComponent.onLoseTarget(enemy, room);
 								}
 							}
 						}
+						
+						// On death event
+						Mappers.aiComponent.get(entity).onDeath(entity, healthCompo.getAttacker(), room);
 						
 			    		// Get XP
 			    		if (healthCompo.getAttacker() != null) {
@@ -190,9 +193,15 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 						}
 						AlterationReceiverComponent attackerAlterationReceiverCompo = null;
 						if (healthCompo.getAttacker() != null) {
+							
 							attackerAlterationReceiverCompo = Mappers.alterationReceiverComponent.get(healthCompo.getAttacker());
 							if (attackerAlterationReceiverCompo != null) {
 								attackerAlterationReceiverCompo.onKill(healthCompo.getAttacker(), entity, room);
+							}
+							
+							AIComponent attackerAIComponent = Mappers.aiComponent.get(healthCompo.getAttacker());
+							if (attackerAIComponent != null) {
+								attackerAIComponent.onKill(healthCompo.getAttacker(), entity, room);
 							}
 						}
 						

@@ -119,28 +119,13 @@ public class HealthComponent implements Component, Poolable, MovableInterface, R
 		String damageTypeStr = " " + damageType.title() + "[GRAY]";
 		if (damageType == DamageType.NORMAL) damageTypeStr = "";
 		
+		String targetLabel = Journal.getLabel(target);
+
 		if (attacker != null) {
-			if (Mappers.playerComponent.has(attacker)) {
-				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
-				if (targetEnemyCompo != null) {
-					Journal.addEntry("[GRAY]You attacked " + targetEnemyCompo.getType().title() + " for " + realAmountOfDamage + damageTypeStr + " damages");
-				}
-			} else if (Mappers.enemyComponent.has(attacker)) {
-				EnemyComponent attackerEnemyCompo = Mappers.enemyComponent.get(attacker);
-				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
-				if (targetEnemyCompo != null) {
-					Journal.addEntry("[GRAY]" + attackerEnemyCompo.getType().title() + " attacked " + targetEnemyCompo.getType().title() + " for " + realAmountOfDamage + damageTypeStr + " damages");
-				} else if (Mappers.playerComponent.has(target)) {
-					Journal.addEntry("[GRAY]" + attackerEnemyCompo.getType().title() + " attacked you for " + realAmountOfDamage + damageTypeStr + " damages");
-				}
-			}
+			String attackerLabel = Journal.getLabel(attacker);
+			Journal.addEntry("[GRAY]" + attackerLabel + " attacked " + targetLabel + " for " + realAmountOfDamage + damageTypeStr + " damages");
 		} else {
-			if (Mappers.playerComponent.has(target)) {
-				Journal.addEntry("[GRAY]You took " + realAmountOfDamage + damageTypeStr + " damages");
-			} else if (Mappers.enemyComponent.has(target)) {
-				EnemyComponent targetEnemyCompo = Mappers.enemyComponent.get(target);
-				Journal.addEntry("[GRAY]" + targetEnemyCompo.getType().title() + " took " + realAmountOfDamage + damageTypeStr + " damages");
-			}
+			Journal.addEntry("[GRAY]" + targetLabel + "  took " + realAmountOfDamage + damageTypeStr + " damages");
 		}
 	}
 

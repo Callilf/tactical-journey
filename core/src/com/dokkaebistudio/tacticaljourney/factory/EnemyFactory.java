@@ -31,11 +31,11 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enemies.EnemyScorpion;
-import com.dokkaebistudio.tacticaljourney.enemies.EnemyShinobi;
-import com.dokkaebistudio.tacticaljourney.enemies.EnemyStinger;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyScorpion;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -135,15 +135,15 @@ public final class EnemyFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setType(new EnemyScorpion());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		aiComponent.setAlerted(true, enemyEntity, GameScreen.player);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyScorpion());
 		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
 		enemyEntity.add(enemyComponent);
 		
@@ -237,16 +237,16 @@ public final class EnemyFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
+		aiComponent.setType(new EnemyStinger());
 		aiComponent.setSubSystem(new StingerSubSystem());
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyStinger());
 		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
 		enemyEntity.add(enemyComponent);
 		
@@ -349,21 +349,21 @@ public final class EnemyFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
+		EnemyShinobi enemyShinobi = new EnemyShinobi();
+		if (clone) {
+			enemyShinobi.setSmokeBombUsed(true);
+			enemyShinobi.setKawarimiActivated(true);
+		}
+		aiComponent.setType(enemyShinobi);
 		aiComponent.setSubSystem(clone ? null : new ShinobiSubSystem());
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		EnemyShinobi enemyShinobi = new EnemyShinobi();
-		if (clone) {
-			enemyShinobi.setSmokeBombUsed(true);
-			enemyShinobi.setKawarimiActivated(true);
-		}
-		enemyComponent.setType(enemyShinobi);
 		enemyComponent.setFaction(EnemyFactionEnum.SHINOBI);
 		enemyEntity.add(enemyComponent);
 		

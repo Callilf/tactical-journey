@@ -21,7 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.EnemyShinobi;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -56,7 +56,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
 		if (enemyShinobi == null) {
-			enemyShinobi = (EnemyShinobi) Mappers.enemyComponent.get(enemy).getType();
+			enemyShinobi = (EnemyShinobi) Mappers.aiComponent.get(enemy).getType();
 			for (AttackSkill as : Mappers.attackComponent.get(enemy).getSkills()) {
 				switch(as.getAttackType()) {
 				case MELEE:
@@ -196,7 +196,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     			}
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
-    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
     			return true;
     		}
     		
@@ -210,7 +210,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     			fleeTileReached = true;
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
-    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.enemyComponent.get(enemy));
+    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
     			return true;
     		}
     		break;

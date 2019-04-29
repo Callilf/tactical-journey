@@ -1,15 +1,15 @@
-package com.dokkaebistudio.tacticaljourney.enemies.tribesmen;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class EnemyTribesmanShaman extends Enemy {
+public class EnemyTribesmanShaman extends Creature {
 
 	
 	@Override
@@ -24,7 +24,7 @@ public class EnemyTribesmanShaman extends Enemy {
 		// Remove all totems
 		List<Entity> totems = new ArrayList<>();
 		for (Entity e : room.getEnemies()) {
-			if (Mappers.enemyComponent.get(e).getType() instanceof EnemyTribesmanTotem) {
+			if (Mappers.aiComponent.get(e).getType() instanceof EnemyTribesmanTotem) {
 				totems.add(e);
 			}
 		}

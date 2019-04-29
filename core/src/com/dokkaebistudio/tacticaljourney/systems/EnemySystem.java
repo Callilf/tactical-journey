@@ -118,7 +118,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         	case ENEMY_TURN_INIT :
             	
             	moveCompo.setMoveRemaining(moveCompo.getMoveSpeed());
-            	enemyComponent.onStartTurn(enemyEntity, room);
+            	aiComponent.onStartTurn(enemyEntity, room);
             	room.setNextState(RoomState.ENEMY_COMPUTE_MOVABLE_TILES);
         		
         	case ENEMY_COMPUTE_MOVABLE_TILES :
@@ -265,7 +265,7 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
         		break;
         		
         	case ENEMY_ATTACK_FINISH:
-	    		finishOneEnemyTurn(enemyEntity, attackCompo, enemyComponent);
+	    		finishOneEnemyTurn(enemyEntity, attackCompo, aiComponent);
 	    		break;
 	    		
         	default:
@@ -290,12 +290,12 @@ public class EnemySystem extends EntitySystem implements RoomSystem {
 		}
 	}
 
-	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo, EnemyComponent enemyComponent) {
+	public void finishOneEnemyTurn(Entity enemyEntity, AttackComponent attackCompo, AIComponent aiComponent) {
     	attackCompo.clearAttackableTiles();
 		attackCompo.getActiveSkill().clearAttackImage();
 		attackCompo.setActiveSkill(null);
 		
-    	enemyComponent.onEndTurn(enemyEntity, room);
+    	aiComponent.onEndTurn(enemyEntity, room);
 
     	
 		enemyFinishedCount ++;

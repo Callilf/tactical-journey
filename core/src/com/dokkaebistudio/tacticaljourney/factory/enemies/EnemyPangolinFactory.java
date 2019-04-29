@@ -27,10 +27,10 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinBaby;
-import com.dokkaebistudio.tacticaljourney.enemies.pangolins.EnemyPangolinMother;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinBaby;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
@@ -99,14 +99,14 @@ public final class EnemyPangolinFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setType(new EnemyPangolinBaby(mother));
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyPangolinBaby(mother));
 		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
 		enemyEntity.add(enemyComponent);
 		
@@ -198,15 +198,15 @@ public final class EnemyPangolinFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
+		aiComponent.setType(new EnemyPangolinMother());
 		aiComponent.setSubSystem(new PangolinMotherSubSystem());
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
-		enemyComponent.setType(new EnemyPangolinMother());
 		enemyComponent.setFaction(EnemyFactionEnum.PANGOLINS);
 		enemyEntity.add(enemyComponent);
 		

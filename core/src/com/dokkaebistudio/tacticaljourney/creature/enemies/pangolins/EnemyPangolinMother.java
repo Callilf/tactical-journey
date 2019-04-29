@@ -1,18 +1,17 @@
-package com.dokkaebistudio.tacticaljourney.enemies.pangolins;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class EnemyPangolinMother extends Enemy {
+public class EnemyPangolinMother extends Creature {
 
 	private boolean crying;
 	private int cryingEndTurn;
@@ -60,8 +59,8 @@ public class EnemyPangolinMother extends Enemy {
 
 		// Alert all babies when receiving a hit
 		for(Entity e : room.getEnemies()) {
-			EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
-			Enemy type = enemyComponent.getType();
+			AIComponent aiCompo = Mappers.aiComponent.get(e);
+			Creature type = aiCompo.getType();
 			if (type != null && type.getClass().equals(EnemyPangolinBaby.class)) {
 				Mappers.aiComponent.get(e).setAlerted(true, e, attacker);
 			}
@@ -74,10 +73,10 @@ public class EnemyPangolinMother extends Enemy {
 	public void onDeath(Entity enemy, Entity attacker, Room room) {
 		// Remove the mother for all babies
 		for(Entity e : room.getEnemies()) {
-			EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
-			Enemy type = enemyComponent.getType();
+			AIComponent aiCompo = Mappers.aiComponent.get(e);
+			Creature type = aiCompo.getType();
 			if (type != null && type.getClass().equals(EnemyPangolinBaby.class)) {
-				EnemyPangolinBaby baby = (EnemyPangolinBaby)enemyComponent.getType();
+				EnemyPangolinBaby baby = (EnemyPangolinBaby)aiCompo.getType();
 				baby.setMother(null);
 			}
 		}

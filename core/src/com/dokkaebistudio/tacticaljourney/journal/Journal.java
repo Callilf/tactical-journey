@@ -3,8 +3,10 @@ package com.dokkaebistudio.tacticaljourney.journal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.rendering.JournalRenderer;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Journal {
 	
@@ -47,6 +49,18 @@ public class Journal {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * Return the label of the given entity by looking the inspectable component.
+	 * @param e the entity
+	 * @return the label, "" if no label
+	 */
+	public static String getLabel(Entity e) {
+		if (Mappers.inspectableComponent.has(e)) {
+			return Mappers.inspectableComponent.get(e).getTitle();
+		}
+		return "";
 	}
 	
 	public static void dispose() {

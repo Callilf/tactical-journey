@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
@@ -45,13 +46,15 @@ import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponen
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.allies.AllyClone;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -260,8 +263,9 @@ public final class PlayerFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		aiComponent.setBasicMoveStrategy(EnemyMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
-		aiComponent.setAlertedMoveStrategy(EnemyMoveStrategy.MOVE_TOWARDS_TARGET);
+		aiComponent.setType(new AllyClone());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
 		Entity alertedDisplayer = this.entityFactory.createTextOnTile(position, "", ZIndexConstants.HEALTH_DISPLAYER, room);
 		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		cloneEntity.add(aiComponent);
@@ -273,7 +277,7 @@ public final class PlayerFactory {
 		// Move compo
 		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
 		moveComponent.room = room;
-		moveComponent.setMoveSpeed(5);
+		moveComponent.setMoveSpeed(Mappers.moveComponent.get(GameScreen.player).getMoveSpeed());
 		cloneEntity.add(moveComponent);
 		
 		// Attack compo
@@ -281,8 +285,8 @@ public final class PlayerFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
-		as.setRangeMax(1);
-		as.setStrength(5);
+		as.setRangeMax(Mappers.attackComponent.get(GameScreen.player).getRangeMax());
+		as.setStrength(Mappers.attackComponent.get(GameScreen.player).getStrength());
 		as.setAttackType(AttackTypeEnum.MELEE);
 		AttackAnimation attackAnimation = new AttackAnimation(
 				AnimationSingleton.getInstance().attack_slash,
@@ -308,19 +312,12 @@ public final class PlayerFactory {
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(10);
-		healthComponent.setHp(10);
+		healthComponent.setMaxHp(100);
+		healthComponent.setHp(100);
 		healthComponent.setMaxArmor(0);
 		healthComponent.setArmor(0);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(position, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		cloneEntity.add(healthComponent);
-		
-		// Alteration receiver compo
-		AlterationReceiverComponent alterationReceiverCompo = engine.createComponent(AlterationReceiverComponent.class);
-		BlessingOfCalishka initialBlessing = new BlessingOfCalishka();
-		initialBlessing.setInfused(true);
-		alterationReceiverCompo.requestAction(AlterationActionEnum.RECEIVE_BLESSING, initialBlessing);
-		cloneEntity.add(alterationReceiverCompo);
 		
 		// Statuses
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);

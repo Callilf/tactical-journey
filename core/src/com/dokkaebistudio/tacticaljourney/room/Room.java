@@ -33,6 +33,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
@@ -300,8 +301,13 @@ public class Room extends EntitySystem {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
 				alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
 				
+				for (Entity ally : this.getAllies()) {
+					if (Mappers.aiComponent.has(ally)) {
+						Mappers.aiComponent.get(ally).onRoomVisited(ally, this);
+					}
+				}
 				for (Entity enemy : this.getEnemies()) {
-					Mappers.enemyComponent.get(enemy).onRoomVisited(enemy, this);
+					Mappers.aiComponent.get(enemy).onRoomVisited(enemy, this);
 				}
 			} else {
 				this.visited = RoomVisitedState.ENTRANCE;
@@ -326,6 +332,15 @@ public class Room extends EntitySystem {
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(player);
 			if (alterationReceiverComponent != null) {
 				alterationReceiverComponent.onRoomCleared(player, this);
+			}
+			
+			if (!this.getAllies().isEmpty()) {
+				for (Entity ally : new ArrayList<>(this.getAllies())) {
+					AIComponent aiComponent = Mappers.aiComponent.get(ally);
+					if (aiComponent != null) {
+						aiComponent.onRoomCleared(ally, this);
+					}
+				}
 			}
 
 			for (Entity door : doors) {

@@ -4,15 +4,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShield;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanSpear;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanTotem;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShaman;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShield;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanSpear;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanTotem;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -35,8 +35,8 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 	@Override
 	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {		
 		
-		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-		EnemyTribesmanShaman shamanType = (EnemyTribesmanShaman) enemyComponent.getType();
+		AIComponent aiComponent = Mappers.aiComponent.get(enemy);
+		EnemyTribesmanShaman shamanType = (EnemyTribesmanShaman) aiComponent.getType();
 
 		
 		switch(room.getState()) {
@@ -46,7 +46,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 			// Check if there is a totem in the room
 			boolean totemFound = false;
 			for (Entity e : room.getEnemies()) {
-				if (Mappers.enemyComponent.get(e).getType() instanceof EnemyTribesmanTotem) {
+				if (Mappers.aiComponent.get(e).getType() instanceof EnemyTribesmanTotem) {
 					totem = e;
 					totemFound = true;
 					break;
@@ -56,9 +56,9 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 			
 			numberOfEnemies = 0;
 			for (Entity e : room.getEnemies()) {
-				if (Mappers.enemyComponent.get(e).getType() instanceof EnemyTribesmanShield
-						|| Mappers.enemyComponent.get(e).getType() instanceof EnemyTribesmanSpear
-						|| Mappers.enemyComponent.get(e).getType() instanceof EnemyTribesmanScout) {
+				if (Mappers.aiComponent.get(e).getType() instanceof EnemyTribesmanShield
+						|| Mappers.aiComponent.get(e).getType() instanceof EnemyTribesmanSpear
+						|| Mappers.aiComponent.get(e).getType() instanceof EnemyTribesmanScout) {
 					numberOfEnemies ++;
 				}
 			}

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
@@ -54,8 +55,8 @@ public class BlessingPhotosynthesis extends Blessing {
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(10));
 				
-				EnemyComponent enemyComponent = Mappers.enemyComponent.get(e);
-				Journal.addEntry("[FOREST]Photosynthesis entangled " + enemyComponent.getType().title());
+				AIComponent aiCompo = Mappers.aiComponent.get(e);
+				Journal.addEntry("[FOREST]Photosynthesis entangled " + aiCompo.getType().title());
 				AlterationSystem.addAlterationProc(this);
 			}
 			

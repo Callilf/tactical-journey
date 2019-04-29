@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
@@ -19,10 +17,9 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
-import com.dokkaebistudio.tacticaljourney.enemies.enums.EnemyMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanScout;
-import com.dokkaebistudio.tacticaljourney.enemies.tribesmen.EnemyTribesmanShaman;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -42,7 +39,7 @@ public class EnemyActionSelector {
     	GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
     	AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
     	
-    	EnemyMoveStrategy moveStrategy = aiComponent.isAlerted() ? aiComponent.getAlertedMoveStrategy() : aiComponent.getBasicMoveStrategy();
+    	AIMoveStrategy moveStrategy = aiComponent.isAlerted() ? aiComponent.getAlertedMoveStrategy() : aiComponent.getBasicMoveStrategy();
     	    	
     	switch (moveStrategy) {
     	case MOVE_TOWARDS_TARGET :
@@ -110,13 +107,11 @@ public class EnemyActionSelector {
 
 		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
 		if (aiComponent.getTarget() == null) {
-			ImmutableArray<Entity> allTargets = null;
+			List<Entity> allTargets = null;
 			if (Mappers.enemyComponent.has(enemyEntity)) {
-				Family family = Family.all(AllyComponent.class, GridPositionComponent.class).get();
-				allTargets = room.engine.getEntitiesFor(family);
+				allTargets = room.getAllies();
 			} else {
-				Family family = Family.all(EnemyComponent.class, GridPositionComponent.class).get();
-				allTargets = room.engine.getEntitiesFor(family);
+				allTargets = room.getEnemies();
 			}
 			
 			//First find the closest target
@@ -181,9 +176,10 @@ public class EnemyActionSelector {
 	private static Entity tribesmanScoutStrategy(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
+		AIComponent currentAICompo = Mappers.aiComponent.get(enemyEntity);
 		EnemyComponent currentEnemyCompo = Mappers.enemyComponent.get(enemyEntity);
 
-		EnemyTribesmanScout type = (EnemyTribesmanScout) currentEnemyCompo.getType();
+		EnemyTribesmanScout type = (EnemyTribesmanScout) currentAICompo.getType();
 		boolean unalertedFriends = type.hasFriendsNotAlerted();
 		
 		List<Entity> friends = new ArrayList<>();
@@ -193,7 +189,7 @@ public class EnemyActionSelector {
 			AIComponent aic = Mappers.aiComponent.get(e);
 			if (ec != null 
 					&& ec.getFaction() == currentEnemyCompo.getFaction() 
-					&& !(ec.getType() instanceof EnemyTribesmanShaman)
+					&& !(aic.getType() instanceof EnemyTribesmanShaman)
 					&& (!unalertedFriends || (unalertedFriends && !aic.isAlerted()) )) {
 				friends.add(e);
 			}
@@ -254,13 +250,11 @@ public class EnemyActionSelector {
 
 		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
 		if (aiComponent.getTarget() == null) {
-			ImmutableArray<Entity> allTargets = null;
+			List<Entity> allTargets = null;
 			if (Mappers.enemyComponent.has(enemyEntity)) {
-				Family family = Family.all(AllyComponent.class, GridPositionComponent.class).get();
-				allTargets = room.engine.getEntitiesFor(family);
+				allTargets = room.getAllies();
 			} else {
-				Family family = Family.all(EnemyComponent.class, GridPositionComponent.class).get();
-				allTargets = room.engine.getEntitiesFor(family);
+				allTargets = room.getEnemies();
 			}
 			
 			//First find the closest target

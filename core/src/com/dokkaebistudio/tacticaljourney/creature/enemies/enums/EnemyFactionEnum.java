@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.enemies.enums;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.enums;
 
 public enum EnemyFactionEnum {
 	SPIDERS,

@@ -1,9 +1,9 @@
-package com.dokkaebistudio.tacticaljourney.enemies.tribesmen;
+package com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen;
 
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.enemies.Enemy;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 
-public class EnemyTribesmanScout extends Enemy {
+public class EnemyTribesmanScout extends Creature {
 
 
 	private boolean hasFriendsNotAlerted = false;

@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.enemies;
+package com.dokkaebistudio.tacticaljourney.creature.enemies;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingKawarimi;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
@@ -18,7 +19,7 @@ import com.dokkaebistudio.tacticaljourney.systems.enemies.ShinobiSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
-public class EnemyShinobi extends Enemy {
+public class EnemyShinobi extends Creature {
 	
 	private boolean sleeping = true;
 	private boolean kawarimiActivated = false;

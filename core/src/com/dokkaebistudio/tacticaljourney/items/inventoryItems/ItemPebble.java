@@ -52,8 +52,7 @@ public class ItemPebble extends AbstractItem {
 		
 		Entity enemy = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
 		if (enemy != null) {
-			EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
-			Journal.addEntry(enemyComponent.getType().title() + " looks mad at you");
+			Journal.addEntry(Journal.getLabel(enemy) + " looks mad at you");
 	
 			Mappers.aiComponent.get(enemy).setAlerted(true, enemy, thrower);
 			room.removeEntity(item);

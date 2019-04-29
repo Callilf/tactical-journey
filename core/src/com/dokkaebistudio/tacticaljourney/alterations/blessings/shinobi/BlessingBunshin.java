@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 /**
  * Bunshin no jutsu: Chance to clone on room entrance.
@@ -63,7 +64,7 @@ public class BlessingBunshin extends Blessing {
 			List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(playerPos.coord(), room);
 			for (Tile t : adjacentTiles) {
 				if (t.isWalkable(entity) && TileUtil.getSolidEntityOnTile(t.getGridPos(), room) == null) {
-					BlessingKawarimi.createSmokeEffect(t.getGridPos());
+					VFXUtil.createSmokeEffect(t.getGridPos());
 					Entity clone = room.entityFactory.playerFactory.createPlayerClone(room, t.getGridPos(), GameScreen.player);
 					
 					

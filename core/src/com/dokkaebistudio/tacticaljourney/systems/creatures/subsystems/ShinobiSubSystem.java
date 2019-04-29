@@ -15,7 +15,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingKawarimi;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -32,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class ShinobiSubSystem extends CreatureSubSystem {
 	
@@ -172,15 +172,15 @@ public class ShinobiSubSystem extends CreatureSubSystem {
     			
     			// Clone
     			List<Entity> clones = new ArrayList<>();
-    			BlessingKawarimi.createSmokeEffect(UP_CLONE_TILE);
+    			VFXUtil.createSmokeEffect(UP_CLONE_TILE);
     			clones.add(room.entityFactory.enemyFactory.createShinobi(room, UP_CLONE_TILE, true));
-    			BlessingKawarimi.createSmokeEffect(DOWN_CLONE_TILE);
+    			VFXUtil.createSmokeEffect(DOWN_CLONE_TILE);
     			clones.add(room.entityFactory.enemyFactory.createShinobi(room, DOWN_CLONE_TILE, true));
     			if (LEFT_CLONE_TILE.equals(Mappers.gridPositionComponent.get(enemy).coord())) {
-        			BlessingKawarimi.createSmokeEffect(RIGHT_CLONE_TILE);
+    				VFXUtil.createSmokeEffect(RIGHT_CLONE_TILE);
         			clones.add(room.entityFactory.enemyFactory.createShinobi(room, RIGHT_CLONE_TILE, true));
     			} else {
-        			BlessingKawarimi.createSmokeEffect(LEFT_CLONE_TILE);
+    				VFXUtil.createSmokeEffect(LEFT_CLONE_TILE);
         			clones.add(room.entityFactory.enemyFactory.createShinobi(room, LEFT_CLONE_TILE, true));
     			}
     			

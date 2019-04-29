@@ -162,7 +162,8 @@ public class CreepFire extends Creep {
 			if (flammableComponent != null && flammableComponent.isPropagate() && !flammableComponent.isBurning()) {
 				flammableComponent.setBurning(true);
 				GridPositionComponent flammablePos = Mappers.gridPositionComponent.get(flammable);
-				Entity fire = room.entityFactory.creepFactory.createFire(	room, flammablePos.coord(), parentEntityCompo.getParent());
+				Entity parent = parentEntityCompo != null ? parentEntityCompo.getParent() : null;
+				Entity fire = room.entityFactory.creepFactory.createFire(	room, flammablePos.coord(), parent);
 			}
 		}
 	}

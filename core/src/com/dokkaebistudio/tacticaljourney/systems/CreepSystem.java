@@ -75,6 +75,7 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
     	if (room.getState() == RoomState.ALLY_END_TURN) {
     		// Handle enemy stop positions
     		for (Entity ally : room.getAllies()) {
+    			if (ally == GameScreen.player) continue;
 	    		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(ally);
 	    		Set<Entity> creeps = TileUtil.getEntitiesWithComponentOnTile(enemyPos.coord(), CreepComponent.class, room);
 	    		for (Entity creep : creeps) {

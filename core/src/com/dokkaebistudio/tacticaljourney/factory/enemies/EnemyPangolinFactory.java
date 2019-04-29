@@ -27,8 +27,8 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinBaby;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
@@ -38,7 +38,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.pangolins.PangolinMotherSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -102,8 +102,6 @@ public final class EnemyPangolinFactory {
 		aiComponent.setType(new EnemyPangolinBaby(mother));
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -139,7 +137,6 @@ public final class EnemyPangolinFactory {
 		healthComponent.setMaxHp(12);
 		healthComponent.setHp(12);
 		healthComponent.setMaxArmor(20);
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -202,8 +199,6 @@ public final class EnemyPangolinFactory {
 		aiComponent.setSubSystem(new PangolinMotherSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -236,7 +231,6 @@ public final class EnemyPangolinFactory {
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
 		healthComponent.addResistance(DamageType.EXPLOSION, 75);
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(20);
 		healthComponent.setHp(20);
 		healthComponent.setMaxArmor(50);

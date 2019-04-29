@@ -4,16 +4,17 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
@@ -21,7 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class AIComponent implements Component, Poolable, MovableInterface, RoomSystem {
+public class AIComponent implements Component, Poolable, MovableInterface, MarkerInterface, RoomSystem {
 	
 	/** The room.*/
 	public Room room;
@@ -29,7 +30,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	/** The type of enemy. */
 	private Creature type;
 
-	private EnemySubSystem subSystem;
+	private CreatureSubSystem subSystem;
 	
 	/** Whether this enemy's turn is over or not. */
 	private boolean turnOver;
@@ -49,7 +50,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	private boolean alerted = false;
 	
 	/** The displayer that shows the the alerted state. */
-	private Entity alertedDisplayer;
+	private Label alertedMarker = new Label("", PopinService.hudStyle());
 	
 	/** The target this enemy is focusing on. */
 	private Entity target;
@@ -65,14 +66,27 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	
 	@Override
 	public void reset() {
-		if (alertedDisplayer != null) {
-			room.removeEntity(alertedDisplayer);		
+		if (alertedMarker != null) {
+			alertedMarker.setText("");
+			alertedMarker.remove();		
 		}
-		alertedDisplayer = null;
 		setAlerted(false, null, null);
 		subSystem = null;
 		turnOver = false;
 	}
+	
+	
+	@Override
+	public void showMarker(Entity ally) {
+		GameScreen.fxStage.addActor(alertedMarker);
+		this.place(Mappers.gridPositionComponent.get(ally).coord());
+	}
+	
+	@Override
+	public void hideMarker() {
+		alertedMarker.remove();
+	}
+	
 	
 	
 	
@@ -81,17 +95,12 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void initiateMovement(Vector2 currentPos) {
-		
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
-			//Add the tranfo component to the entity to perform real movement on screen
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(currentPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 
@@ -99,10 +108,9 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
-		if (alertedDisplayer != null) {
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			gridPositionComponent.absolutePos((int)(gridPositionComponent.getAbsolutePos().x + xOffset), 
-					(int)(gridPositionComponent.getAbsolutePos().y + yOffset));
+		if (alertedMarker != null) {
+			alertedMarker.layout();
+			alertedMarker.setPosition(alertedMarker.getX() + xOffset, alertedMarker.getY() + yOffset);
 		}
 	}
 
@@ -110,29 +118,23 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 
 	@Override
 	public void endMovement(Vector2 finalPos) {
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(finalPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
-		if (alertedDisplayer != null) {
-			TextComponent textCompo = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			
+		if (alertedMarker != null) {
+			alertedMarker.layout();
 			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-			startPos.x = startPos.x + GameScreen.GRID_SIZE - textCompo.getWidth();
-			startPos.y = startPos.y + textCompo.getHeight();
-			gridPositionComponent.absolutePos((int)startPos.x, (int)startPos.y);
-			gridPositionComponent.coord(tilePos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - alertedMarker.getGlyphLayout().width;
+			startPos.y = startPos.y + alertedMarker.getGlyphLayout().height - 10;
+			alertedMarker.setPosition(startPos.x, startPos.y);
 		}
 	}
 	
@@ -219,7 +221,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	public void setAlerted(boolean alerted, Entity enemy, Entity target) {
 		if (!this.alerted && alerted && enemy != null) {
 			//First time alerted
-			this.type.onAlerted(enemy, GameScreen.player, room);
+			this.type.onAlerted(enemy, target, room);
 		}
 		
 		this.alerted = alerted;
@@ -230,35 +232,29 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 			this.target = target;
 		}
 		
-		if (alertedDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(alertedDisplayer);
-			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(alertedDisplayer);
-			if (textComponent != null && gridPositionComponent != null) {
-				String color = "[WHITE]";
-				if (this.target != GameScreen.player) {
-					color = "[GREEN]";
-				}
-				
-				textComponent.setText(this.alerted ? color + "!!" : "");
-				
-				this.place(gridPositionComponent.coord());
+		if (alertedMarker != null) {
+			String color = "[WHITE]";
+			if (this.target != GameScreen.player) {
+				color = "[GREEN]";
+			}
+			
+			alertedMarker.setText(this.alerted ? color + "!!" : "");
+			alertedMarker.layout();
+			if (enemy != null) {
+				this.place(Mappers.gridPositionComponent.get(enemy).coord());
 			}
 		}
 	}
 
-	public Entity getAlertedDisplayer() {
-		return alertedDisplayer;
+	public Label getAlertedMarker() {
+		return alertedMarker;
 	}
 
-	public void setAlertedDisplayer(Entity alertedDisplayer) {
-		this.alertedDisplayer = alertedDisplayer;
-	}
-
-	public EnemySubSystem getSubSystem() {
+	public CreatureSubSystem getSubSystem() {
 		return subSystem;
 	}
 
-	public void setSubSystem(EnemySubSystem subSystem) {
+	public void setSubSystem(CreatureSubSystem subSystem) {
 		this.subSystem = subSystem;
 	}
 
@@ -301,9 +297,8 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				output.writeString(object.basicMoveStrategy.name());
 				output.writeString(object.alertedMoveStrategy.name());
 
-				kryo.writeClassAndObject(output, object.alertedDisplayer);
-				output.writeBoolean(object.alerted);
 				kryo.writeClassAndObject(output, object.target);
+				output.writeBoolean(object.alerted);
 			}
 
 			@Override
@@ -311,17 +306,15 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				AIComponent compo = engine.createComponent(AIComponent.class);
 				
 				compo.type = (Creature) kryo.readClassAndObject(input);
-				compo.subSystem = (EnemySubSystem) kryo.readClassAndObject(input);
+				compo.subSystem = (CreatureSubSystem) kryo.readClassAndObject(input);
 				
 				compo.turnOver = input.readBoolean();
 				
 				compo.basicMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				compo.alertedMoveStrategy = AIMoveStrategy.valueOf(input.readString());
 				
-				compo.alertedDisplayer = (Entity) kryo.readClassAndObject(input);
-				compo.setAlerted(input.readBoolean(), null, null);
 				compo.target = (Entity) kryo.readClassAndObject(input);
-//				engine.addEntity(compo.alertedDisplayer);
+				compo.setAlerted(input.readBoolean(), null, compo.target);
 				
 				return compo;
 			}

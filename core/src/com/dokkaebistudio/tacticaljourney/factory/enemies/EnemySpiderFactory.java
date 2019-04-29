@@ -94,8 +94,6 @@ public final class EnemySpiderFactory {
 		aiComponent.setType(new EnemySpider());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -129,8 +127,6 @@ public final class EnemySpiderFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -186,8 +182,6 @@ public final class EnemySpiderFactory {
 		aiComponent.setType(new EnemyWebSpider());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_FROM_RANGE_IF_POSSIBLE);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -222,8 +216,6 @@ public final class EnemySpiderFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(5);
 		healthComponent.setHp(5);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -282,8 +274,6 @@ public final class EnemySpiderFactory {
 		aiComponent.setType(new EnemyVenomSpider());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -318,7 +308,6 @@ public final class EnemySpiderFactory {
 		healthComponent.setHp(10);
 		healthComponent.addResistance(DamageType.POISON, 100);
 		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);

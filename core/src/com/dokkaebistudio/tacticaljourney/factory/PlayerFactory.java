@@ -184,6 +184,7 @@ public final class PlayerFactory {
 		healthComponent.setHp(50);
 		healthComponent.setMaxArmor(30);
 		healthComponent.setArmor(0);
+		healthComponent.removeHpDisplayer();
 		playerEntity.add(healthComponent);
 		
 		// Experience compo
@@ -266,8 +267,6 @@ public final class PlayerFactory {
 		aiComponent.setType(new AllyClone());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.entityFactory.createTextOnTile(position, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		cloneEntity.add(aiComponent);
 		
 		// Humanoid
@@ -312,11 +311,10 @@ public final class PlayerFactory {
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(100);
-		healthComponent.setHp(100);
+		healthComponent.setMaxHp(10);
+		healthComponent.setHp(10);
 		healthComponent.setMaxArmor(0);
 		healthComponent.setArmor(0);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(position, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		cloneEntity.add(healthComponent);
 		
 		// Statuses

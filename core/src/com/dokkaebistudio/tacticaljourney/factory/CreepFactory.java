@@ -102,8 +102,7 @@ public final class CreepFactory {
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepWeb());
 		creepCompo.setDuration(3);
-		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
-		creepCompo.setReleasedTurn(turnReleased);
+		creepCompo.setReleasedTurn(CreepReleasedTurnEnum.getReleaseTurn(room.getState()));
 		creepEntity.add(creepCompo);
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
@@ -205,7 +204,7 @@ public final class CreepFactory {
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().vineBush);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 1);
-		dropRate.add(ItemPoolRarity.COMMON, 0);
+//		dropRate.add(ItemPoolRarity.COMMON, 0);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		bushEntity.add(lootRewardCompo);
@@ -227,8 +226,7 @@ public final class CreepFactory {
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepFire());
 		creepCompo.setDuration(3);
-		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
-		creepCompo.setReleasedTurn(turnReleased);
+		creepCompo.setReleasedTurn(CreepReleasedTurnEnum.getReleaseTurn(room.getState()));
 		creepEntity.add(creepCompo);
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
@@ -271,8 +269,7 @@ public final class CreepFactory {
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
 		creepCompo.setType(new CreepPoison());
 		creepCompo.setDuration(5);
-		CreepReleasedTurnEnum turnReleased = room.getState().isPlayerTurn() ? CreepReleasedTurnEnum.PLAYER : CreepReleasedTurnEnum.ENEMY;
-		creepCompo.setReleasedTurn(turnReleased);
+		creepCompo.setReleasedTurn(CreepReleasedTurnEnum.getReleaseTurn(room.getState()));
 		creepEntity.add(creepCompo);
 		
 		if (parentEntity != null) {

@@ -17,26 +17,26 @@ public abstract class Creature {
 	
 	/**
 	 * Called when the player enter the room for the first time.
-	 * @param enemy the enemy entity
-	 * @param room the room where this enemy is
+	 * @param creature the creature entity
+	 * @param room the room where this creature is
 	 */
-	public void onRoomVisited(Entity enemy, Room room) {}
+	public void onRoomVisited(Entity creature, Room room) {}
 
-	public void onStartTurn(Entity enemy, Room room) {}
-	public void onEndTurn(Entity enemy, Room room) {}
+	public void onStartTurn(Entity creature, Room room) {}
+	public void onEndTurn(Entity creature, Room room) {}
 	
-	public void onStartMovement(Entity enemy) {}
-	public void onEndMovement(Entity enemy) {}
+	public void onStartMovement(Entity creature) {}
+	public void onEndMovement(Entity creature) {}
 	
-	public void onAttack(Entity enemy, Entity target, Room room) {}
-	public boolean onReceiveAttack(Entity enemy, Entity attacker, Room room) { return true; }
+	public void onAttack(Entity creature, Entity target, Room room) {}
+	public boolean onReceiveAttack(Entity creature, Entity attacker, Room room) { return true; }
 	public void onReceiveDamage(int damage, Entity creature, Entity attacker, Room room) {
 		Mappers.aiComponent.get(creature).setAlerted(false, creature, attacker);
 	}
 	
-	public void onKill(Entity enemy, Entity target, Room room) {}
+	public void onKill(Entity creature, Entity target, Room room) {}
 
-	public void onDeath(Entity enemy, Entity attacker, Room room) {}
+	public void onDeath(Entity creature, Entity attacker, Room room) {}
 		
 	
 	/**
@@ -48,7 +48,7 @@ public abstract class Creature {
 		Mappers.aiComponent.get(creature).setAlerted(false, creature, null);
 	}
 	
-	public void onAlerted(Entity enemy, Entity player, Room room) {}
+	public void onAlerted(Entity creature, Entity target, Room room) {}
 	
 	
 	public void onRoomCleared(Entity creature, Room room) {}

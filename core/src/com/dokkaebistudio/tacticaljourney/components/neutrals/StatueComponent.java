@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.components.neutrals;
 import java.util.List;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -17,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse.CursesEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.pools.AlterationPool;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
@@ -33,7 +35,7 @@ import com.esotericsoftware.kryo.io.Output;
  * @author Callil
  *
  */
-public class StatueComponent implements Component, Poolable {
+public class StatueComponent implements Component, Poolable, MarkerInterface {
 
 	/** Whether this statue still has a blessing to offer. */
 	private boolean hasBlessing = true;
@@ -62,6 +64,20 @@ public class StatueComponent implements Component, Poolable {
 		setBlessingToGive(null);
 		setCurseToGive(null);
 		setHolyAura(null);
+	}
+	
+	@Override
+	public void showMarker(Entity e) {
+		if (this.getHolyAura() != null) {
+			GameScreen.fxStage.addActor(this.getHolyAura());
+		}
+	}
+	
+	@Override
+	public void hideMarker() {
+		if (this.getHolyAura() != null) {
+			this.getHolyAura().remove();
+		}
 	}
 	
 	

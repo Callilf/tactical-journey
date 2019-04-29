@@ -15,9 +15,10 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.ShinobiSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class EnemyShinobi extends Creature {
 	
@@ -75,14 +76,14 @@ public class EnemyShinobi extends Creature {
 		Journal.addEntry("Kawarimi activated and evaded the attack.");
 						
 		// Effect on the previous tile : smoke + log
-		BlessingKawarimi.createLogEffect(gridPositionComponent.coord());
-		BlessingKawarimi.createSmokeEffect(gridPositionComponent.coord());
+		VFXUtil.createLogEffect(gridPositionComponent.coord());
+		VFXUtil.createSmokeEffect(gridPositionComponent.coord());
 		
 		// Select the new tile + add smoke
 		Collections.shuffle(possibleMoves,  RandomSingleton.getInstance().getUnseededRandom());
 		Vector2 newPlace = possibleMoves.get(0);
 		MovementHandler.placeEntity(enemy, newPlace, room);
-		BlessingKawarimi.createSmokeEffect(newPlace);
+		VFXUtil.createSmokeEffect(newPlace);
 		
 
 		// Cancel the enemy attack
@@ -99,7 +100,7 @@ public class EnemyShinobi extends Creature {
 	
 	
 	@Override
-	public void onAlerted(Entity enemy, Entity player, Room room) {
+	public void onAlerted(Entity enemy, Entity target, Room room) {
 		sleeping = false;
 	}
 	

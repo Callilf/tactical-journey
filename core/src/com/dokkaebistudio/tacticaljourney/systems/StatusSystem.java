@@ -20,6 +20,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -70,7 +71,7 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
 
 		
 		// Handle status on the player
-		if (Mappers.playerComponent.has(entity)) {
+		if (entity == GameScreen.player) {
 			if (room.getState() == RoomState.PLAYER_TURN_INIT) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
 					status.onStartTurn(entity, room);
@@ -86,11 +87,26 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
 			}
 		}
 		
-		
+		// Handle status on allies
+		if (Mappers.allyComponent.has(entity) && entity != GameScreen.player) {
+			if (room.getState() == RoomState.PLAYER_END_TURN) {
+				for (Status status : statusReceiverComponent.getStatuses()) {
+					status.onStartTurn(entity, room);
+				}
+			}
+			
+			if (room.getState() == RoomState.ALLY_END_TURN) {
+				for (Status status : statusReceiverComponent.getStatuses()) {
+					status.onEndTurn(entity, room);
+					
+					statusReceiverComponent.updateDuration(status, -1);
+				}
+			}
+		}
 		
 		// Handle status on enemies
 		if (Mappers.enemyComponent.has(entity)) {
-			if (room.getState() == RoomState.PLAYER_END_TURN) {
+			if (room.getState() == RoomState.ALLY_END_TURN) {
 				for (Status status : statusReceiverComponent.getStatuses()) {
 					status.onStartTurn(entity, room);
 				}

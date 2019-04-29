@@ -13,13 +13,13 @@ import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -72,10 +72,10 @@ public class StatusDebuffStunned extends Status {
 			room.turnManager.endPlayerTurn();
 		}
 			
-		boolean isEnemy = Mappers.enemyComponent.has(entity);
-		if (isEnemy && room.getState().isEnemyTurn() && EnemySystem.enemyCurrentyPlaying == entity) {
-			// Finish this enemy turn since it's dead
-			room.setNextState(RoomState.ENEMY_TURN_INIT);
+		boolean isCreature = Mappers.allyComponent.has(entity) || Mappers.enemyComponent.has(entity);
+		if (isCreature && (room.getState().isAllyTurn() || room.getState().isEnemyTurn()) && CreatureSystem.creatureCurrentyPlaying == entity) {
+			// Finish this creature turn since it's dead
+			room.setCreatureState(RoomCreatureState.NONE);
 		}	
 		
 		PoolableVector2 animPos = TileUtil.convertGridPosIntoPixelPos(Mappers.gridPositionComponent.get(entity).coord());

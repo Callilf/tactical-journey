@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -20,12 +21,14 @@ import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -35,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
@@ -165,9 +169,9 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 			// When right clicking on an ennemy, display it's possible movement
 			handleRightClickOnEnemies(player);
-			
 			handleClickOnPlayer(player);
-
+			handleClickOnAlly();
+			
 			break;
 
 		case PLAYER_MOVE_DESTINATION_SELECTED:
@@ -365,7 +369,40 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 //		}
 	}
 	
-	
+	/**
+	 * Click on the player to end the turn if no move remaining
+	 */
+	private void handleClickOnAlly() {		
+		if (InputSingleton.getInstance().leftClickJustReleased) {
+			Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
+			int x = (int) touchPoint.x;
+			int y = (int) touchPoint.y;
+
+			PoolableVector2 gridPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+			
+			GridPositionComponent playerPos = Mappers.gridPositionComponent.get(GameScreen.player);
+			int distance = TileUtil.getDistanceBetweenTiles(playerPos.coord(), gridPos);
+			if (distance > 1) return;
+			
+			Entity ally = TileUtil.getEntityWithComponentOnTile(gridPos, AllyComponent.class, room);
+			if (ally == null || ally == GameScreen.player) return;
+			
+			// Check movement cost
+			MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
+			int moveCost = TileUtil.getCostOfMovementForTilePos(gridPos, GameScreen.player, room);
+			if (moveComponent.getMoveRemaining() < moveCost) return;
+			
+			// Swap possible
+			VFXUtil.createSmokeEffect(gridPos);
+			VFXUtil.createSmokeEffect(playerPos.coord());
+			MovementHandler.placeEntity(ally, playerPos.coord(), room);
+			MovementHandler.placeEntity(GameScreen.player, gridPos, room);
+			
+			moveComponent.setMoveRemaining(moveComponent.getMoveRemaining() - moveCost);
+			
+			room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
+		}
+	}
 	
 	
 	//****************************
@@ -451,6 +488,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (playerAttackComponent != null) {
 			playerAttackComponent.showAttackableTiles();
 		}
+		
+		HUDRenderer.hideTargetMaker();
 	}
 
 	private void displayEnemyTiles(Entity player, Entity attackableEntity) {
@@ -478,6 +517,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
 		if (enemyAttackCompo != null) {
 			enemyAttackCompo.showAttackableTiles();
+		}
+		
+		AIComponent aiComponent = Mappers.aiComponent.get(attackableEntity);
+		if (aiComponent != null && aiComponent.getTarget() != null) {
+			HUDRenderer.displayTargetMaker(Mappers.gridPositionComponent.get(aiComponent.getTarget()).coord());
 		}
 	}
 	

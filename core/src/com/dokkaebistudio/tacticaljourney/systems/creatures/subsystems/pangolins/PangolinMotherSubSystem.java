@@ -1,20 +1,20 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins;
+package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.pangolins;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class PangolinMotherSubSystem extends EnemySubSystem {
+public class PangolinMotherSubSystem extends CreatureSubSystem {
 	
 
 	
 	@Override
-	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {		
+	public boolean update(final CreatureSystem creatureSystem, final Entity enemy, final Room room) {		
 		
 		AIComponent aiCompo = Mappers.aiComponent.get(enemy);
 		EnemyPangolinMother pangolinType = (EnemyPangolinMother) aiCompo.getType();

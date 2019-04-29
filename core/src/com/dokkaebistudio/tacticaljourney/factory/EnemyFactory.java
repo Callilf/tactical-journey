@@ -34,8 +34,8 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyScorpion;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -43,8 +43,8 @@ import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.ShinobiSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -138,8 +138,6 @@ public final class EnemyFactory {
 		aiComponent.setType(new EnemyScorpion());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		aiComponent.setAlerted(true, enemyEntity, GameScreen.player);
 		enemyEntity.add(aiComponent);
 		
@@ -173,7 +171,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(15);
 		healthComponent.setHp(15);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -241,8 +238,6 @@ public final class EnemyFactory {
 		aiComponent.setSubSystem(new StingerSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		
@@ -282,7 +277,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(8);
 		healthComponent.setHp(8);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -358,8 +352,6 @@ public final class EnemyFactory {
 		aiComponent.setSubSystem(clone ? null : new ShinobiSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		
@@ -418,7 +410,6 @@ public final class EnemyFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(25);
 		healthComponent.setHp(25);
-		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		enemyEntity.add(healthComponent);
 		
 		if (!clone) {

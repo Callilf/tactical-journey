@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -56,6 +57,8 @@ import com.dokkaebistudio.tacticaljourney.systems.InspectSystem;
 import com.dokkaebistudio.tacticaljourney.systems.InspectSystem.InspectModeActionEnum;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class HUDRenderer implements Renderer, RoomSystem {
 	
@@ -146,6 +149,10 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Label reward;
 	
 	
+	// Target of the selected creature
+	private static Image targetImage;
+	
+	
 	// Components
 	private WalletComponent walletComponent;
 	private InventoryComponent inventoryComponent;	
@@ -159,6 +166,11 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	
 	public HUDRenderer(Stage s) {
 		this.stage = s;
+		
+		targetImage = new Image(Assets.target_marker.getRegion());
+		targetImage.addAction(Actions.forever(Actions.sequence(
+				Actions.moveBy(0, 30, 1f, Interpolation.pow2), 
+				Actions.moveBy(0, -30, 1f, Interpolation.pow2))));
 	}
 	
 	@Override
@@ -1007,5 +1019,26 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		
 		return sb.toString();
 	}
+	
+	
+	public static void displayTargetMaker(Vector2 gridPos) {
+		if (targetImage.hasParent()) return; 
+		
+		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		pixelPos.x += GameScreen.GRID_SIZE/2 - targetImage.getWidth()/2;
+		pixelPos.y += 60;
+		targetImage.setPosition(pixelPos.x, pixelPos.y);
+		pixelPos.free();
+		
+		for (Action a : targetImage.getActions()) {
+			a.restart();
+		}
+		GameScreen.fxStage.addActor(targetImage);
+	}
+	
+	public static void hideTargetMaker() {
+		targetImage.remove();
+	}
+	
 	
 }

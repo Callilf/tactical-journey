@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine.PooledEntity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -112,7 +113,7 @@ public class Persister {
 	public Persister() {}
 	public Persister(GameScreen gs) {
 		this.gameScreen = gs;
-		this.engine = gs.engine;
+		this.engine = GameScreen.engine;
 	}
 	
 	/**
@@ -168,10 +169,8 @@ public class Persister {
 	
 	public GameStatistics loadGameStatistics() {
 		GameStatistics stats = null;
-		
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
-		
 		try {
 			FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
 		    Input input = new Input(new FileInputStream(statsFile.file()));
@@ -209,6 +208,10 @@ public class Persister {
 
 			@Override
 			public void write(Kryo kryo, Output output, GameScreen gs) {
+				
+				// Pre-save the player (just the id) so that when another entity references it, it won't save it
+				output.writeLong(((PublicEntity)GameScreen.player).id);
+				savedEntities.add(((PublicEntity)GameScreen.player).id);
 								
 				// Save the current time
 				output.writeFloat(GameTimeSingleton.getInstance().getElapsedTime());
@@ -235,14 +238,20 @@ public class Persister {
 					kryo.writeClassAndObject(output, f);
 				}
 				
-				// Save the player
-				kryo.writeClassAndObject(output, gs.player);
+				// Save the player for real
+				savedEntities.remove(((PublicEntity)GameScreen.player).id);
+				kryo.writeClassAndObject(output, GameScreen.player);
 
 				output.writeLong(GameScreen.engine.entityCounter);
 			}
 
 			@Override
-			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {		
+			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {
+				
+				// Partial load of the player so that entities that reference it won't crash
+				GameScreen.player = (PublicEntity) engine.createEntity();
+				((PublicEntity)GameScreen.player).id = input.readLong();
+				loadedEntities.put(((PublicEntity)GameScreen.player).id, (PooledEntity) GameScreen.player);
 				
 				// Restore the time
 				GameTimeSingleton.getInstance().setElapsedTime(input.readFloat());
@@ -276,12 +285,13 @@ public class Persister {
 					}
 				}
 				
-				// Load the player
-				gameScreen.player = (Entity) kryo.readClassAndObject(input);
+				// Real load of the player
+				loadedEntities.remove(((PublicEntity)GameScreen.player).id);
+				GameScreen.player = (PublicEntity) kryo.readClassAndObject(input);
 				
 						
 				GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
-				MovementHandler.placeEntity(gameScreen.player, gridPositionComponent.coord(), gameScreen.activeFloor.getActiveRoom());
+				MovementHandler.placeEntity(GameScreen.player, gridPositionComponent.coord(), gameScreen.activeFloor.getActiveRoom());
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				inventoryComponent.player = GameScreen.player;
 				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(GameScreen.player);
@@ -534,7 +544,13 @@ public class Persister {
 				}
 				
 				// Otherwise, load it
-				PooledEntity loadedEntity = (PooledEntity) engine.createEntity();
+				PooledEntity loadedEntity = null;
+				if (entityId == ((PublicEntity)GameScreen.player).id) {
+					// if it's the player, use the already created entity
+					loadedEntity = (PooledEntity) GameScreen.player;
+				} else {
+					loadedEntity = (PooledEntity) engine.createEntity();
+				}
 				loadedEntity.flags = input.readInt();
 				loadedEntity.id = entityId;
 				loadedEntities.put(entityId, loadedEntity);

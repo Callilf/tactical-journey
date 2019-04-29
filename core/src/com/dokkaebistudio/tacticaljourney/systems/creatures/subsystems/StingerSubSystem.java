@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies;
+package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,16 +16,16 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler.MovementProgressEnum;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class StingerSubSystem extends EnemySubSystem {
+public class StingerSubSystem extends CreatureSubSystem {
 	
 	
 	private enum StingerAttackStates {
@@ -41,7 +41,7 @@ public class StingerSubSystem extends EnemySubSystem {
 	private StingerAttackStates attackState = StingerAttackStates.NONE;
 	
 	@Override
-	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
+	public boolean update(final CreatureSystem creatureSystem, final Entity enemy, final Room room) {
     	MoveComponent moveCompo = Mappers.moveComponent.get(enemy);
     	final AttackComponent attackCompo = Mappers.attackComponent.get(enemy);
     	GridPositionComponent enemyCurrentPos = Mappers.gridPositionComponent.get(enemy);
@@ -50,13 +50,13 @@ public class StingerSubSystem extends EnemySubSystem {
 		GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(playerEntity);
 
 		
-		switch(room.getState()) {
+		switch(room.getCreatureState()) {
 		
-		case ENEMY_TURN_INIT:
+		case TURN_INIT:
 			attackCompo.setAdditionnalStrength(0);
 			break;
 
-    	case ENEMY_MOVE_TILES_DISPLAYED :
+    	case MOVE_TILES_DISPLAYED :
     		
     		// First check whether the stinger in aligned with the player horizontally or vertically    		
     		chargeTarget = canChargePlayer(enemy, moveCompo, attackCompo, room);
@@ -65,13 +65,13 @@ public class StingerSubSystem extends EnemySubSystem {
     			canCharge = true;
     			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(chargeTarget);
     			chargeDistance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), enemyCurrentPos.coord());
-        		room.setNextState(RoomState.ENEMY_ATTACK);
+        		room.setCreatureState(RoomCreatureState.ATTACK);
         		return true;
     		} else {
 	    		return false;
     		}
     		
-    	case ENEMY_ATTACK:
+    	case ATTACK:
     		
     		if (canCharge) {
     			attackState = StingerAttackStates.INIT_CHARGE;
@@ -151,7 +151,7 @@ public class StingerSubSystem extends EnemySubSystem {
     			StateComponent stateComponent = Mappers.stateComponent.get(enemy);
     			stateComponent.set(StatesEnum.STINGER_ATTACK, true);
     			
-    			enemySystem.getMovementHandler().initiateMovement(enemy);
+    			creatureSystem.getMovementHandler().initiateMovement(enemy);
     			attackState = StingerAttackStates.CHARGE;
     			
     			break;
@@ -159,7 +159,7 @@ public class StingerSubSystem extends EnemySubSystem {
     	    	moveCompo.selectCurrentMoveDestinationTile(enemy);
 	    		
     	    	//Do the movement on screen
-    	    	MovementProgressEnum movementFinished = enemySystem.getMovementHandler().performRealMovement(enemy, room, 15);
+    	    	MovementProgressEnum movementFinished = creatureSystem.getMovementHandler().performRealMovement(enemy, room, 15);
         		if (movementFinished == MovementProgressEnum.MOVEMENT_OVER) attackState = StingerAttackStates.END_CHARGE;
 
     			break;
@@ -175,7 +175,7 @@ public class StingerSubSystem extends EnemySubSystem {
 				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(targetPos.coord(), room));
 				
 				attackCompo.setAdditionnalStrength(chargeDistance);
-				room.setNextState(RoomState.ENEMY_ATTACK_ANIMATION);
+				room.setCreatureState(RoomCreatureState.ATTACK_ANIMATION);
     			
     			default:
     		}
@@ -192,7 +192,7 @@ public class StingerSubSystem extends EnemySubSystem {
 	
 	
 	@Override
-	public boolean computeMovableTilesToDisplayToPlayer(EnemySystem system, Entity enemyEntity, Room room) {
+	public boolean computeMovableTilesToDisplayToPlayer(CreatureSystem system, Entity enemyEntity, Room room) {
 		MoveComponent moveCompo = Mappers.moveComponent.get(enemyEntity);
     	AttackComponent attackCompo = Mappers.attackComponent.get(enemyEntity);
     	

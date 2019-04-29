@@ -48,8 +48,7 @@ import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.AllySystem;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
@@ -64,6 +63,7 @@ public class Room extends EntitySystem {
 	private RoomState lastInGameState;
 	private RoomState state;
 	private RoomState nextState;
+	private RoomCreatureState creatureState;
 	
 	public Tile[][] grid;
 	
@@ -150,6 +150,7 @@ public class Room extends EntitySystem {
 
 		
 		this.rewards = new ArrayList<>();
+		this.creatureState = RoomCreatureState.NONE;
 	}
 	
 	public Array<Entity> getAllEntities() {
@@ -463,9 +464,9 @@ public class Room extends EntitySystem {
 		this.enemies.remove(enemy);
 		this.removeEntity(enemy);
 		
-		if (state.isEnemyTurn() && EnemySystem.enemyCurrentyPlaying == enemy) {
+		if (state.isEnemyTurn() && CreatureSystem.creatureCurrentyPlaying == enemy) {
 			// Finish this enemy turn since it's dead
-			this.setNextState(RoomState.ENEMY_TURN_INIT);
+			this.setCreatureState(RoomCreatureState.NONE);
 		}
 	}
 	
@@ -497,9 +498,9 @@ public class Room extends EntitySystem {
 		this.allies.remove(ally);
 		this.removeEntity(ally);
 		
-		if (state.isEnemyTurn() && AllySystem.allyCurrentyPlaying == ally) {
-			// Finish this ally turn since it's dead
-			this.setNextState(RoomState.ALLY_TURN_INIT);
+		if (state.isAllyTurn() && CreatureSystem.creatureCurrentyPlaying == ally) {
+			// Finish this enemy turn since it's dead
+			this.setCreatureState(RoomCreatureState.NONE);
 		}
 	}
 	
@@ -713,6 +714,14 @@ public class Room extends EntitySystem {
 
 	public void setOnExitPath(boolean onExitPath) {
 		this.onExitPath = onExitPath;
+	}
+
+	public RoomCreatureState getCreatureState() {
+		return creatureState;
+	}
+
+	public void setCreatureState(RoomCreatureState creatureState) {
+		this.creatureState = creatureState;
 	}
 
 	

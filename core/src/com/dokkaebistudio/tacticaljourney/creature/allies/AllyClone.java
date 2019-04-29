@@ -1,13 +1,13 @@
 package com.dokkaebistudio.tacticaljourney.creature.allies;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi.BlessingKawarimi;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class AllyClone extends Creature {
 
@@ -52,7 +52,7 @@ public class AllyClone extends Creature {
 	@Override
 	public void onRoomCleared(Entity creature, Room room) {
 		GridPositionComponent pos = Mappers.gridPositionComponent.get(creature);
-		BlessingKawarimi.createSmokeEffect(pos.coord());
+		VFXUtil.createSmokeEffect(pos.coord());
 		room.removeAlly(creature);
 	}
 }

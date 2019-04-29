@@ -59,9 +59,11 @@ public class GridPositionComponent implements Component, Poolable {
     
     
     public void coord(Vector2 coord) {
+    	this.hasAbsolutePos = false;
     	this.coord.set(coord.x,coord.y);
     }
     public void coord(int x, int y) {
+    	this.hasAbsolutePos = false;
     	this.coord.set(x,y);
     }
     

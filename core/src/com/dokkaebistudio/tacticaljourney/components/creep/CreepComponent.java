@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -28,7 +29,19 @@ public class CreepComponent implements Component, Poolable {
 	
 	public enum CreepReleasedTurnEnum {
 		PLAYER,
+		ALLY,
 		ENEMY;
+		
+		
+		public static CreepReleasedTurnEnum getReleaseTurn(RoomState roomState) {
+			if (roomState.isPlayerTurn()) {
+				return PLAYER;
+			} else if (roomState.isAllyTurn()) {
+				return ALLY;
+			} else {
+				return ENEMY;
+			}
+		}
 	}
 	
 	/** The type of creep. */

@@ -44,8 +44,8 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanScoutSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen.TribesmanShamanSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen.TribesmanScoutSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen.TribesmanShamanSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -112,8 +112,6 @@ public final class EnemyTribesmenFactory {
 		aiComponent.setType(new EnemyTribesmanSpear());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -147,8 +145,6 @@ public final class EnemyTribesmenFactory {
 		healthComponent.room = room;
 		healthComponent.setMaxHp(13);
 		healthComponent.setHp(13);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
-		healthComponent.setHpDisplayer(hpEntity);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
@@ -212,8 +208,6 @@ public final class EnemyTribesmenFactory {
 		aiComponent.setType(new EnemyTribesmanShield());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -245,7 +239,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(13);
 		healthComponent.setHp(13);
 		healthComponent.setMaxArmor(7);
@@ -315,8 +308,6 @@ public final class EnemyTribesmenFactory {
 		aiComponent.setSubSystem(new TribesmanScoutSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -348,7 +339,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		healthComponent.setMaxArmor(0);
@@ -420,8 +410,6 @@ public final class EnemyTribesmenFactory {
 		aiComponent.setSubSystem(new TribesmanShamanSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.STANDING_STILL);
 		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.STANDING_STILL);
-		Entity alertedDisplayer = this.enemyFactory.entityFactory.createTextOnTile(pos, "", ZIndexConstants.HEALTH_DISPLAYER, room);
-		aiComponent.setAlertedDisplayer(alertedDisplayer);
 		enemyEntity.add(aiComponent);
 		
 		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
@@ -453,7 +441,6 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setHpDisplayer(this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(5);
 		healthComponent.setMaxArmor(0);

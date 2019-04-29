@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -14,8 +15,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -112,30 +112,28 @@ public class Floor {
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
 		
-		//TODO maybe move this
+		// Hide markers for each entities of the old room
 		if (oldRoom != null) {
 			for (Entity e : oldRoom.getAllEntities()) {
 				if (e == GameScreen.player) continue;
-				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-				if (statusReceiverComponent != null) statusReceiverComponent.hideStatusTable();
 				
-				StatueComponent statueCompo = Mappers.statueComponent.get(e);
-				if (statueCompo != null && statueCompo.getHolyAura() != null) statueCompo.getHolyAura().remove();
-				ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(e);
-				if (chaliceCompo != null && chaliceCompo.getAura() != null) chaliceCompo.getAura().remove();
-
+				for (Component c : e.getComponents()) {
+					if (c instanceof MarkerInterface) {
+						((MarkerInterface) c).hideMarker();
+					}
+				}
 			}
 		}
+		
+		// Display markers for each entities of the new room
 		for (Entity e : newRoom.getAllEntities()) {
 			if (e == GameScreen.player) continue;
-			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
-			if (statusReceiverComponent != null) statusReceiverComponent.displayStatusTable(GameScreen.fxStage);
 			
-			StatueComponent statueCompo = Mappers.statueComponent.get(e);
-			if (statueCompo != null && statueCompo.getHolyAura() != null) GameScreen.fxStage.addActor(statueCompo.getHolyAura());
-			ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(e);
-			if (chaliceCompo != null && chaliceCompo.getAura() != null) GameScreen.fxStage.addActor(chaliceCompo.getAura());
-
+			for (Component c : e.getComponents()) {
+				if (c instanceof MarkerInterface) {
+					((MarkerInterface) c).showMarker(e);
+				}
+			}
 		}
 		
 		if (oldRoom != null) {

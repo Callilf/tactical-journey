@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen;
+package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
@@ -15,13 +15,13 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribes
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanTotem;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
+import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
-public class TribesmanShamanSubSystem extends EnemySubSystem {
+public class TribesmanShamanSubSystem extends CreatureSubSystem {
 	
 	private Entity totem;
 	private int numberOfEnemies;
@@ -33,15 +33,15 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 	private int numberOfObsSummoned;
 	
 	@Override
-	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {		
+	public boolean update(final CreatureSystem enemySystem, final Entity enemy, final Room room) {		
 		
 		AIComponent aiComponent = Mappers.aiComponent.get(enemy);
 		EnemyTribesmanShaman shamanType = (EnemyTribesmanShaman) aiComponent.getType();
 
 		
-		switch(room.getState()) {
+		switch(room.getCreatureState()) {
 		
-		case ENEMY_TURN_INIT:
+		case TURN_INIT:
 			
 			// Check if there is a totem in the room
 			boolean totemFound = false;
@@ -65,11 +65,11 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 			
 			break;
 
-		case ENEMY_ATTACK:
+		case ATTACK:
 			
 			if (recovering) {
 				recovering = false;
-	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+	    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 			}
 			
@@ -82,7 +82,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				summoningTotem = false;
 				recovering = true;
 				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
-	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+	    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 				
 			} else if (summoningOrb) {
@@ -94,7 +94,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				summoningOrb = false;
 				recovering = true;
 				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
-	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+	    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 			} else if (summoningEnemy) {
 				Entity generateTribesman = generateTribesman(room);
@@ -103,7 +103,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 				summoningEnemy = false;
 				recovering = true;
 				Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
-	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+	    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 
 			} else {
@@ -115,7 +115,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 					summoningTotem = true;
 					Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 					
-		    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+		    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 					return true;
 				} else {
 					
@@ -132,7 +132,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 						summoningEnemy = true;
 						Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 						
-			    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+			    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 						return true;
 
 					} else if (choice == 1) {
@@ -143,7 +143,7 @@ public class TribesmanShamanSubSystem extends EnemySubSystem {
 							summoningOrb = true;
 							Mappers.stateComponent.get(enemy).set(StatesEnum.TRIBESMEN_SHAMAN_SUMMONING);
 							
-				    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+				    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 							return true;
 						}
 						

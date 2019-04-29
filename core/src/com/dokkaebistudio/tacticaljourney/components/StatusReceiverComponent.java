@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
@@ -35,7 +36,7 @@ import com.esotericsoftware.kryo.io.Output;
  * @author Callil
  *
  */
-public class StatusReceiverComponent implements Component, Poolable, MovableInterface {
+public class StatusReceiverComponent implements Component, Poolable, MovableInterface, MarkerInterface {
 	
 	/** The list of statuses currently affecting this entity. */
 	private List<Status> statuses = new ArrayList<>();
@@ -90,6 +91,15 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 //		return this.blessingImage;
 //	}
 	
+	@Override
+	public void showMarker(Entity e) {
+		this.displayStatusTable(GameScreen.fxStage);
+	}
+	
+	@Override
+	public void hideMarker() {
+		this.hideStatusTable();
+	}
 	
 	
 	@Override

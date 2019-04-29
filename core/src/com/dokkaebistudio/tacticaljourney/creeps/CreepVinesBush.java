@@ -6,10 +6,13 @@ package com.dokkaebistudio.tacticaljourney.creeps;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingUnfinished;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
@@ -35,6 +38,12 @@ public class CreepVinesBush extends Creep {
 	
 	@Override
 	public boolean isImmune(Entity entity) {
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(entity);
+		if (alterationReceiverComponent != null) {
+			Blessing blessing = alterationReceiverComponent.getBlessing(BlessingUnfinished.class);
+			if (blessing != null) return true;
+		}
+		
 		return Mappers.flyComponent.has(entity);
 	}
 

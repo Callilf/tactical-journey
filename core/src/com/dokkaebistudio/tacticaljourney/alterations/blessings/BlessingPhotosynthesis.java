@@ -8,7 +8,6 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;

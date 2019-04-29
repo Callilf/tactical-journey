@@ -18,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -136,7 +137,14 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 			}
 		}
 		
-		boolean canBeReceived = status.onReceive(entity, room);
+		boolean canBeReceived = true;
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(entity);
+		if (alterationReceiverComponent != null) {
+			canBeReceived = alterationReceiverComponent.onReceiveStatusEffect(entity, status, room);
+		}
+		if (!canBeReceived) return;
+		
+		canBeReceived = status.onReceive(entity, room);
 		if (canBeReceived) {
 			statuses.add(status);
 			

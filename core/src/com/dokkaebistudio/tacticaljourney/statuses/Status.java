@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 
 /**
  * A status on an entity that provides a temporary buff or a debuff.

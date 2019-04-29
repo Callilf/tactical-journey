@@ -20,8 +20,8 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
@@ -33,7 +33,6 @@ import com.dokkaebistudio.tacticaljourney.creeps.CreepWeb;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.WallItemPool;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 
@@ -97,6 +96,8 @@ public final class CreepFactory {
 		creepEntity.add(inspect);
 		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
+		destructible.setDestroyableWithWeapon(true);
+		destructible.setDestroyed(true);
 		creepEntity.add(destructible);
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);

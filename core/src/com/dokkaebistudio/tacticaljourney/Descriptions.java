@@ -273,6 +273,9 @@ public class Descriptions {
 	
 	public static final String ITEM_SILKY_BEARD_TITLE = "Silky beard";
 	public static final String ITEM_SILKY_BEARD_DESCRIPTION = "A beard of an peculiar boy that once lived inside a spider. Or is it the beard of the spider that once ate a young boy ? Grants the blessing of the indegistible while held in the inventory.";
+	
+	public static final String ITEM_SCISSORHAND_TITLE = "Scissorhand";
+	public static final String ITEM_SCISSORHAND_DESCRIPTION = "The hand of an artificial human. Each finger is razor sharp. Grants the blessing of the unfinished while held in the inventory.";
 
 	
 }

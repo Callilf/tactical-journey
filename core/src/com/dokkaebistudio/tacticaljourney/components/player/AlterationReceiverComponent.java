@@ -26,7 +26,6 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Alteration;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -35,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
@@ -214,6 +214,27 @@ public class AlterationReceiverComponent implements Component, Poolable {
 			c.onPlayerTurnEnds(entity, room);
 		}
 	}	
+	
+	public void onArriveOnTile(Vector2 gridPos, Entity mover, Room room) {
+		for (Blessing b : blessings) {
+			b.onArriveOnTile(gridPos, mover, room);
+		}
+		for (Curse c : curses) {
+			c.onArriveOnTile(gridPos, mover, room);
+		}
+	}
+	
+	public boolean onReceiveStatusEffect(Entity entity, Status status, Room room) {
+		boolean result = true;
+		for (Blessing b : blessings) {
+			result &= b.onReceiveStatusEffect(entity, status, room);
+		}
+		for (Curse c : curses) {
+			result &= c.onReceiveStatusEffect(entity, status, room);
+		}
+		return result;
+	}
+
 	
 	
 	//*************

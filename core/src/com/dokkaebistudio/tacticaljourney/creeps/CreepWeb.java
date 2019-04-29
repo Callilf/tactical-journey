@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingIndegistible;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingUnfinished;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
@@ -28,6 +29,12 @@ public class CreepWeb extends Creep {
 
 	@Override
 	public boolean isImmune(Entity entity) {
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(entity);
+		if (alterationReceiverComponent != null) {
+			Blessing blessing = alterationReceiverComponent.getBlessing(BlessingUnfinished.class);
+			if (blessing != null) return true;
+		}
+		
 		return Mappers.flyComponent.has(entity);
 	}
 	

@@ -4,11 +4,13 @@
 package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.wheel.AttackWheel;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 
@@ -97,8 +99,13 @@ public abstract class Alteration {
 	public void onFloorVisited(Entity entity, Floor floor, Room room) {};
 	
 	
+
 	
 	// Misc
+	
+	public void onArriveOnTile(Vector2 gridPos, Entity mover, Room room) {}
+	
+	public boolean onReceiveStatusEffect(Entity entity, Status status, Room room) { return true; }
 	
 	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {}
 	

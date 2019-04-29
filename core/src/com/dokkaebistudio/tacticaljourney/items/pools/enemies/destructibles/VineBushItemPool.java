@@ -25,8 +25,8 @@ public class VineBushItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PEBBLE, 10));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 1, true));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.PEBBLE, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 1, true));
 	}
 	
 	

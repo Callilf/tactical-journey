@@ -7,12 +7,14 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MovableInterface;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -197,11 +199,20 @@ public class MovementHandler {
 			}
 		}
 		
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(mover);
+		if (alterationReceiverComponent != null) {
+			alterationReceiverComponent.onArriveOnTile(moveCompo.currentMoveDestinationTilePos, mover, room);
+		}
+		
+		
 		// Creep
 		Entity creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
 		if (creep != null) {
-			// There is creep on this tile, play its effect
-			Mappers.creepComponent.get(creep).onWalk(mover, creep, room);
+			DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(creep);
+			if (destructibleComponent == null || !destructibleComponent.isDestroyed()) {
+				// There is creep on this tile, play its effect
+				Mappers.creepComponent.get(creep).onWalk(mover, creep, room);
+			}
 		}
 		
 		//Leave creep

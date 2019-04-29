@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -92,7 +93,7 @@ public class LootUtil {
 		  }
 		};
 		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
-		room.floor.getGameScreen().fxStage.addActor(dropAnimationImage);
+		GameScreen.fxStage.addActor(dropAnimationImage);
 		
 		lootRewardComponent.setLatestItem(dropItem);
 	}

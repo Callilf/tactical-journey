@@ -27,8 +27,8 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinBaby;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
@@ -38,7 +38,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.pangolins.PangolinMotherSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.pangolins.PangolinMotherSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**

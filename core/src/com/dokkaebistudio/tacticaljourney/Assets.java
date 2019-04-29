@@ -72,6 +72,7 @@ public class Assets {
 	public static RegionDescriptor tile_movable;
 	public static RegionDescriptor tile_attackable;
 	public static RegionDescriptor tile_explosion;
+	public static RegionDescriptor target_marker;
 	
 	public static RegionDescriptor tile_movable_waypoint;
 	public static RegionDescriptor tile_movable_selected;
@@ -464,6 +465,7 @@ public class Assets {
 		tile_movable = Assets.getTexture("tile-movable");
 		tile_attackable = Assets.getTexture("tile-attackable");
 		tile_explosion = Assets.getTexture("tile-explosion");
+		target_marker = Assets.getTexture("target_marker");
 		
 		tile_movable_waypoint = Assets.getTexture("tile-movable-waypoint");
 		tile_movable_selected = Assets.getTexture("tile-movable-selected");

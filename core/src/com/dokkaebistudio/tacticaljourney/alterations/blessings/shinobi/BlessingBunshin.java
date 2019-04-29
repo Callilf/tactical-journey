@@ -29,7 +29,7 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
  */
 public class BlessingBunshin extends Blessing {
 
-	private int chanceToProc = 100;
+	private int chanceToProc = 25;
 
 	@Override
 	public String title() {

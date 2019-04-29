@@ -43,8 +43,8 @@ import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.ShinobiSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.StingerSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**

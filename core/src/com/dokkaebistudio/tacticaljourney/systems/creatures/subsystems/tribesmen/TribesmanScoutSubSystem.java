@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies.tribesmen;
+package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -10,27 +10,27 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnu
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
+import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
-public class TribesmanScoutSubSystem extends EnemySubSystem {
+public class TribesmanScoutSubSystem extends CreatureSubSystem {
 	
 
 	
 	@Override
-	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {		
+	public boolean update(final CreatureSystem enemySystem, final Entity enemy, final Room room) {		
 		
 		EnemyComponent enemyComponent = Mappers.enemyComponent.get(enemy);
 		AIComponent aiComponent = Mappers.aiComponent.get(enemy);
 		EnemyTribesmanScout scoutType = (EnemyTribesmanScout) aiComponent.getType();
 
 		
-		switch(room.getState()) {
+		switch(room.getCreatureState()) {
 		
-		case ENEMY_TURN_INIT:
+		case TURN_INIT:
 			
 			scoutType.setHasFriendsNotAlerted(false);
 			for (Entity e : room.getEnemies()) {
@@ -47,7 +47,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 			
 			return false;
 
-		case ENEMY_ATTACK:
+		case ATTACK:
 
 			// Alert other tribesmen
 			if (scoutType.hasFriendsNotAlerted()) {
@@ -115,7 +115,7 @@ public class TribesmanScoutSubSystem extends EnemySubSystem {
 				}
 				
 				
-	    		room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+	    		room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 
 			} else {

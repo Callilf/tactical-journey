@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -26,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -451,6 +453,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		if (playerAttackComponent != null) {
 			playerAttackComponent.showAttackableTiles();
 		}
+		
+		HUDRenderer.hideTargetMaker();
 	}
 
 	private void displayEnemyTiles(Entity player, Entity attackableEntity) {
@@ -478,6 +482,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 		AttackComponent enemyAttackCompo = Mappers.attackComponent.get(attackableEntity);
 		if (enemyAttackCompo != null) {
 			enemyAttackCompo.showAttackableTiles();
+		}
+		
+		AIComponent aiComponent = Mappers.aiComponent.get(attackableEntity);
+		if (aiComponent != null && aiComponent.getTarget() != null) {
+			HUDRenderer.displayTargetMaker(Mappers.gridPositionComponent.get(aiComponent.getTarget()).coord());
 		}
 	}
 	

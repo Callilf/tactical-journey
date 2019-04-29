@@ -13,7 +13,7 @@ import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
-import com.dokkaebistudio.tacticaljourney.systems.enemies.EnemySubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.CreatureSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
@@ -29,7 +29,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 	/** The type of enemy. */
 	private Creature type;
 
-	private EnemySubSystem subSystem;
+	private CreatureSubSystem subSystem;
 	
 	/** Whether this enemy's turn is over or not. */
 	private boolean turnOver;
@@ -254,11 +254,11 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 		this.alertedDisplayer = alertedDisplayer;
 	}
 
-	public EnemySubSystem getSubSystem() {
+	public CreatureSubSystem getSubSystem() {
 		return subSystem;
 	}
 
-	public void setSubSystem(EnemySubSystem subSystem) {
+	public void setSubSystem(CreatureSubSystem subSystem) {
 		this.subSystem = subSystem;
 	}
 
@@ -311,7 +311,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, RoomS
 				AIComponent compo = engine.createComponent(AIComponent.class);
 				
 				compo.type = (Creature) kryo.readClassAndObject(input);
-				compo.subSystem = (EnemySubSystem) kryo.readClassAndObject(input);
+				compo.subSystem = (CreatureSubSystem) kryo.readClassAndObject(input);
 				
 				compo.turnOver = input.readBoolean();
 				

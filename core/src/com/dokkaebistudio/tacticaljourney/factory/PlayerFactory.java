@@ -312,8 +312,8 @@ public final class PlayerFactory {
 		// Health compo
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
-		healthComponent.setMaxHp(100);
-		healthComponent.setHp(100);
+		healthComponent.setMaxHp(10);
+		healthComponent.setHp(10);
 		healthComponent.setMaxArmor(0);
 		healthComponent.setArmor(0);
 		healthComponent.setHpDisplayer(this.entityFactory.createTextOnTile(position, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room));

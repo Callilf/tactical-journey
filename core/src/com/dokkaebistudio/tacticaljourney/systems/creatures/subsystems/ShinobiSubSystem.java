@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.systems.enemies;
+package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,14 +26,14 @@ import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.systems.EnemySystem;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
-public class ShinobiSubSystem extends EnemySubSystem {
+public class ShinobiSubSystem extends CreatureSubSystem {
 	
 	public static final Vector2 LEFT_CLONE_TILE = new Vector2(3, 6);
 	public static final Vector2 RIGHT_CLONE_TILE = new Vector2(19, 6);
@@ -54,7 +54,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	private Entity smokeBomb;
 	
 	@Override
-	public boolean update(final EnemySystem enemySystem, final Entity enemy, final Room room) {
+	public boolean update(final CreatureSystem creatureSystem, final Entity enemy, final Room room) {
 		if (enemyShinobi == null) {
 			enemyShinobi = (EnemyShinobi) Mappers.aiComponent.get(enemy).getType();
 			for (AttackSkill as : Mappers.attackComponent.get(enemy).getSkills()) {
@@ -74,9 +74,9 @@ public class ShinobiSubSystem extends EnemySubSystem {
 		}
 		final Vector2 playerPos = Mappers.gridPositionComponent.get(GameScreen.player).coord();
 		
-		switch(room.getState()) {
+		switch(room.getCreatureState()) {
 		
-		case ENEMY_TURN_INIT:
+		case TURN_INIT:
 			if (enemyShinobi.isSleeping()) {
 				Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_SLEEPING);
 			}
@@ -128,7 +128,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 			
 			break;
 
-    	case ENEMY_MOVE_TILES_DISPLAYED:
+    	case MOVE_TILES_DISPLAYED:
 
     		if (enemyShinobi.isSleeping()) {
         		for(Tile t : Mappers.attackComponent.get(enemy).allAttackableTiles) {
@@ -141,7 +141,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		}
     			
     		if (enemyShinobi.isSleeping()) {
-    			room.setNextState(RoomState.ENEMY_END_MOVEMENT);
+    			room.setCreatureState(RoomCreatureState.END_MOVEMENT);
     			return true;
     		}
     		
@@ -156,11 +156,11 @@ public class ShinobiSubSystem extends EnemySubSystem {
 	    				moveComponent.setSelectedTile(destinationTileEntity);
 	    					
 	    				//Display the way to go to this point
-	    				List<Entity> waypoints = enemySystem.getTileSearchService().buildWaypointList(enemy, moveComponent, Mappers.gridPositionComponent.get(enemy), 
+	    				List<Entity> waypoints = creatureSystem.getTileSearchService().buildWaypointList(enemy, moveComponent, Mappers.gridPositionComponent.get(enemy), 
 	    						destinationPos, room);
 	    				moveComponent.setWayPoints(waypoints);
 	    				moveComponent.hideMovementEntities();
-	            		room.setNextState(RoomState.ENEMY_MOVE_DESTINATION_SELECTED);
+	            		room.setCreatureState(RoomCreatureState.MOVE_DESTINATION_SELECTED);
 
     				}
     			}
@@ -196,13 +196,13 @@ public class ShinobiSubSystem extends EnemySubSystem {
     			}
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
-    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
+    			creatureSystem.finishOneCreatureTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
     			return true;
     		}
     		
     		break;
     		
-    	case ENEMY_END_MOVEMENT:
+    	case END_MOVEMENT:
     		
     		if (fleeNextTile != null && fleeNextTile.getGridPos().equals(fleeTile)) {
     			fleeNextTile = null;
@@ -210,12 +210,12 @@ public class ShinobiSubSystem extends EnemySubSystem {
     			fleeTileReached = true;
     			
     			Mappers.stateComponent.get(enemy).set(StatesEnum.SHINOBI_CLONING);
-    			enemySystem.finishOneEnemyTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
+    			creatureSystem.finishOneCreatureTurn(enemy, Mappers.attackComponent.get(enemy), Mappers.aiComponent.get(enemy));
     			return true;
     		}
     		break;
     		
-    	case ENEMY_ATTACK:
+    	case ATTACK:
     		if (!enemyShinobi.isSleeping()) {
     			AttackSkill activeSkill = Mappers.attackComponent.get(enemy).getActiveSkill();
     			if (activeSkill.getAttackType() == AttackTypeEnum.MELEE) {
@@ -238,7 +238,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
     		
     		break;
     		
-    	case ENEMY_ATTACK_FINISH:
+    	case ATTACK_FINISH:
     		if (!enemyShinobi.isSleeping()) {
     			Mappers.stateComponent.get(enemy).set(StatesEnum.STANDING);
     		}
@@ -292,7 +292,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 					Journal.addEntry(
 							Mappers.inspectableComponent.get(thrower).getTitle() + " threw a smoke bomb.");
 
-					room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+					room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 					return true;
 			  }
 			};
@@ -351,7 +351,7 @@ public class ShinobiSubSystem extends EnemySubSystem {
 				smokeBomb = null;
 				Journal.addEntry(Mappers.inspectableComponent.get(thrower).getTitle() + " threw a smoke bomb.");
 				
-				room.setNextState(RoomState.ENEMY_ATTACK_FINISH);
+				room.setCreatureState(RoomCreatureState.ATTACK_FINISH);
 				return true;
 			  }
 			};

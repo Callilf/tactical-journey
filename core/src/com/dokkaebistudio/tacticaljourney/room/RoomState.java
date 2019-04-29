@@ -37,27 +37,11 @@ public enum RoomState {
 	
 	
 	ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
-	ALLY_TURN_INIT,
-	ALLY_COMPUTE_MOVABLE_TILES,
-	ALLY_MOVE_TILES_DISPLAYED,
-	ALLY_MOVE_DESTINATION_SELECTED,
-	ALLY_MOVING,
-	ALLY_END_MOVEMENT,
-	ALLY_ATTACK,
-	ALLY_ATTACK_ANIMATION,
-	ALLY_ATTACK_FINISH,
+	ALLY_TURN,
 	ALLY_END_TURN,
 	
 	ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER,
-	ENEMY_TURN_INIT,
-	ENEMY_COMPUTE_MOVABLE_TILES,
-	ENEMY_MOVE_TILES_DISPLAYED,
-	ENEMY_MOVE_DESTINATION_SELECTED,
-	ENEMY_MOVING,
-	ENEMY_END_MOVEMENT,
-	ENEMY_ATTACK,
-	ENEMY_ATTACK_ANIMATION,
-	ENEMY_ATTACK_FINISH,
+	ENEMY_TURN,
 	ENEMY_END_TURN,
 	
 	
@@ -111,15 +95,7 @@ public enum RoomState {
 	 */
 	public boolean isAllyTurn() {
 		return this == RoomState.ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
-				|| this == RoomState.ALLY_TURN_INIT 
-				|| this == RoomState.ALLY_COMPUTE_MOVABLE_TILES 
-				|| this == RoomState.ALLY_MOVE_TILES_DISPLAYED
-    			|| this == RoomState.ALLY_MOVE_DESTINATION_SELECTED 
-    			|| this == RoomState.ALLY_MOVING 
-    			|| this == RoomState.ALLY_END_MOVEMENT
-    			|| this == RoomState.ALLY_ATTACK
-				|| this == RoomState.ALLY_ATTACK_ANIMATION
-				|| this == RoomState.ALLY_ATTACK_FINISH;
+				|| this == RoomState.ALLY_TURN;
 	}
 	
 	/**
@@ -128,15 +104,7 @@ public enum RoomState {
 	 */
 	public boolean isEnemyTurn() {
 		return this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
-				|| this == RoomState.ENEMY_TURN_INIT 
-				|| this == RoomState.ENEMY_COMPUTE_MOVABLE_TILES 
-				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
-    			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 
-    			|| this == RoomState.ENEMY_MOVING 
-    			|| this == RoomState.ENEMY_END_MOVEMENT
-    			|| this == RoomState.ENEMY_ATTACK
-				|| this == RoomState.ENEMY_ATTACK_ANIMATION
-				|| this == RoomState.ENEMY_ATTACK_FINISH;
+				|| this == RoomState.ENEMY_TURN;
 	}
 	
 	/**
@@ -161,16 +129,10 @@ public enum RoomState {
     			|| this == RoomState.PLAYER_THROWING
     			|| this == RoomState.PLAYER_STUNNED
     			|| this == RoomState.PLAYER_END_TURN
+    			|| this == RoomState.ALLY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
+    			|| this == RoomState.ALLY_TURN
 				|| this == RoomState.ENEMY_COMPUTE_TILES_TO_DISPLAY_TO_PLAYER
-				|| this == RoomState.ENEMY_TURN_INIT 
-				|| this == RoomState.ENEMY_COMPUTE_MOVABLE_TILES 
-				|| this == RoomState.ENEMY_MOVE_TILES_DISPLAYED
-    			|| this == RoomState.ENEMY_MOVE_DESTINATION_SELECTED 
-    			|| this == RoomState.ENEMY_MOVING 
-    			|| this == RoomState.ENEMY_END_MOVEMENT
-    			|| this == RoomState.ENEMY_ATTACK
-				|| this == RoomState.ENEMY_ATTACK_ANIMATION
-				|| this == RoomState.ENEMY_ATTACK_FINISH;
+				|| this == RoomState.ENEMY_TURN;
 	}
 	
 	/**

@@ -31,6 +31,8 @@ public class StingerItemPool extends ItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5));
+
 	}
 	
 	

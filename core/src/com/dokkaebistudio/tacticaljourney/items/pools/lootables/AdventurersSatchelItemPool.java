@@ -49,7 +49,10 @@ public class AdventurersSatchelItemPool extends ItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 7));		
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 7));		
 		
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.WORMHOLE_SHARD, 5));	
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.WORMHOLE_SHARD, 5));
+		
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5));
+
 	}
 	
 	

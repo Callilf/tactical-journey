@@ -8,6 +8,8 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 /**
  * A tutorial page.
@@ -20,11 +22,13 @@ public class ItemTutorialPage extends AbstractItem {
 	
 	public ItemTutorialPage() {
 		super("Tutorial page", Assets.tutorial_page_item, false, true);
+		this.setPaper(true);
 	}
 
 	public ItemTutorialPage(int pageNumber) {
 		super("Tutorial page", Assets.tutorial_page_item, false, true);
 		this.pageNumber = pageNumber;
+		this.setPaper(true);
 	}
 	
 	@Override
@@ -112,7 +116,7 @@ public class ItemTutorialPage extends AbstractItem {
 	@Override
 	public boolean use(Entity user, Entity item, Room room) {
 		Journal.addEntry("You tore down the tutorial page " + pageNumber + ".");
-		
+		VFXUtil.createDisappearanceEffect(Mappers.gridPositionComponent.get(user).coord(), Mappers.spriteComponent.get(item).getSprite());
 		return true;
 	}
 }

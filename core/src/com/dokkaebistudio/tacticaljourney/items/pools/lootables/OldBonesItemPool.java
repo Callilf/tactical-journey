@@ -45,6 +45,8 @@ public class OldBonesItemPool extends ItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_ORB, 2));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POISON_ORB, 2));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.FIRE_ORB, 2));
+		
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 2));
 	}
 	
 	

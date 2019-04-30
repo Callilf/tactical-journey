@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class HealthSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -211,6 +212,8 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 								status.onDeath(entity, room);
 							}
 						}
+						
+						VFXUtil.createDeathEffect(entity);
 						
 						if (enemyComponent != null) {
 							room.removeEnemy(entity);

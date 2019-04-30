@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingUnfinished;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseUnfinished;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -22,6 +23,8 @@ public class ItemScissorhand extends AbstractInfusableItem {
 		
 		BlessingUnfinished blessing = new BlessingUnfinished();
 		blessings.add(blessing);
+		CurseUnfinished curse = new CurseUnfinished();
+		curses.add(curse);
 	}
 	
 	@Override

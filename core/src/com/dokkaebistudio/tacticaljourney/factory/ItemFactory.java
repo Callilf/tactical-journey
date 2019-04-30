@@ -53,6 +53,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDoppelganger;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemShuriken;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmokebomb;
@@ -240,7 +241,19 @@ public final class ItemFactory {
 		case SMOKE_BOMB:
 			item = createItemBase(room, tilePos,  new ItemSmokebomb(), EntityFlagEnum.ITEM_SHURIKEN);
 			break;
+
 			
+		//***************
+		// Scrolls
+			
+		case SCROLL_DOPPELGANGER:
+			item = createItemBase(room, tilePos,  new ItemScrollOfDoppelganger(), EntityFlagEnum.ITEM_SCROLL);
+			FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+			flammable.setPropagate(true);
+			flammable.setDestroyed(true);
+			item.add(flammable);
+			break;
+
 			
 		//******************
 		// Infusables
@@ -248,7 +261,7 @@ public final class ItemFactory {
 		case TOTEM_OF_KALAMAZOO:
 			item = createItemBase(room, tilePos,  new ItemTotemOfKalamazoo(), EntityFlagEnum.ITEM_INFUSABLE);
 			
-			FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+			flammable = engine.createComponent(FlammableComponent.class);
 			flammable.setPropagate(true);
 			flammable.setDestroyed(false);
 			item.add(flammable);

@@ -6,7 +6,6 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings.shinobi;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -19,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
+import com.dokkaebistudio.tacticaljourney.util.AIUtil;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
@@ -70,7 +70,7 @@ public class BlessingBunshin extends Blessing {
 					
 					AIComponent aiComponent = Mappers.aiComponent.get(clone);
 					
-					Entity target = findClosestTarget(t.getGridPos(), room);
+					Entity target = AIUtil.findClosestTarget(t.getGridPos(), room);
 					aiComponent.setAlerted(true, clone, target);
 					
 					break;
@@ -83,18 +83,6 @@ public class BlessingBunshin extends Blessing {
 		
 	}
 
-	private Entity findClosestTarget(Vector2 pos, Room room) {
-		int shortestDistance = -1;
-		Entity target = null;
-		for(Entity enemy : room.getEnemies()) {
-			int dist = TileUtil.getDistanceBetweenTiles(Mappers.gridPositionComponent.get(enemy).coord(), pos);
-			if (target == null || dist < shortestDistance) {
-				shortestDistance = dist;
-				target = enemy;
-				if (shortestDistance == 1) break;
-			}
-		}
-		return target;
-	}
+
 
 }

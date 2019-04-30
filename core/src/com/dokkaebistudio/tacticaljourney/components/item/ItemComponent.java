@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
@@ -69,6 +70,12 @@ public class ItemComponent implements Component, Poolable {
 	 * @param picker the entity that picks it up
 	 */
 	public boolean pickUp(Entity picker, Entity item, Room room) {
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(picker);
+		if (alterationReceiverComponent != null) {
+			boolean canPickUp = alterationReceiverComponent.onPickupItem(picker, item, room) >= 0;
+			if (!canPickUp) return false;
+		}
+		
 		return itemType.pickUp(picker, item, room);
 	}
 
@@ -78,6 +85,12 @@ public class ItemComponent implements Component, Poolable {
 	 * @param item the item to use
 	 */
 	public boolean use(Entity user, Entity item, Room room) {
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(user);
+		if (alterationReceiverComponent != null) {
+			boolean canUse = alterationReceiverComponent.onUseItem(user, item, room) >= 0;
+			if (!canUse) return false;
+		}
+		
 		return itemType.use(user, item, room);
 	}
 	

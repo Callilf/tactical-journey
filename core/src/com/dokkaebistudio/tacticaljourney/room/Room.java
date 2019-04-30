@@ -35,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -238,6 +239,14 @@ public class Room extends EntitySystem {
 	public void addEntity(Entity e) {
 		this.addToAllEntities(e);
 		engine.addEntity(e);
+		
+		if (this.floor.getActiveRoom() == this) {
+			for (Component c : e.getComponents()) {
+				if (c instanceof MarkerInterface) {
+					((MarkerInterface) c).showMarker(e);
+				}
+			}
+		}
 	}
 	
 	/**

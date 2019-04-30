@@ -336,6 +336,8 @@ public class Assets {
 	public static RegionDescriptor wormhole_shard_item;
 	public static RegionDescriptor divine_catalyst_item;
 	
+	public static RegionDescriptor scroll_doppelganger_item;
+	
 	public static RegionDescriptor arrow_item;
 	public static RegionDescriptor bomb_item;
 	
@@ -422,6 +424,7 @@ public class Assets {
 	public static RegionDescriptor curse_pangolin_mother;
 	public static RegionDescriptor curse_heavy_arrows;
 	public static RegionDescriptor curse_shinobi;
+	public static RegionDescriptor curse_unfinished;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -722,6 +725,8 @@ public class Assets {
 		wormhole_shard_item = Assets.getTexture("item-consumable-wormhole-shard");
 		divine_catalyst_item = Assets.getTexture("item-consumable-divine-catalyst");
 		
+		scroll_doppelganger_item = Assets.getTexture("item-scroll-doppelganger");
+		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
 		
@@ -808,6 +813,7 @@ public class Assets {
 		curse_pangolin_mother = Assets.getTexture("curse-pangolin-mother");
 		curse_heavy_arrows = Assets.getTexture("curse-heavy-arrow");
 		curse_shinobi = Assets.getTexture("curse-shinobi");
+		curse_unfinished = Assets.getTexture("curse-unfinished");
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

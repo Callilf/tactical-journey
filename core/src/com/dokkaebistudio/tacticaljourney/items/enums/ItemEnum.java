@@ -22,6 +22,9 @@ public enum ItemEnum {
 	POTION_FIRE(Descriptions.ITEM_FIRE_POTION_TITLE, 1),
 	POTION_WING(Descriptions.ITEM_WING_POTION_TITLE, 1),
 	
+	// Scrolls
+	SCROLL_DOPPELGANGER(Descriptions.ITEM_SCROLL_DOPPELGANGER_TITLE, 1),
+	
 	// Armors
 	ARMOR_PIECE(Descriptions.ITEM_ARMOR_PIECE_TITLE, 1),
 	ARMOR_LIGHT(Descriptions.ITEM_LIGHT_ARMOR_TITLE, 2),

@@ -143,7 +143,7 @@ public abstract class CreatureSystem extends EntitySystem implements RoomSystem 
             		
             	//Build the movable tiles list
         		tileSearchService.buildMoveTilesSet(creatureEntity, room);
-        		if (attackCompo != null && attackCompo.allAttackableTiles.isEmpty()) {
+        		if (attackCompo != null && attackCompo.allAttackableTiles != null && attackCompo.allAttackableTiles.isEmpty()) {
         			attackTileSearchService.buildAttackTilesSet(creatureEntity, room, true, false);
         		}
         		moveCompo.hideMovableTiles();

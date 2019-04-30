@@ -114,6 +114,23 @@ public abstract class Alteration {
 	
 	/** Called when the level up popin pops up. */
 	public void onLevelUp(Entity entity, Room room) {}
+	
+	/**
+	 * Called when an item is picked up. If the return value is negative, the item cannot be picked up.
+	 * @param picker the picker
+	 * @param item the item to pick
+	 * @param room the room
+	 * @return -1 : cannot be picked. 0 or >0 can be picked
+	 */
+	public int onPickupItem(Entity picker, Entity item, Room room) { return 0; }
+	/**
+	 * Called when an item is used. If the return value is negative, the item cannot be picked up.
+	 * @param user the user
+	 * @param item the item to use
+	 * @param room the room
+	 * @return -1 : cannot be used. 0 or >0 can be used
+	 */
+	public int onUseItem(Entity user, Entity item, Room room) { return 0; }
 
 	
 	

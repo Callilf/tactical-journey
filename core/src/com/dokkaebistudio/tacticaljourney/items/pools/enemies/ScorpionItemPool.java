@@ -34,6 +34,8 @@ public class ScorpionItemPool extends ItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 5));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5));
+
 	}
 	
 	

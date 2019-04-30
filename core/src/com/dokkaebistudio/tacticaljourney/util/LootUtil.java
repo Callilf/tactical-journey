@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class LootUtil {
 
@@ -38,17 +39,18 @@ public class LootUtil {
 		destructibleComponent.setDestroyed(true);
 
 		if (destructibleComponent.isRemove()) {
-			
+			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
+
 			// Drop loot
 			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(d);
 			dropItem(d, lootRewardComponent, room);
 			
+			VFXUtil.createDisappearanceEffect(tilePos.coord(), Mappers.spriteComponent.get(d).getSprite());
 			room.removeEntity(d);
 
 			
 			//Add debris
 			if (destructibleComponent != null && destructibleComponent.getDestroyedTexture() != null) {
-				GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
 				room.entityFactory.createSpriteOnTile(tilePos.coord(), 2,destructibleComponent.getDestroyedTexture(), EntityFlagEnum.DESTROYED_SPRITE, room);
 			}
 		} else {

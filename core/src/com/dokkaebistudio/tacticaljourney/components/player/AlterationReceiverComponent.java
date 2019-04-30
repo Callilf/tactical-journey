@@ -234,8 +234,28 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		}
 		return result;
 	}
-
 	
+	public int onPickupItem(Entity entity, Entity item, Room room) {
+		int result = 0;
+		for (Blessing b : blessings) {
+			result += b.onPickupItem(entity, item, room);
+		}
+		for (Curse c : curses) {
+			result += c.onPickupItem(entity, item, room);
+		}
+		return result;
+	}
+
+	public int onUseItem(Entity entity, Entity item, Room room) {
+		int result = 0;
+		for (Blessing b : blessings) {
+			result += b.onUseItem(entity, item, room);
+		}
+		for (Curse c : curses) {
+			result += c.onUseItem(entity, item, room);
+		}
+		return result;
+	}
 	
 	//*************
 	// Animations

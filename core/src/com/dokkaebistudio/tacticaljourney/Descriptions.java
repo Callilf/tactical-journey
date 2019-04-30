@@ -172,6 +172,9 @@ public class Descriptions {
 
 	public static final String ITEM_WING_POTION_TITLE = "Wing potion";
 	public static final String ITEM_WING_POTION_DESCRIPTION = "Upon drink, grants flight for 30 turns.";
+	
+	public static final String ITEM_SCROLL_DOPPELGANGER_TITLE = "Scroll of Doppelganger";
+	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summon a 10 hp copy of oneself that disappear once the room is cleared. Do nothing on a cleared room.";
 
 	public static final String ITEM_ORB_CONTAINER_TITLE = "Orb container";
 	public static final String ITEM_ORB_CONTAINER_DESCRIPTION = "Contains a random orb. Orbs are very volatile and will immediately orbit around you when you discover them. If all orb slots are filled and you "

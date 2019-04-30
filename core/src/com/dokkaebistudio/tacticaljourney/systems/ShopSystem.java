@@ -158,8 +158,7 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 			if (walletComponent.hasEnoughMoney(itemComponent.getPrice())) {
 				// Pay
 				walletComponent.use(itemComponent.getPrice());
-				// Hide the price displayer
-				room.removeEntity(itemComponent.getPriceDisplayer());
+				// Remove the price
 				itemComponent.setPrice(null);
 				// Remove the item from the shop keeper's inventory
 				shopKeeperComponent.removeItem(currentItem);

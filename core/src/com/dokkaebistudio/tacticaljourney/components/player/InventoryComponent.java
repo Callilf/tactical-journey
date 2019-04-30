@@ -292,7 +292,6 @@ public class InventoryComponent implements Component, Poolable {
 				for (Entity currentItem : clonedList) {
 					ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
 					itemComponent.drop(player, currentItem, room);
-					room.getAddedItems().add(currentItem);
 				}
 			}
 		}

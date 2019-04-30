@@ -30,8 +30,10 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 	
 	@Override
 	public void showMarker(Entity ally) {
-		GameScreen.fxStage.addActor(marker);
-		this.place(Mappers.gridPositionComponent.get(ally).coord());
+		if (marker != null) {
+			GameScreen.fxStage.addActor(marker);
+			this.place(Mappers.gridPositionComponent.get(ally).coord());
+		}
 	}
 	
 	@Override
@@ -44,6 +46,9 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 	
 	@Override
 	public void reset() {
+		if (marker == null) {
+			marker = new Image(Assets.ally_marker.getRegion());
+		}
 		marker.remove();
 	}
 	
@@ -53,31 +58,39 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 
 	@Override
 	public void initiateMovement(Vector2 currentPos) {
-		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
-		startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
-		startPos.y = startPos.y + marker.getHeight();
-		marker.setPosition(startPos.x, startPos.y);
+		if (marker != null) {
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(currentPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
+			startPos.y = startPos.y + marker.getHeight();
+			marker.setPosition(startPos.x, startPos.y);
+		}
 	}
 
 	@Override
 	public void performMovement(float xOffset, float yOffset) {
-		marker.setPosition(marker.getX() + xOffset, marker.getY() + yOffset);
+		if (marker != null) {
+			marker.setPosition(marker.getX() + xOffset, marker.getY() + yOffset);
+		}
 	}
 
 	@Override
 	public void endMovement(Vector2 finalPos) {
-		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
-		startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
-		startPos.y = startPos.y + marker.getHeight();
-		marker.setPosition(startPos.x, startPos.y);
+		if (marker != null) {
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(finalPos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
+			startPos.y = startPos.y + marker.getHeight();
+			marker.setPosition(startPos.x, startPos.y);
+		}
 	}
 
 	@Override
 	public void place(Vector2 tilePos) {
-		Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
-		startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
-		startPos.y = startPos.y + marker.getHeight();
-		marker.setPosition(startPos.x, startPos.y);
+		if (marker != null) {
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+			startPos.x = startPos.x + GameScreen.GRID_SIZE - marker.getWidth();
+			startPos.y = startPos.y + marker.getHeight();
+			marker.setPosition(startPos.x, startPos.y);
+		}
 	}
 	
 	
@@ -88,8 +101,8 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 		return marker;
 	}
 
-	public void setMarker(Image marker) {
-		this.marker = marker;
+	public void removeMarker() {
+		this.marker = null;
 	}
 	
 	
@@ -99,11 +112,17 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 		return new Serializer<AllyComponent>() {
 
 			@Override
-			public void write(Kryo kryo, Output output, AllyComponent object) {}
+			public void write(Kryo kryo, Output output, AllyComponent object) {
+				output.writeBoolean(object.marker == null);
+			}
 
 			@Override
 			public AllyComponent read(Kryo kryo, Input input, Class<AllyComponent> type) {
 				AllyComponent compo = engine.createComponent(AllyComponent.class);
+				
+				boolean markerHidden = input.readBoolean();
+				if (markerHidden) compo.removeMarker();
+				
 				return compo;
 			}
 		

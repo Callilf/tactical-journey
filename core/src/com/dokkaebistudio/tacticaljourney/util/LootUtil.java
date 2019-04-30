@@ -89,8 +89,6 @@ public class LootUtil {
 		  public boolean act(float delta){
 			itemComponent.drop(dropLocation, dropItem, room);
 			dropLocation.free();
-			
-			room.getAddedItems().add(dropItem);
 		    return true;
 		  }
 		};

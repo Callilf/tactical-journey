@@ -95,7 +95,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 						fxStage.addActor(i);
 					}
 
-					room.getRemovedItems().add(item);
+					room.removeEntity(item);
 				}
 			}
 
@@ -144,9 +144,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 						fxStage.addActor(i);
 					}
 
-					if (itemComponent.getQuantity() == null || itemComponent.getQuantity() == 0) {
-						room.getRemovedItems().add(currentItem);
-					}
 					room.turnManager.endPlayerTurn();
 				}				
 				playerInventoryCompo.setCurrentAction(null);
@@ -160,7 +157,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				boolean instaUsed = itemComponent.use(player, currentItem, room);
 				
 				if (instaUsed) {
-					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				}				
@@ -175,7 +171,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 				if (used) {
 					playerInventoryCompo.remove(currentItem);
-					room.getRemovedItems().add(currentItem);
 					room.removeEntity(currentItem);
 					room.turnManager.endPlayerTurn();
 				}
@@ -194,7 +189,6 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 							itemComponent.drop(player, currentItem, room);
 
 //							playerIventoryCompo.remove(currentItem);
-							room.getAddedItems().add(currentItem);
 							room.turnManager.endPlayerTurn();
 							
 					    return true;
@@ -225,10 +219,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				default :
 			
 			}
-			
-			
-			
-			
+
 		}		
 	
 		
@@ -241,62 +232,8 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 			}
 		}
 		
-	
-		// Display items quantities
-		for (Entity item : room.getAddedItems()) {
-			ItemComponent itemComponent = Mappers.itemComponent.get(item);
-			// Display quantity or price
-			createValueAndPriceDisplayers(item, itemComponent);
-		}
-		room.getAddedItems().clear();
-	
-		for (Entity item : room.getRemovedItems()) {
-			ItemComponent itemComponent = Mappers.itemComponent.get(item);
-			if (itemComponent.getQuantityDisplayer() != null) {
-				room.removeEntity(itemComponent.getQuantityDisplayer());
-				itemComponent.setQuantityDisplayer(null);
-			}
-			if (itemComponent.getPriceDisplayer() != null) {
-				room.removeEntity(itemComponent.getPriceDisplayer());
-				itemComponent.setPriceDisplayer(null);
-			}
-		}
-		room.getRemovedItems().clear();
-	
-	}
 
-
-	/**
-	 * Create the displayers for quantity and price on items on the floor.
-	 * @param item the item
-	 * @param itemComponent the item component
-	 */
-	private void createValueAndPriceDisplayers(Entity item, ItemComponent itemComponent) {
-		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(item);
-		Vector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
-
-		if (itemComponent.getQuantity() != null) {
-			Entity quantityDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
-					String.valueOf(itemComponent.getQuantity()), room);
-			quantityDisplayer.flags = EntityFlagEnum.TEXT_QUANTITY_DISPLAYER.getFlag();
-			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
-			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(quantityDisplayer);
-			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + 10, displayerPosCompo.getAbsolutePos().y + 10 + textComponent.getHeight());
-			itemComponent.setQuantityDisplayer(quantityDisplayer);
-		}
-		
-		if (itemComponent.getPrice() != null) {
-			Entity priceDisplayer = this.room.entityFactory.createText(new Vector3(pixelPos, ZIndexConstants.ITEM),
-					String.valueOf(itemComponent.getPrice()), room);
-			priceDisplayer.flags = EntityFlagEnum.TEXT_PRICE_DISPLAYER.getFlag();
-			TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
-			GridPositionComponent displayerPosCompo = Mappers.gridPositionComponent.get(priceDisplayer);
-			displayerPosCompo.absolutePos(displayerPosCompo.getAbsolutePos().x + GameScreen.GRID_SIZE - textComponent.getWidth(),
-					displayerPosCompo.getAbsolutePos().y + GameScreen.GRID_SIZE);
-			
-			textComponent.setText("[GOLD]" + textComponent.getText());
-			itemComponent.setPriceDisplayer(priceDisplayer);
-		}
+	
 	}
 
 

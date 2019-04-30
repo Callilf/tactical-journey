@@ -108,12 +108,6 @@ public class Room extends EntitySystem {
 	private Set<Entity> entitiesToRemove;
 
 	
-	
-	/** The items added to this room at the current frame. */
-	private List<Entity> addedItems;
-	/** The items removed from the room at the current frame. */
-	private List<Entity> removedItems;
-	
 	private List<AbstractRoomReward> rewards;
 
 	
@@ -141,8 +135,6 @@ public class Room extends EntitySystem {
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
 		this.entitiesToRemove = new HashSet<>();
-		this.addedItems = new ArrayList<>();
-		this.removedItems = new ArrayList<>();
 		
 		this.allies = new ArrayList<>();
 		this.enemies = new ArrayList<>();
@@ -161,6 +153,14 @@ public class Room extends EntitySystem {
 	public void addToAllEntities(Entity e) {
 		if (!this.allEntities.contains(e, true)) {
 			this.allEntities.add(e);
+		}
+		
+		if (this.floor != null && this.floor.getActiveRoom() == this) {
+			for (Component c : e.getComponents()) {
+				if (c instanceof MarkerInterface) {
+					((MarkerInterface) c).showMarker(e);
+				}
+			}
 		}
 	}
 
@@ -239,14 +239,6 @@ public class Room extends EntitySystem {
 	public void addEntity(Entity e) {
 		this.addToAllEntities(e);
 		engine.addEntity(e);
-		
-		if (this.floor.getActiveRoom() == this) {
-			for (Component c : e.getComponents()) {
-				if (c instanceof MarkerInterface) {
-					((MarkerInterface) c).showMarker(e);
-				}
-			}
-		}
 	}
 	
 	/**
@@ -607,22 +599,6 @@ public class Room extends EntitySystem {
 		this.visited = visitedState;
 	}
 
-	public List<Entity> getAddedItems() {
-		return addedItems;
-	}
-
-	public void setAddedItems(List<Entity> addedItems) {
-		this.addedItems = addedItems;
-	}
-
-	public List<Entity> getRemovedItems() {
-		return removedItems;
-	}
-
-	public void setRemovedItems(List<Entity> removedItems) {
-		this.removedItems = removedItems;
-	}
-	
 	
 	/**
 	 * Add a neutral in the room.

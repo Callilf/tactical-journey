@@ -117,6 +117,7 @@ public final class PlayerFactory {
 		playerEntity.add(gridPosition);
 		
 		AllyComponent allyComponent = engine.createComponent(AllyComponent.class);
+		allyComponent.removeMarker();
 		playerEntity.add(allyComponent);
 		
 		// Player compo

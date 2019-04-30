@@ -82,8 +82,10 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 	
 	@Override
 	public void showMarker(Entity ally) {
-		GameScreen.fxStage.addActor(hpDisplayer);
-		this.place(Mappers.gridPositionComponent.get(ally).coord());
+		if (hpDisplayer != null) {
+			GameScreen.fxStage.addActor(hpDisplayer);
+			this.place(Mappers.gridPositionComponent.get(ally).coord());
+		}
 	}
 	
 	@Override
@@ -491,6 +493,8 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 				
 				output.writeInt(object.maxHp);
 				output.writeInt(object.hp);
+				
+				output.writeBoolean(object.hpDisplayer == null);
 
 				// Armor
 				output.writeInt(object.maxArmor);
@@ -506,6 +510,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 				
 				compo.setMaxHp(input.readInt());
 				compo.setHp(input.readInt());
+				
+				boolean hpDisplayerHidden = input.readBoolean();
+				if (hpDisplayerHidden) compo.removeHpDisplayer();
 
 				compo.setMaxArmor(input.readInt());
 				compo.setArmor(input.readInt());

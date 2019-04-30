@@ -366,10 +366,10 @@ public class Persister {
 					f.setRoomPositions((Map<Vector2, Room>) kryo.readClassAndObject(input));
 					f.setActiveRoom( (Room) kryo.readClassAndObject(input));
 										
-					// Restore the items' quantity and price displayers
-					for(Entity e : f.getActiveRoom().getAllEntities()) {
-						if (Mappers.itemComponent.has(e)) f.getActiveRoom().getAddedItems().add(e);
-					}
+//					// Restore the items' quantity and price displayers
+//					for(Entity e : f.getActiveRoom().getAllEntities()) {
+//						if (Mappers.itemComponent.has(e)) f.getActiveRoom().getAddedItems().add(e);
+//					}
 				}
 				return f;
 			}
@@ -411,9 +411,6 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.getEnemies());
 					kryo.writeClassAndObject(output, roomToSave.getNeutrals());
 					kryo.writeClassAndObject(output, roomToSave.getDoors());
-					
-					kryo.writeClassAndObject(output, roomToSave.getAddedItems());
-					kryo.writeClassAndObject(output, roomToSave.getRemovedItems());
 					
 					kryo.writeClassAndObject(output, roomToSave.getNorthNeighbor());
 					kryo.writeClassAndObject(output, roomToSave.getSouthNeighbor());
@@ -475,9 +472,6 @@ public class Persister {
 				loadedRoom.getEnemies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getNeutrals().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getDoors().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
-				
-				loadedRoom.getAddedItems().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
-				loadedRoom.getRemovedItems().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 
 				loadedRoom.setNorthNeighbor((Room) kryo.readClassAndObject(input));
 				loadedRoom.setSouthNeighbor((Room) kryo.readClassAndObject(input));

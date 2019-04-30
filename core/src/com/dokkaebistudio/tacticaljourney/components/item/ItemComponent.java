@@ -11,34 +11,38 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.AbstractInfusableItem;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class ItemComponent implements Component, Poolable {
+public class ItemComponent implements Component, Poolable, MarkerInterface {
 		
 	/** The king of item. */
 	private AbstractItem itemType;
 		
 	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
-	private Entity quantityDisplayer;
+	private Label quantityDisplayer = new Label("", PopinService.hudStyle());;
 	
 	/** The price of the item. Null if no price. */
 	private Integer price;
 	
 	/** The displayer that shows the quantity of this item (ex: quantity of arrows or bombs). */
-	private Entity priceDisplayer;
+	private Label priceDisplayer = new Label("", PopinService.hudStyle());;
 	
 	
 	//******************************
@@ -51,19 +55,67 @@ public class ItemComponent implements Component, Poolable {
 	/** The sprite used for the drop animation. */
 	private Image dropAnimationImage;
 
+	
+	
+	@Override
+	public void showMarker(Entity e) {
+		if (quantityDisplayer != null) {
+			GameScreen.fxStage.addActor(quantityDisplayer);
+			this.place(Mappers.gridPositionComponent.get(e).coord());
+		}
+		if (priceDisplayer != null) {
+			GameScreen.fxStage.addActor(priceDisplayer);
+			this.place(Mappers.gridPositionComponent.get(e).coord());
+		}
 
+	}
+
+	@Override
+	public void hideMarker() {
+		if (quantityDisplayer != null) {
+			quantityDisplayer.remove();
+		}
+		if (priceDisplayer != null) {
+			priceDisplayer.remove();
+		}
+	}
 
 
 
 	@Override
 	public void reset() {
 		this.quantityPickedUp = null;
-		this.quantityDisplayer = null;
 		this.price = null;
-		this.priceDisplayer = null;
+		if (quantityDisplayer != null) {
+			quantityDisplayer.setText("");
+			quantityDisplayer.remove();		
+		}		
+		if (priceDisplayer != null) {
+			priceDisplayer.setText("");
+			priceDisplayer.remove();		
+		}	
 		this.setDropAnimationImage(null);
 		this.pickupAnimationImages.clear();
 	}
+	
+	
+	public void place(Vector2 tilePos) {
+		if (quantityDisplayer != null) {
+			quantityDisplayer.layout();
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+			startPos.x += quantityDisplayer.getGlyphLayout().width/2;
+			startPos.y += quantityDisplayer.getGlyphLayout().height/2;
+			quantityDisplayer.setPosition(startPos.x, startPos.y);
+		}
+		if (priceDisplayer != null) {
+			priceDisplayer.layout();
+			Vector2 startPos = TileUtil.convertGridPosIntoPixelPos(tilePos);
+			startPos.x += priceDisplayer.getGlyphLayout().width/2;
+			startPos.y = startPos.y + GameScreen.GRID_SIZE - priceDisplayer.getGlyphLayout().height;
+			priceDisplayer.setPosition(startPos.x, startPos.y);
+		}
+	}
+	
 	
 	/**
 	 * Pick up this item.
@@ -270,6 +322,10 @@ public class ItemComponent implements Component, Poolable {
 			AbstractInfusableItem infusableItem = (AbstractInfusableItem) this.itemType;
 			infusableItem.setItemEntity(itemEntity);
 		}
+		
+		if (this.itemType.getQuantity() != null && quantityDisplayer != null) {
+			quantityDisplayer.setText(String.valueOf(this.itemType.getQuantity()));
+		}
 	}
 
 	public Integer getQuantity() {
@@ -280,17 +336,16 @@ public class ItemComponent implements Component, Poolable {
 		this.itemType.setQuantity(value);
 		
 		if (quantityDisplayer != null) {
-			TextComponent textComponent = Mappers.textComponent.get(quantityDisplayer);
-			textComponent.setText(String.valueOf(value));
+			if (value != null) {
+				quantityDisplayer.setText(String.valueOf(value));
+			} else {
+				quantityDisplayer.setText("");
+			}
 		}
 	}
 
-	public Entity getQuantityDisplayer() {
+	public Label getQuantityDisplayer() {
 		return quantityDisplayer;
-	}
-
-	public void setQuantityDisplayer(Entity quantityDisplayer) {
-		this.quantityDisplayer = quantityDisplayer;
 	}
 
 	public Integer getPrice() {
@@ -306,22 +361,18 @@ public class ItemComponent implements Component, Poolable {
 		
 		if (priceDisplayer != null) {
 			if (price != null) {
-				TextComponent textComponent = Mappers.textComponent.get(priceDisplayer);
-				textComponent.setText(String.valueOf(price));
+				priceDisplayer.setText("[GOLD]" + String.valueOf(price));
 			} else {
-				priceDisplayer = null;
+				priceDisplayer.setText("");
 			}
 		}
 		
 	}
 
-	public Entity getPriceDisplayer() {
+	public Label getPriceDisplayer() {
 		return priceDisplayer;
 	}
 
-	public void setPriceDisplayer(Entity priceDisplayer) {
-		this.priceDisplayer = priceDisplayer;
-	}
 
 	public Image getDropAnimationImage() {
 		return dropAnimationImage;
@@ -362,6 +413,7 @@ public class ItemComponent implements Component, Poolable {
 				ItemComponent compo = engine.createComponent(ItemComponent.class);
 				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
 				compo.setPrice((Integer) kryo.readClassAndObject(input));
+				compo.setQuantity(compo.itemType.getQuantity());
 				
 				return compo;
 			}

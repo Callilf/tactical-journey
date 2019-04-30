@@ -117,9 +117,6 @@ public final class ItemFactory {
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		if (tilePos != null) {
 			gridPosition.coord(item, tilePos, room);
-			if (room != null) {
-				room.getAddedItems().add(item);
-			}
 		}
 		gridPosition.zIndex = ZIndexConstants.ITEM;
 		item.add(gridPosition);
@@ -131,8 +128,12 @@ public final class ItemFactory {
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	item.add(destructibleCompo);
 		
-		engine.addEntity(item);
-		
+    	if (room != null) {
+    		room.addEntity(item);
+    	} else {
+    		engine.addEntity(item);
+    	}
+    	
 		return item;
 	}
 	

@@ -307,7 +307,6 @@ public final class EnemySpiderFactory {
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(10);
 		healthComponent.addResistance(DamageType.POISON, 100);
-		Entity hpEntity = this.enemyFactory.entityFactory.createTextOnTile(pos, String.valueOf(healthComponent.getHp()), ZIndexConstants.HEALTH_DISPLAYER, room);
 		enemyEntity.add(healthComponent);
 		
 		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);

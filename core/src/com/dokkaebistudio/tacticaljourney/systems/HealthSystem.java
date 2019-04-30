@@ -90,15 +90,11 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
 		    		case HIT_INTERRUPT:
 			    		healthCompo.setReceivedDamageLastTurn(true);
 		    		case HIT:	    			
-						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
-								offsetTimes.size() * -20, room);
-						
-		    			break;
 		    		case HEALED:						
 		    		case RESISTANT:
 		    		case ARMOR:
-						room.entityFactory.createDamageDisplayer(displayValue, gridPos, healthChange,
-								offsetTimes.size() * -20, room);
+		    			VFXUtil.createDamageDisplayer(displayValue, gridPos.coord(), 
+		    					healthChange,offsetTimes.size() * -20, room);
 		
 		    			break;
 		    		default:

@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
@@ -28,7 +27,6 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -45,7 +43,6 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
@@ -53,8 +50,6 @@ import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.skills.SkillEnum;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector.Hit;
 
@@ -538,133 +533,41 @@ public final class EntityFactory {
 	}
 	
 	
-	/**
-	 * Create a text that will be displayed on a tile.
-	 * @param pos the position of the text in tile position
-	 * @return the text entity
-	 */
-	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex) {
-		return createTextOnTile(tilePos, text, zIndex, null);
-	}
-	
-	/**
-	 * Create a text that will be displayed on a tile.
-	 * @param pos the position of the text in tile position
-	 * @return the text entity
-	 */
-	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex, Room room) {
-		Entity textTest = engine.createEntity();
-		textTest.flags = EntityFlagEnum.TEXT_ON_TILE.getFlag();
-
-		GridPositionComponent gridPositionComponent = new GridPositionComponent();
-		if (room != null) {
-			gridPositionComponent.coord(textTest, tilePos, room);
-		} else {
-			gridPositionComponent.coord(tilePos);
-		}
-		gridPositionComponent.zIndex = zIndex;
-		textTest.add(gridPositionComponent);
-		
-		TextComponent tc = new TextComponent(SceneAssets.smallFont);
-		tc.setText(text);
-		textTest.add(tc);
-		
-		engine.addEntity(textTest);
-		
-		return textTest;
-	}
-	
-	/**
-	 * Create a damage displayer.
-	 * @param damage the damage to display
-	 * @param gridPos the grid position
-	 * @param heal whether the amount is a healing amount or damage amount (changes the color of the text)
-	 * @return the damage displayer entity
-	 */
-	public Entity createDamageDisplayer(String damage, GridPositionComponent gridPosCompo, HealthChangeEnum healthChange, float offsetY, Room room) {
-		Entity display = engine.createEntity();
-		display.flags = EntityFlagEnum.DAMAGE_DISPLAYER.getFlag();
-
-		PoolableVector2 initialPos = null;
-		if (gridPosCompo.hasAbsolutePos()) {
-			initialPos = PoolableVector2.create(gridPosCompo.getAbsolutePos());
-		} else {
-			initialPos = TileUtil.convertGridPosIntoPixelPos(gridPosCompo.coord());
-		}
-		initialPos.add(GameScreen.GRID_SIZE/2, GameScreen.GRID_SIZE + offsetY);
-		
-		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
-		displayCompo.setInitialPosition(initialPos);
-		display.add(displayCompo);
-		
-		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
-		transfoCompo.absolutePos(initialPos.x, initialPos.y);
-		transfoCompo.zIndex = ZIndexConstants.DAMAGE_DISPLAYER;
-		display.add(transfoCompo);
-		
-		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		textCompo.setFont(SceneAssets.font);
-		
-		String color = "";
-		switch(healthChange) {
-		case HEALED:
-			color = "[GREEN]";
-			break;
-		case HIT:
-		case HIT_INTERRUPT:
-			color = "[RED]";
-			break;
-		case ARMOR:
-			color = "[BLUE]";
-			break;
-		case RESISTANT:
-			color = "[BLACK]";
-			break;
-			default:
-				color = "[WHITE]";
-
-		}
-		textCompo.setText(color + damage);
-		display.add(textCompo);
-		
-		initialPos.free();
-		
-		room.addEntity(display);
-		return display;
-	}
-	
-	/**
-	 * Create an experience displayer.
-	 * @param exp the amount of xp earned
-	 * @param initialPos the initial position
-	 * @return the exp displayer entity
-	 */
-	public Entity createExpDisplayer(int exp, Vector2 gridPos, float offsetY, Room room) {
-		Entity display = engine.createEntity();
-		display.flags = EntityFlagEnum.EXP_DISPLAYER.getFlag();
-
-		PoolableVector2 initialPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
-		initialPos.add(0, GameScreen.GRID_SIZE + offsetY);
-		
-		DamageDisplayComponent displayCompo = engine.createComponent(DamageDisplayComponent.class);
-		displayCompo.setInitialPosition(initialPos);
-		display.add(displayCompo);
-		 
-		GridPositionComponent transfoCompo = engine.createComponent(GridPositionComponent.class);
-		transfoCompo.absolutePos(initialPos.x, initialPos.y);
-		transfoCompo.zIndex = ZIndexConstants.EXP_DISPLAYER;
-		display.add(transfoCompo);
-		
-		TextComponent textCompo = engine.createComponent(TextComponent.class);
-		textCompo.setFont(SceneAssets.font);
-		textCompo.setText("Exp+" + exp);
-		display.add(textCompo);
-		
-		initialPos.free();
-		
-		room.addEntity(display);
-		return display;
-	}
+//	/**
+//	 * Create a text that will be displayed on a tile.
+//	 * @param pos the position of the text in tile position
+//	 * @return the text entity
+//	 */
+//	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex) {
+//		return createTextOnTile(tilePos, text, zIndex, null);
+//	}
+//	
+//	/**
+//	 * Create a text that will be displayed on a tile.
+//	 * @param pos the position of the text in tile position
+//	 * @return the text entity
+//	 */
+//	public Entity createTextOnTile(Vector2 tilePos, String text, int zIndex, Room room) {
+//		Entity textTest = engine.createEntity();
+//		textTest.flags = EntityFlagEnum.TEXT_ON_TILE.getFlag();
+//
+//		GridPositionComponent gridPositionComponent = new GridPositionComponent();
+//		if (room != null) {
+//			gridPositionComponent.coord(textTest, tilePos, room);
+//		} else {
+//			gridPositionComponent.coord(tilePos);
+//		}
+//		gridPositionComponent.zIndex = zIndex;
+//		textTest.add(gridPositionComponent);
+//		
+//		TextComponent tc = new TextComponent(SceneAssets.smallFont);
+//		tc.setText(text);
+//		textTest.add(tc);
+//		
+//		engine.addEntity(textTest);
+//		
+//		return textTest;
+//	}
 	
 	
 	/**

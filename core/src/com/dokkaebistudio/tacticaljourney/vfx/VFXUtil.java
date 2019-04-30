@@ -12,12 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -26,6 +32,90 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class VFXUtil {
 	
+//	private static int damageDisplayerXOffset;
+	
+	/**
+	 * Create a damage displayer.
+	 * @param damage the damage to display
+	 * @param gridPos the grid position
+	 * @param healthChange the type of health modif (impact the text color)
+	 * @param offsetY the offset in case of many displayers being displayed at the same time
+	 * @param room the room
+	 * @return the damage displayer entity
+	 */
+	public static void createDamageDisplayer(String damage, Vector2 gridPos, HealthChangeEnum healthChange, float offsetY, Room room) {
+		String color = "";
+		switch(healthChange) {
+		case HEALED:
+			color = "[GREEN]";
+			break;
+		case HIT:
+		case HIT_INTERRUPT:
+			color = "[RED]";
+			break;
+		case ARMOR:
+			color = "[BLUE]";
+			break;
+		case RESISTANT:
+			color = "[BLACK]";
+			break;
+			default:
+				color = "[WHITE]";
+
+		}		
+		
+
+		final Label image = new Label(color + damage, PopinService.hudStyle());
+		final Container<Label> container = new Container<>(image);
+	    container.setTransform(true);   // for enabling scaling and rotation
+	    container.pack();
+	    
+		Action removeImageAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			container.remove();
+		    return true;
+		  }
+		};
+		
+		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		container.setPosition(pixelPos.x + GameScreen.GRID_SIZE - container.getHeight(), pixelPos.y + GameScreen.GRID_SIZE/2 - offsetY);
+		pixelPos.free();
+
+		container.setOrigin(Align.center);
+				
+		ScaleToAction appear = Actions.scaleTo(1.5f, 1.5f, 1f, Interpolation.elasticOut);
+		ScaleToAction scale = Actions.scaleTo(0f, 0f, 2f);
+		SequenceAction scalingActions = Actions.sequence(appear,scale);
+		
+		MoveByAction moveBy = Actions.moveBy(0, 150, 3f);
+		container.addAction(Actions.sequence(Actions.scaleTo(0, 0), Actions.parallel(scalingActions, moveBy), removeImageAction));
+		
+		GameScreen.fxStage.addActor(container);		
+	}
+	
+	
+	public static void createExperienceDisplayer(int exp, Vector2 gridPos, float offsetY, Room room) {
+		final Label image = new Label("[YELLOW]EXP+" + exp, PopinService.hudStyle());
+		Action removeImageAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			  image.remove();
+		    return true;
+		  }
+		};
+		
+		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		image.setPosition(pixelPos.x, pixelPos.y + GameScreen.GRID_SIZE - offsetY);
+		pixelPos.free();
+
+		image.setOrigin(Align.center);
+		
+		MoveByAction moveBy = Actions.moveBy(0, 100, 2f);
+		image.addAction(Actions.sequence(moveBy, removeImageAction));
+		
+		GameScreen.fxStage.addActor(image);		
+	}
 	
 	public static void createDisappearanceEffect(Vector2 gridPos, Sprite sprite) {
 		

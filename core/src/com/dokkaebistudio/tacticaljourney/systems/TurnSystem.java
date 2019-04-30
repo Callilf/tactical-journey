@@ -91,7 +91,7 @@ public class TurnSystem extends IteratingSystem implements RoomSystem {
 		  }
 		};
 			
-		newTurnLabel.addAction(Actions.sequence(Actions.moveBy(0, 50, 1.0f), finishAction));
+		newTurnLabel.addAction(Actions.sequence(Actions.moveBy(0, 100, 1.0f), finishAction));
 		stage.addActor(newTurnLabel);
 	}
 }

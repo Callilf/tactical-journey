@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class ExperienceSystem extends IteratingSystem implements RoomSystem {
 	    
@@ -41,8 +42,7 @@ public class ExperienceSystem extends IteratingSystem implements RoomSystem {
     		for (int i=0 ; i<expCompo.getXpGainedAtCurrentFrame().size() ; i++) {
     			Integer expGain = expCompo.getXpGainedAtCurrentFrame().get(i);
 				GridPositionComponent attackerPosCompo = Mappers.gridPositionComponent.get(player);
-				room.entityFactory.createExpDisplayer(expGain, attackerPosCompo.coord(), 15 * i, room);
-
+				VFXUtil.createExperienceDisplayer(expGain, attackerPosCompo.coord(), 20 * i, room);
     		}
     		
     		expCompo.getXpGainedAtCurrentFrame().clear();

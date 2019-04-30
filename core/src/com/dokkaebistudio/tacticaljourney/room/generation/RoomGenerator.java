@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -266,10 +267,17 @@ public abstract class RoomGenerator {
 			
 			// Place a loot
 			placeLootable(90, room, random, spawnPositions);
-
+			
+			boolean hasPotion = random.nextSeededInt(5) == 0;
+			if (hasPotion) {
+				entityFactory.itemFactory.createItem(ItemEnum.POTION_SMALL_HEALTH, room, spawnPositions.get(0));
+				spawnPositions.remove(0);
+			}
+			
 			// Place enemies
 			placeEnemies(room, random, spawnPositions, false);
 			
+
 			break;
 			
 		case ITEM_ROOM:

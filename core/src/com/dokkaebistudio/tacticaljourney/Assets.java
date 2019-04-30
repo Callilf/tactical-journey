@@ -337,6 +337,7 @@ public class Assets {
 	public static RegionDescriptor divine_catalyst_item;
 	
 	public static RegionDescriptor scroll_doppelganger_item;
+	public static RegionDescriptor scroll_teleportation_item;
 	
 	public static RegionDescriptor arrow_item;
 	public static RegionDescriptor bomb_item;
@@ -726,6 +727,7 @@ public class Assets {
 		divine_catalyst_item = Assets.getTexture("item-consumable-divine-catalyst");
 		
 		scroll_doppelganger_item = Assets.getTexture("item-scroll-doppelganger");
+		scroll_teleportation_item = Assets.getTexture("item-scroll-teleportation");
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");

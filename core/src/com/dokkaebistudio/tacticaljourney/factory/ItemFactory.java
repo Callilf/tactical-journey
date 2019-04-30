@@ -54,6 +54,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDoppelganger;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemShuriken;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmallHealthPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemSmokebomb;
@@ -254,7 +255,13 @@ public final class ItemFactory {
 			flammable.setDestroy(true);
 			item.add(flammable);
 			break;
-
+		case SCROLL_TELEPORTATION:
+			item = createItemBase(room, tilePos,  new ItemScrollOfTeleportation(), EntityFlagEnum.ITEM_SCROLL);
+			flammable = engine.createComponent(FlammableComponent.class);
+			flammable.setPropagate(true);
+			flammable.setDestroy(true);
+			item.add(flammable);
+			break;
 			
 		//******************
 		// Infusables

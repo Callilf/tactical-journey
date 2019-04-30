@@ -36,6 +36,8 @@ public class SpiderItemPool extends ItemPool {
 
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 100));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 100));
+
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 30));
 		
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SILKY_BEARD, 1, true));
 	}

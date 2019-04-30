@@ -175,6 +175,9 @@ public class Descriptions {
 	
 	public static final String ITEM_SCROLL_DOPPELGANGER_TITLE = "Scroll of Doppelganger";
 	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summon a 10 hp copy of oneself that disappear once the room is cleared. Do nothing on a cleared room.";
+	
+	public static final String ITEM_SCROLL_TELEPORTATION_TITLE = "Scroll of teleportation";
+	public static final String ITEM_SCROLL_TELEPORTATION_DESCRIPTION = "Teleport you to a random room of the current floor. Doesn't work in a boss room.";
 
 	public static final String ITEM_ORB_CONTAINER_TITLE = "Orb container";
 	public static final String ITEM_ORB_CONTAINER_DESCRIPTION = "Contains a random orb. Orbs are very volatile and will immediately orbit around you when you discover them. If all orb slots are filled and you "

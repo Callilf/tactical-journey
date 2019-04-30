@@ -28,6 +28,9 @@ public class TribesmenScoutItemPool extends ItemPool {
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 5));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 5));
+		
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5));
 	}
 	
 

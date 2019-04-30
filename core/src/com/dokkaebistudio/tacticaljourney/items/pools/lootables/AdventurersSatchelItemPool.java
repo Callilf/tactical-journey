@@ -35,6 +35,7 @@ public class AdventurersSatchelItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 20));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 20));				
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 20));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 10));
 	}
 	
 

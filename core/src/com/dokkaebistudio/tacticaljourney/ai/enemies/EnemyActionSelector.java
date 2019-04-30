@@ -102,34 +102,10 @@ public class EnemyActionSelector {
 	private static Entity moveTowardsTargetStrategy(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
-		int shortestDistance = -1;
-		Entity target = null;
 
-		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
-		if (aiComponent.getTarget() == null) {
-			List<Entity> allTargets = null;
-			if (Mappers.enemyComponent.has(enemyEntity)) {
-				allTargets = room.getAllies();
-			} else {
-				allTargets = room.getEnemies();
-			}
-			
-			//First find the closest target
-			for (Entity p : allTargets) {
-				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-				if (target == null || distance < shortestDistance) {
-					shortestDistance = distance;
-					target = p;
-				}
-			}
-			
-		} else {
-			target = aiComponent.getTarget();
-			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
-			
-		}
+		TargetInfo selectTarget = selectTarget(enemyEntity, enemyPos, room);
+		int shortestDistance = selectTarget != null ? selectTarget.distance : -1;
+		Entity target = selectTarget != null ? selectTarget.target : null;
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 
@@ -245,34 +221,10 @@ public class EnemyActionSelector {
 	private static Entity moveRandomlyButAttackFromRangeIfPossible(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, AttackComponent attackCompo, GridPositionComponent enemyPos, AttackTileSearchService atss) {
 		Entity selectedTile = null;
-		int shortestDistance = -1;
-		Entity target = null;
-
-		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
-		if (aiComponent.getTarget() == null) {
-			List<Entity> allTargets = null;
-			if (Mappers.enemyComponent.has(enemyEntity)) {
-				allTargets = room.getAllies();
-			} else {
-				allTargets = room.getEnemies();
-			}
-			
-			//First find the closest target
-			for (Entity p : allTargets) {
-				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-				if (target == null || distance < shortestDistance) {
-					shortestDistance = distance;
-					target = p;
-				}
-			}
-			
-		} else {
-			target = aiComponent.getTarget();
-			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
-			
-		}
+		
+		TargetInfo selectTarget = selectTarget(enemyEntity, enemyPos, room);
+		int shortestDistance = selectTarget != null ? selectTarget.distance : -1;
+		Entity target = selectTarget != null ? selectTarget.target : null;
 
 		if (target != null) {
 			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
@@ -322,34 +274,10 @@ public class EnemyActionSelector {
 	private static Entity moveRandomlyButAttackIfPossible(Entity enemyEntity, Room room,
 			MoveComponent moveComponent, GridPositionComponent enemyPos) {
 		Entity selectedTile = null;
-		int shortestDistance = -1;
-		Entity target = null;
-
-		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
-		if (aiComponent.getTarget() == null) {
-			List<Entity> allTargets = null;
-			if (Mappers.enemyComponent.has(enemyEntity)) {
-				allTargets = room.getAllies();
-			} else {
-				allTargets = room.getEnemies();
-			}
-			
-			//First find the closest target
-			for (Entity p : allTargets) {
-				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
-				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
-				if (target == null || distance < shortestDistance) {
-					shortestDistance = distance;
-					target = p;
-				}
-			}
-			
-		} else {
-			target = aiComponent.getTarget();
-			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
-			shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
-			
-		}
+		
+		TargetInfo selectTarget = selectTarget(enemyEntity, enemyPos, room);
+		int shortestDistance = selectTarget != null ? selectTarget.distance : -1;
+		Entity target = selectTarget != null ? selectTarget.target : null;
 		
 		AttackComponent attackComponent = Mappers.attackComponent.get(enemyEntity);
 		if (shortestDistance == attackComponent.getActiveSkill().getRangeMax()) {
@@ -421,6 +349,60 @@ public class EnemyActionSelector {
 		}
 		
     	return selectedTile;
+	}
+	
+	public static TargetInfo selectTarget(Entity enemyEntity, GridPositionComponent enemyPos, Room room) {
+		int shortestDistance = -1;
+		Entity target = null;
+
+		TargetInfo ti = null;
+		AIComponent aiComponent = Mappers.aiComponent.get(enemyEntity);
+		
+		if (aiComponent.getTarget() != null) {
+			target = aiComponent.getTarget();
+			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(target);
+			if (targetPos == null) {
+				target = null;
+			} else {
+				shortestDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), targetPos.coord());
+				ti = new TargetInfo(shortestDistance, target);
+			}
+		}
+		
+		if (ti == null) {
+			List<Entity> allTargets = null;
+			if (Mappers.enemyComponent.has(enemyEntity)) {
+				allTargets = room.getAllies();
+			} else {
+				allTargets = room.getEnemies();
+			}
+			
+			//First find the closest target
+			for (Entity p : allTargets) {
+				GridPositionComponent playerPos = Mappers.gridPositionComponent.get(p);
+				int distance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), playerPos.coord());
+				if (target == null || distance < shortestDistance) {
+					shortestDistance = distance;
+					target = p;
+				}
+			}
+			ti = new TargetInfo(shortestDistance, target);
+		}
+		
+		return ti;
+	}
+	
+	
+	
+	private static class TargetInfo {
+		
+		public int distance;
+		public Entity target;
+		
+		public TargetInfo(int distance, Entity target) {
+			this.distance = distance;
+			this.target = target;
+		}
 	}
 	
 }

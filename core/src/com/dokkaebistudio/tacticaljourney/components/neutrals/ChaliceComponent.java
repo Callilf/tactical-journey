@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -67,8 +68,9 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
 		PoolableVector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 		
+		this.getAura().setOrigin(Align.center);
 		ScaleToAction scale = Actions.scaleTo(0f, 0f, 2f);
-		MoveToAction move = Actions.moveTo(playerPixelPos.x + GameScreen.GRID_SIZE/2, playerPixelPos.y + GameScreen.GRID_SIZE/2, 2f, Interpolation.pow5);
+		MoveToAction move = Actions.moveTo(playerPixelPos.x, playerPixelPos.y, 2f, Interpolation.pow5);
 		this.getAura().addAction(Actions.sequence(Actions.parallel(scale, move), new Action() {
 			@Override
 			public boolean act(float delta) {
@@ -99,9 +101,6 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 
 	public void setAura(AnimatedImage aura) {
 		this.aura = aura;
-		if (aura != null) {
-			GameScreen.fxStage.addActor(aura);
-		}
 	}
 	
 	public void removeAura() {

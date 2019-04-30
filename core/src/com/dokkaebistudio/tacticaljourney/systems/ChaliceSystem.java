@@ -95,6 +95,7 @@ public class ChaliceSystem extends EntitySystem implements RoomSystem {
 			if (chaliceCompo.isFilled() && chaliceCompo.getAura() == null) {
 				AnimatedImage aura = createHolyAura(chalice);
 				chaliceCompo.setAura(aura);
+				chaliceCompo.showMarker(chalice);
 			}
 
 		}

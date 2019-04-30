@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
@@ -87,6 +88,7 @@ public class StatueComponent implements Component, Poolable, MarkerInterface {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
 		PoolableVector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(gridPositionComponent.coord());
 		
+		this.getHolyAura().setOrigin(Align.center);
 		ScaleToAction scale = Actions.scaleTo(0f, 0f, 2f);
 		MoveToAction move = Actions.moveTo(playerPixelPos.x, playerPixelPos.y, 2f, Interpolation.pow5);
 		this.getHolyAura().addAction(Actions.sequence(Actions.parallel(scale, move), new Action() {
@@ -158,9 +160,6 @@ public class StatueComponent implements Component, Poolable, MarkerInterface {
 
 	public void setHolyAura(AnimatedImage holyAura) {
 		this.holyAura = holyAura;
-		if (holyAura != null) {
-			GameScreen.fxStage.addActor(holyAura);
-		}
 	}
 	
 	public void removeHolyAura() {

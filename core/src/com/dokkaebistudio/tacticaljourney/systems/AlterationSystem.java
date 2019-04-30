@@ -145,6 +145,7 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 			if (statueComponent.isHasBlessing() && statueComponent.getHolyAura() == null) {
 				AnimatedImage aura = createHolyAura(statue);
 				statueComponent.setHolyAura(aura);
+				statueComponent.showMarker(statue);
 			}
 			
 			if (statueComponent.wasJustDestroyed()) {

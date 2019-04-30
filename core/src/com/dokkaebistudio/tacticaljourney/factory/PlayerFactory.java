@@ -153,7 +153,7 @@ public final class PlayerFactory {
 		InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
 		inventoryComponent.init();
 		inventoryComponent.player = playerEntity;
-		inventoryComponent.setNumberOfSlots(8);
+		inventoryComponent.setNumberOfSlots(10);
 		inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 		
 		//TEST

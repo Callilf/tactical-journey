@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
@@ -101,12 +100,21 @@ public class Floor {
 	}
 	
 	
+	
 	/** 
 	 * Enter the given room.
 	 * @param newRoom the room we are entering
 	 */
 	public void enterRoom(Room newRoom) {
 		Room oldRoom = this.getActiveRoom();
+		enterRoom(newRoom, oldRoom);
+	}
+	
+	/** 
+	 * Enter the given room.
+	 * @param newRoom the room we are entering
+	 */
+	public void enterRoom(Room newRoom, Room oldRoom) {
 		if (oldRoom == newRoom) oldRoom = null;
 		
 		this.gameScreen.enterRoom(newRoom, oldRoom);

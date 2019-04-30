@@ -288,7 +288,7 @@ public class GameScreen extends ScreenAdapter {
 		quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
 				
 		//Enter the first room
-		activeFloor.enterRoom(activeFloor.getActiveRoom());
+		activeFloor.enterRoom(activeFloor.getActiveRoom(), null);
 		
 		Journal.addEntry("Welcome to Tactical Journey!");
 	}
@@ -349,7 +349,7 @@ public class GameScreen extends ScreenAdapter {
 
 		// Enter the room of the new floor
 		Room newActiveRoom = newFloor.getActiveRoom();
-		enterRoom(newActiveRoom, this.activeFloor.getActiveRoom());
+		newFloor.enterRoom(newActiveRoom, oldRoom);
 
 		PoolableVector2 tempPos = PoolableVector2.create(11,6);
 		MovementHandler.placeEntity(player, tempPos, newActiveRoom);

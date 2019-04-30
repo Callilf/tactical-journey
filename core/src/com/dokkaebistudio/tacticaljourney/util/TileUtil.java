@@ -148,6 +148,7 @@ public final class TileUtil {
 			Set<Entity> orbs = TileUtil.getEntitiesWithComponentOnTile(pos, OrbComponent.class,  room);
 			for (Entity e : orbs) {
 				OrbComponent orbComponent = Mappers.orbComponent.get(e);
+				if (orbComponent.getParent() == mover) continue;
 				cost += orbComponent.getType().getHeuristic(mover);
 			}
 		}

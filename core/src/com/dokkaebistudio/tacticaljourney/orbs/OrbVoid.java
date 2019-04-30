@@ -48,6 +48,6 @@ public class OrbVoid extends Orb {
 	}
 	
 	public int getHeuristic(Entity mover) {
-		return 1;
+		return 0;
 	}
 }

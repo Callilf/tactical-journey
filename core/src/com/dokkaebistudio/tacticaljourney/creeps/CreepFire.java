@@ -108,7 +108,7 @@ public class CreepFire extends Creep {
 		for (Entity flammable : flammables) {
 			FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
 			flammableComponent.setBurning(true);
-			if (flammableComponent.isDestroyed()) {
+			if (flammableComponent.isDestroy()) {
 				
 				Image destroyedTexture = flammableComponent.getDestroyedTexture(gridPositionComponent.getWorldPos());
 				if (destroyedTexture != null) {
@@ -144,7 +144,7 @@ public class CreepFire extends Creep {
 		for (Entity flammable : flammables) {
 			FlammableComponent flammableComponent = Mappers.flammableComponent.get(flammable);
 			flammableComponent.setBurning(true);
-			if (flammableComponent.isDestroyed()) {
+			if (flammableComponent.isDestroy()) {
 				
 				Image destroyedTexture = flammableComponent.getDestroyedTexture(gridPositionComponent.getWorldPos());
 				if (destroyedTexture != null) {

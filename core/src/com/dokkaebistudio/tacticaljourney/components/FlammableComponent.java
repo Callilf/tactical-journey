@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -28,7 +27,7 @@ public class FlammableComponent implements Component, Poolable {
 	private boolean propagate;
 	
 	/** Whether this entity is destroyed when ignited. */
-	private boolean destroyed;
+	private boolean destroy;
 	
 	/** The texture to use to make the item disappear. */
 	private RegionDescriptor destroyedTexture;
@@ -38,7 +37,7 @@ public class FlammableComponent implements Component, Poolable {
 	public void reset() {
 		burning = false;
 		propagate = false;	
-		destroyed = false;
+		destroy = false;
 	}
 	
 	
@@ -54,13 +53,13 @@ public class FlammableComponent implements Component, Poolable {
 	}
 
 
-	public boolean isDestroyed() {
-		return destroyed;
+	public boolean isDestroy() {
+		return destroy;
 	}
 
 
-	public void setDestroyed(boolean destroy) {
-		this.destroyed = destroy;
+	public void setDestroy(boolean destroy) {
+		this.destroy = destroy;
 	}
 
 
@@ -109,7 +108,7 @@ public class FlammableComponent implements Component, Poolable {
 			public void write(Kryo kryo, Output output, FlammableComponent object) {
 				output.writeBoolean(object.burning);
 				output.writeBoolean(object.propagate);
-				output.writeBoolean(object.destroyed);
+				output.writeBoolean(object.destroy);
 				
 				kryo.writeObjectOrNull(output, object.destroyedTexture, RegionDescriptor.class);
 			}
@@ -119,7 +118,7 @@ public class FlammableComponent implements Component, Poolable {
 				FlammableComponent compo = engine.createComponent(FlammableComponent.class);
 				compo.burning = input.readBoolean();
 				compo.propagate = input.readBoolean();
-				compo.destroyed = input.readBoolean();
+				compo.destroy = input.readBoolean();
 				
 				compo.destroyedTexture = kryo.readObjectOrNull(input, RegionDescriptor.class);
 				return compo;

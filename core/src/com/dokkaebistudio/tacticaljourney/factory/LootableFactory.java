@@ -179,7 +179,7 @@ public final class LootableFactory {
     	
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
-		flammable.setDestroyed(false);
+		flammable.setDestroy(false);
 		lootable.add(flammable);
 
 		engine.addEntity(lootable);

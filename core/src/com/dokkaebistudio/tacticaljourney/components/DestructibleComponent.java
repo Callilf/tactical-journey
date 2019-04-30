@@ -17,7 +17,7 @@ import com.esotericsoftware.kryo.io.Output;
 public class DestructibleComponent implements Component, Poolable {
 	
 	/** Whether the entity is already destroyed. */
-	private boolean destroyed;
+	private boolean destroyed = false;
 
 	/**
 	 * The sprite of the entity destroyed.

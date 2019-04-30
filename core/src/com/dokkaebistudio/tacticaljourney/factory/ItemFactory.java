@@ -251,7 +251,7 @@ public final class ItemFactory {
 			item = createItemBase(room, tilePos,  new ItemScrollOfDoppelganger(), EntityFlagEnum.ITEM_SCROLL);
 			FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 			flammable.setPropagate(true);
-			flammable.setDestroyed(true);
+			flammable.setDestroy(true);
 			item.add(flammable);
 			break;
 
@@ -264,7 +264,7 @@ public final class ItemFactory {
 			
 			flammable = engine.createComponent(FlammableComponent.class);
 			flammable.setPropagate(true);
-			flammable.setDestroyed(false);
+			flammable.setDestroy(false);
 			item.add(flammable);
 			
 			break;
@@ -286,7 +286,7 @@ public final class ItemFactory {
 			
 			flammable = engine.createComponent(FlammableComponent.class);
 			flammable.setPropagate(true);
-			flammable.setDestroyed(true);
+			flammable.setDestroy(true);
 			item.add(flammable);
 			
 			break;
@@ -460,7 +460,7 @@ public final class ItemFactory {
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
-		flammable.setDestroyed(true);
+		flammable.setDestroy(true);
 		flammable.setDestroyedTexture(Assets.tutorial_page_item);
 		item.add(flammable);
 

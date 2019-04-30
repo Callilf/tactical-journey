@@ -97,7 +97,6 @@ public final class CreepFactory {
 		
 		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
 		destructible.setDestroyableWithWeapon(true);
-		destructible.setDestroyed(true);
 		creepEntity.add(destructible);
 		
 		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
@@ -108,7 +107,7 @@ public final class CreepFactory {
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
-		flammable.setDestroyed(true);
+		flammable.setDestroy(true);
 		flammable.setDestroyedTexture(Assets.creep_web);
 		creepEntity.add(flammable);
 		
@@ -165,7 +164,7 @@ public final class CreepFactory {
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
-		flammable.setDestroyed(true);
+		flammable.setDestroy(true);
 		flammable.setDestroyedTexture(Assets.tallGrass);
 		bushEntity.add(flammable);
     	
@@ -197,7 +196,7 @@ public final class CreepFactory {
 		
 		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
 		flammable.setPropagate(true);
-		flammable.setDestroyed(true);
+		flammable.setDestroy(true);
 		flammable.setDestroyedTexture(Assets.tallGrass);
 		bushEntity.add(flammable);
 		

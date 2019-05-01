@@ -203,19 +203,21 @@ public class VFXUtil {
 		GameScreen.fxStage.addActor(log);
 	}
 	
+	
 	/**
 	 * Smoke effect when evading.
 	 * @param gridPos the tile pos
 	 */
 	public static void createSmokeEffect(Vector2 gridPos) {
+		createSmokeEffect(gridPos, null);
+	}
+	
+	/**
+	 * Smoke effect when evading.
+	 * @param gridPos the tile pos
+	 */
+	public static void createSmokeEffect(Vector2 gridPos, Action smokeAnimFinishAction) {
 		final AnimatedImage smokeAnim = new AnimatedImage(AnimationSingleton.getInstance().smoke_bomb, false);
-		Action smokeAnimFinishAction = new Action(){
-		  @Override
-		  public boolean act(float delta){
-			smokeAnim.remove();
-		    return true;
-		  }
-		};
 		smokeAnim.setFinishAction(smokeAnimFinishAction);
 		
 		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
@@ -225,5 +227,7 @@ public class VFXUtil {
 		
 		GameScreen.fxStage.addActor(smokeAnim);
 	}
+	
+
 	
 }

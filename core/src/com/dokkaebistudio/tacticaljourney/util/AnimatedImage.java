@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -17,6 +18,7 @@ public class AnimatedImage extends Image {
 	protected Animation<Sprite> animation = null;
     private float stateTime = 0;
     private boolean loop;
+    private boolean actionPlaying;
     private Action finishAction;
 
     
@@ -41,9 +43,23 @@ public class AnimatedImage extends Image {
         	super.act(delta);
     	} else {
     		if (animation.isAnimationFinished(stateTime)) {
-    			this.remove();
+    			if (actionPlaying) {
+    				super.act(delta);
+    				return;
+    			}
+    			
     			if (finishAction != null) {
-    				finishAction.act(delta);
+    				Action removeImageAction = new Action(){
+					  @Override
+					  public boolean act(float delta){
+					    remove();
+					    return true;
+					  }
+					};
+    				this.addAction(Actions.sequence(finishAction, removeImageAction));
+    				actionPlaying = true;
+    			} else {
+    				this.remove();
     			}
     		} else {
 	    		((TextureRegionDrawable)getDrawable()).setRegion(animation.getKeyFrame(stateTime, false));

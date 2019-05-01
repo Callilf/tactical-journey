@@ -36,6 +36,8 @@ public class InputSingleton implements InputProcessor{
 	/** The last touched point. */
 	private Vector3 touchPoint = new Vector3();
 	
+	public static boolean inputBlocked = false;
+	
 	//*************
 	// Mouse
 	
@@ -164,6 +166,8 @@ public class InputSingleton implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
+		if (inputBlocked) return false;
+		
 		if (keycode == Input.Keys.SPACE) {
 			spaceJustPressed = true;
 			return true;
@@ -187,6 +191,8 @@ public class InputSingleton implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
+		if (inputBlocked) return false;
+		
 		if (keycode == Input.Keys.SPACE) {
 			spaceJustReleased = true;
 			return true;
@@ -219,6 +225,8 @@ public class InputSingleton implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (inputBlocked) return false;
+		
 		if (button == Input.Buttons.LEFT) {
 			leftClickJustPressed = true;
 			return true;
@@ -232,6 +240,8 @@ public class InputSingleton implements InputProcessor{
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (inputBlocked) return false;
+		
 		if (button == Input.Buttons.LEFT) {
 			leftClickJustReleased = true;
 			return true;

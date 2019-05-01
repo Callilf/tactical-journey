@@ -141,6 +141,9 @@ public abstract class Alteration {
 	}
 	public void setInfused(boolean infused) {
 		this.infused = infused;
+		if (this.infused) {
+			itemEntityId = null;
+		}
 	}
 	
 	public Integer getItemEntityId() {

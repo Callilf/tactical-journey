@@ -444,9 +444,8 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 		upTable.add(curseTitle).width(350).pad(5, 10, 0, 5);
 		
 		RegionDescriptor itemSprite = null;
-		if (alteration.getItemEntityId() != null) {
+		if (!alteration.isInfused() && alteration.getItemEntityId() != null) {
 			Entity itemEntity = Mappers.inventoryComponent.get(GameScreen.player).findItemByEntityId(alteration.getItemEntityId());
-//			PublicEntity itemEntity = GameScreen.engine.findEntityById(alteration.getItemEntityId());
 			itemSprite = Mappers.itemComponent.get(itemEntity).getItemType().getTexture();
 		}
 		if (itemSprite == null || alteration.isInfused()) itemSprite = Assets.item_infused_icon;

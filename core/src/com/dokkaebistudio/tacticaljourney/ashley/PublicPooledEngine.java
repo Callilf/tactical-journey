@@ -47,7 +47,13 @@ public class PublicPooledEngine extends PooledEngine {
 
 	/** @return Clean {@link Entity} from the Engine pool. In order to add it to the {@link Engine}, use {@link #addEntity(Entity)}. */
 	public Entity createEntity () {
-		PooledEntity entity = entityPool.obtain();
+		PooledEntity entity = null;
+		while (entity == null) {
+			PooledEntity entityFromPool = entityPool.obtain();
+			if (entityFromPool.flags == 0) {
+				entity = entityFromPool;
+			}
+		}
 		entity.id = entityCounter;
 		entityCounter++;
 		return entity;

@@ -231,7 +231,6 @@ public class MovementHandler {
 					moveCompo.clearSelectedTileFromPreviousTurn();
 					//Change room !!!
 					finishRealMovement(mover, room);
-					moveCompo.clearMovableTiles();
 					room.leaveRoom(doorCompo.getTargetedRoom());
 					return null;
 				}

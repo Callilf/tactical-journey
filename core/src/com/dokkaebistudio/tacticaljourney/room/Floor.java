@@ -117,6 +117,11 @@ public class Floor {
 	public void enterRoom(Room newRoom, Room oldRoom) {
 		if (oldRoom == newRoom) oldRoom = null;
 		
+		if (oldRoom != null) {
+			Mappers.moveComponent.get(GameScreen.player).clearMovableTiles();
+			Mappers.attackComponent.get(GameScreen.player).clearAttackableTiles();
+		}
+		
 		this.gameScreen.enterRoom(newRoom, oldRoom);
 		this.setActiveRoom(newRoom);
 		
@@ -161,6 +166,9 @@ public class Floor {
 				MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W/2, GameScreen.GRID_H-2), newRoom);
 			}
 		}
+		
+		
+		newRoom.setNextState(RoomState.PLAYER_TURN_INIT);
 		
 		MapRenderer.requireRefresh();
 	}

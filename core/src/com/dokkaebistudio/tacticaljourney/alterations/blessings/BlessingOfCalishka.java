@@ -14,7 +14,7 @@ import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**
- * Blessing of Kalamazoo. Restore between 0 and 10 health after clearing a room.
+ * Blessing of Calishka. Starting blessing that heals 5hp on room visit and room clear.
  * @author Callil
  *
  */
@@ -29,13 +29,24 @@ public class BlessingOfCalishka extends Blessing {
 	
 	@Override
 	public String description() {
-		return "On room clear, [GREEN]restore 5 hp";
+		return "On discovering a new room, [GREEN]restore 5 hp[]. On room clear, [GREEN]restore 5 hp";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.blessing_calishka;
 	}
+	
+	@Override
+	public void onRoomVisited(Entity entity, Room room) {
+		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
+		
+		if (healthComponent != null) {
+			healthComponent.restoreHealth(healAmount);
+			
+			Journal.addEntry("[GREEN]Blessing of Calishka granted " + healAmount + " hp for discovering a new room.");
+			AlterationSystem.addAlterationProc(this);
+		}	}
 
 	@Override
 	public void onRoomCleared(Entity entity, Room room) {
@@ -44,7 +55,7 @@ public class BlessingOfCalishka extends Blessing {
 		if (healthComponent != null) {
 			healthComponent.restoreHealth(healAmount);
 			
-			Journal.addEntry("[GREEN]Blessing of Calishka granted " + healAmount + " hp.");
+			Journal.addEntry("[GREEN]Blessing of Calishka granted " + healAmount + " hp for clearing the room.");
 			AlterationSystem.addAlterationProc(this);
 		}
 	}

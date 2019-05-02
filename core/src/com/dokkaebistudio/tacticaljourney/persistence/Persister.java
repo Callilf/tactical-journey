@@ -51,6 +51,8 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -626,6 +628,8 @@ public class Persister {
 		kryo.register(ShopKeeperComponent.class, ShopKeeperComponent.getSerializer(engine));
 		kryo.register(SoulbenderComponent.class, SoulbenderComponent.getSerializer(engine));
 		kryo.register(StatueComponent.class, StatueComponent.getSerializer(engine));
+		kryo.register(ChaliceComponent.class, ChaliceComponent.getSerializer(engine));
+		kryo.register(SewingMachineComponent.class, SewingMachineComponent.getSerializer(engine));
 
 
 		kryo.register(HumanoidComponent.class, HumanoidComponent.getSerializer(engine));

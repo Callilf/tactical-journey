@@ -6,7 +6,9 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
@@ -75,27 +77,46 @@ public class LootUtil {
      */
 	public static void dropItem(final Entity entity, final LootRewardComponent lootRewardComponent, final Room room) {
 		if (lootRewardComponent == null) return;
-		
-		final Entity dropItem = generateLoot(entity, lootRewardComponent, room.entityFactory);
-		if (dropItem == null) return;
-		
-		final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(entity);
-		final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
+
+		final Entity dropItem = generateLoot(entity, lootRewardComponent, room.entityFactory);
+		if (dropItem != null) {
+			final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
+			final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
+			
+			// Drop animation
+			Action finishDropAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				itemComponent.drop(dropLocation, dropItem, room);
+				dropLocation.free();
+			    return true;
+			  }
+			};
+			Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction, 0f);
+			GameScreen.fxStage.addActor(dropAnimationImage);
+			
+			lootRewardComponent.setLatestItem(dropItem);
+		}
 		
-		// Drop animation
-		Action finishDropAction = new Action(){
-		  @Override
-		  public boolean act(float delta){
-			itemComponent.drop(dropLocation, dropItem, room);
-			dropLocation.free();
-		    return true;
-		  }
-		};
-		Image dropAnimationImage = itemComponent.getDropAnimationImage(entity, dropItem, finishDropAction);
-		GameScreen.fxStage.addActor(dropAnimationImage);
-		
-		lootRewardComponent.setLatestItem(dropItem);
+		if (lootRewardComponent.getItemToDrop() != null) {
+			// Drop animation
+			final Entity mandatoryLoot = room.entityFactory.itemFactory.createItem(lootRewardComponent.getItemToDrop());
+			final ItemComponent mandatoryItemComponent = Mappers.itemComponent.get(mandatoryLoot);
+			final PoolableVector2 dropLoc = PoolableVector2.create(gridPositionComponent.coord());
+			Action finishMandatoryDropAction = new Action(){
+			  @Override
+			  public boolean act(float delta){
+				mandatoryItemComponent.drop(dropLoc, mandatoryLoot, room);
+				dropLoc.free();
+			    return true;
+			  }
+			};
+			Image mandatoryDropAnimationImage = mandatoryItemComponent.getDropAnimationImage(entity,
+					mandatoryLoot, finishMandatoryDropAction, dropItem != null ? 0.3f : 0f);
+			
+			GameScreen.fxStage.addActor(mandatoryDropAnimationImage);
+		}
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -243,7 +244,7 @@ public class ItemComponent implements Component, Poolable, MarkerInterface {
 	 * @param tilePos the tile on which the animation takes place
 	 * @param dropAction the action to call after the movement is over
 	 */
-	public Image getDropAnimationImage(Entity dropper, Entity item, Action dropAction) {
+	public Image getDropAnimationImage(Entity dropper, Entity item, Action dropAction, float delay) {
 		ItemComponent itemComponent = Mappers.itemComponent.get(item);
 		
 		final Image drop = new Image(itemComponent.getItemType().getTexture().getRegion());
@@ -260,7 +261,11 @@ public class ItemComponent implements Component, Poolable, MarkerInterface {
 		  }
 		};
 		
-		drop.addAction(Actions.sequence(Actions.moveBy(0, 50, 0.2f, Interpolation.pow3Out),
+		SequenceAction initAction = Actions.sequence(Actions.alpha(0f), 
+				Actions.delay(delay),
+				Actions.alpha(1f));
+		
+		drop.addAction(Actions.sequence(initAction, Actions.moveBy(0, 50, 0.2f, Interpolation.pow3Out),
 				Actions.moveBy(0, -50, 0.5f, Interpolation.bounceOut), 
 				dropAction,
 				removeImageAction));

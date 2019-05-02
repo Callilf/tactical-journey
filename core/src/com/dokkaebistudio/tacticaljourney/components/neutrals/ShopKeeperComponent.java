@@ -47,7 +47,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private boolean talking;
 	
 	/** The number of items for sale. Default is 3. */
-	private int numberOfItems = 3;
+	private int numberOfItems = 5;
 	
 	/** The items the shop keeper is selling. */
 //	private List<Entity> soldItems = new ArrayList<>();

@@ -16,9 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
@@ -33,6 +35,35 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 public class VFXUtil {
 	
 //	private static int damageDisplayerXOffset;
+	
+	
+	public static void createStatsUpNotif(String text, Vector2 gridPos) {
+		final Label image = new Label("[BLACK]" + text, PopinService.hudStyle());
+		final Container<Label> container = new Container<>(image);
+	    container.setTransform(true);   // for enabling scaling and rotation
+	    container.pack();
+	    
+		Action removeImageAction = new Action(){
+		  @Override
+		  public boolean act(float delta){
+			container.remove();
+		    return true;
+		  }
+		};
+		
+		PoolableVector2 pixelPos = TileUtil.convertGridPosIntoPixelPos(gridPos);
+		container.setPosition(pixelPos.x + GameScreen.GRID_SIZE/2 - container.getWidth()/2, pixelPos.y + GameScreen.GRID_SIZE/2 - container.getHeight()/2);
+		pixelPos.free();
+
+		container.setOrigin(Align.center);
+				
+		ScaleToAction appear = Actions.scaleTo(1.5f, 1.5f, 1f, Interpolation.elasticOut);
+		AlphaAction disappear = Actions.fadeOut(2f);
+		
+		container.addAction(Actions.sequence(Actions.scaleTo(0, 0),  appear, disappear, removeImageAction));
+		
+		GameScreen.fxStage.addActor(container);		
+	}
 	
 	/**
 	 * Create a damage displayer.

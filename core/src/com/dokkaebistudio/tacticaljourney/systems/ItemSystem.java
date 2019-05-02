@@ -194,7 +194,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 					    return true;
 					  }
 				};
-				Image dropImage = itemComponent.getDropAnimationImage(player, currentItem, finishDropAction);
+				Image dropImage = itemComponent.getDropAnimationImage(player, currentItem, finishDropAction, 0f);
 				fxStage.addActor(dropImage);
 				room.setNextState(RoomState.ITEM_DROP_ANIM);
 				

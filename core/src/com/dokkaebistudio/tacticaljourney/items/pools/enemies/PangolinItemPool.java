@@ -28,9 +28,9 @@ public class PangolinItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 10));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.LEATHER, 2));
 	}
 	
 	

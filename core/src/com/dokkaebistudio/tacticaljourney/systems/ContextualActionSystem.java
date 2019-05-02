@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
@@ -92,6 +93,19 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 					checkForLootablesToDisplayPopin();
 					checkForExitToDisplayPopin();
 					checkForWormholeToDisplayPopin();
+				}
+				
+				
+				PoolableVector2 gridPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+				int distanceFromPlayer = TileUtil.getDistanceBetweenTiles(gridPos, Mappers.gridPositionComponent.get(player).coord());
+				if (distanceFromPlayer == 1) {
+					
+					// At close range
+					
+					Entity sewingMachine = TileUtil.getEntityWithComponentOnTile(gridPos, SewingMachineComponent.class, room);
+					if (sewingMachine != null) {
+						playerCompo.requestAction(PlayerActionEnum.SEW, sewingMachine);
+					}
 				}
 				
 			}

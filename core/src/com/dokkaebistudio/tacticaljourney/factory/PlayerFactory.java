@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -391,7 +392,7 @@ public final class PlayerFactory {
 		
 		// Shop keeper component
 		ShopKeeperComponent shopKeeperCompo = engine.createComponent(ShopKeeperComponent.class);
-		shopKeeperCompo.setNumberOfItems(3);
+		shopKeeperCompo.setNumberOfItems(5);
 		shopKeeperCompo.setItemPool(ItemPoolSingleton.getInstance().basicShopItemPool);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.RARE, 10);
@@ -564,4 +565,41 @@ public final class PlayerFactory {
 		return soulBenderEntity;
 	}
 	
+	
+	/**
+	 * Create a sewing machine.
+	 * @param pos the position
+	 * @param room the room
+	 * @return the entity
+	 */
+	public Entity createSewingMachine(Vector2 pos, Room room) {
+		Entity sewingMachineEntity = engine.createEntity();
+		sewingMachineEntity.flags = EntityFlagEnum.ALTAR.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle("Sewing Machine");
+		inspect.setDescription("A vintage sewing machine. It looks like it should still work, and there is even some thread remaining.");
+		sewingMachineEntity.add(inspect);
+		
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(Assets.sewing_machine);
+		sewingMachineEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(sewingMachineEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.STATUE;
+		sewingMachineEntity.add(gridPosition);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		sewingMachineEntity.add(solidComponent);
+			
+		SewingMachineComponent sewingMachineComponent = engine.createComponent(SewingMachineComponent.class);
+		sewingMachineEntity.add(sewingMachineComponent);
+		
+		room.addNeutral(sewingMachineEntity);
+		return sewingMachineEntity;
+	}
 }

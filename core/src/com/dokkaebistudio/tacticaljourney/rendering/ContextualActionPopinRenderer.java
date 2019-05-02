@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
@@ -31,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.Play
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -235,6 +237,28 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			yesBtn.setText("Give");
 			
 			updateGiveCatalystSoulbenderListener(actionEntity, soulBenderComponent);
+			break;
+			
+			
+		case SEW:
+			SewingMachineComponent sewingMachineComponent = Mappers.sewingMachineComponent.get(actionEntity);
+			
+			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
+			boolean hasLeather = inventoryComponent.contains(ItemScrollOfTeleportation.class);
+
+			
+			title.setText("Sewing machine");
+			desc.setText("The sewing machine is ready to be used and there even is spare thread.");
+			if (hasLeather) {
+				desc.setText(desc.getText() + " You have leather so you can use it.");
+			} else {
+				desc.setText(desc.getText() + " You just need some leather to use it.");
+			}
+			yesBtn.setText("Sew");
+			
+			if (!hasLeather) yesBtn.setDisabled(true);
+			
+			updateSewListener(actionEntity, sewingMachineComponent);
 			break;
 			default:
 		}
@@ -444,6 +468,20 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtn.addListener(yesBtnListener);
 	}
 	
+	private void updateSewListener(final Entity statue, final SewingMachineComponent sewingMachineComponent) {
+		if (yesBtnListener != null) {
+			yesBtn.removeListener(yesBtnListener);
+		}
+		yesBtnListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {				
+				sewingMachineComponent.sew(room);
+				room.turnManager.endPlayerTurn();
+				closePopin();
+			}
+		};
+		yesBtn.addListener(yesBtnListener);
+	}
 	
 	
 	// CLOSE

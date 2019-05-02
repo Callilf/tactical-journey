@@ -38,7 +38,6 @@ public class BasicShopItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5, 5));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5, 5));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 5, 10));
-
 	}
 
 
@@ -46,6 +45,7 @@ public class BasicShopItemPool extends ItemPool {
 		
 	static {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.DIVINE_CATALYST, 5, 40));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.LEATHER, 5, 20));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MERCHANT_MASK, 10, 25, true));
 	}
 	

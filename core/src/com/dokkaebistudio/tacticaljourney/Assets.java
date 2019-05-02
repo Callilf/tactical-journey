@@ -47,6 +47,7 @@ public class Assets {
 	public static RegionDescriptor goddess_statue;
 	public static RegionDescriptor goddess_statue_broken;
 	public static RegionDescriptor altar;
+	public static RegionDescriptor sewing_machine;
 
 	
 	public static RegionDescriptor grid1;
@@ -337,6 +338,7 @@ public class Assets {
 	public static RegionDescriptor orb_container_item;
 	public static RegionDescriptor wormhole_shard_item;
 	public static RegionDescriptor divine_catalyst_item;
+	public static RegionDescriptor leather_item;
 	
 	public static RegionDescriptor scroll_doppelganger_item;
 	public static RegionDescriptor scroll_teleportation_item;
@@ -449,6 +451,7 @@ public class Assets {
 		goddess_statue = Assets.getTexture("godess_statue");
 		goddess_statue_broken = Assets.getTexture("godess_statue_broken");
 		altar = Assets.getTexture("altar");
+		sewing_machine = Assets.getTexture("sewing_machine");
 
 		grid1 = Assets.getTexture("grid_world1");
 		grid2 = Assets.getTexture("grid_world2");
@@ -730,6 +733,7 @@ public class Assets {
 		orb_container_item = Assets.getTexture("item-consumable-orb-container");
 		wormhole_shard_item = Assets.getTexture("item-consumable-wormhole-shard");
 		divine_catalyst_item = Assets.getTexture("item-consumable-divine-catalyst");
+		leather_item = Assets.getTexture("item-consumable-leather");
 		
 		scroll_doppelganger_item = Assets.getTexture("item-scroll-doppelganger");
 		scroll_teleportation_item = Assets.getTexture("item-scroll-teleportation");

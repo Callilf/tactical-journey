@@ -43,6 +43,7 @@ public enum ItemEnum {
 	PEBBLE(Descriptions.ITEM_PEBBLE_TITLE, 1),
 	WORMHOLE_SHARD(Descriptions.ITEM_WORMHOLE_SHARD_TITLE, 1),
 	DIVINE_CATALYST(Descriptions.ITEM_DIVINE_CATALYST_TITLE, 1),
+	LEATHER(Descriptions.ITEM_LEATHER_TITLE, 1),
 	
 	
 	// Orbs

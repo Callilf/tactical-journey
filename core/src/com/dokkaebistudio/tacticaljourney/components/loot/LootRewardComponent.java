@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.esotericsoftware.kryo.Kryo;
@@ -30,6 +31,12 @@ public class LootRewardComponent implements Component, Poolable {
 	
 	/** The random used to compute the drop item. */
 	private RandomXS128 dropSeededRandom;
+	
+	/**
+	 * The item this enemy will drop. Used only in some cases where the drop is inevitable.
+	 * For example for leather hides.
+	 */
+	private ItemEnum itemToDrop;
 
 	
 	
@@ -80,7 +87,14 @@ public class LootRewardComponent implements Component, Poolable {
 	public void setDropSeededRandom(RandomXS128 dropSeededRandom) {
 		this.dropSeededRandom = dropSeededRandom;
 	}
-	
+
+	public ItemEnum getItemToDrop() {
+		return itemToDrop;
+	}
+
+	public void setItemToDrop(ItemEnum itemToDrop) {
+		this.itemToDrop = itemToDrop;
+	}
 	
 	public static Serializer<LootRewardComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<LootRewardComponent>() {
@@ -89,7 +103,8 @@ public class LootRewardComponent implements Component, Poolable {
 			public void write(Kryo kryo, Output output, LootRewardComponent object) {
 				kryo.writeClassAndObject(output, object.latestItem);
 				kryo.writeClassAndObject(output, object.dropRate);
-				output.writeString(object.itemPool.id);				
+				output.writeString(object.itemPool.id);
+				output.writeString(object.itemToDrop != null ? object.itemToDrop.name() : null);
 				
 				// Save the state of the random
 				long seed0 = object.dropSeededRandom.getState(0);
@@ -108,6 +123,9 @@ public class LootRewardComponent implements Component, Poolable {
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				compo.itemPool = (ItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				
+				String itemName = input.readString();
+				compo.itemToDrop = itemName != null ? ItemEnum.valueOf(itemName) : null;
+				
 				// Read the random state
 				String randomState = input.readString();
 				String[] split = randomState.split("#");
@@ -118,4 +136,6 @@ public class LootRewardComponent implements Component, Poolable {
 		
 		};
 	}
+
+
 }

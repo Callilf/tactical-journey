@@ -59,6 +59,7 @@ public class PlayerComponent implements Component {
 		RESTOCK_SHOP,
 		INFUSE,
 		GIVE_CATALYST_SOULBENDER,
+		SEW
 	}
 	
 	/** Whether the popin to ask for loot should open or not. */

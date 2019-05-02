@@ -272,11 +272,12 @@ public abstract class RoomGenerator {
 			// Place a loot
 			placeLootable(90, room, random, spawnPositions);
 			
-			boolean hasPotion = random.nextSeededInt(5) == 0;
-			if (hasPotion) {
-				entityFactory.itemFactory.createItem(ItemEnum.POTION_SMALL_HEALTH, room, spawnPositions.get(0));
-				spawnPositions.remove(0);
-			}
+			// Place random potions to simplify the game
+//			boolean hasPotion = random.nextSeededInt(5) == 0;
+//			if (hasPotion) {
+//				entityFactory.itemFactory.createItem(ItemEnum.POTION_SMALL_HEALTH, room, spawnPositions.get(0));
+//				spawnPositions.remove(0);
+//			}
 			
 			// Place enemies
 			placeEnemies(room, random, spawnPositions, false);
@@ -444,6 +445,9 @@ public abstract class RoomGenerator {
 			
 			pos = spawnPositions.get(1);
 			entityFactory.playerFactory.createSoulbender(	pos, room);
+			
+			pos = spawnPositions.get(2);
+			entityFactory.playerFactory.createSewingMachine(pos, room);
 			
 			default:
 			break;

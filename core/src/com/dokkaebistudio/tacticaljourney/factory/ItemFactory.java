@@ -49,6 +49,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolin
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
@@ -217,6 +218,9 @@ public final class ItemFactory {
 			break;
 		case DIVINE_CATALYST:
 			item = createItemBase(room, tilePos,  new ItemDivineCatalyst(), EntityFlagEnum.ITEM_DIVINE_CATALYST);
+			break;
+		case LEATHER:
+			item = createItemBase(room, tilePos,  new ItemLeather(), EntityFlagEnum.ITEM_LEATHER);
 			break;
 		case UNIVERSAL_CURE:
 			item = createItemBase(room, tilePos, new ItemUniversalCure(), EntityFlagEnum.ITEM_UNIVERSAL_CURE);

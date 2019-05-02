@@ -220,6 +220,9 @@ public class Descriptions {
 	public static final String ITEM_DIVINE_CATALYST_TITLE = "Divine catalyst";
 	public static final String ITEM_DIVINE_CATALYST_DESCRIPTION = "This strange container seems to have some kind of divine powers. You can break it to receive a basic blessing, but you can probably find other ways to use it.";
 	
+	public static final String ITEM_LEATHER_TITLE = "Leather";
+	public static final String ITEM_LEATHER_DESCRIPTION = "A small piece of leather hide. You could use it to make more pockets on your backpack if you had a way to sew it up.";
+	
 	public static final String ITEM_TUTORIAL_PAGE_TITLE = "Tutorial page";
 	public static final String ITEM_TUTORIAL_PAGE_DESCRIPTION = "A page of the missing Tutorial book.";
 

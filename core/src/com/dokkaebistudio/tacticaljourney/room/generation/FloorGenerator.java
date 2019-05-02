@@ -10,12 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 /**
@@ -154,7 +157,26 @@ public abstract class FloorGenerator {
 		for (Room r : rooms) {
 			r.create();
 		}
+		
+		// 8 - Add mandatory loot
+		placeMandatoryLoot(rooms);
+	}
 
+	private void placeMandatoryLoot(List<Room> rooms) {
+		
+		// Leather
+		List<Entity> allEnemiesOfFloor = new ArrayList<>();
+		for (Room r : rooms) {
+			if (r.hasEnemies()) {
+				for (Entity enemy : r.getEnemies()) {
+					allEnemiesOfFloor.add(enemy);
+				}
+			}
+		}
+		Collections.shuffle(allEnemiesOfFloor, random.getNextSeededRandom());
+		Entity enemy = allEnemiesOfFloor.get(0);
+		Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.LEATHER);
+		
 	}
 	
 	protected List<RoomType> fillSpecialRooms() {

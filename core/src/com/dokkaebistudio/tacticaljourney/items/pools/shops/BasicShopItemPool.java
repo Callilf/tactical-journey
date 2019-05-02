@@ -34,6 +34,11 @@ public class BasicShopItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10, 8));
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 10, 5));
+		
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 5, 10));
+
 	}
 
 

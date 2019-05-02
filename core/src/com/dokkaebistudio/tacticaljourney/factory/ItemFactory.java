@@ -53,6 +53,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDestruction;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDoppelganger;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemShuriken;
@@ -257,6 +258,13 @@ public final class ItemFactory {
 			break;
 		case SCROLL_TELEPORTATION:
 			item = createItemBase(room, tilePos,  new ItemScrollOfTeleportation(), EntityFlagEnum.ITEM_SCROLL);
+			flammable = engine.createComponent(FlammableComponent.class);
+			flammable.setPropagate(true);
+			flammable.setDestroy(true);
+			item.add(flammable);
+			break;
+		case SCROLL_DESTRUCTION:
+			item = createItemBase(room, tilePos,  new ItemScrollOfDestruction(), EntityFlagEnum.ITEM_SCROLL);
 			flammable = engine.createComponent(FlammableComponent.class);
 			flammable.setPropagate(true);
 			flammable.setDestroy(true);

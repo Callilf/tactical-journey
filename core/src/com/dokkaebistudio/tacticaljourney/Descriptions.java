@@ -59,6 +59,9 @@ public class Descriptions {
 	public static final String LOOTABLE_ORB_BAG_TITLE = "Orb bag";
 	public static final String LOOTABLE_ORB_BAG_DESCRIPTION = "An special bag designed to hold orbs. Upon opening the orbs will automatically take the empty orb spots around you.";
 
+	public static final String LOOTABLE_SPELL_BOOK_TITLE = "Worn spell book";
+	public static final String LOOTABLE_SPELL_BOOK_DESCRIPTION = "An ancient spell book that has seen better days. Some pages might still be readable.";
+
 	
 	// Creep
 	
@@ -174,10 +177,13 @@ public class Descriptions {
 	public static final String ITEM_WING_POTION_DESCRIPTION = "Upon drink, grants flight for 30 turns.";
 	
 	public static final String ITEM_SCROLL_DOPPELGANGER_TITLE = "Scroll of Doppelganger";
-	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summon a 10 hp copy of oneself that disappear once the room is cleared. Do nothing on a cleared room.";
+	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summons a 10 hp copy of oneself that disappear once the room is cleared. Does nothing on a cleared room.";
 	
 	public static final String ITEM_SCROLL_TELEPORTATION_TITLE = "Scroll of teleportation";
-	public static final String ITEM_SCROLL_TELEPORTATION_DESCRIPTION = "Teleport you to a random room of the current floor. Doesn't work in a boss room.";
+	public static final String ITEM_SCROLL_TELEPORTATION_DESCRIPTION = "Teleports you to a random room of the current floor. Doesn't work in a boss room.";
+	
+	public static final String ITEM_SCROLL_DESTRUCTION_TITLE = "Scroll of destruction";
+	public static final String ITEM_SCROLL_DESTRUCTION_DESCRIPTION = "Deals [RED]explosion[] damages to all creatures in the room depending on their distance from you and destroys all destructible entities of the room.";
 
 	public static final String ITEM_ORB_CONTAINER_TITLE = "Orb container";
 	public static final String ITEM_ORB_CONTAINER_DESCRIPTION = "Contains a random orb. Orbs are very volatile and will immediately orbit around you when you discover them. If all orb slots are filled and you "

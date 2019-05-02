@@ -25,6 +25,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.lootables.AdventurersSatch
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OldBonesItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.OrbBagItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.lootables.PersonalBelongingsItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.lootables.SpellBookItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.shops.BasicShopItemPool;
 
 public class ItemPoolSingleton {
@@ -52,7 +53,8 @@ public class ItemPoolSingleton {
 	public AdventurersSatchelItemPool satchel = new AdventurersSatchelItemPool();
 	public PersonalBelongingsItemPool personalBelongings = new PersonalBelongingsItemPool();
 	public OrbBagItemPool orbBag = new OrbBagItemPool();
-	
+	public SpellBookItemPool spellBook = new SpellBookItemPool();
+
 	// DESTRUCTIBLES
 	public AmmoCrateItemPool ammoCrate = new AmmoCrateItemPool();
 	public VaseItemPool vase = new VaseItemPool();
@@ -86,6 +88,7 @@ public class ItemPoolSingleton {
 		allItemPools.add(satchel);
 		allItemPools.add(personalBelongings);
 		allItemPools.add(orbBag);
+		allItemPools.add(spellBook);
 		
 		//Destructibles
 		allItemPools.add(ammoCrate);

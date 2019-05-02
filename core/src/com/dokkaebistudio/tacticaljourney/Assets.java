@@ -267,6 +267,8 @@ public class Assets {
 	public static RegionDescriptor lootable_belongings_opened;
 	public static RegionDescriptor lootable_orb_bag;
 	public static RegionDescriptor lootable_orb_bag_opened;
+	public static RegionDescriptor lootable_spell_book;
+	public static RegionDescriptor lootable_spell_book_opened;
 
 	//*********
 	// Statuses
@@ -338,6 +340,7 @@ public class Assets {
 	
 	public static RegionDescriptor scroll_doppelganger_item;
 	public static RegionDescriptor scroll_teleportation_item;
+	public static RegionDescriptor scroll_destruction_item;
 	
 	public static RegionDescriptor arrow_item;
 	public static RegionDescriptor bomb_item;
@@ -658,6 +661,8 @@ public class Assets {
 		lootable_belongings_opened = Assets.getTexture("remains_belongings_opened");
 		lootable_orb_bag = Assets.getTexture("remains_orb_bag");
 		lootable_orb_bag_opened = Assets.getTexture("remains_orb_bag_opened");
+		lootable_spell_book = Assets.getTexture("remains_spellbook");
+		lootable_spell_book_opened = Assets.getTexture("remains_spellbook_opened");
 
 		//*********
 		// Statuses
@@ -728,6 +733,7 @@ public class Assets {
 		
 		scroll_doppelganger_item = Assets.getTexture("item-scroll-doppelganger");
 		scroll_teleportation_item = Assets.getTexture("item-scroll-teleportation");
+		scroll_destruction_item = Assets.getTexture("item-scroll-destruction");
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");

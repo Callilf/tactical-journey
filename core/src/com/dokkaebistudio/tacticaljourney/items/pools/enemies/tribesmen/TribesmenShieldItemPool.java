@@ -31,6 +31,7 @@ public class TribesmenShieldItemPool extends ItemPool {
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 2));
 
 	}
 	

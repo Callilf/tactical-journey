@@ -3,11 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.factory;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
@@ -23,9 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.Loot
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.LootableEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
-import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 
 /**
  * Factory used to create presets of entities.
@@ -232,4 +227,53 @@ public final class LootableFactory {
     	return lootable;
 	}
 	
+	
+	/**
+	 * Create a lootable spellbook.
+	 * @param room the room
+	 * @param pos the tile position
+	 * @return the lootable bones
+	 */
+	public Entity createSpellBook(Room room, Vector2 pos) {
+		Entity remainsEntity = engine.createEntity();
+		remainsEntity.flags = EntityFlagEnum.LOOTABLE_SPELLBOOK.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LOOTABLE_SPELL_BOOK_TITLE);
+		inspect.setDescription(Descriptions.LOOTABLE_SPELL_BOOK_DESCRIPTION);
+		remainsEntity.add(inspect);
+		
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(remainsEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
+    	remainsEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(LootableEnum.SPELL_BOOK.getClosedTexture());
+    	remainsEntity.add(spriteCompo);
+
+    	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
+    	lootComponent.setType(LootableEnum.SPELL_BOOK);
+    	lootComponent.setItemPool(ItemPoolSingleton.getInstance().spellBook);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 20);
+		dropRate.add(ItemPoolRarity.COMMON, 70);
+		lootComponent.setDropRate(dropRate);
+		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+    	lootComponent.setMaxNumberOfItems(2);
+    	lootComponent.setLootableState(LootableStateEnum.CLOSED, null);
+    	remainsEntity.add(lootComponent);
+    	
+    	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
+    	remainsEntity.add(destructibleCompo);
+    	
+		FlammableComponent flammable = engine.createComponent(FlammableComponent.class);
+		flammable.setPropagate(true);
+		flammable.setDestroy(true);
+		remainsEntity.add(flammable);
+    	
+		engine.addEntity(remainsEntity);
+
+    	return remainsEntity;
+	}
 }

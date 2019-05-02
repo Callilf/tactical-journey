@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles;
+package com.dokkaebistudio.tacticaljourney.items.pools.lootables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,26 +7,28 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public class VineBushItemPool extends ItemPool {
+public class SpellBookItemPool extends ItemPool {
 	
-	public VineBushItemPool() {
-		this.id = "VineBush";
+	public SpellBookItemPool() {
+		this.id = "Spell book";
 	}
 	
+
 	/**
 	 * This map contains the whole list of items that can be in the shop, as well as the unit price of each item.
 	 */
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
-	
+		
 	static {
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 10));
 	}
 	
 
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
-	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 5));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 1, true));
+	static {		
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 10));
 	}
 	
 	
@@ -39,6 +41,5 @@ public class VineBushItemPool extends ItemPool {
 	public List<PooledItemDescriptor> getRareItemPool() {
 		return rareItemPool;
 	}
-	
-	
+
 }

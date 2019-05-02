@@ -39,6 +39,13 @@ public enum LootableEnum {
 		public String getDescription() {
 			return Descriptions.LOOTABLE_ORB_BAG_DESCRIPTION;
 		}
+	},
+	
+	SPELL_BOOK(Descriptions.LOOTABLE_SPELL_BOOK_TITLE, 2, Assets.lootable_spell_book.getName(), Assets.lootable_spell_book_opened.getName()) {
+		@Override
+		public String getDescription() {
+			return Descriptions.LOOTABLE_SPELL_BOOK_DESCRIPTION;
+		}
 	};
 	
 	/** The name of the lootable that will be displayed in game. */

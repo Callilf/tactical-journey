@@ -81,7 +81,8 @@ public abstract class RoomGenerator {
 			groom.getTileTypes()[x][GameScreen.GRID_H - 1] = TileEnum.WALL;
 		}
 		
-		boolean hasBushInLayout = false;
+		List<PoolableVector2> emptyTiles = new ArrayList<>();
+		
 		Entity createdDoor = null;
 		int y = 0;
 		while (scanner.hasNext() && y < GameScreen.GRID_H) {
@@ -154,7 +155,6 @@ public abstract class RoomGenerator {
             		} else {
                 		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
             		}
-            		hasBushInLayout = true;
             		break;
             		
             	case SPAWN:
@@ -168,20 +168,9 @@ public abstract class RoomGenerator {
             		break;
             		
             		default:
-            			int nextInt = random.nextSeededInt(20);
-            			if (nextInt == 0 && currentRoom.type != RoomType.SHOP_ROOM) {
-            				groom.getTileTypes()[x][realY] = TileEnum.MUD;
-            			} else if (nextInt == 1 && currentRoom.type != RoomType.SHOP_ROOM && !hasBushInLayout) {
-                    		nextSeededInt = random.nextSeededInt(20);
-            				if (nextSeededInt == 0) {
-                        		groom.getTileTypes()[x][realY] = TileEnum.VINES_BUSH;
-                    		} else {
-                        		groom.getTileTypes()[x][realY] = TileEnum.BUSH;
-                    		}
-            			} else {
-            				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
-            			}
-            	
+        				groom.getTileTypes()[x][realY] = TileEnum.GROUND;
+        				emptyTiles.add(PoolableVector2.create(x,realY));
+
             	}
             	tempPos.free();
             	
@@ -195,6 +184,22 @@ public abstract class RoomGenerator {
 		
         scanner.close();
         
+        if (currentRoom.type != RoomType.SHOP_ROOM) {
+        	int max = (int) Math.ceil(emptyTiles.size() / 50);
+	        int mudRandom = random.nextSeededInt(Math.max(max, 1));
+	        for (int i=0 ; i< mudRandom ; i++) {
+	        	int start = random.nextSeededInt(emptyTiles.size());
+	        	PoolableVector2 startPos = emptyTiles.get(start);
+	        	placeCreepRiver(TileEnum.MUD, startPos, groom, emptyTiles, 100, 10);
+	        }
+	        
+	        int bushRandom = random.nextSeededInt(Math.max(max, 1));
+	        for (int i=0 ; i< bushRandom ; i++) {
+	        	int start = random.nextSeededInt(emptyTiles.size());
+	        	PoolableVector2 startPos = emptyTiles.get(start);
+	        	placeBush(startPos, groom, emptyTiles, 70, 10);
+	        }
+        }
         
         //Create the tile entities
 		for (int x = 0; x < GRID_W; x++) {
@@ -208,7 +213,6 @@ public abstract class RoomGenerator {
 
 		return groom;
 	}
-
 
 	protected FileHandle chooseRoomPattern(Room currentRoom) {
 		RandomSingleton random = RandomSingleton.getInstance();
@@ -508,5 +512,100 @@ public abstract class RoomGenerator {
 				continue;
 			}
 		}
+	}
+	
+	
+	
+	// CREEP placement
+	
+
+	protected void placeCreep(TileEnum type, PoolableVector2 position, GeneratedRoom groom, List<PoolableVector2> emptyTiles, int chance, int step) {
+		RandomSingleton random = RandomSingleton.getInstance();
+    	groom.getTileTypes()[(int) position.x][(int) position.y] = type; 
+    	emptyTiles.remove(position);
+    	
+    	if (chance <= 0) return;
+    	
+    	PoolableVector2 north = PoolableVector2.create(position.x, position.y + 1);
+    	if (emptyTiles.contains(north) && random.nextSeededInt(100) <= chance) {
+    		placeCreep(type, north, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 south = PoolableVector2.create(position.x, position.y - 1);
+    	if (emptyTiles.contains(south) && random.nextSeededInt(100) <= chance) {
+    		placeCreep(type, south, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 east = PoolableVector2.create(position.x + 1, position.y);
+    	if (emptyTiles.contains(east) && random.nextSeededInt(100) <= chance) {
+    		placeCreep(type, east, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 west = PoolableVector2.create(position.x - 1, position.y);
+    	if (emptyTiles.contains(west) && random.nextSeededInt(100) <= chance) {
+    		placeCreep(type, west, groom, emptyTiles, chance - step, step);
+    	}
+	}
+
+	protected void placeBush(PoolableVector2 position, GeneratedRoom groom, List<PoolableVector2> emptyTiles, int chance, int step) {
+		RandomSingleton random = RandomSingleton.getInstance();
+		
+		int bushType = random.nextSeededInt(20);
+		TileEnum type = null;
+		if (bushType == 0) {
+			type = TileEnum.VINES_BUSH;
+		} else {
+			type = TileEnum.BUSH;
+		}
+    	groom.getTileTypes()[(int) position.x][(int) position.y] = type; 
+    	emptyTiles.remove(position);
+    	
+    	if (chance <= 0) return;
+    	
+    	PoolableVector2 north = PoolableVector2.create(position.x, position.y + 1);
+    	if (emptyTiles.contains(north) && random.nextSeededInt(100) <= chance) {
+    		placeBush(north, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 south = PoolableVector2.create(position.x, position.y - 1);
+    	if (emptyTiles.contains(south) && random.nextSeededInt(100) <= chance) {
+    		placeBush(south, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 east = PoolableVector2.create(position.x + 1, position.y);
+    	if (emptyTiles.contains(east) && random.nextSeededInt(100) <= chance) {
+    		placeBush(east, groom, emptyTiles, chance - step, step);
+    	}
+    	PoolableVector2 west = PoolableVector2.create(position.x - 1, position.y);
+    	if (emptyTiles.contains(west) && random.nextSeededInt(100) <= chance) {
+    		placeBush(west, groom, emptyTiles, chance - step, step);
+    	}
+	}
+	
+	protected void placeCreepRiver(TileEnum type, PoolableVector2 position, GeneratedRoom groom, List<PoolableVector2> emptyTiles, int chance, int step) {
+		RandomSingleton random = RandomSingleton.getInstance();
+    	groom.getTileTypes()[(int) position.x][(int) position.y] = type; 
+    	emptyTiles.remove(position);
+    	
+    	if (chance <= 0) return;
+    	
+    	List<PoolableVector2> possibleDirections = new ArrayList<>();
+    	PoolableVector2 north = PoolableVector2.create(position.x, position.y + 1);
+    	if (emptyTiles.contains(north)) {
+    		possibleDirections.add(north);
+    	}
+    	PoolableVector2 south = PoolableVector2.create(position.x, position.y - 1);
+    	if (emptyTiles.contains(south)) {
+    		possibleDirections.add(south);
+    	}
+    	PoolableVector2 east = PoolableVector2.create(position.x + 1, position.y);
+    	if (emptyTiles.contains(east)) {
+    		possibleDirections.add(east);
+    	}
+    	PoolableVector2 west = PoolableVector2.create(position.x - 1, position.y);
+    	if (emptyTiles.contains(west)) {
+    		possibleDirections.add(west);
+    	}
+    	
+    	if (possibleDirections.isEmpty()) return;
+    	
+    	int nextSeededInt = random.nextSeededInt(possibleDirections.size());
+    	PoolableVector2 direction = possibleDirections.get(nextSeededInt);
+    	placeCreepRiver(type, direction, groom, emptyTiles, chance - step, step);
 	}
 }

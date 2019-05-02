@@ -6,9 +6,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
@@ -33,9 +32,9 @@ public class SewingMachineComponent implements Component, Poolable {
 	
 	public void sew(Room room) {
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
-		if (inventoryComponent.contains(ItemScrollOfTeleportation.class)) {
+		if (inventoryComponent.contains(ItemLeather.class)) {
 			Journal.addEntry("[GREEN]" + Journal.getLabel(GameScreen.player) + " used the sewing machine to get 1 more inventory slot.");
-			int indexOfLeather = inventoryComponent.indexOf(ItemScrollOfTeleportation.class);
+			int indexOfLeather = inventoryComponent.indexOf(ItemLeather.class);
 			Entity leather = inventoryComponent.getAndRemove(indexOfLeather);
 			inventoryComponent.addSlot();
 			

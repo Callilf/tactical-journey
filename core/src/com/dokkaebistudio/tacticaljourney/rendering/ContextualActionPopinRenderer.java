@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.Play
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -244,7 +245,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			SewingMachineComponent sewingMachineComponent = Mappers.sewingMachineComponent.get(actionEntity);
 			
 			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
-			boolean hasLeather = inventoryComponent.contains(ItemScrollOfTeleportation.class);
+			boolean hasLeather = inventoryComponent.contains(ItemLeather.class);
 
 			
 			title.setText("Sewing machine");

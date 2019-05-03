@@ -152,8 +152,7 @@ public class ShinobiSubSystem extends CreatureSubSystem {
 	            		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
 	    		    	//Clicked on this tile !!
 	    				//Create an entity to show that this tile is selected as the destination
-	    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
-	    				moveComponent.setSelectedTile(destinationTileEntity);
+	    				moveComponent.setSelectedTile(destinationPos.coord(), room);
 	    					
 	    				//Display the way to go to this point
 	    				List<Entity> waypoints = creatureSystem.getTileSearchService().buildWaypointList(enemy, moveComponent, Mappers.gridPositionComponent.get(enemy), 

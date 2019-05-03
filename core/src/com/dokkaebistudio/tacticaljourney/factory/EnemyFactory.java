@@ -31,6 +31,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyOrangutan;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyScorpion;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
@@ -43,6 +44,7 @@ import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.OrangutanSubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
@@ -302,7 +304,7 @@ public final class EnemyFactory {
 	
 	
 	/**
-	 * Create a shinobi.
+	 * Create a shinobi mini boss.
 	 * @param pos the position
 	 * @return the enemy entity
 	 */
@@ -428,6 +430,129 @@ public final class EnemyFactory {
 			enemyEntity.add(lootRewardCompo);
 		}
 		
+		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
+		enemyEntity.add(statusReceiverCompo);
+		
+		room.addEnemy(enemyEntity);
+		
+		return enemyEntity;
+	}
+	
+	
+	/**
+	 * Create an orangutan mini boss.
+	 * @param pos the position
+	 * @return the enemy entity
+	 */
+	public Entity createOrangutan(Room room, Vector2 pos) {
+		Entity enemyEntity = engine.createEntity();
+		enemyEntity.flags = EntityFlagEnum.ENEMY_ORANGUTAN.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_ORANGUTAN_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_ORANGUTAN_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		enemyEntity.add(spriteCompo);
+
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().orangutanStand);
+		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().orangutanStand);
+		enemyEntity.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.STANDING );
+		enemyEntity.add(stateCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(enemyEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.ENEMY;
+		enemyEntity.add(gridPosition);
+		
+		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
+		enemyEntity.add(humanoidCompo);
+		
+		AIComponent aiComponent = engine.createComponent(AIComponent.class);
+		aiComponent.room = room;
+		EnemyOrangutan enemyOrangutan = new EnemyOrangutan();
+		aiComponent.setType(enemyOrangutan);
+		aiComponent.setSubSystem(new OrangutanSubSystem());
+		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
+		aiComponent.setAlertedMoveStrategy(AIMoveStrategy.MOVE_TOWARDS_TARGET);
+		enemyEntity.add(aiComponent);
+		
+		
+		EnemyComponent enemyComponent = engine.createComponent(EnemyComponent.class);
+		enemyComponent.setFaction(EnemyFactionEnum.SOLITARY);
+		enemyEntity.add(enemyComponent);
+		
+		
+		MoveComponent moveComponent = engine.createComponent(MoveComponent.class);
+		moveComponent.room = room;
+		moveComponent.setMoveSpeed(4);
+		enemyEntity.add(moveComponent);
+				
+		AttackComponent attackComponent = engine.createComponent(AttackComponent.class);
+		attackComponent.room = room;
+		
+		AttackSkill meleeSkill = new AttackSkill();
+		meleeSkill.setName("Smash");
+		meleeSkill.setRangeMax(1);
+		meleeSkill.setStrength(12);
+		meleeSkill.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		meleeSkill.setAttackAnimation(attackAnimation);
+		attackComponent.getSkills().add(meleeSkill);
+//		
+//		AttackSkill rangeSkill = new AttackSkill();
+//		rangeSkill.setName("Shuriken throw");
+//		rangeSkill.setRangeMin(2);
+//		rangeSkill.setRangeMax(5);
+//		rangeSkill.setStrength(5);
+//		rangeSkill.setAttackType(AttackTypeEnum.RANGE);
+//		AttackAnimation rangeAttackAnimation = new AttackAnimation(
+//				AnimationSingleton.getInstance().shuriken_projectile, false);
+//		rangeSkill.setAttackAnimation(rangeAttackAnimation);
+//		attackComponent.getSkills().add(rangeSkill);
+//		
+//		
+//		AttackSkill throwSkill = new AttackSkill();
+//		throwSkill.setName("Smokebomb throw");
+//		throwSkill.setActive(false);
+//		throwSkill.setRangeMin(2);
+//		throwSkill.setRangeMax(5);
+//		throwSkill.setStrength(0);
+//		throwSkill.setAttackType(AttackTypeEnum.THROW);
+//		AttackAnimation throwAttackAnimation = new AttackAnimation(null, null, false);
+//		throwSkill.setAttackAnimation(throwAttackAnimation);
+//		attackComponent.getSkills().add(throwSkill);
+		
+		enemyEntity.add(attackComponent);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		enemyEntity.add(solidComponent);
+		
+		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
+		healthComponent.room = room;
+		healthComponent.setMaxHp(35);
+		healthComponent.setHp(35);
+		enemyEntity.add(healthComponent);
+		
+		ExpRewardComponent expRewardCompo = engine.createComponent(ExpRewardComponent.class);
+		expRewardCompo.setExpGain(30);
+		enemyEntity.add(expRewardCompo);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.COMMON, 100);
+		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+		enemyEntity.add(lootRewardCompo);
+	
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		enemyEntity.add(statusReceiverCompo);
 		

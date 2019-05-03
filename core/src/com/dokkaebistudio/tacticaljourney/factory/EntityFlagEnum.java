@@ -25,6 +25,7 @@ public enum EntityFlagEnum {
 	ENEMY_TRIBESMEN_TOTEM(41),
 	
 	ENEMY_SHINOBI(42),
+	ENEMY_ORANGUTAN(43),
 	
 	ALLY_CLONE(70),
 

@@ -52,7 +52,8 @@ public class CreepVinesBush extends Creep {
 		
 		int chance = RandomSingleton.getInstance().nextUnseededInt(100);
 		if (chance < chanceToProc) {
-			
+			GridPositionComponent creepPos = Mappers.gridPositionComponent.get(creep);
+
 			// Entangle
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
 			if (statusReceiverComponent != null) {
@@ -69,12 +70,11 @@ public class CreepVinesBush extends Creep {
 				MoveComponent moveComponent = Mappers.moveComponent.get(walker);
 				moveComponent.setMoveRemaining(0);
 				if (moveComponent.moving) {
-					moveComponent.setSelectedTile(creep);
+					moveComponent.setSelectedTile(creepPos.coord(), room);
 					MovementHandler.finishRealMovement(walker, room);
 				}
 			}
 			
-			GridPositionComponent creepPos = Mappers.gridPositionComponent.get(creep);
 			room.entityFactory.createSpriteOnTile(creepPos.coord(), 2, Assets.tallGrass_destroyed, EntityFlagEnum.DESTROYED_SPRITE, room);
 
 			room.removeEntity(creep);

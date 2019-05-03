@@ -260,6 +260,9 @@ public class Assets {
 	public static Array<Sprite> boss_shinobi_throw;
 	public static Array<Sprite> boss_shinobi_clone;
 
+	public static Array<Sprite> boss_orangutan_stand;
+
+	
 	//*************
 	// Containers
 	
@@ -656,6 +659,8 @@ public class Assets {
 		boss_shinobi_sleep = Assets.getAnimation("shinobi_sleep");
 		boss_shinobi_throw = Assets.getAnimation("shinobi_throw");
 		boss_shinobi_clone = Assets.getAnimation("shinobi_clone");
+		
+		boss_orangutan_stand = Assets.getAnimation("orangutan_stand");
 
 		
 		//*************

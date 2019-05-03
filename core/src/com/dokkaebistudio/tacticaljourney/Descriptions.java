@@ -144,6 +144,9 @@ public class Descriptions {
 	public static final String ENEMY_SHINOBI_TITLE = "Fallen shinobi";
 	public static final String ENEMY_SHINOBI_DESCRIPTION = "A ancient shinobi that died in the dungeon but was brought back from the dead to serve as a defender. Even though he did not survive "
 			+ "the dungeon, his various skills make him a formidable foe.";
+	
+	public static final String ENEMY_ORANGUTAN_TITLE = "Orangutan";
+	public static final String ENEMY_ORANGUTAN_DESCRIPTION = "A big alpha orangutan. Its strength and agility allowed it to claim this territory, and tt probably won't be happy to see you contest it.";
 
 	
 	// Items

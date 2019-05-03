@@ -160,8 +160,7 @@ public abstract class CreatureSystem extends EntitySystem implements RoomSystem 
             		GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(selectedTile);
     		    	//Clicked on this tile !!
     				//Create an entity to show that this tile is selected as the destination
-    				Entity destinationTileEntity = room.entityFactory.createDestinationTile(destinationPos.coord(), room);
-    				moveCompo.setSelectedTile(destinationTileEntity);
+    				moveCompo.setSelectedTile(destinationPos.coord(), room);
     					
     				//Display the way to go to this point
     				List<Entity> waypoints = tileSearchService.buildWaypointList(creatureEntity,moveCompo, enemyCurrentPos, 

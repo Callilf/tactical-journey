@@ -62,6 +62,8 @@ public class AnimationSingleton {
 	public Animation<Sprite> shinobiSleep;
 	public Animation<Sprite> shinobiThrow;
 	public Animation<Sprite> shinobiClone;
+	
+	public Animation<Sprite> orangutanStand;
 
 	
 	public Animation<Sprite> attack_slash;
@@ -164,6 +166,9 @@ public class AnimationSingleton {
 		createAnimation(shinobiThrow);
 		shinobiClone = new Animation<Sprite>(1f, Assets.boss_shinobi_clone, PlayMode.NORMAL);
 		createAnimation(shinobiClone);
+		
+		orangutanStand = new Animation<Sprite>(0.2f, Assets.boss_orangutan_stand, PlayMode.LOOP_PINGPONG);
+		createAnimation(orangutanStand);
 
 		
 		attack_slash = new Animation<>(0.03f, Assets.slash_animation);

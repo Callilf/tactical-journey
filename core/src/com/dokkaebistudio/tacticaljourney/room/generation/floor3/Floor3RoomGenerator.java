@@ -34,26 +34,16 @@ public class Floor3RoomGenerator extends RoomGenerator {
 		List<PoolableVector2> spawnPositions = null;
 		
 		switch(room.type) {
-		case COMMON_ENEMY_ROOM :
-		case SHOP_ROOM:
-		case STATUE_ROOM:
-		case ITEM_ROOM:
-		case KEY_ROOM:
-		case END_FLOOR_ROOM:
-		case START_FLOOR_ROOM:
-
-
-			super.generateRoomContent(room, generatedRoom);
-			return;
-			
 			default:
+				super.generateRoomContent(room, generatedRoom);
+				return;
 		}
-		
-		placeDestructibles(room, random, generatedRoom.getPossibleDestr());
-	
-	
-		// Release poolable vector2
-		generatedRoom.releaseSpawns();
+//		
+//		placeDestructibles(room, random, generatedRoom.getPossibleDestr());
+//	
+//	
+//		// Release poolable vector2
+//		generatedRoom.releaseSpawns();
 	}
 
 	

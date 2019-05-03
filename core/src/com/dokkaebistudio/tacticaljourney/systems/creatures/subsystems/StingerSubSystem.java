@@ -143,8 +143,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     				}
     			}
     			
-    			Entity destinationTileEntity = room.entityFactory.createDestinationTile(chargeLocation, room);
-    			moveCompo.setSelectedTile(destinationTileEntity);
+    			moveCompo.setSelectedTile(chargeLocation, room);
     			moveCompo.hideMovementEntities();
     			
     			// Stinger animation

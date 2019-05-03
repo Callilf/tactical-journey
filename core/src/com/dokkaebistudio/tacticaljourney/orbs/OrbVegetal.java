@@ -45,7 +45,7 @@ public class OrbVegetal extends Orb {
 			MoveComponent moveComponent = Mappers.moveComponent.get(target);
 			moveComponent.setMoveRemaining(0);
 			if (moveComponent.moving) {
-				moveComponent.setSelectedTile(orb);
+				moveComponent.setSelectedTile(Mappers.gridPositionComponent.get(orb).coord(), room);
 				MovementHandler.finishRealMovement(target, room);
 			}
 		}

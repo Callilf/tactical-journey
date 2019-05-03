@@ -370,7 +370,12 @@ public abstract class RoomGenerator {
 			
 		case MINI_BOSS_ROOM:
 			
-			entityFactory.enemyFactory.createShinobi(room, new Vector2(11, 6), false);
+			int miniBossRandom = random.nextSeededInt(2);
+			if (miniBossRandom == 0) {
+				entityFactory.enemyFactory.createShinobi(room, new Vector2(11, 6), false);
+			} else {
+				entityFactory.enemyFactory.createOrangutan(room, new Vector2(11, 6));
+			}
 			break;
 			
 		case START_FLOOR_ROOM:

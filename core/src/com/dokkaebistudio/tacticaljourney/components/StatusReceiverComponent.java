@@ -284,6 +284,20 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 	}
 	
 	/**
+	 * Return the status with the given class if the entity has this status, null otherwise.
+	 * @param statusClass the status class
+	 * @return the status or null
+	 */
+	public Status getStatus(Class statusClass) {
+		for(Status status : statuses) {
+			if (status.getClass().equals(statusClass)) {
+				return status;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Whether the entity has the at least one of the given statuses.
 	 * @param statusClass the status classes
 	 * @return true if the entity currently has one of this statuses

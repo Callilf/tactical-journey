@@ -9,10 +9,12 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
@@ -67,9 +69,11 @@ public class StatusDebuffBurning extends Status {
 	
 	@Override
 	public boolean onReceive(Entity entity, Room room) {
+		this.removeEntangledStatus(entity, room);
+		
 		HealthComponent healthComponent = Mappers.healthComponent.get(entity);
 		int resistance = healthComponent.getResistance(DamageType.FIRE);
-		if (resistance == 100) {
+		if (resistance >= 100) {
 			healthComponent.healthChangeMap.put(HealthChangeEnum.RESISTANT, "FIRE IMMUNITY");
 			return false;
 		}
@@ -116,6 +120,16 @@ public class StatusDebuffBurning extends Status {
 	public void addUp(Status addedStatus) {
 		// Reset the stop chance
 		this.stopChance = 0;
+	}
+	
+	
+	public void removeEntangledStatus(Entity e, Room room) {
+		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(e);
+		if (statusReceiverComponent != null && statusReceiverComponent.hasStatus(StatusDebuffEntangled.class)) {
+			Status status = statusReceiverComponent.getStatus(StatusDebuffEntangled.class);
+			Journal.addEntry("[ORANGE]Burning[] destroyed the vines and removed the [FOREST]entangled[] status effect");
+			statusReceiverComponent.removeStatus(e, status, room);						
+		}
 	}
 
 	

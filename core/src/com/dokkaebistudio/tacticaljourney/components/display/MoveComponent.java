@@ -181,9 +181,11 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 
 	public void setSelectedTile(Entity selectedTile) {
 		if (this.selectedTile != null) {
-			room.removeEntity(this.selectedTile);
+			GridPositionComponent newPos = Mappers.gridPositionComponent.get(selectedTile);
+			Mappers.gridPositionComponent.get(selectedTile).coord(this.selectedTile, newPos.coord(), room);
+		} else {
+			this.selectedTile = selectedTile;
 		}
-		this.selectedTile = selectedTile;
 	}
 
 

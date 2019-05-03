@@ -492,12 +492,14 @@ public abstract class RoomGenerator {
 		int lootRandom = random.nextSeededInt(10);
 		boolean isLoot = lootRandom < lootableChancePercentage;
 		if (isLoot) {
-			lootRandom = random.nextSeededInt(12);
+			lootRandom = random.nextSeededInt(16);
 			Vector2 lootPos = spawnPositions.get(0);
 			if (lootRandom <= 5) {
 				entityFactory.lootableFactory.createBones(room, lootPos);				
 			} else if (lootRandom <= 9) {
 				entityFactory.lootableFactory.createSatchel(room, lootPos);
+			} else if (lootRandom <= 12) {
+				entityFactory.lootableFactory.createSpellBook(room, lootPos);
 			} else {
 				entityFactory.lootableFactory.createOrbBag(room, lootPos);
 			}

@@ -58,6 +58,7 @@ import com.dokkaebistudio.tacticaljourney.rendering.MenuPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.ProfilePopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.StatusPopinRenderer;
+import com.dokkaebistudio.tacticaljourney.rendering.TeleportPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WheelRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.WinPopinRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -237,6 +238,7 @@ public class GameScreen extends ScreenAdapter {
 		renderers.add(new WheelRenderer(attackWheel, this, game.batcher, game.shapeRenderer, hudStage));
 		renderers.add(new ContextualActionPopinRenderer(room, stage));
 		renderers.add(new InspectPopinRenderer(room, stage));
+		renderers.add(new TeleportPopinRenderer(room, stage));
 		renderers.add(new ItemPopinRenderer(room, stage));
 		renderers.add(new InventoryPopinRenderer(room, inventoryStage));
 		renderers.add(new LootPopinRenderer(room, inventoryStage));

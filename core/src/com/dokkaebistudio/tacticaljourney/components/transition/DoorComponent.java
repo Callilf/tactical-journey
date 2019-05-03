@@ -1,4 +1,4 @@
-package com.dokkaebistudio.tacticaljourney.components;
+package com.dokkaebistudio.tacticaljourney.components.transition;
 
 import java.util.Map;
 
@@ -30,12 +30,13 @@ public class DoorComponent implements Component {
 	
 	public void open(Entity door) {
 		this.opened = true;
-		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_opened.getRegion());
+		
+		Mappers.spriteComponent.get(door).updateSprite(Assets.door_opened);
 	}
 	
 	public void close(Entity door) {
 		this.opened = false;
-		Mappers.spriteComponent.get(door).getSprite().setRegion(Assets.door_closed.getRegion());
+		Mappers.spriteComponent.get(door).updateSprite(Assets.door_closed);
 	}
 	
 	// Getters and Setters

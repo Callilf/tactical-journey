@@ -51,6 +51,8 @@ public enum RoomState {
 	INSPECT_MODE,
 	INSPECT_POPIN,
 	
+	TELEPORT_POPIN,
+	
 	PROFILE_POPIN,
 	LEVEL_UP_POPIN,
 	INVENTORY_POPIN,
@@ -191,6 +193,7 @@ public enum RoomState {
 				|| this == RoomState.STATUS_POPIN
 				|| this == RoomState.CHARACTERISTICS_POPIN
 				|| this == RoomState.INSPECT_POPIN
+				|| this == RoomState.TELEPORT_POPIN
 				
 				|| this == RoomState.DEBUG_POPIN;
 	}

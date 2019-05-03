@@ -22,16 +22,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -79,6 +78,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 			checkForLootablesToDisplayPopin();
 			checkForExitToDisplayPopin();
 			checkForWormholeToDisplayPopin();
+			checkForSecretDoorToDisplayPopin();
 			
 		} else if (room.getState().canEndTurn()) {
 			
@@ -93,6 +93,7 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 					checkForLootablesToDisplayPopin();
 					checkForExitToDisplayPopin();
 					checkForWormholeToDisplayPopin();
+					checkForSecretDoorToDisplayPopin();
 				}
 				
 				
@@ -166,6 +167,22 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (wormhole != null) {
 			playerComponent.setActionDoneAtThisFrame(true);
 			playerCompo.requestAction(PlayerActionEnum.WORMHOLE, wormhole);
+		}
+	}
+	
+	/**
+	 * Check whether there is a secret door on the current tile, if so
+	 * display the teleport popin.
+	 */
+	private void checkForSecretDoorToDisplayPopin() {
+		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
+		if (playerComponent.isActionDoneAtThisFrame()) return;
+
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
+		Entity secretDoor = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SecretDoorComponent.class, room);
+		if (secretDoor != null && Mappers.secretDoorComponent.get(secretDoor).isOpened()) {
+			playerComponent.setActionDoneAtThisFrame(true);
+			playerCompo.setTeleportPopinRequested(true);
 		}
 	}
 

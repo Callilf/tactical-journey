@@ -17,7 +17,6 @@ import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
-import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -37,7 +36,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponen
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
@@ -262,6 +263,33 @@ public final class EntityFactory {
 		engine.addEntity(doorEntity);
 
     	return doorEntity;
+	}
+	
+	public Entity createSecretDoor(Room room, Vector2 pos) {
+		Entity secretDoorEntity = engine.createEntity();
+		secretDoorEntity.flags = EntityFlagEnum.SECRET_DOOR.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.SECRET_DOOR_TITLE);
+		inspect.setDescription(Descriptions.SECRET_DOOR_DESCRIPTION);
+		secretDoorEntity.add(inspect);
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(secretDoorEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.DOOR;
+    	secretDoorEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(Assets.secret_door_closed);
+    	secretDoorEntity.add(spriteCompo);
+    	
+    	SecretDoorComponent secretDoorCompo = engine.createComponent(SecretDoorComponent.class);
+    	secretDoorCompo.setOpened( false);
+    	secretDoorEntity.add(secretDoorCompo);
+    	
+		engine.addEntity(secretDoorEntity);
+
+    	return secretDoorEntity;
 	}
 	
 	public Entity createExit(Room room, Vector2 pos, boolean opened) {

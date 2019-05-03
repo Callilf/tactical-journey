@@ -69,6 +69,9 @@ public class Assets {
 	public static RegionDescriptor exit_closed;
 	public static RegionDescriptor door_closed;
 	public static RegionDescriptor door_opened;
+	public static RegionDescriptor secret_door_closed;
+	public static RegionDescriptor secret_door_opened;
+
 
 	public static RegionDescriptor tile_movable;
 	public static RegionDescriptor tile_attackable;
@@ -472,6 +475,8 @@ public class Assets {
 		exit_closed = Assets.getTexture("exit_closed");
 		door_closed = Assets.getTexture("door-closed");
 		door_opened = Assets.getTexture("door-opened");
+		secret_door_closed = Assets.getTexture("secret-door-closed");
+		secret_door_opened = Assets.getTexture("secret-door-opened");
 
 		tile_movable = Assets.getTexture("tile-movable");
 		tile_attackable = Assets.getTexture("tile-attackable");

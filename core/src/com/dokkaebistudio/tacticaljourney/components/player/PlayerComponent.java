@@ -97,6 +97,13 @@ public class PlayerComponent implements Component {
 	}
 	
 	
+	//*************************
+	// Teleport
+	
+	private boolean teleportPopinRequested = false;
+
+	
+	
 	//**************************
 	// Getter & Setters 
 
@@ -177,6 +184,14 @@ public class PlayerComponent implements Component {
 
 	public void setInspectPopinRequested(boolean inspectPopinRequested) {
 		this.inspectPopinRequested = inspectPopinRequested;
+	}
+	
+	public boolean isTeleportPopinRequested() {
+		return teleportPopinRequested;
+	}
+	
+	public void setTeleportPopinRequested(boolean teleportPopinRequested) {
+		this.teleportPopinRequested = teleportPopinRequested;
 	}
 	
 	public int getKarma() {

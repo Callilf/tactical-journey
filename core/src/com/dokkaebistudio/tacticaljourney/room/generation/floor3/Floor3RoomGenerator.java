@@ -9,12 +9,10 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 
 /**
@@ -42,13 +40,11 @@ public class Floor3RoomGenerator extends RoomGenerator {
 		case ITEM_ROOM:
 		case KEY_ROOM:
 		case END_FLOOR_ROOM:
+		case START_FLOOR_ROOM:
+
 
 			super.generateRoomContent(room, generatedRoom);
 			return;
-			
-		case START_FLOOR_ROOM:
-			
-			break;
 			
 			default:
 		}

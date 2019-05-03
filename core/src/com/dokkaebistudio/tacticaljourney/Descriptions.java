@@ -18,6 +18,9 @@ public class Descriptions {
 
 	public static final String DOOR_TITLE = "Door";
 	public static final String DOOR_DESCRIPTION = "A door that leads to another room.";
+	
+	public static final String SECRET_DOOR_TITLE = "Secret door";
+	public static final String SECRET_DOOR_DESCRIPTION = "A secret door that allows fast travelling between rooms on the same floor.";
 
 	public static final String EXIT_TITLE = "Doorway to a lower floor";
 	public static final String EXIT_DESCRIPTION = "A doorway to the next floor.";

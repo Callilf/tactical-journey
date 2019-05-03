@@ -33,7 +33,6 @@ import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
-import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfTeleportation;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;

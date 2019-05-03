@@ -26,7 +26,6 @@ import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
-import com.dokkaebistudio.tacticaljourney.components.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
@@ -68,7 +67,9 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -413,6 +414,7 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.getEnemies());
 					kryo.writeClassAndObject(output, roomToSave.getNeutrals());
 					kryo.writeClassAndObject(output, roomToSave.getDoors());
+					kryo.writeClassAndObject(output, roomToSave.getSecretDoor());
 					
 					kryo.writeClassAndObject(output, roomToSave.getNorthNeighbor());
 					kryo.writeClassAndObject(output, roomToSave.getSouthNeighbor());
@@ -474,7 +476,8 @@ public class Persister {
 				loadedRoom.getEnemies().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getNeutrals().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
 				loadedRoom.getDoors().addAll((Collection<? extends Entity>) kryo.readClassAndObject(input));
-
+				loadedRoom.setSecretDoor((Entity) kryo.readClassAndObject(input));
+				
 				loadedRoom.setNorthNeighbor((Room) kryo.readClassAndObject(input));
 				loadedRoom.setSouthNeighbor((Room) kryo.readClassAndObject(input));
 				loadedRoom.setWestNeighbor((Room) kryo.readClassAndObject(input));
@@ -642,6 +645,7 @@ public class Persister {
 		kryo.register(GridPositionComponent.class, GridPositionComponent.getSerializer(engine, loadedRooms));
 //		kryo.register(TileComponent.class, TileComponent.getSerializer(engine, floor));
 		kryo.register(DoorComponent.class, DoorComponent.getSerializer(engine, loadedRooms));
+		kryo.register(SecretDoorComponent.class, SecretDoorComponent.getSerializer(engine));
 		kryo.register(ExitComponent.class, ExitComponent.getSerializer(engine));
 		
 		

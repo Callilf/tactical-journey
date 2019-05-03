@@ -113,6 +113,8 @@ public class Room extends EntitySystem {
 	
 	/** The doors entities of this room. */
 	private List<Entity> doors;
+	/** The teleporter in this room, if any. */
+	private Entity secretDoor;
 	
 	private Room northNeighbor;
 	private Room southNeighbor;
@@ -311,6 +313,10 @@ public class Room extends EntitySystem {
 				for (Entity enemy : this.getEnemies()) {
 					Mappers.aiComponent.get(enemy).onRoomVisited(enemy, this);
 				}
+				
+				if (enemies.isEmpty() && secretDoor != null) {
+					Mappers.secretDoorComponent.get(secretDoor).open(secretDoor);
+				}
 			} else {
 				this.visited = RoomVisitedState.ENTRANCE;
 			}
@@ -347,6 +353,10 @@ public class Room extends EntitySystem {
 
 			for (Entity door : doors) {
 				Mappers.doorComponent.get(door).open(door);
+			}
+			
+			if (secretDoor != null) {
+				Mappers.secretDoorComponent.get(secretDoor).open(secretDoor);
 			}
 			
 			// Receive rewards
@@ -707,6 +717,14 @@ public class Room extends EntitySystem {
 
 	public void setCreatureState(RoomCreatureState creatureState) {
 		this.creatureState = creatureState;
+	}
+
+	public Entity getSecretDoor() {
+		return secretDoor;
+	}
+
+	public void setSecretDoor(Entity secretDoor) {
+		this.secretDoor = secretDoor;
 	}
 
 	

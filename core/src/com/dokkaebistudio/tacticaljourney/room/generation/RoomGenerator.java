@@ -222,10 +222,9 @@ public abstract class RoomGenerator {
 
 			break;
 		case COMMON_ENEMY_ROOM:
-		case KEY_ROOM:
+		case KEY_ROOM:	
 		case END_FLOOR_ROOM:
-			
-			int roomNb = 1 + random.nextSeededInt(12);
+			int roomNb = 1 + random.nextSeededInt(14);
 			currentRoom.roomPattern = "data/rooms/room" + roomNb + ".csv";
 
 			break;
@@ -293,6 +292,10 @@ public abstract class RoomGenerator {
 			Entity belongings = entityFactory.lootableFactory.createPersonalBelongings(room, lootPos);
 			spawnPositions.remove(0);
 			
+			Vector2 secretDoorPos = spawnPositions.get(0);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, secretDoorPos));
+			spawnPositions.remove(0);
+			
 			// Place enemies
 			placeEnemies(room, random, spawnPositions, false);
 			break;
@@ -307,6 +310,10 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemKey(room, spawnPositions.get(0));
 			spawnPositions.remove(0);
 			
+			secretDoorPos = spawnPositions.get(0);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, secretDoorPos));
+			spawnPositions.remove(0);
+			
 			placeEnemies(room, random, spawnPositions, false);
 			break;
 			
@@ -319,6 +326,8 @@ public abstract class RoomGenerator {
 					EntityFlagEnum.SHOP_CARPET, room);
 			Mappers.gridPositionComponent.get(carpet).overlap = 0;
 			
+			room.setSecretDoor(entityFactory.createSecretDoor(room, new Vector2(16, 8)));
+			
 			break;
 			
 		case STATUE_ROOM:
@@ -329,6 +338,11 @@ public abstract class RoomGenerator {
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
+			
+			secretDoorPos = spawnPositions.get(0);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, secretDoorPos));
+			spawnPositions.remove(0);
+			
 			placeEnemies(room, random, spawnPositions, true);
 			break;
 			
@@ -346,6 +360,11 @@ public abstract class RoomGenerator {
 			// Retrieve the spawn points and shuffle them
 			spawnPositions = new ArrayList<>(possibleSpawns);
 			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
+			
+			secretDoorPos = spawnPositions.get(0);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, secretDoorPos));
+			spawnPositions.remove(0);
+			
 			placeEnemies(room, random, spawnPositions, true);
 			break;
 			
@@ -431,6 +450,12 @@ public abstract class RoomGenerator {
 //			entityFactory.creepFactory.createWeb(room, new Vector2(16,6));
 //			entityFactory.creepFactory.createWeb(room, new Vector2(17,6));
 
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
+
+			secretDoorPos = spawnPositions.get(0);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, secretDoorPos));
+			spawnPositions.remove(0);
 			
 			break;
 		case END_FLOOR_ROOM:
@@ -443,9 +468,12 @@ public abstract class RoomGenerator {
 			entityFactory.createExit(room, pos, false);
 			
 			pos = spawnPositions.get(1);
-			entityFactory.playerFactory.createSoulbender(	pos, room);
+			entityFactory.createSecretDoor(room, pos);
 			
 			pos = spawnPositions.get(2);
+			entityFactory.playerFactory.createSoulbender(	pos, room);
+			
+			pos = spawnPositions.get(3);
 			entityFactory.playerFactory.createSewingMachine(pos, room);
 			
 			default:

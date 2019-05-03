@@ -473,7 +473,7 @@ public abstract class RoomGenerator {
 			entityFactory.createExit(room, pos, false);
 			
 			pos = spawnPositions.get(1);
-			entityFactory.createSecretDoor(room, pos);
+			room.setSecretDoor(entityFactory.createSecretDoor(room, pos));
 			
 			pos = spawnPositions.get(2);
 			entityFactory.playerFactory.createSoulbender(	pos, room);

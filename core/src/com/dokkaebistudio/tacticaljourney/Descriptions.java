@@ -183,7 +183,7 @@ public class Descriptions {
 	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summons a 10 hp copy of oneself that disappear once the room is cleared. Does nothing on a cleared room.";
 	
 	public static final String ITEM_SCROLL_TELEPORTATION_TITLE = "Scroll of teleportation";
-	public static final String ITEM_SCROLL_TELEPORTATION_DESCRIPTION = "Teleports you to a random room of the current floor. Doesn't work in a boss room.";
+	public static final String ITEM_SCROLL_TELEPORTATION_DESCRIPTION = "Teleports you to a random room of the current floor, with a higher chance to land on an unvisited room. Doesn't work in a boss room.";
 	
 	public static final String ITEM_SCROLL_DESTRUCTION_TITLE = "Scroll of destruction";
 	public static final String ITEM_SCROLL_DESTRUCTION_DESCRIPTION = "Deals [RED]explosion[] damages to all creatures in the room depending on their distance from you and destroys all destructible entities of the room.";

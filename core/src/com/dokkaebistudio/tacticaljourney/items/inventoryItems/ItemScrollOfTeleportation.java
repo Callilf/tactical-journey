@@ -8,6 +8,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -19,13 +20,10 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
-import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
+import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 /**
@@ -35,6 +33,8 @@ import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
  */
 public class ItemScrollOfTeleportation extends AbstractItem {
 	
+	private static final int UNVISITED_ROOM_CHANCE_MULTIPLIER = 20;
+
 	public ItemScrollOfTeleportation() {
 		super(ItemEnum.SCROLL_TELEPORTATION, Assets.scroll_teleportation_item, false, true);
 		this.setPaper(true);
@@ -62,9 +62,7 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 			return false;
 		}
 		
-		final List<Room> rooms = room.floor.getRooms();
-		final int roomIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(rooms.size());
-		final Room newRoom = rooms.get(roomIndex);
+		final Room newRoom = selectNewRoom(room);
 		
 		InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(user);
 		inventoryComponent.remove(item);
@@ -80,7 +78,7 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 			// Enter here when the first smoke animation is over
 			 
 			if (newRoom != room) {
-				room.floor.enterRoom(rooms.get(roomIndex));
+				room.floor.enterRoom(newRoom);
 			}
 			MovementHandler.placeEntity(GameScreen.player, new Vector2(GameScreen.GRID_W/2, 1), newRoom);
 			
@@ -107,6 +105,36 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 		Journal.addEntry("Scroll of teleportation sent you to another room.");
 		
 		return false;
+	}
+
+	private Room selectNewRoom(final Room room) {
+		final List<Room> rooms = room.floor.getRooms();
+		
+		Array<Room> visitedRooms = new Array<>();
+		Array<Room> unvisitedRooms = new Array<>();
+		for (Room r : rooms) {
+			if (r.getVisited() == RoomVisitedState.NEVER_VISITED) {
+				unvisitedRooms.add(r);
+			} else {
+				visitedRooms.add(r);
+			}
+		}
+		
+		if (unvisitedRooms.size == 0) {
+			int roomIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(visitedRooms.size);
+			return visitedRooms.get(roomIndex);
+		} else {
+			int unvisitedRoomChance = UNVISITED_ROOM_CHANCE_MULTIPLIER * unvisitedRooms.size;
+			if (RandomSingleton.getNextChanceWithKarma() <= unvisitedRoomChance) {
+				// Go to new room
+				int roomIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(unvisitedRooms.size);
+				return unvisitedRooms.get(roomIndex);
+			} else {
+				// Go to visited room
+				int roomIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(visitedRooms.size);
+				return visitedRooms.get(roomIndex);
+			}
+		}
 	}
 
 

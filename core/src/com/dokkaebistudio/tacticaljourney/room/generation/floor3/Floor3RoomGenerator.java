@@ -41,19 +41,16 @@ public class Floor3RoomGenerator extends RoomGenerator {
 		case STATUE_ROOM:
 		case ITEM_ROOM:
 		case KEY_ROOM:
+		case END_FLOOR_ROOM:
+
 			super.generateRoomContent(room, generatedRoom);
 			return;
 			
 		case START_FLOOR_ROOM:
 			
 			break;
-		case END_FLOOR_ROOM:
-			if (possibleSpawns.size() == 0) return;
-			int nextInt = random.nextSeededInt(possibleSpawns.size());
-			Vector2 pos = possibleSpawns.get(nextInt);
-			entityFactory.createExit(room, pos, false);
+			
 			default:
-			break;
 		}
 		
 		placeDestructibles(room, random, generatedRoom.getPossibleDestr());

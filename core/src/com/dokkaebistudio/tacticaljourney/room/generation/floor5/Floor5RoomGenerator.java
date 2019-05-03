@@ -48,7 +48,7 @@ public class Floor5RoomGenerator extends RoomGenerator {
 		switch(room.type) {
 		case START_FLOOR_ROOM:
 
-			entityFactory.itemFactory.createItem(ItemEnum.UNIVERSAL_CURE, room, new Vector2(12,10));
+			entityFactory.itemFactory.createItem(ItemEnum.UNIVERSAL_CURE, room, new Vector2(11,10));
 			
 			default:
 			break;

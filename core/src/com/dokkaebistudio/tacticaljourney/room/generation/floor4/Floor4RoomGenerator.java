@@ -117,8 +117,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 		case END_FLOOR_ROOM:
 			if (possibleSpawns.size() == 0) return;
 			Vector2 pos = possibleSpawns.get(0);
-			// TODO uncomment later
-//			entityFactory.createExit(room, pos, true);
+			entityFactory.createExit(room, pos, true);
 			
 			pos = possibleSpawns.get(1);
 			Entity personalBelongings = entityFactory.lootableFactory.createPersonalBelongings(room, pos);

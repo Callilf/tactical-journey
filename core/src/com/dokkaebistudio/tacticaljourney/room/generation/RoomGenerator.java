@@ -25,7 +25,6 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -551,7 +550,7 @@ public abstract class RoomGenerator {
 	protected void placeBush(PoolableVector2 position, GeneratedRoom groom, List<PoolableVector2> emptyTiles, int chance, int step) {
 		RandomSingleton random = RandomSingleton.getInstance();
 		
-		int bushType = random.nextSeededInt(20);
+		int bushType = random.nextSeededInt(30);
 		TileEnum type = null;
 		if (bushType == 0) {
 			type = TileEnum.VINES_BUSH;

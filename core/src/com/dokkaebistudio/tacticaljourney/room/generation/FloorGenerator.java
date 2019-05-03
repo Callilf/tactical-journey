@@ -164,7 +164,6 @@ public abstract class FloorGenerator {
 
 	private void placeMandatoryLoot(List<Room> rooms) {
 		
-		// Leather
 		List<Entity> allEnemiesOfFloor = new ArrayList<>();
 		for (Room r : rooms) {
 			if (r.hasEnemies()) {
@@ -174,9 +173,19 @@ public abstract class FloorGenerator {
 			}
 		}
 		Collections.shuffle(allEnemiesOfFloor, random.getNextSeededRandom());
-		Entity enemy = allEnemiesOfFloor.get(0);
-		Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.LEATHER);
 		
+		// Leather
+		if (allEnemiesOfFloor.size() > 0) {
+			Entity enemy = allEnemiesOfFloor.get(0);
+			Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.LEATHER);
+		}
+		
+		// Divine Catalyst
+		if (allEnemiesOfFloor.size() > 1) {
+			Entity enemy = allEnemiesOfFloor.get(1);
+			Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.DIVINE_CATALYST);
+		}
+
 	}
 	
 	protected List<RoomType> fillSpecialRooms() {

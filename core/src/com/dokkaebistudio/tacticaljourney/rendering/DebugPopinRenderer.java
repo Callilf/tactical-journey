@@ -439,10 +439,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Array<Entity> copy = new Array<>(room.getAllEntities());
-				Iterator<Entity> iterator = copy.iterator();
-				while(iterator.hasNext()) {
-					LootUtil.destroy(iterator.next(), room);
-				}
+				copy.forEach(entity -> LootUtil.destroy(entity, room));
 			}
 		});
 		optionsTable.add(destroyAll).padBottom(20);

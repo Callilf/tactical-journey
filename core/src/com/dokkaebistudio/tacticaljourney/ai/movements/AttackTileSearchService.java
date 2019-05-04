@@ -74,14 +74,8 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		//Range Postprocess : remove tiles that cannot be attacked
 		if (mainSkill.getRangeMin() > 1) {
-			Iterator<Tile> it = attackableTiles.iterator();
-			while (it.hasNext()) {
-				Tile currentAttackableTile = it.next();
-				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < mainSkill.getRangeMin()) {
-					it.remove();
-				}
-			}
+			attackableTiles.removeIf( tile -> 
+				TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), tile.getGridPos()) < mainSkill.getRangeMin());
 		}
 		
 //		System.out.println("Old Search att tiles : " + (System.currentTimeMillis() - time));
@@ -148,14 +142,8 @@ public class AttackTileSearchService extends TileSearchService {
 			
 			//Range Postprocess : remove tiles that cannot be attacked
 			if (attackSkill.getRangeMin() > 1) {
-				Iterator<Tile> it = currentSkillAttackableTiles.iterator();
-				while (it.hasNext()) {
-					Tile currentAttackableTile = it.next();
-					//Remove tiles that are too close
-					if (TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), currentAttackableTile.getGridPos()) < attackSkill.getRangeMin()) {
-						it.remove();
-					}
-				}
+				currentSkillAttackableTiles.removeIf( tile -> 
+					TileUtil.getDistanceBetweenTiles(attackerPosCompo.coord(), tile.getGridPos()) < attackSkill.getRangeMin());
 			}
 			
 			attackableTiles.addAll(currentSkillAttackableTiles);
@@ -225,14 +213,8 @@ public class AttackTileSearchService extends TileSearchService {
 		
 		//Range Postprocess : remove tiles that cannot be attacked
 		if (attackSkill.getRangeMin() > 1) {
-			Iterator<Tile> it = attackableTiles.iterator();
-			while (it.hasNext()) {
-				Tile currentAttackableTile = it.next();
-				//Remove tiles that are too close
-				if (TileUtil.getDistanceBetweenTiles(posCompo.coord(), currentAttackableTile.getGridPos()) < attackSkill.getRangeMin()) {
-					it.remove();
-				}
-			}
+			attackableTiles.removeIf( tile -> 
+				TileUtil.getDistanceBetweenTiles(posCompo.coord(), tile.getGridPos()) < attackSkill.getRangeMin());
 		}
 		
 		return attackableTiles;

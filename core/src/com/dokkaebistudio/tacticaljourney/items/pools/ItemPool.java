@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 
 public abstract class ItemPool {
 	
@@ -104,16 +105,14 @@ public abstract class ItemPool {
 	public void removeItemFromPool(ItemEnum itemType) {
 		Iterator<PooledItemDescriptor> iterator = getPool(ItemPoolRarity.COMMON).iterator();
 		while(iterator.hasNext()) {
-			PooledItemDescriptor pid = iterator.next();
-			if (pid.getType() == itemType) {
+			if (iterator.next().getType() == itemType) {
 				iterator.remove();
 				break;
 			}
 		}
 		iterator = getPool(ItemPoolRarity.RARE).iterator();
 		while(iterator.hasNext()) {
-			PooledItemDescriptor pid = iterator.next();
-			if (pid.getType() == itemType) {
+			if (iterator.next().getType() == itemType) {
 				iterator.remove();
 				break;
 			}

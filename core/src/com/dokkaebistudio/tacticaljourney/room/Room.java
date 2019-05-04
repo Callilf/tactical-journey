@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -34,7 +33,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
@@ -159,11 +157,11 @@ public class Room extends EntitySystem {
 		}
 		
 		if (this.floor != null && this.floor.getActiveRoom() == this) {
-			for (Component c : e.getComponents()) {
+			e.getComponents().forEach(c -> {
 				if (c instanceof MarkerInterface) {
 					((MarkerInterface) c).showMarker(e);
 				}
-			}
+			});
 		}
 	}
 
@@ -280,9 +278,7 @@ public class Room extends EntitySystem {
 		
 		
 		// Remove entities that are no longer in the game
-		for (Entity e : this.entitiesToRemove) {
-			removeEntityFromEngine(e);
-		}
+		this.entitiesToRemove.forEach(e -> removeEntityFromEngine(e));
 		this.entitiesToRemove.clear();
 		
 
@@ -296,15 +292,14 @@ public class Room extends EntitySystem {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
 				alterationReceiverComponent.onRoomVisited(GameScreen.player, this);
 				
-				for (Entity ally : this.getAllies()) {
-					if (Mappers.aiComponent.has(ally)) {
-						Mappers.aiComponent.get(ally).onRoomVisited(ally, this);
-					}
-				}
-				for (Entity enemy : this.getEnemies()) {
-					Mappers.aiComponent.get(enemy).onRoomVisited(enemy, this);
-				}
+				this.getAllies().stream()
+					.filter(ally -> Mappers.aiComponent.has(ally))
+					.forEach(ally -> Mappers.aiComponent.get(ally).onRoomVisited(ally, this));
 				
+				this.getEnemies().stream()
+					.filter(ally -> Mappers.aiComponent.has(ally))
+					.forEach(ally -> Mappers.aiComponent.get(ally).onRoomVisited(ally, this));
+
 				if (enemies.isEmpty() && secretDoor != null) {
 					Mappers.secretDoorComponent.get(secretDoor).open(secretDoor);
 				}
@@ -334,12 +329,9 @@ public class Room extends EntitySystem {
 			}
 			
 			if (!this.getAllies().isEmpty()) {
-				for (Entity ally : new ArrayList<>(this.getAllies())) {
-					AIComponent aiComponent = Mappers.aiComponent.get(ally);
-					if (aiComponent != null) {
-						aiComponent.onRoomCleared(ally, this);
-					}
-				}
+				new ArrayList<>(this.getAllies()).stream()
+					.filter(ally -> Mappers.aiComponent.has(ally))
+					.forEach(ally -> Mappers.aiComponent.get(ally).onRoomCleared(ally, this));
 			}
 
 			for (Entity door : doors) {

@@ -1,7 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -61,14 +60,7 @@ public class HealthSystem extends IteratingSystem implements RoomSystem {
     @Override
     protected void processEntity(final Entity entity, float deltaTime) {
     	float elapsedTime = GameTimeSingleton.getInstance().getElapsedTime();
-    	
-    	Iterator<Float> iterator = offsetTimes.iterator();
-    	while(iterator.hasNext()) {
-    		if (iterator.next() < elapsedTime) {
-    			iterator.remove();
-    		}
-    	}
-    	
+    	offsetTimes.removeIf(f -> f < elapsedTime);
     	
     	// 1 - Handle entities with healthComponent
     	HealthComponent healthCompo = Mappers.healthComponent.get(entity);

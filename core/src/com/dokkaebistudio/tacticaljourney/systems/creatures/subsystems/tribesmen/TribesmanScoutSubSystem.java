@@ -1,5 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
@@ -102,10 +104,10 @@ public class TribesmanScoutSubSystem extends CreatureSubSystem {
 	    	    			int range = TileUtil.getDistanceBetweenTiles(enemyCurrentPos.coord(), attTilePos.coord());
 							if (range <= attackCompo.getRangeMax() && range >= attackCompo.getRangeMin()) {
 	    	    				//Attack possible
-								Entity ally = TileUtil.getEntityWithComponentOnTile(attTilePos.coord(), AllyComponent.class, room);
-								if (ally != null) {
+								Optional<Entity> ally = TileUtil.getEntityWithComponentOnTile(attTilePos.coord(), AllyComponent.class, room);
+								if (ally.isPresent()) {
 									// The scout sees the player, set it's alert status to TRUE
-		            				aiComponent.setAlerted(true, enemy, ally);
+		            				aiComponent.setAlerted(true, enemy, ally.get());
 		            				break;
 								}
 	    	    			}

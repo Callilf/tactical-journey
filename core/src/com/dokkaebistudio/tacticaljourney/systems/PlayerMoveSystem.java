@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -384,8 +385,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int distance = TileUtil.getDistanceBetweenTiles(playerPos.coord(), gridPos);
 			if (distance > 1) return;
 			
-			Entity ally = TileUtil.getEntityWithComponentOnTile(gridPos, AllyComponent.class, room);
-			if (ally == null || ally == GameScreen.player) return;
+			Optional<Entity> ally = TileUtil.getEntityWithComponentOnTile(gridPos, AllyComponent.class, room);
+			if (!ally.isPresent() || ally.get() == GameScreen.player) return;
 			
 			// Check movement cost
 			MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
@@ -395,7 +396,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			// Swap possible
 			VFXUtil.createSmokeEffect(gridPos);
 			VFXUtil.createSmokeEffect(playerPos.coord());
-			MovementHandler.placeEntity(ally, playerPos.coord(), room);
+			MovementHandler.placeEntity(ally.get(), playerPos.coord(), room);
 			MovementHandler.placeEntity(GameScreen.player, gridPos, room);
 			
 			moveComponent.setMoveRemaining(moveComponent.getMoveRemaining() - moveCost);
@@ -421,16 +422,16 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				int y = (int) touchPoint.y;
 				
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
+				Optional<Entity> attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
 				tempPos.free();
 				
-				if (attackableEntity != null) {
+				if (attackableEntity.isPresent()) {
 					timer += Gdx.graphics.getDeltaTime();
 					
-					if (enemyHighlighted != null && attackableEntity != enemyHighlighted) {
+					if (enemyHighlighted != null && attackableEntity.get() != enemyHighlighted) {
 						hideEnemyTiles(player);
 					} else if (timer >= 0.5f) {
-						displayEnemyTiles(player, attackableEntity);
+						displayEnemyTiles(player, attackableEntity.get());
 					}
 				} else {
 					if (enemyHighlighted != null) {
@@ -455,11 +456,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			int y = (int) touchPoint.y;
 
 			PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-			Entity attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
+			Optional<Entity> attackableEntity = TileUtil.getEntityWithComponentOnTile(tempPos, AttackComponent.class, room);
 			tempPos.free();
 			
-			if (attackableEntity != null) {
-				displayEnemyTiles(player, attackableEntity);
+			if (attackableEntity.isPresent()) {
+				displayEnemyTiles(player, attackableEntity.get());
 			} else if (enemyHighlighted != null) {
 				hideEnemyTiles(player);
 			}

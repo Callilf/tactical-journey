@@ -31,9 +31,8 @@ public class EnemySystem extends CreatureSystem implements RoomSystem {
 	@Override
 	public void fillEntitiesOfCurrentRoom() {
 		allCreaturesOfCurrentRoom.clear();
-		for (Entity e : room.getEnemies()) {
-			allCreaturesOfCurrentRoom.add(e);
-		}
+		room.getEnemies().stream()
+			.forEachOrdered(allCreaturesOfCurrentRoom::add);
 	}
 	
 	@Override

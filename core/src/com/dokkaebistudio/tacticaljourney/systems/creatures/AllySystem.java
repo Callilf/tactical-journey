@@ -32,11 +32,9 @@ public class AllySystem extends CreatureSystem implements RoomSystem {
 	@Override
 	public void fillEntitiesOfCurrentRoom() {
 		allCreaturesOfCurrentRoom.clear();
-		for (Entity e : room.getAllies()) {
-            if (e != GameScreen.player) {
-            	allCreaturesOfCurrentRoom.add(e);
-            }
-		}
+		room.getAllies().stream()
+			.filter(e -> e != GameScreen.player)
+			.forEachOrdered(allCreaturesOfCurrentRoom::add);
 	}
 	
 	@Override

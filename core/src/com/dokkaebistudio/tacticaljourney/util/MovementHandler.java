@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.util;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -206,12 +208,12 @@ public class MovementHandler {
 		
 		
 		// Creep
-		Entity creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
-		if (creep != null) {
-			DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(creep);
+		Optional<Entity> creep = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, CreepComponent.class,room);
+		if (creep.isPresent()) {
+			DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(creep.get());
 			if (destructibleComponent == null || !destructibleComponent.isDestroyed()) {
 				// There is creep on this tile, play its effect
-				Mappers.creepComponent.get(creep).onWalk(mover, creep, room);
+				Mappers.creepComponent.get(creep.get()).onWalk(mover, creep.get(), room);
 			}
 		}
 		

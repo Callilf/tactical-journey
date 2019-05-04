@@ -3,14 +3,14 @@
  */
 package com.dokkaebistudio.tacticaljourney.room;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
@@ -48,11 +48,11 @@ public class Tile {
 	 * @return true if the entity can walk on this tile.
 	 */
 	public boolean isWalkable(Entity walker) {
-		Entity solid = TileUtil.getEntityWithComponentOnTile(this.gridPos, SolidComponent.class, room);
-		if (solid != null) return false;
+		Optional<Entity> solid = TileUtil.getEntityWithComponentOnTile(this.gridPos, SolidComponent.class, room);
+		if (solid.isPresent()) return false;
 		
-		Entity chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
-		if (chasm != null && !Mappers.flyComponent.has(walker)) return false;
+		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
+		if (chasm.isPresent() && !Mappers.flyComponent.has(walker)) return false;
 		
 		return true;
 	}
@@ -63,11 +63,11 @@ public class Tile {
 	 * @return true if possible to throw on this tile.
 	 */
 	public boolean isThrowable(Entity thrower) {
-		Entity wall = TileUtil.getEntityWithComponentOnTile(this.gridPos, BlockExplosionComponent.class, room);
-		if (wall != null) return false;
+		Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(this.gridPos, BlockExplosionComponent.class, room);
+		if (wall.isPresent()) return false;
 		
-		Entity chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
-		if (chasm != null) return false;
+		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
+		if (chasm.isPresent()) return false;
 		
 		return true;
 	}

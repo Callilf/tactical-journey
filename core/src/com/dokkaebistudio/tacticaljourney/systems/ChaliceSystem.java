@@ -18,13 +18,12 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
@@ -67,9 +66,10 @@ public class ChaliceSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity chalice = TileUtil.getEntityWithComponentOnTile(tempPos, ChaliceComponent.class, room);
+				Optional<Entity> chaliceOpt = TileUtil.getEntityWithComponentOnTile(tempPos, ChaliceComponent.class, room);
 				
-				if (chalice != null) {
+				if (chaliceOpt.isPresent()) {
+					Entity chalice = chaliceOpt.get();
 					ChaliceComponent chaliceCompo = Mappers.chaliceComponent.get(chalice);
 					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(GameScreen.player);
 
@@ -112,11 +112,9 @@ public class ChaliceSystem extends EntitySystem implements RoomSystem {
 	 */
 	private void fillChalices() {
 		chalices.clear();
-		for (Entity e : room.getNeutrals()) {
-			if (Mappers.chaliceComponent.has(e)) {
-				chalices.add(e);
-			}
-		}
+		room.getNeutrals().stream()
+				.filter(e -> Mappers.chaliceComponent.has(e))
+				.forEachOrdered(chalices::add);
 	}
 	
 	

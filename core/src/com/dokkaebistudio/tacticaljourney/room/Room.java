@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -214,23 +215,13 @@ public class Room extends EntitySystem {
 	 * Get the set of entities with the given component at the given position.
 	 */
 	public Set<Entity> getEntitiesAtPositionWithComponent(Vector2 pos, Class componentClass) {
-		Set<Entity> result = null;
-		Set<Entity> set = entitiesAtPositions.get(pos);
-		if (set != null) {
-			for (Entity e : set) {
-				Component component = ComponentMapper.getFor(componentClass).get(e);
-				if (component != null) {
-					if (result == null) result = new HashSet<>();
-					result.add(e);
-				}
-			}
+		if (entitiesAtPositions.containsKey(pos)) {
+			return entitiesAtPositions.get(pos).stream()
+				.filter(e -> ComponentMapper.getFor(componentClass).get(e) != null)
+				.collect(Collectors.toSet());
 		}
 		
-		if (result == null) {
-			return Collections.emptySet();
-		} else {
-			return result;
-		}
+		return Collections.emptySet();
 	}
 	
 	

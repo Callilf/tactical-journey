@@ -18,6 +18,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -100,9 +101,11 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity statue = TileUtil.getEntityWithComponentOnTile(tempPos, StatueComponent.class, room);
+				Optional<Entity> statueOpt = TileUtil.getEntityWithComponentOnTile(tempPos, StatueComponent.class, room);
 				
-				if (statue != null) {
+				if (statueOpt.isPresent()) {
+					Entity statue = statueOpt.get();
+					
 					StatueComponent statueComponent = Mappers.statueComponent.get(statue);
 					DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(statue);
 					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
@@ -236,11 +239,9 @@ public class AlterationSystem extends EntitySystem implements RoomSystem {
 	 */
 	private void fillStatues() {
 		statues.clear();
-		for (Entity e : room.getNeutrals()) {
-			if (Mappers.statueComponent.has(e)) {
-				statues.add(e);
-			}
-		}
+		room.getNeutrals().stream()
+			.filter(e -> Mappers.statueComponent.has(e))
+			.forEachOrdered(statues::add);
 	}
 	
 	

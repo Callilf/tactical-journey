@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -265,12 +266,12 @@ public class StingerSubSystem extends CreatureSubSystem {
 	private boolean checkTile(PoolableVector2 position, Set<Entity> additionnalAttackableTiles, MoveComponent moveCompo,
 			AttackComponent attackCompo, Room room) {
 		Tile tileAtGridPos = TileUtil.getTileAtGridPos(position, room);
-		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
-		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
+		Optional<Entity> solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
+		Optional<Entity> blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
 		if (!attackCompo.allAttackableTiles.contains(tileAtGridPos) && !moveCompo.allWalkableTiles.contains(tileAtGridPos)) {
 			additionnalAttackableTiles.add(room.entityFactory.createAttackableTile(position, room, false));
 		}
-		return solid == null && blockVision == null;
+		return !solid.isPresent() && !blockVision.isPresent();
 	}
 	
 	
@@ -284,9 +285,9 @@ public class StingerSubSystem extends CreatureSubSystem {
 		while (i >= 0) {
 			// left
 			temp.set(i, enemyPos.coord().y);
-			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
-			if (target != null) {
-				return target;
+			Optional<Entity> target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target.isPresent()) {
+				return target.get();
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -298,9 +299,9 @@ public class StingerSubSystem extends CreatureSubSystem {
 		while (i < GameScreen.GRID_W) {
 			// right
 			temp.set(i, enemyPos.coord().y);
-			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
-			if (target != null) {
-				return target;
+			Optional<Entity> target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target.isPresent()) {
+				return target.get();
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -312,9 +313,9 @@ public class StingerSubSystem extends CreatureSubSystem {
 		while (i >= 0) {
 			// down
 			temp.set(enemyPos.coord().x, i);
-			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
-			if (target != null) {
-				return target;
+			Optional<Entity> target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target.isPresent()) {
+				return target.get();
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -326,9 +327,9 @@ public class StingerSubSystem extends CreatureSubSystem {
 		while (i < GameScreen.GRID_H) {
 			// up
 			temp.set(enemyPos.coord().x, i);
-			Entity target = checkTileForAlly(temp, moveCompo, attackCompo, room);
-			if (target != null) {
-				return target;
+			Optional<Entity> target = checkTileForAlly(temp, moveCompo, attackCompo, room);
+			if (target.isPresent()) {
+				return target.get();
 			}
 			if (checkTileForSolid(temp, moveCompo, attackCompo, room)) {
 				break;
@@ -341,14 +342,13 @@ public class StingerSubSystem extends CreatureSubSystem {
 	}
 	
 	private boolean checkTileForSolid(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		Entity solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
-		if (solid != null) return true;
-		Entity blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
-		return blockVision != null;
+		Optional<Entity> solid = TileUtil.getEntityWithComponentOnTile(position, SolidComponent.class, room);
+		if (solid.isPresent()) return true;
+		Optional<Entity> blockVision = TileUtil.getEntityWithComponentOnTile(position, BlockVisibilityComponent.class, room);
+		return blockVision.isPresent();
 	}
-	private Entity checkTileForAlly(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
-		Entity ally = TileUtil.getEntityWithComponentOnTile(position, AllyComponent.class, room);
-		return ally;
+	private Optional<Entity> checkTileForAlly(PoolableVector2 position, MoveComponent moveCompo, AttackComponent attackCompo, Room room) {
+		return TileUtil.getEntityWithComponentOnTile(position, AllyComponent.class, room);
 	}
 
 

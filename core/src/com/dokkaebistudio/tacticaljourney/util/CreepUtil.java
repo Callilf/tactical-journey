@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.util;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
@@ -38,9 +40,9 @@ public class CreepUtil {
 		canCatchFire = tile.isThrowable(null);
 		
 		if (canCatchFire) {
-			Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(pos, CreepComponent.class, room);
-			if (creepAlreadyThere != null) {
-				CreepComponent creepComponent = Mappers.creepComponent.get(creepAlreadyThere);
+			Optional<Entity> creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(pos, CreepComponent.class, room);
+			if (creepAlreadyThere.isPresent()) {
+				CreepComponent creepComponent = Mappers.creepComponent.get(creepAlreadyThere.get());
 				if (creepComponent.getType().getType() == CreepType.FIRE) {
 					//There is already fire on this tile, do nothing
 					canCatchFire = false;
@@ -49,8 +51,8 @@ public class CreepUtil {
 		}
 		
 		if (canCatchFire) {
-			Entity wall = TileUtil.getEntityWithComponentOnTile(pos, BlockExplosionComponent.class, room);
-			if (wall != null) {
+			Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(pos, BlockExplosionComponent.class, room);
+			if (wall.isPresent()) {
 				canCatchFire = false;
 			}
 		}

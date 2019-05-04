@@ -1,5 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -19,15 +20,15 @@ public class OrbUtil {
 	public static void checkContact(Entity orb, Room room) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(orb);
 
-		Entity player = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), PlayerComponent.class, room);
-		if (player != null) {
+		Optional<Entity> player = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), PlayerComponent.class, room);
+		if (player.isPresent()) {
 			OrbComponent orbComponent = Mappers.orbComponent.get(orb);
-			orbComponent.onContact(orb, player, room);
+			orbComponent.onContact(orb, player.get(), room);
 		} else {
-			Entity enemy = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), EnemyComponent.class, room);
-			if (enemy != null && Mappers.enemyComponent.get(enemy).canActivateOrbs()) {
+			Optional<Entity> enemy = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), EnemyComponent.class, room);
+			if (enemy.isPresent() && Mappers.enemyComponent.get(enemy.get()).canActivateOrbs()) {
 				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
-				orbComponent.onContact(orb, enemy, room);
+				orbComponent.onContact(orb, enemy.get(), room);
 			} else {
 				
 				Set<Entity> otherOrbs = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), OrbComponent.class, room);

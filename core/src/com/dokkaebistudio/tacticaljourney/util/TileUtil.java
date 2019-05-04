@@ -2,6 +2,7 @@ package com.dokkaebistudio.tacticaljourney.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -17,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 
@@ -191,8 +193,8 @@ public final class TileUtil {
 		Tile tile = getTileAtGridPos(gridPos, room);
 		if (!tile.isWalkable(walker)) return false;
 		
-		Entity solid = getEntityWithComponentOnTile(gridPos, SolidComponent.class, room);
-		if (solid != null) return false;
+		Optional<Entity> solid = getEntityWithComponentOnTile(gridPos, SolidComponent.class, room);
+		if (solid.isPresent()) return false;
 		
 		return true;
 	}
@@ -205,12 +207,9 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity with the given component standing on the tile at the given position, null if there is none.
 	 */
-	public static Entity getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
- 		Set<Entity> entities = room.getEntitiesAtPositionWithComponent(position, componentClass);
-		for (Entity e : entities) {
-			return e;
-		}
-		return null;
+	public static Optional<Entity> getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+		return room.getEntitiesAtPositionWithComponent(position, componentClass).stream()
+				.findFirst();
 	}
 	
 	/**
@@ -412,33 +411,33 @@ public final class TileUtil {
 		PoolableVector2 temp = PoolableVector2.create(pos);
 		if (temp.x > 0) {
 			temp.x -= 1;
-			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e != null) {
-				tiles.add(e);
+			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e.isPresent()) {
+				tiles.add(e.get());
 			}
 			temp.x += 1;
 		}
 		if (temp.x < GameScreen.GRID_W - 1) {
 			temp.x += 1;
-			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e != null) {
-				tiles.add(e);
+			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e.isPresent()) {
+				tiles.add(e.get());
 			}
 			temp.x -= 1;
 		}
 		if (temp.y > 0) {
 			temp.y -= 1;
-			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e != null) {
-				tiles.add(e);
+			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e.isPresent()) {
+				tiles.add(e.get());
 			}
 			temp.y += 1;
 		}
 		if (temp.y < GameScreen.GRID_H - 1) {
 			temp.y += 1;
-			Entity e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e != null) {
-				tiles.add(e);
+			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+			if (e.isPresent()) {
+				tiles.add(e.get());
 			}
 			temp.y -= 1;
 		}
@@ -459,19 +458,22 @@ public final class TileUtil {
 		PoolableVector2 temp = TileUtil.convertPixelPosIntoGridPos(x, y);
 		
 		if (empty) {
-			empty &= TileUtil.getEntityWithComponentOnTile(temp, ItemComponent.class, room) == null;
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, ItemComponent.class, room).isPresent();
 		}
 		if (empty) {
-			empty &= TileUtil.getEntityWithComponentOnTile(temp, LootableComponent.class, room) == null;
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, LootableComponent.class, room).isPresent();
 		}
 		if (empty) {
-			empty &= TileUtil.getEntityWithComponentOnTile(temp, WormholeComponent.class, room) == null;
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, WormholeComponent.class, room).isPresent();
 		}
 		if (empty) {
-			empty &= TileUtil.getEntityWithComponentOnTile(temp, DoorComponent.class, room) == null;
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, DoorComponent.class, room).isPresent();
 		}
 		if (empty) {
-			empty &= TileUtil.getEntityWithComponentOnTile(temp, ExitComponent.class, room) == null;
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, SecretDoorComponent.class, room).isPresent();
+		}
+		if (empty) {
+			empty &= !TileUtil.getEntityWithComponentOnTile(temp, ExitComponent.class, room).isPresent();
 		}
 
 		return !empty;

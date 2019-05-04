@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -50,8 +52,9 @@ public class ItemPebble extends AbstractItem {
 	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
 		super.onThrow(thrownPosition, thrower, item, room);
 		
-		Entity enemy = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
-		if (enemy != null) {
+		Optional<Entity> enemyOpt = TileUtil.getEntityWithComponentOnTile(thrownPosition, EnemyComponent.class, room);
+		if (enemyOpt.isPresent()) {
+			Entity enemy = enemyOpt.get();
 			Journal.addEntry(Journal.getLabel(enemy) + " looks mad at you");
 	
 			Mappers.aiComponent.get(enemy).setAlerted(true, enemy, thrower);

@@ -18,6 +18,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -28,10 +29,10 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -83,9 +84,11 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity soulbender = TileUtil.getEntityWithComponentOnTile(tempPos, SoulbenderComponent.class, room);
+				Optional<Entity> soulbenderOpt = TileUtil.getEntityWithComponentOnTile(tempPos, SoulbenderComponent.class, room);
 				
-				if (soulbender != null) {
+				if (soulbenderOpt.isPresent()) {
+					Entity soulbender = soulbenderOpt.get();
+					
 					SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(soulbender);
 					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
 					

@@ -90,7 +90,7 @@ public class BlessingHangeki extends Blessing {
 			float randomValue = RandomSingleton.getNextChanceWithKarma();
 			if (randomValue < getCurrentProcChance(user)) {
 
-				Journal.addEntry("Hangeki activated by throwing a retaliation kunaï.");
+				Journal.addEntry("Hangeki activated by throwing a retaliation kunai.");
 				AlterationSystem.addAlterationProc(this);
 				
 				// Throw the kunai

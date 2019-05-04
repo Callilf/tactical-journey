@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -68,9 +69,9 @@ public class ItemSmokebomb extends AbstractItem {
 		// Adjacent enemies are stunned
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(userPos.coord(), room);
 		for (Tile adjacentTile : adjacentTiles) {
-			Entity stunnableEntity = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), StatusReceiverComponent.class, room);
-			if (stunnableEntity != null && stunnableEntity != user) {
-				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity);
+			Optional<Entity> stunnableEntity = TileUtil.getEntityWithComponentOnTile(adjacentTile.getGridPos(), StatusReceiverComponent.class, room);
+			if (stunnableEntity.isPresent() && stunnableEntity.get() != user) {
+				StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity.get());
 				if (statusReceiverComponent != null) {
 					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(1));
 				}
@@ -87,9 +88,9 @@ public class ItemSmokebomb extends AbstractItem {
 		createSmokeEffect(thrownPosition);
 		room.removeEntity(item);
 
-		Entity stunnableEntity = TileUtil.getEntityWithComponentOnTile(thrownPosition, StatusReceiverComponent.class, room);
-		if (stunnableEntity != null) {
-			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity);
+		Optional<Entity> stunnableEntity = TileUtil.getEntityWithComponentOnTile(thrownPosition, StatusReceiverComponent.class, room);
+		if (stunnableEntity.isPresent()) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(stunnableEntity.get());
 			if (statusReceiverComponent != null) {
 				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(2));
 			}

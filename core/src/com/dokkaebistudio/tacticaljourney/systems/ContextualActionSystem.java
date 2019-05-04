@@ -16,6 +16,8 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
@@ -103,9 +105,9 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 					
 					// At close range
 					
-					Entity sewingMachine = TileUtil.getEntityWithComponentOnTile(gridPos, SewingMachineComponent.class, room);
-					if (sewingMachine != null) {
-						playerCompo.requestAction(PlayerActionEnum.SEW, sewingMachine);
+					Optional<Entity> sewingMachine = TileUtil.getEntityWithComponentOnTile(gridPos, SewingMachineComponent.class, room);
+					if (sewingMachine.isPresent()) {
+						playerCompo.requestAction(PlayerActionEnum.SEW, sewingMachine.get());
 					}
 				}
 				
@@ -124,17 +126,17 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (playerComponent.isActionDoneAtThisFrame()) return;
 		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
-		Entity lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
-		if (lootable != null) {
+		Optional<Entity> lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
+		if (lootable.isPresent()) {
 			playerComponent.setActionDoneAtThisFrame(true);
 
 			if (room.hasEnemies()) {
-				playerCompo.requestAction(PlayerActionEnum.LOOT, lootable);
+				playerCompo.requestAction(PlayerActionEnum.LOOT, lootable.get());
 			} else {
-				LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable);
+				LootableComponent lootableComponent = Mappers.lootableComponent.get(lootable.get());
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
 				inventoryComponent.setTurnsToWaitBeforeLooting(lootableComponent.getNbTurnsToOpen());
-				inventoryComponent.setLootableEntity(lootable);
+				inventoryComponent.setLootableEntity(lootable.get());
 			}
 		}
 	}
@@ -148,10 +150,10 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (playerComponent.isActionDoneAtThisFrame()) return;
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
-		Entity exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
-		if (exit != null) {
+		Optional<Entity> exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
+		if (exit.isPresent()) {
 			playerComponent.setActionDoneAtThisFrame(true);
-			playerCompo.requestAction(PlayerActionEnum.EXIT, exit);
+			playerCompo.requestAction(PlayerActionEnum.EXIT, exit.get());
 		}
 	}
 
@@ -163,10 +165,10 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (playerComponent.isActionDoneAtThisFrame()) return;
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
-		Entity wormhole = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), WormholeComponent.class, room);
-		if (wormhole != null) {
+		Optional<Entity> wormhole = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), WormholeComponent.class, room);
+		if (wormhole.isPresent()) {
 			playerComponent.setActionDoneAtThisFrame(true);
-			playerCompo.requestAction(PlayerActionEnum.WORMHOLE, wormhole);
+			playerCompo.requestAction(PlayerActionEnum.WORMHOLE, wormhole.get());
 		}
 	}
 	
@@ -179,8 +181,8 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 		if (playerComponent.isActionDoneAtThisFrame()) return;
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
-		Entity secretDoor = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SecretDoorComponent.class, room);
-		if (secretDoor != null && Mappers.secretDoorComponent.get(secretDoor).isOpened()) {
+		Optional<Entity> secretDoor = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SecretDoorComponent.class, room);
+		if (secretDoor.isPresent() && Mappers.secretDoorComponent.get(secretDoor.get()).isOpened()) {
 			playerComponent.setActionDoneAtThisFrame(true);
 			playerCompo.setTeleportPopinRequested(true);
 		}

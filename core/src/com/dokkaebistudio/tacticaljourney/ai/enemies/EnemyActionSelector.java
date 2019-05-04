@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.ai.enemies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -302,9 +303,9 @@ public class EnemyActionSelector {
 	
 	private static int getOrbHeuristic(Vector2 pos, Entity enemyEntity, Room room) {
 		if (Mappers.humanoidComponent.has(enemyEntity)) {
-			Entity orb = TileUtil.getEntityWithComponentOnTile(pos, OrbComponent.class, room);
-			if (orb != null) {
-				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
+			Optional<Entity> orb = TileUtil.getEntityWithComponentOnTile(pos, OrbComponent.class, room);
+			if (orb.isPresent()) {
+				OrbComponent orbComponent = Mappers.orbComponent.get(orb.get());
 				if (orbComponent != null) {
 					return orbComponent.getType().getHeuristic(enemyEntity);
 				}

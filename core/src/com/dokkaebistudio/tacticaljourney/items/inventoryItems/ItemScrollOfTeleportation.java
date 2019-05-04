@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -111,14 +112,15 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 		final List<Room> rooms = room.floor.getRooms();
 		
 		Array<Room> visitedRooms = new Array<>();
-		Array<Room> unvisitedRooms = new Array<>();
-		for (Room r : rooms) {
+		Array<Room> unvisitedRooms = new Array<>();		
+		rooms.forEach((Room r) -> { 
 			if (r.getVisited() == RoomVisitedState.NEVER_VISITED) {
 				unvisitedRooms.add(r);
 			} else {
 				visitedRooms.add(r);
 			}
-		}
+		});
+
 		
 		if (unvisitedRooms.size == 0) {
 			int roomIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(visitedRooms.size);

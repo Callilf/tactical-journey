@@ -18,6 +18,7 @@ package com.dokkaebistudio.tacticaljourney.systems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -83,20 +84,20 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Entity shopKeeper = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
+				Optional<Entity> shopKeeper = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
 				
-				if (shopKeeper != null) {
-					ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
+				if (shopKeeper.isPresent()) {
+					ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper.get());
 					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
 					
 					int distanceFromStatue = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), tempPos);
 					if (distanceFromStatue == 1 && shopKeeperComponent.hasSoldItems()) {
 						// Refill popin
 						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-						playerComponent.requestAction(PlayerActionEnum.RESTOCK_SHOP, shopKeeper);
+						playerComponent.requestAction(PlayerActionEnum.RESTOCK_SHOP, shopKeeper.get());
 						
 					} else {
-						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper);
+						GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(shopKeeper.get());
 						room.setRequestedDialog(Descriptions.SHOPKEEPER_TITLE,shopKeeperComponent.getSpeech());
 					}
 				}

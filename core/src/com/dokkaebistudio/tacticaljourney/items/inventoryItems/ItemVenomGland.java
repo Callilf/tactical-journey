@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -72,14 +73,14 @@ public class ItemVenomGland extends AbstractItem {
 			for (Tile tile : adjacentTiles) {
 				if (tile.isThrowable(thrower)) {
 					boolean canHavePoison = true;
-					Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), CreepComponent.class, room);
-					if (creepAlreadyThere != null) {
+					Optional<Entity> creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), CreepComponent.class, room);
+					if (creepAlreadyThere.isPresent()) {
 						// Replace any creep on this tile
-						room.removeEntity(creepAlreadyThere);
+						room.removeEntity(creepAlreadyThere.get());
 					}
 					
-					Entity wall = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), BlockExplosionComponent.class, room);
-					if (wall != null) {
+					Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), BlockExplosionComponent.class, room);
+					if (wall.isPresent()) {
 						canHavePoison = false;
 					}
 				

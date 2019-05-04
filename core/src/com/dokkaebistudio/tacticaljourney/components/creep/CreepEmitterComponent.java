@@ -1,14 +1,13 @@
 package com.dokkaebistudio.tacticaljourney.components.creep;
 
+import java.util.Optional;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
-import com.dokkaebistudio.tacticaljourney.creeps.Creep;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -40,8 +39,8 @@ public class CreepEmitterComponent implements Component, Poolable {
 		
 		switch(type) {
 		case WEB:
-			Entity creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(position, CreepComponent.class, room);
-			if (creepAlreadyThere != null) room.removeEntity(creepAlreadyThere);
+			Optional<Entity> creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(position, CreepComponent.class, room);
+			if (creepAlreadyThere.isPresent()) room.removeEntity(creepAlreadyThere.get());
 			
 			creep = room.entityFactory.creepFactory.createWeb(room, position);
 			

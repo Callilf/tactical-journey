@@ -62,7 +62,7 @@ public class RoomRenderer implements Renderer, RoomSystem {
 				else if (gpcA == null) return -1;
 				else if (gpcB == null) return 1;
 				
-				// This complex computation ensure that big sprites on lower tiles appear in front of sprites on further tiles
+				// This complex computation ensure that big sprites on lower tiles appear in front of sprites on upper tiles
 				return (int) Math.signum(
 						(gpcA.zIndex + (GameScreen.SCREEN_H - gpcA.coord().y)*5*gpcA.overlap) - (gpcB.zIndex + (GameScreen.SCREEN_H - gpcB.coord().y)*5*gpcB.overlap)
 						);

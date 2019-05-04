@@ -1,13 +1,17 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
@@ -121,13 +125,11 @@ public final class TileUtil {
 	 * @return the cost of movement
 	 */
 	public static int getCostOfMovementForTilePos(Vector2 pos, Entity mover, Room room) {
-		int cost = 1;
 		Set<Entity> creepEntities = TileUtil.getEntitiesWithComponentOnTile(pos, CreepComponent.class, room);
-		for (Entity e : creepEntities) {
-			CreepComponent creepComponent = Mappers.creepComponent.get(e);
-			cost += creepComponent.getMovementConsumed(mover);
-		}
-		return cost;
+		return 1 + creepEntities.stream()
+			.map(e -> Mappers.creepComponent.get(e))
+			.mapToInt(creepCompo -> creepCompo.getMovementConsumed(mover))
+			.sum();
 	}
 	
 	/**
@@ -207,7 +209,7 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity with the given component standing on the tile at the given position, null if there is none.
 	 */
-	public static Optional<Entity> getEntityWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+	public static Optional<Entity> getEntityWithComponentOnTile(Vector2 position, Class<?> componentClass, Room room) {
 		return room.getEntitiesAtPositionWithComponent(position, componentClass).stream()
 				.findFirst();
 	}
@@ -218,7 +220,7 @@ public final class TileUtil {
 	 * @param engine the engine
 	 * @return The entity standing at this position, null if no entity there.
 	 */
-	public static Set<Entity> getEntitiesWithComponentOnTile(Vector2 position, Class componentClass, Room room) {
+	public static Set<Entity> getEntitiesWithComponentOnTile(Vector2 position, Class<?> componentClass, Room room) {
 		return room.getEntitiesAtPositionWithComponent(position, componentClass);
 	}
 	
@@ -373,27 +375,12 @@ public final class TileUtil {
 	public static List<Tile> getAdjacentTiles(Vector2 pos, Room room) {
 		List<Tile> tiles = new ArrayList<>();
 		
-		PoolableVector2 temp = PoolableVector2.create(pos);
-		if (temp.x > 0) {
-			temp.x -= 1;
-			tiles.add(room.getTileAtGridPosition(temp));
-			temp.x += 1;
-		}
-		if (temp.x < GameScreen.GRID_W - 1) {
-			temp.x += 1;
-			tiles.add(room.getTileAtGridPosition(temp));
-			temp.x -= 1;
-		}
-		if (temp.y > 0) {
-			temp.y -= 1;
-			tiles.add(room.getTileAtGridPosition(temp));
-			temp.y += 1;
-		}
-		if (temp.y < GameScreen.GRID_H - 1) {
-			temp.y += 1;
-			tiles.add(room.getTileAtGridPosition(temp));
-			temp.y -= 1;
-		}
+		List<PoolableVector2> adjacentPositions = getAdjacentPositions(pos);
+
+		adjacentPositions.forEach( vector -> {
+			tiles.add(room.getTileAtGridPosition(vector));
+			vector.free();
+		});
 		
 		return tiles;
 	}
@@ -405,44 +392,38 @@ public final class TileUtil {
 	 * @param room the room
 	 * @return a list with 4 entities max
 	 */
-	public static List<Entity> getAdjacentEntitiesWithComponent(Vector2 pos, Class componentClass, Room room) {
+	public static List<Entity> getAdjacentEntitiesWithComponent(Vector2 pos, Class<?> componentClass, Room room) {
 		List<Entity> tiles = new ArrayList<>();
 		
-		PoolableVector2 temp = PoolableVector2.create(pos);
-		if (temp.x > 0) {
-			temp.x -= 1;
-			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
+		List<PoolableVector2> adjacentPositions = getAdjacentPositions(pos);
+		
+		adjacentPositions.forEach( vector -> {
+			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(vector, componentClass, room);
 			if (e.isPresent()) {
 				tiles.add(e.get());
 			}
-			temp.x += 1;
-		}
-		if (temp.x < GameScreen.GRID_W - 1) {
-			temp.x += 1;
-			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e.isPresent()) {
-				tiles.add(e.get());
-			}
-			temp.x -= 1;
-		}
-		if (temp.y > 0) {
-			temp.y -= 1;
-			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e.isPresent()) {
-				tiles.add(e.get());
-			}
-			temp.y += 1;
-		}
-		if (temp.y < GameScreen.GRID_H - 1) {
-			temp.y += 1;
-			Optional<Entity> e = TileUtil.getEntityWithComponentOnTile(temp, componentClass, room);
-			if (e.isPresent()) {
-				tiles.add(e.get());
-			}
-			temp.y -= 1;
-		}
+			vector.free();
+		});
 		
 		return tiles;
+	}
+	
+
+	private static List<PoolableVector2> getAdjacentPositions(Vector2 pos) {
+		List<PoolableVector2> adjacentPositions = new ArrayList<>();
+		if (pos.x > 0) {
+			adjacentPositions.add(PoolableVector2.create(pos.x - 1, pos.y));
+		}
+		if (pos.x < GameScreen.GRID_W - 1) {
+			adjacentPositions.add(PoolableVector2.create(pos.x + 1, pos.y));
+		}
+		if (pos.y > 0) {
+			adjacentPositions.add(PoolableVector2.create(pos.x, pos.y - 1));
+		}
+		if (pos.y < GameScreen.GRID_H - 1) {
+			adjacentPositions.add(PoolableVector2.create(pos.x, pos.y + 1));
+		}
+		return adjacentPositions;
 	}
 	
 	

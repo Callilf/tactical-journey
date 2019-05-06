@@ -352,6 +352,7 @@ public class Assets {
 	
 	public static RegionDescriptor arrow_item;
 	public static RegionDescriptor bomb_item;
+	public static RegionDescriptor clover_item;
 	
 	// Personal items
 	public static RegionDescriptor totem_of_kalamazoo;
@@ -751,6 +752,7 @@ public class Assets {
 		
 		arrow_item = Assets.getTexture("item-consumable-arrow");
 		bomb_item = Assets.getTexture("item-consumable-bomb");
+		clover_item = Assets.getTexture("item-clover");
 		
 		// Personal items
 		totem_of_kalamazoo = Assets.getTexture("item-infusable-totem-of-kalamazoo");

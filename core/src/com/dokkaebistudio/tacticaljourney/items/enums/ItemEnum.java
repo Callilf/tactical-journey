@@ -12,6 +12,8 @@ public enum ItemEnum {
 	AMMO_ARROW(Descriptions.ITEM_ARROWS_TITLE, 1),
 	AMMO_BOMB(Descriptions.ITEM_BOMBS_TITLE, 1),
 	
+	CLOVER(Descriptions.ITEM_CLOVER_TITLE, 1),
+	
 	// End game
 	UNIVERSAL_CURE(Descriptions.ITEM_UNIVERSAL_CURE_TITLE, 1),
 

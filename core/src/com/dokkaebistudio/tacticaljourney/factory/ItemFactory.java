@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
+import com.dokkaebistudio.tacticaljourney.items.ItemFourLeafClover;
 import com.dokkaebistudio.tacticaljourney.items.ItemKey;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney;
 import com.dokkaebistudio.tacticaljourney.items.ItemMoney.MoneyAmountEnum;
@@ -179,6 +180,10 @@ public final class ItemFactory {
 		
 		switch (type) {
 		
+		
+		//*****************
+		// Insta use items
+		
 		case MONEY:
 			item = createItemMoney(room, tilePos, MoneyAmountEnum.SMALL, randomToUse);
 			break;
@@ -190,6 +195,9 @@ public final class ItemFactory {
 			break;
 		case AMMO_BOMB:
 			item = createItemBombs(room, tilePos, randomToUse);
+			break;
+		case CLOVER:
+			item = createItemBase(room, tilePos,  new ItemFourLeafClover(), EntityFlagEnum.ITEM_CLOVER);
 			break;
 			
 		//***********************

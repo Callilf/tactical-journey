@@ -164,6 +164,9 @@ public class Descriptions {
 	public static final String ITEM_BOMBS_TITLE = "Bombs";
 	public static final String ITEM_BOMBS_DESCRIPTION = "Bombs can be thrown on the ground by using your bomb skill and explode after some turns. Be sure to stay away from the blast. "
 			+ "If there are too much bombs for your bag, the remaining bombs will stay on the ground.";
+	
+	public static final String ITEM_CLOVER_TITLE = "Four-leaf clover";
+	public static final String ITEM_CLOVER_DESCRIPTION = "A rare four-leaf clover that is said will bring good fortune to the one who picks it up. Increases karma by 1.";
 
 	public static final String ITEM_UNIVERSAL_CURE_TITLE = "Universal cure";
 	public static final String ITEM_UNIVERSAL_CURE_DESCRIPTION = "The dream potion that can cure any kind of illness.";

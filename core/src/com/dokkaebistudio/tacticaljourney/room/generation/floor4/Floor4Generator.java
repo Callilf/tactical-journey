@@ -4,12 +4,14 @@
 package com.dokkaebistudio.tacticaljourney.room.generation.floor4;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
@@ -66,5 +68,10 @@ public class Floor4Generator extends FloorGenerator {
 		for (Room r : rooms) {
 			r.create();
 		}
+	}
+	
+	@Override
+	protected List<ItemEnum> fillMandatoryItems() {
+		return Collections.emptyList();
 	}
 }

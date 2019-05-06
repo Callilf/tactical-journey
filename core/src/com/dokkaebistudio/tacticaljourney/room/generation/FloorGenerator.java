@@ -163,7 +163,9 @@ public abstract class FloorGenerator {
 	}
 
 	private void placeMandatoryLoot(List<Room> rooms) {
-		
+		List<ItemEnum> mandatoryLoot = fillMandatoryItems();
+		if (mandatoryLoot.isEmpty()) return;
+
 		List<Entity> allEnemiesOfFloor = new ArrayList<>();
 		for (Room r : rooms) {
 			if (r.hasEnemies()) {
@@ -174,18 +176,14 @@ public abstract class FloorGenerator {
 		}
 		Collections.shuffle(allEnemiesOfFloor, random.getNextSeededRandom());
 		
-		// Leather
-		if (allEnemiesOfFloor.size() > 0) {
-			Entity enemy = allEnemiesOfFloor.get(0);
-			Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.LEATHER);
+		int index = 0;
+		for (ItemEnum itemType : mandatoryLoot) {
+			if (allEnemiesOfFloor.size() > index) {
+				Entity enemy = allEnemiesOfFloor.get(index);
+				Mappers.lootRewardComponent.get(enemy).setItemToDrop(itemType);
+			}
+			index ++;
 		}
-		
-		// Divine Catalyst
-		if (allEnemiesOfFloor.size() > 1) {
-			Entity enemy = allEnemiesOfFloor.get(1);
-			Mappers.lootRewardComponent.get(enemy).setItemToDrop(ItemEnum.DIVINE_CATALYST);
-		}
-
 	}
 	
 	protected List<RoomType> fillSpecialRooms() {
@@ -212,6 +210,12 @@ public abstract class FloorGenerator {
 		return specialRooms;
 	}
 
+	protected List<ItemEnum> fillMandatoryItems() {
+		List<ItemEnum> mandatoryItems = new ArrayList<>();
+		mandatoryItems.add(ItemEnum.LEATHER);
+		mandatoryItems.add(ItemEnum.DIVINE_CATALYST);
+		return mandatoryItems;
+	}
 
 	
 	/**

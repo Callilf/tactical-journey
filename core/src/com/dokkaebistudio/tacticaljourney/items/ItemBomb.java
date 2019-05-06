@@ -25,12 +25,12 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 public class ItemBomb extends AbstractItem {
 
 	public ItemBomb() {
-		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2);
+		super("# bomb[s]", Assets.bomb_item, false, false, 1, 1);
 		this.type = ItemEnum.AMMO_BOMB;
 	}
 	
 	public ItemBomb(RandomXS128 randomToUse) {
-		super("# bomb[s]", Assets.bomb_item, false, false, 1, 2, randomToUse);
+		super("# bomb[s]", Assets.bomb_item, false, false, 1, 1, randomToUse);
 		this.type = ItemEnum.AMMO_BOMB;
 	}
 

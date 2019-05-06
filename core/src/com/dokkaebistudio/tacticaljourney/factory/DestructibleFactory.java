@@ -154,8 +154,8 @@ public final class DestructibleFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().ammoCrate);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 90);
+		dropRate.add(ItemPoolRarity.RARE, 5);
+		dropRate.add(ItemPoolRarity.COMMON, 95);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		crateEntity.add(lootRewardCompo);

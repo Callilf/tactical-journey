@@ -3,7 +3,6 @@ package com.dokkaebistudio.tacticaljourney.persistence;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.invoke.SerializedLambda;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,7 +42,6 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -99,7 +97,6 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.ClosureSerializer;
 
 public class Persister {
 	
@@ -680,7 +677,6 @@ public class Persister {
 
 		
 		kryo.register(TextComponent.class, TextComponent.getSerializer(engine));
-		kryo.register(DamageDisplayComponent.class, DamageDisplayComponent.getSerializer(engine));
 		kryo.register(DialogComponent.class, DialogComponent.getSerializer(engine));
 
 //		kryo.register(WheelModifierComponent.class, WheelModifierComponent.getSerializer(engine, floor));

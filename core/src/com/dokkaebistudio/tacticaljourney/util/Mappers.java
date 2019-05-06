@@ -24,7 +24,6 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.DamageDisplayComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -109,7 +108,6 @@ public final class Mappers {
 
 	
 	public final static ComponentMapper<TextComponent> textComponent = ComponentMapper.getFor(TextComponent.class);
-	public final static ComponentMapper<DamageDisplayComponent> damageDisplayCompoM = ComponentMapper.getFor(DamageDisplayComponent.class);
 	public final static ComponentMapper<DialogComponent> dialogComponent = ComponentMapper.getFor(DialogComponent.class);
 
 	public final static ComponentMapper<WheelModifierComponent> wheelModifierComponent = ComponentMapper.getFor(WheelModifierComponent.class);

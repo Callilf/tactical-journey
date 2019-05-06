@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -81,7 +82,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			
 			temp.set(11, 2);
-			Entity shaman = room.entityFactory.enemyFactory.createTribesmenShaman(room, temp);
+			Entity shaman = room.entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHAMAN,room, temp);
 			Mappers.aiComponent.get(shaman).setAlerted(true, shaman, GameScreen.player);
 
 			temp.free();
@@ -97,11 +98,11 @@ public class Floor4RoomGenerator extends RoomGenerator {
 				int tribesmanType = random.nextSeededInt(3);
 				Entity enemy = null;
 				if (tribesmanType == 0) {
-					enemy = entityFactory.enemyFactory.createTribesmenSpear(room, iterator.next());
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR,room, iterator.next());
 				} else if (tribesmanType == 1){
-					enemy = entityFactory.enemyFactory.createTribesmenShield(room, iterator.next());
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHIELD,room, iterator.next());
 				} else {
-					enemy = entityFactory.enemyFactory.createTribesmenScout(room, iterator.next());
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SCOUT,room, iterator.next());
 				}
 				
 				Mappers.aiComponent.get(enemy).setAlerted(true, enemy, GameScreen.player);

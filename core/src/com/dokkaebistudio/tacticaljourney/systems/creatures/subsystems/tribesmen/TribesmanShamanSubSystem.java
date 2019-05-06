@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShaman;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShield;
@@ -75,7 +76,7 @@ public class TribesmanShamanSubSystem extends CreatureSubSystem {
 			
 			if (summoningTotem) {
 				PoolableVector2 temp = PoolableVector2.create(11,  6);
-				totem = room.entityFactory.enemyFactory.createTribesmenTotem(room, temp);
+				totem = room.entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_TOTEM,room, temp);
 				Mappers.aiComponent.get(totem).setTurnOver(true);
 				temp.free();
 				
@@ -197,11 +198,11 @@ public class TribesmanShamanSubSystem extends CreatureSubSystem {
 		Entity tribesman = null;
 		int randInt = unseededRandom.nextInt(75);
 		if (randInt >= 0 && randInt < 25) {
-			tribesman = room.entityFactory.enemyFactory.createTribesmenSpear( room, temp);
+			tribesman = room.entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR, room, temp);
 		} else if (randInt >= 25 && randInt < 50) {
-			tribesman = room.entityFactory.enemyFactory.createTribesmenShield( room, temp);
+			tribesman = room.entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHIELD, room, temp);
 		} else {
-			tribesman = room.entityFactory.enemyFactory.createTribesmenScout( room, temp);
+			tribesman = room.entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SCOUT, room, temp);
 		}
 		
 		temp.free();

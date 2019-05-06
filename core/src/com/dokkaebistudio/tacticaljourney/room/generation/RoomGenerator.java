@@ -380,6 +380,17 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,2));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,3));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,4));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,5));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,6));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,7));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,8));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,9));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,10));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,11));
+			entityFactory.destructibleFactory.createAmmoCrate(room, new Vector2(2,1));
 //			entityFactory.playerFactory.createPlayerClone(room, new Vector2(11,10), GameScreen.player);
 //			entityFactory.creepFactory.createFire(room, new Vector2(11,10), null);
 //			entityFactory.creepFactory.createPoison(room, new Vector2(11,11), null);

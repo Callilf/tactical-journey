@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.persistence;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.invoke.SerializedLambda;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemySpawnerComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
@@ -97,6 +99,7 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.ClosureSerializer;
 
 public class Persister {
 	
@@ -601,6 +604,12 @@ public class Persister {
 	
 	public void registerSerializers(Kryo kryo, Floor currentFloor, List<Floor> floors) {
 		
+		// Java mandatory serializers
+//		kryo.register(Object[].class);
+//		kryo.register(Class.class);
+//		kryo.register(SerializedLambda.class);
+//		kryo.register(ClosureSerializer.Closure.class, new ClosureSerializer());
+		
 		// general serializers
 		kryo.register(GameScreen.class, getGameScreenSerializer());
 		kryo.register(Floor.class, getFloorSerializer());
@@ -667,6 +676,7 @@ public class Persister {
 		kryo.register(HealthComponent.class, HealthComponent.getSerializer(engine));
 		kryo.register(ExpRewardComponent.class, ExpRewardComponent.getSerializer(engine));
 		kryo.register(LootRewardComponent.class, LootRewardComponent.getSerializer(engine));
+		kryo.register(EnemySpawnerComponent.class, EnemySpawnerComponent.getSerializer(engine));
 
 		
 		kryo.register(TextComponent.class, TextComponent.getSerializer(engine));

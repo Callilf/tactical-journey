@@ -9,6 +9,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -69,47 +70,47 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (enemyTypeRandom == 0) {
 				int spiderType = random.nextSeededInt(2);
 				if (spiderType == 0) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER,room, new Vector2(iterator.next()));
 				} else {
-					enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER,room, new Vector2(iterator.next()));
 				}
 				iterator.remove();
 			} else if (enemyTypeRandom == 1 || enemyTypeRandom == 2) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.WEB_SPIDER,room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
 					int spiderType = random.nextSeededInt(2);
 					if (spiderType == 0) {
-						enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+						enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER,room, new Vector2(iterator.next()));
 					} else {
-						enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+						enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER,room, new Vector2(iterator.next()));
 					}
 					iterator.remove();
 				}
 			} else if (enemyTypeRandom == 3 || enemyTypeRandom == 4) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.PANGOLIN_BABY,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 7 || enemyTypeRandom == 8){
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SCORPION,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom >= 9 && enemyTypeRandom <= 12){
-				enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom >= 13 && enemyTypeRandom <= 15) {
-				enemy = entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHIELD,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 16 || enemyTypeRandom == 17){
-				enemy = entityFactory.enemyFactory.createTribesmenScout(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SCOUT,room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
 					int tribesmanType = random.nextSeededInt(2);
 					if (tribesmanType == 0) {
-						enemy = entityFactory.enemyFactory.createTribesmenSpear(room, new Vector2(iterator.next()));
+						enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR,room, new Vector2(iterator.next()));
 					} else {
-						enemy = entityFactory.enemyFactory.createTribesmenShield(room, new Vector2(iterator.next()));
+						enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHIELD,room, new Vector2(iterator.next()));
 					}
 					iterator.remove();
 				}

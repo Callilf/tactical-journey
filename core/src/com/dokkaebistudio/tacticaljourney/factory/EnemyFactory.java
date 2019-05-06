@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyShinobi;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -79,35 +80,62 @@ public final class EnemyFactory {
 		this.tribesmenFactory = new EnemyTribesmenFactory(e, this);
 	}
 	
-
-	/**
-	 * Create a spider.
-	 * @param pos the position
-	 * @return the enemy entity
-	 */
-	public Entity createSpider(Room room, Vector2 pos) {
-		return spiderFactory.createSpider(room, pos);
-	}
-	
-	
-	/**
-	 * Create a spider web that can spit web on the player to alert other spiders
-	 * and leaves web creep on the floor when moving.
-	 * @param pos the position
-	 * @return the enemy entity
-	 */
-	public Entity createSpiderWeb(Room room, Vector2 pos) {
-		return spiderFactory.createSpiderWeb(room, pos);
-	}
-	
-	/**
-	 * Create a venom spider
-	 * and leaves web creep on the floor when moving.
-	 * @param pos the position
-	 * @return the enemy entity
-	 */
-	public Entity createVenomSpider(Room room, Vector2 pos) {
-		return spiderFactory.createVenomSpider(room, pos);
+	public Entity createEnemy(EnemyTypeEnum type, Room room, Vector2 pos) {
+		Entity enemy = null;
+		
+		switch(type) {
+		case SPIDER:
+			enemy = spiderFactory.createSpider(room, pos);
+			break;
+		case WEB_SPIDER:
+			enemy = spiderFactory.createSpiderWeb(room, pos);
+			break;
+		case VENOM_SPIDER:
+			enemy = spiderFactory.createVenomSpider(room, pos);
+			break;
+			
+		case SCORPION:
+			enemy = createScorpion(room, pos);
+			break;
+		case STINGER:
+			enemy = createStinger(room, pos);
+			break;
+			
+		case PANGOLIN_BABY:
+			enemy = pangolinFactory.createPangolinBaby(room, pos, null);
+			break;
+		case PANGOLIN_MATRIARCH:
+			enemy = pangolinFactory.createPangolinMother(room, pos);
+			break;
+			
+		case TRIBESMAN_SPEAR:
+			enemy = tribesmenFactory.createSpearman(room, pos);
+			break;
+		case TRIBESMAN_SHIELD:
+			enemy = tribesmenFactory.createShieldHolder(room, pos);
+			break;
+		case TRIBESMAN_SCOUT:
+			enemy = tribesmenFactory.createScout(room, pos);
+			break;
+		case TRIBESMAN_SHAMAN:
+			enemy = tribesmenFactory.createShaman(room, pos);
+			break;
+		case TRIBESMAN_TOTEM:
+			enemy = tribesmenFactory.createTotem(room, pos);
+			break;
+			
+			
+		case SHINOBI:
+			enemy = createShinobi(room, pos, false);
+			break;
+		case ORANGUTAN:
+			enemy = createOrangutan(room, pos);
+			break;
+			
+		default:
+		}
+		
+		return enemy;
 	}
 	
 	
@@ -560,48 +588,5 @@ public final class EnemyFactory {
 		
 		return enemyEntity;
 	}
-	
-	
-	/**
-	 * Create a baby pangolin.
-	 * @param pos the position
-	 * @return the enemy entity
-	 */
-	public Entity createPangolinBaby(Room room, Vector2 pos, Entity mother) {
-		return pangolinFactory.createPangolinBaby(room, pos, mother);
-	}
-	
-	/**
-	 * Create a mother pangolin.
-	 * @param pos the position
-	 * @return the enemy entity
-	 */
-	public Entity createPangolinMother(Room room, Vector2 pos) {
-		return pangolinFactory.createPangolinMother(room, pos);
-	}
-	
-	
-	
-	//**********************
-	// Tribesmen
-	
-	public Entity createTribesmenSpear(Room room, Vector2 pos) {
-		return tribesmenFactory.createSpearman(room, pos);
-	}
-	
-	public Entity createTribesmenShield(Room room, Vector2 pos) {
-		return tribesmenFactory.createShieldHolder(room, pos);
-	}
-	
-	public Entity createTribesmenScout(Room room, Vector2 pos) {
-		return tribesmenFactory.createScout(room, pos);
-	}
-	
-	public Entity createTribesmenShaman(Room room, Vector2 pos) {
-		return tribesmenFactory.createShaman(room, pos);
-	}
-	
-	public Entity createTribesmenTotem(Room room, Vector2 pos) {
-		return tribesmenFactory.createTotem(room, pos);
-	}
+
 }

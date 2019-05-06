@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemySpawnerComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
@@ -104,6 +105,7 @@ public final class Mappers {
 	public final static ComponentMapper<HealthComponent> healthComponent = ComponentMapper.getFor(HealthComponent.class);
 	public final static ComponentMapper<ExpRewardComponent> expRewardComponent = ComponentMapper.getFor(ExpRewardComponent.class);
 	public final static ComponentMapper<LootRewardComponent> lootRewardComponent = ComponentMapper.getFor(LootRewardComponent.class);
+	public final static ComponentMapper<EnemySpawnerComponent> enemySpawnerComponent = ComponentMapper.getFor(EnemySpawnerComponent.class);
 
 	
 	public final static ComponentMapper<TextComponent> textComponent = ComponentMapper.getFor(TextComponent.class);

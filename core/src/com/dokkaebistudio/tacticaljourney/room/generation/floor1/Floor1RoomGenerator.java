@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
@@ -47,26 +48,26 @@ public class Floor1RoomGenerator extends RoomGenerator {
 			Entity enemy = null;
 			int enemyTypeRandom = random.nextSeededInt(9);
 			if (enemyTypeRandom == 0) {
-				enemy = entityFactory.enemyFactory.createScorpion(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SCORPION, room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 1) {
-				enemy = entityFactory.enemyFactory.createPangolinBaby(room, new Vector2(iterator.next()), null);
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.PANGOLIN_BABY,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 2) {
-				enemy = entityFactory.enemyFactory.createSpiderWeb(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.WEB_SPIDER,room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
-					enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER,room, new Vector2(iterator.next()));
 					iterator.remove();
 				}
 			} else if (enemyTypeRandom == 3) {
-				enemy = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else if (enemyTypeRandom == 4 || enemyTypeRandom == 5) {
-				enemy = entityFactory.enemyFactory.createStinger(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER,room, new Vector2(iterator.next()));
 				iterator.remove();
 			} else {
-				enemy = entityFactory.enemyFactory.createSpider(room, new Vector2(iterator.next()));
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER,room, new Vector2(iterator.next()));
 				iterator.remove();
 			}
 		}

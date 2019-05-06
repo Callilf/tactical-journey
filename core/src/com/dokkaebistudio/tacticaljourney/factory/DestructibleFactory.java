@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemySpawnerComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -19,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -104,6 +106,11 @@ public final class DestructibleFactory {
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		vaseEntity.add(lootRewardCompo);
 		
+		EnemySpawnerComponent enemySpawnCompo = engine.createComponent(EnemySpawnerComponent.class);
+		enemySpawnCompo.addSpawnChance(5, EnemyTypeEnum.SPIDER);
+		vaseEntity.add(enemySpawnCompo);
+
+		
 		return vaseEntity;
 	}
 	
@@ -142,7 +149,7 @@ public final class DestructibleFactory {
 				Assets.destructible_ammo_crate, Assets.destructible_ammo_crate_destroyed);
 		
 		DestructibleComponent destructibleComponent = Mappers.destructibleComponent.get(crateEntity);
-		destructibleComponent.setDestroyableWithWeapon(true);	
+		destructibleComponent.setDestroyableWithWeapon(true);
 
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().ammoCrate);
@@ -152,7 +159,13 @@ public final class DestructibleFactory {
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		crateEntity.add(lootRewardCompo);
-				
+		
+		EnemySpawnerComponent enemySpawnCompo = engine.createComponent(EnemySpawnerComponent.class);
+		enemySpawnCompo.addSpawnChance(1, EnemyTypeEnum.SCORPION);
+		enemySpawnCompo.addSpawnChance(2, EnemyTypeEnum.STINGER);
+		enemySpawnCompo.addSpawnChance(7, EnemyTypeEnum.SPIDER);
+		crateEntity.add(enemySpawnCompo);
+		
 		return crateEntity;
 	}
 	

@@ -67,9 +67,9 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				if (!iterator.hasNext()) break;
 				
 				if (i == 0) {
-					mother = entityFactory.enemyFactory.createPangolinMother(room, iterator.next());
+					mother = entityFactory.enemyFactory.pangolinFactory.createPangolinMother(room, iterator.next());
 				} else {
-					Entity baby = entityFactory.enemyFactory.createPangolinBaby(room, iterator.next(), mother);
+					Entity baby = entityFactory.enemyFactory.pangolinFactory.createPangolinBaby(room, iterator.next(), mother);
 				}
 				
 			}

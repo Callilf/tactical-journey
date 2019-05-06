@@ -6,12 +6,11 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemySpawnerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -20,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarit
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.StatueComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
@@ -42,10 +42,14 @@ public class LootUtil {
 
 		if (destructibleComponent.isRemove()) {
 			GridPositionComponent tilePos = Mappers.gridPositionComponent.get(d);
+			
+			boolean spawnedEnemy = spawnEnemy(d, tilePos, room);
 
-			// Drop loot
-			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(d);
-			dropItem(d, lootRewardComponent, room);
+			if (!spawnedEnemy) {
+				// Drop loot
+				LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(d);
+				dropItem(d, lootRewardComponent, room);
+			}
 			
 			VFXUtil.createDisappearanceEffect(tilePos.coord(), Mappers.spriteComponent.get(d).getSprite());
 			room.removeEntity(d);
@@ -66,6 +70,31 @@ public class LootUtil {
 		if (statueComponent != null) {
 			statueComponent.setJustDestroyed(true);
 		}
+	}
+
+
+
+	/**
+	 * Spawn an enemy from the given entity if possible.
+	 * @param spawnerEntity the entity that could spawn an enemy
+	 * @param tilePos the position of this entity
+	 * @param room the room
+	 * @return true if the entity has spawned an enemy
+	 */
+	private static boolean spawnEnemy(Entity spawnerEntity, GridPositionComponent tilePos, Room room) {
+		boolean spawnedEnemy = false;
+		EnemySpawnerComponent enemySpawnerComponent = Mappers.enemySpawnerComponent.get(spawnerEntity);
+		if (enemySpawnerComponent != null) {
+			int randomInt = RandomSingleton.getInstance().nextSeededInt(100);
+			if (randomInt < enemySpawnerComponent.getTotalSpawnChance()) {
+				EnemyTypeEnum enemyType = enemySpawnerComponent.getActionForRandomInt(randomInt);
+				if (enemyType != null) {
+					room.entityFactory.enemyFactory.createEnemy(enemyType, room, tilePos.coord());
+					spawnedEnemy = true;
+				}
+			}
+		}
+		return spawnedEnemy;
 	}
 	
 	

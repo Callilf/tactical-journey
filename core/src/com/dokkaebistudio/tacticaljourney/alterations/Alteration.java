@@ -25,7 +25,7 @@ public abstract class Alteration {
 	 * Null if the alteration has been infused. */
 	private Integer itemEntityId;
 	
-	private boolean infused;
+	private boolean infused = true;
 	
 	public abstract String title();
 	public abstract String description();
@@ -151,6 +151,9 @@ public abstract class Alteration {
 	}
 	public void setItemEntityId(Integer itemEntityId) {
 		this.itemEntityId = itemEntityId;
+		if (itemEntityId != null) {
+			this.infused = false;
+		}
 	}
 
 	

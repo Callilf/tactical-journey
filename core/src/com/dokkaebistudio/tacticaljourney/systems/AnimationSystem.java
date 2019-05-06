@@ -16,9 +16,11 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
@@ -27,13 +29,14 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class AnimationSystem extends IteratingSystem implements RoomSystem {
+public class AnimationSystem extends EntitySystem implements RoomSystem {
 
 	private Room room;
 
-	
+    /** The entities with an animation component of the current room. */
+    private List<Entity> allEntitiesOfCurrentRoom = new ArrayList<>();
+
 	public AnimationSystem(Room room) {
-		super(Family.one(AnimationComponent.class).get());
 		this.priority = 3;
 
 		this.room = room;
@@ -46,22 +49,32 @@ public class AnimationSystem extends IteratingSystem implements RoomSystem {
 	}
 	
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
+	public void update(float deltaTime) {
+		fillEntitiesOfCurrentRoom();
 		
-		AnimationComponent anim = Mappers.animationComponent.get(entity);
-
-		SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
-		StateComponent state = Mappers.stateComponent.get(entity);
-		if (spriteCompo == null || state == null) return;
-		
-		Animation<Sprite> animation = anim.getAnimation(state.get());
-		
-		if (animation != null) {
-			Sprite keyFrame = animation.getKeyFrame(state.time);
-			spriteCompo.getSprite().set(keyFrame);
+		for (Entity entity : allEntitiesOfCurrentRoom) {
+			AnimationComponent anim = Mappers.animationComponent.get(entity);
+	
+			SpriteComponent spriteCompo = Mappers.spriteComponent.get(entity);
+			StateComponent state = Mappers.stateComponent.get(entity);
+			if (spriteCompo == null || state == null) return;
+			
+			Animation<Sprite> animation = anim.getAnimation(state.get());
+			
+			if (animation != null) {
+				Sprite keyFrame = animation.getKeyFrame(state.time);
+				spriteCompo.getSprite().set(keyFrame);
+			}
+			
+			state.time += deltaTime;
 		}
-		
-		state.time += deltaTime;
-		
+	}
+	
+	
+	private void fillEntitiesOfCurrentRoom() {
+		allEntitiesOfCurrentRoom.clear();
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.animationComponent.has(e)) allEntitiesOfCurrentRoom.add(e);
+		}
 	}
 }

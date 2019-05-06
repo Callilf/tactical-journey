@@ -16,25 +16,47 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
+import com.badlogic.ashley.core.EntitySystem;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class StateSystem extends IteratingSystem {	
-	private ComponentMapper<StateComponent> sm;
+public class StateSystem extends EntitySystem implements RoomSystem {	
 	
-	public StateSystem() {
-		super(Family.all(StateComponent.class).get());
-		
-		this.priority = 2;
+	private Room room;
 
-		sm = ComponentMapper.getFor(StateComponent.class);
+    /** The entities with an state component of the current room. */
+    private List<Entity> allEntitiesOfCurrentRoom = new ArrayList<>();
+
+	
+	public StateSystem(Room r) {
+		this.priority = 2;
+		this.room = r;
 	}
 
+	
 	@Override
-	public void processEntity(Entity entity, float deltaTime) {
-		sm.get(entity).time += deltaTime;
+	public void enterRoom(Room newRoom) {
+		this.room = newRoom;
+	}
+	
+	
+	@Override
+	public void update(float deltaTime) {
+		fillEntitiesOfCurrentRoom();
+		for (Entity entity : allEntitiesOfCurrentRoom) {
+			Mappers.stateComponent.get(entity).time += deltaTime;
+		}
+	}
+	
+	
+	private void fillEntitiesOfCurrentRoom() {
+		allEntitiesOfCurrentRoom.clear();
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.stateComponent.has(e)) allEntitiesOfCurrentRoom.add(e);
+		}
 	}
 }

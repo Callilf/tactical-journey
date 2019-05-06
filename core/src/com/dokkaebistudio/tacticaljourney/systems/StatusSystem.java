@@ -16,9 +16,11 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
@@ -27,18 +29,19 @@ import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
-public class StatusSystem extends IteratingSystem implements RoomSystem {	
+public class StatusSystem extends EntitySystem implements RoomSystem {	
 	
 	private Stage fxStage;
 	private Room room;
-	private Entity player;
+	
+    /** The entities with a status receiver component of the current room. */
+    private List<Entity> allEntitiesOfCurrentRoom = new ArrayList<>();
+
 		
 	public StatusSystem(Entity player, Room r, Stage stage) {
-		super(Family.one(StatusReceiverComponent.class).get());
 		this.priority = 12;
 
 		this.fxStage = stage;
-		this.player = player;
 		this.room = r;
 	}
 	
@@ -49,78 +52,90 @@ public class StatusSystem extends IteratingSystem implements RoomSystem {
     }
     
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
-		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
+	public void update(float deltaTime) {
+		fillEntitiesOfCurrentRoom();
 		
-		// Add or remove statuses
-		if (statusReceiverComponent.getCurrentAction() != null) {
-			Status currentStatus = statusReceiverComponent.getCurrentStatus();
+		for (Entity entity : allEntitiesOfCurrentRoom) {
+			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(entity);
+			
+			// Add or remove statuses
+			if (statusReceiverComponent.getCurrentAction() != null) {
+				Status currentStatus = statusReceiverComponent.getCurrentStatus();
+	
+				switch (statusReceiverComponent.getCurrentAction()) {
+				case RECEIVE_STATUS:
+					statusReceiverComponent.addStatus(entity, currentStatus, room,fxStage);				
+					break;
+				case REMOVE_STATUS:
+					statusReceiverComponent.removeStatus(entity, currentStatus, room);						
+					break;
+				
+				}
+				
+				statusReceiverComponent.clearCurrentAction();
+			}
+	
+			
+			// Handle status on the player
+			if (entity == GameScreen.player) {
+				if (room.getState() == RoomState.PLAYER_TURN_INIT) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onStartTurn(entity, room);
+					}
+				}
+				
+				if (room.getState() == RoomState.PLAYER_END_TURN) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onEndTurn(entity, room);
+						
+						statusReceiverComponent.updateDuration(status, -1);
+					}
+				}
+			}
+			
+			// Handle status on allies
+			if (Mappers.allyComponent.has(entity) && entity != GameScreen.player) {
+				if (room.getState() == RoomState.PLAYER_END_TURN) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onStartTurn(entity, room);
+					}
+				}
+				
+				if (room.getState() == RoomState.ALLY_END_TURN) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onEndTurn(entity, room);
+						
+						statusReceiverComponent.updateDuration(status, -1);
+					}
+				}
+			}
+			
+			// Handle status on enemies
+			if (Mappers.enemyComponent.has(entity)) {
+				if (room.getState() == RoomState.ALLY_END_TURN) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onStartTurn(entity, room);
+					}
+				}
+				
+				if (room.getState() == RoomState.ENEMY_END_TURN) {
+					for (Status status : statusReceiverComponent.getStatuses()) {
+						status.onEndTurn(entity, room);
+						
+						statusReceiverComponent.updateDuration(status, -1);
+					}
+				}
+			}
 
-			switch (statusReceiverComponent.getCurrentAction()) {
-			case RECEIVE_STATUS:
-				statusReceiverComponent.addStatus(entity, currentStatus, room,fxStage);				
-				break;
-			case REMOVE_STATUS:
-				statusReceiverComponent.removeStatus(entity, currentStatus, room);						
-				break;
-			
-			}
-			
-			statusReceiverComponent.clearCurrentAction();
 		}
-
-		
-		// Handle status on the player
-		if (entity == GameScreen.player) {
-			if (room.getState() == RoomState.PLAYER_TURN_INIT) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onStartTurn(entity, room);
-				}
-			}
-			
-			if (room.getState() == RoomState.PLAYER_END_TURN) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onEndTurn(entity, room);
-					
-					statusReceiverComponent.updateDuration(status, -1);
-				}
-			}
-		}
-		
-		// Handle status on allies
-		if (Mappers.allyComponent.has(entity) && entity != GameScreen.player) {
-			if (room.getState() == RoomState.PLAYER_END_TURN) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onStartTurn(entity, room);
-				}
-			}
-			
-			if (room.getState() == RoomState.ALLY_END_TURN) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onEndTurn(entity, room);
-					
-					statusReceiverComponent.updateDuration(status, -1);
-				}
-			}
-		}
-		
-		// Handle status on enemies
-		if (Mappers.enemyComponent.has(entity)) {
-			if (room.getState() == RoomState.ALLY_END_TURN) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onStartTurn(entity, room);
-				}
-			}
-			
-			if (room.getState() == RoomState.ENEMY_END_TURN) {
-				for (Status status : statusReceiverComponent.getStatuses()) {
-					status.onEndTurn(entity, room);
-					
-					statusReceiverComponent.updateDuration(status, -1);
-				}
-			}
-		}
-
 	}
 
+	
+	
+	private void fillEntitiesOfCurrentRoom() {
+		allEntitiesOfCurrentRoom.clear();
+		for (Entity e : room.getAllEntities()) {
+			if (Mappers.statusReceiverComponent.has(e)) allEntitiesOfCurrentRoom.add(e);
+		}
+	}
 }

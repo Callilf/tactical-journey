@@ -50,7 +50,7 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 	private ExplosionTileSearchService explosionTileSearchService = new ExplosionTileSearchService();
 	
     /** The explosives of the current room that need updating. */
-    private List<Entity> allExplosivesOfCurrentRoom;
+    private List<Entity> allExplosivesOfCurrentRoom = new ArrayList<>();
 
 	
 	public ExplosionSystem(Room r, Stage fxStage) {
@@ -58,8 +58,6 @@ public class ExplosionSystem extends EntitySystem implements RoomSystem {
 
 		this.room = r;
 		this.fxStage = fxStage;
-		
-		allExplosivesOfCurrentRoom = new ArrayList<>();
 	}
 	
 	

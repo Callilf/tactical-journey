@@ -4,8 +4,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.room.Floor;
-import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;

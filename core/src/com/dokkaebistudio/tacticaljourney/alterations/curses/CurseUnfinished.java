@@ -28,22 +28,12 @@ public class CurseUnfinished extends Curse {
 	
 	@Override
 	public String description() {
-		return "Paper items such as pages or scrolls cannot be manipulated and are destroyed on pickup.";
+		return "Paper items such as pages or scrolls cannot be used and are destroyed upon use.";
 	}
 	
 	@Override
 	public RegionDescriptor texture() {
 		return Assets.curse_unfinished;
-	}
-
-	
-	@Override
-	public int onPickupItem(Entity picker, Entity item, Room room) {
-		int result = checkItemType(picker, item, room);
-		if (result < 0) {
-			room.removeEntity(item);
-		}
-		return result;
 	}
 
 	

@@ -241,6 +241,10 @@ public class Room extends EntitySystem {
 		this.entitiesToRemove.add(e);
 	}
 	
+	public boolean isEntityToRemove(Entity e) {
+		return this.entitiesToRemove.contains(e);
+	}
+	
 	
 	/**
 	 * Remove an entity from the game.

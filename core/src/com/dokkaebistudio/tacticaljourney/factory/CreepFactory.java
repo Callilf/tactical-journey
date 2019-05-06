@@ -141,8 +141,9 @@ public final class CreepFactory {
 	}
 	
 	
-	public Entity createBush(Room room, Vector2 pos) {
-		Entity bushEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_BUSH, Assets.tallGrass);
+	public Entity createBush(Room room, Vector2 pos, boolean clover) {
+		
+		Entity bushEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_BUSH, clover ? Assets.tallGrassClover : Assets.tallGrass);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.BUSH_TITLE);
@@ -168,14 +169,15 @@ public final class CreepFactory {
 		flammable.setDestroyedTexture(Assets.tallGrass);
 		bushEntity.add(flammable);
 		
-		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().bush);
-		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 0.3f);
-//		dropRate.add(ItemPoolRarity.COMMON, 0);
-		lootRewardCompo.setDropRate(dropRate);
-		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
-		bushEntity.add(lootRewardCompo);
+		if (clover) {
+			LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+			lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().bush);
+			DropRate dropRate = new DropRate();
+			dropRate.add(ItemPoolRarity.RARE,  100f);
+			lootRewardCompo.setDropRate(dropRate);
+			lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+			bushEntity.add(lootRewardCompo);
+		}
     	
 		engine.addEntity(bushEntity);
 

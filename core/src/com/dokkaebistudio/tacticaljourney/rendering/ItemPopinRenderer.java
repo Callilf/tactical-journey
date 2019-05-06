@@ -79,7 +79,8 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     	}
     	
     	if (playerCompo.getRequestedActions().size() == 1 && playerCompo.getRequestedActions().get(0) == PlayerActionEnum.ITEM_POPIN) {
-    		if (!room.hasEnemies()) {
+			itemComponent = Mappers.itemComponent.get(playerCompo.getActionEntities().get(0));
+    		if (!room.hasEnemies() && itemComponent.getPrice() == null && playerInventoryCompo.canStore(itemComponent)) {
 				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, playerCompo.getActionEntities().get(0));
 				playerCompo.clearRequestedAction();
 				return;
@@ -87,7 +88,6 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     		
     		room.setNextState(RoomState.ITEM_POPIN);
     		
-			itemComponent = Mappers.itemComponent.get(playerCompo.getActionEntities().get(0));
 			isShop = itemComponent.getPrice() != null;
 
 			if (selectedItemPopin == null) {

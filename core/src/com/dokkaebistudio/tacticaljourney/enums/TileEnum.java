@@ -14,6 +14,7 @@ public enum TileEnum {
 	WALL(true, false),
 	PIT(false, true),
 	BUSH(false, false),
+	CLOVER_BUSH(false, false),
 	VINES_BUSH(false, false);
 	
 	

@@ -585,9 +585,14 @@ public abstract class RoomGenerator {
 	protected void placeBush(PoolableVector2 position, GeneratedRoom groom, List<PoolableVector2> emptyTiles, int chance, int step) {
 		RandomSingleton random = RandomSingleton.getInstance();
 		
-		int bushType = random.nextSeededInt(30);
+		float unit = (float) random.nextSeededInt(100);
+		float decimal = random.nextSeededFloat();
+		float bushType = unit + decimal;
+
 		TileEnum type = null;
-		if (bushType == 0) {
+		if (bushType < 0.3f) {
+			type = TileEnum.CLOVER_BUSH;
+		} else if (bushType < 3) {
 			type = TileEnum.VINES_BUSH;
 		} else {
 			type = TileEnum.BUSH;

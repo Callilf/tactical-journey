@@ -47,6 +47,7 @@ public class BasicShopItemPool extends ItemPool {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.DIVINE_CATALYST, 5, 40));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.LEATHER, 5, 20));
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MERCHANT_MASK, 10, 25, true));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 10, 20));
 	}
 	
 	

@@ -122,7 +122,10 @@ public final class EntityFactory {
 				result = this.creepFactory.createMud(room, pos);
 				break;
 			case BUSH:
-				result = this.creepFactory.createBush(room, pos);
+				result = this.creepFactory.createBush(room, pos, false);
+				break;
+			case CLOVER_BUSH:
+				result = this.creepFactory.createBush(room, pos, true);
 				break;
 			case VINES_BUSH:
 				result = this.creepFactory.createVinesBush(room, pos);

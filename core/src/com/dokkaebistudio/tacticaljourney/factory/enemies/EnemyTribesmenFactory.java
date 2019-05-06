@@ -154,8 +154,8 @@ public final class EnemyTribesmenFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesmanSpear);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 40);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 40f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -252,8 +252,8 @@ public final class EnemyTribesmenFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesManShield);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 40);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 40f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -352,8 +352,8 @@ public final class EnemyTribesmenFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesmanScout);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 40);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 40f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -454,8 +454,8 @@ public final class EnemyTribesmenFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().tribesmanScout);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 40);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 40f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);

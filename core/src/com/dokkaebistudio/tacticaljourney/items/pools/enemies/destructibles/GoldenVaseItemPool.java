@@ -26,7 +26,8 @@ public class GoldenVaseItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_BIG, 1));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MONEY_BIG, 5));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 1));
 	}
 	
 	

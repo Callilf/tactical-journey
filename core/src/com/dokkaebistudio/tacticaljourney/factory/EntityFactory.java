@@ -198,8 +198,8 @@ public final class EntityFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().wall);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 2);
-		dropRate.add(ItemPoolRarity.COMMON, 90);
+		dropRate.add(ItemPoolRarity.RARE, 2f);
+		dropRate.add(ItemPoolRarity.COMMON, 90f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		wallEntity.add(lootRewardCompo);

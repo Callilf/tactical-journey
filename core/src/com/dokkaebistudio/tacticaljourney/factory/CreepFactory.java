@@ -167,6 +167,15 @@ public final class CreepFactory {
 		flammable.setDestroy(true);
 		flammable.setDestroyedTexture(Assets.tallGrass);
 		bushEntity.add(flammable);
+		
+		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().bush);
+		DropRate dropRate = new DropRate();
+		dropRate.add(ItemPoolRarity.RARE, 0.3f);
+//		dropRate.add(ItemPoolRarity.COMMON, 0);
+		lootRewardCompo.setDropRate(dropRate);
+		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
+		bushEntity.add(lootRewardCompo);
     	
 		engine.addEntity(bushEntity);
 
@@ -203,7 +212,7 @@ public final class CreepFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().vineBush);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 1);
+		dropRate.add(ItemPoolRarity.RARE, 1f);
 //		dropRate.add(ItemPoolRarity.COMMON, 0);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());

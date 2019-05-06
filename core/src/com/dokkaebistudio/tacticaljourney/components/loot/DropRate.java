@@ -12,9 +12,9 @@ public class DropRate implements Poolable {
 		RARE;
 	}
 	
-	private Map<ItemPoolRarity, Integer> ratePerRarity = new LinkedHashMap<>();
+	private Map<ItemPoolRarity, Float> ratePerRarity = new LinkedHashMap<>();
 	
-	public void add(ItemPoolRarity rarity, Integer rate) {
+	public void add(ItemPoolRarity rarity, Float rate) {
 		ratePerRarity.put(rarity, rate);
 	}
 	
@@ -25,12 +25,12 @@ public class DropRate implements Poolable {
 	}
 
 
-	public Map<ItemPoolRarity, Integer> getRatePerRarity() {
+	public Map<ItemPoolRarity, Float> getRatePerRarity() {
 		return ratePerRarity;
 	}
 
 
-	public void setRatePerRarity(Map<ItemPoolRarity, Integer> ratePerRarity) {
+	public void setRatePerRarity(Map<ItemPoolRarity, Float> ratePerRarity) {
 		this.ratePerRarity = ratePerRarity;
 	}
 	

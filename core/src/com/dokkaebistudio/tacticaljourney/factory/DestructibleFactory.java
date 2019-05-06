@@ -100,8 +100,8 @@ public final class DestructibleFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().vase);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 50f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		vaseEntity.add(lootRewardCompo);
@@ -128,8 +128,8 @@ public final class DestructibleFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().goldenVase);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 90);
+		dropRate.add(ItemPoolRarity.RARE, 10f);
+		dropRate.add(ItemPoolRarity.COMMON, 90f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		vaseEntity.add(lootRewardCompo);
@@ -154,8 +154,8 @@ public final class DestructibleFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().ammoCrate);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 95);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 95f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		crateEntity.add(lootRewardCompo);

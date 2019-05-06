@@ -13,6 +13,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.WebSpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.AmmoCrateItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.BushItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.GoldenVaseItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.StatueItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.destructibles.VaseItemPool;
@@ -61,6 +62,7 @@ public class ItemPoolSingleton {
 	public GoldenVaseItemPool goldenVase = new GoldenVaseItemPool();
 	public WallItemPool wall = new WallItemPool();
 	public StatueItemPool statue = new StatueItemPool();
+	public BushItemPool bush = new BushItemPool();
 	public VineBushItemPool vineBush = new VineBushItemPool();
 	
 	// ENEMIES
@@ -96,6 +98,7 @@ public class ItemPoolSingleton {
 		allItemPools.add(goldenVase);
 		allItemPools.add(wall);
 		allItemPools.add(statue);
+		allItemPools.add(bush);
 		allItemPools.add(vineBush);
 		
 		// Enemies

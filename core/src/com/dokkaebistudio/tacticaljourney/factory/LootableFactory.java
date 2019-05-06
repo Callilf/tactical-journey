@@ -73,8 +73,8 @@ public final class LootableFactory {
     	lootComponent.setType(LootableEnum.BONES);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().oldBones);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 50f);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(2);
@@ -117,8 +117,8 @@ public final class LootableFactory {
     	lootComponent.setType(LootableEnum.SATCHEL);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().satchel);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 70);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 70f);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(3);
@@ -162,7 +162,7 @@ public final class LootableFactory {
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
 		DropRate dropRate = new DropRate();
 //		dropRate.add(ItemPoolRarity.RARE, 0);
-		dropRate.add(ItemPoolRarity.COMMON, 100);
+		dropRate.add(ItemPoolRarity.COMMON, 100f);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(1);
@@ -211,8 +211,8 @@ public final class LootableFactory {
     	lootComponent.setType(LootableEnum.ORB_BAG);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().orbBag);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 2);
-		dropRate.add(ItemPoolRarity.COMMON, 70);
+		dropRate.add(ItemPoolRarity.RARE, 2f);
+		dropRate.add(ItemPoolRarity.COMMON, 70f);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(3);
@@ -256,8 +256,8 @@ public final class LootableFactory {
     	lootComponent.setType(LootableEnum.SPELL_BOOK);
     	lootComponent.setItemPool(ItemPoolSingleton.getInstance().spellBook);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 20);
-		dropRate.add(ItemPoolRarity.COMMON, 70);
+		dropRate.add(ItemPoolRarity.RARE, 20f);
+		dropRate.add(ItemPoolRarity.COMMON, 70f);
 		lootComponent.setDropRate(dropRate);
 		lootComponent.setSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
     	lootComponent.setMaxNumberOfItems(2);

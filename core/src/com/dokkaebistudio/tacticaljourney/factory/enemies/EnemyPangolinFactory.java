@@ -146,8 +146,8 @@ public final class EnemyPangolinFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().pangolin);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
+		dropRate.add(ItemPoolRarity.RARE, 10f);
+		dropRate.add(ItemPoolRarity.COMMON, 30f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -244,8 +244,8 @@ public final class EnemyPangolinFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().pangolinMatriarch);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 0);
-		dropRate.add(ItemPoolRarity.COMMON, 100 );
+		dropRate.add(ItemPoolRarity.RARE, 0f);
+		dropRate.add(ItemPoolRarity.COMMON, 100f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);

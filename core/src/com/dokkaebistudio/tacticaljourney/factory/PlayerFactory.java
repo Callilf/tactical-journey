@@ -395,8 +395,8 @@ public final class PlayerFactory {
 		shopKeeperCompo.setNumberOfItems(5);
 		shopKeeperCompo.setItemPool(ItemPoolSingleton.getInstance().basicShopItemPool);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 90);
+		dropRate.add(ItemPoolRarity.RARE, 10f);
+		dropRate.add(ItemPoolRarity.COMMON, 90f);
 		shopKeeperCompo.setDropRate(dropRate);
 		shopKeeperCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		shopKeeperCompo.addSpeech("Hey!\nI'm the shop keeper.");
@@ -460,8 +460,8 @@ public final class PlayerFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().statue);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 98);
-		dropRate.add(ItemPoolRarity.COMMON, 2);
+		dropRate.add(ItemPoolRarity.RARE, 98f);
+		dropRate.add(ItemPoolRarity.COMMON, 2f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		goddessStatueEntity.add(lootRewardCompo);

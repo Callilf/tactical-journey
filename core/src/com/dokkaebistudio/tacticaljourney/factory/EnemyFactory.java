@@ -210,8 +210,8 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().scorpion);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 20);
-		dropRate.add(ItemPoolRarity.COMMON, 50);
+		dropRate.add(ItemPoolRarity.RARE, 20f);
+		dropRate.add(ItemPoolRarity.COMMON, 50f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -316,8 +316,8 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().stinger);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 20);
-		dropRate.add(ItemPoolRarity.COMMON, 30 );
+		dropRate.add(ItemPoolRarity.RARE, 20f);
+		dropRate.add(ItemPoolRarity.COMMON, 30f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -452,7 +452,7 @@ public final class EnemyFactory {
 			LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 			lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().shinobi);
 			DropRate dropRate = new DropRate();
-			dropRate.add(ItemPoolRarity.COMMON, 100);
+			dropRate.add(ItemPoolRarity.COMMON, 100f);
 			lootRewardCompo.setDropRate(dropRate);
 			lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 			enemyEntity.add(lootRewardCompo);
@@ -576,7 +576,7 @@ public final class EnemyFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.COMMON, 100);
+		dropRate.add(ItemPoolRarity.COMMON, 100f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);

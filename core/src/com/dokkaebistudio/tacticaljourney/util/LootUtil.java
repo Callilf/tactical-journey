@@ -180,10 +180,10 @@ public class LootUtil {
 	public static ItemPoolRarity getRarity(float randomValue, DropRate dropRate) {
 		if (dropRate == null) return null;
 		
-		int chance = 0;
+		float chance = 0;
 		ItemPoolRarity rarity = null;
-		for (Entry<ItemPoolRarity, Integer> entry : dropRate.getRatePerRarity().entrySet()) {
-			if (randomValue >= chance && randomValue < chance + entry.getValue().intValue()) {
+		for (Entry<ItemPoolRarity, Float> entry : dropRate.getRatePerRarity().entrySet()) {
+			if (randomValue >= chance && randomValue < chance + entry.getValue().floatValue()) {
 				rarity = entry.getKey();
 				break;
 			}

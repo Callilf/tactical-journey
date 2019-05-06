@@ -136,8 +136,8 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().spider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 5);
-		dropRate.add(ItemPoolRarity.COMMON, 20);
+		dropRate.add(ItemPoolRarity.RARE, 5f);
+		dropRate.add(ItemPoolRarity.COMMON, 20f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -225,8 +225,8 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().webSpider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 60);
+		dropRate.add(ItemPoolRarity.RARE, 10f);
+		dropRate.add(ItemPoolRarity.COMMON, 60f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);
@@ -316,8 +316,8 @@ public final class EnemySpiderFactory {
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().venomSpider);
 		DropRate dropRate = new DropRate();
-		dropRate.add(ItemPoolRarity.RARE, 10);
-		dropRate.add(ItemPoolRarity.COMMON, 30);
+		dropRate.add(ItemPoolRarity.RARE, 10f);
+		dropRate.add(ItemPoolRarity.COMMON, 30f);
 		lootRewardCompo.setDropRate(dropRate);
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		enemyEntity.add(lootRewardCompo);

@@ -7,10 +7,10 @@ import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 
-public class VineBushItemPool extends ItemPool {
+public class BushItemPool extends ItemPool {
 	
-	public VineBushItemPool() {
-		this.id = "VineBush";
+	public BushItemPool() {
+		this.id = "bush";
 	}
 	
 	/**
@@ -25,8 +25,7 @@ public class VineBushItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> rareItemPool = new ArrayList<>();
 		
 	static {
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 5));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.VEGETAL_GARMENT, 1, true));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 1));
 	}
 	
 	

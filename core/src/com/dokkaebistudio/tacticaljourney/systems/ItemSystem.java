@@ -21,22 +21,18 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -120,7 +116,7 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 				
 			}
 			
-		} else if (playerInventoryCompo.getCurrentAction() != null && playerInventoryCompo.getCurrentAction() != InventoryActionEnum.DISPLAY_POPIN) {
+		} else if (playerInventoryCompo.getCurrentAction() != null) {
 			
 			final Entity currentItem = playerInventoryCompo.getCurrentItem();
 			final ItemComponent itemComponent = Mappers.itemComponent.get(currentItem);
@@ -242,30 +238,27 @@ public class ItemSystem extends EntitySystem implements RoomSystem {
 	 */
 	private void checkItemPresenceToDisplayPopin() {
 		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent.isActionDoneAtThisFrame()) return;
 		
 		// Item popin
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		List<Entity> itemEntityOnTile = TileUtil.getItemEntityOnTile(gridPositionComponent.coord(), room);
 		if (!itemEntityOnTile.isEmpty()) {
 			for (Entity item : itemEntityOnTile) {
-				playerComponent.setActionDoneAtThisFrame(true);
 				ItemComponent itemComponent = Mappers.itemComponent.get(item);
 
 				if (room.hasEnemies()) {
 					// Open the popin for the first item that is not a "instant pickup" item
 					if (!itemComponent.getItemType().isInstantPickUp()) {
-						playerInventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
+						playerComponent.requestAction(PlayerActionEnum.ITEM_POPIN, item);
 					}
 				} else {
 					// Auto pickup in cleared rooms
-					if (itemComponent.getPrice() == null && playerInventoryCompo.canStore(itemComponent)) {
-						playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, item);
-					} else {
-						playerInventoryCompo.requestAction(InventoryActionEnum.DISPLAY_POPIN, item);
-					}
+//					if (itemComponent.getPrice() == null && playerInventoryCompo.canStore(itemComponent) && itemEntityOnTile.size() == 1) {
+//						playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, item);
+//					} else {
+						playerComponent.requestAction(PlayerActionEnum.ITEM_POPIN, item);
+//					}
 				}
-				break;
 			}
 		}
 	}

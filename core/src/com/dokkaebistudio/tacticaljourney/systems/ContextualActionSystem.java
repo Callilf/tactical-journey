@@ -121,14 +121,10 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * Check whether there is a lootable entity on the current tile, if so
 	 * display the "Would you like to loot?" popin.
 	 */
-	private void checkForLootablesToDisplayPopin() {
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent.isActionDoneAtThisFrame()) return;
-		
+	private void checkForLootablesToDisplayPopin() {		
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Optional<Entity> lootable = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), LootableComponent.class, room);
 		if (lootable.isPresent()) {
-			playerComponent.setActionDoneAtThisFrame(true);
 
 			if (room.hasEnemies()) {
 				playerCompo.requestAction(PlayerActionEnum.LOOT, lootable.get());
@@ -146,13 +142,9 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * display the "Would you like to leave?" popin.
 	 */
 	private void checkForExitToDisplayPopin() {
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent.isActionDoneAtThisFrame()) return;
-
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Optional<Entity> exit = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), ExitComponent.class, room);
 		if (exit.isPresent()) {
-			playerComponent.setActionDoneAtThisFrame(true);
 			playerCompo.requestAction(PlayerActionEnum.EXIT, exit.get());
 		}
 	}
@@ -161,13 +153,9 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * Check whether there is a wormhole to display the "Would you like to use it" popin.
 	 */
 	private void checkForWormholeToDisplayPopin() {
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent.isActionDoneAtThisFrame()) return;
-
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Optional<Entity> wormhole = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), WormholeComponent.class, room);
 		if (wormhole.isPresent()) {
-			playerComponent.setActionDoneAtThisFrame(true);
 			playerCompo.requestAction(PlayerActionEnum.WORMHOLE, wormhole.get());
 		}
 	}
@@ -177,14 +165,10 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 	 * display the teleport popin.
 	 */
 	private void checkForSecretDoorToDisplayPopin() {
-		PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-		if (playerComponent.isActionDoneAtThisFrame()) return;
-
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(player);
 		Optional<Entity> secretDoor = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), SecretDoorComponent.class, room);
 		if (secretDoor.isPresent() && Mappers.secretDoorComponent.get(secretDoor.get()).isOpened()) {
-			playerComponent.setActionDoneAtThisFrame(true);
-			playerCompo.setTeleportPopinRequested(true);
+			playerCompo.requestAction(PlayerActionEnum.TELEPORT_POPIN, secretDoor.get());
 		}
 	}
 

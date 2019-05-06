@@ -39,7 +39,6 @@ public class PlayerComponent implements Component {
 	/** Whether the profile popin is opened or not. */
 	private boolean profilePopinDisplayed;
 	
-	private boolean actionDoneAtThisFrame = false;
 	
 
 	public void increaseKarma(int amount) {
@@ -50,7 +49,8 @@ public class PlayerComponent implements Component {
 	// Action
 	
 	public enum PlayerActionEnum {
-		NONE,
+		ITEM_POPIN,
+		TELEPORT_POPIN,
 		LOOT,
 		EXIT,
 		WORMHOLE,
@@ -63,16 +63,17 @@ public class PlayerComponent implements Component {
 	}
 	
 	/** Whether the popin to ask for loot should open or not. */
-	private PlayerActionEnum requestedAction = PlayerActionEnum.NONE;
-	private Entity actionEntity;
+	private List<PlayerActionEnum> requestedActions = new ArrayList<>();
+	private List<Entity> actionEntities = new ArrayList<>();
 
 	public void requestAction(PlayerActionEnum action, Entity actionEntity) {
-		this.requestedAction = action;
-		this.actionEntity = actionEntity;
+		this.requestedActions.add(action);
+		this.actionEntities.add(actionEntity);
 	}
 
 	public void clearRequestedAction() {
-		this.requestedAction = PlayerActionEnum.NONE;
+		this.requestedActions.clear();
+		this.actionEntities.clear();
 	}
 
 	
@@ -95,12 +96,6 @@ public class PlayerComponent implements Component {
 	public void clearInspectedEntities() {
 		inspectedEntities.clear();
 	}
-	
-	
-	//*************************
-	// Teleport
-	
-	private boolean teleportPopinRequested = false;
 
 	
 	
@@ -158,25 +153,14 @@ public class PlayerComponent implements Component {
 		this.skillThrow = skillThrow;
 	}
 
-	public PlayerActionEnum getRequestedAction() {
-		return requestedAction;
+	public List<PlayerActionEnum> getRequestedActions() {
+		return requestedActions;
+	}
+	
+	public List<Entity> getActionEntities() {
+		return actionEntities;
 	}
 
-	public Entity getActionEntity() {
-		return actionEntity;
-	}
-
-	public void setActionEntity(Entity actionEntity) {
-		this.actionEntity = actionEntity;
-	}
-
-	public boolean isActionDoneAtThisFrame() {
-		return actionDoneAtThisFrame;
-	}
-
-	public void setActionDoneAtThisFrame(boolean actionDoneAtThisFrame) {
-		this.actionDoneAtThisFrame = actionDoneAtThisFrame;
-	}
 
 	public boolean isInspectPopinRequested() {
 		return inspectPopinRequested;
@@ -185,14 +169,7 @@ public class PlayerComponent implements Component {
 	public void setInspectPopinRequested(boolean inspectPopinRequested) {
 		this.inspectPopinRequested = inspectPopinRequested;
 	}
-	
-	public boolean isTeleportPopinRequested() {
-		return teleportPopinRequested;
-	}
-	
-	public void setTeleportPopinRequested(boolean teleportPopinRequested) {
-		this.teleportPopinRequested = teleportPopinRequested;
-	}
+
 	
 	public int getKarma() {
 		return karma;

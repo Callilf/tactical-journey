@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent.LootableStateEnum;
@@ -55,6 +56,9 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     //**************************
     // Actors
     
+    private Table choicePopin;
+    private Table choicePopinSubTable;
+    
     private Table mainPopin;
     private Label title;
     private Label desc;
@@ -79,11 +83,19 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     	}
     	
-    	if (playerCompo.getRequestedAction() != PlayerActionEnum.NONE) {
+    	if (playerCompo.getRequestedActions().size() == 1) {
+    		if (playerCompo.getRequestedActions().get(0) == PlayerActionEnum.ITEM_POPIN
+    			|| playerCompo.getRequestedActions().get(0) == PlayerActionEnum.TELEPORT_POPIN) {
+    			return;
+    		}
+    	}
+    	
+    	if (!playerCompo.getRequestedActions().isEmpty()) {
     		room.setNextState(RoomState.CONTEXTUAL_ACTION_POPIN);
 
 			if (mainPopin == null) {
 				initTable();
+				initChoiceTable();
 				
     			// Close popin with ESCAPE
 	    		stage.addListener(new InputListener() {
@@ -105,7 +117,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			mainPopin.setPosition(GameScreen.SCREEN_W/2 - mainPopin.getWidth()/2, GameScreen.SCREEN_H/2 - mainPopin.getHeight()/2);
 		
 			this.stage.addActor(mainPopin);
-			
+			this.stage.addActor(choicePopin);
+	
 			playerCompo.clearRequestedAction();
     	}
     	
@@ -120,12 +133,83 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
     		}
     	}
 	}
+    
+    /**
+     * Init choice popin.
+     */
+	private void initChoiceTable() {		
+		choicePopin = new Table();
+		choicePopin.setTouchable(Touchable.enabled);
+		choicePopin.addListener(new ClickListener() {});
+		
+		// Place the popin and add the background texture
+		choicePopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);		
+		NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
+		choicePopin.setBackground(ninePatchDrawable);
+		
+		choicePopin.align(Align.top);
+
+		Label title = new Label("What do you want to interact with?", PopinService.hudStyle());
+		choicePopin.add(title).top().align(Align.top).pad(20, 10, 20, 10);
+		choicePopin.row().align(Align.center);
+		
+		choicePopinSubTable = new Table();
+		choicePopin.add(choicePopinSubTable).pad(20, 10, 20, 10);
+		choicePopin.row().align(Align.center);
+		
+		// Close button
+		final TextButton closeBtn = new TextButton("Close",PopinService.buttonStyle());			
+		// Close listener
+		closeBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				closePopin();
+			}
+		});
+		choicePopin.add(closeBtn).pad(0, 20,0,20);
+
+	}
 
 	private void updateContentForAction() {
-		Entity actionEntity = playerCompo.getActionEntity();
+
+		mainPopin.setVisible(false);
+		choicePopin.setVisible(false);
+
+		if (playerCompo.getRequestedActions().size() > 1) {
+			// More than ONE entity: display the choice popin
+			choicePopin.setVisible(true);
+			choicePopinSubTable.clear();
+			
+			for (int i=0 ; i< playerCompo.getActionEntities().size() ; i++) {
+				PlayerActionEnum action = playerCompo.getRequestedActions().get(i);
+				final Entity e = playerCompo.getActionEntities().get(i);
+				InspectableComponent inspectableComponent = Mappers.inspectableComponent.get(e);
+				
+				final TextButton btn = new TextButton(inspectableComponent.getTitle(),PopinService.buttonStyle());			
+				// Close listener
+				btn.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						playerCompo.clearRequestedAction();
+						playerCompo.requestAction(action, e);
+						choicePopin.setVisible(false);
+					}
+				});
+				choicePopinSubTable.add(btn).pad(0, 20,5,20);
+				choicePopinSubTable.row();
+			}
+			choicePopinSubTable.pack();
+			choicePopin.pack();
+			choicePopin.setPosition(GameScreen.SCREEN_W/2 - choicePopin.getWidth()/2, GameScreen.SCREEN_H/2 - choicePopin.getHeight()/2);
+			return;
+		}
+		
+		PlayerActionEnum requestedAction = playerCompo.getRequestedActions().get(0);
+		Entity actionEntity = playerCompo.getActionEntities().get(0);
+		mainPopin.setVisible(true);
 		yesBtn.setDisabled(false);
 
-		switch (playerCompo.getRequestedAction()) {
+		switch (requestedAction) {
 			
 		case LOOT:
 			LootableComponent lootableComponent = Mappers.lootableComponent.get(actionEntity);
@@ -491,7 +575,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 	 */
 	private void closePopin() {
 		mainPopin.remove();
-		
+		choicePopin.remove();
+
 		if (room.getNextState() == null) {
 			room.setNextState(room.getLastInGameState());
 		}

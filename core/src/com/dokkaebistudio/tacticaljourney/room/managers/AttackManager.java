@@ -4,6 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
 import java.util.Optional;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -74,12 +75,12 @@ public class AttackManager {
 		
 		Entity target = attackCompo.getTarget();
 		if (target == null) {
-			//Attacked an empty tiled... XD
+			//Attacked a tile with no enemy on it
 			Tile targetedTile = attackCompo.getTargetedTile();
-			Optional<Entity> destructible = TileUtil.getEntityWithComponentOnTile(targetedTile.getGridPos(), DestructibleComponent.class, room);
-			if (destructible.isPresent() && Mappers.destructibleComponent.get(destructible.get()).isDestroyableWithWeapon()) {
-				LootUtil.destroy(destructible.get(), room);
-			}
+			Set<Entity> destructibles = TileUtil.getEntitiesWithComponentOnTile(targetedTile.getGridPos(), DestructibleComponent.class, room);
+			destructibles.stream()
+				.filter( d -> Mappers.destructibleComponent.get(d).isDestroyableWithWeapon())
+				.forEach(d -> LootUtil.destroy(d, room));
 			
 			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(attacker);
 			if (alterationReceiverComponent != null) {

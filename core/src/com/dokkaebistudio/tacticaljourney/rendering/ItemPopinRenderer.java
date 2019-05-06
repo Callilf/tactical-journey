@@ -20,6 +20,8 @@ import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -33,6 +35,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	public Stage stage;
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
+	private PlayerComponent playerCompo;
 	private InventoryComponent playerInventoryCompo;
 	private ItemComponent itemComponent;
 
@@ -71,13 +74,20 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
     public void render(float deltaTime) {
     	
     	if (playerInventoryCompo == null) {
+    		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     		playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     	}
     	
-    	if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.DISPLAY_POPIN) {
+    	if (playerCompo.getRequestedActions().size() == 1 && playerCompo.getRequestedActions().get(0) == PlayerActionEnum.ITEM_POPIN) {
+    		if (!room.hasEnemies()) {
+				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, playerCompo.getActionEntities().get(0));
+				playerCompo.clearRequestedAction();
+				return;
+    		}
+    		
     		room.setNextState(RoomState.ITEM_POPIN);
     		
-			itemComponent = Mappers.itemComponent.get(playerInventoryCompo.getCurrentItem());
+			itemComponent = Mappers.itemComponent.get(playerCompo.getActionEntities().get(0));
 			isShop = itemComponent.getPrice() != null;
 
 			if (selectedItemPopin == null) {
@@ -100,7 +110,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 		
 			this.stage.addActor(selectedItemPopin);
 			
-			playerInventoryCompo.clearCurrentAction();
+			playerCompo.clearRequestedAction();
     	}
     	
     	
@@ -117,7 +127,7 @@ public class ItemPopinRenderer implements Renderer, RoomSystem {
 	}
 
 	private void refreshTable() {
-		Entity item = playerInventoryCompo.getCurrentItem();
+		Entity item = playerCompo.getActionEntities().get(0);
 		
 		// Update the content
 		itemTitle.setText(itemComponent.getItemLabel());

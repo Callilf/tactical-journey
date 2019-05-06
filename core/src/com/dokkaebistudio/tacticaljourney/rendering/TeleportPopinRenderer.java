@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.rendering;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -20,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -48,9 +48,6 @@ public class TeleportPopinRenderer implements Renderer, RoomSystem {
     private Table choicePopin;
     private Table choicePopinSubTable;
     private Label desc;
-
-    
-    private boolean needRefresh;
     
     public TeleportPopinRenderer(Room r, Stage s) {
         this.room = r;
@@ -70,9 +67,10 @@ public class TeleportPopinRenderer implements Renderer, RoomSystem {
     		playerCompo = Mappers.playerComponent.get(GameScreen.player);
     	}
     	
-    	if (playerCompo.isTeleportPopinRequested() || needRefresh) {
+    	
+    	
+    	if (playerCompo.getRequestedActions().size() == 1 && playerCompo.getRequestedActions().get(0) == PlayerActionEnum.TELEPORT_POPIN) {
     		room.setNextState(RoomState.TELEPORT_POPIN);
-    		playerCompo.setTeleportPopinRequested(false);
 
 			if (choicePopin == null) {
 				initChoiceTable();
@@ -110,8 +108,6 @@ public class TeleportPopinRenderer implements Renderer, RoomSystem {
 	}
 
 	private void updateContent() {
-		needRefresh = false;
-
 		choicePopinSubTable.clear();
 		accessibleRooms.clear();
 		

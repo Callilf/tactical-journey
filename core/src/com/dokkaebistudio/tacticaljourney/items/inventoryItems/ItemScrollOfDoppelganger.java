@@ -31,6 +31,7 @@ public class ItemScrollOfDoppelganger extends AbstractItem {
 	public ItemScrollOfDoppelganger() {
 		super(ItemEnum.SCROLL_DOPPELGANGER, Assets.scroll_doppelganger_item, false, true);
 		this.setPaper(true);
+		setRecyclePrice(3);
 	}
 	
 	@Override

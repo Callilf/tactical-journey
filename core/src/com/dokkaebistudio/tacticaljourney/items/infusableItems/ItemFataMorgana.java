@@ -19,7 +19,8 @@ public class ItemFataMorgana extends AbstractInfusableItem {
 	
 	public ItemFataMorgana() {
 		super(ItemEnum.FATA_MORGANA, Assets.fata_morgana, false, true);
-		
+		setRecyclePrice(30);
+
 		BlessingOfVilma blessing = new BlessingOfVilma();
 		blessings.add(blessing);
 	}

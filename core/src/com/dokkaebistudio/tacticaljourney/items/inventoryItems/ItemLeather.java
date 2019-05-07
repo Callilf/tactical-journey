@@ -19,6 +19,7 @@ public class ItemLeather extends AbstractItem {
 
 	public ItemLeather() {
 		super(ItemEnum.LEATHER, Assets.leather_item, false, true);
+		setRecyclePrice(15);
 	}
 	
 	@Override

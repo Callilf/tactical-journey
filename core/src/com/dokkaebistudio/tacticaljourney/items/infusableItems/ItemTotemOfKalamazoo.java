@@ -19,7 +19,8 @@ public class ItemTotemOfKalamazoo extends AbstractInfusableItem {
 	
 	public ItemTotemOfKalamazoo() {
 		super(ItemEnum.TOTEM_OF_KALAMAZOO, Assets.totem_of_kalamazoo, false, true);
-		
+		setRecyclePrice(30);
+
 		BlessingOfKalamazoo blessing = new BlessingOfKalamazoo();
 		blessings.add(blessing);
 	}

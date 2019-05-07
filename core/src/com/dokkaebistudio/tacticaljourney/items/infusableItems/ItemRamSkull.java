@@ -19,7 +19,8 @@ public class ItemRamSkull extends AbstractInfusableItem {
 	
 	public ItemRamSkull() {
 		super(ItemEnum.RAM_SKULL, Assets.ram_skull, false, true);
-		
+		setRecyclePrice(25);
+
 		BlessingPoisoner blessing = new BlessingPoisoner();
 		blessings.add(blessing);
 	}

@@ -31,6 +31,7 @@ public class ItemWebSack extends AbstractItem {
 
 	public ItemWebSack() {
 		super(ItemEnum.WEB_SACK, Assets.web_sack_item, false, true);
+		setRecyclePrice(1);
 	}
 	
 	@Override

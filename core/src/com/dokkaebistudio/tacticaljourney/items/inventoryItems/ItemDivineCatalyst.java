@@ -29,6 +29,7 @@ public class ItemDivineCatalyst extends AbstractItem {
 
 	public ItemDivineCatalyst() {
 		super(ItemEnum.DIVINE_CATALYST, Assets.divine_catalyst_item, false, true);
+		setRecyclePrice(30);
 	}
 	
 	@Override

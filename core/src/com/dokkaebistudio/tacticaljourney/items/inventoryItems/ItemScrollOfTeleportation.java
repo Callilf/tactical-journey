@@ -4,7 +4,6 @@
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -39,6 +38,7 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 	public ItemScrollOfTeleportation() {
 		super(ItemEnum.SCROLL_TELEPORTATION, Assets.scroll_teleportation_item, false, true);
 		this.setPaper(true);
+		setRecyclePrice(3);
 	}
 	
 	@Override

@@ -23,7 +23,8 @@ public class ItemMithridatium extends AbstractInfusableItem {
 	
 	public ItemMithridatium() {
 		super(ItemEnum.MITHRIDATIUM, Assets.mithridatium, false, true);
-		
+		setRecyclePrice(15);
+
 		BlessingMithridatism blessing = new BlessingMithridatism();
 		blessings.add(blessing);
 	}

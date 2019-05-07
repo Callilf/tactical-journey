@@ -27,11 +27,13 @@ public class ItemArrow extends AbstractItem {
 	public ItemArrow() {
 		super("# arrow[s]", Assets.arrow_item, false, false, 1, 3);
 		this.type = ItemEnum.AMMO_ARROW;
+		setRecyclePrice(1);
 	}
 	
 	public ItemArrow(RandomXS128 randomToUse) {
 		super("# arrow[s]", Assets.arrow_item, false, false, 1, 3, randomToUse);
 		this.type = ItemEnum.AMMO_ARROW;
+		setRecyclePrice(1);
 	}
 	
 	@Override

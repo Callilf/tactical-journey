@@ -21,16 +21,19 @@ import java.util.Optional;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.RecyclingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorComponent;
+import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -109,6 +112,13 @@ public class ContextualActionSystem extends EntitySystem implements RoomSystem {
 					if (sewingMachine.isPresent()) {
 						playerCompo.requestAction(PlayerActionEnum.SEW, sewingMachine.get());
 					}
+					Optional<Entity> recyclingMachine = TileUtil.getEntityWithComponentOnTile(gridPos, RecyclingMachineComponent.class, room);
+					if (recyclingMachine.isPresent()) {
+						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
+						inventoryComponent.setRecycler(recyclingMachine.get());
+						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.RECYCLING);
+					}
+
 				}
 				
 			}

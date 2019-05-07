@@ -19,7 +19,8 @@ public class ItemSilkyBeard extends AbstractInfusableItem {
 	
 	public ItemSilkyBeard() {
 		super(ItemEnum.SILKY_BEARD, Assets.silky_beard, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingIndegistible blessing = new BlessingIndegistible();
 		blessings.add(blessing);
 	}

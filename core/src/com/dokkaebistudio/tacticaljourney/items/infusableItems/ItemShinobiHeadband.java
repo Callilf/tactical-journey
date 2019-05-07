@@ -20,7 +20,8 @@ public class ItemShinobiHeadband extends AbstractInfusableItem {
 	
 	public ItemShinobiHeadband() {
 		super(ItemEnum.SHINOBI_HEADBAND, Assets.shinobi_headband, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingBunshin blessing2 = new BlessingBunshin();
 		blessings.add(blessing2);
 		CurseShinobi curse = new CurseShinobi();

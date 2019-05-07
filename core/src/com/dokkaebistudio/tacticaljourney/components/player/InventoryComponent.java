@@ -51,6 +51,7 @@ public class InventoryComponent implements Component, Poolable {
 
 	/** The soulbender in case of an infusion. */
 	private Entity soulbender;
+	private Entity recycler;
 
 	
 	private int firstEmptySlot = 0;
@@ -440,7 +441,14 @@ public class InventoryComponent implements Component, Poolable {
 	public void setSoulbender(Entity soulbender) {
 		this.soulbender = soulbender;
 	}
-	
+
+	public Entity getRecycler() {
+		return recycler;
+	}
+
+	public void setRecycler(Entity recycler) {
+		this.recycler = recycler;
+	}
 	
 	
 	
@@ -473,4 +481,5 @@ public class InventoryComponent implements Component, Poolable {
 		
 		};
 	}
+
 }

@@ -33,6 +33,8 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
+import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrb;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -160,7 +162,10 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		    		
 		    		arrowQuantity = new Label("0", PopinService.hudStyle());
 		    		bombQuantity = new Label("0", PopinService.hudStyle());
-		    		Table arrowsAndBombsTable = InventoryPopinRenderer.createArrowsAndBombTable(arrowQuantity, bombQuantity);
+		    		Image quiverImage = new Image(Assets.loadAndGetTexture(new ItemArrow().getTexture().getNameFull()).getRegion());
+		    		Image bombBagImage = new Image(Assets.loadAndGetTexture(new ItemBomb().getTexture().getNameFull()).getRegion());
+		    		Table arrowsAndBombsTable = InventoryPopinRenderer.createArrowsAndBombTable(quiverImage, bombBagImage, 
+		    				arrowQuantity, bombQuantity, null, null);
 		    		mainTable.add(arrowsAndBombsTable);
 		    		
 	    			// Close popin with ESCAPE

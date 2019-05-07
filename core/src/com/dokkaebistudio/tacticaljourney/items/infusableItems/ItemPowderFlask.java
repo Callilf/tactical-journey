@@ -20,7 +20,8 @@ public class ItemPowderFlask extends AbstractInfusableItem {
 
 	public ItemPowderFlask() {
 		super(ItemEnum.POWDER_FLASK, Assets.powder_flask, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingOfFireArrows blessing = new BlessingOfFireArrows();
 		blessings.add(blessing);
 		

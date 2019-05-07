@@ -20,7 +20,8 @@ public class ItemNurseEyePatch extends AbstractInfusableItem {
 	
 	public ItemNurseEyePatch() {
 		super(ItemEnum.NURSE_EYE_PATCH, Assets.nurse_eye_patch, false, true);
-		
+		setRecyclePrice(25);
+
 		BlessingBlackMamba blessing = new BlessingBlackMamba();
 		blessings.add(blessing);
 		

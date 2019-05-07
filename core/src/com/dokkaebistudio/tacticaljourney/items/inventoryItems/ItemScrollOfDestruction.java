@@ -3,8 +3,6 @@
  */
 package com.dokkaebistudio.tacticaljourney.items.inventoryItems;
 
-import java.util.Iterator;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
@@ -31,6 +29,7 @@ public class ItemScrollOfDestruction extends AbstractItem {
 	public ItemScrollOfDestruction() {
 		super(ItemEnum.SCROLL_DESTRUCTION, Assets.scroll_destruction_item, false, true);
 		this.setPaper(true);
+		setRecyclePrice(6);
 	}
 	
 	@Override

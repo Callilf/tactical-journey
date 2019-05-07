@@ -19,7 +19,8 @@ public class ItemVegetalGarment extends AbstractInfusableItem {
 	
 	public ItemVegetalGarment() {
 		super(ItemEnum.VEGETAL_GARMENT, Assets.vegetal_garment, false, true);
-		
+		setRecyclePrice(30);
+
 		BlessingPhotosynthesis blessing = new BlessingPhotosynthesis();
 		blessings.add(blessing);
 	}

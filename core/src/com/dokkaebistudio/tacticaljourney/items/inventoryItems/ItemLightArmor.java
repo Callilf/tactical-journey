@@ -22,6 +22,7 @@ public class ItemLightArmor extends AbstractItem {
 
 	public ItemLightArmor() {
 		super(ItemEnum.ARMOR_LIGHT, Assets.armor_up_item, false, true);
+		setRecyclePrice(15);
 	}
 	
 	@Override

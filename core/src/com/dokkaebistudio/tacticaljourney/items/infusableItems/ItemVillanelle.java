@@ -19,7 +19,8 @@ public class ItemVillanelle extends AbstractInfusableItem {
 	
 	public ItemVillanelle() {
 		super(ItemEnum.VILLANELLE, Assets.villanelle, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingContractKiller blessing = new BlessingContractKiller();
 		blessings.add(blessing);
 	}

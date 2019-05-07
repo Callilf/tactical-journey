@@ -327,6 +327,7 @@ public abstract class RoomGenerator {
 			Mappers.gridPositionComponent.get(carpet).overlap = 0;
 			
 			room.setSecretDoor(entityFactory.createSecretDoor(room, new Vector2(16, 8)));
+			entityFactory.createRecyclingMachine(room, new Vector2(6, 8));
 			
 			break;
 			
@@ -380,11 +381,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-//			entityFactory.playerFactory.createPlayerClone(room, new Vector2(11,10), GameScreen.player);
-//			entityFactory.creepFactory.createFire(room, new Vector2(11,10), null);
-//			entityFactory.creepFactory.createPoison(room, new Vector2(11,11), null);
-//			entityFactory.enemyFactory.createScorpion(room, new Vector2(15,6));
-//			entityFactory.orbFactory.createDeathOrb(new Vector2(11, 10), room);
+//			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER, room, new Vector2(11, 2));
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
@@ -428,7 +425,6 @@ public abstract class RoomGenerator {
 			entityFactory.itemFactory.createItemTutorialPage(4,room, new Vector2(8, 6));
 			entityFactory.itemFactory.createItemTutorialPage(5,room, new Vector2(8, 5));
 
-//			entityFactory.lootableFactory.createBones(room, new Vector2(12, 9));
 //			entityFactory.lootableFactory.createOrbBag(room, new Vector2(13, 9));
 //			entityFactory.lootableFactory.createPersonalBelongings(room, new Vector2(14, 9));
 //
@@ -442,7 +438,7 @@ public abstract class RoomGenerator {
 //			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 10));			
 //			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 11));			
 //			entityFactory.enemyFactory.createScorpion(room, new Vector2(14, 4));			
-//			Entity enemy4 = entityFactory.enemyFactory.createVenomSpider(room, new Vector2(11, 8));
+//			Entity enemy4 = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER, room, new Vector2(11, 2));
 			
 //			Entity enemy2 = entityFactory.enemyFactory.createSpider(room, new Vector2(10, 8), 1);
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(enemy2);

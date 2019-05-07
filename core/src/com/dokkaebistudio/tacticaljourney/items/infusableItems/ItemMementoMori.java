@@ -20,7 +20,8 @@ public class ItemMementoMori extends AbstractInfusableItem {
 
 	public ItemMementoMori() {
 		super(ItemEnum.MEMENTO_MORI, Assets.memento_mori, false, true);
-		
+		setRecyclePrice(25);
+
 		BlessingOfAcceptance blessing = new BlessingOfAcceptance();
 		blessings.add(blessing);
 		

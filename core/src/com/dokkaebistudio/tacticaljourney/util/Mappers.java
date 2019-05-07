@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.RecyclingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
@@ -71,6 +72,7 @@ public final class Mappers {
 	public final static ComponentMapper<StatueComponent> statueComponent = ComponentMapper.getFor(StatueComponent.class);
 	public final static ComponentMapper<ChaliceComponent> chaliceComponent = ComponentMapper.getFor(ChaliceComponent.class);
 	public final static ComponentMapper<SewingMachineComponent> sewingMachineComponent = ComponentMapper.getFor(SewingMachineComponent.class);
+	public final static ComponentMapper<RecyclingMachineComponent> recyclingMachineComponent = ComponentMapper.getFor(RecyclingMachineComponent.class);
 
 	public final static ComponentMapper<HumanoidComponent> humanoidComponent = ComponentMapper.getFor(HumanoidComponent.class);
 

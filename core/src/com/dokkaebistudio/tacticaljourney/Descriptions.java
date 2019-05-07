@@ -45,6 +45,10 @@ public class Descriptions {
 	
 	public static final String SOULBENDER_TITLE = "Soul bender";
 	public static final String SOULBENDER_DESCRIPTION = "A old wizard that can extract souls from items and infuse them into another soul.";
+	
+	public static final String RECYCLER_TITLE = "Recycle & Reward";
+	public static final String RECYCLER_DESCRIPTION = "A fancy machine that can recycle pretty much anything and turn it into gold coins. This is the pride of the shop keeper so you should better take"
+			+ " good care of it if you don't want him to get mad.";
 
 
 	

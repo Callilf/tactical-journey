@@ -36,6 +36,7 @@ public abstract class AbstractItem {
 	
 	
 	private Integer quantity;
+	private Integer recyclePrice;
 	
 	private boolean paper;
 	
@@ -261,5 +262,13 @@ public abstract class AbstractItem {
 
 	public void setPaper(boolean paper) {
 		this.paper = paper;
+	}
+
+	public Integer getRecyclePrice() {
+		return recyclePrice;
+	}
+
+	public void setRecyclePrice(Integer recyclePrice) {
+		this.recyclePrice = recyclePrice;
 	}
 }

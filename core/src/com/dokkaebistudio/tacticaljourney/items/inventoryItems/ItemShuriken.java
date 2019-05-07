@@ -28,6 +28,7 @@ public class ItemShuriken extends AbstractItem {
 
 	public ItemShuriken() {
 		super(ItemEnum.SHURIKEN, Assets.shuriken_item, false, true);
+		setRecyclePrice(5);
 	}
 	
 	@Override

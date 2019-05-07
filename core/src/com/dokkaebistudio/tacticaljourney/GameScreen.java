@@ -269,7 +269,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new AlterationSystem(player, room, foregroundFxStage));
 		engine.addSystem(new ChaliceSystem(room, foregroundFxStage));
 		engine.addSystem(new StatusSystem(player, room, fxStage));
-		engine.addSystem(new ShopSystem(	player, room, fxStage));
+		engine.addSystem(new ShopSystem(	player, room));
 		engine.addSystem(new SoulbenderSystem(	player, room, fxStage));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new DialogSystem(room));

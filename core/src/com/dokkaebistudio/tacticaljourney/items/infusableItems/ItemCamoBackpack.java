@@ -20,7 +20,8 @@ public class ItemCamoBackpack extends AbstractInfusableItem {
 
 	public ItemCamoBackpack() {
 		super(ItemEnum.CAMO_BACKPACK, Assets.camo_backpack, false, true);
-		
+		setRecyclePrice(15);
+
 		BlessingOfTheLooter blessing = new BlessingOfTheLooter();
 		blessings.add(blessing);
 		

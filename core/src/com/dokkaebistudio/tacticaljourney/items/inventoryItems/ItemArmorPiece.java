@@ -22,6 +22,7 @@ public class ItemArmorPiece extends AbstractItem {
 
 	public ItemArmorPiece() {
 		super(ItemEnum.ARMOR_PIECE, Assets.armor_piece_item, false, true);
+		setRecyclePrice(5);
 	}
 	
 	@Override

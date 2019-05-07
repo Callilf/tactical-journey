@@ -20,7 +20,8 @@ public class ItemHandProsthesis extends AbstractInfusableItem {
 	
 	public ItemHandProsthesis() {
 		super(ItemEnum.HAND_PROSTHESIS, Assets.hand_prothesis, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingShurikenjutsu blessing = new BlessingShurikenjutsu();
 		blessings.add(blessing);
 		CurseShinobi curse = new CurseShinobi();

@@ -19,7 +19,8 @@ public class ItemOldCrown extends AbstractInfusableItem {
 	
 	public ItemOldCrown() {
 		super(ItemEnum.OLD_CROWN, Assets.old_crown, false, true);
-		
+		setRecyclePrice(30);
+
 		BlessingOfCinders blessing = new BlessingOfCinders();
 		blessings.add(blessing);
 	}

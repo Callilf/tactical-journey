@@ -305,6 +305,10 @@ public class ItemComponent implements Component, Poolable, MarkerInterface {
 		return itemType.getActionLabel();
 	}
 	
+	public Integer getItemRecyclePrice() {
+		return itemType.getRecyclePrice();
+	}
+	
 	public RegionDescriptor getItemImageName() {
 		return itemType.getTexture();
 	}

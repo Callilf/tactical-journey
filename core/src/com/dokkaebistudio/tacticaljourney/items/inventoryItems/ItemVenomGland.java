@@ -33,6 +33,7 @@ public class ItemVenomGland extends AbstractItem {
 
 	public ItemVenomGland() {
 		super(ItemEnum.VENOM_GLAND, Assets.venom_gland_item, false, true);
+		setRecyclePrice(2);
 	}
 	
 	@Override

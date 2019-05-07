@@ -25,6 +25,7 @@ public class ItemWingPotion extends AbstractItem {
 
 	public ItemWingPotion() {
 		super(ItemEnum.POTION_WING, Assets.wing_potion_item, false, true);
+		setRecyclePrice(5);
 	}
 	
 	@Override

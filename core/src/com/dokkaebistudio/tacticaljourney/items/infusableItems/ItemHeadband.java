@@ -19,7 +19,8 @@ public class ItemHeadband extends AbstractInfusableItem {
 	
 	public ItemHeadband() {
 		super(ItemEnum.HEADBAND, Assets.headband, false, true);
-		
+		setRecyclePrice(30);
+
 		BlessingOfTheGoat blessing = new BlessingOfTheGoat();
 		blessings.add(blessing);
 	}

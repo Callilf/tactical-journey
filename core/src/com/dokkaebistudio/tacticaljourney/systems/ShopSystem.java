@@ -23,7 +23,6 @@ import java.util.Optional;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
@@ -33,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.I
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -42,18 +42,14 @@ import com.dokkaebistudio.tacticaljourney.util.ShopUtil;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ShopSystem extends EntitySystem implements RoomSystem {	
-	
-	private Stage fxStage;
 	private Room room;
 	private Entity player;
 	private InventoryComponent playerInventoryCompo;
 	
 	private List<Entity> shopKeepers = new ArrayList<>();
 	
-	public ShopSystem(Entity player, Room r, Stage stage) {
+	public ShopSystem(Entity player, Room r) {
 		this.priority = 13;
-
-		this.fxStage = stage;
 		this.player = player;
 		this.room = r;
 	}
@@ -176,7 +172,6 @@ public class ShopSystem extends EntitySystem implements RoomSystem {
 			}
 			
 		}
-
 	}
 
 

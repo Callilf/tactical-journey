@@ -20,7 +20,8 @@ public class ItemScissorhand extends AbstractInfusableItem {
 	
 	public ItemScissorhand() {
 		super(ItemEnum.SCISSORHAND, Assets.scissorhand, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingUnfinished blessing = new BlessingUnfinished();
 		blessings.add(blessing);
 		CurseUnfinished curse = new CurseUnfinished();

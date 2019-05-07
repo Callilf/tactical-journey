@@ -31,6 +31,7 @@ public class ItemSmallHealthPotion extends AbstractItem {
 
 	public ItemSmallHealthPotion() {
 		super(ItemEnum.POTION_SMALL_HEALTH, Assets.health_up_item, false, true);
+		setRecyclePrice(8);
 	}
 	
 	@Override

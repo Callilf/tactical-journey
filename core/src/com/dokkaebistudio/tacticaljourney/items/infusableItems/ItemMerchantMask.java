@@ -19,7 +19,8 @@ public class ItemMerchantMask extends AbstractInfusableItem {
 
 	public ItemMerchantMask() {
 		super(ItemEnum.MERCHANT_MASK, Assets.merchant_mask, false, true);
-		
+		setRecyclePrice(15);
+
 		BlessingMaskMerchant blessing = new BlessingMaskMerchant();
 		blessings.add(blessing);
 	}

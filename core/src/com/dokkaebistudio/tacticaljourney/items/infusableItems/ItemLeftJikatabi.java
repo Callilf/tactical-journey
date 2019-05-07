@@ -20,7 +20,8 @@ public class ItemLeftJikatabi extends AbstractInfusableItem {
 	
 	public ItemLeftJikatabi() {
 		super(ItemEnum.LEFT_JIKATABI, Assets.left_jikatabi, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingKawarimi blessing2 = new BlessingKawarimi();
 		blessings.add(blessing2);
 		CurseShinobi curse = new CurseShinobi();

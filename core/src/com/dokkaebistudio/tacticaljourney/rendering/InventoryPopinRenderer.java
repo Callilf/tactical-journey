@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
 import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -66,7 +67,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     /** Whether the item popin is displayed. */
     private boolean itemPopinDisplayed = false;
     private boolean infusionPopinDisplayed = false;
-    
+    private boolean recyclingPopinDisplayed = false;
     
     //*****************************
     // ACTORS
@@ -75,8 +76,14 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private Table mainTable;
     private Label title;
     private TextButton closeBtn;
+    private Image quiverImage;
+    private Image bombBagImage;
     private Label arrowQuantity;
     private Label bombQuantity;
+    private Label arrowPrice;
+    private Label bombPrice;
+    private Table arrowSlot;
+    private Table bombSlot;
     
     /** The inventory table. */
     private Table inventoryTable;
@@ -86,6 +93,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private Table[] slots = new Table[96];
     private Image[] slotImages = new Image[96];
     private Label[] slotQuantities = new Label[96];
+    private Label[] slotPrices = new Label[96];
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
     
     
@@ -108,6 +116,17 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private TextButton infuseBtn;
     private ChangeListener infuseListener;
 
+    
+    /** The Recycle popin. */
+    private Table recyclingPopin;
+    private Label recyclingTitle;
+    private Label recyclingDesc;
+    private TextButton recyclingBtn;
+    private ChangeListener recyclingListener;
+    
+    // Used for arrow and bomb recycling
+    private ItemArrow itemArrow;
+    private ItemBomb itemBomb;
     
     /**
      * Constructor.
@@ -133,15 +152,19 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
     		ammoCarrierCompo = Mappers.ammoCarrierComponent.get(GameScreen.player);
+    		itemArrow = new ItemArrow();
+    		itemArrow.setLabel("Arrow");
+    		itemBomb = new ItemBomb();
+    		itemBomb.setLabel("Bomb");
     	}
 
     	
     	// Check if the inventory is displayed
-    	if (inventoryCompo.getDisplayMode().isInventoryPopin() && room.getState() != RoomState.INVENTORY_POPIN) {
+    	if (inventoryCompo.getDisplayMode().isInventoryPopin() && (room.getState() != RoomState.INVENTORY_POPIN || needsRefresh)) {
 			//set the state
     		room.setNextState(RoomState.INVENTORY_POPIN);
 
-    		if (mainTable == null) {	    		
+    		if (mainTable == null) {
 	    		createInventoryTable();
 	    		
     			// Close popin with ESCAPE
@@ -160,15 +183,52 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     		if (needsRefresh || inventoryCompo.isNeedInventoryRefresh()) {
 	        	
 //    			money.setText("[GOLD]" + walletCompo.getAmount());
-    			if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INFUSION) {
+    			switch(inventoryCompo.getDisplayMode()) {
+    			case INFUSION:
     				title.setText("Select the item to infuse");
-    			} else {
-    				title.setText("Inventory");
+    				break;
+    			case RECYCLING:
+    				title.setText("Select the item to sell");
+    				break;
+    				
+    			default:
+        				title.setText("Inventory");
     			}
     			
     			// Update arrow and bomb quantities
+    			quiverImage.addAction(Actions.alpha(1f));
+    			bombBagImage.addAction(Actions.alpha(1f));
     			arrowQuantity.setText(ammoCarrierCompo.getArrows() + "/" + ammoCarrierCompo.getMaxArrows());
     			bombQuantity.setText(ammoCarrierCompo.getBombs() + "/" + ammoCarrierCompo.getMaxBombs());
+				if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.RECYCLING) {
+					arrowPrice.setText("[GOLDENROD]" + itemArrow.getRecyclePrice());
+					bombPrice.setText("[GOLDENROD]" + itemBomb.getRecyclePrice());
+					if (ammoCarrierCompo.getArrows() <= 0) quiverImage.addAction(Actions.alpha(0.3f));
+					if (ammoCarrierCompo.getBombs() <= 0) bombBagImage.addAction(Actions.alpha(0.3f));
+				} else {
+					arrowPrice.setText("");
+					bombPrice.setText("");
+				}
+				arrowSlot.clearListeners();
+				bombSlot.clearListeners();
+				if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.RECYCLING && ammoCarrierCompo.getArrows() > 0) {
+					arrowSlot.addListener(new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							displayRecyclingPopin(null, itemArrow, arrowSlot);
+						}
+					});
+				}
+				if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.RECYCLING && ammoCarrierCompo.getBombs() > 0) {
+					bombSlot.addListener(new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							displayRecyclingPopin(null, itemBomb, bombSlot);
+						}
+					});
+				}
+
+
 
     			// Fill the slots table
     			float scrollY = slotsScroll.getScrollY();
@@ -193,6 +253,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				final Table slot = slots[i];
 					Image image = slotImages[i];
 					Label quantity = slotQuantities[i];
+					Label price = slotPrices[i];
     				final Entity item = inventoryCompo.get(i);
     				
     				slot.clearListeners();
@@ -208,7 +269,18 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     					}
     					
     					quantity.setText(inventoryCompo.getQuantity(i) > 1 ? String.valueOf(inventoryCompo.getQuantity(i)) : "");
-
+    					
+    					if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.RECYCLING) {
+	    					if (itemComponent.getItemRecyclePrice() != null) {
+	    						price.setText("[GOLDENROD]" + itemComponent.getItemRecyclePrice());
+	    					} else {
+	    						image.addAction(Actions.alpha(0.3f));
+	    						price.setText("");
+	    					}
+    					} else {
+    						price.setText("");
+    					}
+    					
     					slot.clearListeners();
     					
     					if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.INVENTORY) {
@@ -225,12 +297,21 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	    							displayInfusionPopin( item, slot);
 	    						}
 	    					});
+    					} else if (inventoryCompo.getDisplayMode() == InventoryDisplayModeEnum.RECYCLING && itemComponent.getItemRecyclePrice() != null) {
+    						slot.addListener(new ClickListener() {
+	    						@Override
+	    						public void clicked(InputEvent event, float x, float y) {
+	    							displayRecyclingPopin( item, itemComponent.getItemType(), slot);
+	    						}
+	    					});
     					}
+
     					
     				} else {
     			        boolean activeSlot = i < inventoryCompo.getNumberOfSlots();
 			        	image.setDrawable(null);
     			        quantity.setText("");
+    			        price.setText("");
     			        if (!activeSlot) {
 	    					slot.setVisible(false);
     			        }
@@ -322,7 +403,16 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 
 		arrowQuantity = new Label("0", PopinService.hudStyle());
 		bombQuantity = new Label("0", PopinService.hudStyle());
-		Table arrowsAndBombs = createArrowsAndBombTable(arrowQuantity, bombQuantity);
+		quiverImage = new Image(Assets.loadAndGetTexture(itemArrow.getTexture().getNameFull()).getRegion());
+		bombBagImage = new Image(Assets.loadAndGetTexture(itemBomb.getTexture().getNameFull()).getRegion());
+		arrowPrice = new Label("0", PopinService.hudStyle());
+		bombPrice = new Label("0", PopinService.hudStyle());
+		Table arrowsAndBombs = createArrowsAndBombTable(quiverImage, bombBagImage, 
+				arrowQuantity, bombQuantity,
+				arrowPrice, bombPrice);
+		arrowSlot = (Table) arrowsAndBombs.getChildren().get(1);
+		bombSlot = (Table) arrowsAndBombs.getChildren().get(3);
+		
 		
 		
     	mainTable.add(inventoryTable).padRight(5);
@@ -332,7 +422,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 
 
-	public static Table createArrowsAndBombTable(Label arrowQuantity, Label bombQuantity) {
+	public static Table createArrowsAndBombTable(Image arrowImage, Image bombImage, Label arrowQuantity, Label bombQuantity,
+			Label arrowPrice, Label bombPrice) {
 		Table arrowsAndBombs = new Table();
 		arrowsAndBombs.setTouchable(Touchable.enabled);
 		arrowsAndBombs.addListener(new ClickListener() {});
@@ -355,10 +446,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		quiverTable.setBackground(slotBackground);
 
 		Stack quiver = new Stack();
-		Image quiverSlot = new Image(Assets.loadAndGetTexture(new ItemArrow().getTexture().getNameFull()).getRegion());
-		quiver.add(quiverSlot);
+		quiver.add(arrowImage);
 		arrowQuantity.setAlignment(Align.bottomLeft);
 		quiver.add(arrowQuantity);
+		if (arrowPrice != null) {
+			arrowPrice.setAlignment(Align.topLeft);
+			quiver.add(arrowPrice);
+		}
 		quiverTable.add(quiver);
 		arrowsAndBombs.add(quiverTable).uniformX().pad(10, 0, 40, 0);
 		arrowsAndBombs.row();
@@ -371,10 +465,13 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		Table bombBagTable = new Table();
 		bombBagTable.setBackground(slotBackground);
 		Stack bombBag = new Stack();
-		Image bombBagSlot = new Image(Assets.loadAndGetTexture(new ItemBomb().getTexture().getNameFull()).getRegion());
-		bombBag.add(bombBagSlot);
+		bombBag.add(bombImage);
 		bombQuantity.setAlignment(Align.bottomLeft);
 		bombBag.add(bombQuantity);
+		if (bombPrice != null) {
+			bombPrice.setAlignment(Align.topLeft);
+			bombBag.add(bombPrice);
+		}
 		bombBagTable.add(bombBag);
 		arrowsAndBombs.add(bombBagTable).uniformX().pad(10, 0, 20, 0);
 		arrowsAndBombs.row();
@@ -406,6 +503,11 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		quantity.setAlignment(Align.bottomLeft);
 		slotQuantities[index] = quantity;
 		imageStack.add(quantity);
+		
+		Label price = new Label("", PopinService.hudStyle());
+		price.setAlignment(Align.topLeft);
+		slotPrices[index] = price;
+		imageStack.add(price);
 		
 		slot.add(imageStack).expand().pad(-5, -5, -5, -5);
 		
@@ -680,6 +782,115 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	}
 	
 	
+	
+	//*********************************
+	// Infusion popin
+	
+	
+	/**
+	 * Display the popin to validate the infusion.
+	 * @param item the item selected
+	 * @param slot the slot on which the item was
+	 */
+	private void displayRecyclingPopin(final Entity itemEntity, final AbstractItem item, final Table slot) {
+		if (recyclingPopin == null) {
+			recyclingPopin = new Table();
+//			recyclingPopin.setDebug(true);
+
+			// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
+			recyclingPopin.setTouchable(Touchable.enabled);
+			recyclingPopin.addListener(new ClickListener() {});
+			
+			// Place the popin and add the background texture
+			recyclingPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
+			NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
+			recyclingPopin.setBackground(ninePatchDrawable);
+			
+			recyclingPopin.align(Align.top);
+			
+			// 1 - Title
+			recyclingTitle = new Label("Title", PopinService.hudStyle());
+			recyclingPopin.add(recyclingTitle).top().align(Align.top).pad(20, 0, 20, 0);
+			recyclingPopin.row().align(Align.center);
+			
+			// 2 - Description
+			recyclingDesc = new Label("Are you sure ?", PopinService.hudStyle());
+			recyclingDesc.setWrap(true);
+			recyclingPopin.add(recyclingDesc).growY().width(900).left().pad(0, 20, 0, 20);
+			recyclingPopin.row();
+			
+			// 3 - Action buttons
+			Table buttonTable = new Table();
+			
+			// 3.1 - Close button
+			final TextButton closeBtn = new TextButton("Cancel",PopinService.buttonStyle());			
+			// continueButton listener
+			closeBtn.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					hideRecyclingPopin();
+				}
+			});
+			buttonTable.add(closeBtn).pad(0, 20,0,20);
+			
+			// 3.2 - Drop button
+			recyclingBtn = new TextButton("Recycle",PopinService.buttonStyle());			
+			buttonTable.add(recyclingBtn).pad(0, 20,0,20);
+
+			
+			recyclingPopin.add(buttonTable).pad(20, 0, 20, 0);
+			
+		}
+		
+				
+		// Update the content
+		recyclingTitle.setText("Infusion");
+		recyclingDesc.setText("Are you sure you want to recycle the " + item.getLabel()
+				+ " in exchange of [GOLDENROD]" + item.getRecyclePrice() + " gold coins[]?");
+		
+		// Update the throw item listener
+		updateRecycleListener(itemEntity, item, slot);
+		
+		// Place the popin properly
+		recyclingPopin.pack();
+		recyclingPopin.setPosition(GameScreen.SCREEN_W/2 - recyclingPopin.getWidth()/2, GameScreen.SCREEN_H/2 - recyclingPopin.getHeight()/2);
+	
+		recyclingPopinDisplayed = true;
+		this.stage.addActor(recyclingPopin);
+	}
+	
+	private void updateRecycleListener(final Entity itemEntity, final AbstractItem item, final Table slot) {
+		if (recyclingListener != null) {
+			recyclingBtn.removeListener(recyclingListener);
+		}
+		recyclingListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (itemEntity != null) {
+					Mappers.recyclingMachineComponent.get(inventoryCompo.getRecycler()).recycle(itemEntity, room);
+				} else {
+					Mappers.recyclingMachineComponent.get(inventoryCompo.getRecycler()).recycle(item, room);
+				}
+				slot.removeListener(this);
+				
+				if (room.hasEnemies()) {
+					closePopin();
+					room.turnManager.endPlayerTurn();
+				} else {
+					hideRecyclingPopin();
+					needsRefresh = true;
+				}
+			}
+		};
+		recyclingBtn.addListener(recyclingListener);
+	}
+	
+	private void hideRecyclingPopin() {
+		recyclingPopin.remove();
+		recyclingPopinDisplayed = false;
+	}
+	
+	
 	//*****************************
 	// CLOSE and REFRESH
 	
@@ -699,6 +910,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		
 		if (itemPopinDisplayed) hideSelectedItemPopin();
 		if (infusionPopinDisplayed) hideInfusionPopin();
+		if (recyclingPopinDisplayed) hideRecyclingPopin();
 
 		mainTable.remove();
 		needsRefresh = true;

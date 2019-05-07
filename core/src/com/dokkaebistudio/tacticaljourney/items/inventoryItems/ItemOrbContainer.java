@@ -24,6 +24,7 @@ public class ItemOrbContainer extends AbstractItem {
 	
 	public ItemOrbContainer() {
 		super(ItemEnum.ORB_CONTAINER, Assets.orb_container_item, false, true);
+		setRecyclePrice(3);
 	}
 	
 	@Override

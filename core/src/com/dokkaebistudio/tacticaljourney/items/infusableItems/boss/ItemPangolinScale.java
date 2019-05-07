@@ -21,7 +21,8 @@ public class ItemPangolinScale extends AbstractInfusableItem {
 
 	public ItemPangolinScale() {
 		super(ItemEnum.PANGOLIN_SCALE, Assets.pangolin_scale, false, true);
-		
+		setRecyclePrice(20);
+
 		BlessingOfThePangolin blessing = new BlessingOfThePangolin();
 		blessings.add(blessing);
 		

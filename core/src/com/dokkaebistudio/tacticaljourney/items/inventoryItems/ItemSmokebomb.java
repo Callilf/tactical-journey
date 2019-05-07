@@ -37,6 +37,7 @@ public class ItemSmokebomb extends AbstractItem {
 
 	public ItemSmokebomb() {
 		super(ItemEnum.SMOKE_BOMB, Assets.smoke_bomb_item, false, true);
+		setRecyclePrice(7);
 	}
 	
 	@Override

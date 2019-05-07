@@ -27,11 +27,13 @@ public class ItemBomb extends AbstractItem {
 	public ItemBomb() {
 		super("# bomb[s]", Assets.bomb_item, false, false, 1, 1);
 		this.type = ItemEnum.AMMO_BOMB;
+		setRecyclePrice(2);
 	}
 	
 	public ItemBomb(RandomXS128 randomToUse) {
 		super("# bomb[s]", Assets.bomb_item, false, false, 1, 1, randomToUse);
 		this.type = ItemEnum.AMMO_BOMB;
+		setRecyclePrice(2);
 	}
 
 	@Override

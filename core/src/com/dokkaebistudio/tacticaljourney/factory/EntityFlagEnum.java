@@ -7,6 +7,7 @@ public enum EntityFlagEnum {
 	GODDESS_STATUE(3),
 	SOUL_BENDER(4),
 	ALTAR(5),
+	RECYCLER(6),
 	
 
 
@@ -86,6 +87,7 @@ public enum EntityFlagEnum {
 	
 	BOMB(600),
 	EXPLOSION_EFFECT(601),
+	WORMHOLE(602),
 
 	DESTRUCTIBLE_VASE(900),
 	DESTRUCTIBLE_AMMO_CRATE(901),

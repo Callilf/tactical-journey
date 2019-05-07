@@ -31,6 +31,7 @@ public class ItemFirePotion extends AbstractItem {
 
 	public ItemFirePotion() {
 		super(ItemEnum.POTION_FIRE, Assets.fire_potion_item, false, true);
+		setRecyclePrice(3);
 	}
 	
 	@Override

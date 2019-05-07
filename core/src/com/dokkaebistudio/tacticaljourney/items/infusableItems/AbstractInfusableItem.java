@@ -79,17 +79,7 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 		boolean dropped = super.drop(dropper, item, room);
 	
 		if (dropped) {
-			AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(dropper);
-			for (Blessing b : alterationReceiverComponent.getBlessings()) {
-				if (b.getItemEntityId() != null && b.getItemEntityId() == ((PublicEntity)item).id) {
-					alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_BLESSING, b);
-				}
-			}
-			for (Curse c : alterationReceiverComponent.getCurses()) {
-				if (c.getItemEntityId() != null && c.getItemEntityId() == ((PublicEntity)item).id) {
-					alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, c);
-				}
-			}
+			removeBlessingsAndCurses(dropper, item);
 		}
 		
 		return dropped;
@@ -99,17 +89,7 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 	public void onThrow(Vector2 thrownPosition, Entity thrower, Entity item, Room room) {
 		super.onThrow(thrownPosition, thrower, item, room);
 		
-		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(thrower);
-		for (Blessing b : alterationReceiverComponent.getBlessings()) {
-			if (b.getItemEntityId() != null && b.getItemEntityId() == ((PublicEntity)item).id) {
-				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_BLESSING, b);
-			}
-		}
-		for (Curse c : alterationReceiverComponent.getCurses()) {
-			if (c.getItemEntityId() != null &&  c.getItemEntityId() == ((PublicEntity)item).id) {
-				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, c);
-			}
-		}
+		removeBlessingsAndCurses(thrower, item);
 	}
 
 	
@@ -125,4 +105,20 @@ public abstract class AbstractInfusableItem extends AbstractItem {
 		return super.infuse(player, item, room);
 	}
 	
+	
+	
+
+	public void removeBlessingsAndCurses(Entity dropper, Entity item) {
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(dropper);
+		for (Blessing b : alterationReceiverComponent.getBlessings()) {
+			if (b.getItemEntityId() != null && b.getItemEntityId() == ((PublicEntity)item).id) {
+				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_BLESSING, b);
+			}
+		}
+		for (Curse c : alterationReceiverComponent.getCurses()) {
+			if (c.getItemEntityId() != null && c.getItemEntityId() == ((PublicEntity)item).id) {
+				alterationReceiverComponent.requestAction(AlterationActionEnum.REMOVE_CURSE, c);
+			}
+		}
+	}
 }

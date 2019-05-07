@@ -404,6 +404,7 @@ public final class PlayerFactory {
 		shopKeeperCompo.addSpeech("We cut and slice, it makes us feel so very nice.");
 		shopKeeperCompo.addSpeech("I like it in here, all brighty and cosy.");
 		shopKeeperCompo.addSpeech("I can restock my shop if you want to, given that you can afford it.");
+		shopKeeperCompo.addSpeech("Did you know that you can break the crates with a simple sword slash?");
 		
 		shopKeeperEntity.add(shopKeeperCompo);
 		

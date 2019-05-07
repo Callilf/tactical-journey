@@ -27,6 +27,7 @@ public class ItemRegenPotion extends AbstractItem {
 
 	public ItemRegenPotion() {
 		super(ItemEnum.POTION_REGEN, Assets.regen_potion_item, false, true);
+		setRecyclePrice(5);
 	}
 	
 	@Override

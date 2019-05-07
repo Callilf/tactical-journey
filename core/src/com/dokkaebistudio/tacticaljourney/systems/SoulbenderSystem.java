@@ -129,7 +129,7 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 //		fillSoulBenders();
 
 
-		// Buy item
+		// Infuse item
 		if (playerInventoryCompo.getCurrentAction() == InventoryActionEnum.INFUSE) {
 			
 			Entity soulbender = playerInventoryCompo.getSoulbender();
@@ -146,6 +146,7 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 				Journal.addEntry("[PINK]Infused the " + itemComponent.getItemLabel());
 				itemComponent.infuse(player, currentItem, room);
 				soulbenderComponent.setHasInfused(true);
+				room.turnManager.endPlayerTurn();
 				
 				playerInventoryCompo.setCurrentAction(null);
 			} else {

@@ -42,6 +42,7 @@ public class Assets {
 	public static Array<Sprite> player_flying;
 	public static RegionDescriptor shopkeeper;
 	public static RegionDescriptor shopkeeper_carpet;
+	public static RegionDescriptor recycling_machine;
 
 	public static RegionDescriptor soulbender;
 	public static RegionDescriptor goddess_statue;
@@ -455,6 +456,7 @@ public class Assets {
 		
 		shopkeeper = Assets.getTexture("shopkeeper");
 		shopkeeper_carpet = Assets.getTexture("shopkeeper_carpet");
+		recycling_machine = Assets.getTexture("recycling_machine");
 		soulbender = Assets.getTexture("soulbender");
 		goddess_statue = Assets.getTexture("godess_statue");
 		goddess_statue_broken = Assets.getTexture("godess_statue_broken");

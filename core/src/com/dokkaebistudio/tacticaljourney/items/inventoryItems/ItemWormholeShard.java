@@ -23,6 +23,7 @@ public class ItemWormholeShard extends AbstractItem {
 
 	public ItemWormholeShard() {
 		super(ItemEnum.WORMHOLE_SHARD, Assets.wormhole_shard_item, false, true);
+		setRecyclePrice(5);
 	}
 	
 	@Override

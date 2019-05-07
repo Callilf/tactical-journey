@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.RecyclingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
@@ -686,7 +687,7 @@ public final class EntityFactory {
 	 */
 	public Entity createWormhole(Room room, Vector2 tilePos, Vector2 destination) {
 		Entity wormhole = engine.createEntity();
-		wormhole.flags = EntityFlagEnum.EXPLOSION_EFFECT.getFlag();
+		wormhole.flags = EntityFlagEnum.WORMHOLE.getFlag();
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.WORMHOLE_TITLE);
@@ -719,5 +720,36 @@ public final class EntityFactory {
 	}
 	
 	
+	public Entity createRecyclingMachine(Room room, Vector2 tilePos) {
+		Entity recycler = engine.createEntity();
+		recycler.flags = EntityFlagEnum.RECYCLER.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.RECYCLER_TITLE);
+		inspect.setDescription(Descriptions.RECYCLER_DESCRIPTION);
+		recycler.add(inspect);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(recycler, tilePos, room);
+		gridPosition.zIndex = ZIndexConstants.STATUE;
+		recycler.add(gridPosition);
+		
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(Assets.recycling_machine);
+		recycler.add(spriteCompo);
+		
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		recycler.add(solidComponent);
+		
+		BlockVisibilityComponent blockVisibilityCompo = engine.createComponent(BlockVisibilityComponent.class);
+		recycler.add(blockVisibilityCompo);
+		
+		RecyclingMachineComponent recyclingCompo = engine.createComponent(RecyclingMachineComponent.class);
+		recycler.add(recyclingCompo);
+		
+		engine.addEntity(recycler);
+		
+		return recycler;
+	}
 	
 }

@@ -28,9 +28,12 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
+import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
+import com.dokkaebistudio.tacticaljourney.items.ItemBomb;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -51,6 +54,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
+	private AmmoCarrierComponent ammoCarrierCompo;
     
     
     //***************************
@@ -71,6 +75,8 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     private Table mainTable;
     private Label title;
     private TextButton closeBtn;
+    private Label arrowQuantity;
+    private Label bombQuantity;
     
     /** The inventory table. */
     private Table inventoryTable;
@@ -126,6 +132,7 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
+    		ammoCarrierCompo = Mappers.ammoCarrierComponent.get(GameScreen.player);
     	}
 
     	
@@ -159,6 +166,10 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
     				title.setText("Inventory");
     			}
     			
+    			// Update arrow and bomb quantities
+    			arrowQuantity.setText(ammoCarrierCompo.getArrows() + "/" + ammoCarrierCompo.getMaxArrows());
+    			bombQuantity.setText(ammoCarrierCompo.getBombs() + "/" + ammoCarrierCompo.getMaxBombs());
+
     			// Fill the slots table
     			float scrollY = slotsScroll.getScrollY();
     			slotsTable.clear();
@@ -308,9 +319,66 @@ public class InventoryPopinRenderer implements Renderer, RoomSystem {
 		});
 		inventoryTable.add(closeBtn).pad(20, 0, 20, 0);
 		
-    	mainTable.add(inventoryTable);
+
+		arrowQuantity = new Label("0", PopinService.hudStyle());
+		bombQuantity = new Label("0", PopinService.hudStyle());
+		Table arrowsAndBombs = createArrowsAndBombTable(arrowQuantity, bombQuantity);
+		
+		
+    	mainTable.add(inventoryTable).padRight(5);
+    	mainTable.add(arrowsAndBombs);
     	mainTable.pack();
     	mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
+	}
+
+
+	public static Table createArrowsAndBombTable(Label arrowQuantity, Label bombQuantity) {
+		Table arrowsAndBombs = new Table();
+		arrowsAndBombs.setTouchable(Touchable.enabled);
+		arrowsAndBombs.addListener(new ClickListener() {});
+			    		
+		NinePatchDrawable arrowsAndBombsBackground = new NinePatchDrawable(SceneAssets.popinNinePatch);
+		arrowsAndBombs.setBackground(arrowsAndBombsBackground);
+
+		arrowsAndBombs.align(Align.top);
+		
+		// 1 - Title
+		Label arrowsLabel = new Label("Quiver", PopinService.hudStyle());
+		arrowsLabel.setAlignment(Align.center);
+		arrowsAndBombs.add(arrowsLabel).uniformX().pad(20, 0, 10, 0);
+		arrowsAndBombs.row();
+		
+		Table quiverTable = new Table();
+		NinePatchDrawable slotBackground = new NinePatchDrawable(SceneAssets.popinInnerNinePatch);
+		slotBackground.setMinWidth(140);
+		slotBackground.setMinHeight(140);
+		quiverTable.setBackground(slotBackground);
+
+		Stack quiver = new Stack();
+		Image quiverSlot = new Image(Assets.loadAndGetTexture(new ItemArrow().getTexture().getNameFull()).getRegion());
+		quiver.add(quiverSlot);
+		arrowQuantity.setAlignment(Align.bottomLeft);
+		quiver.add(arrowQuantity);
+		quiverTable.add(quiver);
+		arrowsAndBombs.add(quiverTable).uniformX().pad(10, 0, 40, 0);
+		arrowsAndBombs.row();
+
+		Label bombsLabel = new Label("Bomb bag", PopinService.hudStyle());
+		bombsLabel.setAlignment(Align.center);
+		arrowsAndBombs.add(bombsLabel).uniformX().pad(20, 0, 10, 0);
+		arrowsAndBombs.row();
+		
+		Table bombBagTable = new Table();
+		bombBagTable.setBackground(slotBackground);
+		Stack bombBag = new Stack();
+		Image bombBagSlot = new Image(Assets.loadAndGetTexture(new ItemBomb().getTexture().getNameFull()).getRegion());
+		bombBag.add(bombBagSlot);
+		bombQuantity.setAlignment(Align.bottomLeft);
+		bombBag.add(bombQuantity);
+		bombBagTable.add(bombBag);
+		arrowsAndBombs.add(bombBagTable).uniformX().pad(10, 0, 20, 0);
+		arrowsAndBombs.row();
+		return arrowsAndBombs;
 	}
 
     /**

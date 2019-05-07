@@ -30,6 +30,7 @@ import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.items.orbs.ItemOrb;
@@ -53,6 +54,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 	/** The inventory component of the player (kept in cache to prevent getting it at each frame). */
 	private InventoryComponent inventoryCompo;
+	private AmmoCarrierComponent ammoCarrierCompo;
 	/** The current lootable component. */
 	private LootableComponent lootableCompo;
         
@@ -89,6 +91,9 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     private TextButton[] slotDropBtns = new TextButton[96];
 
     private List<TextButton> inventoryDropButtons = new ArrayList<>();
+    
+    private Label arrowQuantity;
+    private Label bombQuantity;
     
     /** The loot table. */
     private Table lootTable;
@@ -128,6 +133,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
     	
     	if (inventoryCompo == null) {
     		inventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
+    		ammoCarrierCompo = Mappers.ammoCarrierComponent.get(GameScreen.player);
     	}
     	
     	
@@ -151,6 +157,11 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 		    		createLootTable();
 		    		createInventoryTable();
+		    		
+		    		arrowQuantity = new Label("0", PopinService.hudStyle());
+		    		bombQuantity = new Label("0", PopinService.hudStyle());
+		    		Table arrowsAndBombsTable = InventoryPopinRenderer.createArrowsAndBombTable(arrowQuantity, bombQuantity);
+		    		mainTable.add(arrowsAndBombsTable);
 		    		
 	    			// Close popin with ESCAPE
 		    		stage.addListener(new InputListener() {
@@ -392,7 +403,7 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 		slotsScroll.layout();
 		inventoryTable.add(slotsScroll).width(635).height(600);
 		
-    	mainTable.add(inventoryTable);
+    	mainTable.add(inventoryTable).padRight(20);
 	}
     /**
      * Create an inventory slot (filled or empty).
@@ -441,6 +452,10 @@ public class LootPopinRenderer implements Renderer, RoomSystem {
 	
 	
 	private void refreshInventory() {
+		
+		// Update arrow and bomb quantities
+		arrowQuantity.setText(ammoCarrierCompo.getArrows() + "/" + ammoCarrierCompo.getMaxArrows());
+		bombQuantity.setText(ammoCarrierCompo.getBombs() + "/" + ammoCarrierCompo.getMaxBombs());
 		
 		// Fill the slots table
 		float scrollY = slotsScroll.getScrollY();

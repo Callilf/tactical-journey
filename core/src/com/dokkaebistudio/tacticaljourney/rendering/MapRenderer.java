@@ -285,7 +285,7 @@ public class MapRenderer implements Renderer {
 				Image roomImage = (Image) children.get(0);
 				Image playerImage = (Image) children.get(1);
 				
-				if (room.isVisited() || FULL_MAP) {
+				if (room.isDisplayedOnMap() || FULL_MAP) {
 					roomImage.setVisible(true);
 
 					switch(room.type) {
@@ -492,9 +492,11 @@ public class MapRenderer implements Renderer {
 	 * Scroll to center on the current room.
 	 */
 	private void scrollToCurrentRoom() {
-		Group scrollPos = player.getParent();
-		scrollPane.layout();
-		scrollPane.scrollTo(scrollPos.getX(), scrollPos.getY(), player.getImageWidth(), player.getImageHeight(), true, true);
+		if (player != null) {
+			Group scrollPos = player.getParent();
+			scrollPane.layout();
+			scrollPane.scrollTo(scrollPos.getX(), scrollPos.getY(), player.getImageWidth(), player.getImageHeight(), true, true);
+		}
 	}
 
 	

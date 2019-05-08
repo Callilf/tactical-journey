@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -355,7 +356,8 @@ public abstract class RoomGenerator {
 			
 		case CHALICE_ROOM:
 
-			entityFactory.playerFactory.createChalice(new Vector2(11,6), room);
+			int chaliceTypeIndex = random.nextSeededInt(ChaliceType.values().length);
+			entityFactory.playerFactory.createChalice(new Vector2(11,6), room, ChaliceType.values()[chaliceTypeIndex]);
 			
 			if (possibleSpawns.size() == 0) return;
 			// Retrieve the spawn points and shuffle them

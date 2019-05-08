@@ -13,11 +13,16 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
+import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
+import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -33,6 +38,16 @@ import com.esotericsoftware.kryo.io.Output;
  *
  */
 public class ChaliceComponent implements Component, Poolable, MarkerInterface {
+	
+	public enum ChaliceType {
+		LIFT_CURSE,
+		FULL_HEAL,
+		VISION
+	}
+	
+	/** The type of chalice. */
+	private ChaliceType type;
+	
 	/** Whether this chalice is filled or empty. */
 	private boolean filled;
 	
@@ -43,6 +58,7 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 	
 	@Override
 	public void reset() {
+		setType(ChaliceType.LIFT_CURSE);
 		setAura(null);
 		setFilled(true);
 	}
@@ -62,7 +78,7 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 	}
 	
 	
-	public void drink() {
+	public void drink(Room room) {
 		this.setFilled(false);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
@@ -76,17 +92,39 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 			public boolean act(float delta) {
 				removeAura();
 				
-				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
-				if (alterationReceiverComponent.getCurses().isEmpty()) {
-					Journal.addEntry("[YELLOW]A holy fluid runs through your body. Since you did not have any curse, it does nothing else that making you feel good.");
-				} else {
-					int curseIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(alterationReceiverComponent.getCurses().size());
-					Curse curse = alterationReceiverComponent.getCurses().get(curseIndex);
+				switch (type) {
+				case LIFT_CURSE:
+					AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+					if (alterationReceiverComponent.getCurses().isEmpty()) {
+						Journal.addEntry("[YELLOW]A holy fluid runed through your body. Since you did not have any curse, it did nothing else than making you feel good.");
+					} else {
+						int curseIndex = RandomSingleton.getInstance().getUnseededRandom().nextInt(alterationReceiverComponent.getCurses().size());
+						Curse curse = alterationReceiverComponent.getCurses().get(curseIndex);
+						
+						alterationReceiverComponent.requestAction(AlterationActionEnum.LIFT_CURSE, curse);
+						Journal.addEntry("[YELLOW]A holy fluid runed through your body. You feel that a burden has been lifted.");
+					}
+					break;
 					
-					alterationReceiverComponent.requestAction(AlterationActionEnum.LIFT_CURSE, curse);
-					Journal.addEntry("[YELLOW]A holy fluid runs through your body. You feel that a burden has been lifted.");
+				case FULL_HEAL:
+					HealthComponent healthComponent = Mappers.healthComponent.get(GameScreen.player);
+					healthComponent.restoreHealth(healthComponent.getMaxHp() - healthComponent.getHp());
+					
+					StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(GameScreen.player);
+					statusReceiverComponent.removeStatus(GameScreen.player, StatusDebuffPoison.class, room);
+					
+					Journal.addEntry("[GREEN]A revigorating fluid runed through your body and healed all your wounds.");
+					break;
+					
+				case VISION:
+					room.floor.getRooms().forEach(r -> r.setDisplayedOnMap(true));
+					MapRenderer.requireRefresh();
+					Journal.addEntry("[GREEN]A vivid image of the layout of the floor formed into your mind.");
+					
+					break;
+					
+					default:
 				}
-
 				return true;
 			}
 		}));
@@ -119,12 +157,23 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 		this.filled = filled;
 	}
 	
+	public ChaliceType getType() {
+		return type;
+	}
+
+	public void setType(ChaliceType type) {
+		this.type = type;
+	}
+
+
+	
 	
 	public static Serializer<ChaliceComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<ChaliceComponent>() {
 
 			@Override
 			public void write(Kryo kryo, Output output, ChaliceComponent object) {
+				output.writeString(object.type.name());
 				output.writeBoolean(object.filled);
 				kryo.writeClassAndObject(output, object.aura);
 			}
@@ -132,6 +181,7 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 			@Override
 			public ChaliceComponent read(Kryo kryo, Input input, Class<ChaliceComponent> type) {
 				ChaliceComponent compo = engine.createComponent(ChaliceComponent.class);
+				compo.type = ChaliceType.valueOf(input.readString());
 				compo.filled = input.readBoolean();
 				compo.setAura((AnimatedImage) kryo.readClassAndObject(input));
 				return compo;

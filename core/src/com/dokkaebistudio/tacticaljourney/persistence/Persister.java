@@ -403,6 +403,7 @@ public class Persister {
 					kryo.writeClassAndObject(output, roomToSave.grid);
 					output.writeString(roomToSave.getCleared().name());
 					output.writeString(roomToSave.getVisited().name());
+					output.writeBoolean(roomToSave.isDisplayedOnMap());
 					
 					output.writeInt(roomToSave.getAllEntities().size);
 					for (Entity e : roomToSave.getAllEntities()) {
@@ -456,6 +457,7 @@ public class Persister {
 				
 				loadedRoom.setCleared(RoomClearedState.valueOf(input.readString()));
 				loadedRoom.setVisited(RoomVisitedState.valueOf(input.readString()));
+				loadedRoom.setDisplayedOnMap(input.readBoolean());
 				
 				// All entities
 				int entityNb = input.readInt();

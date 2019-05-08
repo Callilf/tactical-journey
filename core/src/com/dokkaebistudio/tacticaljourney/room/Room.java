@@ -77,6 +77,7 @@ public class Room extends EntitySystem {
 	/** Whether the player has already entered this room or not. */
 	private RoomVisitedState visited;
 	private boolean justEntered;
+	private boolean displayedOnMap;
 	
 	/** Whether this room has been cleared. */
 	private RoomClearedState cleared;
@@ -132,6 +133,7 @@ public class Room extends EntitySystem {
 		this.attackManager = new AttackManager(this);
 		this.type = type;
 		this.visited = RoomVisitedState.NEVER_VISITED;
+		this.displayedOnMap = false;
 		
 		this.allEntities = new Array<>();
 		this.entitiesAtPositions = new HashMap<>();
@@ -685,6 +687,7 @@ public class Room extends EntitySystem {
 
 	public void setJustEntered(boolean justEntered) {
 		this.justEntered = justEntered;
+		this.displayedOnMap = true;
 	}
 
 	public boolean isOnExitPath() {
@@ -709,6 +712,14 @@ public class Room extends EntitySystem {
 
 	public void setSecretDoor(Entity secretDoor) {
 		this.secretDoor = secretDoor;
+	}
+
+	public boolean isDisplayedOnMap() {
+		return displayedOnMap;
+	}
+
+	public void setDisplayedOnMap(boolean displayedOnMap) {
+		this.displayedOnMap = displayedOnMap;
 	}
 
 	

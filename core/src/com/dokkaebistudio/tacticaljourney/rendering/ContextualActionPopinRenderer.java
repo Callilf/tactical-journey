@@ -488,7 +488,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {				
-				chaliceComponent.drink();
+				chaliceComponent.drink(room);
 				room.turnManager.endPlayerTurn();
 				closePopin();
 			}

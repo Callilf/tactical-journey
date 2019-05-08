@@ -1,6 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;

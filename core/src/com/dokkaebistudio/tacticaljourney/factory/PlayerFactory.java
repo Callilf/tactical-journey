@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
@@ -477,7 +478,7 @@ public final class PlayerFactory {
 	 * @param room the room
 	 * @return the statue entity
 	 */
-	public Entity createChalice(Vector2 pos, Room room) {
+	public Entity createChalice(Vector2 pos, Room room, ChaliceType type) {
 		Entity chaliceEntity = engine.createEntity();
 		chaliceEntity.flags = EntityFlagEnum.ALTAR.getFlag();
 
@@ -506,6 +507,7 @@ public final class PlayerFactory {
 		chaliceEntity.add(destructible);		
 		
 		ChaliceComponent chaliceComponent = engine.createComponent(ChaliceComponent.class);
+		chaliceComponent.setType(type);
 		chaliceComponent.setFilled(true);
 		chaliceEntity.add(chaliceComponent);
 		

@@ -292,7 +292,7 @@ public class GameScreen extends ScreenAdapter {
 		//Enter the first room
 		activeFloor.enterRoom(activeFloor.getActiveRoom(), null);
 		
-		Journal.addEntry("Welcome to Tactical Journey!");
+		Journal.addEntry("Welcome to Calishka's Trial!");
 	}
 	
 	/**

@@ -134,9 +134,9 @@ public class HowToPlayScreen extends ScreenAdapter {
 
 		Label hudLabel = new Label("Profile\n"
 				+ "The profile panel allows you seeing you stats and active blessings and curses. Blessings and Curses are passive abilities that can be"
-				+ "received from item or performing certain actions. Blessings are positive abilities and will make the game easier, whereas Curses are"
-				+ "negative abilities that will tend to make it harder.\n"
-				+ "Some item will only grant you a blessing, but most of them will grant you both a blessing and a curse. It's up to you to balance them"
+				+ " received from item or performing certain actions. Blessings are positive abilities and will make the game easier, whereas Curses are"
+				+ " negative abilities that will tend to make it harder.\n"
+				+ "Some items will only grant you a blessing, but most of them will grant you both a blessing and a curse. It's up to you to balance them"
 				+ " properly.", 
 				PopinService.hudStyle());
 		hudLabel.setWrap(true);

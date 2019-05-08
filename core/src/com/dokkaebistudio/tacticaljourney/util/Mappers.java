@@ -17,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
@@ -85,6 +86,7 @@ public final class Mappers {
 	public final static ComponentMapper<DoorComponent> doorComponent = ComponentMapper.getFor(DoorComponent.class);
 	public final static ComponentMapper<SecretDoorComponent> secretDoorComponent = ComponentMapper.getFor(SecretDoorComponent.class);
 	public final static ComponentMapper<ExitComponent> exitComponent = ComponentMapper.getFor(ExitComponent.class);
+	public final static ComponentMapper<PanelComponent> panelComponent = ComponentMapper.getFor(PanelComponent.class);
 	public final static ComponentMapper<WormholeComponent> wormholeComponent = ComponentMapper.getFor(WormholeComponent.class);
 	
 	

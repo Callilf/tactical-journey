@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -324,6 +325,34 @@ public final class EntityFactory {
     	exitCompo.setOpened(opened);
     	exitEntity.add(exitCompo);
 
+		engine.addEntity(exitEntity);
+
+    	return exitEntity;
+	}
+	
+	
+	public Entity createWoodenPanel(Room room, Vector2 pos) {
+		Entity exitEntity = engine.createEntity();
+		exitEntity.flags = EntityFlagEnum.WOODEN_PANEL.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.WOODEN_PANEL_TITLE);
+		inspect.setDescription(Descriptions.WOODEN_PANEL_DESCRIPTION);
+		exitEntity.add(inspect);
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(exitEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.ENEMY;
+    	exitEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(Assets.wooden_panel);
+    	exitEntity.add(spriteCompo);
+    	
+    	PanelComponent panelComponent = engine.createComponent(PanelComponent.class);
+    	panelComponent.init();
+    	exitEntity.add(panelComponent);
+    	
 		engine.addEntity(exitEntity);
 
     	return exitEntity;

@@ -35,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
+import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -326,6 +327,7 @@ public class Persister {
 				if (floor.getLevel() >= currentLevel && !savedFloors.contains(floor.getLevel())) {
 					savedFloors.add(floor.getLevel());
 
+					output.writeInt(floor.getTurns());
 					output.writeBoolean(floor.getRooms() != null);
 					
 					if (floor.getRooms() != null) {
@@ -356,6 +358,8 @@ public class Persister {
 				// Old level, no need to load more
 				if (level < currentLevel) return f;
 
+				f.setTurns(input.readInt());
+				
 				boolean isGenerated = input.readBoolean();
 				if (isGenerated) {
 					// load rooms
@@ -657,6 +661,7 @@ public class Persister {
 		kryo.register(DoorComponent.class, DoorComponent.getSerializer(engine, loadedRooms));
 		kryo.register(SecretDoorComponent.class, SecretDoorComponent.getSerializer(engine));
 		kryo.register(ExitComponent.class, ExitComponent.getSerializer(engine));
+		kryo.register(PanelComponent.class, PanelComponent.getSerializer(engine));
 		
 		
 		kryo.register(MoveComponent.class, MoveComponent.getSerializer(engine));

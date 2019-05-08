@@ -24,6 +24,9 @@ public class Descriptions {
 
 	public static final String EXIT_TITLE = "Doorway to a lower floor";
 	public static final String EXIT_DESCRIPTION = "A doorway to the next floor.";
+	
+	public static final String WOODEN_PANEL_TITLE = "Turns indicator";
+	public static final String WOODEN_PANEL_DESCRIPTION = "This panel indicated the number of turns you have spent in the current floor.";
 
 	public static final String BOMB_TITLE = "Bomb";
 	public static final String BOMB_DESCRIPTION = "A bomb that will explode after some turns. Don't get caught in the blast!";

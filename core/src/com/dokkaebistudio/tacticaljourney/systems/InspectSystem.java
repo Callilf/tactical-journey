@@ -41,7 +41,7 @@ public class InspectSystem extends EntitySystem implements RoomSystem {
 	
 		
 	public InspectSystem(Entity player, Room r, Stage stage) {
-		this.priority = 21;
+		this.priority = 24;
 
 		this.fxStage = stage;
 		this.player = player;

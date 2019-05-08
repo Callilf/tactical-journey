@@ -36,6 +36,7 @@ public class TurnManager {
 	 */
 	public void startNewTurn() {
 		this.turn ++;
+		this.room.floor.setTurns(this.room.floor.getTurns() + 1);
 		this.room.setNextState(RoomState.PLAYER_TURN_INIT);
 		GameTimeSingleton.getInstance().nextTurn();
 	}

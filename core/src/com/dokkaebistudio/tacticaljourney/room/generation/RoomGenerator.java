@@ -33,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * Util class to generate a room.
@@ -383,6 +384,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
 //			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER, room, new Vector2(11, 2));
 			
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
@@ -468,7 +470,14 @@ public abstract class RoomGenerator {
 			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
 			
 			Vector2 pos = spawnPositions.get(0);
-			entityFactory.createExit(room, pos, false);
+			Entity exit = entityFactory.createExit(room, pos, false);
+			List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(pos, room);
+			for (Tile t : adjacentTiles) {
+				if (t.isWalkable(exit)) {
+					entityFactory.createWoodenPanel(room, t.getGridPos());
+					break;
+				}
+			}
 			
 			pos = spawnPositions.get(1);
 			room.setSecretDoor(entityFactory.createSecretDoor(room, pos));

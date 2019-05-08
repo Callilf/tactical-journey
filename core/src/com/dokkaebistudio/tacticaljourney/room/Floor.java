@@ -55,6 +55,9 @@ public class Floor {
 	
 	private FloorGenerator floorGenerator;
 	
+	/** The number of turns spent on this floor. */
+	private int turns;
+	
 	/**
 	 * Constructor.
 	 * @param gameScreen the game screen.
@@ -265,6 +268,14 @@ public class Floor {
 
 	public FloorGenerator getFloorGenerator() {
 		return this.floorGenerator;
+	}
+
+	public int getTurns() {
+		return turns;
+	}
+
+	public void setTurns(int turns) {
+		this.turns = turns;
 	}
 	
 }

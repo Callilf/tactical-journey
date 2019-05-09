@@ -14,6 +14,7 @@ public enum RoomType {
 	
 	EMPTY_ROOM("Room"),
 	COMMON_ENEMY_ROOM("Room"),
+	TREASURE_ROOM("Treasure room"),
 	
 	// Mandatory rooms
 	

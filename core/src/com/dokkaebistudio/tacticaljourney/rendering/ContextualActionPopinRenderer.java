@@ -300,7 +300,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			title.setText("Infuse an item");
 			String descStr = "Would you like to infuse an item ?";
 			if (soulBenderComponent.getPrice() == 0) {
-				descStr += " The first infusion is free!";
+				descStr += " I do it for free! I'm nice like that.";
 			} else {
 				descStr += " It will cost you [GOLDENROD]" + soulBenderComponent.getPrice() + " gold coins[].";
 			}

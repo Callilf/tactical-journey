@@ -46,7 +46,7 @@ public class PanelSystem extends EntitySystem implements RoomSystem {
 	public void update(float deltaTime) {
 		if (room.getState() == RoomState.ENEMY_END_TURN || room.getVisited().justEntered()) {
 			fillPanels();
-			allPanels.forEach(e -> Mappers.panelComponent.get(e).updateText(room.floor.getTurns()));
+			allPanels.forEach(e -> Mappers.panelComponent.get(e).updateText(room.floor.getTurns(), room.floor.getTurnThreshold()));
 		}
 	}
 

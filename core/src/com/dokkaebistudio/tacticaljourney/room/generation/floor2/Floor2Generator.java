@@ -45,21 +45,28 @@ public class Floor2Generator extends FloorGenerator {
 		List<Room> rooms = new ArrayList<>();
 
 		// Create the boss room
-		Room startRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, RoomType.BOSS_ROOM);
+		Room startRoom = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.BOSS_ROOM);
 		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);
 		
 
 		// Create the exit room
-		Room currentRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, RoomType.END_FLOOR_ROOM);
-		roomsPerPosition.put(new Vector2(0, 1), currentRoom);
-		positionsPerRoom.put(currentRoom, new Vector2(0, 1));
-		rooms.add(currentRoom);
-			
-		// Set the neighbors
-		setNeighbors(GenerationMoveEnum.NORTH, startRoom, currentRoom);		
+		Room exitRoom = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.END_FLOOR_ROOM);
+		roomsPerPosition.put(new Vector2(0, 1), exitRoom);
+		positionsPerRoom.put(exitRoom, new Vector2(0, 1));
+		rooms.add(exitRoom);
+		setNeighbors(GenerationMoveEnum.NORTH, startRoom, exitRoom);		
+		
+		
+		// Create the treasure room
+		Room treasureRoom = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.TREASURE_ROOM);
+		roomsPerPosition.put(new Vector2(0, 2), treasureRoom);
+		positionsPerRoom.put(treasureRoom, new Vector2(0, 2));
+		rooms.add(treasureRoom);
+		setNeighbors(GenerationMoveEnum.NORTH, exitRoom, treasureRoom);		
 				
+		
 		// Generate the content of all rooms
 		floor.setRooms(rooms);
 		floor.setActiveRoom(startRoom);

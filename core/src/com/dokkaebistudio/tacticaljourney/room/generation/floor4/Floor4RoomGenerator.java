@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -14,14 +15,18 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 /**
  * @author Callil
@@ -39,6 +44,9 @@ public class Floor4RoomGenerator extends RoomGenerator {
 		switch(currentRoom.type) {
 		case BOSS_ROOM:
 			currentRoom.roomPattern = "data/rooms/bossRoomFloor4.csv";
+			break;
+		case TREASURE_ROOM:
+			currentRoom.roomPattern = "data/rooms/treasureRoom.csv";
 			break;
 			
 			default:
@@ -116,15 +124,28 @@ public class Floor4RoomGenerator extends RoomGenerator {
 			
 			break;
 		case END_FLOOR_ROOM:
+			
+			List<Floor> floors = room.floor.getGameScreen().floors;
+			Floor previousFloor = floors.get(floors.indexOf(room.floor) - 1);
+			
+			Vector2 northDoorPos = new Vector2(11, 12);
+			Optional<Entity> door = TileUtil.getEntityWithComponentOnTile(northDoorPos, DoorComponent.class, room);
+			if (door.isPresent()) {
+				door.get().remove(InspectableComponent.class);
+				entityFactory.createWallGate(room, new Vector2(11, 12), previousFloor.getTurns() <= previousFloor.getTurnThreshold());
+			}
+			
 			if (possibleSpawns.size() == 0) return;
 			Vector2 pos = possibleSpawns.get(0);
 			entityFactory.createExit(room, pos, true);
 			
-			pos = possibleSpawns.get(1);
-			Entity personalBelongings = entityFactory.lootableFactory.createPersonalBelongings(room, pos);
-
-			default:
+//			pos = possibleSpawns.get(1);
+//			Entity personalBelongings = entityFactory.lootableFactory.createPersonalBelongings(room, pos);
 			break;
+			
+			default:
+				super.generateRoomContent(room, generatedRoom);
+				return;
 		}
 		
 		placeDestructibles(room, random, generatedRoom.getPossibleDestr());

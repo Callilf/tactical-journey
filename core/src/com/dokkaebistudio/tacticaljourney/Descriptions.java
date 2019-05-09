@@ -27,6 +27,12 @@ public class Descriptions {
 	
 	public static final String WOODEN_PANEL_TITLE = "Turns indicator";
 	public static final String WOODEN_PANEL_DESCRIPTION = "This panel indicated the number of turns you have spent in the current floor.";
+	
+	public static final String WALL_GATE_CLOSED_TITLE = "Closed gate";
+	public static final String WALL_GATE_CLOSED_DESCRIPTION = "A big arch gate in the wall. It's tightly closed and there's an inscription on it:\n"
+			+ "One does not simply walk into the treasure room after spending so much turns on the previous floor.";
+	public static final String WALL_GATE_OPENED_TITLE = "Opened gate";
+	public static final String WALL_GATE_OPENED_DESCRIPTION = "A big arch gate in the wall. It's opened.";
 
 	public static final String BOMB_TITLE = "Bomb";
 	public static final String BOMB_DESCRIPTION = "A bomb that will explode after some turns. Don't get caught in the blast!";

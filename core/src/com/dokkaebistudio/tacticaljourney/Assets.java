@@ -68,6 +68,9 @@ public class Assets {
 	public static RegionDescriptor entangled_vines;
 	
 	public static RegionDescriptor wooden_panel;
+	public static RegionDescriptor wall_gate_closed;
+	public static RegionDescriptor wall_gate_opened;
+	
 	public static RegionDescriptor exit_opened;
 	public static RegionDescriptor exit_closed;
 	public static RegionDescriptor door_closed;
@@ -481,6 +484,9 @@ public class Assets {
 		entangled_vines = Assets.getTexture("entangled_vines");
 		
 		wooden_panel = Assets.getTexture("wooden-panel");
+		wall_gate_closed = Assets.getTexture("wall-gate-closed");
+		wall_gate_opened = Assets.getTexture("wall-gate-opened");
+
 		exit_opened = Assets.getTexture("exit_opened");
 		exit_closed = Assets.getTexture("exit_closed");
 		door_closed = Assets.getTexture("door-closed");

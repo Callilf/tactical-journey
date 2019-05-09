@@ -358,6 +358,38 @@ public final class EntityFactory {
     	return exitEntity;
 	}
 	
+	public Entity createWallGate(Room room, Vector2 pos, boolean opened) {
+		Entity exitEntity = engine.createEntity();
+		exitEntity.flags = EntityFlagEnum.WALL_GATE.getFlag();
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(opened ? Descriptions.WALL_GATE_OPENED_TITLE : Descriptions.WALL_GATE_CLOSED_TITLE);
+		inspect.setDescription(opened ? Descriptions.WALL_GATE_OPENED_DESCRIPTION : Descriptions.WALL_GATE_CLOSED_DESCRIPTION);
+		exitEntity.add(inspect);
+
+    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
+    	movableTilePos.coord(exitEntity, pos, room);
+    	movableTilePos.zIndex = ZIndexConstants.WALL;
+    	exitEntity.add(movableTilePos);
+    	
+    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+    	spriteCompo.setSprite(opened ? Assets.wall_gate_opened : Assets.wall_gate_closed);
+    	exitEntity.add(spriteCompo);
+    	
+    	if (!opened) {
+    		SolidComponent solidCompo = engine.createComponent(SolidComponent.class);
+    		exitEntity.add(solidCompo);
+    		BlockVisibilityComponent blockVisibilityCompo = engine.createComponent(BlockVisibilityComponent.class);
+    		exitEntity.add(blockVisibilityCompo);
+    		BlockExplosionComponent blockExploCompo = engine.createComponent(BlockExplosionComponent.class);
+    		exitEntity.add(blockExploCompo);
+    	}
+    	
+		engine.addEntity(exitEntity);
+
+    	return exitEntity;
+	}
+	
 	public Entity createMovableTile(Vector2 pos, Room room) {
 		Entity movableTileEntity = engine.createEntity();
 		movableTileEntity.flags = EntityFlagEnum.MOVABLE_TILE.getFlag();

@@ -26,6 +26,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -487,6 +488,58 @@ public abstract class RoomGenerator {
 			
 			pos = spawnPositions.get(3);
 			entityFactory.playerFactory.createSewingMachine(pos, room);
+			break;
+			
+		case TREASURE_ROOM:
+			spawnPositions = new ArrayList<>(possibleSpawns);
+			Collections.shuffle(spawnPositions, random.getNextSeededRandom());
+
+			int soulbenderRand = random.nextSeededInt(3);
+			if (soulbenderRand == 0) {
+				Entity sb = entityFactory.playerFactory.createSoulbender(spawnPositions.get(0), room);
+				Mappers.soulbenderComponent.get(sb).setPrice(0);
+				spawnPositions.remove(0);
+			}
+			
+			int infusableRand = random.nextSeededInt(4);
+			if (infusableRand < 3) {
+				entityFactory.lootableFactory.createPersonalBelongings(room, spawnPositions.get(0));
+				spawnPositions.remove(0);
+			}
+			
+			int chaliceRand = random.nextSeededInt(4);
+			if (chaliceRand == 0) {
+				chaliceTypeIndex = random.nextSeededInt(ChaliceType.values().length);
+				entityFactory.playerFactory.createChalice(spawnPositions.get(0), room, ChaliceType.values()[chaliceTypeIndex]);
+				spawnPositions.remove(0);
+			}
+			
+			int statueRand = random.nextSeededInt(4);
+			if (statueRand == 0) {
+				needsTwoExplosions = random.nextSeededInt(2) == 0;
+				entityFactory.playerFactory.createGoddessStatue(spawnPositions.get(0), room, needsTwoExplosions);
+				spawnPositions.remove(0);
+			}
+			
+			int leatherRand = random.nextSeededInt(5);
+			if (leatherRand == 0) {
+				entityFactory.itemFactory.createItem(ItemEnum.LEATHER, room, spawnPositions.get(0));
+				spawnPositions.remove(0);
+			}
+			
+			int divineCatalystRand = random.nextSeededInt(5);
+			if (divineCatalystRand == 0) {
+				entityFactory.itemFactory.createItem(ItemEnum.DIVINE_CATALYST, room, spawnPositions.get(0));
+				spawnPositions.remove(0);
+			}
+			
+			int satchelRand = random.nextSeededInt(2);
+			if (satchelRand == 0) {
+				entityFactory.lootableFactory.createSatchel(room, spawnPositions.get(0));
+				spawnPositions.remove(0);
+			}
+			
+			break;
 			
 			default:
 			break;

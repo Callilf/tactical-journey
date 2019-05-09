@@ -11,6 +11,8 @@ import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
  *
  */
 public class Floor1Generator extends FloorGenerator {
+	
+	public static final int TURN_THRESHOLD = 250;
 
 	private int roomIndex = 100;
 	
@@ -23,5 +25,16 @@ public class Floor1Generator extends FloorGenerator {
 		int index = roomIndex;
 		roomIndex++;
 		return index;
+	}
+	
+	protected int getMinRoomNb() {
+		return 15;
+	}
+	protected int getMaxRoomNb() {
+		return 19;
+	}
+	
+	protected int getTurnThresholdForTreasureRoom() {
+		return TURN_THRESHOLD;
 	}
 }

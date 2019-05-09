@@ -57,6 +57,7 @@ public class Floor {
 	
 	/** The number of turns spent on this floor. */
 	private int turns;
+	private int turnThreshold;
 	
 	/**
 	 * Constructor.
@@ -276,6 +277,14 @@ public class Floor {
 
 	public void setTurns(int turns) {
 		this.turns = turns;
+	}
+
+	public int getTurnThreshold() {
+		return turnThreshold;
+	}
+
+	public void setTurnThreshold(int turnThreshold) {
+		this.turnThreshold = turnThreshold;
 	}
 	
 }

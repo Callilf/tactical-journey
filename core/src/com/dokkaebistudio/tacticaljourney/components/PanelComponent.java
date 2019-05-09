@@ -42,8 +42,9 @@ public class PanelComponent implements Component, Poolable, MovableInterface, Ma
 		textContainer.pack();
 	}
 	
-	public void updateText(int turns) {	
-		text.setText(turns <= MAX_TURN ? String.valueOf(turns) : String.valueOf(MAX_TURN));
+	public void updateText(int turns, int turnThreshold) {	
+		String color = turns <= turnThreshold ? "[WHITE]" : "[LIGHT_GRAY]";
+		text.setText(turns <= MAX_TURN ? color + turns : color + MAX_TURN);
 	}
 	
 	

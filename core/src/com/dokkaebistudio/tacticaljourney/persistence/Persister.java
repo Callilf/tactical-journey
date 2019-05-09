@@ -328,6 +328,7 @@ public class Persister {
 					savedFloors.add(floor.getLevel());
 
 					output.writeInt(floor.getTurns());
+					output.writeInt(floor.getTurnThreshold());
 					output.writeBoolean(floor.getRooms() != null);
 					
 					if (floor.getRooms() != null) {
@@ -359,6 +360,7 @@ public class Persister {
 				if (level < currentLevel) return f;
 
 				f.setTurns(input.readInt());
+				f.setTurnThreshold(input.readInt());
 				
 				boolean isGenerated = input.readBoolean();
 				if (isGenerated) {

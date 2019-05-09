@@ -28,9 +28,6 @@ import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
  */
 public abstract class FloorGenerator {
 	
-	public static final int MIN_ROOM_NB = 17;
-	public static final int MAX_ROOM_NB = 25;
-	
 	protected RandomSingleton random;
 	private RoomGenerator roomGenerator;
 	
@@ -46,6 +43,17 @@ public abstract class FloorGenerator {
 	}
 	
 	protected abstract int getNextRoomIndex();
+	
+	protected int getMinRoomNb() {
+		return 17;
+	}
+	protected int getMaxRoomNb() {
+		return 25;
+	}
+	
+	protected int getTurnThresholdForTreasureRoom() {
+		return 200;
+	}
 	
 	/**
 	 * Generate all the layout of the given floor.
@@ -117,9 +125,9 @@ public abstract class FloorGenerator {
 		addAdditionalRooms(floor, gameScreen, rooms, additionnalRoomsNumber, false);
 		
 		// 4.2 if it wasn't enough to reach the min number of room, add some more
-		if (rooms.size() < MIN_ROOM_NB) {
+		if (rooms.size() < getMinRoomNb()) {
 			// Add more rooms to reach the min number
-			addAdditionalRooms(floor, gameScreen, rooms, MIN_ROOM_NB - rooms.size(), true);
+			addAdditionalRooms(floor, gameScreen, rooms, getMinRoomNb() - rooms.size(), true);
 		}
 		
 		
@@ -160,6 +168,10 @@ public abstract class FloorGenerator {
 		
 		// 8 - Add mandatory loot
 		placeMandatoryLoot(rooms);
+		
+		// 9 - Set turn threshold
+		floor.setTurns(0);
+		floor.setTurnThreshold(this.getTurnThresholdForTreasureRoom());
 	}
 
 	private void placeMandatoryLoot(List<Room> rooms) {
@@ -272,10 +284,10 @@ public abstract class FloorGenerator {
 						
 						setNeighbors(direction, previousRoom, currentRoom);
 						
-						if (addToReachMin && rooms.size() >= MIN_ROOM_NB) {
+						if (addToReachMin && rooms.size() >= getMinRoomNb()) {
 							return;
 						}
-						if (rooms.size() >= MAX_ROOM_NB) {
+						if (rooms.size() >= getMaxRoomNb()) {
 							return;
 						}
 						
@@ -347,10 +359,10 @@ public abstract class FloorGenerator {
 				roomsPerPosition.put(vector2, currentRoom);
 				positionsPerRoom.put(currentRoom, vector2);
 				
-				if (addToReachMinNb && allRooms.size() >= MIN_ROOM_NB) {
+				if (addToReachMinNb && allRooms.size() >= getMinRoomNb()) {
 					return;
 				}
-				if (allRooms.size() >= MAX_ROOM_NB) {
+				if (allRooms.size() >= getMaxRoomNb()) {
 					return;
 				}
 				addAdditionalSubRooms(floor, gameScreen, currentRoom, chanceToAddRoom, allRooms, addToReachMinNb);

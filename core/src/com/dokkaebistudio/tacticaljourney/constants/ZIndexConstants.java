@@ -11,7 +11,7 @@ public final class ZIndexConstants {
 	public static final int TILE = 1;
 	
 	// ENTITIES ON TILE
-	public static final int WALL = 30;
+	public static final int WALL = 32;
 	public static final int BUSH = 30;
 	public static final int MUD = 2;
 	public static final int DOOR = 2;
@@ -37,7 +37,7 @@ public final class ZIndexConstants {
 	
 	// PLAYER
 	public static final int PLAYER = 31;
-	public static final int ORB = 32;
+	public static final int ORB = 33;
 	public static final int STATUE = 31;
 	
 	// DESTRUCTIBLE

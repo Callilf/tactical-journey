@@ -350,6 +350,7 @@ public class MapRenderer implements Renderer {
 						
 					case COMMON_ENEMY_ROOM:
 					case EMPTY_ROOM:
+					case TREASURE_ROOM:
 					default:
 						if (room.hasEnemies()) {
 							roomImage.setDrawable(new TextureRegionDrawable(Assets.map_room_enemy.getRegion()));

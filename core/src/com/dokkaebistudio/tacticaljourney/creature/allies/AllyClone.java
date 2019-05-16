@@ -17,6 +17,24 @@ public class AllyClone extends Creature {
 		return "Clone";
 	}
 	
+	@Override
+	public void onStartTurn(Entity creature, Room room) {
+		AIComponent aiComponent = Mappers.aiComponent.get(creature);
+		if (aiComponent.getTarget() != null) {
+			GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(aiComponent.getTarget());
+			if (gridPositionComponent != null) {
+				// Check if the current target can still be reached
+				boolean canMoveToTarget = TileUtil.canMoveToEnemy(creature, gridPositionComponent.coord(), room);
+				if (!canMoveToTarget) aiComponent.setTarget(null);
+			}
+		}
+		
+		if (aiComponent.getTarget() == null) {
+			// If no target, select a new one
+			selectTarget(creature, null, room);
+		}
+	}
+	
 	
 	@Override
 	public void onLoseTarget(Entity creature, Room room) {
@@ -26,7 +44,23 @@ public class AllyClone extends Creature {
 		super.onLoseTarget(creature, room);
 		
 		// Switch to another target
+		selectTarget(creature, previousTarget, room);
+	}
 
+
+	
+	@Override
+	public void onRoomCleared(Entity creature, Room room) {
+		GridPositionComponent pos = Mappers.gridPositionComponent.get(creature);
+		VFXUtil.createSmokeEffect(pos.coord());
+		room.removeAlly(creature);
+	}
+	
+	
+	// Utils
+	
+
+	private void selectTarget(Entity creature, Entity previousTarget, Room room) {
 		GridPositionComponent pos = Mappers.gridPositionComponent.get(creature);
 
 		Entity target = null;
@@ -37,6 +71,10 @@ public class AllyClone extends Creature {
 			GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemy);
 			int dist = TileUtil.getDistanceBetweenTiles(pos.coord(), enemyPos.coord());
 			if (target == null || dist < shortestDistance) {
+				
+				//Check whether there is a path to this target
+				if (!TileUtil.canMoveToEnemy(creature, enemyPos.coord(), room)) continue;
+				
 				target = enemy;
 				shortestDistance = dist;
 				
@@ -47,12 +85,5 @@ public class AllyClone extends Creature {
 		if (target != null) {
 			Mappers.aiComponent.get(creature).setAlerted(true, creature, target);
 		}
-	}
-	
-	@Override
-	public void onRoomCleared(Entity creature, Room room) {
-		GridPositionComponent pos = Mappers.gridPositionComponent.get(creature);
-		VFXUtil.createSmokeEffect(pos.coord());
-		room.removeAlly(creature);
 	}
 }

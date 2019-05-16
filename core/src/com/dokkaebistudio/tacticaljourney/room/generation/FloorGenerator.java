@@ -72,7 +72,7 @@ public abstract class FloorGenerator {
 		endRoomY = random.nextSeededInt(2) == 0 ? endRoomY : -endRoomY;
 		
 		// 3 - Build a path from startRoom to endRoom
-		Room startRoom = new Room(floor, getNextRoomIndex(), gameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
+		Room startRoom = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.START_FLOOR_ROOM);
 		roomsPerPosition.put(new Vector2(0,0), startRoom);
 		positionsPerRoom.put(startRoom, new Vector2(0,0));
 		rooms.add(startRoom);

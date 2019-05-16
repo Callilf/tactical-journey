@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
@@ -25,19 +26,26 @@ public class OrbUtil {
 			OrbComponent orbComponent = Mappers.orbComponent.get(orb);
 			orbComponent.onContact(orb, player.get(), room);
 		} else {
-			Optional<Entity> enemy = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), EnemyComponent.class, room);
-			if (enemy.isPresent() && Mappers.enemyComponent.get(enemy.get()).canActivateOrbs()) {
+			Optional<Entity> entity = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), EnemyComponent.class, room);
+			if (entity.isPresent() && Mappers.enemyComponent.get(entity.get()).canActivateOrbs()) {
 				OrbComponent orbComponent = Mappers.orbComponent.get(orb);
-				orbComponent.onContact(orb, enemy.get(), room);
+				orbComponent.onContact(orb, entity.get(), room);
 			} else {
+				entity = TileUtil.getEntityWithComponentOnTile(gridPositionComponent.coord(), AllyComponent.class, room);
+				if (entity.isPresent()) {
+					OrbComponent orbComponent = Mappers.orbComponent.get(orb);
+					orbComponent.onContact(orb, entity.get(), room);
+				} else {
 				
-				Set<Entity> otherOrbs = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), OrbComponent.class, room);
-				for (Entity otherOrb : otherOrbs) {
-					if (otherOrb != null && otherOrb != orb) {
-						OrbComponent orbComponent = Mappers.orbComponent.get(orb);
-						orbComponent.onContactWithAnotherOrb(orb, otherOrb, room);
-						break;
+					Set<Entity> otherOrbs = TileUtil.getEntitiesWithComponentOnTile(gridPositionComponent.coord(), OrbComponent.class, room);
+					for (Entity otherOrb : otherOrbs) {
+						if (otherOrb != null && otherOrb != orb) {
+							OrbComponent orbComponent = Mappers.orbComponent.get(orb);
+							orbComponent.onContactWithAnotherOrb(orb, otherOrb, room);
+							break;
+						}
 					}
+					
 				}
 			}
 		}

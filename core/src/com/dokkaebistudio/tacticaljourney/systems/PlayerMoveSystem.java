@@ -587,8 +587,8 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 
 	private boolean selectTileAndBuildWaypoints(Entity moverEntity, GridPositionComponent destinationPos) {
 		// Check whether we can find a path to this tile
-		List<Entity> waypoints = tileSearchService.buildWaypointList(moverEntity, moveCompo, moverCurrentPos, 
-				destinationPos, room);
+		List<Entity> waypoints = TileSearchService.buildWaypointList(moverEntity, moveCompo, moverCurrentPos.coord(), 
+				destinationPos.coord(), room, true);
 
 		if (waypoints == null) {
 			// No path found

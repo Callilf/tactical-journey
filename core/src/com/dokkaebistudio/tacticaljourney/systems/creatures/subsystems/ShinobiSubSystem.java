@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -155,8 +156,9 @@ public class ShinobiSubSystem extends CreatureSubSystem {
 	    				moveComponent.setSelectedTile(destinationPos.coord(), room);
 	    					
 	    				//Display the way to go to this point
-	    				List<Entity> waypoints = creatureSystem.getTileSearchService().buildWaypointList(enemy, moveComponent, Mappers.gridPositionComponent.get(enemy), 
-	    						destinationPos, room);
+	    				List<Entity> waypoints = TileSearchService.buildWaypointList(enemy, moveComponent, 
+	    						Mappers.gridPositionComponent.get(enemy).coord(), 
+	    						destinationPos.coord(), room, true);
 	    				moveComponent.setWayPoints(waypoints);
 	    				moveComponent.hideMovementEntities();
 	            		room.setCreatureState(RoomCreatureState.MOVE_DESTINATION_SELECTED);
@@ -336,12 +338,14 @@ public class ShinobiSubSystem extends CreatureSubSystem {
 				rangeSkill.setActive(true);
 
 
-				int leftDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), LEFT_CLONE_TILE);
-				int rightDistance = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), RIGHT_CLONE_TILE);
-				if (leftDistance >= rightDistance) {
-					fleeTile = RIGHT_CLONE_TILE;
-				} else {
+				int leftDistanceFromShinobi = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), LEFT_CLONE_TILE);
+				int leftDistanceFromPlayer = TileUtil.getDistanceBetweenTiles(playerTile.getGridPos(), LEFT_CLONE_TILE);
+//				int rightDistanceFromShinobi = TileUtil.getDistanceBetweenTiles(enemyPos.coord(), RIGHT_CLONE_TILE);
+//				int rightDistanceFromPlayer = TileUtil.getDistanceBetweenTiles(playerTile.getGridPos(), RIGHT_CLONE_TILE);
+				if (leftDistanceFromShinobi <= leftDistanceFromPlayer) {
 					fleeTile = LEFT_CLONE_TILE;
+				} else {
+					fleeTile = RIGHT_CLONE_TILE;
 				}
 				
 				ItemComponent itemComponent = Mappers.itemComponent.get(smokeBomb);

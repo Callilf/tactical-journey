@@ -97,17 +97,31 @@ public class TileSearchService {
 	 * @param moverCurrentPos the position of the start tile
 	 * @param destinationPos the position of the destination
 	 * @param room the room
-	 * @return the list of waypoints entities. An empty list if the destination is already beside the startpoint. Null if
+	 * @param onlyUseMovableTiles only use the movable tiles to check the path
+	 * @return the list of waypoint entities. An empty list if the destination is already beside the startpoint. Null if
 	 * no path can be found.
 	 */
-	public List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, GridPositionComponent moverCurrentPos,
-			GridPositionComponent destinationPos, Room room) {
-		Tile startTile = room.getTileAtGridPosition(moverCurrentPos.coord());
-		List<Tile> movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
+	public static List<Entity> buildWaypointList(Entity mover, MoveComponent moveCompo, Vector2 moverCurrentPos,
+			Vector2 destinationPos, Room room, boolean onlyUseMovableTiles) {
+		Tile startTile = room.getTileAtGridPosition(moverCurrentPos);
+		List<Tile> movableTilesList = null;
+		
+		if (onlyUseMovableTiles) {
+			movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
+		} else {
+			movableTilesList = new ArrayList<>();
+			for (Tile[] column : room.grid) {
+				for (Tile tile : column) {
+					if (tile.isWalkable(mover)) {
+						movableTilesList.add(tile);
+					}
+				}
+			}
+		}
 		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
 		IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);
 		GraphPath<Tile> path = new DefaultGraphPath<Tile>();
-		indexedAStarPathFinder.searchNodePath(startTile, room.getTileAtGridPosition(destinationPos.coord()), new RoomHeuristic(), path);
+		indexedAStarPathFinder.searchNodePath(startTile, room.getTileAtGridPosition(destinationPos), new RoomHeuristic(), path);
 		
 		int pathNb = -1;
 		List<Entity> waypoints = new ArrayList<>();
@@ -123,6 +137,43 @@ public class TileSearchService {
 			
 		}
 		return waypoints;
+	}
+	
+	
+	/**
+	 * Build the waypoint list to get the path to follow from start tile to end tile.
+	 * @param moveCompo the moveComponent
+	 * @param moverCurrentPos the position of the start tile
+	 * @param destinationPos the position of the destination
+	 * @param room the room
+	 * @param onlyUseMovableTiles only use the movable tiles to check the path
+	 * @return the list of waypoint entities. An empty list if the destination is already beside the startpoint. Null if
+	 * no path can be found.
+	 */
+	public static boolean findPath(Entity mover, MoveComponent moveCompo, Vector2 moverCurrentPos,
+			Vector2 destinationPos, Room room, boolean onlyUseMovableTiles) {
+		Tile startTile = room.getTileAtGridPosition(moverCurrentPos);
+		List<Tile> movableTilesList = null;
+		
+		if (onlyUseMovableTiles) {
+			movableTilesList = new ArrayList<>(moveCompo.allWalkableTiles);
+		} else {
+			movableTilesList = new ArrayList<>();
+			movableTilesList.add(TileUtil.getTileAtGridPos(Mappers.gridPositionComponent.get(mover).coord(), room));
+			for (Tile[] column : room.grid) {
+				for (Tile tile : column) {
+					if (tile.isWalkable(mover)) {
+						movableTilesList.add(tile);
+					}
+				}
+			}
+		}
+		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
+		IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);
+		GraphPath<Tile> path = new DefaultGraphPath<Tile>();
+		indexedAStarPathFinder.searchNodePath(startTile, room.getTileAtGridPosition(destinationPos), new RoomHeuristic(), path);
+		
+		return path.getCount() != 0;
 	}
 	
 	

@@ -1,22 +1,20 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
@@ -458,5 +456,41 @@ public final class TileUtil {
 		}
 
 		return !empty;
+	}
+	
+	/**
+	 * Checks whether the given entity can move the its current position to the given position.
+	 * @param mover the mover entity
+	 * @param destination the destination grid position
+	 * @param room the room
+	 * @return true if the entity can go there, false if no path can be found
+	 */
+	public static boolean canMoveToPosition(Entity mover, Vector2 destination, Room room) {
+		MoveComponent moveComponent = Mappers.moveComponent.get(mover);
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(mover);
+		return TileSearchService.findPath(mover, moveComponent, gridPositionComponent.coord(), 
+				destination, room, false);
+	}
+	
+	/**
+	 * Checks whether the given entity can move the its current position to the given position.
+	 * @param mover the mover entity
+	 * @param destination the destination grid position
+	 * @param room the room
+	 * @return true if the entity can go there, false if no path can be found
+	 */
+	public static boolean canMoveToEnemy(Entity mover, Vector2 enemyPos, Room room) {
+		MoveComponent moveComponent = Mappers.moveComponent.get(mover);
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(mover);
+		
+		List<Tile> adjacentTiles = getAdjacentTiles(enemyPos, room);
+		for (Tile t : adjacentTiles) {
+			if (!t.isWalkable(mover)) continue;
+			boolean foundPath = TileSearchService.findPath(mover, moveComponent, gridPositionComponent.coord(), 
+					t.getGridPos(), room, false);
+			if (foundPath) return true;
+		}
+		
+		return false;
 	}
 }

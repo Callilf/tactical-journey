@@ -163,8 +163,8 @@ public abstract class CreatureSystem extends EntitySystem implements RoomSystem 
     				moveCompo.setSelectedTile(destinationPos.coord(), room);
     					
     				//Display the way to go to this point
-    				List<Entity> waypoints = tileSearchService.buildWaypointList(creatureEntity,moveCompo, enemyCurrentPos, 
-    						destinationPos, room);
+    				List<Entity> waypoints = TileSearchService.buildWaypointList(creatureEntity,moveCompo, 
+    						enemyCurrentPos.coord(), destinationPos.coord(), room, true);
     		       	moveCompo.setWayPoints(waypoints);
     		       	moveCompo.hideMovementEntities();
             		room.setCreatureState(RoomCreatureState.MOVE_DESTINATION_SELECTED);

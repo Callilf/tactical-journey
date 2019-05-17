@@ -38,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribes
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanShield;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanSpear;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanTotem;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EnemyFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -441,6 +442,7 @@ public final class EnemyTribesmenFactory {
 		
 		HealthComponent healthComponent = engine.createComponent(HealthComponent.class);
 		healthComponent.room = room;
+		healthComponent.addResistance(DamageType.EXPLOSION, 100);
 		healthComponent.setMaxHp(10);
 		healthComponent.setHp(5);
 		healthComponent.setMaxArmor(0);

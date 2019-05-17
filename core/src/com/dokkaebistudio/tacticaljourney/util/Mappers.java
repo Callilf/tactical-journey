@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -125,6 +126,7 @@ public final class Mappers {
 
 	public final static ComponentMapper<CreepComponent> creepComponent = ComponentMapper.getFor(CreepComponent.class);
 	public final static ComponentMapper<CreepEmitterComponent> creepEmitterComponent = ComponentMapper.getFor(CreepEmitterComponent.class);
+	public final static ComponentMapper<CreepImmunityComponent> creepImmunityComponent = ComponentMapper.getFor(CreepImmunityComponent.class);
 	
 	public final static ComponentMapper<OrbComponent> orbComponent = ComponentMapper.getFor(OrbComponent.class);
 	public final static ComponentMapper<OrbCarrierComponent> orbCarrierComponent = ComponentMapper.getFor(OrbCarrierComponent.class);

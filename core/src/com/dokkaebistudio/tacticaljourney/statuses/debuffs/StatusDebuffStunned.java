@@ -69,12 +69,13 @@ public class StatusDebuffStunned extends Status {
 		
 		boolean isPlayer = Mappers.playerComponent.has(entity);
 		if (isPlayer && room.getState().isPlayerTurn()) {
-			room.turnManager.endPlayerTurn();
+			room.setNextState(RoomState.PLAYER_STUNNED);
+//			room.turnManager.endPlayerTurn();
 		}
 			
 		boolean isCreature = Mappers.allyComponent.has(entity) || Mappers.enemyComponent.has(entity);
 		if (isCreature && (room.getState().isAllyTurn() || room.getState().isEnemyTurn()) && CreatureSystem.creatureCurrentyPlaying == entity) {
-			// Finish this creature turn since it's dead
+			// Finish this creature turn
 			room.setCreatureState(RoomCreatureState.NONE);
 		}	
 		

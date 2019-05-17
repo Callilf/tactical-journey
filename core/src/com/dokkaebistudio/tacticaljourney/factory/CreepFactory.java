@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarit
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepBanana;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
@@ -294,4 +295,36 @@ public final class CreepFactory {
 		return creepEntity;
 	}
 	
+	/**
+	 * Create a banana peel.
+	 * @param room the room
+	 * @param pos the position
+	 * @return the creep entity
+	 */
+	public Entity createBananaPeel(Room room, Vector2 pos, Entity parentEntity) {
+		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_BANANA, Assets.creep_banana);
+				
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.BANANA_PEEL_TITLE);
+		inspect.setDescription(Descriptions.BANANA_PEEL_DESCRIPTION);
+		creepEntity.add(inspect);
+		
+		DestructibleComponent destructible = engine.createComponent(DestructibleComponent.class);
+		destructible.setDestroyableWithWeapon(true);
+		creepEntity.add(destructible);
+		
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(new CreepBanana());
+		creepEntity.add(creepCompo);
+		
+		if (parentEntity != null) {
+			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+			parentCompo.setParent(parentEntity);
+			creepEntity.add(parentCompo);
+		}
+		
+		room.addEntity(creepEntity);		
+		creepCompo.onAppear(creepEntity, room);
+		return creepEntity;
+	}
 }

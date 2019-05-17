@@ -66,6 +66,7 @@ public class Assets {
 	public static RegionDescriptor tallGrass_destroyed;
 	public static RegionDescriptor vineGrass;
 	public static RegionDescriptor entangled_vines;
+	public static RegionDescriptor creep_banana;
 	
 	public static RegionDescriptor wooden_panel;
 	public static RegionDescriptor wall_gate_closed;
@@ -483,6 +484,7 @@ public class Assets {
 		vineGrass = Assets.getTexture("tile-vines-grass");
 		mud_destroyed = Assets.getTexture("tile-mud-destroyed");
 		entangled_vines = Assets.getTexture("entangled_vines");
+		creep_banana = Assets.getTexture("creep-banana");
 		
 		wooden_panel = Assets.getTexture("wooden-panel");
 		wall_gate_closed = Assets.getTexture("wall-gate-closed");

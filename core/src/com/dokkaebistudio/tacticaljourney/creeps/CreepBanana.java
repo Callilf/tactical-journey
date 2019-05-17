@@ -8,14 +8,12 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
-import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
@@ -24,13 +22,13 @@ import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
  * @author Callil
  *
  */
-public class CreepVinesBush extends Creep {
+public class CreepBanana extends Creep {
 	
 	private int chanceToProc = 100;
 	
-	public CreepVinesBush() {
-		super("bush", Assets.tallGrass);
-		type = CreepType.VINES_BUSH;
+	public CreepBanana() {
+		super("banana", Assets.creep_banana);
+		type = CreepType.BANANA;
 	}
 	
 
@@ -39,33 +37,24 @@ public class CreepVinesBush extends Creep {
 		
 		int chance = RandomSingleton.getInstance().nextUnseededInt(100);
 		if (chance < chanceToProc) {
-			GridPositionComponent creepPos = Mappers.gridPositionComponent.get(creep);
 
 			// Entangle
 			StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(walker);
 			if (statusReceiverComponent != null) {
-				Journal.addEntry("[FOREST]Vines surged from the bush and entangled " + Mappers.inspectableComponent.get(walker).getTitle());
-				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffEntangled(3));
+				Journal.addEntry("[YELLOW]" + Journal.getLabel(walker) + " slipped on a banana peel");
+				statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffStunned(2));
 			}
-			
-			boolean immune = false;
-			InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(walker);
-			immune = inventoryComponent != null && inventoryComponent.contains(ItemVegetalGarment.class);
-			
-			if (!immune) {
-				// Stop movement
-				MoveComponent moveComponent = Mappers.moveComponent.get(walker);
-				moveComponent.setMoveRemaining(0);
-				if (moveComponent.moving) {
-					moveComponent.setSelectedTile(creepPos.coord(), room);
-					MovementHandler.finishRealMovement(walker, room);
-				}
-			}
-			
-			room.entityFactory.createSpriteOnTile(creepPos.coord(), 2, Assets.tallGrass_destroyed, EntityFlagEnum.DESTROYED_SPRITE, room);
 
+			// Stop movement
+			GridPositionComponent creepPos = Mappers.gridPositionComponent.get(creep);
+			MoveComponent moveComponent = Mappers.moveComponent.get(walker);
+			moveComponent.setMoveRemaining(0);
+			if (moveComponent.moving) {
+				moveComponent.setSelectedTile(creepPos.coord(), room);
+				MovementHandler.finishRealMovement(walker, room);
+			}
+			
 			room.removeEntity(creep);
-
 		}
 	}
 	

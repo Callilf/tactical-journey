@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -25,7 +26,8 @@ public abstract class Creep {
 		MUD,
 		FIRE,
 		BUSH,
-		VINES_BUSH;
+		VINES_BUSH,
+		BANANA;
 	}
 	
 	/** The type. */
@@ -85,7 +87,16 @@ public abstract class Creep {
 	 * @return
 	 */
 	public boolean isImmune(Entity entity) {
-		return false;
+		boolean immune = Mappers.flyComponent.has(entity);
+		
+		if (!immune) {
+			CreepImmunityComponent creepImmunityComponent = Mappers.creepImmunityComponent.get(entity);
+			if (creepImmunityComponent != null) {
+				immune = creepImmunityComponent.isImmune(this.type);
+			}
+		}
+		
+		return immune;
 	}
 	
 	

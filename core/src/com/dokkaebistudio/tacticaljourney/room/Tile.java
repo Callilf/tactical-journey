@@ -43,6 +43,14 @@ public class Tile {
 	
 	
 	/**
+	 * Check whether the tile is not a pit, and has no solid entity on it.
+	 * @return true if this tile can be walked on.
+	 */
+	public boolean isWalkable() {
+		return isWalkable(null);
+	}
+	
+	/**
 	 * Check whether the given entity can walk on this tile.
 	 * @param walker the walking entity
 	 * @return true if the entity can walk on this tile.
@@ -51,8 +59,13 @@ public class Tile {
 		Optional<Entity> solid = TileUtil.getEntityWithComponentOnTile(this.gridPos, SolidComponent.class, room);
 		if (solid.isPresent()) return false;
 		
+		boolean fly = false;
+		if (walker != null) {
+			fly = Mappers.flyComponent.has(walker);
+		}
+		
 		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
-		if (chasm.isPresent() && !Mappers.flyComponent.has(walker)) return false;
+		if (chasm.isPresent() && !fly) return false;
 		
 		return true;
 	}

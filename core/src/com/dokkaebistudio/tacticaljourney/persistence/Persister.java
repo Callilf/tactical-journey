@@ -42,6 +42,7 @@ import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepEmitterComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -701,6 +702,7 @@ public class Persister {
 
 		kryo.register(CreepComponent.class, CreepComponent.getSerializer(engine));
 		kryo.register(CreepEmitterComponent.class, CreepEmitterComponent.getSerializer(engine));
+		kryo.register(CreepImmunityComponent.class, CreepImmunityComponent.getSerializer(engine));
 		
 		kryo.register(OrbComponent.class, OrbComponent.getSerializer(engine));
 		kryo.register(OrbCarrierComponent.class, OrbCarrierComponent.getSerializer(engine));

@@ -78,7 +78,9 @@ public class CreepComponent implements Component, Poolable {
 	 * @param room the room
 	 */
 	public void onWalk(Entity walker, Entity creep, Room room) {
-		type.onWalk(walker, creep, room);
+		if (!type.isImmune(walker)) {
+			type.onWalk(walker, creep, room);
+		}
 	}
 	
 	
@@ -89,7 +91,9 @@ public class CreepComponent implements Component, Poolable {
 	 * @param room the room
 	 */
 	public void onStop(Entity walker, Entity creep, Room room) {
-		type.onStop(walker, creep, room);
+		if (!type.isImmune(walker)) {
+			type.onStop(walker, creep, room);
+		}
 	}
 	
 	/**

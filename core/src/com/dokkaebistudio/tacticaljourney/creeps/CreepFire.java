@@ -36,12 +36,6 @@ public class CreepFire extends Creep {
 	}
 	
 	
-	@Override
-	public boolean isImmune(Entity entity) {
-		return Mappers.flyComponent.has(entity);
-	}
-	
-	
 
 	@Override
 	public void onWalk(Entity walker, Entity creep, Room room) {

@@ -94,6 +94,9 @@ public class Descriptions {
 	public static final String FIRE_TITLE = "Fire";
 	public static final String FIRE_DESCRIPTION = "A small fire that will inflict the [ORANGE]fire[] status effect to anything that steps into it.";
 	
+	public static final String BANANA_PEEL_TITLE = "Banana peel";
+	public static final String BANANA_PEEL_DESCRIPTION = "A banana peel dropped on the floor. An timeless gag but still you'd better avoid stepping on it.";
+
 	// Orbs
 	
 	public static final String ORB_ENERGY_TITLE = "Energy orb";

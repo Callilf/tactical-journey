@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
@@ -38,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyStinger;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -504,7 +506,7 @@ public final class EnemyFactory {
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
-		EnemyOrangutan enemyOrangutan = new EnemyOrangutan();
+		EnemyOrangutan enemyOrangutan = new EnemyOrangutan(RandomSingleton.getInstance().getNextSeededRandom());
 		aiComponent.setType(enemyOrangutan);
 		aiComponent.setSubSystem(new OrangutanSubSystem());
 		aiComponent.setBasicMoveStrategy(AIMoveStrategy.MOVE_RANDOMLY_BUT_ATTACK_IF_POSSIBLE);
@@ -583,6 +585,11 @@ public final class EnemyFactory {
 	
 		StatusReceiverComponent statusReceiverCompo = engine.createComponent(StatusReceiverComponent.class);
 		enemyEntity.add(statusReceiverCompo);
+		
+		// Creep immunity
+		CreepImmunityComponent creepImmunityCompo = engine.createComponent(CreepImmunityComponent.class);
+		creepImmunityCompo.getTypes().add(CreepType.BANANA);
+		enemyEntity.add(creepImmunityCompo);
 		
 		room.addEnemy(enemyEntity);
 		

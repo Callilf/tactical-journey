@@ -8,10 +8,13 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
+import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -43,6 +46,30 @@ public class BlessingUnfinished extends Blessing {
 	public RegionDescriptor texture() {
 		return Assets.blessing_unfinished;
 	}
+	
+	@Override
+	public void onReceive(Entity entity) {
+		CreepImmunityComponent creepImmunityComponent = Mappers.creepImmunityComponent.get(entity);
+		if (creepImmunityComponent == null) {
+			creepImmunityComponent = GameScreen.engine.createComponent(CreepImmunityComponent.class);
+			entity.add(creepImmunityComponent);
+		}
+		
+		creepImmunityComponent.getTypes().add(CreepType.BUSH);
+		creepImmunityComponent.getTypes().add(CreepType.VINES_BUSH);
+		creepImmunityComponent.getTypes().add(CreepType.WEB);
+	}
+	
+	@Override
+	public void onRemove(Entity entity) {
+		CreepImmunityComponent creepImmunityComponent = Mappers.creepImmunityComponent.get(entity);
+		if (creepImmunityComponent != null) {
+			creepImmunityComponent.getTypes().remove(CreepType.BUSH);
+			creepImmunityComponent.getTypes().remove(CreepType.VINES_BUSH);
+			creepImmunityComponent.getTypes().remove(CreepType.WEB);
+		}
+	}
+	
 	
 	@Override
 	public void onArriveOnTile(Vector2 gridPos, Entity mover, Room room) {

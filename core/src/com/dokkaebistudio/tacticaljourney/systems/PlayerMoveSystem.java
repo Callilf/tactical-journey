@@ -265,6 +265,13 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			
 			
 		case PLAYER_STUNNED:
+			moveCompo.clearSelectedTileFromPreviousTurn();
+			moveCompo.clearMovableTiles();
+			attackCompo = Mappers.attackComponent.get(player);
+			if (attackCompo != null) {
+				attackCompo.clearAttackableTiles();
+			}
+			
 			handleRightClickOnEnemies(player);
 			handleClickOnPlayer(player);
 			break;

@@ -1,17 +1,32 @@
 package com.dokkaebistudio.tacticaljourney.creature.enemies;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.OrangutanSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class EnemyOrangutan extends Creature {
 	
 	private boolean sleeping = true;
+	private RandomXS128 random;
+	
+	public EnemyOrangutan() {}
+	
+	public EnemyOrangutan(RandomXS128 random) {
+		this.random = random;
+	}
 
 	@Override
 	public String title() {
@@ -35,6 +50,16 @@ public class EnemyOrangutan extends Creature {
 		
 		// Orient the sprite towards the player
 		Mappers.spriteComponent.get(enemy).orientSprite(enemy, playerPos.coord());
+		
+		List<Tile> freeTiles = new ArrayList<>();
+		List<Tile> allTiles = TileUtil.getAllTiles(room);
+		allTiles.stream().filter(tile -> tile.isWalkable()).forEachOrdered(freeTiles::add);
+		
+		Collections.shuffle(freeTiles, random);
+		
+		for (int i=0 ; i<10 ; i++) {
+			room.entityFactory.creepFactory.createBananaPeel(room, freeTiles.get(i).getGridPos(), enemy);
+		}
 	}
 	
 
@@ -55,5 +80,15 @@ public class EnemyOrangutan extends Creature {
 
 	public void setSleeping(boolean sleeping) {
 		this.sleeping = sleeping;
+	}
+
+
+	public RandomXS128 getRandom() {
+		return random;
+	}
+
+
+	public void setRandom(RandomXS128 random) {
+		this.random = random;
 	}
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -28,8 +29,10 @@ import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.ProfilePopinDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
@@ -149,14 +152,24 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 				});
     		}
     		
-    		alterationReceiverCompo.sort();
-    		refreshProfileTable();
-    		refreshBlessingTable();
-    		refreshCurseTable();
-    		mainTable.pack();
-    		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
-    		
-    		stage.addActor(mainTable);
+    		if (playerCompo.getProfilePopinDisplayMode() == ProfilePopinDisplayModeEnum.PROFILE) {
+    			if (curseTable.getParent() != mainTable) {
+    				mainTable.add(curseTable);
+    			}
+	    		alterationReceiverCompo.sort();
+	    		refreshProfileTable();
+	    		refreshBlessingTable();
+	    		refreshCurseTable();
+	    		mainTable.pack();
+	    		mainTable.setPosition(GameScreen.SCREEN_W/2 - mainTable.getWidth()/2, GameScreen.SCREEN_H/2 - mainTable.getHeight()/2);
+	    		
+	    		stage.addActor(mainTable);
+    		} else if (playerCompo.getProfilePopinDisplayMode() == ProfilePopinDisplayModeEnum.LIFT_CURSE) {
+	    		refreshCurseTable();
+    			curseTable.pack();
+    			curseTable.setPosition(GameScreen.SCREEN_W/2 - curseTable.getWidth()/2, GameScreen.SCREEN_H/2 - curseTable.getHeight()/2);
+	    		stage.addActor(curseTable);
+    		}
     
     	}
     	
@@ -170,7 +183,7 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
             stage.act(Gdx.graphics.getDeltaTime());
     		stage.draw();
     		
-    		if (InputSingleton.getInstance().leftClickJustPressed) {
+    		if (playerCompo.getProfilePopinDisplayMode().closePopinOnClick() && InputSingleton.getInstance().leftClickJustPressed) {
     			closePopin();
     		}
     	}
@@ -477,9 +490,25 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 			oneAlterationSubTable.add(chance).width(Assets.profile_alteration_background.getRegionWidth() - 10).pad(0, 5, 5, 5);
 		}
 		
+		
+		if (playerCompo.getProfilePopinDisplayMode() == ProfilePopinDisplayModeEnum.LIFT_CURSE) {
+			oneAlterationSubTable.row();
+			TextButton liftCurseButton = new TextButton("Lift", PopinService.buttonStyle());
+			oneAlterationSubTable.add(liftCurseButton).width(100).height(50).pad(5, 0, 5, 0);
+
+			liftCurseButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {					
+					AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+					alterationReceiverComponent.requestAction(AlterationActionEnum.LIFT_CURSE, alteration);
+					closePopin();
+				}
+			});
+		}
+		
 		oneAlterationSubTable.pack();
 		
-		oneAlterationTable.add(oneAlterationSubTable).pad(15, 0, 0, 15);
+		oneAlterationTable.add(oneAlterationSubTable).pad(15, 0, 0, 15);		
 		oneAlterationTable.pack();
 		return oneAlterationTable;
 	}
@@ -493,8 +522,12 @@ public class ProfilePopinRenderer implements Renderer, RoomSystem {
 	 * Close the level up popin and unpause the game.
 	 */
 	private void closePopin() {
-		playerCompo.setProfilePopinDisplayed(false);
-		mainTable.remove();
+		if (playerCompo.getProfilePopinDisplayMode() == ProfilePopinDisplayModeEnum.LIFT_CURSE) {
+			curseTable.remove();
+		} else {
+			mainTable.remove();
+		}
+		playerCompo.setProfilePopinDisplayed(ProfilePopinDisplayModeEnum.NONE);
 		room.setNextState(room.getLastInGameState());
 	}
 

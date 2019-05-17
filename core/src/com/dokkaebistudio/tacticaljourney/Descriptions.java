@@ -198,6 +198,9 @@ public class Descriptions {
 	public static final String ITEM_WING_POTION_TITLE = "Wing potion";
 	public static final String ITEM_WING_POTION_DESCRIPTION = "Upon drink, grants flight for 30 turns.";
 	
+	public static final String ITEM_PURITY_POTION_TITLE = "Purity potion";
+	public static final String ITEM_PURITY_POTION_DESCRIPTION = "Upon drink, allows you to lift a curse of your choice.";
+	
 	public static final String ITEM_SCROLL_DOPPELGANGER_TITLE = "Scroll of Doppelganger";
 	public static final String ITEM_SCROLL_DOPPELGANGER_DESCRIPTION = "Summons a 10 hp copy of oneself that disappear once the room is cleared. Does nothing on a cleared room.";
 	

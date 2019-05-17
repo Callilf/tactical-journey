@@ -41,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.ProfilePopinDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
@@ -530,7 +531,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
-					playerComponent.setProfilePopinDisplayed(!playerComponent.isProfilePopinDisplayed());
+					playerComponent.setProfilePopinDisplayed(playerComponent.getProfilePopinDisplayMode().isPopinDisplayed() ?
+							ProfilePopinDisplayModeEnum.NONE : ProfilePopinDisplayModeEnum.PROFILE);
 					if (playerComponent.isProfilePopinDisplayed()) {
 						InspectSystem.requestAction(InspectModeActionEnum.DEACTIVATE);
 					}
@@ -567,7 +569,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					playerComponent.setProfilePopinDisplayed(false);
+					playerComponent.setProfilePopinDisplayed(ProfilePopinDisplayModeEnum.NONE);
 
 					if (inventoryComponent.getDisplayMode() != InventoryDisplayModeEnum.NONE) {
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
@@ -610,7 +612,7 @@ public class HUDRenderer implements Renderer, RoomSystem {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (inspectBtn.isChecked()) {
-						playerComponent.setProfilePopinDisplayed(false);
+						playerComponent.setProfilePopinDisplayed(ProfilePopinDisplayModeEnum.NONE);
 						inventoryComponent.setDisplayMode(InventoryDisplayModeEnum.NONE);
 						InspectSystem.requestAction(InspectModeActionEnum.ACTIVATE);
 					} else {

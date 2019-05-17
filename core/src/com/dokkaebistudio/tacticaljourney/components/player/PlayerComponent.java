@@ -37,7 +37,20 @@ public class PlayerComponent implements Component {
 	
 	
 	/** Whether the profile popin is opened or not. */
-	private boolean profilePopinDisplayed;
+	private ProfilePopinDisplayModeEnum profilePopinDisplayMode = ProfilePopinDisplayModeEnum.NONE;
+	
+	public enum ProfilePopinDisplayModeEnum {
+		NONE,
+		PROFILE,
+		LIFT_CURSE;
+		
+		public boolean isPopinDisplayed() {
+			return this == PROFILE || this == ProfilePopinDisplayModeEnum.LIFT_CURSE;
+		}
+		public boolean closePopinOnClick() {
+			return this == PROFILE;
+		}
+	}
 	
 	
 
@@ -137,11 +150,15 @@ public class PlayerComponent implements Component {
 	}
 
 	public boolean isProfilePopinDisplayed() {
-		return profilePopinDisplayed;
+		return profilePopinDisplayMode.isPopinDisplayed();
+	}
+	
+	public ProfilePopinDisplayModeEnum getProfilePopinDisplayMode() {
+		return profilePopinDisplayMode;
 	}
 
-	public void setProfilePopinDisplayed(boolean profilePopinDisplayed) {
-		this.profilePopinDisplayed = profilePopinDisplayed;
+	public void setProfilePopinDisplayed(ProfilePopinDisplayModeEnum displayMode) {
+		this.profilePopinDisplayMode = displayMode;
 	}
 
 

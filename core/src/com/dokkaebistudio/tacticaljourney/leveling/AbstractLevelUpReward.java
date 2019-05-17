@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
+import com.dokkaebistudio.tacticaljourney.leveling.infusable.LevelUpAlterationRewardPurityPotion;
 import com.dokkaebistudio.tacticaljourney.leveling.infusable.LevelUpAlterationRewardReceiveInfusable;
 import com.dokkaebistudio.tacticaljourney.leveling.items.LevelUpItemRewardArrowsMaxUp;
 import com.dokkaebistudio.tacticaljourney.leveling.items.LevelUpItemRewardArrowsReceive;
@@ -159,9 +160,9 @@ public abstract class AbstractLevelUpReward {
 		case RECEIVE_INFUSABLE:
 			reward = new LevelUpAlterationRewardReceiveInfusable(levelUpSeededRandom);
 			break;
-//		case CURE_CURSE:
-//			reward = new LevelUpAlterationRewardReceiveInfusable();
-//			break;
+		case RECEIVE_PURITY_POTION:
+			reward = new LevelUpAlterationRewardPurityPotion(levelUpSeededRandom);
+			break;
 		
 		default:
 			

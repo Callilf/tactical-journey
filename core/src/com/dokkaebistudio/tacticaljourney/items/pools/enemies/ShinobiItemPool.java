@@ -19,10 +19,11 @@ public class ShinobiItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
 		
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.HAND_PROSTHESIS, 1, true));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.LEFT_JIKATABI, 1, true));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.RIGHT_JIKATABI, 1, true));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHINOBI_HEADBAND, 1, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.HAND_PROSTHESIS, 5, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.LEFT_JIKATABI, 5, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.RIGHT_JIKATABI, 5, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHINOBI_HEADBAND, 5, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_PURITY, 1, false));
 	}
 	
 

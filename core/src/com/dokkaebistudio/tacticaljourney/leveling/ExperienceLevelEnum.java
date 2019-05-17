@@ -3,7 +3,7 @@
  */
 package com.dokkaebistudio.tacticaljourney.leveling;
 
-
+import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum.LevelUpRewardTypeEnum;
 
 /**
  * 
@@ -11,32 +11,37 @@ package com.dokkaebistudio.tacticaljourney.leveling;
  *
  */
 public enum ExperienceLevelEnum {
-
-	LEVEL_1(5),
-	LEVEL_2(10),
-	LEVEL_3(25),
-	LEVEL_4(50),
-	LEVEL_5(75),
-	LEVEL_6(100),
-	LEVEL_7(150),
-	LEVEL_8(200),
-	LEVEL_9(250),
-	LEVEL_10(300),
-	LEVEL_11(350),
-	LEVEL_12(400),
-	LEVEL_13(4500),
-	LEVEL_14(500),
-	LEVEL_15(600),
-	LEVEL_16(700),
-	LEVEL_17(800),
-	LEVEL_18(900),
-	LEVEL_19(1000);
+	LEVEL_0(10, null),
+	LEVEL_1(20, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_2(30, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_3(40, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_4(50, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_5(60, LevelUpRewardTypeEnum.ALTERATIONS),
+	LEVEL_6(70, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_7(80, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_8(90, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_9(100, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_10(110, LevelUpRewardTypeEnum.ALTERATIONS),
+	LEVEL_11(120, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_12(130, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_13(140, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_14(150, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_15(160, LevelUpRewardTypeEnum.ALTERATIONS),
+	LEVEL_16(170, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_17(180, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_18(190, LevelUpRewardTypeEnum.STATS_UP),
+	LEVEL_19(200, LevelUpRewardTypeEnum.ITEMS),
+	LEVEL_20(210, LevelUpRewardTypeEnum.ALTERATIONS);
 	
 	/** The amount of xp needed to reach the next level. */
 	private int xpToNextLevel;
 	
-	ExperienceLevelEnum(int xpToNextLevel) {
+	/** The type of reward when leveling up. */
+	private LevelUpRewardTypeEnum rewardType;
+	
+	ExperienceLevelEnum(int xpToNextLevel, LevelUpRewardTypeEnum rewardType) {
 		this.xpToNextLevel = xpToNextLevel;
+		this.rewardType = rewardType;
 	}
 	
 	
@@ -47,7 +52,7 @@ public enum ExperienceLevelEnum {
 	 * @throws Exception 
 	 */
 	public static ExperienceLevelEnum get(int level) {
-		if (level <= 0) System.out.println("Calling for tha ExperienceLevelEnum for the level = " + level);
+		if (level < 0) System.out.println("Calling for the ExperienceLevelEnum for the level = " + level);
 		
 		ExperienceLevelEnum[] allLevels = ExperienceLevelEnum.values();
 		if (allLevels.length <= level) {
@@ -68,6 +73,16 @@ public enum ExperienceLevelEnum {
 
 	public void setXpToNextLevel(int xpToNextLevel) {
 		this.xpToNextLevel = xpToNextLevel;
+	}
+
+
+	public LevelUpRewardTypeEnum getRewardType() {
+		return rewardType;
+	}
+
+
+	public void setRewardType(LevelUpRewardTypeEnum rewardType) {
+		this.rewardType = rewardType;
 	}
 	
 	

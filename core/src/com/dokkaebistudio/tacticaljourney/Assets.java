@@ -338,6 +338,7 @@ public class Assets {
 	public static RegionDescriptor regen_potion_item;
 	public static RegionDescriptor wing_potion_item;
 	public static RegionDescriptor fire_potion_item;
+	public static RegionDescriptor purity_potion_item;
 	public static RegionDescriptor web_sack_item;
 	public static RegionDescriptor venom_gland_item;
 	public static RegionDescriptor pebble_item;
@@ -746,6 +747,7 @@ public class Assets {
 		regen_potion_item = Assets.getTexture("item-consumable-regen-potion");
 		wing_potion_item = Assets.getTexture("item-consumable-wing-potion");
 		fire_potion_item = Assets.getTexture("item-consumable-fire-potion");
+		purity_potion_item = Assets.getTexture("item-consumable-purity-potion");
 		web_sack_item = Assets.getTexture("item-web-sack");
 		venom_gland_item = Assets.getTexture("item-consumable-venom-gland");
 		pebble_item = Assets.getTexture("item-consumable-pebble");

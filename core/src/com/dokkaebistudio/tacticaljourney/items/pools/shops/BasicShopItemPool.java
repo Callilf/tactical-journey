@@ -19,25 +19,25 @@ public class BasicShopItemPool extends ItemPool {
 	private static final List<PooledItemDescriptor> commonItemPool = new ArrayList<>();
 
 	static {
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 2));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 4));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_ARROW, 10, 3));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.AMMO_BOMB, 10, 5));
 		
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 8));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 20));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_PIECE, 10, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ARMOR_LIGHT, 5, 25));
 		
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SHURIKEN, 5, 8));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SMOKE_BOMB, 5, 10));
 
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 6));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10, 8));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_FIRE, 10, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_REGEN, 10, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_SMALL_HEALTH, 10, 10));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_WING, 10, 8));
 		
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 10, 5));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.ORB_CONTAINER, 10, 10));
 		
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5, 5));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5, 5));
-		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 5, 10));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DOPPELGANGER, 5, 8));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_TELEPORTATION, 5, 8));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCROLL_DESTRUCTION, 5, 15));
 	}
 
 
@@ -45,9 +45,10 @@ public class BasicShopItemPool extends ItemPool {
 		
 	static {
 		rareItemPool.add(new PooledItemDescriptor(ItemEnum.DIVINE_CATALYST, 5, 40));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.LEATHER, 5, 20));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MERCHANT_MASK, 10, 25, true));
-		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 10, 20));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.LEATHER, 5, 25));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.MERCHANT_MASK, 10, 30, true));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.CLOVER, 10, 25));
+		rareItemPool.add(new PooledItemDescriptor(ItemEnum.POTION_PURITY, 10, 60));
 	}
 	
 	

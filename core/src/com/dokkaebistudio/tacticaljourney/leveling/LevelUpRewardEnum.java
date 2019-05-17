@@ -23,8 +23,8 @@ public enum LevelUpRewardEnum {
 	INVENTORY_SLOT (LevelUpRewardTypeEnum.ITEMS),
 	
 	// Alterations
-	RECEIVE_INFUSABLE (LevelUpRewardTypeEnum.ALTERATIONS);
-//	CURE_CURSE (LevelUpRewardTypeEnum.ALTERATIONS);
+	RECEIVE_INFUSABLE (LevelUpRewardTypeEnum.ALTERATIONS),
+	RECEIVE_PURITY_POTION (LevelUpRewardTypeEnum.ALTERATIONS);
 	
 	
 	
@@ -43,19 +43,9 @@ public enum LevelUpRewardEnum {
 	public static List<LevelUpRewardEnum> getValuesForLevel(int level) {
 		List<LevelUpRewardEnum> result = new ArrayList<>();
 		
-		LevelUpRewardTypeEnum t = null;
-		int modulo = level % 3;
-		if (modulo == 2) {
-			t = LevelUpRewardTypeEnum.STATS_UP;
-		} else if (modulo == 0) {
-			t = LevelUpRewardTypeEnum.ITEMS;
-		} else {
-			t = LevelUpRewardTypeEnum.ALTERATIONS;
-		}
-		
-		
+		ExperienceLevelEnum experienceLevelEnum = ExperienceLevelEnum.get(level);
 		for (LevelUpRewardEnum val : LevelUpRewardEnum.values()) {
-			if (val.type == t) {
+			if (val.type == experienceLevelEnum.getRewardType()) {
 				result.add(val);
 			}
 		}

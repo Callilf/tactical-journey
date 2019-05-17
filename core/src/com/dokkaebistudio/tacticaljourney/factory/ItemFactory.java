@@ -54,6 +54,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLightArmor;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemOrbContainer;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPurityPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemRegenPotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDestruction;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemScrollOfDoppelganger;
@@ -190,6 +191,9 @@ public final class ItemFactory {
 		case MONEY_MEDIUM:
 			item = createItemMoney(room, tilePos, MoneyAmountEnum.MEDIUM, randomToUse);
 			break;
+		case MONEY_BIG:
+			item = createItemMoney(room, tilePos, MoneyAmountEnum.LARGE, randomToUse);
+			break;
 		case AMMO_ARROW:
 			item = createItemArrows(room, tilePos, randomToUse);
 			break;
@@ -220,6 +224,9 @@ public final class ItemFactory {
 			break;
 		case POTION_WING:
 			item = createItemBase(room, tilePos,  new ItemWingPotion(), EntityFlagEnum.ITEM_WING_POTION);
+			break;
+		case POTION_PURITY:
+			item = createItemBase(room, tilePos,  new ItemPurityPotion(), EntityFlagEnum.ITEM_PURITY_POTION);
 			break;
 		case ORB_CONTAINER:
 			item = createItemBase(room, tilePos,  new ItemOrbContainer(), EntityFlagEnum.ITEM_ORB_CONTAINER);

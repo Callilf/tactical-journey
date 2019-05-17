@@ -52,7 +52,7 @@ public class ExperienceComponent implements Component,Poolable {
 		xpGainedAtCurrentFrame.clear();
 		levelUpPopinDisplayed = false;
 		numberOfNewLevelReached = 0;
-		level = 1;
+		level = 0;
 		currentXp = 0;
 		selectNumber = 1;
 		

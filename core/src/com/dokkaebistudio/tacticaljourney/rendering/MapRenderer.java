@@ -192,7 +192,7 @@ public class MapRenderer implements Renderer {
 		mapTable.add(mapTitle).width(65).pad(-5, 0, -5, 10);
 		mapTable.add(noMapBtn).width(100).height(50).pad(-5, 0, -5, 10);
 		mapTable.add(smallMapBtn).width(100).height(50).pad(-5, 0, -5, 10);
-		mapTable.add(fullMapBtn).width(100).height(50).pad(-5, 0, -5, 0);;
+		mapTable.add(fullMapBtn).width(100).height(50).pad(-5, 0, -5, 0);
 
 		mapTable.pack();
 		stage.addActor(mapTable);

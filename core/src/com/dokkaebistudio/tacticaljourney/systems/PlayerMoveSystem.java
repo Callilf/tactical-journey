@@ -151,6 +151,11 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 			boolean stillLooting = handleLoot(player);
 			if (stillLooting) return;
 			
+			// When right clicking on an ennemy, display it's possible movement
+			handleRightClickOnEnemies(player);
+			handleClickOnPlayer(player);
+			handleClickOnAlly();
+			
 //			if (!room.hasEnemies() && !moveCompo.isFreeMove()) {
 //				room.turnManager.endPlayerTurn();
 //				break;
@@ -168,10 +173,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				}
 			}
 
-			// When right clicking on an ennemy, display it's possible movement
-			handleRightClickOnEnemies(player);
-			handleClickOnPlayer(player);
-			handleClickOnAlly();
+
 			
 			break;
 
@@ -449,6 +451,7 @@ public class PlayerMoveSystem extends IteratingSystem implements RoomSystem {
 				timer = 0;
 				if (enemyHighlighted != null) {
 					hideEnemyTiles(player);
+					InputSingleton.getInstance().leftClickJustReleased = false;
 				}
 			}
 		}

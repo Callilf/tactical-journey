@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.creature.enemies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,11 +20,16 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
+import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepBanana;
+import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemBanana;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
@@ -37,6 +43,10 @@ public class EnemyOrangutan extends Creature {
 	
 	private boolean sleeping = true;
 	private RandomXS128 random;
+	private List<Entity> bananas = new ArrayList<>();
+	private boolean goingForBanana;
+	
+	private int damageReceived;
 	
 	public EnemyOrangutan() {}
 	
@@ -67,15 +77,33 @@ public class EnemyOrangutan extends Creature {
 		// Orient the sprite towards the player
 		Mappers.spriteComponent.get(enemy).orientSprite(enemy, playerPos.coord());
 		
+		
+		// Place banana peels
 		List<Tile> freeTiles = new ArrayList<>();
 		List<Tile> allTiles = TileUtil.getAllTiles(room);
 		allTiles.stream().filter(tile -> tile.isWalkable()).forEachOrdered(freeTiles::add);
 		
 		Collections.shuffle(freeTiles, random);
 		
-		for (int i=0 ; i<10 ; i++) {
-			room.entityFactory.creepFactory.createBananaPeel(room, freeTiles.get(i).getGridPos(), enemy);
+		Iterator<Tile> iterator = freeTiles.iterator();
+		int i=0;
+		while (iterator.hasNext() && i < 10) {
+			Tile next = iterator.next();
+			room.entityFactory.creepFactory.createBananaPeel(room, next.getGridPos(), enemy);
+			iterator.remove();
+			i++;
 		}
+
+		// Place bananas
+		i=0;
+		while (iterator.hasNext() && i < 4) {
+			Tile next = iterator.next();
+			Entity banana = room.entityFactory.itemFactory.createItem(ItemEnum.BANANA, room, next.getGridPos());
+			bananas.add(banana);
+			iterator.remove();
+			i++;
+		}
+
 	}
 	
 
@@ -94,6 +122,37 @@ public class EnemyOrangutan extends Creature {
 			}
 		}
 		
+		// Check if a banana disappeared
+		// 1) First find all bananas in the room
+		List<Entity> foundBananas = new ArrayList<>();
+		List<Tile> allTiles = TileUtil.getAllTiles(room);
+		for (Tile tile : allTiles) {
+			if (!tile.isWalkable()) continue;
+			
+			Set<Entity> items = TileUtil.getEntitiesWithComponentOnTile(tile.getGridPos(), ItemComponent.class, room);
+			for (Entity item : items) {
+				ItemComponent itemCompo = Mappers.itemComponent.get(item);
+				if (itemCompo != null && itemCompo.getItemType() instanceof ItemBanana) {
+					// Found a banana
+					foundBananas.add(item);
+				}
+			}
+		}
+		// 2) Compare the bananas found to the bananas found at the previous turn to see if a banana disappeared
+		for (Entity banana : this.bananas) {
+			if (!foundBananas.contains(banana)) {
+				// This banana disappeared
+				sleeping = false;
+				aiComponent.setAlerted(true, creature, GameScreen.player);
+				HealthComponent healthComponent = Mappers.healthComponent.get(creature);
+				healthComponent.healthChangeMap.put(HealthChangeEnum.HIT, "@$%&@%$!!!");
+			}
+		}
+		this.bananas.clear();
+		this.bananas.addAll(foundBananas);
+		
+
+		
 	}
 	
 	@Override
@@ -109,43 +168,16 @@ public class EnemyOrangutan extends Creature {
 				.limit(3)
 				.forEachOrdered(t -> throwBananas(orangutanPos.coord(), t, room));
 		}
+		
+		damageReceived += damage;
+		
+		if (damageReceived >= 15) {
+			damageReceived = 0;
+			goingForBanana = true;
+		}
 	}
 	
-	
-	
-	public static int numRabbits(int[] answers) {
-        
-		// Handle exceptional cases
-		if (answers == null || answers.length == 0) {
-			return 0;
-		}
-		
-		// Build a map that tells for each answer how many times it has been given
-		Map<Integer, Integer> map = new HashMap<>();
-		for(int answer : answers) {
-			map.put(answer, map.containsKey(answer) ? map.get(answer) + 1 : 1);
-		}
-		
-		// count
-		int total = 0;
-		for(Entry<Integer, Integer> entry : map.entrySet()) {
-			if (entry.getKey() == 0) {
-				total += entry.getValue();
-			} else {
-				double sum = entry.getValue().intValue();
-				double answer = entry.getKey().intValue() + 1;
-				total += ((int) Math.ceil(sum / answer)) * (entry.getKey()+1); 
-			}
-		}
-		
-		return total;
-    }
-	
-	public static void main(String[] args) {
-		System.out.println(numRabbits(new int[] {10, 10, 10}));
-	}
-	
-	
+
 	
 	//*******************
 	// Utils
@@ -218,5 +250,17 @@ public class EnemyOrangutan extends Creature {
 
 	public void setRandom(RandomXS128 random) {
 		this.random = random;
+	}
+
+	public boolean isGoingForBanana() {
+		return goingForBanana;
+	}
+
+	public void setGoingForBanana(boolean goingForBanana) {
+		this.goingForBanana = goingForBanana;
+	}
+	
+	public List<Entity> getBananas() {
+		return bananas;
 	}
 }

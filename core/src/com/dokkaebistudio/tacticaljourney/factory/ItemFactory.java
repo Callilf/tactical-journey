@@ -48,6 +48,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarmen
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.boss.ItemPangolinScale;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemArmorPiece;
+import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemBanana;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemFirePotion;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemLeather;
@@ -263,7 +264,9 @@ public final class ItemFactory {
 		case SMOKE_BOMB:
 			item = createItemBase(room, tilePos,  new ItemSmokebomb(), EntityFlagEnum.ITEM_SHURIKEN);
 			break;
-
+		case BANANA:
+			item = createItemBase(room, tilePos,  new ItemBanana(), EntityFlagEnum.ITEM_BANANA);
+			break;
 			
 		//***************
 		// Scrolls

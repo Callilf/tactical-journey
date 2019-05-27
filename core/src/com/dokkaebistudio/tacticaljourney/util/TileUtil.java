@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -492,5 +493,12 @@ public final class TileUtil {
 		}
 		
 		return false;
+	}
+	
+	
+	public static List<Tile> getTilesAtProximity(Vector2 center, int maxDistance, Room room) {
+		return TileUtil.getAllTiles(room).parallelStream()
+			.filter(t -> TileUtil.getDistanceBetweenTiles(center, t.getGridPos()) <= maxDistance)
+			.collect(Collectors.toList());
 	}
 }

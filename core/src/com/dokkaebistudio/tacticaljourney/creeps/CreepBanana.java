@@ -6,11 +6,14 @@ package com.dokkaebistudio.tacticaljourney.creeps;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.AIComponent;
+import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyOrangutan;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
@@ -64,6 +67,16 @@ public class CreepBanana extends Creep {
 			return 0;
 		} else {
 			return 1;
+		}
+	}
+	
+	@Override
+	public int getHeuristic(Entity mover) {
+		AIComponent aiComponent = Mappers.aiComponent.get(mover);
+		if (aiComponent != null && aiComponent.getType() instanceof EnemyOrangutan) {
+			return -1;
+		} else {
+			return 0;
 		}
 	}
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.esotericsoftware.kryo.Kryo;
@@ -85,6 +86,10 @@ public class Tile {
 		return true;
 	}
 	
+	public boolean hasCreep() {
+		Optional<Entity> creep = TileUtil.getEntityWithComponentOnTile(this.gridPos, CreepComponent.class, room);
+		return creep.isPresent();
+	}
 	
 	//************************
 	// Getters and Setters

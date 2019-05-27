@@ -39,6 +39,7 @@ public enum ItemEnum {
 	// Throw
 	SHURIKEN(Descriptions.ITEM_SHURIKEN_TITLE, 1),
 	SMOKE_BOMB(Descriptions.ITEM_SMOKE_BOMB_TITLE, 1),
+	BANANA(Descriptions.ITEM_BANANA_TITLE, 1),
 
 	// Misc
 	WEB_SACK(Descriptions.ITEM_WEB_SACK_TITLE, 1),

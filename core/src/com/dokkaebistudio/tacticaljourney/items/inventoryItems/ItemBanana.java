@@ -9,8 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfTheOrangutan;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -53,9 +55,15 @@ public class ItemBanana extends AbstractItem {
 	public boolean use(Entity user, Entity item, Room room) {
 		Journal.addEntry("You ate the banana");
 
-		//Heal the picker for 25 HP !
+		//Heal for 5 hp!
+		int healAmount = 5;
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(user);
+		if (alterationReceiverComponent != null && alterationReceiverComponent.hasBlessing(BlessingOfTheOrangutan.class)) {
+			healAmount = 10;
+		}
+		
 		HealthComponent healthComponent = Mappers.healthComponent.get(user);
-		healthComponent.restoreHealth(5);
+		healthComponent.restoreHealth(healAmount);
 		
 		StatusReceiverComponent statusReceiverComponent = Mappers.statusReceiverComponent.get(user);
 		statusReceiverComponent.removeStatus(user, StatusDebuffPoison.class, room);

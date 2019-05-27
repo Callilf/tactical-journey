@@ -85,7 +85,7 @@ public class EnemyPangolinMother extends Creature {
 	@Override
 	public void onEndTurn(Entity enemy, Room room) {
 		if (crying) {
-			if (room.turnManager.getTurn() == this.cryingEndTurn) {
+			if (room.turnManager.getTurn() >= this.cryingEndTurn) {
 				crying = false;
 				AnimationComponent animationComponent = Mappers.animationComponent.get(enemy);
 				animationComponent.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherStand);

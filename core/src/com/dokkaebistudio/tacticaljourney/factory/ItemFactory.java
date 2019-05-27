@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.items.ItemMoney.MoneyAmountEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemCamoBackpack;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemColorfulTie;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemDurian;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemFataMorgana;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHandProsthesis;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemHeadband;
@@ -390,6 +391,10 @@ public final class ItemFactory {
 			
 		case SCISSORHAND:
 			item = createItemBase(room, tilePos,  new ItemScissorhand(), EntityFlagEnum.ITEM_INFUSABLE);
+			break;
+			
+		case DURIAN:
+			item = createItemBase(room, tilePos,  new ItemDurian(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
 			

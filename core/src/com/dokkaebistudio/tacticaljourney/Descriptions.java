@@ -322,6 +322,9 @@ public class Descriptions {
 	
 	public static final String ITEM_SCISSORHAND_TITLE = "Scissorhand";
 	public static final String ITEM_SCISSORHAND_DESCRIPTION = "The hand of an artificial human. Each finger is razor sharp. Grants the blessing of the unfinished while held in the inventory.";
+	
+	public static final String ITEM_DURIAN_TITLE = "Durian";
+	public static final String ITEM_DURIAN_DESCRIPTION = "The durian is the favorite fruit of the alpha orangutan. The reason why it held onto this one and did not eat it is unclear. Could it be a gift for a female?";
 
 	
 }

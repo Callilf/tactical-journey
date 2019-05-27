@@ -182,7 +182,7 @@ public class EnemyOrangutan extends Creature {
 	//*******************
 	// Utils
 	
-	private void throwBananas(Vector2 orangutanPos, Tile targetedTile, Room room) {
+	public static void throwBananas(Vector2 orangutanPos, Tile targetedTile, Room room) {
 		Image attackImage = new Image(Assets.creep_banana.getRegion());
 		Vector2 playerPixelPos = TileUtil.convertGridPosIntoPixelPos(orangutanPos);
 		attackImage.setPosition(playerPixelPos.x, playerPixelPos.y);
@@ -211,7 +211,7 @@ public class EnemyOrangutan extends Creature {
 	
 	
 	
-	public boolean hasBanana(Tile t, Room room) {
+	public static boolean hasBanana(Tile t, Room room) {
 		Optional<Entity> bananaOpt = TileUtil.getEntityWithComponentOnTile(t.getGridPos(), CreepComponent.class, room);
 		if (bananaOpt.isPresent()) {
 			if (Mappers.creepComponent.get(bananaOpt.get()).getType() instanceof CreepBanana) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.OrangutanItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
@@ -74,6 +75,7 @@ public class ItemPoolSingleton {
 	public PangolinItemPool pangolin = new PangolinItemPool();
 	public PangolinMotherItemPool pangolinMatriarch = new PangolinMotherItemPool();
 	public ShinobiItemPool shinobi = new ShinobiItemPool();
+	public OrangutanItemPool orangutan = new OrangutanItemPool();
 	
 	public TribesmenSpearItemPool tribesmanSpear = new TribesmenSpearItemPool();
 	public TribesmenShieldItemPool tribesManShield = new TribesmenShieldItemPool();
@@ -115,6 +117,7 @@ public class ItemPoolSingleton {
 		allItemPools.add(tribesmanScout);
 		
 		allItemPools.add(shinobi);
+		allItemPools.add(orangutan);
 
 		
 	}

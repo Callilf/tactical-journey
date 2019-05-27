@@ -57,6 +57,11 @@ public class CreepBanana extends Creep {
 				MovementHandler.finishRealMovement(walker, room);
 			}
 			
+			AIComponent aiComponent = Mappers.aiComponent.get(walker);
+			if (aiComponent != null) {
+				aiComponent.setTurnOver(true);
+			}
+			
 			room.removeEntity(creep);
 		}
 	}

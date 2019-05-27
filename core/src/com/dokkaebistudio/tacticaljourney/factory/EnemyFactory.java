@@ -576,7 +576,7 @@ public final class EnemyFactory {
 		enemyEntity.add(expRewardCompo);
 		
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
-		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().personalBelongings);
+		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().orangutan);
 		DropRate dropRate = new DropRate();
 		dropRate.add(ItemPoolRarity.COMMON, 100f);
 		lootRewardCompo.setDropRate(dropRate);

@@ -71,7 +71,7 @@ public class EnemyPangolinBaby extends Creature {
 	@Override
 	public void onEndTurn(Entity enemy, Room room) {
 		if (rolled) {
-			if (room.turnManager.getTurn() == this.turnRolledEnd) {
+			if (room.turnManager.getTurn() >= this.turnRolledEnd) {
 				rolled = false;
 				AnimationComponent animationCompo = Mappers.animationComponent.get(enemy);
 				animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinBabyStand);

@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -121,6 +122,7 @@ public final class Mappers {
 	public final static ComponentMapper<InspectableComponent> inspectableComponent = ComponentMapper.getFor(InspectableComponent.class);
 	
 	public final static ComponentMapper<SolidComponent> solidComponent = ComponentMapper.getFor(SolidComponent.class);
+	public final static ComponentMapper<GravityComponent> gravityComponent = ComponentMapper.getFor(GravityComponent.class);
 	public final static ComponentMapper<ChasmComponent> chasmComponent = ComponentMapper.getFor(ChasmComponent.class);
 	public final static ComponentMapper<FlyComponent> flyComponent = ComponentMapper.getFor(FlyComponent.class);
 

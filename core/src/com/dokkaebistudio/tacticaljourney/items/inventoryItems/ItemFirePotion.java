@@ -82,7 +82,7 @@ public class ItemFirePotion extends AbstractItem {
 		// Create fires on adjacent tiles
 		List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
 		for (Tile tile : adjacentTiles) {
-			if (tile.isThrowable(thrower)) {
+			if (tile.isUnblockedGround(thrower)) {
 				boolean canCatchFire = CreepUtil.canCatchFire(tile.getGridPos(), room);
 				if (canCatchFire) {
 					room.entityFactory.creepFactory.createFire(room, tile.getGridPos(), thrower);

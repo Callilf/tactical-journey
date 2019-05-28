@@ -71,17 +71,13 @@ public final class EnemyPangolinFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createPangolinBaby(Room room, Vector2 pos, Entity mother) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_BABY.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_PANGOLIN_BABY, null);
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_BABY_PANGOLIN_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_BABY_PANGOLIN_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinBabyStand);
@@ -91,11 +87,6 @@ public final class EnemyPangolinFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -167,17 +158,13 @@ public final class EnemyPangolinFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createPangolinMother(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_PANGOLIN_MOTHER.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_PANGOLIN_MOTHER, null);
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_PANGOLIN_MATRIARCH_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_PANGOLIN_MATRIARCH_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().pangolinMotherStand);
@@ -187,11 +174,6 @@ public final class EnemyPangolinFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;

@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -697,6 +698,7 @@ public class Persister {
 		kryo.register(InspectableComponent.class, InspectableComponent.getSerializer(engine));
 		
 		kryo.register(SolidComponent.class, SolidComponent.getSerializer(engine));
+		kryo.register(GravityComponent.class, GravityComponent.getSerializer(engine));
 		kryo.register(ChasmComponent.class, ChasmComponent.getSerializer(engine));
 		kryo.register(FlyComponent.class, FlyComponent.getSerializer(engine));
 

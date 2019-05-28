@@ -27,9 +27,8 @@ import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins.EnemyPangolinMother;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemySpider;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemyVenomSpider;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.spiders.EnemyWebSpider;
@@ -71,23 +70,13 @@ public final class EnemySpiderFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createSpider(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_SPIDER, Assets.enemy_spider);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_SPIDER_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_SPIDER_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.enemy_spider);
-		enemyEntity.add(spriteCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -159,23 +148,13 @@ public final class EnemySpiderFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createSpiderWeb(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_WEB.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_SPIDER_WEB, Assets.enemy_spider_web);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_WEB_SPIDER_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_WEB_SPIDER_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.enemy_spider_web);
-		enemyEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -251,23 +230,13 @@ public final class EnemySpiderFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createVenomSpider(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_SPIDER_VENOM.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_SPIDER_VENOM, Assets.enemy_spider_venom);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_VENOM_SPIDER_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_VENOM_SPIDER_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.enemy_spider_venom);
-		enemyEntity.add(spriteCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;

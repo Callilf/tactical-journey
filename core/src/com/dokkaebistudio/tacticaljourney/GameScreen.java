@@ -70,6 +70,7 @@ import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ChaliceSystem;
+import com.dokkaebistudio.tacticaljourney.systems.ChasmSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
 import com.dokkaebistudio.tacticaljourney.systems.CreepSystem;
 import com.dokkaebistudio.tacticaljourney.systems.DialogSystem;
@@ -278,6 +279,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new OrbSystem(player, room, stage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));
 		engine.addSystem(new PanelSystem(room));
+		engine.addSystem(new ChasmSystem(room));
 		
 		engine.addSystem(new InspectSystem(player, room, fxStage));
 		

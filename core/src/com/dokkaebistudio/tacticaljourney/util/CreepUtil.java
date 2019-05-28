@@ -24,7 +24,7 @@ public class CreepUtil {
 		boolean canSpawnWeb = true;
 
 		Tile tile = TileUtil.getTileAtGridPos(pos, room);
-		canSpawnWeb = tile.isThrowable(null);
+		canSpawnWeb = tile.isUnblockedGround(null);
 		
 		return canSpawnWeb;
 	}
@@ -37,7 +37,7 @@ public class CreepUtil {
 		}
 		
 		Tile tile = TileUtil.getTileAtGridPos(pos, room);
-		canCatchFire = tile.isThrowable(null);
+		canCatchFire = tile.isUnblockedGround(null);
 		
 		if (canCatchFire) {
 			Optional<Entity> creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(pos, CreepComponent.class, room);

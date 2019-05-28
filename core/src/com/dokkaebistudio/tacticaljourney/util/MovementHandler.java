@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -20,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 
 /**
  * Handles movements of entities.
@@ -194,6 +196,11 @@ public class MovementHandler {
 		int costOfMovementForTilePos = TileUtil.getCostOfMovementForTilePos(moveCompo.currentMoveDestinationTilePos, mover, room);
 		moveCompo.setMoveRemaining(moveCompo.getMoveRemaining() - costOfMovementForTilePos);
 		
+		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(moveCompo.currentMoveDestinationTilePos, ChasmComponent.class, room);
+		if (!chasm.isPresent()) {
+			moveCompo.setLastWalkableTile(moveCompo.currentMoveDestinationTilePos);
+		}
+		
 		Mappers.gridPositionComponent.get(mover).coord(mover, moveCompo.currentMoveDestinationTilePos, room);
 		for (Component c : mover.getComponents()) {
 			if (c instanceof MovableInterface) {
@@ -310,6 +317,14 @@ public class MovementHandler {
 	public static void placeEntity(Entity e, Vector2 tilePos, Room room) {
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
 		gridPositionComponent.coord(e,tilePos, room);
+		
+		MoveComponent moveComponent = Mappers.moveComponent.get(e);
+		if(moveComponent != null) {
+			Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(tilePos, ChasmComponent.class, room);
+			if (!chasm.isPresent()) {
+				moveComponent.setLastWalkableTile(tilePos);
+			}
+		}
 		
 		for (Component c : e.getComponents()) {
 			if (c instanceof MovableInterface) {

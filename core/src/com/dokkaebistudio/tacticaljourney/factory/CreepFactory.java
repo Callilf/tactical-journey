@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent.CreepReleasedTurnEnum;
@@ -78,6 +79,9 @@ public final class CreepFactory {
 		gridPosition.coord(creepEntity, pos, room);
 		gridPosition.zIndex = ZIndexConstants.CREEP;
 		creepEntity.add(gridPosition);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		creepEntity.add(gravityCompo);
 		
 		return creepEntity;
 	}

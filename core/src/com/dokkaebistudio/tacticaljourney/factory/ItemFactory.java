@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -134,6 +135,9 @@ public final class ItemFactory {
 		
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	item.add(destructibleCompo);
+    	
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		item.add(gravityCompo);
 		
     	if (room != null) {
     		room.addEntity(item);

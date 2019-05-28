@@ -23,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -385,9 +386,15 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+//			entityFactory.createChasm(room, new Vector2(10,10));
+//			entityFactory.createChasm(room, new Vector2(11,10));
+//			entityFactory.createChasm(room, new Vector2(12,10));
 //			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
-//			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER, room, new Vector2(11, 2));
+//			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER, room, new Vector2(11, 10));
+//			Mappers.lootRewardComponent.get(createEnemy).getDropRate().getRatePerRarity().put(ItemPoolRarity.COMMON, 100f);
 			
+//			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR, room, new Vector2(10, 10));
+
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);
 //			lootRewardComponent.setDrop( generateEnemyLoot(lootRewardComponent.getItemPool(), lootRewardComponent.getDropRate()));

@@ -12,6 +12,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemySpawnerComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
@@ -77,6 +78,9 @@ public final class DestructibleFactory {
 		DestructibleComponent destructibleComponent = engine.createComponent(DestructibleComponent.class);
 		destructibleComponent.setDestroyedTexture(destroyedRegion);
 		vaseEntity.add(destructibleComponent);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		vaseEntity.add(gravityCompo);
 				
 		engine.addEntity(vaseEntity);
 		return vaseEntity;

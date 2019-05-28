@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.alterations.pools.GoddessStatueAlterat
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -51,8 +52,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.allies.AllyClone;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
-import com.dokkaebistudio.tacticaljourney.creeps.Creep;
-import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
@@ -218,6 +217,9 @@ public final class PlayerFactory {
 		CreepImmunityComponent creepImmunityCompo = engine.createComponent(CreepImmunityComponent.class);
 		playerEntity.add(creepImmunityCompo);
 		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		playerEntity.add(gravityCompo);
+		
 //		statusReceiverCompo.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffRegen(50));
 
 		// TEST
@@ -335,6 +337,9 @@ public final class PlayerFactory {
 		OrbCarrierComponent orbCarrierCompo = engine.createComponent(OrbCarrierComponent.class);
 		cloneEntity.add(orbCarrierCompo);
 		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		cloneEntity.add(gravityCompo);
+		
 		if (parent != null) {
 			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
 			parentCompo.setParent(parent);
@@ -416,6 +421,9 @@ public final class PlayerFactory {
 		
 		shopKeeperEntity.add(shopKeeperCompo);
 		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		shopKeeperEntity.add(gravityCompo);
+		
 		room.addNeutral(shopKeeperEntity);
 		return shopKeeperEntity;
 	}
@@ -475,6 +483,9 @@ public final class PlayerFactory {
 		lootRewardCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
 		goddessStatueEntity.add(lootRewardCompo);
 		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		goddessStatueEntity.add(gravityCompo);
+		
 		room.addNeutral(goddessStatueEntity);
 		return goddessStatueEntity;
 	}
@@ -517,6 +528,9 @@ public final class PlayerFactory {
 		chaliceComponent.setType(type);
 		chaliceComponent.setFilled(true);
 		chaliceEntity.add(chaliceComponent);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		chaliceEntity.add(gravityCompo);
 		
 		room.addNeutral(chaliceEntity);
 		return chaliceEntity;
@@ -571,6 +585,9 @@ public final class PlayerFactory {
 		soulbenderCompo.setAfterCatalystSpeech("Thank you! I feel strong enough to infuse another item now.");
 		soulBenderEntity.add(soulbenderCompo);
 		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		soulBenderEntity.add(gravityCompo);
+		
 		room.addNeutral(soulBenderEntity);
 		return soulBenderEntity;
 	}
@@ -608,6 +625,9 @@ public final class PlayerFactory {
 			
 		SewingMachineComponent sewingMachineComponent = engine.createComponent(SewingMachineComponent.class);
 		sewingMachineEntity.add(sewingMachineComponent);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		sewingMachineEntity.add(gravityCompo);
 		
 		room.addNeutral(sewingMachineEntity);
 		return sewingMachineEntity;

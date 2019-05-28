@@ -72,7 +72,7 @@ public class ItemVenomGland extends AbstractItem {
 						
 			List<Tile> adjacentTiles = TileUtil.getAdjacentTiles(thrownPosition, room);
 			for (Tile tile : adjacentTiles) {
-				if (tile.isThrowable(thrower)) {
+				if (tile.isUnblockedGround(thrower)) {
 					boolean canHavePoison = true;
 					Optional<Entity> creepAlreadyThere = TileUtil.getEntityWithComponentOnTile(tile.getGridPos(), CreepComponent.class, room);
 					if (creepAlreadyThere.isPresent()) {

@@ -74,6 +74,11 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	public Vector2 currentMoveDestinationPos;
 	public int currentMoveDestinationIndex;
 	
+	/** The last walkable tile the entity stepped on.
+	 * Used when the player falls into a chasm, so that it can respawn on the ground.
+	 */
+	private Vector2 lastWalkableTile = new Vector2(11,11);
+
 	
 	@Override
 	public void enterRoom(Room newRoom) {
@@ -291,6 +296,9 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.moveSpeed);
 				output.writeInt(object.moveRemaining);
 				output.writeBoolean(object.frozen);
+				
+				output.writeFloat(object.lastWalkableTile.x);
+				output.writeFloat(object.lastWalkableTile.y);
 			}
 
 			@Override
@@ -299,6 +307,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 				compo.moveSpeed = input.readInt();
 				compo.moveRemaining = input.readInt();
 				compo.frozen = input.readBoolean();
+				
+				compo.lastWalkableTile.set(input.readFloat(), input.readFloat());
 				return compo;
 			}
 		
@@ -319,6 +329,14 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 
 	public void setEndTurnTile(Tile endTurnTile) {
 		this.endTurnTile = endTurnTile;
+	}
+
+	public Vector2 getLastWalkableTile() {
+		return lastWalkableTile;
+	}
+
+	public void setLastWalkableTile(Vector2 lastWalkableTile) {
+		this.lastWalkableTile.set(lastWalkableTile);
 	}
 	
 }

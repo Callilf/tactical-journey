@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
@@ -40,6 +41,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
+import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
@@ -141,29 +143,46 @@ public final class EnemyFactory {
 	}
 	
 	
+	
 	/**
-	 * Create a scorpion.
+	 * Create the base of a lootable.
+	 * @param room the room
 	 * @param pos the position
-	 * @return the enemy entity
+	 * @return the lootable entity
 	 */
-	public Entity createScorpion(Room room, Vector2 pos) {
+	public Entity createEnemyBase(Room room, Vector2 pos, EntityFlagEnum flag, RegionDescriptor sprite) {
 		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_SCORPION.getFlag();
-		
-		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
-		inspect.setTitle(Descriptions.ENEMY_SCORPION_TITLE);
-		inspect.setDescription(Descriptions.ENEMY_SCORPION_DESCRIPTION);
-		inspect.setBigPopup(true);
-		enemyEntity.add(inspect);
+		enemyEntity.flags = flag.getFlag();
 
 		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		spriteCompo.setSprite(Assets.enemy_scorpion);
+		if (sprite != null) spriteCompo.setSprite(sprite);
 		enemyEntity.add(spriteCompo);
 
 		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
 		gridPosition.coord(enemyEntity, pos, room);
 		gridPosition.zIndex = ZIndexConstants.ENEMY;
 		enemyEntity.add(gridPosition);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		enemyEntity.add(gravityCompo);
+		
+		return enemyEntity;
+	}
+	
+	
+	/**
+	 * Create a scorpion.
+	 * @param pos the position
+	 * @return the enemy entity
+	 */
+	public Entity createScorpion(Room room, Vector2 pos) {
+		Entity enemyEntity = createEnemyBase(room, pos, EntityFlagEnum.ENEMY_SCORPION, Assets.enemy_scorpion);
+		
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.ENEMY_SCORPION_TITLE);
+		inspect.setDescription(Descriptions.ENEMY_SCORPION_DESCRIPTION);
+		inspect.setBigPopup(true);
+		enemyEntity.add(inspect);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -232,17 +251,13 @@ public final class EnemyFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createStinger(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_STINGER.getFlag();
+		Entity enemyEntity = createEnemyBase(room, pos, EntityFlagEnum.ENEMY_STINGER, null);
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_STINGER_TITLE);
 		inspect.setDescription(Descriptions.ENEMY_STINGER_DESCRIPTION);
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
-		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.FLY_STANDING, AnimationSingleton.getInstance().stingerFly);
@@ -252,13 +267,7 @@ public final class EnemyFactory {
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.FLY_STANDING);
-		enemyEntity.add(stateCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
-		
+		enemyEntity.add(stateCompo);		
 		
 //		Persister p = new Persister(engine);
 //		EnemyComponent enemyComponent = p.loadStinger();
@@ -339,8 +348,7 @@ public final class EnemyFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createShinobi(Room room, Vector2 pos, boolean clone) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_SHINOBI.getFlag();
+		Entity enemyEntity = createEnemyBase(room, pos, EntityFlagEnum.ENEMY_SHINOBI, null);
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_SHINOBI_TITLE);
@@ -348,9 +356,6 @@ public final class EnemyFactory {
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
 		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
-
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().shinobiStand);
 		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().shinobiRun);
@@ -363,15 +368,9 @@ public final class EnemyFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.SHINOBI_SLEEPING );
 		enemyEntity.add(stateCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -475,8 +474,7 @@ public final class EnemyFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createOrangutan(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_ORANGUTAN.getFlag();
+		Entity enemyEntity = createEnemyBase(room, pos, EntityFlagEnum.ENEMY_ORANGUTAN, null);
 		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_ORANGUTAN_TITLE);
@@ -484,9 +482,6 @@ public final class EnemyFactory {
 		inspect.setBigPopup(true);
 		enemyEntity.add(inspect);
 		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
-
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().orangutanStand);
 		animationCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().orangutanStand);
@@ -495,11 +490,6 @@ public final class EnemyFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING );
 		enemyEntity.add(stateCompo);
-
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);

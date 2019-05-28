@@ -10,6 +10,7 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.FlammableComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
@@ -46,28 +47,44 @@ public final class LootableFactory {
 	
 	
 	/**
+	 * Create the base of a lootable.
+	 * @param room the room
+	 * @param pos the position
+	 * @return the lootable entity
+	 */
+	private Entity createLootableBase(Room room, Vector2 pos, EntityFlagEnum flag, LootableEnum lootableEnum) {
+		Entity lootableEntity = engine.createEntity();
+		lootableEntity.flags = flag.getFlag();
+
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		if (lootableEnum != null) spriteCompo.setSprite(lootableEnum.getClosedTexture());
+		lootableEntity.add(spriteCompo);
+
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(lootableEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.LOOTABLE;
+		lootableEntity.add(gridPosition);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		lootableEntity.add(gravityCompo);
+		
+		return lootableEntity;
+	}
+	
+	
+	/**
 	 * Create a lootable skeleton.
 	 * @param room the room
 	 * @param pos the tile position
 	 * @return the lootable bones
 	 */
 	public Entity createBones(Room room, Vector2 pos) {
-		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.LOOTABLE_BONES.getFlag();
-
+		Entity remainsEntity = createLootableBase(room, pos, EntityFlagEnum.LOOTABLE_BONES, LootableEnum.BONES);
+		
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.LOOTABLE_OLD_BONES_TITLE);
 		inspect.setDescription(Descriptions.LOOTABLE_OLD_BONES_DESCRIPTION);
 		remainsEntity.add(inspect);
-		
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	remainsEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(LootableEnum.BONES.getClosedTexture());
-    	remainsEntity.add(spriteCompo);
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.BONES);
@@ -96,22 +113,12 @@ public final class LootableFactory {
 	 * @return the lootable satchel
 	 */
 	public Entity createSatchel(Room room, Vector2 pos) {
-		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.LOOTABLE_SATCHEL.getFlag();
+		Entity remainsEntity = createLootableBase(room, pos, EntityFlagEnum.LOOTABLE_SATCHEL, LootableEnum.SATCHEL);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.LOOTABLE_SATCHEL_TITLE);
 		inspect.setDescription(Descriptions.LOOTABLE_SATCHEL_DESCRIPTION);
 		remainsEntity.add(inspect);
-		
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	remainsEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(LootableEnum.SATCHEL.getClosedTexture());
-    	remainsEntity.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SATCHEL);
@@ -140,22 +147,12 @@ public final class LootableFactory {
 	 * @return the lootable
 	 */
 	public Entity createPersonalBelongings(Room room, Vector2 pos) {
-		Entity lootable = engine.createEntity();
-		lootable.flags = EntityFlagEnum.LOOTABLE_BELONGINGS.getFlag();
+		Entity lootable = createLootableBase(room, pos, EntityFlagEnum.LOOTABLE_BELONGINGS, LootableEnum.PERSONAL_BELONGINGS);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_TITLE);
 		inspect.setDescription(Descriptions.LOOTABLE_PERSONAL_BELONGINGS_DESCRIPTION);
 		lootable.add(inspect);
-		
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(lootable, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	lootable.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(LootableEnum.PERSONAL_BELONGINGS.getClosedTexture());
-    	lootable.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.PERSONAL_BELONGINGS);
@@ -190,22 +187,12 @@ public final class LootableFactory {
 	 * @return the lootable
 	 */
 	public Entity createOrbBag(Room room, Vector2 pos) {
-		Entity lootable = engine.createEntity();
-		lootable.flags = EntityFlagEnum.LOOTABLE_ORB_BAG.getFlag();
+		Entity lootable = createLootableBase(room, pos, EntityFlagEnum.LOOTABLE_ORB_BAG, LootableEnum.ORB_BAG);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.LOOTABLE_ORB_BAG_TITLE);
 		inspect.setDescription(Descriptions.LOOTABLE_ORB_BAG_DESCRIPTION);
 		lootable.add(inspect);
-		
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(lootable, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	lootable.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(LootableEnum.ORB_BAG.getClosedTexture());
-    	lootable.add(spriteCompo);
     	
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.ORB_BAG);
@@ -235,22 +222,12 @@ public final class LootableFactory {
 	 * @return the lootable bones
 	 */
 	public Entity createSpellBook(Room room, Vector2 pos) {
-		Entity remainsEntity = engine.createEntity();
-		remainsEntity.flags = EntityFlagEnum.LOOTABLE_SPELLBOOK.getFlag();
+		Entity remainsEntity = createLootableBase(room, pos, EntityFlagEnum.LOOTABLE_SPELLBOOK, LootableEnum.SPELL_BOOK);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.LOOTABLE_SPELL_BOOK_TITLE);
 		inspect.setDescription(Descriptions.LOOTABLE_SPELL_BOOK_DESCRIPTION);
 		remainsEntity.add(inspect);
-		
-    	GridPositionComponent movableTilePos = engine.createComponent(GridPositionComponent.class);
-    	movableTilePos.coord(remainsEntity, pos, room);
-    	movableTilePos.zIndex = ZIndexConstants.LOOTABLE;
-    	remainsEntity.add(movableTilePos);
-    	
-    	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(LootableEnum.SPELL_BOOK.getClosedTexture());
-    	remainsEntity.add(spriteCompo);
 
     	LootableComponent lootComponent = engine.createComponent(LootableComponent.class);
     	lootComponent.setType(LootableEnum.SPELL_BOOK);

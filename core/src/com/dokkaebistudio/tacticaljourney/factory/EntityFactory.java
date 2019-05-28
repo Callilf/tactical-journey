@@ -18,6 +18,8 @@ import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
+import com.dokkaebistudio.tacticaljourney.components.GravityComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
@@ -199,6 +201,9 @@ public final class EntityFactory {
     	DestructibleComponent destructibleCompo = engine.createComponent(DestructibleComponent.class);
     	destructibleCompo.setDestroyedTexture(Assets.wall_destroyed);
     	wallEntity.add(destructibleCompo);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		wallEntity.add(gravityCompo);
     	
 		LootRewardComponent lootRewardCompo = engine.createComponent(LootRewardComponent.class);
 		lootRewardCompo.setItemPool(ItemPoolSingleton.getInstance().wall);
@@ -353,6 +358,9 @@ public final class EntityFactory {
     	panelComponent.init();
     	exitEntity.add(panelComponent);
     	
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		exitEntity.add(gravityCompo);
+    	
 		engine.addEntity(exitEntity);
 
     	return exitEntity;
@@ -403,6 +411,8 @@ public final class EntityFactory {
     	spriteCompo.setSprite(Assets.tile_movable);
     	movableTileEntity.add(spriteCompo);
     	
+    	movableTileEntity.add(engine.createComponent(FlyComponent.class));
+    	
 		try {
 			engine.addEntity(movableTileEntity);
 		} catch(Exception e) {
@@ -424,6 +434,9 @@ public final class EntityFactory {
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(explosion ? Assets.tile_explosion : Assets.tile_attackable);
     	attackableTileEntity.add(spriteCompo);
+    	
+    	attackableTileEntity.add(engine.createComponent(FlyComponent.class));
+
     	
 		engine.addEntity(attackableTileEntity);
     	return attackableTileEntity;
@@ -447,6 +460,9 @@ public final class EntityFactory {
     	spriteCompo.setSprite(Assets.tile_movable_selected);
     	redCross.add(spriteCompo);
     	
+    	redCross.add(engine.createComponent(FlyComponent.class));
+
+    	
 		engine.addEntity(redCross);
     	return redCross;
 	}
@@ -469,6 +485,9 @@ public final class EntityFactory {
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
     	spriteCompo.setSprite(Assets.tile_movable_waypoint);
     	waypoint.add(spriteCompo);
+    	
+    	waypoint.add(engine.createComponent(FlyComponent.class));
+
     	
 		engine.addEntity(waypoint);
     	return waypoint;
@@ -595,6 +614,9 @@ public final class EntityFactory {
 		ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
 		parentCompo.setParent(parentEntity);
 		bomb.add(parentCompo);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		bomb.add(gravityCompo);
 		
 		engine.addEntity(bomb);
 		
@@ -807,6 +829,9 @@ public final class EntityFactory {
 		
 		RecyclingMachineComponent recyclingCompo = engine.createComponent(RecyclingMachineComponent.class);
 		recycler.add(recyclingCompo);
+		
+		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
+		recycler.add(gravityCompo);
 		
 		engine.addEntity(recycler);
 		

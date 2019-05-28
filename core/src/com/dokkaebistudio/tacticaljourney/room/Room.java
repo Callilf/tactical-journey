@@ -204,6 +204,23 @@ public class Room extends EntitySystem {
 		}
 	}
 	
+	
+	/**
+	 * Remove the entity from the map entitiesAtPositions.
+	 * @param e the entity
+	 * @param pos the position
+	 */
+	public void removeEntityFromPosition(Entity e) {	
+		if (e == null) return;
+		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(e);
+		if (gridPositionComponent != null) {
+			Set<Entity> set = entitiesAtPositions.get(gridPositionComponent.coord());
+			if (set != null) {
+				set.remove(e);
+			}
+		}
+	}
+	
 	/**
 	 * Get the map that gives the entities at each position of the grid.
 	 */

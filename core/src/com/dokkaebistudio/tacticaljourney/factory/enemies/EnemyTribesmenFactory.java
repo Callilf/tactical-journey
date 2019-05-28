@@ -22,15 +22,12 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanScout;
@@ -78,8 +75,7 @@ public final class EnemyTribesmenFactory {
 	 * @return the enemy entity
 	 */
 	public Entity createSpearman(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SPEAR.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_TRIBESMEN_SPEAR, null);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SPEAR_TITLE);
@@ -90,10 +86,7 @@ public final class EnemyTribesmenFactory {
 		// Humanoid
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-		
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
-		
+				
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().tribesmenSpearStand);
 		animCompo.addAnimation(StatesEnum.MOVING, AnimationSingleton.getInstance().tribesmenSpearStand);
@@ -102,12 +95,7 @@ public final class EnemyTribesmenFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
-		
+				
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
 		aiComponent.setType(new EnemyTribesmanSpear());
@@ -174,8 +162,7 @@ public final class EnemyTribesmenFactory {
 
 	
 	public Entity createShieldHolder(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SHIELD.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_TRIBESMEN_SPEAR, null);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SHIELD_TITLE);
@@ -186,9 +173,6 @@ public final class EnemyTribesmenFactory {
 		// Humanoid
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().tribesmenShieldStand);
@@ -198,11 +182,6 @@ public final class EnemyTribesmenFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -272,9 +251,7 @@ public final class EnemyTribesmenFactory {
 	
 	
 	public Entity createScout(Room room, Vector2 pos) {
-		
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SCOUT.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_TRIBESMEN_SCOUT, null);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SCOUT_TITLE);
@@ -285,9 +262,6 @@ public final class EnemyTribesmenFactory {
 		// Humanoid
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().tribesmenScoutStand);
@@ -297,11 +271,6 @@ public final class EnemyTribesmenFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
 		
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
@@ -373,9 +342,7 @@ public final class EnemyTribesmenFactory {
 	
 	
 	public Entity createShaman(Room room, Vector2 pos) {
-		
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_SHAMAN.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_TRIBESMEN_SHAMAN, null);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_SHAMAN_TITLE);
@@ -386,9 +353,6 @@ public final class EnemyTribesmenFactory {
 		// Humanoid
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().tribesmenShamanStand);
@@ -399,12 +363,7 @@ public final class EnemyTribesmenFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
-		
+				
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
 		aiComponent.setType(new EnemyTribesmanShaman());
@@ -475,8 +434,7 @@ public final class EnemyTribesmenFactory {
 	
 	
 	public Entity createTotem(Room room, Vector2 pos) {
-		Entity enemyEntity = engine.createEntity();
-		enemyEntity.flags = EntityFlagEnum.ENEMY_TRIBESMEN_TOTEM.getFlag();
+		Entity enemyEntity = this.enemyFactory.createEnemyBase(room, pos, EntityFlagEnum.ENEMY_TRIBESMEN_TOTEM, null);
 
 		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
 		inspect.setTitle(Descriptions.ENEMY_TRIBESMAN_TOTEM_TITLE);
@@ -487,9 +445,6 @@ public final class EnemyTribesmenFactory {
 		// Humanoid
 		HumanoidComponent humanoidCompo = engine.createComponent(HumanoidComponent.class);
 		enemyEntity.add(humanoidCompo);
-
-		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-		enemyEntity.add(spriteCompo);
 		
 		AnimationComponent animCompo = engine.createComponent(AnimationComponent.class);
 		animCompo.addAnimation(StatesEnum.STANDING, AnimationSingleton.getInstance().tribesmenTotem);
@@ -501,12 +456,7 @@ public final class EnemyTribesmenFactory {
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);
 		stateCompo.set(StatesEnum.STANDING);
 		enemyEntity.add(stateCompo);
-		
-		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
-		gridPosition.coord(enemyEntity, pos, room);
-		gridPosition.zIndex = ZIndexConstants.ENEMY;
-		enemyEntity.add(gridPosition);
-		
+				
 		AIComponent aiComponent = engine.createComponent(AIComponent.class);
 		aiComponent.room = room;
 		aiComponent.setType(new EnemyTribesmanTotem());

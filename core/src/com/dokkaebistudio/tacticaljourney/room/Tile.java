@@ -80,6 +80,21 @@ public class Tile {
 		Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(this.gridPos, BlockExplosionComponent.class, room);
 		if (wall.isPresent()) return false;
 		
+//		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
+//		if (chasm.isPresent()) return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Check whether the given entity can throw something on this tile.
+	 * @param thrower the throwing entity
+	 * @return true if possible to throw on this tile.
+	 */
+	public boolean isUnblockedGround(Entity thrower) {
+		Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(this.gridPos, BlockExplosionComponent.class, room);
+		if (wall.isPresent()) return false;
+		
 		Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(this.gridPos, ChasmComponent.class, room);
 		if (chasm.isPresent()) return false;
 		

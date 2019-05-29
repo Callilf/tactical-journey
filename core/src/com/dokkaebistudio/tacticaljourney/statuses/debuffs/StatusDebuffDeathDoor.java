@@ -154,7 +154,7 @@ public class StatusDebuffDeathDoor extends Status {
 			}
 
 			@Override
-			public StatusDebuffDeathDoor read(Kryo kryo, Input input, Class<StatusDebuffDeathDoor> type) {
+			public StatusDebuffDeathDoor read(Kryo kryo, Input input, Class<? extends StatusDebuffDeathDoor> type) {
 				StatusDebuffDeathDoor statusDebuffDeathDoor = new StatusDebuffDeathDoor(input.readInt());
 				
 				PoolableVector2 pos = PoolableVector2.create(input.readFloat(), input.readFloat());

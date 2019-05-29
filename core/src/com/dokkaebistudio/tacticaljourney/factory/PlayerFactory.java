@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
@@ -52,6 +53,8 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.allies.AllyClone;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.ShopkeeperDialogs;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.SoulbenderDialogs;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
@@ -411,15 +414,12 @@ public final class PlayerFactory {
 		dropRate.add(ItemPoolRarity.RARE, 10f);
 		dropRate.add(ItemPoolRarity.COMMON, 90f);
 		shopKeeperCompo.setDropRate(dropRate);
-		shopKeeperCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());
-		shopKeeperCompo.addSpeech("Hey!\nI'm the shop keeper.");
-		shopKeeperCompo.addSpeech("It's good to see a new face around here!");
-		shopKeeperCompo.addSpeech("We cut and slice, it makes us feel so very nice.");
-		shopKeeperCompo.addSpeech("I like it in here, all brighty and cosy.");
-		shopKeeperCompo.addSpeech("I can restock my shop if you want to, given that you can afford it.");
-		shopKeeperCompo.addSpeech("Did you know that you can break the crates with a simple sword slash?");
-		
+		shopKeeperCompo.setDropSeededRandom(RandomSingleton.getInstance().getNextSeededRandom());		
 		shopKeeperEntity.add(shopKeeperCompo);
+		
+		SpeakerComponent speakerCompo = engine.createComponent(SpeakerComponent.class);
+		speakerCompo.setDialogs(new ShopkeeperDialogs());
+		shopKeeperEntity.add(speakerCompo);
 		
 		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
 		shopKeeperEntity.add(gravityCompo);
@@ -570,20 +570,11 @@ public final class PlayerFactory {
 		// Shop keeper component
 		SoulbenderComponent soulbenderCompo = engine.createComponent(SoulbenderComponent.class);
 		soulbenderCompo.setPrice(10);
-		soulbenderCompo.addSpeech("Hello there ! I'm a soul bender.");
-		soulbenderCompo.addSpeech("I can infuse items' auras into your soul.");
-		soulbenderCompo.addSpeech("This allows you keeping the blessings provided by items permanently, and free an inventory slot.");
-		soulbenderCompo.addSpeech("The bad side is that it also keeps the curses provided by the item.");
-		soulbenderCompo.addSpeech("And also it's not free.");
-		soulbenderCompo.addSpeech("Come closer if you want to infuse an item!");
-		
-		soulbenderCompo.addAfterInfusionSpeech("I'm out of energy, I need some rest.");
-		soulbenderCompo.addAfterInfusionSpeech("I'm getting too old for this.");
-		soulbenderCompo.addAfterInfusionSpeech("If you get me something to restore my energy I could probably infuse another item for you.");
-		
-		soulbenderCompo.setDivineCatalystSpeech("You are carrying a very powerful item, I can feel it. Come closer and let me have a look.");
-		soulbenderCompo.setAfterCatalystSpeech("Thank you! I feel strong enough to infuse another item now.");
 		soulBenderEntity.add(soulbenderCompo);
+		
+		SpeakerComponent speakerCompo = engine.createComponent(SpeakerComponent.class);
+		speakerCompo.setDialogs(new SoulbenderDialogs());
+		soulBenderEntity.add(speakerCompo);
 		
 		GravityComponent gravityCompo = engine.createComponent(GravityComponent.class);
 		soulBenderEntity.add(gravityCompo);

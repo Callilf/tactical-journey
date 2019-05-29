@@ -169,7 +169,7 @@ public class StatusDebuffStunned extends Status {
 			}
 
 			@Override
-			public StatusDebuffStunned read(Kryo kryo, Input input, Class<StatusDebuffStunned> type) {
+			public StatusDebuffStunned read(Kryo kryo, Input input, Class<? extends StatusDebuffStunned> type) {
 				StatusDebuffStunned statusDebuffDeathDoor = new StatusDebuffStunned(input.readInt());
 				
 				PoolableVector2 pos = PoolableVector2.create(input.readFloat(), input.readFloat());

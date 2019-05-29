@@ -112,7 +112,7 @@ public class DestructibleComponent implements Component, Poolable {
 			}
 
 			@Override
-			public DestructibleComponent read(Kryo kryo, Input input, Class<DestructibleComponent> type) {
+			public DestructibleComponent read(Kryo kryo, Input input, Class<? extends DestructibleComponent> type) {
 				DestructibleComponent compo = engine.createComponent(DestructibleComponent.class);
 				compo.destroyed = input.readBoolean();
 				compo.destroyableWithWeapon = input.readBoolean();

@@ -54,7 +54,7 @@ public class SecretDoorComponent implements Component {
 			}
 
 			@Override
-			public SecretDoorComponent read(Kryo kryo, Input input, Class<SecretDoorComponent> type) {
+			public SecretDoorComponent read(Kryo kryo, Input input, Class<? extends SecretDoorComponent> type) {
 				SecretDoorComponent compo = engine.createComponent(SecretDoorComponent.class);
 				compo.opened = input.readBoolean();
 				return compo;

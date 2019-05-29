@@ -113,7 +113,7 @@ public class LootRewardComponent implements Component, Poolable {
 			}
 
 			@Override
-			public LootRewardComponent read(Kryo kryo, Input input, Class<LootRewardComponent> type) {
+			public LootRewardComponent read(Kryo kryo, Input input, Class<? extends LootRewardComponent> type) {
 				LootRewardComponent compo = engine.createComponent(LootRewardComponent.class);
 				compo.latestItem = (Entity) kryo.readClassAndObject(input);
 				if (compo.latestItem != null) {

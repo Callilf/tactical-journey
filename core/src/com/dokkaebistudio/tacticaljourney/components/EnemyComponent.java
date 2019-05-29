@@ -59,7 +59,7 @@ public class EnemyComponent implements Component, Poolable {
 			}
 
 			@Override
-			public EnemyComponent read(Kryo kryo, Input input, Class<EnemyComponent> type) {
+			public EnemyComponent read(Kryo kryo, Input input, Class<? extends EnemyComponent> type) {
 				EnemyComponent compo = engine.createComponent(EnemyComponent.class);
 				
 				compo.canActivateOrbs = input.readBoolean();

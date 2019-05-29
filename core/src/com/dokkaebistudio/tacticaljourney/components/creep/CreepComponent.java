@@ -230,7 +230,7 @@ public class CreepComponent implements Component, Poolable {
 			}
 
 			@Override
-			public CreepComponent read(Kryo kryo, Input input, Class<CreepComponent> type) {
+			public CreepComponent read(Kryo kryo, Input input, Class<? extends CreepComponent> type) {
 				CreepComponent compo = engine.createComponent(CreepComponent.class);
 				
 				compo.type = (Creep) kryo.readClassAndObject(input);

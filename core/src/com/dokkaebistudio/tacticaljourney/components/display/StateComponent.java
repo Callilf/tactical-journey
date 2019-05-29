@@ -66,7 +66,7 @@ public class StateComponent implements Component {
 			}
 
 			@Override
-			public StateComponent read(Kryo kryo, Input input, Class<StateComponent> type) {
+			public StateComponent read(Kryo kryo, Input input, Class<? extends StateComponent> type) {
 				StateComponent compo = engine.createComponent(StateComponent.class);
 				compo.state = StatesEnum.valueOf(input.readString());
 				compo.keepCurrentAnimation = input.readBoolean();

@@ -117,7 +117,7 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 			}
 
 			@Override
-			public AllyComponent read(Kryo kryo, Input input, Class<AllyComponent> type) {
+			public AllyComponent read(Kryo kryo, Input input, Class<? extends AllyComponent> type) {
 				AllyComponent compo = engine.createComponent(AllyComponent.class);
 				
 				boolean markerHidden = input.readBoolean();

@@ -185,7 +185,7 @@ public class LootableComponent implements Component, Poolable {
 			}
 
 			@Override
-			public LootableComponent read(Kryo kryo, Input input, Class<LootableComponent> type) {
+			public LootableComponent read(Kryo kryo, Input input, Class<? extends LootableComponent> type) {
 				LootableComponent compo = engine.createComponent(LootableComponent.class);
 
 				compo.type = LootableEnum.valueOf(input.readString()); 

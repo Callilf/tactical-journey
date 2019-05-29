@@ -420,7 +420,7 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 			}
 
 			@Override
-			public StatusReceiverComponent read(Kryo kryo, Input input, Class<StatusReceiverComponent> type) {
+			public StatusReceiverComponent read(Kryo kryo, Input input, Class<? extends StatusReceiverComponent> type) {
 				StatusReceiverComponent compo = engine.createComponent(StatusReceiverComponent.class);
 
 				List<Status> statusList = (List<Status>) kryo.readClassAndObject(input);

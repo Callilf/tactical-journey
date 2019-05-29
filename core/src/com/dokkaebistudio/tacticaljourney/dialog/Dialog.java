@@ -1,71 +1,102 @@
 package com.dokkaebistudio.tacticaljourney.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
+
+/**
+ * Represents one sentence that can be told to the player.
+ * @author Callil
+ *
+ */
 public class Dialog {
 
-	/** The speaker. */
+	/**
+	 * The sentence to be told.
+	 */
+	private List<String> text = new ArrayList<>();
+	private int currentIndex;
+	
+	/**
+	 * The name of the speaker.
+	 */
 	private String speaker;
 	
-	/** The text. */
-	private String text;
+	/**
+	 * A condition for this sentence to be told.
+	 * The entity in the predicate is the entity that is speaking (soulbender, shopkeeper, calishka...)
+	 */
+	private Predicate<PublicEntity> condition;
 	
-	/** The duration of display. */
-	private float duration;
+	/**
+	 * Whether this sentence can be told once again. If so, once it's selected it will be
+	 * stored again at the end of the list of sentences.
+	 */
+	private boolean repeat;
 	
-	/** Whether this dialog should be displayed even if another dialog is displayed. */
-	private boolean forceDisplay = false;;
+	
+	public float duration;
 	
 	
-	public Dialog(String speaker, String text) {
-		this.text = text;
-		this.speaker = speaker;
-		this.forceDisplay = false;
-		
-		if (text.length() > 0) {
-			this.duration = text.length() / 20f;
-			this.duration = this.duration + 1f;
-		}
-	}
-
-	public Dialog(String speaker, String text, boolean forceDisplay) {
-		this(speaker, text);
-		this.forceDisplay = forceDisplay;
+	public Dialog() {}
+	
+	
+	public boolean hasNextLine() {
+		return text.size() > 0 && currentIndex < text.size() - 1;
 	}
 	
 	
-	
+	//************************
 	// Getters and setters
-
-
-	public String getText() {
+	
+	public List<String> getText() {
 		return text;
 	}
-
-	public void setText(String text) {
+	
+	public void setText(List<String> text) {
 		this.text = text;
 	}
-
-	public float getDuration() {
-		return duration;
+	
+	public void addText(String text) {
+		this.text.add(text);
 	}
-
-	public void setDuration(float duration) {
-		this.duration = duration;
+	public Predicate<PublicEntity> getCondition() {
+		return condition;
 	}
-
-	public boolean isForceDisplay() {
-		return forceDisplay;
+	public void setCondition(Predicate<PublicEntity> condition) {
+		this.condition = condition;
 	}
-
-	public void setForceDisplay(boolean forceDisplay) {
-		this.forceDisplay = forceDisplay;
+	
+	public void setRepeat(boolean repeat) {
+		this.repeat = repeat;
 	}
-
+	
+	public boolean isRepeat() {
+		return repeat;
+	}
+	
 	public String getSpeaker() {
 		return speaker;
 	}
-
+	
 	public void setSpeaker(String speaker) {
 		this.speaker = speaker;
+	}
+
+
+	public int getCurrentIndex() {
+		return currentIndex;
+	}
+
+
+	public void setCurrentIndex(int currentIndex) {
+		this.currentIndex = currentIndex;
+	}
+	
+	public void incrementIndex() {
+		this.currentIndex++;
 	}
 	
 }

@@ -16,12 +16,9 @@
 
 package com.dokkaebistudio.tacticaljourney.systems;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class DialogSystem extends EntitySystem implements RoomSystem {	
 	
@@ -42,21 +39,13 @@ public class DialogSystem extends EntitySystem implements RoomSystem {
 
     @Override
 	public void update(float deltaTime) {
-    	Entity currentDialog = room.getDialog();
+    	Dialog currentDialog = room.getDialog();
     	
     	// Dialog creation
     	if (room.getRequestedDialog() != null) {
     		Dialog requestedDialog = room.getRequestedDialog();
-    		if (requestedDialog.isForceDisplay() || currentDialog == null) {
-    			
-    			if (currentDialog != null) {
-    				// Remove the existing dialog
-    		    	DialogComponent dialogComponent = Mappers.dialogComponent.get(currentDialog);
-        			room.removeDialog();
-    			}
-    			
-				currentDialog = room.entityFactory.createDialogPopin(requestedDialog.getSpeaker(),
-						requestedDialog.getText(), requestedDialog.getDuration(), room);
+    		if (currentDialog == null) {
+				room.setDialog(requestedDialog);
     		}
     		room.clearRequestedDialog();
     	}

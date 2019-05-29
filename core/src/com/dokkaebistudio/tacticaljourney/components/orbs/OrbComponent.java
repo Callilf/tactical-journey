@@ -82,7 +82,7 @@ public class OrbComponent implements Component, Poolable {
 			}
 
 			@Override
-			public OrbComponent read(Kryo kryo, Input input, Class<OrbComponent> type) {
+			public OrbComponent read(Kryo kryo, Input input, Class<? extends OrbComponent> type) {
 				OrbComponent compo = engine.createComponent(OrbComponent.class);
 				compo.type = (Orb) kryo.readClassAndObject(input);
 				compo.parent = (Entity) kryo.readClassAndObject(input);

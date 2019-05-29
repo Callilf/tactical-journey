@@ -25,7 +25,7 @@ public class HumanoidComponent implements Component {
 			public void write(Kryo kryo, Output output, HumanoidComponent object) {}
 
 			@Override
-			public HumanoidComponent read(Kryo kryo, Input input, Class<HumanoidComponent> type) {
+			public HumanoidComponent read(Kryo kryo, Input input, Class<? extends HumanoidComponent> type) {
 				HumanoidComponent compo = engine.createComponent(HumanoidComponent.class);
 				return compo;
 			}

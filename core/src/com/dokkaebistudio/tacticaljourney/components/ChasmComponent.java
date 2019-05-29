@@ -24,7 +24,7 @@ public class ChasmComponent implements Component {
 			public void write(Kryo kryo, Output output, ChasmComponent object) {}
 
 			@Override
-			public ChasmComponent read(Kryo kryo, Input input, Class<ChasmComponent> type) {
+			public ChasmComponent read(Kryo kryo, Input input, Class<? extends ChasmComponent> type) {
 				ChasmComponent compo = engine.createComponent(ChasmComponent.class);
 				return compo;
 			}

@@ -179,7 +179,7 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 			}
 
 			@Override
-			public ChaliceComponent read(Kryo kryo, Input input, Class<ChaliceComponent> type) {
+			public ChaliceComponent read(Kryo kryo, Input input, Class<? extends ChaliceComponent> type) {
 				ChaliceComponent compo = engine.createComponent(ChaliceComponent.class);
 				compo.type = ChaliceType.valueOf(input.readString());
 				compo.filled = input.readBoolean();

@@ -418,7 +418,7 @@ public class ItemComponent implements Component, Poolable, MarkerInterface {
 			}
 
 			@Override
-			public ItemComponent read(Kryo kryo, Input input, Class<ItemComponent> type) {
+			public ItemComponent read(Kryo kryo, Input input, Class<? extends ItemComponent> type) {
 				ItemComponent compo = engine.createComponent(ItemComponent.class);
 				compo.itemType = (AbstractItem) kryo.readClassAndObject(input);
 				compo.setPrice((Integer) kryo.readClassAndObject(input));

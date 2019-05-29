@@ -1,22 +1,18 @@
 package com.dokkaebistudio.tacticaljourney.rendering;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.DialogComponent;
+import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class DialogRenderer implements Renderer, RoomSystem {
 	    
@@ -24,7 +20,7 @@ public class DialogRenderer implements Renderer, RoomSystem {
 	
 	/** The current room. */
     private Room room;
-	private Entity currentDialog;
+	private Dialog currentDialog;
         
     //**************************
     // Actors
@@ -32,6 +28,7 @@ public class DialogRenderer implements Renderer, RoomSystem {
     private Table mainPopin;
     private Label speaker;
     private Label content;
+    private Label nextOrClose;
 
     
     public DialogRenderer(Room r, Stage s) {
@@ -53,30 +50,36 @@ public class DialogRenderer implements Renderer, RoomSystem {
     	}
     	
     	currentDialog = room.getDialog();
-    	DialogComponent dialogComponent = Mappers.dialogComponent.get(currentDialog);
     	
-    	if (dialogComponent.getCurrentDuration() == 0) {
+    	if (currentDialog.duration == 0) {
 			if (mainPopin == null) {
 				initTable();
 			}
 			
-			updateContent(dialogComponent);
+			updateContent();
 			
 			// Place the popin properly
 			mainPopin.pack();
 			mainPopin.setPosition(GameScreen.SCREEN_W/2 - mainPopin.getWidth()/2, 200);
 
 			this.stage.addActor(mainPopin);
-    	} else {
-    		
-    		if (dialogComponent.getCurrentDuration() >= dialogComponent.getDuration()) {
-    			closePopin();
-    			return;
-    		}
-    		
     	}
-		dialogComponent.setCurrentDuration(dialogComponent.getCurrentDuration() + deltaTime);
+    	
+    	currentDialog.duration += deltaTime;
 
+    	
+    	if (currentDialog.duration >= 0.3f && room.isCloseDialogRequested()) {
+			
+			if (currentDialog.getCurrentIndex() == currentDialog.getText().size() - 1) {
+				closePopin();
+				return;
+			} else {
+				currentDialog.incrementIndex();
+				currentDialog.duration = 0;
+				room.setCloseDialogRequested(false);
+			}
+			
+		}
     	
     	
 		// Draw the table
@@ -84,9 +87,10 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		stage.draw();
 	}
 
-	private void updateContent(DialogComponent dialogComponent) {
-		speaker.setText(dialogComponent.getSpeaker());
-		content.setText(dialogComponent.getText());
+	private void updateContent() {
+		speaker.setText(currentDialog.getSpeaker());
+		content.setText(currentDialog.getText().get(currentDialog.getCurrentIndex()));
+		nextOrClose.setText(currentDialog.hasNextLine() ? "Next" : "Close");
 	}
 
 	
@@ -100,10 +104,6 @@ public class DialogRenderer implements Renderer, RoomSystem {
 			mainPopin = new Table();
 		}
 //			mainPopin.setDebug(true);
-
-		// Add an empty click listener to capture the click so that the InputSingleton doesn't handle it
-		mainPopin.setTouchable(Touchable.enabled);
-		mainPopin.addListener(new ClickListener() {});
 		
 		// Place the popin and add the background texture
 		mainPopin.setPosition(GameScreen.SCREEN_W/2, GameScreen.SCREEN_H/2);
@@ -124,8 +124,13 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		
 		// 2 - Description
 		content = new Label("Description", PopinService.hudStyle());
-		content.setWrap(true);
+		content.setWrap(true);		
 		mainPopin.add(content).growY().width(900).left().pad(0, 20, 0, 20);
+		mainPopin.row().align(Align.right);
+
+		// 3 - Click to close
+		nextOrClose = new Label("Click anywhere to close", PopinService.smallTextStyle());
+		mainPopin.add(nextOrClose).right().pad(0, 0, 5, 5);
 	}
 
 	
@@ -138,8 +143,8 @@ public class DialogRenderer implements Renderer, RoomSystem {
 		mainPopin.remove();
 		
 		if (currentDialog != null) {
-			DialogComponent dialogComponent = Mappers.dialogComponent.get(currentDialog);
-			dialogComponent.getRoom().removeDialog();
+			room.removeDialog();
+			currentDialog.duration = 0;
 			currentDialog = null;
 		}
 	}

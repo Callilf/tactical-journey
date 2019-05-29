@@ -142,7 +142,7 @@ public class ExplosiveComponent implements Component, Poolable, RoomSystem {
 			}
 
 			@Override
-			public ExplosiveComponent read(Kryo kryo, Input input, Class<ExplosiveComponent> type) {
+			public ExplosiveComponent read(Kryo kryo, Input input, Class<? extends ExplosiveComponent> type) {
 				ExplosiveComponent compo = engine.createComponent(ExplosiveComponent.class);
 				compo.turnsToExplode = input.readInt();
 				compo.explosionTurn = kryo.readObjectOrNull(input, Integer.class);

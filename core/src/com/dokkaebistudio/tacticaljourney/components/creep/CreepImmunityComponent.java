@@ -54,7 +54,7 @@ public class CreepImmunityComponent implements Component, Poolable {
 			}
 
 			@Override
-			public CreepImmunityComponent read(Kryo kryo, Input input, Class<CreepImmunityComponent> type) {
+			public CreepImmunityComponent read(Kryo kryo, Input input, Class<? extends CreepImmunityComponent> type) {
 				CreepImmunityComponent compo = engine.createComponent(CreepImmunityComponent.class);
 				compo.types = (List<CreepType>) kryo.readClassAndObject(input);
 				return compo;

@@ -152,7 +152,7 @@ public class Tile {
 			}
 
 			@Override
-			public Tile read(Kryo kryo, Input input, Class<Tile> type) {
+			public Tile read(Kryo kryo, Input input, Class<? extends Tile> type) {
 				Vector2 gridPos = new Vector2((int)input.readFloat(), (int)input.readFloat());
 				Tile t = new Tile(null, gridPos);
 				return t;

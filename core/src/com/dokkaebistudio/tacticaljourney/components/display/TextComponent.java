@@ -105,7 +105,7 @@ public class TextComponent implements Component, Poolable {
 			}
 
 			@Override
-			public TextComponent read(Kryo kryo, Input input, Class<TextComponent> type) {
+			public TextComponent read(Kryo kryo, Input input, Class<? extends TextComponent> type) {
 				TextComponent compo = engine.createComponent(TextComponent.class);
 				compo.font = (FontDescriptor) kryo.readClassAndObject(input);
 				compo.text = input.readString();

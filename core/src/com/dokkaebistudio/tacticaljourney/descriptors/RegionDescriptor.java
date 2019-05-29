@@ -59,7 +59,7 @@ public class RegionDescriptor {
 			}
 
 			@Override
-			public RegionDescriptor read(Kryo kryo, Input input, Class<RegionDescriptor> type) {
+			public RegionDescriptor read(Kryo kryo, Input input, Class<? extends RegionDescriptor> type) {
 				String name = input.readString();
 				AtlasRegion sprite = Assets.findSprite(name).getRegion();
 				RegionDescriptor rd = new RegionDescriptor(name, sprite);

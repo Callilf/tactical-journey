@@ -1,6 +1,5 @@
 package com.dokkaebistudio.tacticaljourney.components.neutrals;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +62,6 @@ public class ShopKeeperComponent implements Component, Poolable {
 	private ItemPool itemPool;
 	private DropRate dropRate;
 	private RandomXS128 dropSeededRandom;
-
-	
-	// Speeches 
-	private boolean firstSpeech = true;
-	
-	/** The different sentences the shop keeper can say when being talked to. */
-	private List<String> mainSpeeches = new ArrayList<>();
 	
 	
 	@Override
@@ -78,9 +70,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 		this.restockNumber = 0;
 		this.numberOfItems = 3;
 		this.requestRestock = false;
-		this.firstSpeech = true;
 		this.soldItems.clear();
-		this.mainSpeeches.clear();
 	}
 	
 	public void increaseNumberOfItems(int amount) {
@@ -161,28 +151,7 @@ public class ShopKeeperComponent implements Component, Poolable {
 	}
 	
 	
-	
-	
-	
-	
-	//**************************
-	// Speech related methods
-	
-	public void addSpeech(String s) {
-		mainSpeeches.add(s);
-	}
-	
-	public String getSpeech() {
-		if (firstSpeech) {
-			firstSpeech = false;
-			return mainSpeeches.get(0);
-		} else {
-			RandomXS128 unseededRandom = RandomSingleton.getInstance().getUnseededRandom();
-			int nextInt = unseededRandom.nextInt(mainSpeeches.size());
-			return mainSpeeches.get(nextInt);
-		}
-	}
-	
+
 	
 	//*********************************
 	// Getters and Setters
@@ -249,8 +218,6 @@ public class ShopKeeperComponent implements Component, Poolable {
 				output.writeInt(object.numberOfItems);
 				kryo.writeClassAndObject(output, object.soldItems);
 				output.writeInt(object.restockNumber);
-				output.writeBoolean(object.firstSpeech);
-				kryo.writeClassAndObject(output, object.mainSpeeches);
 				output.writeString(object.itemPool.id);			
 				kryo.writeClassAndObject(output, object.dropRate);
 				
@@ -262,14 +229,12 @@ public class ShopKeeperComponent implements Component, Poolable {
 			}
 
 			@Override
-			public ShopKeeperComponent read(Kryo kryo, Input input, Class<ShopKeeperComponent> type) {
+			public ShopKeeperComponent read(Kryo kryo, Input input, Class<? extends ShopKeeperComponent> type) {
 				ShopKeeperComponent compo = engine.createComponent(ShopKeeperComponent.class);
 				compo.hostile = input.readBoolean();
 				compo.numberOfItems = input.readInt();
 				compo.soldItems = (Map<Entity, Vector2>) kryo.readClassAndObject(input);
 				compo.restockNumber = input.readInt();
-				compo.firstSpeech = input.readBoolean();
-				compo.mainSpeeches = (List<String>) kryo.readClassAndObject(input);
 				compo.itemPool = (ItemPool) ItemPoolSingleton.getInstance().getPoolById(input.readString());
 				compo.dropRate = (DropRate) kryo.readClassAndObject(input);
 				

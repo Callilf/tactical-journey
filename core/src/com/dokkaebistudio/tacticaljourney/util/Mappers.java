@@ -20,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -115,6 +116,7 @@ public final class Mappers {
 	
 	public final static ComponentMapper<TextComponent> textComponent = ComponentMapper.getFor(TextComponent.class);
 	public final static ComponentMapper<DialogComponent> dialogComponent = ComponentMapper.getFor(DialogComponent.class);
+	public final static ComponentMapper<SpeakerComponent> speakerComponent = ComponentMapper.getFor(SpeakerComponent.class);
 
 	public final static ComponentMapper<WheelModifierComponent> wheelModifierComponent = ComponentMapper.getFor(WheelModifierComponent.class);
 	public final static ComponentMapper<WheelComponent> wheelComponentMapper = ComponentMapper.getFor(WheelComponent.class);

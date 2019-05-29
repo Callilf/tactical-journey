@@ -26,7 +26,7 @@ public class SolidComponent implements Component {
 			public void write(Kryo kryo, Output output, SolidComponent object) {}
 
 			@Override
-			public SolidComponent read(Kryo kryo, Input input, Class<SolidComponent> type) {
+			public SolidComponent read(Kryo kryo, Input input, Class<? extends SolidComponent> type) {
 				SolidComponent compo = engine.createComponent(SolidComponent.class);
 				return compo;
 			}

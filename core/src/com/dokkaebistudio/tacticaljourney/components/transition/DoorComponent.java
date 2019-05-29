@@ -70,7 +70,7 @@ public class DoorComponent implements Component {
 			}
 
 			@Override
-			public DoorComponent read(Kryo kryo, Input input, Class<DoorComponent> type) {
+			public DoorComponent read(Kryo kryo, Input input, Class<? extends DoorComponent> type) {
 				DoorComponent compo = engine.createComponent(DoorComponent.class);
 				compo.opened = input.readBoolean();
 				compo.targetedRoom = (Room) kryo.readClassAndObject(input);				

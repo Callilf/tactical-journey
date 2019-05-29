@@ -467,7 +467,7 @@ public class InventoryComponent implements Component, Poolable {
 			}
 
 			@Override
-			public InventoryComponent read(Kryo kryo, Input input, Class<InventoryComponent> type) {
+			public InventoryComponent read(Kryo kryo, Input input, Class<? extends InventoryComponent> type) {
 				InventoryComponent compo = engine.createComponent(InventoryComponent.class);
 
 				compo.numberOfSlots = input.readInt();

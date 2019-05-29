@@ -345,7 +345,7 @@ public class OrbCarrierComponent implements Component, Poolable, MovableInterfac
 			}
 
 			@Override
-			public OrbCarrierComponent read(Kryo kryo, Input input, Class<OrbCarrierComponent> type) {
+			public OrbCarrierComponent read(Kryo kryo, Input input, Class<? extends OrbCarrierComponent> type) {
 				OrbCarrierComponent compo = engine.createComponent(OrbCarrierComponent.class);
 				compo.freeOrbSlotsNumber = input.readInt();
 				compo.northOrb = (Entity) kryo.readClassAndObject(input);

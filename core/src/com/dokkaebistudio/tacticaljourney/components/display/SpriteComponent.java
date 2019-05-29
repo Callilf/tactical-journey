@@ -126,7 +126,7 @@ public class SpriteComponent implements Component, Poolable {
 			}
 
 			@Override
-			public SpriteComponent read(Kryo kryo, Input input, Class<SpriteComponent> type) {
+			public SpriteComponent read(Kryo kryo, Input input, Class<? extends SpriteComponent> type) {
 				SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
 				spriteCompo.hide = input.readBoolean();
 				spriteCompo.flipX = input.readBoolean();

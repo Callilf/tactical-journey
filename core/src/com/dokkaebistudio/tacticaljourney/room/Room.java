@@ -37,6 +37,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
+import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -48,6 +49,7 @@ import com.dokkaebistudio.tacticaljourney.room.managers.TurnManager;
 import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
+import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
@@ -99,8 +101,9 @@ public class Room extends EntitySystem {
 	private List<Entity> neutrals;
 	
 	/** The current dialog displayed. */
-	private Entity dialog;
+	private Dialog dialog;
 	private Dialog requestedDialog;
+	private boolean closeDialogRequested;
 	
 	
 	
@@ -303,6 +306,13 @@ public class Room extends EntitySystem {
 		// Remove entities that are no longer in the game
 		this.entitiesToRemove.forEach(e -> removeEntityFromEngine(e));
 		this.entitiesToRemove.clear();
+		
+		
+		// Handle dialogs
+		if (this.dialog != null && InputSingleton.getInstance().leftClickJustReleased) {
+			this.closeDialogRequested = true;
+			InputSingleton.getInstance().leftClickJustReleased = false;
+		}
 		
 
 		// Update the visited status
@@ -639,31 +649,29 @@ public class Room extends EntitySystem {
 		this.neutrals = neutrals;
 	}
 
-	public Entity getDialog() {
+	public Dialog getDialog() {
 		return dialog;
 	}
 
-	public void setDialog(Entity dialog) {
-		this.addEntity(dialog);
+	public void setDialog(Dialog dialog) {
 		this.dialog = dialog;
 	}
 	
 	public void removeDialog() {
-		this.removeEntity(this.dialog);
 		this.dialog = null;
+		this.closeDialogRequested = false;
 	}
 
 	public Dialog getRequestedDialog() {
 		return requestedDialog;
 	}
 
-	public void setRequestedDialog(String speaker, String text) {
-		Dialog d = new Dialog(speaker, text, false);
+	public void setRequestedDialog(Dialog d) {
 		this.requestedDialog = d;
 	}
-	public void setRequestedDialog(String speaker, String text, boolean force) {
-		Dialog d = new Dialog(speaker, text, force);
-		this.requestedDialog = d;
+	
+	public void setRequestedDialog(String speaker, String text) {
+		this.requestedDialog = new DialogBuilder().setSpeaker(speaker).addText(text).build();
 	}
 
 	public void clearRequestedDialog() {
@@ -737,6 +745,14 @@ public class Room extends EntitySystem {
 
 	public void setDisplayedOnMap(boolean displayedOnMap) {
 		this.displayedOnMap = displayedOnMap;
+	}
+
+	public boolean isCloseDialogRequested() {
+		return closeDialogRequested;
+	}
+
+	public void setCloseDialogRequested(boolean closeDialogRequested) {
+		this.closeDialogRequested = closeDialogRequested;
 	}
 
 	

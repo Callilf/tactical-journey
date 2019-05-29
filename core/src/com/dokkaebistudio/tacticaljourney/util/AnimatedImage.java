@@ -90,7 +90,7 @@ public class AnimatedImage extends Image {
 			}
 
 			@Override
-			public AnimatedImage read(Kryo kryo, Input input, Class<AnimatedImage> type) {
+			public AnimatedImage read(Kryo kryo, Input input, Class<? extends AnimatedImage> type) {
 				int animationIndex = input.readInt();
 				boolean loop = input.readBoolean();
 				AnimatedImage animatedImage = new AnimatedImage(AnimationSingleton.getInstance().getAnimation(animationIndex), loop);

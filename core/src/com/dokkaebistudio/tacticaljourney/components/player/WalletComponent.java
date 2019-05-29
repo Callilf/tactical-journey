@@ -96,7 +96,7 @@ public class WalletComponent implements Component, Poolable {
 			}
 
 			@Override
-			public WalletComponent read(Kryo kryo, Input input, Class<WalletComponent> type) {
+			public WalletComponent read(Kryo kryo, Input input, Class<? extends WalletComponent> type) {
 				WalletComponent compo = engine.createComponent(WalletComponent.class);
 
 				compo.amount = input.readInt(); 

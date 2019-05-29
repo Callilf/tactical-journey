@@ -182,7 +182,7 @@ public class StatueComponent implements Component, Poolable, MarkerInterface {
 			}
 
 			@Override
-			public StatueComponent read(Kryo kryo, Input input, Class<StatueComponent> type) {
+			public StatueComponent read(Kryo kryo, Input input, Class<? extends StatueComponent> type) {
 				StatueComponent compo = engine.createComponent(StatueComponent.class);
 				compo.hasBlessing = input.readBoolean();
 				compo.blessingToGive = (Blessing) kryo.readClassAndObject(input);

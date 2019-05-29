@@ -78,7 +78,7 @@ public class SkillComponent implements Component, Poolable {
 			}
 
 			@Override
-			public SkillComponent read(Kryo kryo, Input input, Class<SkillComponent> type) {
+			public SkillComponent read(Kryo kryo, Input input, Class<? extends SkillComponent> type) {
 				SkillComponent compo = engine.createComponent(SkillComponent.class);
 
 				compo.skillNumber = input.readInt(); 

@@ -61,7 +61,7 @@ public class SewingMachineComponent implements Component, Poolable {
 			}
 
 			@Override
-			public SewingMachineComponent read(Kryo kryo, Input input, Class<SewingMachineComponent> type) {
+			public SewingMachineComponent read(Kryo kryo, Input input, Class<? extends SewingMachineComponent> type) {
 				SewingMachineComponent compo = engine.createComponent(SewingMachineComponent.class);
 				return compo;
 			}

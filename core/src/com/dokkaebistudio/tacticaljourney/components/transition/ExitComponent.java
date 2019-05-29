@@ -70,7 +70,7 @@ public class ExitComponent implements Component {
 			}
 
 			@Override
-			public ExitComponent read(Kryo kryo, Input input, Class<ExitComponent> type) {
+			public ExitComponent read(Kryo kryo, Input input, Class<? extends ExitComponent> type) {
 				ExitComponent compo = engine.createComponent(ExitComponent.class);
 				compo.opened = input.readBoolean();
 				compo.targetedFloorIndex = input.readInt();

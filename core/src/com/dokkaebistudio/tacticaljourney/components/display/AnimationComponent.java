@@ -72,7 +72,7 @@ public class AnimationComponent implements Component, Poolable {
 			}
 
 			@Override
-			public AnimationComponent read(Kryo kryo, Input input, Class<AnimationComponent> type) {
+			public AnimationComponent read(Kryo kryo, Input input, Class<? extends AnimationComponent> type) {
 				AnimationComponent compo = engine.createComponent(AnimationComponent.class);
 				compo.animationsIndexes.putAll((IntMap<Integer>) kryo.readClassAndObject(input));
 				return compo;

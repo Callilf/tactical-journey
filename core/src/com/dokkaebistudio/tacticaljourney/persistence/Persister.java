@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.persistence;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.invoke.SerializedLambda;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.components.HumanoidComponent;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
@@ -101,6 +103,8 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.ClosureSerializer;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
 
 public class Persister {
 	
@@ -146,6 +150,7 @@ public class Persister {
 		
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
+		kryo.setRegistrationRequired(false);
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		// Save the game statistics first
@@ -178,6 +183,7 @@ public class Persister {
 		GameStatistics stats = null;
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
+		kryo.setRegistrationRequired(false);
 		try {
 			FileHandle statsFile = Gdx.files.local("gamestats_1.bin");
 		    Input input = new Input(new FileInputStream(statsFile.file()));
@@ -193,6 +199,7 @@ public class Persister {
 	public void loadGameState() {
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
+		kryo.setRegistrationRequired(false);
 		this.registerSerializers(kryo, gameScreen.activeFloor, gameScreen.floors);
 		
 		try {
@@ -253,7 +260,7 @@ public class Persister {
 			}
 
 			@Override
-			public GameScreen read(Kryo kryo, Input input, Class<GameScreen> type) {
+			public GameScreen read(Kryo kryo, Input input, Class<? extends GameScreen> type) {
 				
 				// Partial load of the player so that entities that reference it won't crash
 				GameScreen.player = (PublicEntity) engine.createEntity();
@@ -347,7 +354,7 @@ public class Persister {
 			}
 
 			@Override
-			public Floor read(Kryo kryo, Input input, Class<Floor> type) {
+			public Floor read(Kryo kryo, Input input, Class<? extends Floor> type) {
 				int level = input.readInt();
 				
 				// If the entity has been previously loaded, return it
@@ -435,7 +442,7 @@ public class Persister {
 			}
 
 			@Override
-			public Room read(Kryo kryo, Input input, Class<Room> type) {
+			public Room read(Kryo kryo, Input input, Class<? extends Room> type) {
 				// Read the room id
 				int roomIndex = input.readInt();
 				
@@ -516,7 +523,7 @@ public class Persister {
 			public void write(Kryo kryo, Output output, PublicPooledEngine object) {}
 
 			@Override
-			public PublicPooledEngine read(Kryo kryo, Input input, Class<PublicPooledEngine> type) {
+			public PublicPooledEngine read(Kryo kryo, Input input, Class<? extends PublicPooledEngine> type) {
 				return engine;
 			}
 			
@@ -544,7 +551,7 @@ public class Persister {
 			}
 
 			@Override
-			public PooledEntity read(Kryo kryo, Input input, Class<PooledEntity> type) {
+			public PooledEntity read(Kryo kryo, Input input, Class<? extends PooledEntity> type) {
 				// Read the ID
 				long entityId = input.readLong();
 				
@@ -601,7 +608,7 @@ public class Persister {
 			}
 
 			@Override
-			public Image read(Kryo kryo, Input input, Class<Image> type) {
+			public Image read(Kryo kryo, Input input, Class<? extends Image> type) {
 				return null;
 			}
 		
@@ -613,10 +620,11 @@ public class Persister {
 	public void registerSerializers(Kryo kryo, Floor currentFloor, List<Floor> floors) {
 		
 		// Java mandatory serializers
-//		kryo.register(Object[].class);
-//		kryo.register(Class.class);
-//		kryo.register(SerializedLambda.class);
-//		kryo.register(ClosureSerializer.Closure.class, new ClosureSerializer());
+		kryo.register(Object[].class);
+		kryo.register(Class.class);
+		kryo.register(SerializedLambda.class);
+		kryo.register(ClosureSerializer.Closure.class, new ClosureSerializer());
+		kryo.addDefaultSerializer(SerializedLambda.class, new JavaSerializer());
 		
 		// general serializers
 		kryo.register(GameScreen.class, getGameScreenSerializer());
@@ -691,6 +699,7 @@ public class Persister {
 		
 		kryo.register(TextComponent.class, TextComponent.getSerializer(engine));
 		kryo.register(DialogComponent.class, DialogComponent.getSerializer(engine));
+		kryo.register(SpeakerComponent.class, SpeakerComponent.getSerializer(engine));
 
 //		kryo.register(WheelModifierComponent.class, WheelModifierComponent.getSerializer(engine, floor));
 		kryo.register(WheelComponent.class, WheelComponent.getSerializer(engine));

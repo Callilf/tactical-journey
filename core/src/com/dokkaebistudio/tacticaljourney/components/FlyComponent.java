@@ -24,7 +24,7 @@ public class FlyComponent implements Component {
 			public void write(Kryo kryo, Output output, FlyComponent object) {}
 
 			@Override
-			public FlyComponent read(Kryo kryo, Input input, Class<FlyComponent> type) {
+			public FlyComponent read(Kryo kryo, Input input, Class<? extends FlyComponent> type) {
 				FlyComponent compo = engine.createComponent(FlyComponent.class);
 				return compo;
 			}

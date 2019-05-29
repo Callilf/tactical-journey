@@ -200,7 +200,7 @@ public class GameScreen extends ScreenAdapter {
 		touchPoint = new Vector3();
 		
 		engine = new PublicPooledEngine();
-		this.entityFactory = new EntityFactory(this.engine);
+		this.entityFactory = new EntityFactory(engine);
 		
 		floors = new ArrayList<>();
 		
@@ -272,7 +272,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new ChaliceSystem(room, foregroundFxStage));
 		engine.addSystem(new StatusSystem(player, room, fxStage));
 		engine.addSystem(new ShopSystem(	player, room));
-		engine.addSystem(new SoulbenderSystem(	player, room, fxStage));
+		engine.addSystem(new SoulbenderSystem(	player, room));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new DialogSystem(room));
 		engine.addSystem(new ExperienceSystem(room, stage));

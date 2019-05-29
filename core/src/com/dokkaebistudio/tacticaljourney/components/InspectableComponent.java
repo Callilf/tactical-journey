@@ -71,7 +71,7 @@ public class InspectableComponent implements Component, Poolable {
 			}
 
 			@Override
-			public InspectableComponent read(Kryo kryo, Input input, Class<InspectableComponent> type) {
+			public InspectableComponent read(Kryo kryo, Input input, Class<? extends InspectableComponent> type) {
 				InspectableComponent compo = engine.createComponent(InspectableComponent.class);
 				compo.title = input.readString();
 				compo.description = input.readString();

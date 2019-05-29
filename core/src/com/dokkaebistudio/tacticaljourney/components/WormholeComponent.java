@@ -42,7 +42,7 @@ public class WormholeComponent implements Component {
 			}
 
 			@Override
-			public WormholeComponent read(Kryo kryo, Input input, Class<WormholeComponent> type) {
+			public WormholeComponent read(Kryo kryo, Input input, Class<? extends WormholeComponent> type) {
 				WormholeComponent compo = engine.createComponent(WormholeComponent.class);
 				compo.destination = (Vector2) kryo.readClassAndObject(input);
 				return compo;

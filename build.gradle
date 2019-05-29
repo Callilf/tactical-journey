@@ -116,7 +116,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:1.8.1"
-        compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
+        compile group: 'com.esotericsoftware', name: 'kryo', version: '5.0.0-RC4'
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 }

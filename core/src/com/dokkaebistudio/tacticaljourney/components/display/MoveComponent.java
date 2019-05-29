@@ -302,7 +302,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 			}
 
 			@Override
-			public MoveComponent read(Kryo kryo, Input input, Class<MoveComponent> type) {
+			public MoveComponent read(Kryo kryo, Input input, Class<? extends MoveComponent> type) {
 				MoveComponent compo = engine.createComponent(MoveComponent.class);
 				compo.moveSpeed = input.readInt();
 				compo.moveRemaining = input.readInt();

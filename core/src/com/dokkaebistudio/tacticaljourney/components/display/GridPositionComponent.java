@@ -185,7 +185,7 @@ public class GridPositionComponent implements Component, Poolable {
 			}
 
 			@Override
-			public GridPositionComponent read(Kryo kryo, Input input, Class<GridPositionComponent> type) {
+			public GridPositionComponent read(Kryo kryo, Input input, Class<? extends GridPositionComponent> type) {
 				GridPositionComponent gridPosCompo = engine.createComponent(GridPositionComponent.class);
 
 				gridPosCompo.zIndex = input.readInt(); 

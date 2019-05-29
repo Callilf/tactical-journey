@@ -37,7 +37,7 @@ public class ExpRewardComponent implements Component {
 			}
 
 			@Override
-			public ExpRewardComponent read(Kryo kryo, Input input, Class<ExpRewardComponent> type) {
+			public ExpRewardComponent read(Kryo kryo, Input input, Class<? extends ExpRewardComponent> type) {
 				ExpRewardComponent compo = engine.createComponent(ExpRewardComponent.class);
 				compo.expGain = input.readInt();
 				return compo;

@@ -46,7 +46,7 @@ public class FontDescriptor {
 			}
 
 			@Override
-			public FontDescriptor read(Kryo kryo, Input input, Class<FontDescriptor> type) {
+			public FontDescriptor read(Kryo kryo, Input input, Class<? extends FontDescriptor> type) {
 				String name = input.readString();
 				return SceneAssets.findFont(name);
 			}

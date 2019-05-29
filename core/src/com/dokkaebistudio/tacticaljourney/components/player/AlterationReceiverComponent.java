@@ -518,7 +518,7 @@ public class AlterationReceiverComponent implements Component, Poolable {
 			}
 
 			@Override
-			public AlterationReceiverComponent read(Kryo kryo, Input input, Class<AlterationReceiverComponent> type) {
+			public AlterationReceiverComponent read(Kryo kryo, Input input, Class<? extends AlterationReceiverComponent> type) {
 				AlterationReceiverComponent compo = engine.createComponent(AlterationReceiverComponent.class);
 				compo.blessings = (List<Blessing>) kryo.readClassAndObject(input);
 				compo.curses = (List<Curse>) kryo.readClassAndObject(input);

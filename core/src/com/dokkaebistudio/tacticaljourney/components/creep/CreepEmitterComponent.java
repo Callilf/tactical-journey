@@ -78,7 +78,7 @@ public class CreepEmitterComponent implements Component, Poolable {
 			}
 
 			@Override
-			public CreepEmitterComponent read(Kryo kryo, Input input, Class<CreepEmitterComponent> type) {
+			public CreepEmitterComponent read(Kryo kryo, Input input, Class<? extends CreepEmitterComponent> type) {
 				CreepEmitterComponent compo = engine.createComponent(CreepEmitterComponent.class);
 				compo.type = CreepType.valueOf(input.readString());
 				return compo;

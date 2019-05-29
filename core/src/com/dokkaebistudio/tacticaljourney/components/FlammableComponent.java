@@ -114,7 +114,7 @@ public class FlammableComponent implements Component, Poolable {
 			}
 
 			@Override
-			public FlammableComponent read(Kryo kryo, Input input, Class<FlammableComponent> type) {
+			public FlammableComponent read(Kryo kryo, Input input, Class<? extends FlammableComponent> type) {
 				FlammableComponent compo = engine.createComponent(FlammableComponent.class);
 				compo.burning = input.readBoolean();
 				compo.propagate = input.readBoolean();

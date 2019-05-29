@@ -170,7 +170,7 @@ public class AttackSkill {
 			}
 
 			@Override
-			public AttackSkill read(Kryo kryo, Input input, Class<AttackSkill> type) {
+			public AttackSkill read(Kryo kryo, Input input, Class<? extends AttackSkill> type) {
 				AttackSkill as = new AttackSkill();
 				as.active = input.readBoolean();
 				as.name = input.readString();

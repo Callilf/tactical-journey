@@ -209,7 +209,7 @@ public class PlayerComponent implements Component {
 			}
 
 			@Override
-			public PlayerComponent read(Kryo kryo, Input input, Class<PlayerComponent> type) {
+			public PlayerComponent read(Kryo kryo, Input input, Class<? extends PlayerComponent> type) {
 				PlayerComponent compo = engine.createComponent(PlayerComponent.class);
 				compo.skillMelee = (Entity) kryo.readClassAndObject(input);
 				compo.skillRange = (Entity) kryo.readClassAndObject(input);

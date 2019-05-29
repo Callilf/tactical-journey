@@ -203,7 +203,7 @@ public class ExperienceComponent implements Component,Poolable {
 			}
 
 			@Override
-			public ExperienceComponent read(Kryo kryo, Input input, Class<ExperienceComponent> type) {
+			public ExperienceComponent read(Kryo kryo, Input input, Class<? extends ExperienceComponent> type) {
 				ExperienceComponent compo = engine.createComponent(ExperienceComponent.class);
 
 				compo.level = input.readInt(); 

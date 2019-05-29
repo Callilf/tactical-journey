@@ -740,28 +740,6 @@ public final class EntityFactory {
 		return skillEntity;
 	}
 	
-	
-	/**
-	 * Create a dialog popin
-	 * @param pos the position
-	 * @return the dialog
-	 */
-	public Entity createDialogPopin(String speaker, String text, float duration, Room room) {
-		Entity dialogEntity = engine.createEntity();
-		dialogEntity.flags = EntityFlagEnum.DIALOG_POPIN.getFlag();
-
-		DialogComponent dialogCompo = engine.createComponent(DialogComponent.class);
-		dialogCompo.setRoom(room);
-		dialogCompo.setSpeaker(speaker);
-		dialogCompo.setDuration(duration);
-		dialogCompo.setText(text);
-		dialogEntity.add(dialogCompo);
-		
-		room.setDialog(dialogEntity);
-
-    	return dialogEntity;
-	}
-	
 	/**
 	 * Create a wormhole.
 	 * @param room the parent room

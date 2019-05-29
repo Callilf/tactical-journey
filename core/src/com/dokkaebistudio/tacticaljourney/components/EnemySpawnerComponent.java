@@ -70,7 +70,7 @@ public class EnemySpawnerComponent implements Component {
 			}
 
 			@Override
-			public EnemySpawnerComponent read(Kryo kryo, Input input, Class<EnemySpawnerComponent> type) {
+			public EnemySpawnerComponent read(Kryo kryo, Input input, Class<? extends EnemySpawnerComponent> type) {
 				EnemySpawnerComponent compo = engine.createComponent(EnemySpawnerComponent.class);
 				compo.totalSpawnChance = input.readInt();
 				compo.spawnChances = (Map<EnemyTypeEnum, Integer>) kryo.readClassAndObject(input);

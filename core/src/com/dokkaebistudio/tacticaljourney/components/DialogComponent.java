@@ -93,7 +93,7 @@ public class DialogComponent implements Component, Poolable, RoomSystem {
 			}
 
 			@Override
-			public DialogComponent read(Kryo kryo, Input input, Class<DialogComponent> type) {
+			public DialogComponent read(Kryo kryo, Input input, Class<? extends DialogComponent> type) {
 				DialogComponent compo = engine.createComponent(DialogComponent.class);
 				compo.speaker = input.readString();
 				compo.text = input.readString();

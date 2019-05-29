@@ -505,7 +505,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 			}
 
 			@Override
-			public HealthComponent read(Kryo kryo, Input input, Class<HealthComponent> type) {
+			public HealthComponent read(Kryo kryo, Input input, Class<? extends HealthComponent> type) {
 				HealthComponent compo = engine.createComponent(HealthComponent.class);
 				
 				compo.setMaxHp(input.readInt());

@@ -50,7 +50,7 @@ public class ParentEntityComponent implements Component, Poolable {
 			}
 
 			@Override
-			public ParentEntityComponent read(Kryo kryo, Input input, Class<ParentEntityComponent> type) {
+			public ParentEntityComponent read(Kryo kryo, Input input, Class<? extends ParentEntityComponent> type) {
 				ParentEntityComponent compo = engine.createComponent(ParentEntityComponent.class);
 				compo.parent = (Entity) kryo.readClassAndObject(input);
 				return compo;

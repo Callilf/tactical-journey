@@ -79,7 +79,7 @@ public class RecyclingMachineComponent implements Component, Poolable {
 			}
 
 			@Override
-			public RecyclingMachineComponent read(Kryo kryo, Input input, Class<RecyclingMachineComponent> type) {
+			public RecyclingMachineComponent read(Kryo kryo, Input input, Class<? extends RecyclingMachineComponent> type) {
 				RecyclingMachineComponent compo = engine.createComponent(RecyclingMachineComponent.class);
 				return compo;
 			}

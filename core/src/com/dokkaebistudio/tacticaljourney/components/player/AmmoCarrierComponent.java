@@ -211,7 +211,7 @@ public class AmmoCarrierComponent implements Component {
 			}
 
 			@Override
-			public AmmoCarrierComponent read(Kryo kryo, Input input, Class<AmmoCarrierComponent> type) {
+			public AmmoCarrierComponent read(Kryo kryo, Input input, Class<? extends AmmoCarrierComponent> type) {
 				AmmoCarrierComponent compo = engine.createComponent(AmmoCarrierComponent.class);
 
 				compo.maxArrows = input.readInt(); 

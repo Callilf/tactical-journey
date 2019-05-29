@@ -146,11 +146,11 @@ public class PanelComponent implements Component, Poolable, MovableInterface, Ma
 
 			@Override
 			public void write(Kryo kryo, Output output, PanelComponent object) {
-				output.writeString(object.text.getText());
+				output.writeString(object.text.getText().toString());
 			}
 
 			@Override
-			public PanelComponent read(Kryo kryo, Input input, Class<PanelComponent> type) {
+			public PanelComponent read(Kryo kryo, Input input, Class<? extends PanelComponent> type) {
 				PanelComponent compo = engine.createComponent(PanelComponent.class);
 				compo.init();
 				compo.text.setText(input.readString());

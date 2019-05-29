@@ -23,8 +23,7 @@ import java.util.Optional;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.Descriptions;
+import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
@@ -33,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.I
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.SoulbenderDialogs;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -43,17 +43,15 @@ import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class SoulbenderSystem extends EntitySystem implements RoomSystem {	
 	
-	private Stage fxStage;
 	private Room room;
 	private Entity player;
 	private InventoryComponent playerInventoryCompo;
 	
 	private List<Entity> soulbenders = new ArrayList<>();
 	
-	public SoulbenderSystem(Entity player, Room r, Stage stage) {
+	public SoulbenderSystem(Entity player, Room r) {
 		this.priority = 13;
 
-		this.fxStage = stage;
 		this.player = player;
 		this.room = r;
 	}
@@ -92,11 +90,13 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 					SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(soulbender);
 					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
 					
+					boolean actionRequested = false;
 					int distanceFromSoulbender = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), tempPos);
 					if (distanceFromSoulbender == 1 && !soulbenderComponent.hasInfused()) {
 						// Popin to ask for infusion
 						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 						playerComponent.requestAction(PlayerActionEnum.INFUSE, soulbender);
+						actionRequested = true;
 						
 					} else if(soulbenderComponent.hasInfused()) {
 						InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(player);
@@ -105,18 +105,14 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 							if (distanceFromSoulbender == 1) {
 								PlayerComponent playerComponent = Mappers.playerComponent.get(player);
 								playerComponent.requestAction(PlayerActionEnum.GIVE_CATALYST_SOULBENDER, soulbender);
-							} else {
-								// "You carry a powerful item" speech
-								room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getDivineCatalystSpeech(), true);
+								actionRequested = true;
 							}
-						} else {
-							// No diving catalyst : "i'm tired" speech
-							room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getAfterInfusionSpeech(), true);
-						}
-					} else if (soulbenderComponent.isReceivedCatalyst()){
-						room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getAfterCatalystSpeech(), true);
-					} else {
-						room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,soulbenderComponent.getSpeech(), true);
+						} 
+					}
+					
+					if (!actionRequested) {
+						SpeakerComponent speakerComponent = Mappers.speakerComponent.get(soulbender);
+						room.setRequestedDialog(speakerComponent.getSpeech(soulbender));
 					}
 				}
 				
@@ -151,7 +147,8 @@ public class SoulbenderSystem extends EntitySystem implements RoomSystem {
 				playerInventoryCompo.setCurrentAction(null);
 			} else {
 				
-				room.setRequestedDialog(Descriptions.SOULBENDER_TITLE,"Come back when you've got enough gold coins.",  true);
+				SpeakerComponent speakerComponent = Mappers.speakerComponent.get(soulbender);
+				room.setRequestedDialog(speakerComponent.getSpeech(SoulbenderDialogs.NOT_ENOUGH_MONEY_TAG));
 				playerInventoryCompo.setCurrentAction(null);
 			}
 

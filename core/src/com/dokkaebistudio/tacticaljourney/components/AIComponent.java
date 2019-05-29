@@ -302,7 +302,7 @@ public class AIComponent implements Component, Poolable, MovableInterface, Marke
 			}
 
 			@Override
-			public AIComponent read(Kryo kryo, Input input, Class<AIComponent> type) {
+			public AIComponent read(Kryo kryo, Input input, Class<? extends AIComponent> type) {
 				AIComponent compo = engine.createComponent(AIComponent.class);
 				
 				compo.type = (Creature) kryo.readClassAndObject(input);

@@ -25,7 +25,7 @@ public class GravityComponent implements Component {
 			public void write(Kryo kryo, Output output, GravityComponent object) {}
 
 			@Override
-			public GravityComponent read(Kryo kryo, Input input, Class<GravityComponent> type) {
+			public GravityComponent read(Kryo kryo, Input input, Class<? extends GravityComponent> type) {
 				GravityComponent compo = engine.createComponent(GravityComponent.class);
 				return compo;
 			}

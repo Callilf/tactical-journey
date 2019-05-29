@@ -36,7 +36,7 @@ public class WheelComponent implements Component {
 			}
 
 			@Override
-			public WheelComponent read(Kryo kryo, Input input, Class<WheelComponent> type) {
+			public WheelComponent read(Kryo kryo, Input input, Class<? extends WheelComponent> type) {
 				WheelComponent compo = engine.createComponent(WheelComponent.class);
 				compo.sectors = (List<Sector>) kryo.readClassAndObject(input);
 				return compo;

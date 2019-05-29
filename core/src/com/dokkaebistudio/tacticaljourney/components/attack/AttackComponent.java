@@ -470,7 +470,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 			}
 
 			@Override
-			public AttackComponent read(Kryo kryo, Input input, Class<AttackComponent> type) {
+			public AttackComponent read(Kryo kryo, Input input, Class<? extends AttackComponent> type) {
 				AttackComponent compo = engine.createComponent(AttackComponent.class);
 				compo.active = input.readBoolean();
 				
@@ -506,6 +506,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 
 				return compo;
 			}
+
 		
 		};
 	}

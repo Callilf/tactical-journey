@@ -20,5 +20,6 @@ public enum EnemyTypeEnum {
 	PANGOLIN_MATRIARCH,
 	
 	SHINOBI,
+	ORANGUTAN_ALPHA,
 	ORANGUTAN;
 }

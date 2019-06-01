@@ -239,6 +239,7 @@ public class Assets {
 	public static RegionDescriptor enemy_scorpion;
 	public static Array<Sprite> enemy_stinger;
 	public static Array<Sprite> enemy_stinger_charge;
+	public static Array<Sprite> enemy_small_orangutan_stand;
 	
 	public static Array<Sprite> enemy_pangolin_baby;
 	public static Array<Sprite> enemy_pangolin_baby_rolled;
@@ -651,6 +652,7 @@ public class Assets {
 		enemy_scorpion = Assets.getTexture("enemy-scorpion-test");
 		enemy_stinger = Assets.getAnimation("stinger");
 		enemy_stinger_charge = Assets.getAnimation("stinger_charge");
+		enemy_small_orangutan_stand = Assets.getAnimation("small_orangutan_stand");
 		
 		enemy_pangolin_baby = Assets.getAnimation("pangolin_baby");
 		enemy_pangolin_baby_rolled = Assets.getAnimation("pangolin_baby_rolled");

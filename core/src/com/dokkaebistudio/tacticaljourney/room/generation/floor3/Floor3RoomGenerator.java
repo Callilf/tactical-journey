@@ -66,8 +66,8 @@ public class Floor3RoomGenerator extends RoomGenerator {
 			if (!iterator.hasNext()) break;
 			
 			Entity enemy = null;
-			int enemyTypeRandom = random.nextSeededInt(18);
-			if (enemyTypeRandom == 0) {
+			int enemyTypeRandom = random.nextSeededInt(100);
+			if (enemyTypeRandom <= 3) {
 				int spiderType = random.nextSeededInt(2);
 				if (spiderType == 0) {
 					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SPIDER,room, new Vector2(iterator.next()));
@@ -75,7 +75,7 @@ public class Floor3RoomGenerator extends RoomGenerator {
 					enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER,room, new Vector2(iterator.next()));
 				}
 				iterator.remove();
-			} else if (enemyTypeRandom == 1 || enemyTypeRandom == 2) {
+			} else if (enemyTypeRandom <= 10) {
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.WEB_SPIDER,room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {
@@ -87,22 +87,25 @@ public class Floor3RoomGenerator extends RoomGenerator {
 					}
 					iterator.remove();
 				}
-			} else if (enemyTypeRandom == 3 || enemyTypeRandom == 4) {
+			} else if (enemyTypeRandom <= 20) {
+				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN,room, new Vector2(iterator.next()));
+				iterator.remove();
+			} else if (enemyTypeRandom <= 25) {
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER,room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else if (enemyTypeRandom == 5 || enemyTypeRandom == 6) {
+			} else if (enemyTypeRandom <= 35) {
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.PANGOLIN_BABY,room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else if (enemyTypeRandom == 7 || enemyTypeRandom == 8){
+			} else if (enemyTypeRandom <= 45){
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.SCORPION,room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else if (enemyTypeRandom >= 9 && enemyTypeRandom <= 12){
+			} else if (enemyTypeRandom <= 65){
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR,room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else if (enemyTypeRandom >= 13 && enemyTypeRandom <= 15) {
+			} else if (enemyTypeRandom <= 80) {
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SHIELD,room, new Vector2(iterator.next()));
 				iterator.remove();
-			} else if (enemyTypeRandom == 16 || enemyTypeRandom == 17){
+			} else {
 				enemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SCOUT,room, new Vector2(iterator.next()));
 				iterator.remove();
 				if (iterator.hasNext()) {

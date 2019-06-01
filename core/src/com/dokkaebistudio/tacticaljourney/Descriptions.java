@@ -161,10 +161,12 @@ public class Descriptions {
 	public static final String ENEMY_SHINOBI_DESCRIPTION = "A ancient shinobi that died in the dungeon but was brought back from the dead to serve as a defender. Even though he did not survive "
 			+ "the dungeon, his various skills make him a formidable foe.";
 	
-	public static final String ENEMY_ORANGUTAN_TITLE = "Orangutan";
-	public static final String ENEMY_ORANGUTAN_DESCRIPTION = "A big alpha orangutan. Its strength and agility allowed it to claim this territory, and tt probably won't be happy to see you contest it.";
+	public static final String ENEMY_ORANGUTAN_ALPHA_TITLE = "Orangutan alpha male";
+	public static final String ENEMY_ORANGUTAN_ALPHA_DESCRIPTION = "A big alpha orangutan. Its strength and agility allowed it to claim this territory, and it probably won't be happy to see you contest it.";
 
-	
+	public static final String ENEMY_ORANGUTAN_TITLE = "Young Orangutan";
+	public static final String ENEMY_ORANGUTAN_DESCRIPTION = "A young rainforest orangutan. Its long arms and legs allow it to move pretty fast, especially in vegetation.";
+
 	// Items
 	
 	public static final String ITEM_MONEY_TITLE = "Gold coins";

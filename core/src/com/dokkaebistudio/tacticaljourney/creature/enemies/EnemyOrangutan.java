@@ -2,11 +2,8 @@ package com.dokkaebistudio.tacticaljourney.creature.enemies;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -56,7 +54,7 @@ public class EnemyOrangutan extends Creature {
 
 	@Override
 	public String title() {
-		return "Orangutan alpha male";
+		return Descriptions.ENEMY_ORANGUTAN_ALPHA_TITLE;
 	}
 	
 	

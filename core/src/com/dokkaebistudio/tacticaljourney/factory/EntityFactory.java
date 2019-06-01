@@ -3,6 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.factory;
 
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -814,6 +816,18 @@ public final class EntityFactory {
 		engine.addEntity(recycler);
 		
 		return recycler;
+	}
+	
+	
+	public static void main(String[] args){
+		
+		LocalTime one = LocalTime.of(5, 15);
+		LocalTime two = LocalTime.of(6, 30);
+		
+		long bt = ChronoUnit.HOURS.between(one, two);
+		long bt2 = ChronoUnit.MINUTES.between(one, two);
+		
+		System.out.println("hours: " + bt + " minutes: " + bt2);
 	}
 	
 }

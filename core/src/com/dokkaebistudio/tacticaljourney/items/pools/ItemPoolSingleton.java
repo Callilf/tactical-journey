@@ -9,6 +9,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.PangolinMotherItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ScorpionItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.ShinobiItemPool;
+import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SmallOrangutanItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.SpiderItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.StingerItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.enemies.VenomSpiderItemPool;
@@ -76,6 +77,7 @@ public class ItemPoolSingleton {
 	public PangolinMotherItemPool pangolinMatriarch = new PangolinMotherItemPool();
 	public ShinobiItemPool shinobi = new ShinobiItemPool();
 	public OrangutanItemPool orangutan = new OrangutanItemPool();
+	public SmallOrangutanItemPool smallOrangutan = new SmallOrangutanItemPool();
 	
 	public TribesmenSpearItemPool tribesmanSpear = new TribesmenSpearItemPool();
 	public TribesmenShieldItemPool tribesManShield = new TribesmenShieldItemPool();
@@ -118,6 +120,7 @@ public class ItemPoolSingleton {
 		
 		allItemPools.add(shinobi);
 		allItemPools.add(orangutan);
+		allItemPools.add(smallOrangutan);
 
 		
 	}

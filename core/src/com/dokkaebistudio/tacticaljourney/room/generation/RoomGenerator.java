@@ -380,7 +380,7 @@ public abstract class RoomGenerator {
 			if (miniBossRandom == 0) {
 				entityFactory.enemyFactory.createShinobi(room, new Vector2(11, 6), false);
 			} else {
-				entityFactory.enemyFactory.createOrangutan(room, new Vector2(11, 6));
+				entityFactory.enemyFactory.createOrangutanAlpha(room, new Vector2(11, 6));
 			}
 			break;
 			
@@ -390,7 +390,7 @@ public abstract class RoomGenerator {
 //			entityFactory.createChasm(room, new Vector2(11,10));
 //			entityFactory.createChasm(room, new Vector2(12,10));
 //			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
-//			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER, room, new Vector2(11, 10));
+//			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN, room, new Vector2(14, 7));
 //			Mappers.lootRewardComponent.get(createEnemy).getDropRate().getRatePerRarity().put(ItemPoolRarity.COMMON, 100f);
 			
 //			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR, room, new Vector2(10, 10));

@@ -11,6 +11,7 @@ import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.Sta
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyFactionEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -36,6 +37,9 @@ public class CreepVinesBush extends Creep {
 
 	@Override
 	public void onWalk(Entity walker, Entity creep, Room room) {
+		if (Mappers.enemyComponent.has(walker)) {
+			if (Mappers.enemyComponent.get(walker).getFaction() == EnemyFactionEnum.ORANGUTANS) return;
+		}
 		
 		int chance = RandomSingleton.getInstance().nextUnseededInt(100);
 		if (chance < chanceToProc) {
@@ -71,6 +75,10 @@ public class CreepVinesBush extends Creep {
 	
 	@Override
 	public int getMovementConsumed(Entity mover) {
+		if (Mappers.enemyComponent.has(mover)) {
+			if (Mappers.enemyComponent.get(mover).getFaction() == EnemyFactionEnum.ORANGUTANS) return -1;
+		}
+		
 		if (isImmune(mover)) {
 			return 0;
 		} else {

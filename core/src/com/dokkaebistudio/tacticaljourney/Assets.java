@@ -213,7 +213,9 @@ public class Assets {
 	public static RegionDescriptor creep_web;
 	public static RegionDescriptor creep_poison;
 	public static RegionDescriptor creep_fire;
+	public static RegionDescriptor creep_lava;
 	public static Array<Sprite> creep_fire_animation;
+	public static Array<Sprite> creep_lava_animation;
 	
 	
 	//***************
@@ -627,7 +629,9 @@ public class Assets {
 		creep_web = Assets.getTexture("creep-web");
 		creep_poison = Assets.getTexture("creep-poison");
 		creep_fire = Assets.getTexture("creep-fire");
+		creep_lava = Assets.getTexture("creep-lava");
 		creep_fire_animation = Assets.getAnimation("creep-fire");
+		creep_lava_animation = Assets.getAnimation("creep-lava");
 
 		
 		//***************

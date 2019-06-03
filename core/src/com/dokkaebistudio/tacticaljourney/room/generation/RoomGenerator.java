@@ -386,6 +386,9 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.creepFactory.createLava(room, new Vector2(12,3), null);
+			entityFactory.creepFactory.createLava(room, new Vector2(13,3), null);
+			entityFactory.creepFactory.createLava(room, new Vector2(14,3), null);
 //			entityFactory.createChasm(room, new Vector2(10,10));
 //			entityFactory.createChasm(room, new Vector2(11,10));
 //			entityFactory.createChasm(room, new Vector2(12,10));

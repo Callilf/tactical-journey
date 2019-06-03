@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepBanana;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepFire;
+import com.dokkaebistudio.tacticaljourney.creeps.CreepLava;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepMud;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepPoison;
 import com.dokkaebistudio.tacticaljourney.creeps.CreepVinesBush;
@@ -247,6 +248,40 @@ public final class CreepFactory {
 		
 		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
 		animationCompo.addAnimation(StatesEnum.FIRE_LOOP, AnimationSingleton.getInstance().fire);
+		creepEntity.add(animationCompo);
+		
+		StateComponent stateCompo = engine.createComponent(StateComponent.class);
+		stateCompo.set(StatesEnum.FIRE_LOOP);
+		creepEntity.add(stateCompo);
+		
+		if (parentEntity != null) {
+			ParentEntityComponent parentCompo = engine.createComponent(ParentEntityComponent.class);
+			parentCompo.setParent(parentEntity);
+			creepEntity.add(parentCompo);
+		}
+    	
+		engine.addEntity(creepEntity);
+		creepCompo.onAppear(creepEntity, room);
+    	return creepEntity;
+	}
+	
+	
+	public Entity createLava(Room room, Vector2 pos, Entity parentEntity) {
+		Entity creepEntity = createCreepBase(room, pos, EntityFlagEnum.CREEP_LAVA, null);
+    			
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.LAVA_TITLE);
+		inspect.setDescription(Descriptions.LAVA_DESCRIPTION);
+		creepEntity.add(inspect);
+		
+		CreepComponent creepCompo = engine.createComponent(CreepComponent.class);
+		creepCompo.setType(new CreepLava());
+		creepCompo.setDuration(5);
+		creepCompo.setReleasedTurn(CreepReleasedTurnEnum.getReleaseTurn(room.getState()));
+		creepEntity.add(creepCompo);
+		
+		AnimationComponent animationCompo = engine.createComponent(AnimationComponent.class);
+		animationCompo.addAnimation(StatesEnum.FIRE_LOOP, AnimationSingleton.getInstance().lava);
 		creepEntity.add(animationCompo);
 		
 		StateComponent stateCompo = engine.createComponent(StateComponent.class);

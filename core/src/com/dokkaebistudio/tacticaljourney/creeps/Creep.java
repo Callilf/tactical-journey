@@ -25,6 +25,7 @@ public abstract class Creep {
 		POISON,
 		MUD,
 		FIRE,
+		LAVA,
 		BUSH,
 		VINES_BUSH,
 		BANANA;

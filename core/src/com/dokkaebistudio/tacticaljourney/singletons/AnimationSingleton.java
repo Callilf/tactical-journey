@@ -28,6 +28,7 @@ public class AnimationSingleton {
 	public Animation<Sprite> bomb_fast;
 	public Animation<Sprite> explosion;
 	public Animation<Sprite> fire;
+	public Animation<Sprite> lava;
 	public Animation<Sprite> portal;
 	
 	public Animation<Sprite> energyOrb;
@@ -105,6 +106,8 @@ public class AnimationSingleton {
 		
 		fire = new Animation<Sprite>(0.17f, Assets.creep_fire_animation, PlayMode.LOOP);
 		createAnimation(fire);
+		lava = new Animation<Sprite>(0.2f, Assets.creep_lava_animation, PlayMode.LOOP);
+		createAnimation(lava);
 		portal = new Animation<Sprite>(0.2f, Assets.portal_animation, PlayMode.LOOP);
 		createAnimation(portal);
 		

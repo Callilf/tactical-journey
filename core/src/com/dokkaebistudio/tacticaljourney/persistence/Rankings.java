@@ -22,6 +22,7 @@ public class Rankings {
 		List<GameStatistics> stats = null;
 		
 		Kryo kryo = new Kryo();
+		kryo.setRegistrationRequired(false);
 		kryo.setReferences(false);
 		
 		try {
@@ -98,6 +99,7 @@ public class Rankings {
 		rankings.add(game);
 		
 		Kryo kryo = new Kryo();
+		kryo.setRegistrationRequired(false);
 		kryo.setReferences(false);
 		
 		try {

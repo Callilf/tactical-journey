@@ -180,6 +180,7 @@ public class PlayerAttackSystem extends IteratingSystem implements RoomSystem {
     		
     	case PLAYER_ATTACK_ANIMATION:
 			final AttackComponent wheelAttackComponent = wheel.getAttackComponent();
+			if (wheelAttackComponent == null) return;
 			Tile targetedTile = wheelAttackComponent.getTargetedTile();
 
 			Action finishAttackAction = new Action(){

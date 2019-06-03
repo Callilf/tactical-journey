@@ -21,7 +21,6 @@ import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.room.Tile;
 
 /**
  * Handles movements of entities.
@@ -240,8 +239,10 @@ public class MovementHandler {
 					moveCompo.clearSelectedTileFromPreviousTurn();
 					//Change room !!!
 					finishRealMovement(mover, room);
-					room.leaveRoom(doorCompo.getTargetedRoom());
-					return null;
+					moveCompo.clearMovableTiles();
+					
+					room.setNextRoom(doorCompo.getTargetedRoom());
+//					return null;
 				}
 			}
 		}

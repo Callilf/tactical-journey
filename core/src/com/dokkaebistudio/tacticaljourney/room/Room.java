@@ -124,6 +124,8 @@ public class Room extends EntitySystem {
 	private Room southNeighbor;
 	private Room westNeighbor;
 	private Room eastNeighbor;
+	
+	private Room nextRoom;
 
 	public Room (Floor f, int index, PooledEngine engine, EntityFactory ef, RoomType type) {
 		this.priority = 1;
@@ -289,9 +291,9 @@ public class Room extends EntitySystem {
 	}
 
 	
-	public void leaveRoom(Room nextRoom) {
+	public void leaveRoom() {
 		this.state = RoomState.PLAYER_TURN_INIT;
-		this.floor.enterRoom(nextRoom);
+		this.floor.enterRoom(this.nextRoom);
 	}
 	
 	
@@ -385,6 +387,11 @@ public class Room extends EntitySystem {
 		
 		// Update the room state
 		updateState();
+		
+		if (this.nextRoom != null) {
+			this.leaveRoom();
+			this.nextRoom = null;
+		}
 	}
 	
 	
@@ -776,6 +783,14 @@ public class Room extends EntitySystem {
 		if (!isPauseState()) {
 			InputSingleton.inputBlocked = false;
 		}
+	}
+
+	public Room getNextRoom() {
+		return nextRoom;
+	}
+
+	public void setNextRoom(Room nextRoom) {
+		this.nextRoom = nextRoom;
 	}
 
 	

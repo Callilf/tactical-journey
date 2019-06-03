@@ -21,7 +21,6 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
-import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
@@ -71,7 +70,8 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 		
 		final GridPositionComponent gridPos = Mappers.gridPositionComponent.get(user);
 		Mappers.spriteComponent.get(user).hide = true;
-		InputSingleton.inputBlocked = true;
+		room.pauseState();
+//		InputSingleton.inputBlocked = true;
 		
 		Action firstSmokeAction = new Action(){
 		  @Override
@@ -89,8 +89,9 @@ public class ItemScrollOfTeleportation extends AbstractItem {
 				// Enter here when the second smoke animation is over
 
 				Mappers.spriteComponent.get(user).hide = false;
-				InputSingleton.inputBlocked = false;
-				
+//				InputSingleton.inputBlocked = false;
+				room.unpauseState();
+
 			    return true;
 			  }
 			};

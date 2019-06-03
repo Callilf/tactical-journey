@@ -117,7 +117,7 @@ public class ChasmSystem extends EntitySystem implements RoomSystem {
 	 * @param tile the tile where the entity and the chasm are
 	 */
 	private void fall(Entity entity, Tile tile) {
-//		System.out.println(entity.flags);
+		room.pauseState();
 		entitiesToRemoveFromPosition.add(entity);
 		
 		SpriteComponent spriteComponent = Mappers.spriteComponent.get(entity);
@@ -146,6 +146,7 @@ public class ChasmSystem extends EntitySystem implements RoomSystem {
 			  }
 			  
 			  image.remove();
+			  room.unpauseState();
 			  return true;
 		  }
 		};

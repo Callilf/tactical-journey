@@ -389,6 +389,7 @@ public abstract class RoomGenerator {
 			entityFactory.creepFactory.createLava(room, new Vector2(12,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(13,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(14,3), null);
+			
 //			entityFactory.createChasm(room, new Vector2(10,10));
 //			entityFactory.createChasm(room, new Vector2(11,10));
 //			entityFactory.createChasm(room, new Vector2(12,10));
@@ -422,7 +423,8 @@ public abstract class RoomGenerator {
 //			entityFactory.itemFactory.createItemKey(room, new Vector2(12, 6));
 //			entityFactory.createExit(room, new Vector2(12, 4), false);
 
-//			entityFactory.playerFactory.createGoddessStatue(new Vector2(12, 6), room);
+//			entityFactory.playerFactory.createGoddessStatue(new Vector2(12, 6), room, true);
+//			entityFactory.playerFactory.createChalice(new Vector2(6, 6), room, ChaliceType.VISION);
 			
 //			entityFactory.itemFactory.createItemVigor(room, new Vector2(10, 10));
 //			entityFactory.itemFactory.createItemFrailty(room, new Vector2(9, 10));

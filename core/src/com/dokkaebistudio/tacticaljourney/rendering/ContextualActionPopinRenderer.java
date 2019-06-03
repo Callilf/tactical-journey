@@ -473,7 +473,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		yesBtnListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {				
-				statueComponent.pray();
+				statueComponent.pray(room);
 				room.turnManager.endPlayerTurn();
 				closePopin();
 			}

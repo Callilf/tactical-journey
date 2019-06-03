@@ -27,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -79,6 +80,7 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 	
 	
 	public void drink(Room room) {
+		room.pauseState();
 		this.setFilled(false);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
@@ -103,6 +105,8 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 						
 						alterationReceiverComponent.requestAction(AlterationActionEnum.LIFT_CURSE, curse);
 						Journal.addEntry("[YELLOW]A holy fluid runed through your body. You feel that a burden has been lifted.");
+						
+						VFXUtil.createStatsUpNotif("Burden lifted", gridPositionComponent.coord());
 					}
 					break;
 					
@@ -121,10 +125,14 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 					MapRenderer.requireRefresh();
 					Journal.addEntry("[GREEN]A vivid image of the layout of the floor formed into your mind.");
 					
+					VFXUtil.createStatsUpNotif("Vision", gridPositionComponent.coord());
+
 					break;
 					
 					default:
 				}
+				
+				room.unpauseState();
 				return true;
 			}
 		}));

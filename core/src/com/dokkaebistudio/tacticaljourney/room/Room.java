@@ -66,6 +66,7 @@ public class Room extends EntitySystem {
 	private RoomState state;
 	private RoomState nextState;
 	private RoomCreatureState creatureState;
+	private int pauseState = 0;
 	
 	public Tile[][] grid;
 	
@@ -433,6 +434,8 @@ public class Room extends EntitySystem {
 	}
 	
 	private void updateState() {
+		if (this.pauseState > 0) return;
+		
 		if (this.nextState != null) {
 			this.state = this.nextState;
 			this.nextState = null;
@@ -753,6 +756,26 @@ public class Room extends EntitySystem {
 
 	public void setCloseDialogRequested(boolean closeDialogRequested) {
 		this.closeDialogRequested = closeDialogRequested;
+	}
+
+	public boolean isPauseState() {
+		return pauseState > 0;
+	}
+
+	public void pauseState() {
+		if (!isPauseState()) {
+			InputSingleton.inputBlocked = true;
+			RoomRenderer.hideBlackFilter();
+		}
+		
+		this.pauseState++;
+	}
+	public void unpauseState() {
+		this.pauseState--;
+		
+		if (!isPauseState()) {
+			InputSingleton.inputBlocked = false;
+		}
 	}
 
 	

@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
@@ -82,7 +83,8 @@ public class StatueComponent implements Component, Poolable, MarkerInterface {
 	}
 	
 	
-	public void pray() {
+	public void pray(Room room) {
+		room.pauseState();
 		this.setHasBlessing(false);
 
 		GridPositionComponent gridPositionComponent = Mappers.gridPositionComponent.get(GameScreen.player);
@@ -99,6 +101,8 @@ public class StatueComponent implements Component, Poolable, MarkerInterface {
 				AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
 				alterationReceiverComponent.requestAction(AlterationActionEnum.RECEIVE_BLESSING, getBlessingToGive());		
 
+				room.unpauseState();
+				
 				return true;
 			}
 		}));

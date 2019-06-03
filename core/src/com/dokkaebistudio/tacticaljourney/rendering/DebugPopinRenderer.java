@@ -444,6 +444,17 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(destroyAll).padBottom(20);
 		optionsTable.row();
 		
+		// Karma
+		TextButton karmaMax = new TextButton("Get lucky", PopinService.buttonStyle());
+		karmaMax.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Mappers.playerComponent.get(GameScreen.player).setKarma(99);
+			}
+		});
+		optionsTable.add(karmaMax).padBottom(20);
+		optionsTable.row();
+		
 		// HP
 		Label hpLabel = new Label("Health", PopinService.hudStyle());
 		optionsTable.add(hpLabel).padBottom(20);

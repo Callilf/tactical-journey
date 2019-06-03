@@ -113,12 +113,15 @@ public class LootUtil {
 			final ItemComponent itemComponent = Mappers.itemComponent.get(dropItem);
 			final PoolableVector2 dropLocation = PoolableVector2.create(gridPositionComponent.coord());
 			
+			room.pauseState();
+			
 			// Drop animation
 			Action finishDropAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
 				itemComponent.drop(dropLocation, dropItem, room);
 				dropLocation.free();
+				room.unpauseState();
 			    return true;
 			  }
 			};
@@ -133,11 +136,14 @@ public class LootUtil {
 			final Entity mandatoryLoot = room.entityFactory.itemFactory.createItem(lootRewardComponent.getItemToDrop());
 			final ItemComponent mandatoryItemComponent = Mappers.itemComponent.get(mandatoryLoot);
 			final PoolableVector2 dropLoc = PoolableVector2.create(gridPositionComponent.coord());
+			room.pauseState();
+
 			Action finishMandatoryDropAction = new Action(){
 			  @Override
 			  public boolean act(float delta){
 				mandatoryItemComponent.drop(dropLoc, mandatoryLoot, room);
 				dropLoc.free();
+				room.unpauseState();
 			    return true;
 			  }
 			};

@@ -132,9 +132,12 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
      */
 	private void handleDuration(Entity creep) {
 		CreepComponent creepComponent = Mappers.creepComponent.get(creep);
-
-		creepComponent.setCurrentDuration(creepComponent.getCurrentDuration() + 1);
-		if (creepComponent.getDuration() > 0 && creepComponent.getCurrentDuration() >= creepComponent.getDuration()) {
+		
+		if (creepComponent.getDurationLastTurn() == -1 && creepComponent.getDuration() > 0) {
+			creepComponent.setDurationLastTurn(room.turnManager.getTurn() + creepComponent.getDuration());
+		}
+		
+		if (creepComponent.getDurationLastTurn() != -1 && creepComponent.getDurationLastTurn() <= room.turnManager.getTurn()) {
 			// Duration reached, remove the creep
 			Image removeCreepImage = creepComponent.getRemoveCreepImage(creep);
 			fxStage.addActor(removeCreepImage);
@@ -143,6 +146,7 @@ public class CreepSystem extends EntitySystem implements RoomSystem {
 			
 			room.removeEntity(creep);
 		}
+
 	}
 
     

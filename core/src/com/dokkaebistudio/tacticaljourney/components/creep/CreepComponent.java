@@ -51,8 +51,8 @@ public class CreepComponent implements Component, Poolable {
 	 * The turn where the creep is generated counts as the first turn ! */
 	private int duration;
 	
-	/** The current number of turns this creep has been here. */
-	private int currentDuration;
+	/** The turn where the creep should disappear. */
+	private int durationLastTurn = -1;
 	
 	/** Whether the creep was released during the player's turn or the enemy turn. */
 	private CreepReleasedTurnEnum releasedTurn;
@@ -143,7 +143,7 @@ public class CreepComponent implements Component, Poolable {
 	
 	@Override
 	public void reset() {
-		this.setCurrentDuration(0);
+		this.durationLastTurn = -1;
 		this.removeCreepImage = null;
 		this.releasedTurn = null;
 	}
@@ -196,15 +196,6 @@ public class CreepComponent implements Component, Poolable {
 		this.duration = duration;
 	}
 
-	public int getCurrentDuration() {
-		return currentDuration;
-	}
-
-	public void setCurrentDuration(int currentDuration) {
-		this.currentDuration = currentDuration;
-	}
-
-
 	public CreepReleasedTurnEnum getReleasedTurn() {
 		return releasedTurn;
 	}
@@ -214,6 +205,13 @@ public class CreepComponent implements Component, Poolable {
 		this.releasedTurn = releasedTurn;
 	}
 
+	public int getDurationLastTurn() {
+		return durationLastTurn;
+	}
+
+	public void setDurationLastTurn(int durationLastTurn) {
+		this.durationLastTurn = durationLastTurn;
+	}
 	
 	
 	
@@ -225,7 +223,7 @@ public class CreepComponent implements Component, Poolable {
 				
 				kryo.writeClassAndObject(output, object.type);
 				output.writeInt(object.duration);
-				output.writeInt(object.currentDuration);
+				output.writeInt(object.durationLastTurn);
 				kryo.writeClassAndObject(output, object.releasedTurn);
 			}
 
@@ -236,7 +234,7 @@ public class CreepComponent implements Component, Poolable {
 				compo.type = (Creep) kryo.readClassAndObject(input);
 				
 				compo.duration = input.readInt();
-				compo.currentDuration = input.readInt();
+				compo.durationLastTurn = input.readInt();
 				compo.releasedTurn = (CreepReleasedTurnEnum) kryo.readClassAndObject(input);
 				
 				return compo;
@@ -244,4 +242,5 @@ public class CreepComponent implements Component, Poolable {
 		
 		};
 	}
+
 }

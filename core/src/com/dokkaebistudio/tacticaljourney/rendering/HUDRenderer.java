@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -37,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -81,6 +83,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	public static Vector2 POS_FPS = new Vector2(5f, 130f);
 
 	public static Boolean isTargeting;
+	public static boolean displayLevelUpButton = false;
+	public static boolean levelUpButtonDisplayed = false;
 
 
 	public Stage stage;
@@ -125,6 +129,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 	private Table xpTable;
 	private Label levelLabel;
 	private Label expLabel;
+	
+	Container<TextButton> levelUpButtonContainer;
 	
 	private Table profileTable; 
 	private Button profileBtn;
@@ -510,6 +516,8 @@ public class HUDRenderer implements Renderer, RoomSystem {
 		levelLabel.setText("Level [YELLOW]" + experienceComponent.getLevel());
 		expLabel.setText("Exp: [YELLOW]" + experienceComponent.getCurrentXp() + "[]/" + experienceComponent.getNextLevelXp());
 		
+		// Level up button
+		handleLevelUpButton();
 		
 		// PROFILE and INVENTORY
 		final PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
@@ -650,6 +658,72 @@ public class HUDRenderer implements Renderer, RoomSystem {
 			inspectBtn.setChecked(false);
 		}
 		
+	}
+
+	private void handleLevelUpButton() {
+		if (levelUpButtonContainer == null) {
+			TextButton levelUpButton = new TextButton("LEVEL UP", PopinService.checkedButtonStyle());
+			levelUpButton.setProgrammaticChangeEvents(false);
+			levelUpButton.addListener( new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					levelUpButton.setChecked(false);
+					levelUpButtonContainer.remove();
+					levelUpButtonDisplayed = false;
+					experienceComponent.setLevelUpPopinDisplayed(true);
+					
+					AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(GameScreen.player);
+	    			alterationReceiverComponent.onLevelUp(GameScreen.player, room);
+				}
+			});
+	
+			levelUpButtonContainer = new Container<>(levelUpButton);
+		    levelUpButtonContainer.setTransform(true);   // for enabling scaling and rotation
+		    levelUpButtonContainer.pack();
+		    levelUpButtonContainer.setPosition(POS_PROFILE.x - levelUpButtonContainer.getWidth()/5, 130);
+		    levelUpButtonContainer.setZIndex(100);
+		    levelUpButtonContainer.setOrigin(Align.center);
+			levelUpButtonContainer.addAction(Actions.forever(
+					Actions.sequence(
+							Actions.delay(2f), 
+							Actions.scaleTo(1.2f, 1.2f, 0.1f),
+							Actions.scaleTo(1f, 1f, 0.5f, Interpolation.elasticOut)
+							)
+					));
+		}
+		
+		
+		if (HUDRenderer.displayLevelUpButton) {
+			levelUpButtonDisplayed = true;
+			
+			Image levelUpAura = new Image(Assets.level_up_aura.getRegion());
+			levelUpAura.setTouchable(Touchable.disabled);
+			levelUpAura.setOrigin(Align.center);
+			levelUpAura.setPosition(levelUpButtonContainer.getX() + levelUpButtonContainer.getWidth()/2, 
+					levelUpButtonContainer.getY() + levelUpButtonContainer.getHeight()/2, Align.center);
+			levelUpAura.addAction(Actions.alpha(0f));
+			levelUpAura.addAction(Actions.scaleTo(0f, 0f));
+			
+			Action removeImageAction = new Action(){
+				  @Override
+				  public boolean act(float delta){
+					levelUpAura.remove();
+				    return true;
+				  }
+				};
+				
+			levelUpAura.addAction( Actions.sequence( Actions.parallel(
+						Actions.alpha(0.8f, 2f),
+						Actions.scaleTo(1f, 1f, 1f),
+						Actions.rotateBy(360f, 4f),
+						Actions.sequence(Actions.delay(2f), Actions.fadeOut(1f))),
+						removeImageAction
+					));
+			stage.addActor(levelUpAura);
+			stage.addActor(levelUpButtonContainer);
+			
+			HUDRenderer.displayLevelUpButton = false;
+		}
 	}
 
 	

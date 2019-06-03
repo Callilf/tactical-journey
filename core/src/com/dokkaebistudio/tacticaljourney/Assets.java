@@ -158,6 +158,8 @@ public class Assets {
 //	public static RegionDescriptor wheel_arc;
 	public static RegionDescriptor wheel_arrow;
 	
+	public static RegionDescriptor level_up_aura;
+	
 	
 	//***********************
 	// Map
@@ -577,6 +579,8 @@ public class Assets {
 		
 //		wheel_arc = Assets.getTexture("wheel-arc");
 		wheel_arrow = Assets.getTexture("wheel-arrow");
+		
+		level_up_aura = Assets.getTexture("level_up_aura");
 		
 		//****************
 		// Map

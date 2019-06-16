@@ -1,18 +1,13 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs;
 
-import java.io.Serializable;
-import java.util.function.Predicate;
-
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
-import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderCatalystPredicate;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderInfusionPredicate;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderReceivedCatalystPredicate;
 
 public class SoulbenderDialogs extends AbstractDialogs {
 	
@@ -45,12 +40,14 @@ public class SoulbenderDialogs extends AbstractDialogs {
 		
 		// After infusion
 		
-		Predicate<PublicEntity> infusionPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
-			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
-					&& playerInventoryCompo != null && !playerInventoryCompo.contains(ItemDivineCatalyst.class);
-		};
+//		Predicate<PublicEntity> infusionPredicate = (Predicate<PublicEntity> & Serializable) e -> {
+//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
+//			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
+//			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
+//					&& playerInventoryCompo != null && !playerInventoryCompo.contains(ItemDivineCatalyst.class);
+//		};
+		
+		DialogCondition infusionPredicate = new SoulbenderInfusionPredicate();
 		
 		this.addDialog(new DialogBuilder()
 				.addText("I'm out of energy, I need some rest.")
@@ -67,12 +64,13 @@ public class SoulbenderDialogs extends AbstractDialogs {
 		
 		// With catalyst
 		
-		Predicate<PublicEntity> catalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
-			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
-					&& playerInventoryCompo != null && playerInventoryCompo.contains(ItemDivineCatalyst.class);
-		};
+//		Predicate<PublicEntity> catalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
+//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
+//			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
+//			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
+//					&& playerInventoryCompo != null && playerInventoryCompo.contains(ItemDivineCatalyst.class);
+//		};
+		DialogCondition catalystPredicate = new SoulbenderCatalystPredicate();
 		
 		this.addDialog(new DialogBuilder()
 				.addText("You are carrying a very powerful artifact, I can feel it. Come closer and let me have a look.")
@@ -82,10 +80,11 @@ public class SoulbenderDialogs extends AbstractDialogs {
 		
 		// After giving catalyst
 		
-		Predicate<PublicEntity> receivedCatalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-			return soulbenderComponent != null && soulbenderComponent.isReceivedCatalyst();
-		};
+//		Predicate<PublicEntity> receivedCatalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
+//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
+//			return soulbenderComponent != null && soulbenderComponent.isReceivedCatalyst();
+//		};
+		DialogCondition receivedCatalystPredicate = new SoulbenderReceivedCatalystPredicate();
 		
 		this.addDialog(new DialogBuilder()
 				.addText("Thank you! I feel strong enough to infuse another item now.")

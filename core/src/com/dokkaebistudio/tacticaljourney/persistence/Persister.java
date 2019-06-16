@@ -623,7 +623,7 @@ public class Persister {
 		kryo.register(Object[].class);
 		kryo.register(Class.class);
 		kryo.register(SerializedLambda.class);
-		kryo.register(ClosureSerializer.Closure.class, new ClosureSerializer());
+//		kryo.register(ClosureSerializer.Closure.class, new ClosureSerializer());
 		kryo.addDefaultSerializer(SerializedLambda.class, new JavaSerializer());
 		
 		// general serializers

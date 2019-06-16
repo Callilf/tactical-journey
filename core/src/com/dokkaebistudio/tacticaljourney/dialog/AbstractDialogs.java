@@ -25,7 +25,7 @@ public abstract class AbstractDialogs {
 	/**
 	 * Dialogs that can be told only if a predicate is satisfied.
 	 */
-	private Map<Predicate<PublicEntity>, List<Dialog>> conditionalDialogs = new HashMap<>();
+	private Map<DialogCondition, List<Dialog>> conditionalDialogs = new HashMap<>();
 	
 	/**
 	 * Dialogs that can be told only when getDialog is called with a given tag.
@@ -65,7 +65,7 @@ public abstract class AbstractDialogs {
 		Dialog dialogToUse = null;
 		
 		// Check if one of the condition is satisfied
-		Optional<Predicate<PublicEntity>> matchingKey = conditionalDialogs.keySet().parallelStream()
+		Optional<DialogCondition> matchingKey = conditionalDialogs.keySet().parallelStream()
 			.filter( p -> p.test(speakerEntity))
 			.findFirst();
 		

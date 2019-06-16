@@ -2,9 +2,6 @@ package com.dokkaebistudio.tacticaljourney.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 
 /**
  * Represents one sentence that can be told to the player.
@@ -28,7 +25,7 @@ public class Dialog {
 	 * A condition for this sentence to be told.
 	 * The entity in the predicate is the entity that is speaking (soulbender, shopkeeper, calishka...)
 	 */
-	private Predicate<PublicEntity> condition;
+	private DialogCondition condition;
 	
 	/**
 	 * Whether this sentence can be told once again. If so, once it's selected it will be
@@ -62,10 +59,10 @@ public class Dialog {
 	public void addText(String text) {
 		this.text.add(text);
 	}
-	public Predicate<PublicEntity> getCondition() {
+	public DialogCondition getCondition() {
 		return condition;
 	}
-	public void setCondition(Predicate<PublicEntity> condition) {
+	public void setCondition(DialogCondition condition) {
 		this.condition = condition;
 	}
 	

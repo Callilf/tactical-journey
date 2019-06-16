@@ -2,14 +2,11 @@ package com.dokkaebistudio.tacticaljourney.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 
 public class DialogBuilder {
 	
 	private List<String> text = new ArrayList<>();
-	private Predicate<PublicEntity> condition;
+	private DialogCondition condition;
 	private boolean repeat;
 	private String speaker;
 	
@@ -29,7 +26,7 @@ public class DialogBuilder {
 		return this;
 	}
 	
-	public DialogBuilder setCondition(Predicate<PublicEntity> condition) {
+	public DialogBuilder setCondition(DialogCondition condition) {
 		this.condition = condition;
 		return this;
 	}

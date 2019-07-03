@@ -3,11 +3,12 @@ package com.dokkaebistudio.tacticaljourney.factory;
 public enum EntityFlagEnum {
 
 	PLAYER(1),
-	SHOPKEEPER(2),
-	GODDESS_STATUE(3),
-	SOUL_BENDER(4),
-	ALTAR(5),
-	RECYCLER(6),
+	CALISHKA(2),
+	SHOPKEEPER(3),
+	GODDESS_STATUE(4),
+	SOUL_BENDER(5),
+	ALTAR(6),
+	RECYCLER(7),
 	
 
 

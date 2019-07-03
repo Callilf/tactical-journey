@@ -44,6 +44,7 @@ public class Assets {
 	public static RegionDescriptor shopkeeper_carpet;
 	public static RegionDescriptor recycling_machine;
 
+	public static RegionDescriptor calishka;
 	public static RegionDescriptor soulbender;
 	public static RegionDescriptor goddess_statue;
 	public static RegionDescriptor goddess_statue_broken;
@@ -468,6 +469,7 @@ public class Assets {
 		player_running = Assets.getAnimation("player_run");
 		player_flying = Assets.getAnimation("player_flight");
 		
+		calishka = Assets.getTexture("calishka");
 		shopkeeper = Assets.getTexture("shopkeeper");
 		shopkeeper_carpet = Assets.getTexture("shopkeeper_carpet");
 		recycling_machine = Assets.getTexture("recycling_machine");

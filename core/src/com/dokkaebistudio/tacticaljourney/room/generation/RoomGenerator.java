@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
@@ -33,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -386,6 +388,8 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
+			entityFactory.playerFactory.createCalishka(new Vector2(5, 6), room);
+			
 			entityFactory.creepFactory.createLava(room, new Vector2(12,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(13,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(14,3), null);
@@ -396,8 +400,6 @@ public abstract class RoomGenerator {
 //			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
 //			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN, room, new Vector2(14, 7));
 //			Mappers.lootRewardComponent.get(createEnemy).getDropRate().getRatePerRarity().put(ItemPoolRarity.COMMON, 100f);
-			
-//			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.TRIBESMAN_SPEAR, room, new Vector2(10, 10));
 
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));
 //			LootRewardComponent lootRewardComponent = Mappers.lootRewardComponent.get(createAmmoCrate);

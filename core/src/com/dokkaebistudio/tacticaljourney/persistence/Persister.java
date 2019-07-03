@@ -55,6 +55,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.RecyclingMachineComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
@@ -103,7 +104,6 @@ import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.ClosureSerializer;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 
 public class Persister {
@@ -653,6 +653,7 @@ public class Persister {
 		kryo.register(EnemyComponent.class, EnemyComponent.getSerializer(engine));
 		kryo.register(AIComponent.class, AIComponent.getSerializer(engine));
 
+		kryo.register(CalishkaComponent.class, CalishkaComponent.getSerializer(engine));
 		kryo.register(ShopKeeperComponent.class, ShopKeeperComponent.getSerializer(engine));
 		kryo.register(SoulbenderComponent.class, SoulbenderComponent.getSerializer(engine));
 		kryo.register(StatueComponent.class, StatueComponent.getSerializer(engine));

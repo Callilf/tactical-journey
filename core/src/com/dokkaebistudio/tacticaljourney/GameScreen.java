@@ -69,6 +69,7 @@ import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.systems.AnimationSystem;
+import com.dokkaebistudio.tacticaljourney.systems.CalishkaSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ChaliceSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ChasmSystem;
 import com.dokkaebistudio.tacticaljourney.systems.ContextualActionSystem;
@@ -272,6 +273,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new ChaliceSystem(room, foregroundFxStage));
 		engine.addSystem(new StatusSystem(player, room, fxStage));
 		engine.addSystem(new ShopSystem(	player, room));
+		engine.addSystem(new CalishkaSystem(	player, room));
 		engine.addSystem(new SoulbenderSystem(	player, room));
 		engine.addSystem(new ContextualActionSystem(	player, room));
 		engine.addSystem(new DialogSystem(room));

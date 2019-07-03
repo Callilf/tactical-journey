@@ -34,6 +34,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SewingMachineComponent;
@@ -53,6 +54,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.allies.AllyClone;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.CalishkaDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.ShopkeeperDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.SoulbenderDialogs;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
@@ -353,6 +355,41 @@ public final class PlayerFactory {
 		return cloneEntity;
 	}
 	
+	
+	public Entity createCalishka(Vector2 pos, Room room) {
+		Entity calishkaEntity = engine.createEntity();
+		calishkaEntity.flags = EntityFlagEnum.CALISHKA.getFlag();
+
+		InspectableComponent inspect = engine.createComponent(InspectableComponent.class);
+		inspect.setTitle(Descriptions.CALISHKA_TITLE);
+		inspect.setDescription(Descriptions.CALISHKA_DESCRIPTION);
+		calishkaEntity.add(inspect);
+
+		// Sprite
+		SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
+		spriteCompo.setSprite(Assets.calishka);
+		calishkaEntity.add(spriteCompo);
+		
+		// Grid position
+		GridPositionComponent gridPosition = engine.createComponent(GridPositionComponent.class);
+		gridPosition.coord(calishkaEntity, pos, room);
+		gridPosition.zIndex = ZIndexConstants.PLAYER;
+		calishkaEntity.add(gridPosition);
+		
+		// Solid compo
+		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);
+		calishkaEntity.add(solidComponent);
+		
+		CalishkaComponent calishkaCompo = engine.createComponent(CalishkaComponent.class);
+		calishkaEntity.add(calishkaCompo);
+		
+		SpeakerComponent speakerCompo = engine.createComponent(SpeakerComponent.class);
+		speakerCompo.setDialogs(new CalishkaDialogs());
+		calishkaEntity.add(speakerCompo);
+		
+		room.addNeutral(calishkaEntity);
+		return calishkaEntity;
+	}
 	
 	/**
 	 * Create a shopkeeper.

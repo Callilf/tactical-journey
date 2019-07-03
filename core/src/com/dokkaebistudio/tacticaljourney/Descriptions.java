@@ -49,6 +49,9 @@ public class Descriptions {
 
 	
 	// Neutrals
+	public static final String CALISHKA_TITLE = "Calishka, the dungeon keeper";
+	public static final String CALISHKA_DESCRIPTION = "A naga woman that releases a powerful aura. The only fact of standing close to her seems to be draining your energy.";
+
 	public static final String SHOPKEEPER_TITLE = "Shopkeeper";
 	public static final String SHOPKEEPER_DESCRIPTION = "Some random dude with a shop in the middle of a dungeon.";
 	

@@ -429,7 +429,7 @@ public class Room extends EntitySystem {
 		return this.nextState;
 	}
 	public RoomState getState() {
-		return this.state;
+		return this.isPauseState() ? RoomState.WAITING : this.state;
 	}
 	
 	public void forceState(RoomState forcedState) {

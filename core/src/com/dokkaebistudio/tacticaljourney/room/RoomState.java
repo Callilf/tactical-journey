@@ -62,7 +62,9 @@ public enum RoomState {
 	STATUS_POPIN,
 	CHARACTERISTICS_POPIN,
 	
-	DEBUG_POPIN;
+	DEBUG_POPIN,
+	
+	WAITING;
 	
 	
 	

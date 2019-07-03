@@ -66,7 +66,7 @@ public class ItemScrollOfDestruction extends AbstractItem {
 		Array<Entity> copyOfAllEntities = new Array<>(room.getAllEntities());
 		copyOfAllEntities.forEach(entity -> LootUtil.destroy(entity, room));
 
-		return false;
+		return true;
 	}
 	
 	

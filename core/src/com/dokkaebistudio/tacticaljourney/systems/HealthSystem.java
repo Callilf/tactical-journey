@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -21,6 +20,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
@@ -233,7 +233,7 @@ public class HealthSystem extends EntitySystem implements RoomSystem {
 					killerString = inspectableComponent.getTitle();
 				}
 			}
-			gameScreen.killerStr = killerString;
+			gameScreen.killerName = killerString;
 		}
 		
 		healthCompo.setAttacker(null);

@@ -2,7 +2,7 @@ package com.dokkaebistudio.tacticaljourney.systems.creatures;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;

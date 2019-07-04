@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
@@ -140,6 +141,10 @@ public final class Mappers {
 	public final static ComponentMapper<FlammableComponent> flammableComponent = ComponentMapper.getFor(FlammableComponent.class);
 	public final static ComponentMapper<ExplosiveComponent> explosiveComponent = ComponentMapper.getFor(ExplosiveComponent.class);
 	public final static ComponentMapper<DestructibleComponent> destructibleComponent = ComponentMapper.getFor(DestructibleComponent.class);
+	
+	
+	
+	public final static ComponentMapper<TutorialComponent> tutorialComponent = ComponentMapper.getFor(TutorialComponent.class);
 
 	
 	

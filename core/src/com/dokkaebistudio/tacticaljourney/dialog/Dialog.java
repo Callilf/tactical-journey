@@ -36,6 +36,11 @@ public class Dialog {
 	
 	public float duration;
 	
+	/**
+	 * An effect that can be played one the dialog is over.
+	 */
+	private DialogEffect effect;
+	
 	
 	public Dialog() {}
 	
@@ -94,6 +99,16 @@ public class Dialog {
 	
 	public void incrementIndex() {
 		this.currentIndex++;
+	}
+
+
+	public DialogEffect getEffect() {
+		return effect;
+	}
+
+
+	public void setEffect(DialogEffect effect) {
+		this.effect = effect;
 	}
 	
 }

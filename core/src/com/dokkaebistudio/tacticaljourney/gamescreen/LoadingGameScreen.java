@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.gamescreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -22,20 +22,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.Settings;
+import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 
 public class LoadingGameScreen extends ScreenAdapter {
 	TacticalJourney game;
 	OrthographicCamera guiCam;
-	boolean newGame;
+	GameTypeEnum gameType;
 	String playerName;
 
 	Texture menuBackground;
 
-	public LoadingGameScreen(TacticalJourney game, boolean newGame, String playerName) {
+	public LoadingGameScreen(TacticalJourney game, GameTypeEnum gameType, String playerName) {
 		this.game = game;
-		this.newGame = newGame;
+		this.gameType = gameType;
 		this.playerName = playerName;
 
 		guiCam = new OrthographicCamera(1920, 1080);
@@ -51,7 +54,7 @@ public class LoadingGameScreen extends ScreenAdapter {
 		if (loaded) { // loading is finished !
 			Assets.getInstance().initTextures();
             // change screen
-			this.game.setScreen(new GameScreen(game, newGame, playerName));
+			this.game.setScreen(new GameScreen(game, gameType, playerName));
 		}
 
 		// report progress

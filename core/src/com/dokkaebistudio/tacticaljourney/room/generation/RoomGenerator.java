@@ -3,8 +3,8 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.generation;
 
-import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_H;
-import static com.dokkaebistudio.tacticaljourney.GameScreen.GRID_W;
+import static com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen.GRID_H;
+import static com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen.GRID_W;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
@@ -28,6 +27,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
@@ -388,7 +388,7 @@ public abstract class RoomGenerator {
 			
 		case START_FLOOR_ROOM:
 			
-			entityFactory.playerFactory.createCalishka(new Vector2(5, 6), room);
+			entityFactory.playerFactory.createCalishka(new Vector2(5, 6), room, null);
 			
 			entityFactory.creepFactory.createLava(room, new Vector2(12,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(13,3), null);
@@ -724,5 +724,14 @@ public abstract class RoomGenerator {
     	int nextSeededInt = random.nextSeededInt(possibleDirections.size());
     	PoolableVector2 direction = possibleDirections.get(nextSeededInt);
     	placeCreepRiver(type, direction, groom, emptyTiles, chance - step, step);
+	}
+	
+	
+
+	protected void closeDoors(Room room) {
+		List<Entity> doors = room.getDoors();
+		for (Entity door : doors) {
+			Mappers.doorComponent.get(door).close(door);
+		}
 	}
 }

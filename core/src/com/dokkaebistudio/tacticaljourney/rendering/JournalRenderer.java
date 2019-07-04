@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;

@@ -8,7 +8,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
@@ -17,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponen
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;

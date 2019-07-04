@@ -13,13 +13,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
@@ -116,11 +116,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 				Mappers.aiComponent.get(enemy).setAlerted(true, enemy, GameScreen.player);
 			}		
 			
-			// Close doors
-			List<Entity> doors = room.getDoors();
-			for (Entity door : doors) {
-				Mappers.doorComponent.get(door).close(door);
-			}
+			closeDoors(room);
 			
 			break;
 		case END_FLOOR_ROOM:

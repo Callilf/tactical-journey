@@ -3,7 +3,7 @@ package com.dokkaebistudio.tacticaljourney.persistence;
 import java.util.Calendar;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing.BlessingsEnum;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
@@ -22,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent.AlterationActionEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

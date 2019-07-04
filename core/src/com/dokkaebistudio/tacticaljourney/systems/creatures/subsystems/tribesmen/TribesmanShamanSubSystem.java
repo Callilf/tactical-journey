@@ -2,7 +2,6 @@ package com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesme
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.components.ExpRewardComponent;
@@ -15,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribes
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanSpear;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.tribesmen.EnemyTribesmanTotem;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;

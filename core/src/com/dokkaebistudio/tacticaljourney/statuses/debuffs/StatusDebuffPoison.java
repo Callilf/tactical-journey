@@ -5,11 +5,11 @@ package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.Status;

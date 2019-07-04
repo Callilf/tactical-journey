@@ -31,8 +31,15 @@ public enum RoomType {
 	MINI_BOSS_ROOM("Mini-boss room", false, 1, 2),
 	
 	
+	BOSS_ROOM("Boss room"),
 	
-	BOSS_ROOM("Boss room");
+	
+	TUTORIAL_ROOM_1("Tutorial room 1"),
+	TUTORIAL_ROOM_2("Tutorial room 2"),
+	TUTORIAL_ROOM_3("Tutorial room 3"),
+	TUTORIAL_ROOM_4("Tutorial room 4"),
+	TUTORIAL_ROOM_5("Tutorial room 5"),
+	TUTORIAL_ROOM_6("Tutorial room 6");
 	
 	private String label;
 	private boolean canBeOnExitPath;

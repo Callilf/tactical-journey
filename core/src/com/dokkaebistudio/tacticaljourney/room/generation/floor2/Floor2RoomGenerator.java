@@ -82,12 +82,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				
 			}
 			
-			
-			// Close doors
-			List<Entity> doors = room.getDoors();
-			for (Entity door : doors) {
-				Mappers.doorComponent.get(door).close(door);
-			}
+			closeDoors(room);
 			
 			break;
 		case END_FLOOR_ROOM:

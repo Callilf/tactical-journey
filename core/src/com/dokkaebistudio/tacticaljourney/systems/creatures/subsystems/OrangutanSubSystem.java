@@ -8,7 +8,6 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
@@ -18,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.GridPositionCompone
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.EnemyOrangutan;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;

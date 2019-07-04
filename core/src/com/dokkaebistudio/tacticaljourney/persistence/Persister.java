@@ -18,7 +18,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
@@ -80,6 +79,7 @@ import com.dokkaebistudio.tacticaljourney.components.transition.SecretDoorCompon
 import com.dokkaebistudio.tacticaljourney.descriptors.FontDescriptor;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPool;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;

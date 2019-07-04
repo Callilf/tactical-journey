@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -19,6 +18,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent
 import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.SkillComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.WheelComponent;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;

@@ -31,7 +31,6 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
@@ -39,6 +38,7 @@ import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverCo
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.rendering.RoomRenderer;
@@ -66,7 +66,9 @@ public class Room extends EntitySystem {
 	private RoomState state;
 	private RoomState nextState;
 	private RoomCreatureState creatureState;
+	
 	private int pauseState = 0;
+	private String restartSystem;
 	
 	public Tile[][] grid;
 	
@@ -370,9 +372,7 @@ public class Room extends EntitySystem {
 					.forEach(ally -> Mappers.aiComponent.get(ally).onRoomCleared(ally, this));
 			}
 
-			for (Entity door : doors) {
-				Mappers.doorComponent.get(door).open(door);
-			}
+			openDoors();
 			
 			if (secretDoor != null) {
 				Mappers.secretDoorComponent.get(secretDoor).open(secretDoor);
@@ -393,6 +393,14 @@ public class Room extends EntitySystem {
 			this.nextRoom = null;
 		}
 	}
+
+	public void openDoors() {
+		for (Entity door : doors) {
+			Mappers.doorComponent.get(door).open(door);
+		}
+	}
+	
+	
 	
 	
 	/**
@@ -791,6 +799,14 @@ public class Room extends EntitySystem {
 
 	public void setNextRoom(Room nextRoom) {
 		this.nextRoom = nextRoom;
+	}
+
+	public String getRestartSystem() {
+		return restartSystem;
+	}
+
+	public void setRestartSystem(String restartSystem) {
+		this.restartSystem = restartSystem;
 	}
 
 	

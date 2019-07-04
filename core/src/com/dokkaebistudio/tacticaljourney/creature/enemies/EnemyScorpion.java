@@ -1,8 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.creature.enemies;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

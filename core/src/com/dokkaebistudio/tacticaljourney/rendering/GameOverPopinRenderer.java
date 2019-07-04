@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.mainmenu.MainMenuScreen;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics;
 import com.dokkaebistudio.tacticaljourney.persistence.GameStatistics.GameStatisticsState;
@@ -49,7 +49,7 @@ public class GameOverPopinRenderer implements Renderer {
 				// Add game stats to rankings
 				GameStatistics gameStats = GameStatistics.create(this.gamescreen);
 				gameStats.setState(GameStatisticsState.LOST);
-				gameStats.setKiller(this.gamescreen.killerStr);
+				gameStats.setKiller(this.gamescreen.killerName);
 				Rankings.addGameToRankings(gameStats);
     		}
     		

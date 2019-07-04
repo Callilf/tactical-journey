@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.dokkaebistudio.tacticaljourney;
+package com.dokkaebistudio.tacticaljourney.gamescreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.dokkaebistudio.tacticaljourney.Assets;
+import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicPooledEngine;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
@@ -90,6 +92,7 @@ import com.dokkaebistudio.tacticaljourney.systems.SoulbenderSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StateSystem;
 import com.dokkaebistudio.tacticaljourney.systems.StatusSystem;
 import com.dokkaebistudio.tacticaljourney.systems.TurnSystem;
+import com.dokkaebistudio.tacticaljourney.systems.TutorialSystem;
 import com.dokkaebistudio.tacticaljourney.systems.WheelSystem;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.AllySystem;
 import com.dokkaebistudio.tacticaljourney.systems.creatures.EnemySystem;
@@ -160,9 +163,9 @@ public class GameScreen extends ScreenAdapter {
 	public static Entity player;
 	
 	/** The name of the entity that killed the player. */
-	public String killerStr;
+	public String killerName;
 	
-	public GameScreen (TacticalJourney game, boolean newGame, String playerName) {
+	public GameScreen (TacticalJourney game, GameTypeEnum gameType, String playerName) {
 		this.game = game;
 		
 		Gdx.input.setCatchBackKey(true);
@@ -204,29 +207,7 @@ public class GameScreen extends ScreenAdapter {
 		this.entityFactory = new EntityFactory(engine);
 		
 		floors = new ArrayList<>();
-		
-		if (newGame) {
-			player = entityFactory.playerFactory.createPlayer(playerName);
-
-			Floor floor1 = new Floor(this, 1);
-			floor1.generate();
-			floors.add(floor1);
-			activeFloor = floor1;
-			Floor floor2 = new Floor(this, 2);
-			floors.add(floor2);
-			Floor floor3 = new Floor(this, 3);
-			floors.add(floor3);
-			Floor floor4 = new Floor(this, 4);
-			floors.add(floor4);
-			Floor floor5 = new Floor(this, 5);
-			floors.add(floor5);
-			
-			MovementHandler.placeEntity(player, new Vector2(11, 11), floor1.getActiveRoom());
-		} else {
-			Persister persister = new Persister(this);
-			persister.loadGameState();
-		}
-
+		initializeGame(gameType, playerName);
 		Room room = activeFloor.getActiveRoom();
 
 		
@@ -285,11 +266,11 @@ public class GameScreen extends ScreenAdapter {
 		
 		engine.addSystem(new InspectSystem(player, room, fxStage));
 		
+		if (gameType.isTutorial()) {
+			engine.addSystem(new TutorialSystem(room, fxStage));
+		}
 		
 
-		
-
-		
 		
 		pauseBounds = new Rectangle(10, 10, 64, 64);
 		resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
@@ -300,6 +281,57 @@ public class GameScreen extends ScreenAdapter {
 		
 		Journal.addEntry("Welcome to Calishka's Trial!");
 	}
+
+
+	private void initializeGame(GameTypeEnum gameType, String playerName) {
+		if (gameType.isNewGame()) {
+			initializeNewGame(playerName);
+		} else if (gameType.isLoadGame()){
+			initializeLoadGame();
+		} else if (gameType.isTutorial()) {
+			initializeTutorial(playerName);
+		}
+	}
+
+
+	private void initializeNewGame(String playerName) {
+		player = entityFactory.playerFactory.createPlayer(playerName);
+
+		Floor floor1 = new Floor(this, 1);
+		floor1.generate();
+		floors.add(floor1);
+		activeFloor = floor1;
+		Floor floor2 = new Floor(this, 2);
+		floors.add(floor2);
+		Floor floor3 = new Floor(this, 3);
+		floors.add(floor3);
+		Floor floor4 = new Floor(this, 4);
+		floors.add(floor4);
+		Floor floor5 = new Floor(this, 5);
+		floors.add(floor5);
+		
+		MovementHandler.placeEntity(player, new Vector2(11, 11), floor1.getActiveRoom());
+	}
+
+	private void initializeLoadGame() {
+		Persister persister = new Persister(this);
+		persister.loadGameState();
+	}
+
+	private void initializeTutorial(String playerName) {
+		player = entityFactory.playerFactory.createPlayer(playerName);
+		
+		Floor floor = new Floor(this, 0);
+		floor.generate();
+		floors.add(floor);
+		activeFloor = floor;
+		
+		MovementHandler.placeEntity(player, new Vector2(7, 6), floor.getActiveRoom());
+	}
+
+
+
+	
 	
 	/**
 	 * Enter a room.

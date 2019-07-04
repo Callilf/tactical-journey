@@ -30,12 +30,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.Settings;
 import com.dokkaebistudio.tacticaljourney.TacticalJourney;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.assets.MenuAssets;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameTypeEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.LoadingGameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -120,12 +122,13 @@ public class MainMenuScreen extends ScreenAdapter {
 		secondTable.add(ranking).width(500).height(200).padBottom(5).padRight(25);
 		
 		
-		final TextButton howToPlay = new TextButton("HOW TO PLAY", PopinService.buttonStyle());
+		final TextButton howToPlay = new TextButton("TUTORIAL", PopinService.buttonStyle());
 		howToPlay.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(new HowToPlayScreen(game));
+				RandomSingleton.createInstance();
+				game.setScreen(new LoadingGameScreen(game, GameTypeEnum.TUTORIAL, null));
 			}
 		});
 		secondTable.add(howToPlay).width(500).height(200).padBottom(5).padLeft(25);

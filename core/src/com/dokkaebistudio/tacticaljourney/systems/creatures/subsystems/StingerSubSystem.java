@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
@@ -16,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.StateComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomCreatureState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;

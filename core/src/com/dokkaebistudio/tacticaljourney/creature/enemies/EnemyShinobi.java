@@ -15,7 +15,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffEntangled;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.ShinobiSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;

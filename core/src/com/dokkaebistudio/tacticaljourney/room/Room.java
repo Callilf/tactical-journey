@@ -50,7 +50,7 @@ import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.CreatureSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {
@@ -301,6 +301,14 @@ public class Room extends EntitySystem {
 	
 	@Override
 	public void update(float deltaTime) {
+		if (this.getRestartSystem() != null) {
+			if (!this.getRestartSystem().equals(this.getClass().getSimpleName())) {
+				return;
+			}
+
+			this.setRestartSystem(null);
+		}
+		
 		// Update the elapsed time
 		if (!state.isPaused()) {
 			GameTimeSingleton gtSingleton = GameTimeSingleton.getInstance();
@@ -781,6 +789,8 @@ public class Room extends EntitySystem {
 		if (!isPauseState()) {
 			InputSingleton.inputBlocked = true;
 			RoomRenderer.hideBlackFilter();
+			
+			this.restartSystem = GameScreen.currentSystem;
 		}
 		
 		this.pauseState++;

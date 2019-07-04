@@ -31,7 +31,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemBanana;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.OrangutanSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.OrangutanSubSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;

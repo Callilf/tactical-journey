@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial.CalishkaTutorial1Dialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial.CalishkaTutorial2Dialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial.CalishkaTutorial3Dialogs;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial.CalishkaTutorial4Dialogs;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
@@ -108,9 +109,11 @@ public class TutorialFloorRoomGenerator extends RoomGenerator {
 		case TUTORIAL_ROOM_4:
 
 			// Combat tutorial
-			entityFactory.playerFactory.createCalishka(new Vector2(20, 7), room, new CalishkaTutorial3Dialogs(), 3);
+			entityFactory.playerFactory.createCalishka(new Vector2(20, 7), room, new CalishkaTutorial4Dialogs(), 4);
 			room.closeDoors();
 			
+			room.entityFactory.createExit(room, new Vector2(2, 6), false);
+
 			break;
 			
 			default:

@@ -8,6 +8,7 @@ import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
@@ -16,6 +17,7 @@ import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -185,6 +187,10 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 						VFXUtil.createSmokeEffect(new Vector2(20, 7));
 						Optional<Entity> calishka = TileUtil.getEntityWithComponentOnTile(new Vector2(20, 7), CalishkaComponent.class, room);
 						room.removeEntity(calishka.get());
+						
+						MoveComponent playerMoveCompo = Mappers.moveComponent.get(GameScreen.player);
+						playerMoveCompo.setMoveRemaining(playerMoveCompo.getMoveSpeed());
+						room.setNextState(RoomState.PLAYER_COMPUTE_MOVABLE_TILES);
 					}
 				})
 				.build());

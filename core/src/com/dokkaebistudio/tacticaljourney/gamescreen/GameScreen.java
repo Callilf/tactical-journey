@@ -121,6 +121,7 @@ public class GameScreen extends ScreenAdapter {
 	
 
 	public TacticalJourney game;
+	public GameTypeEnum gameType;
 
 	public FitViewport viewport;
 	public OrthographicCamera guiCam;
@@ -168,6 +169,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	public GameScreen (TacticalJourney game, GameTypeEnum gameType, String playerName) {
 		this.game = game;
+		this.gameType = gameType;
 		
 		Gdx.input.setCatchBackKey(true);
 
@@ -208,7 +210,7 @@ public class GameScreen extends ScreenAdapter {
 		this.entityFactory = new EntityFactory(engine);
 		
 		floors = new ArrayList<>();
-		initializeGame(gameType, playerName);
+		initializeGame(playerName);
 		Room room = activeFloor.getActiveRoom();
 
 		
@@ -284,7 +286,7 @@ public class GameScreen extends ScreenAdapter {
 	}
 
 
-	private void initializeGame(GameTypeEnum gameType, String playerName) {
+	private void initializeGame(String playerName) {
 		if (gameType.isNewGame()) {
 			initializeNewGame(playerName);
 		} else if (gameType.isLoadGame()){
@@ -327,7 +329,7 @@ public class GameScreen extends ScreenAdapter {
 		floors.add(floor);
 		activeFloor = floor;
 		
-		MovementHandler.placeEntity(player, new Vector2(20, 6), floor.getActiveRoom());
+		MovementHandler.placeEntity(player, new Vector2(7, 6), floor.getActiveRoom());
 	}
 
 
@@ -373,6 +375,11 @@ public class GameScreen extends ScreenAdapter {
 	
 	
 	public void enterNextFloor() {
+		if (gameType.isTutorial()) {
+			this.backToMenu();
+			return;
+		}
+
 		int indexOfCurrentFloor = this.floors.indexOf(this.activeFloor);
 		Floor nextFloor = this.floors.get(indexOfCurrentFloor + 1);
 		this.requestedFloor = nextFloor;

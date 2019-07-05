@@ -88,6 +88,10 @@ public class TutorialSystem extends NamedSystem {
 			break;
 			
 		case 2:
+			if (room.isJustEntered()) {
+				Mappers.experienceComponent.get(GameScreen.player).setCurrentXp(0);
+			}
+			
 			if (!tutorialComponent.isGoal1Reached()) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				if (inventoryComponent.contains(ItemPebble.class)) {
@@ -118,6 +122,10 @@ public class TutorialSystem extends NamedSystem {
 			break;
 			
 		case 3:
+			if (room.isJustEntered()) {
+				Mappers.experienceComponent.get(GameScreen.player).setCurrentXp(0);
+			}
+			
 			if (!tutorialComponent.isGoal1Reached()) {
 				if (room.turnManager.getTurn() >= 4) {
 					displayObjectiveReachedNotif(playerPosCompo);
@@ -155,7 +163,32 @@ public class TutorialSystem extends NamedSystem {
 				break;
 			}
 			break;
+			
+			
+		case 4:
+			if (room.isJustEntered()) {
+				Mappers.experienceComponent.get(GameScreen.player).setCurrentXp(0);
+			}
+			
+			if (!tutorialComponent.isGoal1Reached()) {
+				if (Mappers.experienceComponent.get(GameScreen.player).getCurrentXp() == 2) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal1Reached(true);
+					room.closeDoors();
+				}
+				break;
+			}
+
+			if (!tutorialComponent.isGoal2Reached()) {
+				if (Mappers.experienceComponent.get(GameScreen.player).getCurrentXp() == 4) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal2Reached(true);
+					room.closeDoors();
+				}
+				break;
+			}
 		
+			break;
 		
 			default:
 				System.out.println("We should never end up here in the tutorial system !!!");

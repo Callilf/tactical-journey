@@ -74,7 +74,7 @@ public class TutorialFloorGenerator extends FloorGenerator {
 		
 		// Generate the content of all rooms
 		floor.setRooms(rooms);
-		floor.setActiveRoom(tuto3);
+		floor.setActiveRoom(tuto1);
 		floor.setRoomPositions(roomsPerPosition);
 
 		for (Room r : rooms) {

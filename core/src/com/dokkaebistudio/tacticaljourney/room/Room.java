@@ -407,7 +407,11 @@ public class Room extends EntitySystem {
 			Mappers.doorComponent.get(door).open(door);
 		}
 	}
-	
+	public void closeDoors() {
+		for (Entity door : doors) {
+			Mappers.doorComponent.get(door).close(door);
+		}
+	}
 	
 	
 	

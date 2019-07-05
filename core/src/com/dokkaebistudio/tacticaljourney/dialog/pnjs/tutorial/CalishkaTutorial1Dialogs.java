@@ -1,7 +1,12 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial;
 
+import java.util.Optional;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
@@ -9,6 +14,8 @@ import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
+import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 	
@@ -31,6 +38,12 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 						+ "be displayed. [ORANGE]Click again[] on the same tile to execute the movement for real.")
 				.addText("Come on, try reaching the [GREEN]bush[] and come back here.")
 				.setRepeat(false)
+				.setEffect(new DialogEffect() {
+					public void play(Room room) {
+						VFXUtil.createSmokeEffect(new Vector2(21, 6));
+						room.entityFactory.creepFactory.createBush(room, new Vector2(21, 6), false);
+					}
+				})
 				.build());
 		this.addDialog(new DialogBuilder()
 				.addText("In order to move, you can [ORANGE]click[] on any tile you want, and if the movement towards this tile is possible, a path will "
@@ -66,19 +79,18 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.addText("Personal items are objects that belonged to previous adventurers that came here. All of them will grant you at least one blessing, but most of them will also "
 						+ "be cursed.")
 				.addText("Notice that you already have one [YELLOW]Blessings[], this is my gift and it will help you get started.")
-				.addText("Now go to the next room, it's time to show you more about items, personal items and inventory.")
+				.addText("Now join me in the next room, it's time to show you more about items and inventory.")
 				.setRepeat(false)
 				.setCondition(reachedBushCondition)
 				.setEffect(new DialogEffect() {
 					public void play(Room room) {
 						room.openDoors();
+						
+						VFXUtil.createSmokeEffect(new Vector2(5, 6));
+						Optional<Entity> calishka = TileUtil.getEntityWithComponentOnTile(new Vector2(5, 6), CalishkaComponent.class, room);
+						room.removeEntity(calishka.get());
 					}
 				})
-				.build());
-		this.addDialog(new DialogBuilder()
-				.addText("Go to the next room, to the west.")
-				.setRepeat(true)
-				.setCondition(reachedBushCondition)
 				.build());
 	}
 

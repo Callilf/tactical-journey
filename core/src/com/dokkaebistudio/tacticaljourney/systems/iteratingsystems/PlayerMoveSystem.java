@@ -47,7 +47,7 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 	private final MovementHandler movementHandler;
 
 	/** The highlighted enemy. */
-	private Entity enemyHighlighted;
+	public static Entity enemyHighlighted;
 	
 	/** The tile search service. */
 	private TileSearchService tileSearchService;

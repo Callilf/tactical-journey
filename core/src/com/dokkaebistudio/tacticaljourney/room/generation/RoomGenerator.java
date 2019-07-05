@@ -727,13 +727,5 @@ public abstract class RoomGenerator {
     	PoolableVector2 direction = possibleDirections.get(nextSeededInt);
     	placeCreepRiver(type, direction, groom, emptyTiles, chance - step, step);
 	}
-	
-	
 
-	protected void closeDoors(Room room) {
-		List<Entity> doors = room.getDoors();
-		for (Entity door : doors) {
-			Mappers.doorComponent.get(door).close(door);
-		}
-	}
 }

@@ -21,17 +21,21 @@ import java.util.Optional;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.creeps.CreepBush;
+import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.systems.NamedSystem;
+import com.dokkaebistudio.tacticaljourney.systems.iteratingsystems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
+import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class TutorialSystem extends NamedSystem {	
 	
@@ -69,18 +73,15 @@ public class TutorialSystem extends NamedSystem {
     
 	@Override
 	public void performUpdate(float deltaTime) {
+		GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(GameScreen.player);
 		
 		switch(tutorialComponent.getTutorialNumber()) {
 		case 1:
 			
 			if (!tutorialComponent.isGoal1Reached() && room.getState() == RoomState.PLAYER_END_MOVEMENT) {
-				GridPositionComponent playerPosCompo = Mappers.gridPositionComponent.get(GameScreen.player);
-				Optional<Entity> creep = TileUtil.getEntityWithComponentOnTile(playerPosCompo.coord(), CreepComponent.class, room);
-				if (creep.isPresent()) {
-					if (Mappers.creepComponent.get(creep.get()).getType() instanceof CreepBush) {
-						// Reached the bush
-						tutorialComponent.setGoal1Reached(true);
-					}
+				if (playerPosCompo.coord().x == 21 && playerPosCompo.coord().y == 6) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal1Reached(true);
 				}
 			}
 			
@@ -90,10 +91,69 @@ public class TutorialSystem extends NamedSystem {
 			if (!tutorialComponent.isGoal1Reached()) {
 				InventoryComponent inventoryComponent = Mappers.inventoryComponent.get(GameScreen.player);
 				if (inventoryComponent.contains(ItemPebble.class)) {
-					tutorialComponent.setGoal1Reached(true);;
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal1Reached(true);
 				}
+				break;
+			}
+				
+			if (!tutorialComponent.isGoal2Reached()) {
+				Tile mudTile = room.getTileAtGridPosition(17, 6);
+				Optional<Entity> item = TileUtil.getEntityWithComponentOnTile(mudTile.getGridPos(), ItemComponent.class, room);
+				if (item.isPresent() && Mappers.itemComponent.get(item.get()).getItemType() instanceof ItemPebble) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal2Reached(true);
+				}
+				break;
 			}
 			
+			if (!tutorialComponent.isGoal3Reached()) {
+				if (Mappers.healthComponent.get(GameScreen.player).getArmor() > 0) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal3Reached(true);
+				}
+				break;
+			}
+			
+			break;
+			
+		case 3:
+			if (!tutorialComponent.isGoal1Reached()) {
+				if (room.turnManager.getTurn() >= 4) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal1Reached(true);
+				}
+				break;
+			}
+				
+			if (!tutorialComponent.isGoal2Reached()) {
+				if (Mappers.experienceComponent.get(GameScreen.player).getCurrentXp() > 0) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal2Reached(true);
+					room.closeDoors();
+				}
+				break;
+			}
+			
+			if (!tutorialComponent.isGoal3Reached()) {
+				PlayerComponent playerComponent = Mappers.playerComponent.get(GameScreen.player);
+				if (playerComponent.getInspectedEntities().size() == 1) {
+					Entity entity = playerComponent.getInspectedEntities().get(0);
+					if (entity.flags == EntityFlagEnum.ENEMY_STINGER.getFlag()) {
+						displayObjectiveReachedNotif(playerPosCompo);
+						tutorialComponent.setGoal3Reached(true);
+					}
+				}
+				break;
+			}
+			
+			if (!tutorialComponent.isGoal4Reached()) {
+				if (PlayerMoveSystem.enemyHighlighted != null && PlayerMoveSystem.enemyHighlighted.flags == EntityFlagEnum.ENEMY_STINGER.getFlag()) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal4Reached(true);
+				}
+				break;
+			}
 			break;
 		
 		
@@ -101,6 +161,11 @@ public class TutorialSystem extends NamedSystem {
 				System.out.println("We should never end up here in the tutorial system !!!");
 		}
 		
+	}
+
+
+	private void displayObjectiveReachedNotif(GridPositionComponent playerPosCompo) {
+		VFXUtil.createStatsUpNotif("OBJECTIVE REACHED", "YELLOW", playerPosCompo.coord());
 	}
 
 	

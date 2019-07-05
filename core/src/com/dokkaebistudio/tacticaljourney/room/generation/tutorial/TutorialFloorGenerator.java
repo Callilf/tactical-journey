@@ -56,11 +56,25 @@ public class TutorialFloorGenerator extends FloorGenerator {
 		positionsPerRoom.put(tuto2, new Vector2(-1,0));
 		rooms.add(tuto2);
 		setNeighbors(GenerationMoveEnum.WEST, tuto1, tuto2);
-
+		
+		
+		Room tuto3 = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.TUTORIAL_ROOM_3);
+		roomsPerPosition.put(new Vector2(-2,0), tuto3);
+		positionsPerRoom.put(tuto3, new Vector2(-2,0));
+		rooms.add(tuto3);
+		setNeighbors(GenerationMoveEnum.WEST, tuto2, tuto3);
+		
+		
+		Room tuto4 = new Room(floor, getNextRoomIndex(), GameScreen.engine, gameScreen.entityFactory, RoomType.TUTORIAL_ROOM_4);
+		roomsPerPosition.put(new Vector2(-3,0), tuto4);
+		positionsPerRoom.put(tuto4, new Vector2(-3,0));
+		rooms.add(tuto4);
+		setNeighbors(GenerationMoveEnum.WEST, tuto3, tuto4);
+		
 		
 		// Generate the content of all rooms
 		floor.setRooms(rooms);
-		floor.setActiveRoom(tuto1);
+		floor.setActiveRoom(tuto3);
 		floor.setRoomPositions(roomsPerPosition);
 
 		for (Room r : rooms) {

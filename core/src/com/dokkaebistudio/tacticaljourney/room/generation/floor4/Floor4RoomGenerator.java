@@ -116,7 +116,7 @@ public class Floor4RoomGenerator extends RoomGenerator {
 				Mappers.aiComponent.get(enemy).setAlerted(true, enemy, GameScreen.player);
 			}		
 			
-			closeDoors(room);
+			room.closeDoors();
 			
 			break;
 		case END_FLOOR_ROOM:

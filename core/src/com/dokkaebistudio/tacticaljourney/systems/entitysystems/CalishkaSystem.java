@@ -21,7 +21,9 @@ import java.util.Optional;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
+import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
+import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
@@ -65,9 +67,14 @@ public class CalishkaSystem extends NamedSystem {
 				Optional<Entity> calishkaOpt = TileUtil.getEntityWithComponentOnTile(tempPos, CalishkaComponent.class, room);
 				
 				if (calishkaOpt.isPresent()) {
-					Entity calishka = calishkaOpt.get();					
-					SpeakerComponent speakerComponent = Mappers.speakerComponent.get(calishka);
-					room.setRequestedDialog(speakerComponent.getSpeech(calishka));
+					Entity calishka = calishkaOpt.get();
+					
+					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
+					int distance = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), tempPos);
+					if (distance == 1) {
+						SpeakerComponent speakerComponent = Mappers.speakerComponent.get(calishka);
+						room.setRequestedDialog(speakerComponent.getSpeech(calishka));
+					}
 				}
 				
 				tempPos.free();

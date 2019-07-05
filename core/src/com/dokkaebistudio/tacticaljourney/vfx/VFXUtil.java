@@ -36,7 +36,11 @@ public class VFXUtil {
 	
 	
 	public static void createStatsUpNotif(String text, Vector2 gridPos) {
-		final Label image = new Label("[BLACK]" + text, PopinService.hudStyle());
+		createStatsUpNotif(text, "BLACK", gridPos);
+	}
+	
+	public static void createStatsUpNotif(String text, String color, Vector2 gridPos) {
+		final Label image = new Label("[" + color + "]" + text, PopinService.hudStyle());
 		final Container<Label> container = new Container<>(image);
 	    container.setTransform(true);   // for enabling scaling and rotation
 	    container.pack();

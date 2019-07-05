@@ -327,7 +327,7 @@ public class GameScreen extends ScreenAdapter {
 		floors.add(floor);
 		activeFloor = floor;
 		
-		MovementHandler.placeEntity(player, new Vector2(7, 6), floor.getActiveRoom());
+		MovementHandler.placeEntity(player, new Vector2(20, 6), floor.getActiveRoom());
 	}
 
 

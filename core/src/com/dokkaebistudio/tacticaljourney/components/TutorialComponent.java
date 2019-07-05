@@ -9,6 +9,7 @@ public class TutorialComponent implements Component {
 	private boolean goal1Reached = false;
 	private boolean goal2Reached = false;
 	private boolean goal3Reached = false;
+	private boolean goal4Reached = false;
 	
 
 	public int getTutorialNumber() {
@@ -41,6 +42,14 @@ public class TutorialComponent implements Component {
 
 	public void setGoal3Reached(boolean goal3) {
 		this.goal3Reached = goal3;
+	}
+
+	public boolean isGoal4Reached() {
+		return goal4Reached;
+	}
+
+	public void setGoal4Reached(boolean goal4Reached) {
+		this.goal4Reached = goal4Reached;
 	}
 
 }

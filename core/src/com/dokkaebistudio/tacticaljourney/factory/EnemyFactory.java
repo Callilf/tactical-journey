@@ -305,7 +305,7 @@ public final class EnemyFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
-		as.setName("Stinger charge");
+		as.setName("Sting");
 		as.setRangeMax(1);
 		as.setStrength(6);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -313,6 +313,17 @@ public final class EnemyFactory {
 				AnimationSingleton.getInstance().attack_slash, true);
 		as.setAttackAnimation(attackAnimation);
 		attackComponent.getSkills().add(as);
+		enemyEntity.add(attackComponent);
+		
+		AttackSkill charge = new AttackSkill();
+		charge.setName("Stinger charge");
+		charge.setRangeMax(1);
+		charge.setStrength(7);
+		charge.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation2 = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		charge.setAttackAnimation(attackAnimation2);
+		attackComponent.getSkills().add(charge);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

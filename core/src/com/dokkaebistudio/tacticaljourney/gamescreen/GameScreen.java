@@ -283,6 +283,7 @@ public class GameScreen extends ScreenAdapter {
 		activeFloor.enterRoom(activeFloor.getActiveRoom(), null);
 		
 		Journal.addEntry("Welcome to Calishka's Trial!");
+		RoomRenderer.showFadeoutBlack();
 	}
 
 
@@ -419,6 +420,7 @@ public class GameScreen extends ScreenAdapter {
 		}
 		
 		this.activeFloor = newFloor;
+		RoomRenderer.showFadeoutBlack();
 	}
 
 	private void updateRoomForComponents(Entity e, Room newRoom) {

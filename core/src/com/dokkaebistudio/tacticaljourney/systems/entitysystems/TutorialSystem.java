@@ -20,7 +20,9 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -31,6 +33,7 @@ import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemPebble;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
+import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffFlight;
 import com.dokkaebistudio.tacticaljourney.systems.NamedSystem;
 import com.dokkaebistudio.tacticaljourney.systems.iteratingsystems.PlayerMoveSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -124,6 +127,7 @@ public class TutorialSystem extends NamedSystem {
 		case 3:
 			if (room.isJustEntered()) {
 				Mappers.experienceComponent.get(GameScreen.player).setCurrentXp(0);
+				Mappers.statusReceiverComponent.get(GameScreen.player).removeStatus(GameScreen.player, StatusBuffFlight.class, room);
 			}
 			
 			if (!tutorialComponent.isGoal1Reached()) {

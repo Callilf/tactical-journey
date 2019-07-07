@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
@@ -42,6 +43,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 						
 						VFXUtil.createSmokeEffect(new Vector2(11, 10));
 						Entity spider = room.entityFactory.enemyFactory.spiderFactory.createSpider(room, new Vector2(11, 10));
+						spider.remove(LootRewardComponent.class);
 						Mappers.healthComponent.get(spider).setHp(5);
 						Mappers.aiComponent.get(spider).setTurnOver(true);
 						
@@ -87,6 +89,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 						
 						VFXUtil.createSmokeEffect(new Vector2(11, 2));
 						Entity spider = room.entityFactory.enemyFactory.spiderFactory.createSpider(room, new Vector2(11, 2));
+						spider.remove(LootRewardComponent.class);
 						Mappers.healthComponent.get(spider).setHp(5);
 						Mappers.aiComponent.get(spider).setTurnOver(true);
 						

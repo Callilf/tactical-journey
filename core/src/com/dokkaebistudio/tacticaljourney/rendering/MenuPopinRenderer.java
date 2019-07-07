@@ -16,6 +16,7 @@ import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameTypeEnum;
 import com.dokkaebistudio.tacticaljourney.persistence.Persister;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
@@ -103,6 +104,7 @@ public class MenuPopinRenderer implements Renderer {
 			buttonTable.add(resumeBtn).minWidth(200).padBottom(20);
 			buttonTable.row();
 			
+			// 2.5 - Debug mode
 			if (GameScreen.debugMode) {
 				final TextButton debugBtn = new TextButton("Debug", PopinService.buttonStyle());			
 				debugBtn.addListener(new ChangeListener() {
@@ -119,18 +121,21 @@ public class MenuPopinRenderer implements Renderer {
 			
 			
 			// 3 - Save
-			saveBtn = new TextButton("Save", PopinService.buttonStyle());			
-			saveBtn.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					//Save the game
-					Persister persister = new Persister(gamescreen);
-					persister.saveGameState();
-					closePopin();
-				}
-			});
-			buttonTable.add(saveBtn).minWidth(200).padBottom(20);
-			buttonTable.row();
+			if (gamescreen.gameType != GameTypeEnum.TUTORIAL) {
+				saveBtn = new TextButton("Save", PopinService.buttonStyle());			
+				saveBtn.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						//Save the game
+						Persister persister = new Persister(gamescreen);
+						persister.saveGameState();
+						closePopin();
+					}
+				});
+				buttonTable.add(saveBtn).minWidth(200).padBottom(20);
+				buttonTable.row();
+			}
+			
 			
 			// 4 - Return to menu
 			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
@@ -149,13 +154,15 @@ public class MenuPopinRenderer implements Renderer {
 			table.add(buttonTable).padBottom(50);
 			table.row();
 			
-			Table seedTable = new Table();
-			ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
-			ninePatchDrawable.setMinWidth(400);
-			seedTable.setBackground(ninePatchDrawable);
-			Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());
-			seedTable.add(seed);
-			table.add(seedTable);
+			if (gamescreen.gameType != GameTypeEnum.TUTORIAL) {
+				Table seedTable = new Table();
+				ninePatchDrawable = new NinePatchDrawable(SceneAssets.popinNinePatch);
+				ninePatchDrawable.setMinWidth(400);
+				seedTable.setBackground(ninePatchDrawable);
+				Label seed = new Label("Seed: " + RandomSingleton.getInstance().getSeed(), PopinService.hudStyle());
+				seedTable.add(seed);
+				table.add(seedTable);
+			}
 			
 			table.pack();
 			table.setPosition(GameScreen.SCREEN_W/2 - table.getWidth()/2, GameScreen.SCREEN_H/2 - table.getHeight()/2);
@@ -163,7 +170,9 @@ public class MenuPopinRenderer implements Renderer {
 		}
 		
 		
-		saveBtn.setDisabled(gamescreen.activeFloor.getActiveRoom().getState() != RoomState.PLAYER_MOVE_TILES_DISPLAYED);
+		if (gamescreen.gameType != GameTypeEnum.TUTORIAL) {
+			saveBtn.setDisabled(gamescreen.activeFloor.getActiveRoom().getState() != RoomState.PLAYER_MOVE_TILES_DISPLAYED);
+		}
 	}
 
 	/**

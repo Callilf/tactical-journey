@@ -22,7 +22,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -45,7 +47,8 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	private OrthographicCamera cam;
 	private Array<Entity> renderQueue;
 	
-	private static Image fullBackground;
+	private static Image blackOverlayForPopins;
+	private static Image fadeoutBlack;
 
 	
 	/** The current room. */
@@ -73,9 +76,12 @@ public class RoomRenderer implements Renderer, RoomSystem {
 		this.cam = camera;
 		this.room = room;
 		
-		fullBackground = new Image(Assets.menuBackground.getRegion());
-		fullBackground.setPosition(0, 0);
-		fullBackground.addAction(Actions.alpha(0.5f));
+		blackOverlayForPopins = new Image(Assets.menuBackground.getRegion());
+		blackOverlayForPopins.setPosition(0, 0);
+		blackOverlayForPopins.addAction(Actions.alpha(0.5f));
+		
+		fadeoutBlack = new Image(Assets.menuBackground.getRegion());
+		fadeoutBlack.setPosition(0, 0);
 	}
 	
 	@Override
@@ -178,14 +184,27 @@ public class RoomRenderer implements Renderer, RoomSystem {
 	}
 	
 	public static void showBlackFilter() {
-		if (fullBackground != null && stage != null) {
-			stage.addActor(fullBackground);
+		if (blackOverlayForPopins != null && stage != null) {
+			stage.addActor(blackOverlayForPopins);
 		}
 	}
 	
 	public static void hideBlackFilter() {
-		if (fullBackground != null) {
-			fullBackground.remove();
+		if (blackOverlayForPopins != null) {
+			blackOverlayForPopins.remove();
+		}
+	}
+	
+	public static void showFadeoutBlack() {
+		if (fadeoutBlack != null && stage != null) {
+			stage.addActor(fadeoutBlack);
+			fadeoutBlack.addAction(Actions.alpha(1f));
+			fadeoutBlack.addAction(Actions.sequence(Actions.alpha(0f, 2f, Interpolation.pow4In), new Action() {
+				public boolean act(float delta) {
+					fadeoutBlack.remove();
+					return true;
+				}
+			}));
 		}
 	}
 	

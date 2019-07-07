@@ -7,6 +7,7 @@ public class DialogBuilder {
 	
 	private List<String> text = new ArrayList<>();
 	private DialogCondition condition;
+	private DialogEffect effect;
 	private boolean repeat;
 	private String speaker;
 	
@@ -17,6 +18,7 @@ public class DialogBuilder {
 		d.setCondition(this.condition);
 		d.setRepeat(this.repeat);
 		d.setSpeaker(this.speaker);
+		d.setEffect(this.effect);
 		return d;
 	}
 	
@@ -38,6 +40,11 @@ public class DialogBuilder {
 	
 	public DialogBuilder setSpeaker(String speaker) {
 		this.speaker = speaker;
+		return this;
+	}
+	
+	public DialogBuilder setEffect(DialogEffect effect) {
+		this.effect = effect;
 		return this;
 	}
 }

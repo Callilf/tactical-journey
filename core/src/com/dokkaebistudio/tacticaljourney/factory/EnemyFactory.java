@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.components.AIComponent;
@@ -47,12 +46,13 @@ import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyPangolinFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemySpiderFactory;
 import com.dokkaebistudio.tacticaljourney.factory.enemies.EnemyTribesmenFactory;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.OrangutanSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.ShinobiSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.StingerSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.OrangutanSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.ShinobiSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.StingerSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**
@@ -305,7 +305,7 @@ public final class EnemyFactory {
 		attackComponent.room = room;
 		
 		AttackSkill as = new AttackSkill();
-		as.setName("Stinger charge");
+		as.setName("Sting");
 		as.setRangeMax(1);
 		as.setStrength(6);
 		as.setAttackType(AttackTypeEnum.MELEE);
@@ -313,6 +313,17 @@ public final class EnemyFactory {
 				AnimationSingleton.getInstance().attack_slash, true);
 		as.setAttackAnimation(attackAnimation);
 		attackComponent.getSkills().add(as);
+		enemyEntity.add(attackComponent);
+		
+		AttackSkill charge = new AttackSkill();
+		charge.setName("Stinger charge");
+		charge.setRangeMax(1);
+		charge.setStrength(7);
+		charge.setAttackType(AttackTypeEnum.MELEE);
+		AttackAnimation attackAnimation2 = new AttackAnimation(
+				AnimationSingleton.getInstance().attack_slash, true);
+		charge.setAttackAnimation(attackAnimation2);
+		attackComponent.getSkills().add(charge);
 		enemyEntity.add(attackComponent);
 		
 		SolidComponent solidComponent = engine.createComponent(SolidComponent.class);

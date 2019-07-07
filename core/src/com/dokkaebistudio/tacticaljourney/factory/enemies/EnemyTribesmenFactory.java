@@ -42,8 +42,8 @@ import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen.TribesmanScoutSubSystem;
-import com.dokkaebistudio.tacticaljourney.systems.creatures.subsystems.tribesmen.TribesmanShamanSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.tribesmen.TribesmanScoutSubSystem;
+import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.subsystems.tribesmen.TribesmanShamanSubSystem;
 import com.dokkaebistudio.tacticaljourney.vfx.AttackAnimation;
 
 /**

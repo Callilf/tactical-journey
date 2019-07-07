@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
@@ -71,6 +71,10 @@ public class DialogRenderer implements Renderer, RoomSystem {
     	if (currentDialog.duration >= 0.3f && room.isCloseDialogRequested()) {
 			
 			if (currentDialog.getCurrentIndex() == currentDialog.getText().size() - 1) {
+				if (currentDialog.getEffect() != null) {
+					currentDialog.getEffect().play(room);
+				}
+				
 				closePopin();
 				return;
 			} else {

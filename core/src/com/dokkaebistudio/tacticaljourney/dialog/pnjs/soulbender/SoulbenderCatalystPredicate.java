@@ -1,10 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender;
 
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.SoulbenderComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.inventoryItems.ItemDivineCatalyst;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

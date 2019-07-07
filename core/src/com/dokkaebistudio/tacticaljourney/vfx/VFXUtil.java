@@ -18,10 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -36,7 +36,11 @@ public class VFXUtil {
 	
 	
 	public static void createStatsUpNotif(String text, Vector2 gridPos) {
-		final Label image = new Label("[BLACK]" + text, PopinService.hudStyle());
+		createStatsUpNotif(text, "BLACK", gridPos);
+	}
+	
+	public static void createStatsUpNotif(String text, String color, Vector2 gridPos) {
+		final Label image = new Label("[" + color + "]" + text, PopinService.hudStyle());
 		final Container<Label> container = new Container<>(image);
 	    container.setTransform(true);   // for enabling scaling and rotation
 	    container.pack();

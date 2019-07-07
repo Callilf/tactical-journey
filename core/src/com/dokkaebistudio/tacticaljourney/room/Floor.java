@@ -12,11 +12,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.generation.FloorGenerator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor1.Floor1Generator;
@@ -24,6 +24,7 @@ import com.dokkaebistudio.tacticaljourney.room.generation.floor2.Floor2Generator
 import com.dokkaebistudio.tacticaljourney.room.generation.floor3.Floor3Generator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor4.Floor4Generator;
 import com.dokkaebistudio.tacticaljourney.room.generation.floor5.Floor5Generator;
+import com.dokkaebistudio.tacticaljourney.room.generation.tutorial.TutorialFloorGenerator;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.MovementHandler;
 
@@ -68,7 +69,11 @@ public class Floor {
 		this.gameScreen = gameScreen;
 		this.setLevel(level);
 		
-		if (level == 1) {
+		if (level == 0) {
+			this.gridDescriptor = Assets.grid1;
+			this.grid = new Sprite(Assets.grid1.getRegion());
+			floorGenerator = new TutorialFloorGenerator(this.gameScreen.entityFactory);
+		} else if (level == 1) {
 			this.gridDescriptor = Assets.grid1;
 			this.grid = new Sprite(Assets.grid1.getRegion());
 			floorGenerator = new Floor1Generator(this.gameScreen.entityFactory);

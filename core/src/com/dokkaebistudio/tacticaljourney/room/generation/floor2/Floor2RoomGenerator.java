@@ -21,7 +21,6 @@ import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.generation.GeneratedRoom;
 import com.dokkaebistudio.tacticaljourney.room.generation.RoomGenerator;
-import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
@@ -82,12 +81,7 @@ public class Floor2RoomGenerator extends RoomGenerator {
 				
 			}
 			
-			
-			// Close doors
-			List<Entity> doors = room.getDoors();
-			for (Entity door : doors) {
-				Mappers.doorComponent.get(door).close(door);
-			}
+			room.closeDoors();
 			
 			break;
 		case END_FLOOR_ROOM:

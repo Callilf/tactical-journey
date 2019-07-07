@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.GameScreen;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfCalishka;
@@ -23,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.components.InspectableComponent;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
@@ -54,11 +54,13 @@ import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.creature.allies.AllyClone;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.AIMoveStrategy;
+import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.CalishkaDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.ShopkeeperDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.SoulbenderDialogs;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
@@ -356,7 +358,11 @@ public final class PlayerFactory {
 	}
 	
 	
-	public Entity createCalishka(Vector2 pos, Room room) {
+	public Entity createCalishka(Vector2 pos, Room room, AbstractDialogs dialogs) {
+		return createCalishka(pos, room, dialogs, null);
+	}
+	
+	public Entity createCalishka(Vector2 pos, Room room, AbstractDialogs dialogs, Integer tutorialNumber) {
 		Entity calishkaEntity = engine.createEntity();
 		calishkaEntity.flags = EntityFlagEnum.CALISHKA.getFlag();
 
@@ -384,8 +390,14 @@ public final class PlayerFactory {
 		calishkaEntity.add(calishkaCompo);
 		
 		SpeakerComponent speakerCompo = engine.createComponent(SpeakerComponent.class);
-		speakerCompo.setDialogs(new CalishkaDialogs());
+		speakerCompo.setDialogs(dialogs != null ? dialogs : new CalishkaDialogs());
 		calishkaEntity.add(speakerCompo);
+		
+		if (tutorialNumber != null) {
+			TutorialComponent tutoCompo = engine.createComponent(TutorialComponent.class);
+			tutoCompo.setTutorialNumber(tutorialNumber);
+			calishkaEntity.add(tutoCompo);
+		}
 		
 		room.addNeutral(calishkaEntity);
 		return calishkaEntity;

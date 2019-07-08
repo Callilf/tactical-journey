@@ -57,6 +57,7 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.addText("Try opening your profile page and locate the 'move' characteristic.")
 				.setRepeat(false)
 				.setCondition(reachedBushCondition)
+				.setActivateMarker(true)
 				.build());
 		this.addDialog(new DialogBuilder()
 				.addText("In the profile popup, you can see 3 tabs: the Characteristics, the [YELLOW]Blessings[] and the [PURPLE]Curses[].")

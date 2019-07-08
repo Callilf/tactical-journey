@@ -20,9 +20,7 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.dokkaebistudio.tacticaljourney.components.FlyComponent;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
@@ -203,6 +201,7 @@ public class TutorialSystem extends NamedSystem {
 
 	private void displayObjectiveReachedNotif(GridPositionComponent playerPosCompo) {
 		VFXUtil.createStatsUpNotif("OBJECTIVE REACHED", "YELLOW", playerPosCompo.coord());
+		Mappers.speakerComponent.get(calishka).turnOnMarker();
 	}
 
 	

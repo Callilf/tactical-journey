@@ -37,6 +37,10 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 	
 	@Override
 	public void reset() {
+		if (marker == null) {
+			marker = new Image(Assets.ally_marker.getRegion());
+		}
+		marker.remove();
 		markerPositionOffset = null;
 		markerActive = true;
 	}
@@ -136,6 +140,12 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 		this.dialogs = dialogs;
 	}
 	
+	
+	public void updateMarker(Entity speakerEntity) {
+		if (!markerActive && this.dialogs.shouldActivateMarker((PublicEntity) speakerEntity)) {
+			turnOnMarker();
+		}
+	}
 	
 	public static Serializer<SpeakerComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<SpeakerComponent>() {

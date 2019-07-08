@@ -109,6 +109,7 @@ public class AlterationSystem extends NamedSystem {
 							//Close from statue, display popin
 							if (statueComponent.isHasBlessing()) {
 								Mappers.playerComponent.get(player).requestAction(PlayerActionEnum.PRAY, statue);
+		        				Mappers.spriteComponent.get(player).orientSprite(player, tempPos);
 							}
 						}	
 					}

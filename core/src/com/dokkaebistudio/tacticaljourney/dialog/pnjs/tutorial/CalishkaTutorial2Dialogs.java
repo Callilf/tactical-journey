@@ -55,6 +55,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 				.addText("Now try throwing a rock into the mud over this chasm.")
 				.setRepeat(false)
 				.setCondition(pickedUpRockCondition)
+				.setActivateMarker(true)
 				.build());
 		
 		this.addDialog(new DialogBuilder()
@@ -83,6 +84,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 				.addText("Go and loot the bag on the other side of the pit, grab the armor inside and then equip it!")
 				.setRepeat(false)
 				.setCondition(threwRockCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(18, 5));
@@ -133,6 +135,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 				.addText("Find your way to the next room so that we get serious and talk about combat!")
 				.setRepeat(false)
 				.setCondition(equippedArmorCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						room.openDoors();

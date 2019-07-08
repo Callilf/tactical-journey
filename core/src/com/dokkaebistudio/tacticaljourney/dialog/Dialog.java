@@ -43,6 +43,11 @@ public class Dialog {
 	 */
 	private DialogEffect effect;
 	
+	/**
+	 * Whether the speaker marker should activate when this dialog becomes available.
+	 */
+	private boolean activateMarker;
+	
 	
 	public Dialog() {}
 	
@@ -103,14 +108,20 @@ public class Dialog {
 		this.currentIndex++;
 	}
 
-
 	public DialogEffect getEffect() {
 		return effect;
 	}
 
-
 	public void setEffect(DialogEffect effect) {
 		this.effect = effect;
+	}
+
+	public boolean isActivateMarker() {
+		return activateMarker;
+	}
+
+	public void setActivateMarker(boolean activateMarker) {
+		this.activateMarker = activateMarker;
 	}
 	
 }

@@ -56,6 +56,7 @@ public class SoulbenderDialogs extends AbstractDialogs {
 				.setCondition(catalystPredicate)
 				.setRepeat(true)
 				.setEffect(giveCatalystEffect)
+				.setActivateMarker(true)
 				.build());
 		
 		// After giving catalyst
@@ -68,6 +69,7 @@ public class SoulbenderDialogs extends AbstractDialogs {
 				.setCondition(receivedCatalystPredicate)
 				.setRepeat(false)
 				.setEffect(infusionEffect)
+				.setActivateMarker(true)
 				.build());
 		
 		this.addDialog(new DialogBuilder()

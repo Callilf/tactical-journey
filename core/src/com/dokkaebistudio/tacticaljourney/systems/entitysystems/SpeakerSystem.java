@@ -76,6 +76,9 @@ public class SpeakerSystem extends NamedSystem {
 						SpeakerComponent speakerComponent = Mappers.speakerComponent.get(speaker);
 						speakerComponent.turnOffMarker();
 						room.setRequestedDialog(speakerComponent.getSpeech(speaker));
+						
+        				Mappers.spriteComponent.get(speaker).orientSprite(speaker, playerPosition.coord());
+        				Mappers.spriteComponent.get(player).orientSprite(player, tempPos);
 					}
 				}
 				
@@ -90,7 +93,7 @@ public class SpeakerSystem extends NamedSystem {
 			fillSpeakers();
 			
 			for (Entity speaker : speakers) {
-				
+				Mappers.speakerComponent.get(speaker).updateMarker(speaker);
 			}
 		}
 		
@@ -101,7 +104,7 @@ public class SpeakerSystem extends NamedSystem {
 	private void fillSpeakers() {
 		speakers.clear();
 		room.getNeutrals().stream()
-			.filter( e -> Mappers.soulbenderComponent.has(e))
+			.filter( e -> Mappers.speakerComponent.has(e))
 			.forEachOrdered(speakers::add);
 	}
 

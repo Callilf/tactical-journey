@@ -12,6 +12,7 @@ public class DialogBuilder {
 	private DialogEffect effect;
 	private Entity speaker;
 	private boolean repeat;
+	private boolean activateMarker;
 	
 	
 	public Dialog build() {
@@ -21,6 +22,7 @@ public class DialogBuilder {
 		d.setRepeat(this.repeat);
 		d.setSpeaker(this.speaker);
 		d.setEffect(this.effect);
+		d.setActivateMarker(this.activateMarker);
 		return d;
 	}
 	
@@ -45,9 +47,14 @@ public class DialogBuilder {
 		return this;
 	}
 	
-	
 	public DialogBuilder setEffect(DialogEffect effect) {
 		this.effect = effect;
 		return this;
 	}
+	
+	public DialogBuilder setActivateMarker(boolean r) {
+		this.activateMarker = r;
+		return this;
+	}
+	
 }

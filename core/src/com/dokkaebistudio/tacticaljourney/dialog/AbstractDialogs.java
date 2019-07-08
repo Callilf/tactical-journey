@@ -111,4 +111,23 @@ public abstract class AbstractDialogs {
 		
 		return dialogToUse;
 	}
+	
+	public boolean shouldActivateMarker(PublicEntity speakerEntity) {
+		boolean result = false;;
+		
+		// Check if one of the condition is satisfied
+		Optional<DialogCondition> matchingKey = conditionalDialogs.keySet().parallelStream()
+			.filter( p -> p.test(speakerEntity))
+			.findFirst();
+		
+		if (matchingKey.isPresent()) {
+			// A condition is satisfied
+			List<Dialog> list = conditionalDialogs.get(matchingKey.get());
+			Dialog dialog = list.get(0);
+
+			result = dialog.isActivateMarker();
+		}
+		
+		return result;
+	}
 }

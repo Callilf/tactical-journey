@@ -3,7 +3,6 @@
  */
 package com.dokkaebistudio.tacticaljourney.room.managers;
 
-import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;

@@ -41,6 +41,7 @@ public class ShopkeeperDialogs extends AbstractDialogs {
 				.setRepeat(true)
 				.setCondition(shopkeeperSoldPredicate)
 				.setEffect(new ShopkeeperRestockDialogEffect())
+				.setActivateMarker(true)
 				.build());
 		
 		

@@ -66,6 +66,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.addText("Now go and attack this spider to understand how this works!")
 				.setRepeat(false)
 				.setCondition(spent3Turns)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(17, 6));
@@ -110,6 +111,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.addText("Try to inspect this new enemy!")
 				.setRepeat(false)
 				.setCondition(killedSpiderCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(17, 6));
@@ -147,6 +149,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.addText("Try displaying the possible movements of the enemy!")
 				.setRepeat(false)
 				.setCondition(stingerInspectedCondition)
+				.setActivateMarker(true)
 				.build());
 		
 		
@@ -165,6 +168,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.addText("Go on and kill this enemy. I'll be waiting for you in the next room for the last part of this training, which will center on your bow and bombs.")
 				.setRepeat(false)
 				.setCondition(stingerMovesDisplayedCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						room.openDoors();

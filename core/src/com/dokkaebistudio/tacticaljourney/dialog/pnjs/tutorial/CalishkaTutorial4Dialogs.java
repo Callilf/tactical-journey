@@ -74,6 +74,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 				.addText("Here are some bombs, use them to reach and kill this spider!")
 				.setRepeat(false)
 				.setCondition(killedSpiderCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(11, 6));
@@ -122,6 +123,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 				.addText("You now have all the information you need to get started. Grab the key, open the stairway and enter the real dungeon!")
 				.setRepeat(false)
 				.setCondition(secondSpiderKilledCondition)
+				.setActivateMarker(true)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(11, 6));

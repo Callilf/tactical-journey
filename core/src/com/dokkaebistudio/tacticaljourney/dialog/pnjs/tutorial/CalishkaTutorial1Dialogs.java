@@ -3,6 +3,7 @@ package com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
+import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
@@ -44,7 +45,8 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 		DialogCondition reachedBushCondition = new DialogCondition() {
 			@Override
 			public boolean test(PublicEntity e) {
-				return Mappers.tutorialComponent.get(e).isGoal1Reached();
+				TutorialComponent tc = Mappers.tutorialComponent.get(e);
+				return tc.isGoal1Reached() && !tc.isGoal2Reached();			
 			}
 		};
 		
@@ -59,6 +61,24 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.setCondition(reachedBushCondition)
 				.setActivateMarker(true)
 				.build());
+		
+		this.addDialog(new DialogBuilder()
+				.addText("Try opening your profile page by [ORANGE]clicking[] on the profile button at the bottom of the screen and locate the 'move' characteristic.")
+				.setRepeat(true)
+				.setCondition(reachedBushCondition)
+				.build());
+		
+		
+		// After opening the profile popin
+		
+		DialogCondition openedProfilePopunCondition = new DialogCondition() {
+			@Override
+			public boolean test(PublicEntity e) {
+				TutorialComponent tc = Mappers.tutorialComponent.get(e);
+				return tc.isGoal2Reached();			
+			}
+		};
+		
 		this.addDialog(new DialogBuilder()
 				.addText("In the profile popup, you can see 3 tabs: the Characteristics, the [YELLOW]Blessings[] and the [PURPLE]Curses[].")
 				.addText("The characteristics tab shows all your current stats. If you want more information about them, just click on the small (i) beside the tab's name.")
@@ -70,7 +90,7 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.addText("Notice that you already have one [YELLOW]Blessings[], this is my gift and it will help you get started.")
 				.addText("Now join me in the next room, it's time to show you more about items and inventory.")
 				.setRepeat(false)
-				.setCondition(reachedBushCondition)
+				.setCondition(openedProfilePopunCondition)
 				.setEffect(new DialogEffect() {
 					public void play(Entity speaker, Room room) {
 						room.openDoors();

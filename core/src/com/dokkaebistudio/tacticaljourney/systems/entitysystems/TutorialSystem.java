@@ -86,6 +86,13 @@ public class TutorialSystem extends NamedSystem {
 				}
 			}
 			
+			if (!tutorialComponent.isGoal2Reached()) {
+				if (Mappers.playerComponent.get(GameScreen.player).isProfilePopinDisplayed()) {
+					displayObjectiveReachedNotif(playerPosCompo);
+					tutorialComponent.setGoal2Reached(true);
+				}
+			}
+			
 			break;
 			
 		case 2:

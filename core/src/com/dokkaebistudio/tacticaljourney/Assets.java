@@ -86,6 +86,8 @@ public class Assets {
 	public static RegionDescriptor tile_explosion;
 	public static RegionDescriptor target_marker;
 	public static RegionDescriptor ally_marker;
+	public static RegionDescriptor speaker_marker;
+	public static RegionDescriptor speaker_marker_gray;
 	
 	public static RegionDescriptor tile_movable_waypoint;
 	public static RegionDescriptor tile_movable_selected;
@@ -512,6 +514,8 @@ public class Assets {
 		tile_explosion = Assets.getTexture("tile-explosion");
 		ally_marker = Assets.getTexture("ally_marker");
 		target_marker = Assets.getTexture("target_marker");
+		speaker_marker = Assets.getTexture("speaker_marker");
+		speaker_marker_gray = Assets.getTexture("speaker_marker_gray");
 		
 		tile_movable_waypoint = Assets.getTexture("tile-movable-waypoint");
 		tile_movable_selected = Assets.getTexture("tile-movable-selected");

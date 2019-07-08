@@ -20,8 +20,8 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 		
 		this.addDialog(new DialogBuilder()
 				.addText("Welcome in my dungeon, adventurer. I am Calishka, the keeper of this place.")
-				.addText("It is the [YELLOW]universal cure[] you seek I suppose, you're not the first.")
-				.addText("Well I've been bonded to this place centuries ago, and were you to succeed in finding the cure, I would be freed. Thus I shall assist any adventurer like you that enters these walls.")
+				.addText("You came here to find the [YELLOW]universal cure[] I suppose, like the others.")
+				.addText("I've been bonded to this place centuries ago, and were you to succeed in finding the cure, I would be freed. Thus I shall assist any adventurer like you that enters these walls.")
 				.addText("First of all, let's discuss about movements.")
 				.addText("In order to move, you can [ORANGE]click[] on any tile you want, and if the movement towards this tile is possible, a path will "
 						+ "be displayed. [ORANGE]Click again[] on the same tile to execute the movement for real.")

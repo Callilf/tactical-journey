@@ -45,6 +45,11 @@ import com.dokkaebistudio.tacticaljourney.singletons.AnimationSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 
 public class MainMenuScreen extends ScreenAdapter {
+	
+	
+	
+	private static final int BUTTON_WIDTH = 500;
+	private static final int BUTTON_HEIGHT = 120;
 	TacticalJourney game;
 	OrthographicCamera guiCam;
 	Vector3 touchPoint;
@@ -82,8 +87,6 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 		// New game and Load buttons
 		
-		Table buttonTable = new Table();
-		
 		TextButton start = new TextButton("NEW GAME", PopinService.buttonStyle());
 		start.addListener(new ChangeListener() {
 			
@@ -92,8 +95,8 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new NewGameScreen(game));
 			}
 		});
-		buttonTable.add(start).width(500).height(200).padBottom(5).padRight(25);
-		
+		mainTable.add(start).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(20);
+		mainTable.row();
 		
 		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
 		loadBtn.addListener(new ChangeListener() {
@@ -103,14 +106,11 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new LoadGameScreen(game));
 			}
 		});
-		buttonTable.add(loadBtn).width(500).height(200).padBottom(5).padLeft(25);
+		mainTable.add(loadBtn).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(20);
 		loadBtn.setDisabled(!hasSave);
-		mainTable.add(buttonTable).padBottom(50);
 		mainTable.row();
 		
-		
-		Table secondTable = new Table();
-		
+				
 		TextButton ranking = new TextButton("RANKING", PopinService.buttonStyle());
 		ranking.addListener(new ChangeListener() {
 			
@@ -119,8 +119,9 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new RankingScreen(game));
 			}
 		});
-		secondTable.add(ranking).width(500).height(200).padBottom(5).padRight(25);
-		
+		mainTable.add(ranking).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(20);
+		mainTable.row();
+
 		
 		final TextButton howToPlay = new TextButton("TUTORIAL", PopinService.buttonStyle());
 		howToPlay.addListener(new ChangeListener() {
@@ -131,8 +132,7 @@ public class MainMenuScreen extends ScreenAdapter {
 				game.setScreen(new LoadingGameScreen(game, GameTypeEnum.TUTORIAL, null));
 			}
 		});
-		secondTable.add(howToPlay).width(500).height(200).padBottom(5).padLeft(25);
-		mainTable.add(secondTable).padBottom(200);
+		mainTable.add(howToPlay).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(150);
 		mainTable.row();
 		
 

@@ -55,7 +55,7 @@ public class MenuAssets {
 	
 	public void initTextures() {
 		allSprites = new HashMap<>();
-		menuBackground = MenuAssets.getTexture("background-test-menu");
+		menuBackground = MenuAssets.getTexture("menu_background");
 		mainTitle = MenuAssets.getTexture("main_title");
 		
 		// How to play screenshots

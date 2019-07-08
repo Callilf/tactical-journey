@@ -4,13 +4,6 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-background-test-menu
-  rotate: false
-  xy: 2, 732
-  size: 1920, 1080
-  orig: 1920, 1080
-  offset: 0, 0
-  index: -1
 bombs
   rotate: false
   xy: 1543, 619
@@ -51,6 +44,13 @@ melee
   xy: 1543, 506
   size: 83, 111
   orig: 83, 111
+  offset: 0, 0
+  index: -1
+menu_background
+  rotate: false
+  xy: 2, 732
+  size: 1920, 1080
+  orig: 1920, 1080
   offset: 0, 0
   index: -1
 popin

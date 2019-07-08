@@ -2,12 +2,10 @@ package com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
@@ -16,13 +14,8 @@ import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class CalishkaTutorial4Dialogs extends AbstractDialogs {
+
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.CALISHKA_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public CalishkaTutorial4Dialogs() {
 
 		// Basic dialog
@@ -36,7 +29,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 				.addText("Of course you need arrows first, so here, take these arrows and try killing that spider with your bow!")
 				.setRepeat(false)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(11, 6));
 						Entity arrows = room.entityFactory.itemFactory.createItemArrows(room, new Vector2(11, 6));
 						Mappers.itemComponent.get(arrows).setQuantity(10);
@@ -82,7 +75,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(killedSpiderCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(11, 6));
 						Entity bombs = room.entityFactory.itemFactory.createItemBombs(room, new Vector2(11, 6));
 						Mappers.itemComponent.get(bombs).setQuantity(5);
@@ -130,7 +123,7 @@ public class CalishkaTutorial4Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(secondSpiderKilledCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(11, 6));
 						room.entityFactory.itemFactory.createItemKey(room, new Vector2(11, 6));
 					}

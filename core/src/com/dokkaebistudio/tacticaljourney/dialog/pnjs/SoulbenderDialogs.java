@@ -1,11 +1,11 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs;
 
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderCatalystPredicate;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderGiveDivineCatalystDialogEffect;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderInfuseDialogEffect;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderInfusionPredicate;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender.SoulbenderReceivedCatalystPredicate;
 
@@ -14,38 +14,22 @@ public class SoulbenderDialogs extends AbstractDialogs {
 	public final static String NOT_ENOUGH_MONEY_TAG = "NOT_ENOUGH_MONEY";
 
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.SOULBENDER_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public SoulbenderDialogs() {
+		
+		SoulbenderInfuseDialogEffect infusionEffect = new SoulbenderInfuseDialogEffect();
+		SoulbenderGiveDivineCatalystDialogEffect giveCatalystEffect = new SoulbenderGiveDivineCatalystDialogEffect();
 
 		// Basic dialog
 		
 		this.addDialog(new DialogBuilder()
 				.addText("Hello there ! I'm a soul bender.")
-				.addText("I can infuse items' auras into your soul.")
-				.addText("This allows you keeping the blessings provided by items permanently, and free an inventory slot.")
-				.addText("However it's not free.")
-				.addText("Come closer if you want to infuse an item!")
-				.setRepeat(false)
-				.build());
-		this.addDialog(new DialogBuilder()
-				.addText("Come closer if you want to infuse an item!")
+				.addText("Given you have money, I can infuse items' auras into your soul. This allows you keeping the blessings provided by items permanently, and free an inventory slot.")
 				.setRepeat(true)
+				.setEffect(infusionEffect)
 				.build());
 		
 		
 		// After infusion
-		
-//		Predicate<PublicEntity> infusionPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-//			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
-//			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
-//					&& playerInventoryCompo != null && !playerInventoryCompo.contains(ItemDivineCatalyst.class);
-//		};
 		
 		DialogCondition infusionPredicate = new SoulbenderInfusionPredicate();
 		
@@ -63,39 +47,34 @@ public class SoulbenderDialogs extends AbstractDialogs {
 				.build());
 		
 		// With catalyst
-		
-//		Predicate<PublicEntity> catalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-//			InventoryComponent playerInventoryCompo = Mappers.inventoryComponent.get(GameScreen.player);
-//			return soulbenderComponent != null && soulbenderComponent.hasInfused() 
-//					&& playerInventoryCompo != null && playerInventoryCompo.contains(ItemDivineCatalyst.class);
-//		};
+
 		DialogCondition catalystPredicate = new SoulbenderCatalystPredicate();
 		
 		this.addDialog(new DialogBuilder()
-				.addText("You are carrying a very powerful artifact, I can feel it. Come closer and let me have a look.")
+				.addText("You are carrying a very powerful artifact, I can feel it. If you give it to me, it will restore all my energy and I'll be able to infuse another item for you. "
+						+ "For free of course!")
 				.setCondition(catalystPredicate)
 				.setRepeat(true)
+				.setEffect(giveCatalystEffect)
 				.build());
 		
 		// After giving catalyst
-		
-//		Predicate<PublicEntity> receivedCatalystPredicate = (Predicate<PublicEntity> & Serializable) e -> {
-//			SoulbenderComponent soulbenderComponent = Mappers.soulbenderComponent.get(e);
-//			return soulbenderComponent != null && soulbenderComponent.isReceivedCatalyst();
-//		};
+
 		DialogCondition receivedCatalystPredicate = new SoulbenderReceivedCatalystPredicate();
 		
 		this.addDialog(new DialogBuilder()
 				.addText("Thank you! I feel strong enough to infuse another item now.")
+				.addText("Do you want me to infuse another item for you?")
 				.setCondition(receivedCatalystPredicate)
 				.setRepeat(false)
+				.setEffect(infusionEffect)
 				.build());
 		
 		this.addDialog(new DialogBuilder()
 				.addText("Do you want me to infuse another item for you?")
 				.setCondition(receivedCatalystPredicate)
 				.setRepeat(true)
+				.setEffect(infusionEffect)
 				.build());
 		
 		// Not enough money

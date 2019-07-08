@@ -31,12 +31,14 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 
 	private AbstractDialogs dialogs;
 	private Image marker = new Image(Assets.speaker_marker.getRegion());
+	private boolean markerActive = true;
 	private Vector2 markerPositionOffset;
 
 	
 	@Override
 	public void reset() {
 		markerPositionOffset = null;
+		markerActive = true;
 	}
 	
 
@@ -108,15 +110,26 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 	}
 	
 	
+	public void turnOnMarker() {
+		markerActive = true;
+		if (marker != null) {
+			marker.setDrawable(new TextureRegionDrawable(Assets.speaker_marker.getRegion()));
+		}
+	}
+	public void turnOffMarker() {
+		markerActive = false;
+		if (marker != null) {
+			marker.setDrawable(new TextureRegionDrawable(Assets.speaker_marker_gray.getRegion()));
+		}
+	}
+	
 	
 	public Dialog getSpeech(Entity speakerEntity) {
-		marker.setDrawable(new TextureRegionDrawable(Assets.speaker_marker_gray.getRegion()));
 		return this.dialogs.getDialog((PublicEntity) speakerEntity);
 	}
 	
-	public Dialog getSpeech(String tag) {
-		marker.setDrawable(new TextureRegionDrawable(Assets.speaker_marker_gray.getRegion()));
-		return this.dialogs.getDialog(tag);
+	public Dialog getSpeech(Entity speakerEntity, String tag) {
+		return this.dialogs.getDialog(speakerEntity, tag);
 	}
 	
 	public void setDialogs(AbstractDialogs dialogs) {
@@ -131,6 +144,7 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 			public void write(Kryo kryo, Output output, SpeakerComponent object) {
 				kryo.writeClassAndObject(output, object.dialogs);
 				output.writeBoolean(object.marker == null);
+				output.writeBoolean(object.markerActive);
 			}
 
 			@Override
@@ -140,6 +154,13 @@ public class SpeakerComponent implements Component, Poolable, MovableInterface, 
 				
 				boolean markerHidden = input.readBoolean();
 				if (markerHidden) compo.marker = null;
+				
+				boolean markerActive = input.readBoolean();
+				if (markerActive) {
+					compo.turnOnMarker();
+				} else {
+					compo.turnOffMarker();
+				}
 
 				return compo;
 			}

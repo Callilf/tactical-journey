@@ -1,9 +1,9 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs;
 
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.shopkeeper.ShopkeeperRestockDialogEffect;
+import com.dokkaebistudio.tacticaljourney.dialog.pnjs.shopkeeper.ShopkeeperSoldPredicate;
 
 public class ShopkeeperDialogs extends AbstractDialogs {
 	
@@ -11,12 +11,6 @@ public class ShopkeeperDialogs extends AbstractDialogs {
 	public final static String SOLD_TAG = "SOLD";
 	
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.SHOPKEEPER_TITLE);
-	}		
-	
-	@SuppressWarnings("unchecked")
 	public ShopkeeperDialogs() {
 
 		// Basic dialog
@@ -36,6 +30,18 @@ public class ShopkeeperDialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.build());
 		
+		
+		
+		// Restock
+		
+		ShopkeeperSoldPredicate shopkeeperSoldPredicate = new ShopkeeperSoldPredicate();
+		
+		this.addDialog(new DialogBuilder()
+				.addText("I have many things of interest in my stuff, I can restock the shop if you want to.")
+				.setRepeat(true)
+				.setCondition(shopkeeperSoldPredicate)
+				.setEffect(new ShopkeeperRestockDialogEffect())
+				.build());
 		
 		
 		// After selling

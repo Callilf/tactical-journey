@@ -4,18 +4,14 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.ChasmComponent;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
-import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -24,12 +20,6 @@ import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.CALISHKA_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public CalishkaTutorial2Dialogs() {
 
 		// Basic dialog
@@ -94,7 +84,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(threwRockCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(18, 5));
 						Optional<Entity> chasm = TileUtil.getEntityWithComponentOnTile(new Vector2(18, 5), ChasmComponent.class, room);
 						if (chasm.isPresent()) {
@@ -144,7 +134,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(equippedArmorCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						room.openDoors();
 						
 						VFXUtil.createSmokeEffect(new Vector2(5, 6));
@@ -152,8 +142,7 @@ public class CalishkaTutorial2Dialogs extends AbstractDialogs {
 						Mappers.lootableComponent.get(satchel).getItems().add(room.entityFactory.itemFactory.createItem(ItemEnum.POTION_WING));
 						
 						VFXUtil.createSmokeEffect(new Vector2(20, 7));
-						Optional<Entity> calishka = TileUtil.getEntityWithComponentOnTile(new Vector2(20, 7), CalishkaComponent.class, room);
-						room.removeEntity(calishka.get());
+						room.removeEntity(speaker);
 					}
 				})
 				.build());

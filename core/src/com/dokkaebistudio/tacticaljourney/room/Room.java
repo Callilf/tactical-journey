@@ -700,7 +700,7 @@ public class Room extends EntitySystem {
 		this.requestedDialog = d;
 	}
 	
-	public void setRequestedDialog(String speaker, String text) {
+	public void setRequestedDialog(Entity speaker, String text) {
 		this.requestedDialog = new DialogBuilder().setSpeaker(speaker).addText(text).build();
 	}
 

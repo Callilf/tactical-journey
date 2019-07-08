@@ -74,7 +74,6 @@ public class AlterationSystem extends NamedSystem {
 		this.room = r;
 		
 		this.alterationProcTable = new Table();
-//		this.alterationProcTable.setDebug(true);
 		this.alterationProcTable.left().top();
 		this.alterationProcTable.setPosition(10, 1000);
 		this.fxStage.addActor(this.alterationProcTable);
@@ -110,20 +109,8 @@ public class AlterationSystem extends NamedSystem {
 							//Close from statue, display popin
 							if (statueComponent.isHasBlessing()) {
 								Mappers.playerComponent.get(player).requestAction(PlayerActionEnum.PRAY, statue);
-							} else {
-								room.setRequestedDialog(Journal.getLabel(player), "The statue looks cold.");
-//								room.entityFactory.createDialogPopin("The statue looks cold.", playerPosition.getWorldPos(), 2f, room);
 							}
-						} else {
-							if (statueComponent.isHasBlessing()) {
-								room.setRequestedDialog(Journal.getLabel(player), "A benevolent aura emanates from this statue.");
-							} else {
-								room.setRequestedDialog(Journal.getLabel(player), "The statue looks cold.");
-							}
-						}
-						
-					} else {
-						room.setRequestedDialog(Journal.getLabel(player), "That was probably a bad idea.");
+						}	
 					}
 					
 				}

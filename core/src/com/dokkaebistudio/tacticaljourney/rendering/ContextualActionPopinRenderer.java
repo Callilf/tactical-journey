@@ -287,7 +287,7 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 			ShopKeeperComponent shopKeeperCompo = Mappers.shopKeeperComponent.get(actionEntity);
 			
 			title.setText("Restock of the shop");
-			desc.setText("I have many things of interest in my stuff, I can restock the shop for [GOLD]" + shopKeeperCompo.getRestockPrice() + "gold coins [WHITE]if you want to.");
+			desc.setText("Restock the shop for [GOLD]" + shopKeeperCompo.getRestockPrice() + " gold coins[WHITE]?");
 			yesBtn.setText("Restock");
 			
 			updateRestockListener(shopKeeperCompo);
@@ -314,9 +314,8 @@ public class ContextualActionPopinRenderer implements Renderer, RoomSystem {
 		case GIVE_CATALYST_SOULBENDER:
 			soulBenderComponent = Mappers.soulbenderComponent.get(actionEntity);
 			
-			title.setText("Soulbender");
-			descStr = "You have a Divine catalyst! If I consume it, I can restore my energy and infuse another item for you.\n"
-					+ "Will you give it to me?";
+			title.setText("Divine catalyst");
+			descStr = "Give the divine catalyst to the soul bender?";
 			desc.setText(descStr);
 			yesBtn.setText("Give");
 			

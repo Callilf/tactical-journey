@@ -3,13 +3,15 @@ package com.dokkaebistudio.tacticaljourney.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
+
 public class DialogBuilder {
 	
 	private List<String> text = new ArrayList<>();
 	private DialogCondition condition;
 	private DialogEffect effect;
+	private Entity speaker;
 	private boolean repeat;
-	private String speaker;
 	
 	
 	public Dialog build() {
@@ -38,10 +40,11 @@ public class DialogBuilder {
 		return this;
 	}
 	
-	public DialogBuilder setSpeaker(String speaker) {
-		this.speaker = speaker;
+	public DialogBuilder setSpeaker(Entity e) {
+		this.speaker = e;
 		return this;
 	}
+	
 	
 	public DialogBuilder setEffect(DialogEffect effect) {
 		this.effect = effect;

@@ -3,6 +3,8 @@ package com.dokkaebistudio.tacticaljourney.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
+
 /**
  * Represents one sentence that can be told to the player.
  * @author Callil
@@ -17,9 +19,9 @@ public class Dialog {
 	private int currentIndex;
 	
 	/**
-	 * The name of the speaker.
+	 * The entity that is speaking.
 	 */
-	private String speaker;
+	private Entity speaker;
 	
 	/**
 	 * A condition for this sentence to be told.
@@ -79,11 +81,11 @@ public class Dialog {
 		return repeat;
 	}
 	
-	public String getSpeaker() {
+	public Entity getSpeaker() {
 		return speaker;
 	}
 	
-	public void setSpeaker(String speaker) {
+	public void setSpeaker(Entity speaker) {
 		this.speaker = speaker;
 	}
 

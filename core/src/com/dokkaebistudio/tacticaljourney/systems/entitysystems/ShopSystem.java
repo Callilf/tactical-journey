@@ -18,28 +18,20 @@ package com.dokkaebistudio.tacticaljourney.systems.entitysystems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector3;
 import com.dokkaebistudio.tacticaljourney.components.SpeakerComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.pnjs.ShopkeeperDialogs;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomVisitedState;
-import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.systems.NamedSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.ShopUtil;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 
 public class ShopSystem extends NamedSystem {	
 	private Entity player;
@@ -64,40 +56,6 @@ public class ShopSystem extends NamedSystem {
 		if (!room.getState().isPlayerTurn()) {
 			return;
 		}
-		
-		// Handle clicks on a shopkeeper
-		if (playerInventoryCompo.getCurrentAction() == null && room.getState().canEndTurn()) {
-			
-			// If the user click on the shop keeper, either display a dialog or display refill popin
-			if (InputSingleton.getInstance().leftClickJustReleased) {
-				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
-				int x = (int) touchPoint.x;
-				int y = (int) touchPoint.y;
-				PoolableVector2 tempPos = TileUtil.convertPixelPosIntoGridPos(x, y);
-				Optional<Entity> shopKeeperOpt = TileUtil.getEntityWithComponentOnTile(tempPos, ShopKeeperComponent.class, room);
-				
-				if (shopKeeperOpt.isPresent()) {
-					Entity shopKeeper = shopKeeperOpt.get();
-					ShopKeeperComponent shopKeeperComponent = Mappers.shopKeeperComponent.get(shopKeeper);
-					GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(player);
-					
-					int distanceFromStatue = TileUtil.getDistanceBetweenTiles(playerPosition.coord(), tempPos);
-					if (distanceFromStatue == 1 && shopKeeperComponent.hasSoldItems()) {
-						// Refill popin
-						PlayerComponent playerComponent = Mappers.playerComponent.get(player);
-						playerComponent.requestAction(PlayerActionEnum.RESTOCK_SHOP, shopKeeper);
-						
-					} else {
-						SpeakerComponent speakerComponent = Mappers.speakerComponent.get(shopKeeperOpt.get());
-						room.setRequestedDialog(speakerComponent.getSpeech(shopKeeper));
-					}
-				}
-				
-				tempPos.free();
-			}
-			
-		} 
-		
 
 		fillShopKeepers();
 
@@ -120,7 +78,7 @@ public class ShopSystem extends NamedSystem {
 					shopKeeperComponent.restock(room);
 				} else {
 					SpeakerComponent speakerComponent = Mappers.speakerComponent.get(shopKeeper);
-					room.setRequestedDialog(speakerComponent.getSpeech(ShopkeeperDialogs.NOT_ENOUGH_MONEY_TAG));
+					room.setRequestedDialog(speakerComponent.getSpeech(shopKeeper, ShopkeeperDialogs.NOT_ENOUGH_MONEY_TAG));
 				}
 				
 				shopKeeperComponent.setRequestRestock(false);
@@ -158,11 +116,11 @@ public class ShopSystem extends NamedSystem {
 				playerInventoryCompo.requestAction(InventoryActionEnum.PICKUP, currentItem);
 				
 				SpeakerComponent speakerComponent = Mappers.speakerComponent.get(shopKeeper);
-				room.setRequestedDialog(speakerComponent.getSpeech(ShopkeeperDialogs.SOLD_TAG));
+				room.setRequestedDialog(speakerComponent.getSpeech(shopKeeper, ShopkeeperDialogs.SOLD_TAG));
 			} else {
 				
 				SpeakerComponent speakerComponent = Mappers.speakerComponent.get(shopKeeper);
-				room.setRequestedDialog(speakerComponent.getSpeech(ShopkeeperDialogs.NOT_ENOUGH_MONEY_TAG));
+				room.setRequestedDialog(speakerComponent.getSpeech(shopKeeper, ShopkeeperDialogs.NOT_ENOUGH_MONEY_TAG));
 				playerInventoryCompo.setCurrentAction(null);
 			}
 			

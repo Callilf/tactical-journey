@@ -4,16 +4,13 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
@@ -26,12 +23,6 @@ import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.CALISHKA_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public CalishkaTutorial3Dialogs() {
 
 		// Basic dialog
@@ -76,7 +67,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(spent3Turns)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(17, 6));
 						Optional<Entity> wall = TileUtil.getEntityWithComponentOnTile(new Vector2(17, 6), SolidComponent.class, room);
 						if (wall.isPresent()) {
@@ -120,7 +111,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(killedSpiderCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(17, 6));
 						room.entityFactory.createWall(room, new Vector2(17, 6));
 						
@@ -175,7 +166,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(stingerMovesDisplayedCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						room.openDoors();
 						
 						VFXUtil.createSmokeEffect(new Vector2(17, 6));
@@ -185,8 +176,7 @@ public class CalishkaTutorial3Dialogs extends AbstractDialogs {
 						}
 						
 						VFXUtil.createSmokeEffect(new Vector2(20, 7));
-						Optional<Entity> calishka = TileUtil.getEntityWithComponentOnTile(new Vector2(20, 7), CalishkaComponent.class, room);
-						room.removeEntity(calishka.get());
+						room.removeEntity(speaker);
 						
 						MoveComponent playerMoveCompo = Mappers.moveComponent.get(GameScreen.player);
 						playerMoveCompo.setMoveRemaining(playerMoveCompo.getMoveSpeed());

@@ -109,6 +109,7 @@ public class SoulbenderComponent implements Component, Poolable {
 
 	public void setReceivedCatalyst(boolean receivedCatalyst) {
 		this.receivedCatalyst = receivedCatalyst;
+		this.setPrice(0);
 	}
 	
 }

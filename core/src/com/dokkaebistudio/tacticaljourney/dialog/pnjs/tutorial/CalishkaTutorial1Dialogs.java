@@ -1,30 +1,18 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial;
 
-import java.util.Optional;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.CalishkaComponent;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
-import com.dokkaebistudio.tacticaljourney.util.TileUtil;
 import com.dokkaebistudio.tacticaljourney.vfx.VFXUtil;
 
 public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.CALISHKA_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public CalishkaTutorial1Dialogs() {
 
 		// Basic dialog
@@ -39,7 +27,7 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.addText("Come on, try reaching the [GREEN]bush[] and come back here.")
 				.setRepeat(false)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						VFXUtil.createSmokeEffect(new Vector2(21, 6));
 						room.entityFactory.creepFactory.createBush(room, new Vector2(21, 6), false);
 					}
@@ -83,12 +71,11 @@ public class CalishkaTutorial1Dialogs extends AbstractDialogs {
 				.setRepeat(false)
 				.setCondition(reachedBushCondition)
 				.setEffect(new DialogEffect() {
-					public void play(Room room) {
+					public void play(Entity speaker, Room room) {
 						room.openDoors();
 						
 						VFXUtil.createSmokeEffect(new Vector2(5, 6));
-						Optional<Entity> calishka = TileUtil.getEntityWithComponentOnTile(new Vector2(5, 6), CalishkaComponent.class, room);
-						room.removeEntity(calishka.get());
+						room.removeEntity(speaker);
 					}
 				})
 				.build());

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 
+import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
 
 /**
@@ -32,8 +32,6 @@ public abstract class AbstractDialogs {
 	 */
 	private Map<String, List<Dialog>> taggedDialogs = new HashMap<>();
 	
-	
-	protected abstract void setSpeaker(Dialog d);
 	
 	public void addDialog(Dialog d) {
 		
@@ -90,25 +88,27 @@ public abstract class AbstractDialogs {
 			}
 		}
 		
-		this.setSpeaker(dialogToUse);
+		dialogToUse.setSpeaker(speakerEntity);
+		
 		return dialogToUse;
 	}
 	
-	public Dialog getDialog(String tag) {
-		Dialog res = null;
+	public Dialog getDialog(Entity speakerEntity, String tag) {
+		Dialog dialogToUse = null;
 		
 		List<Dialog> list = taggedDialogs.get(tag);
-		res = list.remove(0);
+		dialogToUse = list.remove(0);
 		
-		if (res.isRepeat()) {
-			list.add(res);
+		if (dialogToUse.isRepeat()) {
+			list.add(dialogToUse);
 		} else {
 			if (list.size() == 0) {
 				taggedDialogs.remove(tag);
 			}
 		}
 		
-		this.setSpeaker(res);
-		return res;
+		dialogToUse.setSpeaker(speakerEntity);
+		
+		return dialogToUse;
 	}
 }

@@ -1,18 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs;
 
-import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
-import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 
 public class CalishkaDialogs extends AbstractDialogs {
 	
-	@Override
-	protected void setSpeaker(Dialog d) {
-		d.setSpeaker(Descriptions.CALISHKA_TITLE);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public CalishkaDialogs() {
 
 		// Basic dialog

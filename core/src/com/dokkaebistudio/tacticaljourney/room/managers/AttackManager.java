@@ -6,15 +6,19 @@ package com.dokkaebistudio.tacticaljourney.room.managers;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ces.components.AIComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.ThrowbackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
+import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -94,6 +98,10 @@ public class AttackManager {
 			alertEnemy(attacker, target);
 		}
 		
+		if (attackCompo.hasThrowback()) {
+			applyThrowback(target, attacker, attackCompo.getThrowback());
+		}
+		
 		int damage = 0;
 		
 		//Compute damage
@@ -141,6 +149,53 @@ public class AttackManager {
 		if (processAttack) {
 			applyDamage(attacker, target, damage, DamageType.NORMAL, attackCompo);
 		}
+	}
+
+
+	private void applyThrowback(Entity target, Entity attacker, int nbTiles) {
+		if (attacker != GameScreen.player) return;
+		
+		ThrowbackComponent throwbackCompo = room.engine.createComponent(ThrowbackComponent.class);
+		throwbackCompo.setNumberOfTiles(nbTiles);
+		target.add(throwbackCompo);
+		
+		Vector2 attackerPos = Mappers.gridPositionComponent.get(attacker).coord();
+		Vector2 targetPos = Mappers.gridPositionComponent.get(target).coord();
+		
+		DirectionEnum direction = DirectionEnum.RIGHT;
+		if (attackerPos.x == targetPos.x) {
+			if (attackerPos.y > targetPos.y) {
+				direction = DirectionEnum.DOWN;
+			} else if (attackerPos.y < targetPos.y) {
+				direction = DirectionEnum.UP;
+			}
+		} else if (attackerPos.x < targetPos.x) {
+			
+			if (attackerPos.y > targetPos.y) {
+				direction = DirectionEnum.DOWN_RIGHT;
+			} else if (attackerPos.y < targetPos.y) {
+				direction = DirectionEnum.UP_RIGHT;
+			}
+			
+		} else if (attackerPos.x > targetPos.x) {
+			
+			if (attackerPos.y > targetPos.y) {
+				direction = DirectionEnum.DOWN_LEFT;
+			} else if (attackerPos.y < targetPos.y) {
+				direction = DirectionEnum.UP_LEFT;
+			}
+			
+		}
+		
+		if (attackerPos.y == targetPos.y) {
+			if (attackerPos.x > targetPos.x) {
+				direction = DirectionEnum.LEFT;
+			} else if (attackerPos.x < targetPos.x) {
+				direction = DirectionEnum.RIGHT;
+			}
+		}
+		
+		throwbackCompo.setDirection(direction);
 	}
 	
 	

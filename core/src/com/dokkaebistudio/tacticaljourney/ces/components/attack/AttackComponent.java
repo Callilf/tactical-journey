@@ -48,6 +48,9 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	// Accuracy
 	private int accuracy = 1;
 	private int realAccuracy = 1;
+	
+	// Throwback
+	private int throwback = 0;
 
 	
 	// Ammos
@@ -133,6 +136,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.doNotConsumeTurn = false;
 		this.doNotAlertTarget = false;
 		this.activeSkill = null;
+		this.throwback = 0;
 	}
 	
 	/**
@@ -164,6 +168,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
 	}
 	
+	public boolean hasThrowback() {
+		return this.throwback > 0;
+	}
+	
+	public void increaseThrowback(int amount) {
+		this.throwback += amount;
+		this.throwback = Math.max(0,  this.throwback);
+	}
 
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.
@@ -427,6 +439,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.activeSkill = activeSkill;
 	}
 	
+	public int getThrowback() {
+		return throwback;
+	}
+	
+	public void setThrowback(int throwback) {
+		this.throwback = throwback;
+	}
+	
 	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<AttackComponent>() {
 
@@ -445,6 +465,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				output.writeInt(object.accuracy);
 				output.writeInt(object.realAccuracy);
 
+				// Throwback
+				output.writeInt(object.throwback);
 				
 				// Ammos
 				output.writeString(object.ammoType.name());
@@ -483,6 +505,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				compo.accuracy = input.readInt();
 				compo.realAccuracy = input.readInt();
 
+				compo.throwback = input.readInt();
+				
 				compo.ammoType = AmmoTypeEnum.valueOf(input.readString());
 				compo.ammosUsedPerAttack = input.readInt();
 				

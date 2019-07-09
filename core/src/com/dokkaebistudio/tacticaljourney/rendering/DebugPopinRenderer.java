@@ -682,6 +682,28 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(accuracyTable).padBottom(20);
 		optionsTable.row();
 		
+		Table throwbackTable = new Table();
+		TextButton throwbackDown = new TextButton("Throwback -1", PopinService.buttonStyle());
+		throwbackDown.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
+				attackComponent.increaseThrowback(- 1);
+			}
+		});
+		throwbackTable.add(throwbackDown).padRight(20);
+		TextButton throwbackUp = new TextButton("Throwback +1", PopinService.buttonStyle());
+		throwbackUp.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
+				attackComponent.increaseThrowback(1);
+			}
+		});
+		throwbackTable.add(throwbackUp);
+		optionsTable.add(throwbackTable).padBottom(20);
+		optionsTable.row();
+		
 		Table moveTable = new Table();
 		TextButton moveDown = new TextButton("Move -1", PopinService.buttonStyle());
 		moveDown.addListener(new ChangeListener() {

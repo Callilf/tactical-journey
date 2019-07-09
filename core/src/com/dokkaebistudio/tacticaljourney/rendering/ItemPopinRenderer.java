@@ -16,18 +16,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent.InventoryActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent.InventoryActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class ItemPopinRenderer implements Renderer, RoomSystem {

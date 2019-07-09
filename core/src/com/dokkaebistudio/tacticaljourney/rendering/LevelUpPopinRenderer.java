@@ -24,14 +24,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.ExperienceComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.leveling.AbstractLevelUpReward;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
-import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class LevelUpPopinRenderer implements Renderer, RoomSystem {

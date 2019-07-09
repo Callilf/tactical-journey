@@ -5,8 +5,8 @@ package com.dokkaebistudio.tacticaljourney.creeps;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

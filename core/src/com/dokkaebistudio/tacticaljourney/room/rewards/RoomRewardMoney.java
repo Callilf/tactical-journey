@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.room.rewards;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

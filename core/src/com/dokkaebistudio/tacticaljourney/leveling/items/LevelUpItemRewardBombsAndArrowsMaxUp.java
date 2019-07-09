@@ -5,7 +5,7 @@ package com.dokkaebistudio.tacticaljourney.leveling.items;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

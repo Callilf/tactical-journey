@@ -6,9 +6,9 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings.basics;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**

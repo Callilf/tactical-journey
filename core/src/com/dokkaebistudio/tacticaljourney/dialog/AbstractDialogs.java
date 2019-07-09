@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 
 /**
  * Represents the list of sentences a PNJ can say.

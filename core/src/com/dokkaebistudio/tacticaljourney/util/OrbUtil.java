@@ -4,11 +4,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.EnemyComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AllyComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.EnemyComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.AllyComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
 public class OrbUtil {

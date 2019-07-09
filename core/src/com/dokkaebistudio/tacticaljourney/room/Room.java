@@ -32,9 +32,10 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.interfaces.MarkerInterface;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.interfaces.MarkerInterface;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
@@ -50,7 +51,6 @@ import com.dokkaebistudio.tacticaljourney.room.rewards.AbstractRoomReward;
 import com.dokkaebistudio.tacticaljourney.room.rewards.RoomRewardMoney;
 import com.dokkaebistudio.tacticaljourney.singletons.GameTimeSingleton;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.entitysystems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class Room extends EntitySystem {

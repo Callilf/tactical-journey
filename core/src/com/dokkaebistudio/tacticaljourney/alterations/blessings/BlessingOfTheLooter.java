@@ -6,10 +6,10 @@ package com.dokkaebistudio.tacticaljourney.alterations.blessings;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
-import com.dokkaebistudio.tacticaljourney.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**

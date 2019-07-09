@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.BlockExplosionComponent;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.BlockExplosionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.creep.CreepComponent;
 import com.dokkaebistudio.tacticaljourney.creeps.Creep.CreepType;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;

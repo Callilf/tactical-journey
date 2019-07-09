@@ -30,13 +30,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.SpriteComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.SpriteComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.TextComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.interfaces.Renderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
-import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class RoomRenderer implements Renderer, RoomSystem {

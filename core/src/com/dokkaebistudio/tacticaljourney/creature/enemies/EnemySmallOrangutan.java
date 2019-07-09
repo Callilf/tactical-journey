@@ -7,7 +7,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;

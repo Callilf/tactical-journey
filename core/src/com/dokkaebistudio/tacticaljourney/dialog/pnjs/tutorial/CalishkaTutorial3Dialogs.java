@@ -4,11 +4,11 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
-import com.dokkaebistudio.tacticaljourney.components.SolidComponent;
-import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.SolidComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.loot.LootRewardComponent;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;

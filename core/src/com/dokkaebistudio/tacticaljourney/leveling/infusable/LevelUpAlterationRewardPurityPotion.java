@@ -2,8 +2,8 @@ package com.dokkaebistudio.tacticaljourney.leveling.infusable;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.item.ItemComponent;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

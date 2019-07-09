@@ -8,11 +8,11 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTypeEnum;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Blessing;
-import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.wheel.Sector;
 

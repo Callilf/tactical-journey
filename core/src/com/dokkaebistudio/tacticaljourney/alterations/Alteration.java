@@ -5,7 +5,7 @@ package com.dokkaebistudio.tacticaljourney.alterations;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Floor;
 import com.dokkaebistudio.tacticaljourney.room.Room;

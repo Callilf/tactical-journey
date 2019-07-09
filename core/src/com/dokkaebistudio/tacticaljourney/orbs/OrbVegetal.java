@@ -5,10 +5,10 @@ package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;

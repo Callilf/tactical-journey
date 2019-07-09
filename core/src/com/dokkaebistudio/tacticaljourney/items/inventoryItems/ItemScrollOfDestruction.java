@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;

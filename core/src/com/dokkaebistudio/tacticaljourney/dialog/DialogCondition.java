@@ -1,6 +1,6 @@
 package com.dokkaebistudio.tacticaljourney.dialog;
 
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 
 public interface DialogCondition {
 

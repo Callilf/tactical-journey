@@ -5,11 +5,11 @@ package com.dokkaebistudio.tacticaljourney.statuses.debuffs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.StatusReceiverComponent.StatusActionEnum;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;

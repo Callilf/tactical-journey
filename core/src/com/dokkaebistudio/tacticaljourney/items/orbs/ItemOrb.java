@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.items.orbs;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;

@@ -1,7 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs.shopkeeper;
 
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

@@ -5,8 +5,8 @@ package com.dokkaebistudio.tacticaljourney.leveling.statsUp;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.leveling.LevelUpRewardEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

@@ -6,10 +6,10 @@ package com.dokkaebistudio.tacticaljourney.alterations.curses;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
-import com.dokkaebistudio.tacticaljourney.systems.entitysystems.AlterationSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 /**

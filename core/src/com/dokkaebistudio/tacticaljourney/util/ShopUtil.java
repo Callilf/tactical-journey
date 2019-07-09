@@ -3,9 +3,9 @@ package com.dokkaebistudio.tacticaljourney.util;
 import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.neutrals.ShopKeeperComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AlterationReceiverComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.WalletComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.neutrals.ShopKeeperComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.WalletComponent;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 

@@ -6,10 +6,10 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.attack.AttackComponent;
-import com.dokkaebistudio.tacticaljourney.components.attack.AttackSkill;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackSkill;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;

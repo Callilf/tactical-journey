@@ -2,8 +2,8 @@ package com.dokkaebistudio.tacticaljourney.dialog.pnjs.tutorial;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.ashley.PublicEntity;
-import com.dokkaebistudio.tacticaljourney.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.TutorialComponent;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.dialog.AbstractDialogs;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogCondition;

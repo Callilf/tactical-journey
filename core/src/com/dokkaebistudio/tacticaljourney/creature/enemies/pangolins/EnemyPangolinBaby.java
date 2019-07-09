@@ -1,10 +1,10 @@
 package com.dokkaebistudio.tacticaljourney.creature.enemies.pangolins;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.AIComponent;
-import com.dokkaebistudio.tacticaljourney.components.HealthComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.AnimationComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.MoveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.AIComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.HealthComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.AnimationComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.enums.StatesEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;

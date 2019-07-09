@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.items.pools.ItemPoolSingleton;
 import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;

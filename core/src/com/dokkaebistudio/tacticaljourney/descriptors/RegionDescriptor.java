@@ -3,7 +3,7 @@ package com.dokkaebistudio.tacticaljourney.descriptors;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.dokkaebistudio.tacticaljourney.Assets;
-import com.dokkaebistudio.tacticaljourney.components.DestructibleComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.DestructibleComponent;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;

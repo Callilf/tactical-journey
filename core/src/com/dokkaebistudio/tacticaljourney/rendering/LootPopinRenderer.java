@@ -27,10 +27,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.assets.SceneAssets;
-import com.dokkaebistudio.tacticaljourney.components.item.ItemComponent;
-import com.dokkaebistudio.tacticaljourney.components.loot.LootableComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.AmmoCarrierComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.item.ItemComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.loot.LootableComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.AmmoCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
+import com.dokkaebistudio.tacticaljourney.ces.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.items.ItemArrow;
@@ -41,7 +42,6 @@ import com.dokkaebistudio.tacticaljourney.rendering.service.PopinService;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
-import com.dokkaebistudio.tacticaljourney.systems.RoomSystem;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 
 public class LootPopinRenderer implements Renderer, RoomSystem {

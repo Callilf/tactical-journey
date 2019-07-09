@@ -1,8 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.creature.allies;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.AIComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.AIComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.creature.Creature;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

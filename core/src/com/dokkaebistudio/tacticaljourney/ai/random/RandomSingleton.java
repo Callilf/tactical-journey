@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.ai.random;
 
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 

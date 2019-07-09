@@ -4,7 +4,7 @@
 package com.dokkaebistudio.tacticaljourney.util;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.player.ParentEntityComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.ParentEntityComponent;
 
 /**
  * Util class with methods related to components.

@@ -1,8 +1,8 @@
 package com.dokkaebistudio.tacticaljourney.dialog.pnjs.soulbender;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent;
-import com.dokkaebistudio.tacticaljourney.components.player.PlayerComponent.PlayerActionEnum;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent.PlayerActionEnum;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogEffect;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;

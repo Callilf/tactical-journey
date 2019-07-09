@@ -5,7 +5,7 @@ package com.dokkaebistudio.tacticaljourney.orbs;
 
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

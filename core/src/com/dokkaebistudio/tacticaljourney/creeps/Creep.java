@@ -6,9 +6,9 @@ package com.dokkaebistudio.tacticaljourney.creeps;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepComponent;
-import com.dokkaebistudio.tacticaljourney.components.creep.CreepImmunityComponent;
-import com.dokkaebistudio.tacticaljourney.components.display.GridPositionComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.creep.CreepComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.creep.CreepImmunityComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;

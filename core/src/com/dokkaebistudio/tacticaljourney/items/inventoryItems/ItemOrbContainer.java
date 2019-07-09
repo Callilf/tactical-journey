@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.items.AbstractItem;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;

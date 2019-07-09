@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.math.RandomXS128;
-import com.dokkaebistudio.tacticaljourney.components.loot.DropRate.ItemPoolRarity;
+import com.dokkaebistudio.tacticaljourney.ces.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.util.LootUtil;
 

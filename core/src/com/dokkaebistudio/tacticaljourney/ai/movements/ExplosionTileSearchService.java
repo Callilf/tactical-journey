@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.dokkaebistudio.tacticaljourney.components.ExplosiveComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.ExplosiveComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;

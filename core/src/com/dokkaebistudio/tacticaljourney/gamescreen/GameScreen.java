@@ -66,7 +66,7 @@ import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.creatures.En
 import com.dokkaebistudio.tacticaljourney.ces.systems.iteratingsystems.ExperienceSystem;
 import com.dokkaebistudio.tacticaljourney.ces.systems.iteratingsystems.PlayerAttackSystem;
 import com.dokkaebistudio.tacticaljourney.ces.systems.iteratingsystems.PlayerMoveSystem;
-import com.dokkaebistudio.tacticaljourney.ces.systems.iteratingsystems.ThrowbackSystem;
+import com.dokkaebistudio.tacticaljourney.ces.systems.iteratingsystems.KnockbackSystem;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.mainmenu.LoadingScreen;
@@ -266,7 +266,7 @@ public class GameScreen extends ScreenAdapter {
 		engine.addSystem(new OrbSystem(player, room, stage));
 		engine.addSystem(new HealthSystem(this,room, fxStage));
 		engine.addSystem(new PanelSystem(room));
-		engine.addSystem(new ThrowbackSystem(room, fxStage));
+		engine.addSystem(new KnockbackSystem(room, fxStage));
 		engine.addSystem(new ChasmSystem(room));
 		
 		engine.addSystem(new InspectSystem(player, room, fxStage));

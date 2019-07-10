@@ -682,26 +682,26 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 		optionsTable.add(accuracyTable).padBottom(20);
 		optionsTable.row();
 		
-		Table throwbackTable = new Table();
-		TextButton throwbackDown = new TextButton("Throwback -1", PopinService.buttonStyle());
-		throwbackDown.addListener(new ChangeListener() {
+		Table knockbackTable = new Table();
+		TextButton knockbackDown = new TextButton("Knockback -1", PopinService.buttonStyle());
+		knockbackDown.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.increaseThrowback(- 1);
 			}
 		});
-		throwbackTable.add(throwbackDown).padRight(20);
-		TextButton throwbackUp = new TextButton("Throwback +1", PopinService.buttonStyle());
-		throwbackUp.addListener(new ChangeListener() {
+		knockbackTable.add(knockbackDown).padRight(20);
+		TextButton knockbackUp = new TextButton("Knockback +1", PopinService.buttonStyle());
+		knockbackUp.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
 				attackComponent.increaseThrowback(1);
 			}
 		});
-		throwbackTable.add(throwbackUp);
-		optionsTable.add(throwbackTable).padBottom(20);
+		knockbackTable.add(knockbackUp);
+		optionsTable.add(knockbackTable).padBottom(20);
 		optionsTable.row();
 		
 		Table moveTable = new Table();

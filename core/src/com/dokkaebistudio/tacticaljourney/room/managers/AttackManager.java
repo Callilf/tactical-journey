@@ -12,7 +12,7 @@ import com.dokkaebistudio.tacticaljourney.ces.components.DestructibleComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
-import com.dokkaebistudio.tacticaljourney.ces.components.ThrowbackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.KnockbackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AmmoCarrierComponent;
@@ -155,7 +155,8 @@ public class AttackManager {
 	private void applyThrowback(Entity target, Entity attacker, int nbTiles) {
 		if (attacker != GameScreen.player) return;
 		
-		ThrowbackComponent throwbackCompo = room.engine.createComponent(ThrowbackComponent.class);
+		KnockbackComponent throwbackCompo = room.engine.createComponent(KnockbackComponent.class);
+		throwbackCompo.setAttacker(attacker);
 		throwbackCompo.setNumberOfTiles(nbTiles);
 		target.add(throwbackCompo);
 		

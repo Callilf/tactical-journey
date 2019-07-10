@@ -1,6 +1,7 @@
 package com.dokkaebistudio.tacticaljourney.ces.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
@@ -10,28 +11,25 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * Marker to indicate that this entity is being pushed.
+ * Marker to indicate that this entity is being pushed back.
  * @author Callil
  *
  */
-public class ThrowbackComponent implements Component, Poolable {
+public class KnockbackComponent implements Component, Poolable {
 
 	private DirectionEnum direction;
 	private int numberOfTiles;
+	private Entity attacker;
 	
 	private int currentNumberOfTilesMoved;
 	
 	
 	@Override
 	public void reset() {
-		this.currentNumberOfTilesMoved = 0;		
+		this.attacker = null;	
 	}
 
-	
-	
-	public void increaseCurrentNumberOfTilesMoved() {
-		this.currentNumberOfTilesMoved ++;
-	}
+
 	
 	
 	public DirectionEnum getDirection() {
@@ -53,37 +51,27 @@ public class ThrowbackComponent implements Component, Poolable {
 		this.numberOfTiles = numberOfTiles;
 	}
 
-
-	public int getCurrentNumberOfTilesMoved() {
-		return currentNumberOfTilesMoved;
+	public Entity getAttacker() {
+		return attacker;
 	}
 
-
-	public void setCurrentNumberOfTilesMoved(int currentNumberOfTilesMoved) {
-		this.currentNumberOfTilesMoved = currentNumberOfTilesMoved;
+	public void setAttacker(Entity attacker) {
+		this.attacker = attacker;
 	}
 
-	
-	public static Serializer<ThrowbackComponent> getSerializer(final PooledEngine engine) {
-		return new Serializer<ThrowbackComponent>() {
+	public static Serializer<KnockbackComponent> getSerializer(final PooledEngine engine) {
+		return new Serializer<KnockbackComponent>() {
 
 			@Override
-			public void write(Kryo kryo, Output output, ThrowbackComponent object) {}
+			public void write(Kryo kryo, Output output, KnockbackComponent object) {}
 
 			@Override
-			public ThrowbackComponent read(Kryo kryo, Input input, Class<? extends ThrowbackComponent> type) {
-				ThrowbackComponent compo = engine.createComponent(ThrowbackComponent.class);
+			public KnockbackComponent read(Kryo kryo, Input input, Class<? extends KnockbackComponent> type) {
+				KnockbackComponent compo = engine.createComponent(KnockbackComponent.class);
 				return compo;
 			}
 		
 		};
 	}
-
-
-
-
-
-
-
 
 }

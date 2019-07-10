@@ -19,6 +19,7 @@ import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionCom
 import com.dokkaebistudio.tacticaljourney.ces.components.display.SpriteComponent;
 import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.ces.systems.NamedIteratingSystem;
+import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
@@ -114,11 +115,11 @@ public class KnockbackSystem extends NamedIteratingSystem {
 			KnockbackDestinationTile bounceDestination = destination.createBounceDestination();
 			createThrowbackImage(entity, bounceDestination, attacker);
 			
-			Mappers.healthComponent.get(entity).hit(5, entity, attacker);
+			Mappers.healthComponent.get(entity).hit(5, entity, attacker, DamageType.KNOCKBACK);
 			
 			Entity bounceEntity = destination.bounceEntity;
 			if (Mappers.healthComponent.has(bounceEntity)) {
-				Mappers.healthComponent.get(bounceEntity).hit(5, bounceEntity, attacker);
+				Mappers.healthComponent.get(bounceEntity).hit(5, bounceEntity, attacker, DamageType.KNOCKBACK);
 			}
 
 

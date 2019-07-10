@@ -76,6 +76,7 @@ public class HealthSystem extends NamedSystem {
 		    		case HEALED:						
 		    		case RESISTANT:
 		    		case ARMOR:
+		    		case KNOCKBACK:
 		    			VFXUtil.createDamageDisplayer(displayValue, gridPos.coord(), 
 		    					healthChange,offsetTimes.size() * -20, room);
 		

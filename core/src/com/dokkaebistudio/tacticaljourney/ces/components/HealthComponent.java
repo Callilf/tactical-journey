@@ -24,7 +24,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.
@@ -124,25 +123,21 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 		this.setHp(Math.max(0, this.getHp() - damageToHealth));
 
 		int damagesToDisplay = realAmountOfDamage;
-
-		if (attacker != null) {
-			this.attacker = attacker;
-			
-			String damagesAlreadyReceived = this.healthChangeMap.get(HealthChangeEnum.HIT_INTERRUPT);
-			if (damagesAlreadyReceived != null) {
-				damagesToDisplay += Integer.parseInt(damagesAlreadyReceived);
-			}
-			
-			this.healthChangeMap.put(HealthChangeEnum.HIT_INTERRUPT, String.valueOf(damagesToDisplay));
-		} else {
-			
-			String damagesAlreadyReceived = this.healthChangeMap.get(HealthChangeEnum.HIT);
-			if (damagesAlreadyReceived != null) {
-				damagesToDisplay += Integer.parseInt(damagesAlreadyReceived);
-			}
-			
-			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(damagesToDisplay));
+		
+		HealthChangeEnum healthChangeType = attacker!= null ? HealthChangeEnum.HIT_INTERRUPT : HealthChangeEnum.HIT;
+		if (damageType == DamageType.KNOCKBACK) {
+			healthChangeType = HealthChangeEnum.KNOCKBACK;
 		}
+
+		this.attacker = attacker;
+		
+		String damagesAlreadyReceived = this.healthChangeMap.get(healthChangeType);
+		if (damagesAlreadyReceived != null) {
+			damagesToDisplay += Integer.parseInt(damagesAlreadyReceived);
+		}
+		
+		this.healthChangeMap.put(healthChangeType, String.valueOf(damagesToDisplay));
+	
 		
 		addJournalEntry(target, attacker, realAmountOfDamage, damageType);
 	}
@@ -155,7 +150,7 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 
 		if (attacker != null) {
 			String attackerLabel = Journal.getLabel(attacker);
-			Journal.addEntry("[GRAY]" + attackerLabel + " attacked " + targetLabel + " for " + realAmountOfDamage + damageTypeStr + " damages");
+			Journal.addEntry("[GRAY]" + attackerLabel + " attacked " + targetLabel + " for " + realAmountOfDamage + " " + damageTypeStr + " damages");
 		} else {
 			Journal.addEntry("[GRAY]" + targetLabel + "  took " + realAmountOfDamage + damageTypeStr + " damages");
 		}

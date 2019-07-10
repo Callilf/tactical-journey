@@ -55,6 +55,7 @@ public class StingerSubSystem extends CreatureSubSystem {
 		
 		case TURN_INIT:
 			attackCompo.setAdditionnalStrength(0);
+			attackCompo.getActiveSkill().setKnockback(0);
 			break;
 
     	case MOVE_TILES_DISPLAYED :
@@ -173,6 +174,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     			
 				attackCompo.setTarget(chargeTarget);
 				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(targetPos.coord(), room));
+				attackCompo.getActiveSkill().setKnockback(1);
 				
 				attackCompo.setAdditionnalStrength(chargeDistance);
 				room.setCreatureState(RoomCreatureState.ATTACK_ANIMATION);
@@ -281,7 +283,7 @@ public class StingerSubSystem extends CreatureSubSystem {
 		// Add the horizontal and vertical lines
 		PoolableVector2 temp = PoolableVector2.create(0, 0);
 		GridPositionComponent enemyPos = Mappers.gridPositionComponent.get(enemyEntity);
-		int i = (int) enemyPos.coord().x - 1;
+		int i = (int) enemyPos.coord().x - 2;
 		while (i >= 0) {
 			// left
 			temp.set(i, enemyPos.coord().y);
@@ -295,7 +297,7 @@ public class StingerSubSystem extends CreatureSubSystem {
 			i--;
 		}
 		
-		i = (int) enemyPos.coord().x + 1;
+		i = (int) enemyPos.coord().x + 2;
 		while (i < GameScreen.GRID_W) {
 			// right
 			temp.set(i, enemyPos.coord().y);
@@ -309,7 +311,7 @@ public class StingerSubSystem extends CreatureSubSystem {
 			i++;
 		}
 		
-		i = (int) enemyPos.coord().y - 1;
+		i = (int) enemyPos.coord().y - 2;
 		while (i >= 0) {
 			// down
 			temp.set(enemyPos.coord().x, i);
@@ -323,7 +325,7 @@ public class StingerSubSystem extends CreatureSubSystem {
 			i--;
 		}
 		
-		i = (int) enemyPos.coord().y + 1;
+		i = (int) enemyPos.coord().y + 2;
 		while (i < GameScreen.GRID_H) {
 			// up
 			temp.set(enemyPos.coord().x, i);

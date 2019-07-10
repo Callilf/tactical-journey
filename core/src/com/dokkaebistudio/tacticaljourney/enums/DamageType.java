@@ -10,7 +10,8 @@ public enum DamageType {
 	NORMAL(""),
 	EXPLOSION("[RED]explosion"),
 	FIRE("[ORANGE]fire"),
-	POISON("[PURPLE]poison");
+	POISON("[PURPLE]poison"),
+	KNOCKBACK("[OLIVE]knockback");
 	
 	private String title;
 	

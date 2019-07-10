@@ -82,6 +82,9 @@ public class VFXUtil {
 		case HEALED:
 			color = "[GREEN]";
 			break;
+		case KNOCKBACK:
+			color = "[OLIVE]";
+			break;
 		case HIT:
 		case HIT_INTERRUPT:
 			color = "[RED]";

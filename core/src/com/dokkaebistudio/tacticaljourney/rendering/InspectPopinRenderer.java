@@ -214,8 +214,6 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 			bigStats.setText(sb.toString());
 
 			
-			
-			// TODO : all attack skills
 			bigAttackTable.clear();
 			AttackComponent attackComponent = Mappers.attackComponent.get(entity);
 			if (attackComponent != null) {
@@ -223,21 +221,29 @@ public class InspectPopinRenderer implements Renderer, RoomSystem {
 					if (as.getName() == null) continue;
 					Table skillTable = new Table();
 					
-					Label attackName = new Label(as.getName() + " | ", PopinService.hudStyle());
-					skillTable.add(attackName).left().align(Align.center).pad(5, 5, 5, 0);
-					
-					Label attackStrength = new Label("Damage: " + as.getStrength() + " | ", PopinService.hudStyle());
-					skillTable.add(attackStrength).left().align(Align.left).pad(5, 5, 5, 0);
-
-					Label attackRange = new Label("Range", PopinService.hudStyle());
-					if (as.getRangeMin() != as.getRangeMax()) {
-						attackRange.setText("Range: " + as.getRangeMin() + "-" + as.getRangeMax());
+					if (as.getDescription() == null) {
+						Label attackName = new Label("[SCARLET]" + as.getName() + "[]: ", PopinService.hudStyle());
+						skillTable.add(attackName).left().align(Align.center);
+						
+						Label attackStrength = new Label("Damage: " + as.getStrength() + ", ", PopinService.hudStyle());
+						skillTable.add(attackStrength).left().align(Align.left).padLeft(5);
+	
+						Label attackRange = new Label("Range", PopinService.hudStyle());
+						if (as.getRangeMin() != as.getRangeMax()) {
+							attackRange.setText("Range: " + as.getRangeMin() + "-" + as.getRangeMax());
+						} else {
+							attackRange.setText("Range: " + as.getRangeMin());
+						}
+						skillTable.add(attackRange).left().align(Align.left).padLeft(5);
+						skillTable.row();
 					} else {
-						attackRange.setText("Range: " + as.getRangeMin());
+						Label attackDesc = new Label("[SCARLET]" + as.getName() + "[]: " + as.getDescription(), PopinService.hudStyle());
+						attackDesc.setWrap(true);
+						skillTable.add(attackDesc).left().align(Align.center).width(900);
+						skillTable.row();
 					}
-					skillTable.add(attackRange).left().align(Align.left).pad(5, 5, 5, 0);
 					
-					bigAttackTable.add(skillTable).left().padBottom(5);
+					bigAttackTable.add(skillTable).left().pad(5, 0, 5, 0);
 					bigAttackTable.row();
 				}
 			}

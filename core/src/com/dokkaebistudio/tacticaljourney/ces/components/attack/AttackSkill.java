@@ -36,6 +36,8 @@ public class AttackSkill {
 	/** The number of tile the target is knocked back. */
 	private int knockback;
 	
+	private String description;
+	
 	// Animations
 	private AttackAnimation attackAnimation;
 
@@ -155,7 +157,14 @@ public class AttackSkill {
 		this.name = name;
 	}
 
-	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	
 	public static Serializer<AttackSkill> getSerializer(final PooledEngine engine) {
 		return new Serializer<AttackSkill>() {
@@ -176,6 +185,8 @@ public class AttackSkill {
                 
                 // Knockback
 				output.writeInt(object.knockback);
+				
+				output.writeString(object.description);
 				
 				// Animations
 				output.writeBoolean(object.attackAnimation != null);
@@ -199,6 +210,8 @@ public class AttackSkill {
 				as.strength = input.readInt();
 				
 				as.knockback = input.readInt();
+				
+				as.description = input.readString();
 				
 				// Animation
 				boolean hasAttackAnim = input.readBoolean();

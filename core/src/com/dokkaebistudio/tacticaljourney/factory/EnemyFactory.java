@@ -318,8 +318,10 @@ public final class EnemyFactory {
 		AttackSkill charge = new AttackSkill();
 		charge.setName("Stinger charge");
 		charge.setRangeMax(1);
-		charge.setStrength(7);
+		charge.setStrength(6);
+		charge.setKnockback(1);
 		charge.setAttackType(AttackTypeEnum.MELEE);
+		charge.setDescription("A charge that can deal massive damage as well as knock the target down. The longer the charge, the more damage it will deal.");
 		AttackAnimation attackAnimation2 = new AttackAnimation(
 				AnimationSingleton.getInstance().attack_slash, true);
 		charge.setAttackAnimation(attackAnimation2);

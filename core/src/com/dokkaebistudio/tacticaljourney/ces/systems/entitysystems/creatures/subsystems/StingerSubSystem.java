@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.ces.components.BlockVisibilityComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackSkill;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.SpriteComponent;
@@ -41,6 +42,9 @@ public class StingerSubSystem extends CreatureSubSystem {
 	private Entity chargeTarget;
 	private StingerAttackStates attackState = StingerAttackStates.NONE;
 	
+	private AttackSkill stingSkill;
+	private AttackSkill chargeSkill;
+	
 	@Override
 	public boolean update(final CreatureSystem creatureSystem, final Entity enemy, final Room room) {
     	MoveComponent moveCompo = Mappers.moveComponent.get(enemy);
@@ -50,12 +54,14 @@ public class StingerSubSystem extends CreatureSubSystem {
 		Entity playerEntity = GameScreen.player;
 		GridPositionComponent playerPosition = Mappers.gridPositionComponent.get(playerEntity);
 
+		stingSkill = attackCompo.getSkills().get(0);
+		chargeSkill = attackCompo.getSkills().get(1);
 		
 		switch(room.getCreatureState()) {
 		
 		case TURN_INIT:
 			attackCompo.setAdditionnalStrength(0);
-			attackCompo.getActiveSkill().setKnockback(0);
+			attackCompo.setActiveSkill(stingSkill);
 			break;
 
     	case MOVE_TILES_DISPLAYED :
@@ -66,7 +72,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     			// Aligned
     			canCharge = true;
     			GridPositionComponent targetPos = Mappers.gridPositionComponent.get(chargeTarget);
-    			chargeDistance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), enemyCurrentPos.coord());
+    			chargeDistance = TileUtil.getDistanceBetweenTiles(targetPos.coord(), enemyCurrentPos.coord()) - 1;
         		room.setCreatureState(RoomCreatureState.ATTACK);
         		return true;
     		} else {
@@ -174,9 +180,10 @@ public class StingerSubSystem extends CreatureSubSystem {
     			
 				attackCompo.setTarget(chargeTarget);
 				attackCompo.setTargetedTile(TileUtil.getTileAtGridPos(targetPos.coord(), room));
-				attackCompo.getActiveSkill().setKnockback(1);
 				
 				attackCompo.setAdditionnalStrength(chargeDistance);
+				
+				attackCompo.setActiveSkill(chargeSkill);
 				room.setCreatureState(RoomCreatureState.ATTACK_ANIMATION);
     			
     			default:

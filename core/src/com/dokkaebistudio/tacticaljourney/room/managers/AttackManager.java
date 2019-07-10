@@ -98,8 +98,8 @@ public class AttackManager {
 			alertEnemy(attacker, target);
 		}
 		
-		if (attackCompo.hasThrowback()) {
-			applyThrowback(target, attacker, attackCompo.getThrowback());
+		if (attackCompo.hasKnockback()) {
+			applyKnockback(target, attacker, attackCompo.getKnockback());
 		}
 		
 		int damage = 0;
@@ -152,9 +152,7 @@ public class AttackManager {
 	}
 
 
-	private void applyThrowback(Entity target, Entity attacker, int nbTiles) {
-		if (attacker != GameScreen.player) return;
-		
+	private void applyKnockback(Entity target, Entity attacker, int nbTiles) {		
 		KnockbackComponent throwbackCompo = room.engine.createComponent(KnockbackComponent.class);
 		throwbackCompo.setAttacker(attacker);
 		throwbackCompo.setNumberOfTiles(nbTiles);

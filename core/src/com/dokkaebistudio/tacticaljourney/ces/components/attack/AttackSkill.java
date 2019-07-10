@@ -33,6 +33,9 @@ public class AttackSkill {
 	/** The amount of damage dealt to an ennemy without any protection. */
 	private int strength;
 	
+	/** The number of tile the target is knocked back. */
+	private int knockback;
+	
 	// Animations
 	private AttackAnimation attackAnimation;
 
@@ -55,7 +58,10 @@ public class AttackSkill {
 		this.rangeMax += amount;
 	}
 	
-	
+	public void increaseKnockback(int amount) {
+		this.knockback += amount;
+		this.knockback = Math.max(0,  this.knockback);
+	}
 	
 	//***************************
 	// Attack Animations
@@ -116,6 +122,14 @@ public class AttackSkill {
 	public void setStrength(int strength) {
 		this.strength = strength;
 	}
+	
+	public int getKnockback() {
+		return knockback;
+	}
+
+	public void setKnockback(int knockback) {
+		this.knockback = knockback;
+	}
 
 	public boolean isActive() {
 		return active;
@@ -159,6 +173,9 @@ public class AttackSkill {
                 
                 // Strength
                 output.writeInt(object.strength);
+                
+                // Knockback
+				output.writeInt(object.knockback);
 				
 				// Animations
 				output.writeBoolean(object.attackAnimation != null);
@@ -181,6 +198,8 @@ public class AttackSkill {
 
 				as.strength = input.readInt();
 				
+				as.knockback = input.readInt();
+				
 				// Animation
 				boolean hasAttackAnim = input.readBoolean();
 				if (hasAttackAnim) {
@@ -196,6 +215,5 @@ public class AttackSkill {
 		
 		};
 	}
-
 
 }

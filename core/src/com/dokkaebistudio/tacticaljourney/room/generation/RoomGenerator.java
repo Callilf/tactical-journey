@@ -19,7 +19,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
-import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.ces.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.ces.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
@@ -34,7 +33,6 @@ import com.dokkaebistudio.tacticaljourney.items.pools.PooledItemDescriptor;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomType;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
-import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
 import com.dokkaebistudio.tacticaljourney.util.PoolableVector2;
 import com.dokkaebistudio.tacticaljourney.util.TileUtil;
@@ -400,7 +398,8 @@ public abstract class RoomGenerator {
 //			entityFactory.createChasm(room, new Vector2(11,10));
 //			entityFactory.createChasm(room, new Vector2(12,10));
 //			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
-//			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN, room, new Vector2(14, 7));
+			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN_ALPHA, room, new Vector2(12, 7));
+//			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER, room, new Vector2(13, 7));
 //			Mappers.lootRewardComponent.get(createEnemy).getDropRate().getRatePerRarity().put(ItemPoolRarity.COMMON, 100f);
 
 //			Entity createAmmoCrate = entityFactory.createAmmoCrate(room, new Vector2(12,10));

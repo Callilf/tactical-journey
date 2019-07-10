@@ -38,7 +38,9 @@ public class AllyComponent implements Component, Poolable, MovableInterface, Mar
 	
 	@Override
 	public void hideMarker() {
-		marker.remove();
+		if (marker != null) {
+			marker.remove();
+		}
 	}
 	
 	

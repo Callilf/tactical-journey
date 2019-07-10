@@ -49,10 +49,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	private int accuracy = 1;
 	private int realAccuracy = 1;
 	
-	// Throwback
-	private int throwback = 0;
-
-	
 	// Ammos
 	/** The type of ammunition used by this attack component. */
 	private AmmoTypeEnum ammoType = AmmoTypeEnum.NONE;
@@ -136,7 +132,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.doNotConsumeTurn = false;
 		this.doNotAlertTarget = false;
 		this.activeSkill = null;
-		this.throwback = 0;
 	}
 	
 	/**
@@ -168,13 +163,14 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
 	}
 	
-	public boolean hasThrowback() {
-		return this.throwback > 0;
+	public boolean hasKnockback() {
+		return getActiveSkill().getKnockback() > 0;
 	}
 	
 	public void increaseThrowback(int amount) {
-		this.throwback += amount;
-		this.throwback = Math.max(0,  this.throwback);
+		for (AttackSkill skill : this.skills) {
+			skill.increaseKnockback(amount);
+		}
 	}
 
 	/**
@@ -439,12 +435,8 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.activeSkill = activeSkill;
 	}
 	
-	public int getThrowback() {
-		return throwback;
-	}
-	
-	public void setThrowback(int throwback) {
-		this.throwback = throwback;
+	public int getKnockback() {
+		return getActiveSkill().getKnockback();
 	}
 	
 	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine) {
@@ -464,9 +456,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				// Accuracy
 				output.writeInt(object.accuracy);
 				output.writeInt(object.realAccuracy);
-
-				// Throwback
-				output.writeInt(object.throwback);
 				
 				// Ammos
 				output.writeString(object.ammoType.name());
@@ -504,8 +493,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				
 				compo.accuracy = input.readInt();
 				compo.realAccuracy = input.readInt();
-
-				compo.throwback = input.readInt();
 				
 				compo.ammoType = AmmoTypeEnum.valueOf(input.readString());
 				compo.ammosUsedPerAttack = input.readInt();

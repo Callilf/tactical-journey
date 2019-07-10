@@ -91,7 +91,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 	
 	@Override
 	public void hideMarker() {
-		hpDisplayer.remove();
+		if (hpDisplayer != null) {
+			hpDisplayer.remove();
+		}
 	}
 	
 	

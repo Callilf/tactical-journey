@@ -15,6 +15,7 @@ import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbCarrierComponent;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.descriptors.RegionDescriptor;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
@@ -138,24 +139,14 @@ public class Floor {
 		if (oldRoom != null) {
 			for (Entity e : oldRoom.getAllEntities()) {
 				if (e == GameScreen.player) continue;
-				
-				for (Component c : e.getComponents()) {
-					if (c instanceof MarkerInterface) {
-						((MarkerInterface) c).hideMarker();
-					}
-				}
+				((PublicEntity)e).hideMarkers();
 			}
 		}
 		
 		// Display markers for each entities of the new room
 		for (Entity e : newRoom.getAllEntities()) {
 			if (e == GameScreen.player) continue;
-			
-			for (Component c : e.getComponents()) {
-				if (c instanceof MarkerInterface) {
-					((MarkerInterface) c).showMarker(e);
-				}
-			}
+			((PublicEntity)e).showMarkers();
 		}
 		
 		if (oldRoom != null) {

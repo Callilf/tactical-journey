@@ -21,6 +21,7 @@ import com.dokkaebistudio.tacticaljourney.ces.components.orbs.OrbComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.transition.DoorComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.transition.ExitComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.transition.SecretDoorComponent;
+import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -501,4 +502,5 @@ public final class TileUtil {
 			.filter(t -> TileUtil.getDistanceBetweenTiles(center, t.getGridPos()) <= maxDistance)
 			.collect(Collectors.toList());
 	}
+
 }

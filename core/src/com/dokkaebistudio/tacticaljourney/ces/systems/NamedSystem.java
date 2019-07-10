@@ -17,6 +17,10 @@ public abstract class NamedSystem extends EntitySystem implements RoomSystem {
 	
 	@Override
 	public void update(float deltaTime) {
+		if (room.isPauseState()) {
+			return;
+		}
+		
 		if (!room.isPauseState() && room.getRestartSystem() != null) {
 			if (!room.getRestartSystem().equals(this.getClass().getSimpleName())) {
 				return;

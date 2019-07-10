@@ -23,7 +23,18 @@ public abstract class NamedIteratingSystem extends IteratingSystem implements Ro
     
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		if (room.getRestartSystem() != null) {
+		GameScreen.currentSystem = this.getClass().getSimpleName();
+
+		performProcessEntity(entity, deltaTime);
+	}
+	
+	@Override
+	public void update(float deltaTime) {
+		if (room.isPauseState()) {
+			return;
+		}
+		
+		if (!room.isPauseState() && room.getRestartSystem() != null) {
 			if (!room.getRestartSystem().equals(this.getClass().getSimpleName())) {
 				return;
 			}
@@ -31,9 +42,7 @@ public abstract class NamedIteratingSystem extends IteratingSystem implements Ro
 			room.setRestartSystem(null);
 		}
 		
-		GameScreen.currentSystem = this.getClass().getSimpleName();
-
-		performProcessEntity(entity, deltaTime);
+		super.update(deltaTime);
 	}
 
 }

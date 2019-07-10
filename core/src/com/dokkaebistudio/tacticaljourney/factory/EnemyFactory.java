@@ -536,6 +536,7 @@ public final class EnemyFactory {
 		meleeSkill.setName("Smash");
 		meleeSkill.setRangeMax(1);
 		meleeSkill.setStrength(12);
+		meleeSkill.setKnockback(1);
 		meleeSkill.setAttackType(AttackTypeEnum.MELEE);
 		AttackAnimation attackAnimation = new AttackAnimation(
 				AnimationSingleton.getInstance().attack_slash, true);

@@ -48,7 +48,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 	// Accuracy
 	private int accuracy = 1;
 	private int realAccuracy = 1;
-
 	
 	// Ammos
 	/** The type of ammunition used by this attack component. */
@@ -164,6 +163,15 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.accuracy = Math.min(MAX_ACCURACY, this.realAccuracy);
 	}
 	
+	public boolean hasKnockback() {
+		return getActiveSkill().getKnockback() > 0;
+	}
+	
+	public void increaseThrowback(int amount) {
+		for (AttackSkill skill : this.skills) {
+			skill.increaseKnockback(amount);
+		}
+	}
 
 	/**
 	 * Clear the list of movable tiles and remove all entities associated to it.
@@ -427,6 +435,10 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		this.activeSkill = activeSkill;
 	}
 	
+	public int getKnockback() {
+		return getActiveSkill().getKnockback();
+	}
+	
 	public static Serializer<AttackComponent> getSerializer(final PooledEngine engine) {
 		return new Serializer<AttackComponent>() {
 
@@ -444,7 +456,6 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				// Accuracy
 				output.writeInt(object.accuracy);
 				output.writeInt(object.realAccuracy);
-
 				
 				// Ammos
 				output.writeString(object.ammoType.name());
@@ -482,7 +493,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 				
 				compo.accuracy = input.readInt();
 				compo.realAccuracy = input.readInt();
-
+				
 				compo.ammoType = AmmoTypeEnum.valueOf(input.readString());
 				compo.ammosUsedPerAttack = input.readInt();
 				

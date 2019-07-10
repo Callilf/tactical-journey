@@ -24,6 +24,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.sun.xml.internal.ws.util.StringUtils;
 
 /**
  * Marker to indicate that this entity has health and therefore can be attacked or damaged.
@@ -90,7 +91,9 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 	
 	@Override
 	public void hideMarker() {
-		hpDisplayer.remove();
+		if (hpDisplayer != null) {
+			hpDisplayer.remove();
+		}
 	}
 	
 	
@@ -120,12 +123,25 @@ public class HealthComponent implements Component, Poolable, MovableInterface, M
 		
 		this.setHp(Math.max(0, this.getHp() - damageToHealth));
 
-		
+		int damagesToDisplay = realAmountOfDamage;
+
 		if (attacker != null) {
 			this.attacker = attacker;
-			this.healthChangeMap.put(HealthChangeEnum.HIT_INTERRUPT, String.valueOf(realAmountOfDamage));
+			
+			String damagesAlreadyReceived = this.healthChangeMap.get(HealthChangeEnum.HIT_INTERRUPT);
+			if (damagesAlreadyReceived != null) {
+				damagesToDisplay += Integer.parseInt(damagesAlreadyReceived);
+			}
+			
+			this.healthChangeMap.put(HealthChangeEnum.HIT_INTERRUPT, String.valueOf(damagesToDisplay));
 		} else {
-			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(realAmountOfDamage));
+			
+			String damagesAlreadyReceived = this.healthChangeMap.get(HealthChangeEnum.HIT);
+			if (damagesAlreadyReceived != null) {
+				damagesToDisplay += Integer.parseInt(damagesAlreadyReceived);
+			}
+			
+			this.healthChangeMap.put(HealthChangeEnum.HIT, String.valueOf(damagesToDisplay));
 		}
 		
 		addJournalEntry(target, attacker, realAmountOfDamage, damageType);

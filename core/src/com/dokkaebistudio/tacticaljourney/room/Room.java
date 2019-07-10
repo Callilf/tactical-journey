@@ -35,6 +35,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.entity.PublicEntity;
 import com.dokkaebistudio.tacticaljourney.ces.systems.entitysystems.creatures.CreatureSystem;
 import com.dokkaebistudio.tacticaljourney.dialog.Dialog;
 import com.dokkaebistudio.tacticaljourney.dialog.DialogBuilder;
@@ -167,11 +168,7 @@ public class Room extends EntitySystem {
 		}
 		
 		if (this.floor != null && this.floor.getActiveRoom() == this) {
-			e.getComponents().forEach(c -> {
-				if (c instanceof MarkerInterface) {
-					((MarkerInterface) c).showMarker(e);
-				}
-			});
+			((PublicEntity)e).showMarkers();
 		}
 	}
 

@@ -22,6 +22,7 @@ import com.dokkaebistudio.tacticaljourney.ces.components.PanelComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.SolidComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.SpeakerComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.KnockbackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.TutorialComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.WormholeComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
@@ -142,6 +143,8 @@ public final class Mappers {
 	public final static ComponentMapper<ExplosiveComponent> explosiveComponent = ComponentMapper.getFor(ExplosiveComponent.class);
 	public final static ComponentMapper<DestructibleComponent> destructibleComponent = ComponentMapper.getFor(DestructibleComponent.class);
 	
+	public final static ComponentMapper<KnockbackComponent> knockbackComponent = ComponentMapper.getFor(KnockbackComponent.class);
+
 	
 	
 	public final static ComponentMapper<TutorialComponent> tutorialComponent = ComponentMapper.getFor(TutorialComponent.class);

@@ -392,13 +392,13 @@ public abstract class RoomGenerator {
 			entityFactory.creepFactory.createLava(room, new Vector2(13,3), null);
 			entityFactory.creepFactory.createLava(room, new Vector2(14,3), null);
 			
-			entityFactory.createChasm(room, new Vector2(11,6));
+//			entityFactory.createChasm(room, new Vector2(11,6));
 			
 //			entityFactory.createChasm(room, new Vector2(10,10));
 //			entityFactory.createChasm(room, new Vector2(11,10));
 //			entityFactory.createChasm(room, new Vector2(12,10));
 //			entityFactory.createWoodenPanel(room, new Vector2(15, 8));
-			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.ORANGUTAN_ALPHA, room, new Vector2(12, 7));
+//			Entity createEnemy = entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.STINGER, room, new Vector2(12, 7));
 //			entityFactory.enemyFactory.createEnemy(EnemyTypeEnum.VENOM_SPIDER, room, new Vector2(13, 7));
 //			Mappers.lootRewardComponent.get(createEnemy).getDropRate().getRatePerRarity().put(ItemPoolRarity.COMMON, 100f);
 

@@ -45,6 +45,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRightJikatabi
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemScissorhand;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemShinobiHeadband;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemSilkyBeard;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTornPant;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemTotemOfKalamazoo;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVegetalGarment;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemVillanelle;
@@ -401,7 +402,9 @@ public final class ItemFactory {
 			item = createItemBase(room, tilePos,  new ItemDurian(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
-			
+		case TORN_PANT:
+			item = createItemBase(room, tilePos,  new ItemTornPant(), EntityFlagEnum.ITEM_INFUSABLE);
+			break;
 			
 			
 		//*****************

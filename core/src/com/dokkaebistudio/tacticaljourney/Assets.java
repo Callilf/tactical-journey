@@ -393,6 +393,7 @@ public class Assets {
 	public static RegionDescriptor silky_beard;
 	public static RegionDescriptor scissorhand;
 	public static RegionDescriptor durian;
+	public static RegionDescriptor torn_pant;
 
 	
 	// Boss items
@@ -446,6 +447,7 @@ public class Assets {
 	public static RegionDescriptor blessing_indegistible;
 	public static RegionDescriptor blessing_unfinished;
 	public static RegionDescriptor blessing_orangutan;
+	public static RegionDescriptor blessing_anger;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -812,6 +814,7 @@ public class Assets {
 		silky_beard = Assets.getTexture("item-infusable-silky-beard");
 		scissorhand = Assets.getTexture("item-infusable-scissorhand");
 		durian = Assets.getTexture("item-infusable-durian");
+		torn_pant = Assets.getTexture("item-infusable-torn-pant");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -865,6 +868,7 @@ public class Assets {
 		blessing_indegistible = Assets.getTexture("blessing-indegistible");
 		blessing_unfinished = Assets.getTexture("blessing-unfinished");
 		blessing_orangutan = Assets.getTexture("blessing-orangutan");
+		blessing_anger = Assets.getTexture("blessing-anger");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");

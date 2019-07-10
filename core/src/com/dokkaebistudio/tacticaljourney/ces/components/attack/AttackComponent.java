@@ -167,7 +167,7 @@ public class AttackComponent implements Component, Poolable, RoomSystem {
 		return getActiveSkill().getKnockback() > 0;
 	}
 	
-	public void increaseThrowback(int amount) {
+	public void increaseKnockback(int amount) {
 		for (AttackSkill skill : this.skills) {
 			skill.increaseKnockback(amount);
 		}

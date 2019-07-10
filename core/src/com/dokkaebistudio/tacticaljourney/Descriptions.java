@@ -333,6 +333,9 @@ public class Descriptions {
 	
 	public static final String ITEM_DURIAN_TITLE = "Durian";
 	public static final String ITEM_DURIAN_DESCRIPTION = "The durian is the favorite fruit of the alpha orangutan. The reason why it held onto this one and did not eat it is unclear. Could it be a gift for a female?";
+	
+	public static final String ITEM_TORN_PANT_TITLE = "Torn pant";
+	public static final String ITEM_TORN_PANT_DESCRIPTION = "A purple pant torn at the bottom but strangely intact at the hip. It's user was known for his ravaging bursts of anger.";
 
 	
 }

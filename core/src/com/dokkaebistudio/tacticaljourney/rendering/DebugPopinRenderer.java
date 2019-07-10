@@ -688,7 +688,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
-				attackComponent.increaseThrowback(- 1);
+				attackComponent.increaseKnockback(- 1);
 			}
 		});
 		knockbackTable.add(knockbackDown).padRight(20);
@@ -697,7 +697,7 @@ public class DebugPopinRenderer implements Renderer, RoomSystem {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				AttackComponent attackComponent = Mappers.attackComponent.get(GameScreen.player);
-				attackComponent.increaseThrowback(1);
+				attackComponent.increaseKnockback(1);
 			}
 		});
 		knockbackTable.add(knockbackUp);

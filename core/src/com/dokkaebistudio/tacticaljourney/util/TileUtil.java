@@ -88,6 +88,10 @@ public final class TileUtil {
 		return PoolableVector2.create(newX, newY);
 	}
 	
+	public static boolean gridPosOutOfRoom(Vector2 gridPos) {
+		return gridPos.x < 0 || gridPos.x >= GameScreen.GRID_W || gridPos.y < 0 || gridPos.y >= GameScreen.GRID_H;
+	}
+	
 	/**
 	 * Check whether the given x,y coordinates in pixel are on the given entity.
 	 * @param x the x pixel coordinate

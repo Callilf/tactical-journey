@@ -117,6 +117,7 @@ public class TileSearchService {
 					}
 				}
 			}
+			movableTilesList.add(startTile);
 		}
 		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
 		IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);

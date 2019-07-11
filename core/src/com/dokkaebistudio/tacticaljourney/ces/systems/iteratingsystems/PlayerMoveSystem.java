@@ -32,6 +32,7 @@ import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.HUDRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.RoomState;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.dokkaebistudio.tacticaljourney.singletons.InputSingleton;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffStunned;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -115,10 +116,19 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 				moveCompo.setFreeMove(true);
 			}
 			
-			if (moveCompo.getSelectedTileFromPreviousTurn() != null) {
+			if (moveCompo.getSelectedTileFromPreviousTurn() != null && !room.hasEnemies()) {
 				// Continue movement
-				room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
-				break;
+				boolean canStillMove = true;
+				for (Entity waypoint : moveCompo.getWayPoints()) {
+					Tile tileAtGridPos = TileUtil.getTileAtGridPos(Mappers.gridPositionComponent.get(waypoint).coord(), room);
+					canStillMove &= tileAtGridPos.isWalkable(player);
+				}
+				canStillMove &= moveCompo.getSelectedTileFromPreviousTurn().isWalkable(player);
+
+				if (canStillMove) {
+					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
+					break;
+				}
 			}
 			
 			// clear the movable tile
@@ -149,10 +159,11 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 			handleClickOnPlayer(player);
 			handleClickOnAlly();
 			
-//			if (!room.hasEnemies() && !moveCompo.isFreeMove()) {
-//				room.turnManager.endPlayerTurn();
-//				break;
-//			}
+			if (moveCompo.getSelectedTileFromPreviousTurn() != null) {
+				// Continue movement
+				room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
+				break;
+			}
 			
 			// When clicking on a moveTile, display it as the destination
 			if (InputSingleton.getInstance().leftClickJustReleased) {
@@ -173,12 +184,12 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 		case PLAYER_MOVE_DESTINATION_SELECTED:
 			// Either click on confirm to move or click on another tile to change the
 			// destination
-			if (InputSingleton.getInstance().leftClickJustReleased || moveCompo.getSelectedTileFromPreviousTurn() != null) {
+			if (InputSingleton.getInstance().leftClickJustReleased || (moveCompo.getSelectedTileFromPreviousTurn() != null && !room.hasEnemies())) {
 				Vector3 touchPoint = InputSingleton.getInstance().getTouchPoint();
 				int x = (int) touchPoint.x;
 				int y = (int) touchPoint.y;
 
-				if (TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedTile()) || moveCompo.getSelectedTileFromPreviousTurn() != null) {
+				if (TileUtil.isPixelPosOnEntity(x, y, moveCompo.getSelectedTile()) || (moveCompo.getSelectedTileFromPreviousTurn() != null && !room.hasEnemies())) {
 					// Confirm movement is we click on the selected tile again
 					
 					// Initiate movement
@@ -200,7 +211,6 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 				} else {
 					// No confirmation, check if another tile has been selected
 					selectDestinationTile(player,x, y);
-					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 				}
 
 			}
@@ -212,7 +222,7 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 				moveCompo.selectCurrentMoveDestinationTile(player);
 				
 				// handle the case where the player has no move remaining, but is in a cleared room
-				if (!room.hasEnemies() && moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
+				if (moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
 					GridPositionComponent gridPosCompo = Mappers.gridPositionComponent.get(player);
 					moveCompo.setEndTurnTile(TileUtil.getTileAtGridPos(gridPosCompo.coord(), room));
 					Vector2 selectedTile = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile()).coord();
@@ -245,6 +255,7 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 			if (moveCompo.isFrozen()) {
 				moveCompo.clearSelectedTileFromPreviousTurn();
 			}
+			
 			
 			room.turnManager.endPlayerTurn();
 			break;
@@ -545,20 +556,19 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 	 * @param moverCurrentPos the current position of the mover
 	 */
 	private boolean selectDestinationTile(Entity moverEntity, int x, int y) {
-		for (Entity tile : moveCompo.movableTiles) {
-			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
-
-			if (destinationPos.coord().equals(moverCurrentPos.coord())) {
-				// Cannot move to the tile we already are
-				continue;
-			}
-
-			
-			if (TileUtil.isPixelPosOnEntity(x, y, tile)) {
-				moveCompo.setSelectedAttackTile(null);
-				return selectTileAndBuildWaypoints(moverEntity, destinationPos);
-			}
-		}
+		
+		
+//		for (Entity tile : moveCompo.movableTiles) {
+//			GridPositionComponent destinationPos = Mappers.gridPositionComponent.get(tile);
+//			if (destinationPos.coord().equals(moverCurrentPos.coord())) {
+//				continue;
+//			}
+//			
+//			if (TileUtil.isPixelPosOnEntity(x, y, tile)) {
+//				moveCompo.setSelectedAttackTile(null);
+//				return selectTileAndBuildWaypoints(moverEntity, destinationPos);
+//			}
+//		}
 		
 		
 		for (Entity tile : attackCompo.attackableTiles) {
@@ -578,20 +588,31 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 						if (dist >= attackCompo.getMainSkill().getRangeMin() && dist <= attackCompo.getMainSkill().getRangeMax()) {
 							// Select this tile
 							moveCompo.setSelectedAttackTile(tile);
-							return selectTileAndBuildWaypoints(moverEntity, movableTilePos);
+							return selectTileAndBuildWaypoints(moverEntity, movableTilePos.coord());
 						}
 					}
 					
 				}
 			}
 		}
-		return false;
+		
+		PoolableVector2 gridPos = TileUtil.convertPixelPosIntoGridPos(x, y);
+		if (gridPos.equals(moverCurrentPos.coord()) || TileUtil.gridPosOutOfRoom(gridPos)) {
+			return false;
+		}
+
+		moveCompo.setSelectedAttackTile(null);
+		return selectTileAndBuildWaypoints(moverEntity, gridPos);
+		
+		
+		
+//		return false;
 	}
 
-	private boolean selectTileAndBuildWaypoints(Entity moverEntity, GridPositionComponent destinationPos) {
+	private boolean selectTileAndBuildWaypoints(Entity moverEntity, Vector2 destinationPos) {
 		// Check whether we can find a path to this tile
 		List<Entity> waypoints = TileSearchService.buildWaypointList(moverEntity, moveCompo, moverCurrentPos.coord(), 
-				destinationPos.coord(), room, true);
+				destinationPos, room, false);
 
 		if (waypoints == null) {
 			// No path found
@@ -600,8 +621,9 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 		moveCompo.setWayPoints(waypoints);
 		
 		// Create an entity to show that this tile is selected as the destination
-		moveCompo.setSelectedTile(destinationPos.coord(), room);
+		moveCompo.setSelectedTile(destinationPos, room);
 
+		room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 		return true;
 	}
 	

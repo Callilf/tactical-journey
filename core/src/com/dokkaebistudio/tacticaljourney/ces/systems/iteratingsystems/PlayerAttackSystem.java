@@ -71,6 +71,7 @@ public class PlayerAttackSystem extends NamedIteratingSystem {
     	switch(room.getState()) {
 	        
     	case PLAYER_MOVE_TILES_DISPLAYED:
+    	case PLAYER_MOVE_DESTINATION_SELECTED:
     		
     		if (moveCompo.getFastAttackTarget() != null) {
     			// Handle fast attack ! (i.e. the user clicked on an attackable tile from a distance)

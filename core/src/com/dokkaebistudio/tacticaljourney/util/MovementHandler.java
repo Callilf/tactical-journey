@@ -254,7 +254,7 @@ public class MovementHandler {
 			return MovementProgressEnum.MOVEMENT_OVER;
 		}
 
-		if (moveCompo.getMoveRemaining() <= 0 && !room.hasEnemies() && !moveCompo.isFrozen()) {
+		if (moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
 			moveCompo.setEndTurnTile(TileUtil.getTileAtGridPos(moveCompo.currentMoveDestinationTilePos, room));
 			Vector2 selectedTile = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile()).coord();
 			moveCompo.setSelectedTileFromPreviousTurn(TileUtil.getTileAtGridPos(selectedTile, room));
@@ -283,6 +283,17 @@ public class MovementHandler {
 				}
 			}
 			moveCompo.setEndTurnTile(null);
+			
+			if (room.hasEnemies()) {
+				StateComponent stateComponent = Mappers.stateComponent.get(e);
+				if (stateComponent != null && !stateComponent.isKeepCurrentAnimation()) {
+					if (Mappers.flyComponent.has(e)) {
+						stateComponent.set(StatesEnum.FLY_STANDING);			
+					} else {
+						stateComponent.set(StatesEnum.STANDING);
+					}
+				}
+			}
 
 		} else if (moveCompo.getSelectedTile() != null) {
 			GridPositionComponent selectedTilePos = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile());

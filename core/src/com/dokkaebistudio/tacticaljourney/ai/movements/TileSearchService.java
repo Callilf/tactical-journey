@@ -128,13 +128,24 @@ public class TileSearchService {
 		List<Entity> waypoints = new ArrayList<>();
 		if (path.getCount() == 0) return null;
 		
+		int totalMoves = Mappers.moveComponent.get(mover).getMoveRemaining() - 1;
+		int currentMove = 0;
+		
 		Iterator<Tile> iterator = path.iterator();
 		while(iterator.hasNext()) {
 			pathNb ++;
 			Tile next = iterator.next();
-			if (pathNb == 0 || !iterator.hasNext()) continue;
-			Entity waypoint = room.entityFactory.createWaypoint(next.getGridPos(), room);
-			waypoints.add(waypoint);
+			if (pathNb == 0) continue;
+			
+			if (!iterator.hasNext()) {
+				Entity dest = room.entityFactory.createDestinationTile(next.getGridPos(), room, currentMove <= totalMoves);
+				waypoints.add(dest);
+			} else {
+				Entity waypoint = room.entityFactory.createWaypoint(next.getGridPos(), room, currentMove <= totalMoves);
+				waypoints.add(waypoint);
+			}
+			currentMove += TileUtil.getCostOfMovementForTilePos(next.getGridPos(), mover, room);
+
 			
 		}
 		return waypoints;

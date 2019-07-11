@@ -103,7 +103,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     					
     					int i = (int) enemyCurrentPos.coord().y;
     					while (i < targetPos.coord().y - 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
+    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room, true);
     						moveCompo.getWayPoints().add(wp);
     						i++;
     					}
@@ -113,7 +113,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     					
     					int i = (int) enemyCurrentPos.coord().y;
     					while (i > targetPos.coord().y + 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room);
+    						Entity wp = room.entityFactory.createWaypoint(new Vector2(chargeLocation.x, i), room, true);
     						moveCompo.getWayPoints().add(wp);
     						i--;
     					}
@@ -130,7 +130,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     					
     					int i = (int) enemyCurrentPos.coord().x;
     					while (i < targetPos.coord().x - 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
+    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room, true);
     						moveCompo.getWayPoints().add(wp);
     						i++;
     					}
@@ -144,7 +144,7 @@ public class StingerSubSystem extends CreatureSubSystem {
     					
     					int i = (int) enemyCurrentPos.coord().x;
     					while (i > targetPos.coord().x + 1) {
-    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room);
+    						Entity wp = room.entityFactory.createWaypoint(new Vector2(i, chargeLocation.y), room, true);
     						moveCompo.getWayPoints().add(wp);
     						i--;
     					}

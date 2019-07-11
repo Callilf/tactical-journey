@@ -254,7 +254,7 @@ public class MovementHandler {
 			return MovementProgressEnum.MOVEMENT_OVER;
 		}
 
-		if (moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
+		if (moveCompo.playerMovementCompo && moveCompo.getMoveRemaining() <= 0 && !moveCompo.isFrozen()) {
 			moveCompo.setEndTurnTile(TileUtil.getTileAtGridPos(moveCompo.currentMoveDestinationTilePos, room));
 			Vector2 selectedTile = Mappers.gridPositionComponent.get(moveCompo.getSelectedTile()).coord();
 			moveCompo.setSelectedTileFromPreviousTurn(TileUtil.getTileAtGridPos(selectedTile, room));

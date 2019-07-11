@@ -9,6 +9,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.movements.AttackTileSearchService;
 import com.dokkaebistudio.tacticaljourney.ai.movements.TileSearchService;
 import com.dokkaebistudio.tacticaljourney.ces.components.AIComponent;
@@ -116,16 +117,25 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 				moveCompo.setFreeMove(true);
 			}
 			
-			if (moveCompo.getSelectedTileFromPreviousTurn() != null && !room.hasEnemies()) {
+			if (moveCompo.getSelectedTileFromPreviousTurn() != null) {
 				// Continue movement
 				boolean canStillMove = true;
+				
+				int totalMoves = Mappers.moveComponent.get(player).getMoveRemaining() - 1;
+				int currentMove = 0;
+				
 				for (Entity waypoint : moveCompo.getWayPoints()) {
 					Tile tileAtGridPos = TileUtil.getTileAtGridPos(Mappers.gridPositionComponent.get(waypoint).coord(), room);
 					canStillMove &= tileAtGridPos.isWalkable(player);
+					
+					Mappers.spriteComponent.get(waypoint).setSprite(currentMove <= totalMoves ? Assets.tile_movable_waypoint : Assets.tile_movable_waypoint_gray);
+					
+					currentMove += TileUtil.getCostOfMovementForTilePos(tileAtGridPos.getGridPos(), player, room);
 				}
 				canStillMove &= moveCompo.getSelectedTileFromPreviousTurn().isWalkable(player);
+				Mappers.spriteComponent.get(moveCompo.getSelectedTile()).setSprite(currentMove <= totalMoves ? Assets.tile_movable_selected : Assets.tile_movable_selected_gray);
 
-				if (canStillMove) {
+				if (canStillMove && !room.hasEnemies()) {
 					room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 					break;
 				}
@@ -618,10 +628,9 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 			// No path found
 			return false;
 		}
+		Entity destination = waypoints.remove(waypoints.size() - 1);
 		moveCompo.setWayPoints(waypoints);
-		
-		// Create an entity to show that this tile is selected as the destination
-		moveCompo.setSelectedTile(destinationPos, room);
+		moveCompo.setSelectedTile(destination, room);
 
 		room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 		return true;

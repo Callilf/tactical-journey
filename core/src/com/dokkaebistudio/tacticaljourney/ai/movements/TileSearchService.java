@@ -14,6 +14,7 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.ces.components.BlockExplosionComponent;
@@ -117,6 +118,7 @@ public class TileSearchService {
 					}
 				}
 			}
+			movableTilesList.add(startTile);
 		}
 		RoomGraph roomGraph = new RoomGraph(mover, movableTilesList);
 		IndexedAStarPathFinder<Tile> indexedAStarPathFinder = new IndexedAStarPathFinder<Tile>(roomGraph);
@@ -127,13 +129,25 @@ public class TileSearchService {
 		List<Entity> waypoints = new ArrayList<>();
 		if (path.getCount() == 0) return null;
 		
+		MoveComponent moveComponent = Mappers.moveComponent.get(mover);
+		int totalMoves = moveComponent.getMoveRemaining() - 1;
+		int currentMove = 0;
+		
 		Iterator<Tile> iterator = path.iterator();
 		while(iterator.hasNext()) {
 			pathNb ++;
 			Tile next = iterator.next();
-			if (pathNb == 0 || !iterator.hasNext()) continue;
-			Entity waypoint = room.entityFactory.createWaypoint(next.getGridPos(), room);
-			waypoints.add(waypoint);
+			if (pathNb == 0) continue;
+			
+			if (!iterator.hasNext()) {
+				Entity dest = room.entityFactory.createDestinationTile(next.getGridPos(), room, currentMove <= totalMoves);
+				waypoints.add(dest);
+			} else {
+				Entity waypoint = room.entityFactory.createWaypoint(next.getGridPos(), room, currentMove <= totalMoves);
+				waypoints.add(waypoint);
+			}
+			currentMove += TileUtil.getCostOfMovementForTilePos(next.getGridPos(), mover, room);
+
 			
 		}
 		return waypoints;

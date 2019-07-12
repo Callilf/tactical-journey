@@ -88,6 +88,10 @@ public final class TileUtil {
 		return PoolableVector2.create(newX, newY);
 	}
 	
+	public static boolean gridPosOutOfRoom(Vector2 gridPos) {
+		return gridPos.x < 0 || gridPos.x >= GameScreen.GRID_W || gridPos.y < 0 || gridPos.y >= GameScreen.GRID_H;
+	}
+	
 	/**
 	 * Check whether the given x,y coordinates in pixel are on the given entity.
 	 * @param x the x pixel coordinate
@@ -501,6 +505,21 @@ public final class TileUtil {
 		return TileUtil.getAllTiles(room).parallelStream()
 			.filter(t -> TileUtil.getDistanceBetweenTiles(center, t.getGridPos()) <= maxDistance)
 			.collect(Collectors.toList());
+	}
+	
+
+	public static DirectionEnum getDirectionBetweenTiles(Vector2 origin, Vector2 target) {
+		DirectionEnum direction = null;
+		if (target.x < origin.x) {
+			direction = DirectionEnum.LEFT;
+		} else if (target.x > origin.x) {
+			direction = DirectionEnum.RIGHT;
+		} else if (target.y < origin.y) {
+			direction = DirectionEnum.DOWN;
+		} else if (target.y > origin.y) {
+			direction = DirectionEnum.UP;
+		}
+		return direction;
 	}
 
 }

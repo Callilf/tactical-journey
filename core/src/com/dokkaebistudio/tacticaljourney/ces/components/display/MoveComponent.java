@@ -25,6 +25,8 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	/** The room that managed entities.*/
 	public Room room;
 	
+	public boolean playerMovementCompo;
+	
 	// Serialized attributes
 	
 	/** The number of tiles the player can move. */
@@ -50,6 +52,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		
 	/** The selected tile for movement. */
 	private Entity selectedTile;
+	private Vector2 clickedTilePos;
 	
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
@@ -94,6 +97,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		this.selectedAttackTile = null;
 		this.frozen = false;
 		this.freeMove = false;
+		this.playerMovementCompo = false;
 	}
 	
 	
@@ -158,6 +162,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 				room.removeEntity(this.selectedTile);
 			}
 			this.selectedTile = null;
+			this.clickedTilePos = null;
 			
 			for (Entity e : wayPoints) {
 				room.removeEntity(e);
@@ -188,9 +193,25 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		if (this.selectedTile != null) {
 			Mappers.gridPositionComponent.get(selectedTile).coord(this.selectedTile, pos, room);
 		} else {
-			Entity destinationTileEntity = room.entityFactory.createDestinationTile(pos, room);		
+			Entity destinationTileEntity = room.entityFactory.createDestinationTile(pos, room, true);		
 			this.selectedTile = destinationTileEntity;
 		}
+	}
+	
+	public void setSelectedTile(Entity selectedTile, Room room) {
+		if (this.selectedTile != null) {
+			room.removeEntity(this.selectedTile);
+		}
+		this.selectedTile = selectedTile;
+	}
+	
+
+	public Vector2 getClickedTilePos() {
+		return clickedTilePos;
+	}
+
+	public void setClickedTilePos(Vector2 clickedTilePos) {
+		this.clickedTilePos = clickedTilePos;
 	}
 
 

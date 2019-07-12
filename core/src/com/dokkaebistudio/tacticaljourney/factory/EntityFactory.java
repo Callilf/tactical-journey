@@ -450,7 +450,7 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the destination tile entity
 	 */
-	public Entity createDestinationTile(Vector2 pos, Room room) {
+	public Entity createDestinationTile(Vector2 pos, Room room, boolean reachable) {
 		Entity redCross = engine.createEntity();
 		redCross.flags = EntityFlagEnum.DESTINATION_TILE.getFlag();
 
@@ -459,7 +459,7 @@ public final class EntityFactory {
     	selectedTilePos.zIndex = ZIndexConstants.DESTINATION_TILE;
     	redCross.add(selectedTilePos);
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(Assets.tile_movable_selected);
+    	spriteCompo.setSprite(reachable ? Assets.tile_movable_selected : Assets.tile_movable_selected_gray);
     	redCross.add(spriteCompo);
     	
     	redCross.add(engine.createComponent(FlyComponent.class));
@@ -475,7 +475,7 @@ public final class EntityFactory {
 	 * @param pos the position
 	 * @return the waypoint entity
 	 */
-	public Entity createWaypoint(Vector2 pos, Room room) {
+	public Entity createWaypoint(Vector2 pos, Room room, boolean reachable) {
 		Entity waypoint = engine.createEntity();
 		waypoint.flags = EntityFlagEnum.WAYPOINT.getFlag();
 
@@ -485,11 +485,10 @@ public final class EntityFactory {
     	waypoint.add(waypointPos);
     	
     	SpriteComponent spriteCompo = engine.createComponent(SpriteComponent.class);
-    	spriteCompo.setSprite(Assets.tile_movable_waypoint);
+    	spriteCompo.setSprite(reachable ? Assets.tile_movable_waypoint : Assets.tile_movable_waypoint_gray);
     	waypoint.add(spriteCompo);
     	
     	waypoint.add(engine.createComponent(FlyComponent.class));
-
     	
 		engine.addEntity(waypoint);
     	return waypoint;

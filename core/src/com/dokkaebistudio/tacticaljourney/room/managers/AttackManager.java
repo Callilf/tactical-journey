@@ -14,10 +14,12 @@ import com.dokkaebistudio.tacticaljourney.ces.components.KnockbackComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.ces.components.attack.AttackComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.display.MoveComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AmmoCarrierComponent;
 import com.dokkaebistudio.tacticaljourney.enums.DamageType;
 import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
+import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 import com.dokkaebistudio.tacticaljourney.room.Tile;
@@ -92,6 +94,11 @@ public class AttackManager {
 			return;
 		}
 		
+		if (target == GameScreen.player) {
+			MoveComponent moveComponent = Mappers.moveComponent.get(GameScreen.player);
+			moveComponent.clearMovableTiles();
+			moveComponent.clearSelectedTileFromPreviousTurn();
+		}
 		
 		if (!attackCompo.isDoNotAlertTarget()) {
 			alertEnemy(attacker, target);

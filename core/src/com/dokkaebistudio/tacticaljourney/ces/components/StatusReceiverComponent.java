@@ -212,6 +212,11 @@ public class StatusReceiverComponent implements Component, Poolable, MovableInte
 
 		status.onRemove(entity, room);
 		statuses.remove(status);
+		
+		AlterationReceiverComponent alterationReceiverComponent = Mappers.alterationReceiverComponent.get(entity);
+		if (alterationReceiverComponent != null) {
+			alterationReceiverComponent.onRemoveStatusEffect(entity, status, room);
+		}
 
 		if (statusTable != null) {
 			Table table = iconsMap.get(status);

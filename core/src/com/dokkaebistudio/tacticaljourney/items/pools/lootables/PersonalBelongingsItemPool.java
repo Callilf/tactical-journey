@@ -41,6 +41,7 @@ public class PersonalBelongingsItemPool extends ItemPool {
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SILKY_BEARD, 10, true));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.SCISSORHAND, 10, true));
 		commonItemPool.add(new PooledItemDescriptor(ItemEnum.TORN_PANT, 8, true));
+		commonItemPool.add(new PooledItemDescriptor(ItemEnum.PAGER, 8, true));
 	}
 	
 

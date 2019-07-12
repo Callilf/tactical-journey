@@ -107,6 +107,9 @@ public abstract class Alteration {
 	
 	public boolean onReceiveStatusEffect(Entity entity, Status status, Room room) { return true; }
 	
+	public void onRemoveStatusEffect(Entity entity, Status status, Room room) {}
+
+	
 	public void onModifyWheelSectors(AttackWheel wheel, Entity entity, Room room) {}
 	
 	/** Called when computing the number of items the shop should sell. */

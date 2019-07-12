@@ -107,6 +107,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 	 */
 	public void increaseMoveSpeed(int amount) {
 		this.setMoveSpeed(this.getMoveSpeed() + amount);
+		this.setMoveRemaining(this.moveRemaining + amount);
 	}
 	
 	

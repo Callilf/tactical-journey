@@ -85,6 +85,7 @@ public enum ItemEnum {
 	SCISSORHAND(Descriptions.ITEM_SCISSORHAND_TITLE, 2),
 	DURIAN(Descriptions.ITEM_DURIAN_TITLE, 2),
 	TORN_PANT(Descriptions.ITEM_TORN_PANT_TITLE, 2),
+	PAGER(Descriptions.ITEM_PAGER_TITLE, 2),
 
 	
 	

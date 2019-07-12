@@ -6,31 +6,26 @@ package com.dokkaebistudio.tacticaljourney.items.infusableItems;
 import com.badlogic.ashley.core.Entity;
 import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.Descriptions;
-import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfAnger;
-import com.dokkaebistudio.tacticaljourney.alterations.curses.basics.CurseTremors;
+import com.dokkaebistudio.tacticaljourney.alterations.blessings.BlessingOfMarvel;
+import com.dokkaebistudio.tacticaljourney.alterations.curses.CurseMarvel;
 import com.dokkaebistudio.tacticaljourney.items.enums.ItemEnum;
 import com.dokkaebistudio.tacticaljourney.room.Room;
 
-/**
- * An infusable item that grants the blessing of anger.
- * @author Callil
- *
- */
-public class ItemTornPant extends AbstractInfusableItem {
+public class ItemPager extends AbstractInfusableItem {
 	
-	public ItemTornPant() {
-		super(ItemEnum.TORN_PANT, Assets.torn_pant, false, true);
-		setRecyclePrice(50);
+	public ItemPager() {
+		super(ItemEnum.PAGER, Assets.pager, false, true);
+		setRecyclePrice(40);
 
-		BlessingOfAnger blessing = new BlessingOfAnger();
+		BlessingOfMarvel blessing = new BlessingOfMarvel();
 		blessings.add(blessing);
-		CurseTremors curse = new CurseTremors();
+		CurseMarvel curse = new CurseMarvel();
 		curses.add(curse);
 	}
 	
 	@Override
 	public String getDescription() {
-		return Descriptions.ITEM_TORN_PANT_DESCRIPTION;	
+		return Descriptions.ITEM_PAGER_DESCRIPTION;	
 	}
 	
 	@Override

@@ -14,6 +14,7 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.alterations.Curse;
 import com.dokkaebistudio.tacticaljourney.ces.components.HealthComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent;
+import com.dokkaebistudio.tacticaljourney.ces.components.StatusReceiverComponent.StatusActionEnum;
 import com.dokkaebistudio.tacticaljourney.ces.components.display.GridPositionComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.interfaces.MarkerInterface;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiverComponent;
@@ -22,6 +23,7 @@ import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
 import com.dokkaebistudio.tacticaljourney.journal.Journal;
 import com.dokkaebistudio.tacticaljourney.rendering.MapRenderer;
 import com.dokkaebistudio.tacticaljourney.room.Room;
+import com.dokkaebistudio.tacticaljourney.statuses.buffs.StatusBuffMighty;
 import com.dokkaebistudio.tacticaljourney.statuses.debuffs.StatusDebuffPoison;
 import com.dokkaebistudio.tacticaljourney.util.AnimatedImage;
 import com.dokkaebistudio.tacticaljourney.util.Mappers;
@@ -43,7 +45,8 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 	public enum ChaliceType {
 		LIFT_CURSE,
 		FULL_HEAL,
-		VISION
+		VISION,
+		MIGHT
 	}
 	
 	/** The type of chalice. */
@@ -128,6 +131,11 @@ public class ChaliceComponent implements Component, Poolable, MarkerInterface {
 					VFXUtil.createStatsUpNotif("Vision", gridPositionComponent.coord());
 
 					break;
+					
+				case MIGHT:
+					statusReceiverComponent = Mappers.statusReceiverComponent.get(GameScreen.player);
+					statusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusBuffMighty(100));
+					Journal.addEntry("[GREEN]A temporary might has strengthen your body.");
 					
 					default:
 				}

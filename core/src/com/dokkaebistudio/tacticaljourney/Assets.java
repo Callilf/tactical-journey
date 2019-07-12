@@ -317,6 +317,14 @@ public class Assets {
 	public static RegionDescriptor status_stunned;
 	public static RegionDescriptor status_stunned_full;
 	public static RegionDescriptor stunned_animation;
+	public static RegionDescriptor status_mighty;
+	public static RegionDescriptor status_mighty_full;
+	public static RegionDescriptor status_binary;
+	public static RegionDescriptor status_binary_full;
+	public static RegionDescriptor status_exhausted;
+	public static RegionDescriptor status_exhausted_full;
+
+
 
 	public static Array<Sprite> holy_animation;	
 
@@ -397,6 +405,7 @@ public class Assets {
 	public static RegionDescriptor scissorhand;
 	public static RegionDescriptor durian;
 	public static RegionDescriptor torn_pant;
+	public static RegionDescriptor pager;
 
 	
 	// Boss items
@@ -451,6 +460,7 @@ public class Assets {
 	public static RegionDescriptor blessing_unfinished;
 	public static RegionDescriptor blessing_orangutan;
 	public static RegionDescriptor blessing_anger;
+	public static RegionDescriptor blessing_marvel;
 	public static RegionDescriptor curse_frailty;
 	public static RegionDescriptor curse_slowness;
 	public static RegionDescriptor curse_weakness;
@@ -462,6 +472,7 @@ public class Assets {
 	public static RegionDescriptor curse_heavy_arrows;
 	public static RegionDescriptor curse_shinobi;
 	public static RegionDescriptor curse_unfinished;
+	public static RegionDescriptor curse_marvel;
 
 	private static Assets instance;
 	private AssetManager manager;
@@ -742,6 +753,12 @@ public class Assets {
 		status_stunned = Assets.getTexture("stunned");
 		status_stunned_full = Assets.getTexture("stunned_full");
 		stunned_animation = Assets.getTexture("stunned_animation");
+		status_mighty = Assets.getTexture("mighty");
+		status_mighty_full = Assets.getTexture("mighty_full");
+		status_binary = Assets.getTexture("binary");
+		status_binary_full = Assets.getTexture("binary_full");
+		status_exhausted = Assets.getTexture("exhausted");
+		status_exhausted_full = Assets.getTexture("exhausted_full");
 
 		
 		holy_animation = Assets.getAnimation("holy_aura");
@@ -821,6 +838,7 @@ public class Assets {
 		scissorhand = Assets.getTexture("item-infusable-scissorhand");
 		durian = Assets.getTexture("item-infusable-durian");
 		torn_pant = Assets.getTexture("item-infusable-torn-pant");
+		pager = Assets.getTexture("item-infusable-pager");
 		
 		// Boss items
 		pangolin_scale = Assets.getTexture("item-infusable-pangolin-scale");
@@ -875,6 +893,7 @@ public class Assets {
 		blessing_unfinished = Assets.getTexture("blessing-unfinished");
 		blessing_orangutan = Assets.getTexture("blessing-orangutan");
 		blessing_anger = Assets.getTexture("blessing-anger");
+		blessing_marvel = Assets.getTexture("blessing-marvel");
 		curse_frailty = Assets.getTexture("curse-frailty");
 		curse_slowness = Assets.getTexture("curse-slowness");
 		curse_weakness = Assets.getTexture("curse-weakness");
@@ -886,6 +905,7 @@ public class Assets {
 		curse_heavy_arrows = Assets.getTexture("curse-heavy-arrow");
 		curse_shinobi = Assets.getTexture("curse-shinobi");
 		curse_unfinished = Assets.getTexture("curse-unfinished");
+		curse_marvel = Assets.getTexture("curse-marvel");
 	}
 	
 	public static void addSprite(RegionDescriptor sprite) {

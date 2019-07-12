@@ -235,6 +235,15 @@ public class AlterationReceiverComponent implements Component, Poolable {
 		return result;
 	}
 	
+	public void onRemoveStatusEffect(Entity entity, Status status, Room room) {
+		for (Blessing b : blessings) {
+			b.onRemoveStatusEffect(entity, status, room);
+		}
+		for (Curse c : curses) {
+			c.onRemoveStatusEffect(entity, status, room);
+		}
+	}
+	
 	public int onPickupItem(Entity entity, Entity item, Room room) {
 		int result = 0;
 		for (Blessing b : blessings) {

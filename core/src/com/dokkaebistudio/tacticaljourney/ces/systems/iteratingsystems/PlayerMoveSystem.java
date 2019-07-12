@@ -615,7 +615,6 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 					Vector2 attackTilePos = null;
 					for (Entity movableTile : moveCompo.movableTiles) {
 						
-						// TODO improve the tile selection later
 						GridPositionComponent movableTilePos = Mappers.gridPositionComponent.get(movableTile);
 						int dist = TileUtil.getDistanceBetweenTiles(movableTilePos.coord(), destinationPos.coord());
 						if (dist >= attackCompo.getMainSkill().getRangeMin() && dist <= attackCompo.getMainSkill().getRangeMax()) {

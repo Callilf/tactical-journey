@@ -336,6 +336,9 @@ public class Descriptions {
 	
 	public static final String ITEM_TORN_PANT_TITLE = "Torn pant";
 	public static final String ITEM_TORN_PANT_DESCRIPTION = "A purple pant torn at the bottom but strangely intact at the hip. It's user was known for his ravaging bursts of anger.";
+	
+	public static final String ITEM_PAGER_TITLE = "PAGER";
+	public static final String ITEM_PAGER_DESCRIPTION = "A peculiar pager with a yellow star logo. For emergencies only.";
 
 	
 }

@@ -22,7 +22,6 @@ import com.dokkaebistudio.tacticaljourney.ai.random.RandomSingleton;
 import com.dokkaebistudio.tacticaljourney.ces.components.loot.DropRate.ItemPoolRarity;
 import com.dokkaebistudio.tacticaljourney.ces.components.neutrals.ChaliceComponent.ChaliceType;
 import com.dokkaebistudio.tacticaljourney.constants.ZIndexConstants;
-import com.dokkaebistudio.tacticaljourney.creature.enemies.enums.EnemyTypeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.TileEnum;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFactory;
 import com.dokkaebistudio.tacticaljourney.factory.EntityFlagEnum;
@@ -572,13 +571,13 @@ public abstract class RoomGenerator {
 		int lootRandom = random.nextSeededInt(10);
 		boolean isLoot = lootRandom < lootableChancePercentage;
 		if (isLoot) {
-			lootRandom = random.nextSeededInt(16);
+			lootRandom = random.nextSeededInt(14);
 			Vector2 lootPos = spawnPositions.get(0);
 			if (lootRandom <= 5) {
 				entityFactory.lootableFactory.createBones(room, lootPos);				
 			} else if (lootRandom <= 9) {
 				entityFactory.lootableFactory.createSatchel(room, lootPos);
-			} else if (lootRandom <= 12) {
+			} else if (lootRandom <= 11) {
 				entityFactory.lootableFactory.createSpellBook(room, lootPos);
 			} else {
 				entityFactory.lootableFactory.createOrbBag(room, lootPos);

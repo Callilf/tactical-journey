@@ -55,7 +55,7 @@ public class CurseOfAcceptance extends Curse {
 				StatusReceiverComponent attackerStatusReceiverComponent = Mappers.statusReceiverComponent.get(attacker);
 				attackerStatusReceiverComponent.requestAction(StatusActionEnum.RECEIVE_STATUS, new StatusDebuffDeathDoor(3));
 				
-				Journal.addEntry("[PURPLE]Curse of acceptance inflicted [BLACK]Death's door[PURPLE] to you");
+				Journal.addEntry("[PURPLE]Curse of acceptance inflicted [BLACK]Death's door[PURPLE] to " + Journal.getLabel(attacker));
 				AlterationSystem.addAlterationProc(this);
 			}
 			

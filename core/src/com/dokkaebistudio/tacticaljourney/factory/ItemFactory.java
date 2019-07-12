@@ -39,6 +39,7 @@ import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMerchantMask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemMithridatium;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemNurseEyePatch;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemOldCrown;
+import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPager;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemPowderFlask;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRamSkull;
 import com.dokkaebistudio.tacticaljourney.items.infusableItems.ItemRightJikatabi;
@@ -406,6 +407,9 @@ public final class ItemFactory {
 			item = createItemBase(room, tilePos,  new ItemTornPant(), EntityFlagEnum.ITEM_INFUSABLE);
 			break;
 			
+		case PAGER:
+			item = createItemBase(room, tilePos,  new ItemPager(), EntityFlagEnum.ITEM_INFUSABLE);
+			break;
 			
 		//*****************
 		// Orbs

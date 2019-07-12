@@ -93,6 +93,7 @@ public class Assets {
 	public static RegionDescriptor tile_movable_waypoint_gray;
 	public static RegionDescriptor tile_movable_selected;
 	public static RegionDescriptor tile_movable_selected_gray;
+	public static RegionDescriptor tile_attack_selected;
 	
 	public static RegionDescriptor btn_move_confirmation;
 	public static RegionDescriptor btn_end_turn;
@@ -525,6 +526,7 @@ public class Assets {
 		tile_movable_waypoint_gray = Assets.getTexture("tile-movable-waypoint-gray");
 		tile_movable_selected = Assets.getTexture("tile-movable-selected");
 		tile_movable_selected_gray = Assets.getTexture("tile-movable-selected-gray");
+		tile_attack_selected = Assets.getTexture("tile-attack-selected");
 		
 		btn_move_confirmation = Assets.getTexture("btn-move-confirmation");
 		btn_end_turn = Assets.getTexture("btn-end-turn");

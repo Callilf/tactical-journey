@@ -506,5 +506,20 @@ public final class TileUtil {
 			.filter(t -> TileUtil.getDistanceBetweenTiles(center, t.getGridPos()) <= maxDistance)
 			.collect(Collectors.toList());
 	}
+	
+
+	public static DirectionEnum getDirectionBetweenTiles(Vector2 origin, Vector2 target) {
+		DirectionEnum direction = null;
+		if (target.x < origin.x) {
+			direction = DirectionEnum.LEFT;
+		} else if (target.x > origin.x) {
+			direction = DirectionEnum.RIGHT;
+		} else if (target.y < origin.y) {
+			direction = DirectionEnum.DOWN;
+		} else if (target.y > origin.y) {
+			direction = DirectionEnum.UP;
+		}
+		return direction;
+	}
 
 }

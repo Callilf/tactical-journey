@@ -28,6 +28,7 @@ import com.dokkaebistudio.tacticaljourney.ces.components.player.AlterationReceiv
 import com.dokkaebistudio.tacticaljourney.ces.components.player.InventoryComponent;
 import com.dokkaebistudio.tacticaljourney.ces.components.player.PlayerComponent;
 import com.dokkaebistudio.tacticaljourney.ces.systems.NamedIteratingSystem;
+import com.dokkaebistudio.tacticaljourney.enums.DirectionEnum;
 import com.dokkaebistudio.tacticaljourney.enums.HealthChangeEnum;
 import com.dokkaebistudio.tacticaljourney.enums.InventoryDisplayModeEnum;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
@@ -652,6 +653,34 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 		moveCompo.setWayPoints(waypoints);
 		moveCompo.setSelectedTile(destination, room);
 		moveCompo.setClickedTilePos(destinationPos);
+		
+		
+		if (moveCompo.getSelectedAttackTile() != null) {
+			SpriteComponent spriteComponent = Mappers.spriteComponent.get(destination);
+			spriteComponent.setSprite(Assets.tile_attack_selected);
+			
+			Vector2 target = Mappers.gridPositionComponent.get(moveCompo.getSelectedAttackTile()).coord();
+			Vector2 attackTile = Mappers.gridPositionComponent.get(destination).coord();
+			
+			DirectionEnum direction = TileUtil.getDirectionBetweenTiles(attackTile, target);
+			if (direction != null) {
+				switch (direction) {
+				case LEFT: 
+					spriteComponent.flipX = true;
+					break;
+				case DOWN:
+					spriteComponent.getSprite().rotate90(true);
+					break;
+				case UP:
+					spriteComponent.getSprite().rotate90(false);
+					break;
+					
+					default:
+				}
+			}
+			
+		}
+
 
 		room.setNextState(RoomState.PLAYER_MOVE_DESTINATION_SELECTED);
 		return true;

@@ -14,6 +14,7 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
+import com.dokkaebistudio.tacticaljourney.Assets;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomGraph;
 import com.dokkaebistudio.tacticaljourney.ai.pathfinding.RoomHeuristic;
 import com.dokkaebistudio.tacticaljourney.ces.components.BlockExplosionComponent;
@@ -128,7 +129,8 @@ public class TileSearchService {
 		List<Entity> waypoints = new ArrayList<>();
 		if (path.getCount() == 0) return null;
 		
-		int totalMoves = Mappers.moveComponent.get(mover).getMoveRemaining() - 1;
+		MoveComponent moveComponent = Mappers.moveComponent.get(mover);
+		int totalMoves = moveComponent.getMoveRemaining() - 1;
 		int currentMove = 0;
 		
 		Iterator<Tile> iterator = path.iterator();

@@ -611,16 +611,25 @@ public class PlayerMoveSystem extends NamedIteratingSystem {
 				if (distance > attackCompo.getMainSkill().getRangeMax()) {
 					
 					//Select a tile close enough to attack
+					int attackTileDistance = -1;
+					Vector2 attackTilePos = null;
 					for (Entity movableTile : moveCompo.movableTiles) {
 						
 						// TODO improve the tile selection later
 						GridPositionComponent movableTilePos = Mappers.gridPositionComponent.get(movableTile);
 						int dist = TileUtil.getDistanceBetweenTiles(movableTilePos.coord(), destinationPos.coord());
 						if (dist >= attackCompo.getMainSkill().getRangeMin() && dist <= attackCompo.getMainSkill().getRangeMax()) {
-							// Select this tile
-							moveCompo.setSelectedAttackTile(tile);
-							return selectTileAndBuildWaypoints(moverEntity, movableTilePos.coord());
+							int moveDistance = TileUtil.getDistanceBetweenTiles(moverCurrentPos.coord(), movableTilePos.coord());
+							if (attackTileDistance > moveDistance || attackTileDistance == -1) {
+								attackTilePos = movableTilePos.coord();
+								attackTileDistance = moveDistance;
+							}
 						}
+					}
+					
+					if (attackTilePos != null) {
+						moveCompo.setSelectedAttackTile(tile);
+						return selectTileAndBuildWaypoints(moverEntity, attackTilePos);
 					}
 					
 				} else {

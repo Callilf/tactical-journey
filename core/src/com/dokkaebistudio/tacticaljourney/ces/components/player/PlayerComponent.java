@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.dokkaebistudio.tacticaljourney.room.Tile;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -110,6 +111,19 @@ public class PlayerComponent implements Component {
 		inspectedEntities.clear();
 	}
 
+	
+	//************************
+	// Auto trigger click
+	
+	private Tile triggerClickTile;
+	
+	public Tile getTriggerClickTile() {
+		return triggerClickTile;
+	}
+	
+	public void setTriggerClickTile(Tile triggerClickTile) {
+		this.triggerClickTile = triggerClickTile;
+	}
 	
 	
 	//**************************

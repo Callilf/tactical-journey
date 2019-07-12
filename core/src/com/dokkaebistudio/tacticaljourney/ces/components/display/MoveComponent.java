@@ -52,6 +52,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 		
 	/** The selected tile for movement. */
 	private Entity selectedTile;
+	private Vector2 clickedTilePos;
 	
 	/** The arrows displaying the paths to the selected tile. */
 	private List<Entity> wayPoints = new ArrayList<>();
@@ -161,6 +162,7 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 				room.removeEntity(this.selectedTile);
 			}
 			this.selectedTile = null;
+			this.clickedTilePos = null;
 			
 			for (Entity e : wayPoints) {
 				room.removeEntity(e);
@@ -201,6 +203,15 @@ public class MoveComponent implements Component, Poolable, RoomSystem {
 			room.removeEntity(this.selectedTile);
 		}
 		this.selectedTile = selectedTile;
+	}
+	
+
+	public Vector2 getClickedTilePos() {
+		return clickedTilePos;
+	}
+
+	public void setClickedTilePos(Vector2 clickedTilePos) {
+		this.clickedTilePos = clickedTilePos;
 	}
 
 

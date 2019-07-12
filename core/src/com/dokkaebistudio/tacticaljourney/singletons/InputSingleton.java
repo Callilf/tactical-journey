@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.dokkaebistudio.tacticaljourney.gamescreen.GameScreen;
@@ -35,6 +36,9 @@ public class InputSingleton implements InputProcessor{
 	
 	/** The last touched point. */
 	private Vector3 touchPoint = new Vector3();
+	
+	private boolean triggered;
+	private Vector3 triggeredPoint = new Vector3();
 	
 	public static boolean inputBlocked = false;
 	
@@ -117,6 +121,8 @@ public class InputSingleton implements InputProcessor{
 		this.skill1JustReleased = false;
 		this.skill2JustPressed = false;
 		this.skill2JustReleased = false;
+		
+		this.triggered = false;
 	}
 	
 	/**
@@ -146,10 +152,23 @@ public class InputSingleton implements InputProcessor{
 	 * @return the location of the touch
 	 */
 	public Vector3 getTouchPoint() {
+		if (triggered) {
+			return triggeredPoint;
+		}
+		
 		touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 		//guicam.unproject(touchPoint);
 		viewport.unproject(touchPoint);
 		return touchPoint;
+	}
+	
+	public void setTriggerPoint(float x, float y) {
+		triggeredPoint.set(x, y, 0);
+		this.triggered = true;
+	}
+	
+	public void setTriggerPoint(Vector2 point) {
+		setTriggerPoint(point.x, point.y);
 	}
 	
 	/**

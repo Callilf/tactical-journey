@@ -120,9 +120,9 @@ public class MenuPopinRenderer implements Renderer {
 			}
 			
 			
-			// 3 - Save
+			// 3 - Save & quit
 			if (gamescreen.gameType != GameTypeEnum.TUTORIAL) {
-				saveBtn = new TextButton("Save", PopinService.buttonStyle());			
+				saveBtn = new TextButton("Save and quit", PopinService.buttonStyle());			
 				saveBtn.addListener(new ChangeListener() {
 					@Override
 					public void changed(ChangeEvent event, Actor actor) {
@@ -130,6 +130,7 @@ public class MenuPopinRenderer implements Renderer {
 						Persister persister = new Persister(gamescreen);
 						persister.saveGameState();
 						closePopin();
+						gamescreen.backToMenu();
 					}
 				});
 				buttonTable.add(saveBtn).minWidth(200).padBottom(20);
@@ -138,7 +139,7 @@ public class MenuPopinRenderer implements Renderer {
 			
 			
 			// 4 - Return to menu
-			final TextButton mainMenuBtn = new TextButton("Main menu", PopinService.buttonStyle());			
+			final TextButton mainMenuBtn = new TextButton("Quit without saving", PopinService.buttonStyle());			
 			mainMenuBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {

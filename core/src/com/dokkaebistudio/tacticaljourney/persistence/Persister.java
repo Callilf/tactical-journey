@@ -206,7 +206,9 @@ public class Persister {
 			FileHandle saveFile = Gdx.files.local("gamestate_1.bin");
 		    Input input = new Input(new FileInputStream(saveFile.file()));
 		    kryo.readObject(input, GameScreen.class);
-		    input.close();   
+		    input.close();
+		    
+		    this.deleteSave();
 		} catch (KryoException | IOException e ) {
 			Gdx.app.error("SAVE", "Failed to load the game state", e);
 		}

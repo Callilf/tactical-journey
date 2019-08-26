@@ -118,7 +118,7 @@ public class GameScreen extends ScreenAdapter {
 	public static final int BOTTOM_MENU_HEIGHT = 40;
 	public static final int LEFT_RIGHT_PADDING = 40;
 	
-	public static final boolean debugMode = true;
+	public static final boolean debugMode = false;
 	
 
 	public TacticalJourney game;

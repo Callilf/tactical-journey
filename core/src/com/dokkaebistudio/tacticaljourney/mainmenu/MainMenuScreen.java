@@ -98,7 +98,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainTable.add(start).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(20);
 		mainTable.row();
 		
-		final TextButton loadBtn = new TextButton("LOAD", PopinService.buttonStyle());
+		final TextButton loadBtn = new TextButton("LOAD GAME", PopinService.buttonStyle());
 		loadBtn.addListener(new ChangeListener() {
 			
 			@Override
@@ -111,7 +111,7 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainTable.row();
 		
 				
-		TextButton ranking = new TextButton("RANKING", PopinService.buttonStyle());
+		TextButton ranking = new TextButton("RANKINGS", PopinService.buttonStyle());
 		ranking.addListener(new ChangeListener() {
 			
 			@Override

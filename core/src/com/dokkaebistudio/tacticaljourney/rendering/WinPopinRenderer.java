@@ -89,7 +89,8 @@ public class WinPopinRenderer implements Renderer {
 			
 			// 2 - Desc
 			Label desc = new Label("Congratulations! You managed to survive the dungeon and claim the universal cure.", PopinService.hudStyle());
-			table.add(desc).top().align(Align.left).width(600).pad(20, 0, 60, 0);
+			desc.setWrap(true);
+			table.add(desc).growY().width(900).left().pad(20, 0, 60, 0);
 			table.row();		
 			
 			// 3 - Action buttons

@@ -6,9 +6,10 @@ Prototype of a Tactical/Rogue like/Dungeon crawler game.
 
 The game's assets are all placeholders and there is no sound, but the gameplay is there. The coding part is basically over.
 
-To try it out:
-On desktop, launch the runable jar called Calishka's Trial.jar in the Releases folder.
-On Android, install the APK file Calishka's Trial.apk in the Releases folder.
+### How to install it
+**On desktop**: launch the runable jar called Calishka's Trial.jar in the Releases folder. You need to have a JRE (8 minimum) installed on your computer. You can get it here: https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
+
+**On Android**: install the APK file Calishka's Trial.apk in the Releases folder.
 
 No more work is expected on this project.
 

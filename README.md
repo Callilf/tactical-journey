@@ -1,5 +1,4 @@
-# Tactical Journey
-
+# Calishka's Trial
 Prototype of a Tactical/Rogue like/Dungeon crawler game.
 
 ## The prototype has been released
